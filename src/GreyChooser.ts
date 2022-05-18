@@ -14,6 +14,7 @@ import {
   Location,
   printHtml,
   haveEffect,
+  Effect,
 } from "kolmafia";
 import {
   hasCombatSkillActive,

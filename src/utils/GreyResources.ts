@@ -68,7 +68,13 @@ export class GreyPulls {
   static pullStartingGear() {
     GreyPulls.tryPull(Item.get("yule hatchet"));
     GreyPulls.tryPull(Item.get("mafia thumb ring"));
-    GreyPulls.tryPull(Item.get("HOA regulation book"));
+
+    if (storageAmount(Item.get("HOA regulation book")) > 0) {
+      GreyPulls.tryPull(Item.get("HOA regulation book"));
+    } else {
+      GreyPulls.tryPull(Item.get("Space Trip safety headphones"));
+    }
+
     GreyPulls.tryPull(Item.get("Hemlock Helm"));
     GreyPulls.tryPull(Item.get('"Remember the Trees" Shirt'));
   }

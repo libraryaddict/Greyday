@@ -7,7 +7,6 @@ import {
   print,
   toInt,
 } from "kolmafia";
-import { BanishType, getBanished } from "../utils/Banishers";
 import { GreyAdventurer } from "./GreyAdventurer";
 import { QuestRegistry } from "./quests/QuestRegistry";
 

@@ -13,6 +13,7 @@ import {
   print,
   haveSkill,
   myMp,
+  Skill,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";

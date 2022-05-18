@@ -1,4 +1,5 @@
 import {
+  Familiar,
   familiarWeight,
   haveSkill,
   Item,
