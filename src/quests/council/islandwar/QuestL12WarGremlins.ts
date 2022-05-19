@@ -9,6 +9,7 @@ import {
   myHp,
   print,
   retrieveItem,
+  Skill,
   visitUrl,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";

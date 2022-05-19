@@ -1,29 +1,10 @@
-import {
-  adv1,
-  availableAmount,
-  council,
-  equippedAmount,
-  getProperty,
-  Item,
-  lastChoice,
-  Location,
-  myLevel,
-  outfit,
-  print,
-  toInt,
-  use,
-} from "kolmafia";
-import { PropertyManager } from "../../utils/Properties";
+import { availableAmount, council, Item, Location, use } from "kolmafia";
 import {
   getQuestStatus,
-  OutfitImportance,
   QuestAdventure,
   QuestInfo,
   QuestStatus,
 } from "../Quests";
-import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
-import { greyAdv } from "../../utils/GreyLocations";
 import { QuestType } from "../QuestTypes";
 import { QuestL10GiantShip } from "./beanstalk/QuestL10GiantShip";
 import { QuestL10GiantGround } from "./beanstalk/QuestL10GiantGround";

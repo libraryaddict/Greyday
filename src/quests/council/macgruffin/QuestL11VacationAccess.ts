@@ -7,6 +7,7 @@ import {
   getProperty,
   myAscensions,
   toInt,
+  Item,
 } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";

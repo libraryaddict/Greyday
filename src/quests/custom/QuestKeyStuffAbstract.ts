@@ -5,6 +5,7 @@ import {
   getProperty,
   use,
   print,
+  Monster,
 } from "kolmafia";
 import { canCombatLocket } from "../../utils/GreyUtils";
 

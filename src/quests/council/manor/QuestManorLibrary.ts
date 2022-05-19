@@ -8,6 +8,7 @@ import {
   Location,
   Monster,
   print,
+  Skill,
   toInt,
   toItem,
 } from "kolmafia";

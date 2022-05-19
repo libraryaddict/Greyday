@@ -12,6 +12,7 @@ import {
   currentRound,
   setProperty,
   familiarWeight,
+  Skill,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { Macro } from "../../utils/MacroBuilder";

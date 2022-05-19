@@ -1,4 +1,4 @@
-import { autosell, itemAmount, use } from "kolmafia";
+import { autosell, Item, itemAmount, use } from "kolmafia";
 import { Task } from "./Tasks";
 
 export class TaskSellCrap implements Task {

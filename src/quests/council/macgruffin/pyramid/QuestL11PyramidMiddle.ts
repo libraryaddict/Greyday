@@ -7,6 +7,7 @@ import {
   getProperty,
   isBanished,
   toInt,
+  Skill,
 } from "kolmafia";
 import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";

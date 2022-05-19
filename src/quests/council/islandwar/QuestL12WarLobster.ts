@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  Familiar,
   familiarWeight,
   getProperty,
   Item,

@@ -18,6 +18,8 @@ import {
   currentMcd,
   equippedAmount,
   familiarWeight,
+  Familiar,
+  Slot,
 } from "kolmafia";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
