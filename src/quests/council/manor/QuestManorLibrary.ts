@@ -60,6 +60,7 @@ export class QuestManorLibrary implements QuestInfo {
     }
 
     if (
+      availableAmount(this.book) > 0 &&
       toInt(getProperty("scrapbookCharges")) < 100 &&
       !isBanished(this.librarian)
     ) {

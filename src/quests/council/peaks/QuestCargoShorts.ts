@@ -11,6 +11,8 @@ import {
   print,
   visitUrl,
   runChoice,
+  Item,
+  availableAmount,
 } from "kolmafia";
 import { greyKillingBlow } from "../../../utils/GreyCombat";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -24,6 +26,8 @@ import {
 import { QuestType } from "../../QuestTypes";
 
 export class QuestCargoShorts implements QuestInfo {
+  shorts: Item = Item.get("Cargo Cultist Shorts");
+
   getId(): QuestType {
     return "Council / Peaks / CargoShortsSmut";
   }
@@ -33,7 +37,10 @@ export class QuestCargoShorts implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (getProperty("_cargoPocketEmptied") == "true") {
+    if (
+      getProperty("_cargoPocketEmptied") == "true" ||
+      availableAmount(this.shorts) == 0
+    ) {
       return QuestStatus.COMPLETED;
     }
 

@@ -9,19 +9,26 @@ import {
 } from "kolmafia";
 import { GreyAdventurer } from "./GreyAdventurer";
 import { QuestRegistry } from "./quests/QuestRegistry";
+import { GreyRequirements } from "./utils/GreyResources";
 
 class GreyYouMain {
-  adventures: GreyAdventurer = new GreyAdventurer();
+  adventures: GreyAdventurer;
 
   handleCommand(command: string) {
-    if (command == "test") {
-      new QuestRegistry();
+    if (command == "required") {
+      new GreyRequirements().hasRequired();
       return;
     }
 
     if (myPath() != "Grey You") {
-      throw "You're not in grey you";
+      print(
+        "You're not in grey you. Use 'required' to get requirements.",
+        "red"
+      );
+      return;
     }
+
+    this.adventures = new GreyAdventurer();
 
     if (command == "sim") {
       this.adventures.runTurn(false);

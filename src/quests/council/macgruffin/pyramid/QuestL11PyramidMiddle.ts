@@ -61,6 +61,7 @@ export class QuestL11PyramidMiddle implements QuestInfo {
     }
 
     if (
+      availableAmount(this.book) > 0 &&
       !isBanished(this.servant) &&
       toInt(getProperty("scrapbookCharges")) < 100
     ) {
@@ -96,7 +97,7 @@ export class QuestL11PyramidMiddle implements QuestInfo {
 
         if (
           !isBanished(this.servant) &&
-          toInt(getProperty("scrapbookCharges")) < 100 &&
+          toInt(getProperty("scrapbookCharges")) >= 100 &&
           AbsorbsProvider.getReabsorbedMonsters().includes(this.servant)
         ) {
           startMacro.if_(this.servant, Macro.skill(this.banisher));

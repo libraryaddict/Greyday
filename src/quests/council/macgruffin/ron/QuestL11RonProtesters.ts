@@ -9,6 +9,7 @@ import {
   Monster,
   toInt,
   use,
+  storageAmount,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
@@ -77,9 +78,14 @@ export class QuestL11RonProtesters implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    if (availableAmount(this.deck) == 0 && !GreySettings.isHardcoreMode()) {
-      GreyPulls.pullDeckOfLewdCards();
-      GreyPulls.pullLynrdProtesters();
+    if (!GreySettings.isHardcoreMode()) {
+      if (availableAmount(this.deck) == 0 && storageAmount(this.deck) > 0) {
+        GreyPulls.pullDeckOfLewdCards();
+      }
+
+      if (availableAmount(this.lyrndCostume[0]) == 0) {
+        GreyPulls.pullLynrdProtesters();
+      }
     }
 
     let outfit = new GreyOutfit().setNoCombat();

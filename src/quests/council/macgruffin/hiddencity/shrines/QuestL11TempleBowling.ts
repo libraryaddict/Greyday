@@ -38,6 +38,13 @@ export class QuestL11Bowling implements QuestInfo {
     return 11;
   }
 
+  ownBall(): boolean {
+    return (
+      availableAmount(this.cosmicBall) > 0 ||
+      getProperty("cosmicBowlingBallReturnCombats") != "-1"
+    );
+  }
+
   getId(): QuestType {
     return "Council / MacGruffin / HiddenCity / Bowling";
   }
@@ -58,6 +65,10 @@ export class QuestL11Bowling implements QuestInfo {
   }
 
   mustBeDone(): boolean {
+    if (!this.ownBall()) {
+      return false;
+    }
+
     if (haveEffect(Effect.get("Ultrahydrated"))) {
       return false;
     }
@@ -92,7 +103,11 @@ export class QuestL11Bowling implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (this.getProgress() == 1 && !this.isBowlingBallNextCombat()) {
+    if (
+      this.ownBall() &&
+      this.getProgress() == 1 &&
+      !this.isBowlingBallNextCombat()
+    ) {
       return QuestStatus.NOT_READY;
     }
 
@@ -118,7 +133,7 @@ export class QuestL11Bowling implements QuestInfo {
 
         let macro: Macro = null;
 
-        if (this.getProgress() == 1) {
+        if (this.getProgress() == 1 && this.ownBall()) {
           macro = new Macro().item(this.cosmicBall);
 
           if (itemAmount(this.ball) > 0) {

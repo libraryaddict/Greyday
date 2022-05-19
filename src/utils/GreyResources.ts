@@ -9,6 +9,7 @@ import {
   Item,
   mallPrice,
   outfitPieces,
+  print,
   storageAmount,
   use,
 } from "kolmafia";
@@ -233,49 +234,157 @@ export function getZappables(item: Item): Item[] {
   return items;
 }
 
-class GreyRequirements {
+enum Required {
+  MUST = "You must have this",
+  VERY_USEFUL = "I'd prefer if you had this",
+  USEFUL = "Very useful, but can skip",
+  MINOR = "Minor, can skip",
+  NOTE = "",
+}
+
+export class GreyRequirements {
   hasRequired() {
-    let dontHave: string[] = [];
+    let dontHave: [string, Required][] = [];
 
     if (!haveFamiliar(Familiar.get("Grey Goose"))) {
-      dontHave.push("Grey Goose, you must have this.");
+      dontHave.push([
+        "Grey Goose, why even play this path without it",
+        Required.MUST,
+      ]);
     }
 
     if (availableAmount(Item.get("Combat Lover's Locket")) == 0) {
-      dontHave.push("Combat Lovers Locket, very useful");
+      dontHave.push([
+        "Combat Lovers Locket, currently hardcoded",
+        Required.MUST,
+      ]);
+    } else {
+      dontHave.push([
+        "Combat Lovers Locket - Make sure you have 'Pygmy witch lawyer' & 'Fantasy Bandit' in it!",
+        Required.NOTE,
+      ]);
     }
 
     if (availableAmount(Item.get("industrial fire extinguisher")) == 0) {
-      dontHave.push("industrial fire extinguisher, saves 8ish turns?");
+      dontHave.push([
+        "industrial fire extinguisher, minor, but hardcoded so a must",
+        Required.MUST,
+      ]);
     }
 
     if (availableAmount(Item.get("backup camera")) == 0) {
-      dontHave.push(
-        "Backup Camera, can range from must have to saves 6+ turns"
-      );
+      dontHave.push(["Backup Camera", Required.MUST]);
     }
 
     if (
       availableAmount(Item.get("unwrapped knock-off retro superhero cape")) == 0
     ) {
-      dontHave.push(
-        "unwrapped knock-off retro superhero cape, saves 15ish turns"
-      );
+      dontHave.push([
+        "unwrapped knock-off retro superhero cape, currently hardcoded",
+        Required.MUST,
+      ]);
     }
 
-    // TODO  MayDay™ supply package
-    // TODO Unbreakable Umbrella
-    // TODO Bowling ball
-    // TODO Crystal ball
-    // TODO Short order cook
-    // TODO Familiar scrapbook
-    // TODO Cold medicine
-    // TODO Powerful glove
+    dontHave.push([
+      "Can't see if you own the mayday supply, but..",
+      Required.USEFUL,
+    ]);
+
+    if (availableAmount(Item.get("Unbreakable Umbrella")) == 0) {
+      dontHave.push([
+        "Unbreakable Umbrella - Current hardcoded, so a must",
+        Required.MUST,
+      ]);
+    }
+
+    if (
+      availableAmount(Item.get("Cosmic Bowling Ball")) == 0 &&
+      getProperty("cosmicBowlingBallReturnCombats") == "-1"
+    ) {
+      dontHave.push(["Cosmic Bowling Ball", Required.VERY_USEFUL]);
+    }
+
+    if (availableAmount(Item.get("miniature crystal ball")) == 0) {
+      dontHave.push(["miniature crystal ball", Required.MUST]);
+    }
+
+    if (!haveFamiliar(Familiar.get("Short Order Cook"))) {
+      dontHave.push([
+        "Short Order Cook - Only useful for the first 10 or so turns though",
+        Required.USEFUL,
+      ]);
+    }
+
+    if (availableAmount(Item.get("Clan VIP Lounge key")) == 0) {
+      dontHave.push(["Clan VIP Invitation", Required.MUST]);
+    }
+
+    if (availableAmount(Item.get("Familiar Scrapbook")) == 0) {
+      dontHave.push(["Familiar Scrapbook", Required.USEFUL]);
+    }
+
+    if (availableAmount(Item.get("Powerful Glove")) == 0) {
+      dontHave.push(["Powerful Glove", Required.VERY_USEFUL]);
+    }
+
+    if (availableAmount(Item.get("Cursed Magnifying Glass")) == 0) {
+      dontHave.push([
+        "Cursed Magnifying Glass, only really used for lobsters currently",
+        Required.MINOR,
+      ]);
+    }
+
+    if (availableAmount(Item.get("Cargo Cultist Shorts")) == 0) {
+      dontHave.push([
+        "Cargo Cultist Shorts, does save 5? turns",
+        Required.MINOR,
+      ]);
+    }
+
+    if (
+      availableAmount(Item.get("HOA regulation book")) +
+        availableAmount(Item.get("Space Trip safety headphones")) ==
+      0
+    ) {
+      dontHave.push([
+        "Need one of: HOA regulation book || Space Trip safety headphones, they save you 10+ turns",
+        Required.VERY_USEFUL,
+      ]);
+    }
+
+    if (availableAmount(Item.get("Mafia Thumb Ring")) == 0) {
+      dontHave.push(["Mafia Thumb Ring", Required.MUST]);
+    }
+
+    if (availableAmount(Item.get("Yule Hatchet")) == 0) {
+      dontHave.push(["Yule Hatchet (Come on, its cheap)", Required.MUST]);
+    }
+
+    if (availableAmount(Item.get("Deck of lewd playing cards")) == 0) {
+      dontHave.push(["Deck of lewd playing cards", Required.USEFUL]);
+    }
+
+    if (availableAmount(Item.get("SongBoom™ BoomBox")) == 0) {
+      dontHave.push(["SongBoom™ BoomBox", Required.MINOR]);
+    }
+
+    for (let [name, required] of dontHave) {
+      let color: string = "green";
+
+      if (required == Required.MUST) {
+        color = "red";
+      } else if (required == Required.VERY_USEFUL) {
+        color = "orange";
+      } else if (required == Required.USEFUL) {
+        color = "blue";
+      } else if (required == Required.MINOR) {
+        color = "gray";
+      }
+
+      print(name + (required.length > 0 ? " = " + required : ""), color);
+    }
+
+    print("End Requirements.");
     // TODO Camelcalf?
-    // TODO Cargo cultist
-    // HOA regulation book
-    // Mafia thumb ring
-    // Yule hatchet
-    // Deck of sleaze cards
   }
 }

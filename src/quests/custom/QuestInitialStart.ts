@@ -14,12 +14,14 @@ import {
   myAdventures,
   myAscensions,
   myLevel,
+  myLocation,
   myMeat,
   print,
   setProperty,
   squareRoot,
   toBoolean,
   toInt,
+  turnsPlayed,
   use,
   useFamiliar,
   visitUrl,
@@ -31,7 +33,6 @@ import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
 export class QuestInitialStart implements QuestInfo {
-  property: string = "greyYouLastPowerLeveled";
   familiar: Familiar = Familiar.get("Grey Goose");
   equip: Item = Item.get("Grey Down Vest");
   desiredLevel: number;
@@ -49,7 +50,12 @@ export class QuestInitialStart implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (availableAmount(this.mayday) > 0) {
+    if (
+      availableAmount(this.mayday) > 0 ||
+      (myLocation() != null &&
+        myLocation().combatQueue.length > 0 &&
+        getProperty("breakfastCompleted") == "false")
+    ) {
       return QuestStatus.READY;
     }
 
@@ -65,6 +71,7 @@ export class QuestInitialStart implements QuestInfo {
       location: null,
       run: () => {
         if (!hippyStoneBroken() && toBoolean(getProperty("auto_pvpEnable"))) {
+          print("Enabling pvp as it was set to true in autoscend", "blue");
           visitUrl("peevpee.php?action=smashstone&pwd&confirm=on", true);
           visitUrl("peevpee.php?place=fight");
         }
@@ -76,7 +83,9 @@ export class QuestInitialStart implements QuestInfo {
           cliExecute("saber resistance");
         }
 
-        cliExecute("boombox food");
+        if (availableAmount(Item.get("SongBoom™ BoomBox")) > 0) {
+          cliExecute("boombox food");
+        }
 
         if (!GreySettings.isHardcoreMode()) {
           GreyPulls.pullStartingGear();

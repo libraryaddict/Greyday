@@ -2,6 +2,7 @@ import {
   availableAmount,
   Familiar,
   getProperty,
+  getWorkshed,
   handlingChoice,
   Item,
   lastChoice,
@@ -19,6 +20,7 @@ export class TaskWorkshed implements Task {
   lastChecked: string = "_lastCheckedCabinet";
   hat: Item = Item.get("Ice Crown");
   pants: Item = Item.get("frozen jeans");
+  cabinet: Item = Item.get("Cold medicine cabinet");
 
   hasConsults(): boolean {
     return toInt(getProperty("_coldMedicineConsults")) < 5;
@@ -63,6 +65,10 @@ export class TaskWorkshed implements Task {
   }
 
   run() {
+    if (getWorkshed() != this.cabinet) {
+      return;
+    }
+
     if (!this.hasConsults() || !this.isConsultReady() || !this.shouldCheck()) {
       return;
     }
