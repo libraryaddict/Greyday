@@ -172,6 +172,8 @@ export type QuestMisc =
   | "Misc / UnlockDungeonsOfDoom"
   | "Misc / GrabZapWand"
   | "Misc / InitialStart"
+  | "Misc / PowerLeveling"
+  | "Misc / FortuneExp"
   | "Misc / Purchases"
   | "Misc / FriarExp"
   | "Misc / MonsterBait";

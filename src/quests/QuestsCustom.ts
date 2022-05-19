@@ -21,6 +21,8 @@ import { QuestPullZappableKey } from "./custom/QuestPullZappableKey";
 import { QuestZapKeys } from "./custom/QuestZapKeys";
 import { QuestMonsterBait } from "./custom/QuestMonsterBait";
 import { QuestFamiliarEquip } from "./custom/QuestFamiliarEquip";
+import { QuestFortuneExp } from "./custom/QuestFortuneExp";
+import { QuestPowerLeveling } from "./custom/QuestPowerLeveling";
 
 export class QuestsCustom implements QuestInfo {
   // This is a wrapper class around some of our custom routing goals. Like combat locket or so.
@@ -28,7 +30,7 @@ export class QuestsCustom implements QuestInfo {
   quests: QuestInfo[] = [];
 
   constructor() {
-    this.quests.push(new QuestInitialStart(6));
+    this.quests.push(new QuestInitialStart());
     this.quests.push(new QuestLocketInfiniteLoop());
     this.quests.push(new QuestLocketFantasyRealm());
     this.quests.push(new QuestLocketSystemSweep());
@@ -48,6 +50,8 @@ export class QuestsCustom implements QuestInfo {
     this.quests.push(new QuestSkillRegistry());
     this.quests.push(new QuestMonsterBait());
     this.quests.push(new QuestFamiliarEquip());
+    this.quests.push(new QuestFortuneExp());
+    this.quests.push(new QuestPowerLeveling(4));
   }
 
   level(): number {

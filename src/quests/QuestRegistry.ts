@@ -3,6 +3,7 @@ import {
   Effect,
   haveEffect,
   haveSkill,
+  Item,
   myMeat,
   print,
   Skill,
@@ -90,6 +91,8 @@ export class QuestRegistry {
 
       { id: "Council / Toot" },
       { id: "Misc / InitialStart" },
+      { id: "Misc / PowerLeveling" },
+      { id: "Misc / FortuneExp" },
 
       { id: "CombatLocket / SystemSweep" },
       { id: "CombatLocket / InfiniteLoop" },

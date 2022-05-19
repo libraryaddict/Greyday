@@ -16,10 +16,11 @@ import {
   use,
   visitUrl,
 } from "kolmafia";
-import { greyAdv } from "../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { GreyPulls } from "../../../utils/GreyResources";
 import { GreySettings } from "../../../utils/GreySettings";
+import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -94,16 +95,27 @@ export class Quest12WarNuns implements QuestInfo {
       run: () => {
         if (this.getMeat() == 0) {
           this.visitNuns();
+          cliExecute("boombox meat");
         }
 
         let meat = this.getMeat();
 
         this.tryToBuff();
 
-        greyAdv(this.loc, outfit);
+        greyAdv(
+          this.loc,
+          outfit,
+          new AdventureSettings().setStartOfFightMacro(
+            Macro.trySkill("sing along")
+          )
+        );
 
         if (meat >= this.getMeat() || this.getMeat() >= 100_000) {
           this.visitNuns();
+
+          if (this.status() == QuestStatus.COMPLETED) {
+            cliExecute("boombox food");
+          }
         }
       },
     };
