@@ -11,6 +11,7 @@ import { QuestType } from "../../../QuestTypes";
 
 export class QuestL11ShenNinja implements QuestInfo {
   location: Location = Location.get("Lair of the Ninja Snowmen");
+  // TODO Once we've got the absorbs, try replace combats if assassins isnt done cos we're really just stacking +combat
 
   getId(): QuestType {
     return "Council / MacGruffin / Shen / Ninjas";

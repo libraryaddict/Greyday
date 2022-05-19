@@ -10,6 +10,7 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
+import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 
 export class QuestTowerWallSkin implements QuestInfo {
   beehive: Item = Item.get("Beehive");
@@ -99,6 +100,7 @@ export class QuestTowerBeeHive implements QuestInfo {
       location: this.blackForest,
       run: () => {
         let props = new PropertyManager();
+        DelayBurners.tryReplaceCombats();
 
         try {
           props.setChoice(924, 3); // Beezzzz

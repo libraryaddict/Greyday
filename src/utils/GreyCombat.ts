@@ -2,6 +2,7 @@ import {
   appearanceRates,
   Effect,
   equippedAmount,
+  getMonsters,
   getProperty,
   haveEffect,
   haveOutfit,
@@ -90,12 +91,13 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
     ) {
       // If we are not using crystal ball and didn't just banish something..
       if (
-        equippedAmount(Item.get("miniature crystal ball")) == 0 ||
-        getBanished().filter(
-          (b) =>
-            b.banisher.type == BanishType.SYSTEM_SWEEP &&
-            b.turnBanished + 2 >= myTurncount()
-        ).length == 0
+        getMonsters(myLocation()).includes(monster) &&
+        (equippedAmount(Item.get("miniature crystal ball")) == 0 ||
+          getBanished().filter(
+            (b) =>
+              b.banisher.type == BanishType.SYSTEM_SWEEP &&
+              b.turnBanished + 2 >= myTurncount()
+          ).length == 0)
       )
         // If we do want to banish something..
         macro.trySkill(Skill.get("System Sweep"));
@@ -138,6 +140,10 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
   let macro = new Macro();
 
   if (haveEffect(Effect.get("Temporary Amnesia")) == 0) {
+    if (myLevel() < 5) {
+      macro = macro.trySkill(" Convert Matter to Pomade");
+    }
+
     if (
       getProperty("retroCapeSuperhero") == "vampire" &&
       getProperty("retroCapeWashingInstructions") == "kill"
@@ -145,7 +151,7 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
       macro = macro.trySkill("Slay the dead");
     }
 
-    if (lastMonster().physicalResistance < 70) {
+    if (lastMonster().physicalResistance < 70 && myMp() >= 20) {
       if (outfit.itemDropWeight >= 2 || myLevel() > 20) {
         macro = macro.trySkillRepeat(Skill.get("Double Nanovision"));
       }

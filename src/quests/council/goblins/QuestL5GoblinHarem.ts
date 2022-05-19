@@ -23,6 +23,8 @@ export class QuestL5GoblinHarem implements QuestInfo {
   harem: Location = Location.get("Cobb's Knob Harem");
   extingisher: Item = Item.get("industrial fire extinguisher");
 
+  // TODO Don't fire extingush the absorb
+
   getId(): QuestType {
     return "Council / Goblins / HaremOutfit";
   }

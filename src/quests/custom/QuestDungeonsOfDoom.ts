@@ -18,11 +18,14 @@ import { greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
+import { DelayBurners } from "../../iotms/delayburners/DelayBurners";
 
 export class QuestDungeonsOfDoom implements QuestInfo {
   bend: Location = Location.get("The Enormous Greater-Than Sign");
   plusSign: Item = Item.get("plus sign");
   teleportis: Effect = Effect.get("Teleportitis");
+
+  // TODO Once we have the absorb, do replace combats
 
   getId(): QuestType {
     return "Misc / UnlockDungeonsOfDoom";

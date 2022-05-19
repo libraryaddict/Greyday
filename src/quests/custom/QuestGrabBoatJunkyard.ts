@@ -30,6 +30,7 @@ import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreySettings } from "../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
+import { DelayBurners } from "../../iotms/delayburners/DelayBurners";
 
 export class QuestGrabBoatJunkyard implements QuestInfo {
   location: Location = Location.get("The Old Landfill");
@@ -93,6 +94,9 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
         if (this.needParts()) {
           if (closetAmount(this.junkKey) > 0) {
             takeCloset(this.junkKey);
+          } else {
+            // We immediately try to replace combats because the key drops the longer we spend
+            DelayBurners.tryReplaceCombats();
           }
 
           props.setChoice(795, 1);

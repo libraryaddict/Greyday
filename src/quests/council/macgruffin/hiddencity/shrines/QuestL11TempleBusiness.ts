@@ -14,6 +14,7 @@ import { PropertyManager } from "../../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../../../Quests";
 import { QuestType } from "../../../../QuestTypes";
+import { DelayBurners } from "../../../../../iotms/delayburners/DelayBurners";
 
 export class QuestL11Business implements QuestInfo {
   files: Item[] = [
@@ -46,6 +47,13 @@ export class QuestL11Business implements QuestInfo {
     return 4 - ((totalTurns - 1) % 5);
   }
 
+  isDelayBurning(): boolean {
+    return (
+      this.delayUntilNextNC() > 0 &&
+      (availableAmount(this.completeFile) > 0 || this.filesRemaining() == 0)
+    );
+  }
+
   status(): QuestStatus {
     if (getProperty("questL11Worship") != "step3") {
       return QuestStatus.NOT_READY;
@@ -61,8 +69,14 @@ export class QuestL11Business implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (availableAmount(this.completeFile) > 0 && this.delayUntilNextNC() > 0) {
-      return QuestStatus.READY;
+    if (this.isDelayBurning()) {
+      if (DelayBurners.isDelayBurnerReady()) {
+        return QuestStatus.READY;
+      }
+
+      if (DelayBurners.isDelayBurnerFeasible()) {
+        return QuestStatus.FASTER_LATER;
+      }
     }
 
     return QuestStatus.READY;
@@ -109,6 +123,19 @@ export class QuestL11Business implements QuestInfo {
             props.setChoice(786, 2); // Get binder clip
           } else {
             props.setChoice(786, 3); // Fight accountant
+          }
+
+          if (
+            availableAmount(this.completeFile) > 0 &&
+            this.filesRemaining() == 0
+          ) {
+            let ready = DelayBurners.getReadyDelayBurner();
+
+            if (ready != null) {
+              ready.doFightSetup();
+            } else {
+              DelayBurners.tryReplaceCombats();
+            }
           }
 
           let settings = new AdventureSettings().addBanish(

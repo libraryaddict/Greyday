@@ -1,4 +1,4 @@
-import { Location, Familiar, availableAmount, Item } from "kolmafia";
+import { Location, Familiar, availableAmount, Item, Monster } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -9,12 +9,27 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
+import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 
 export class QuestL10GiantGround implements QuestInfo {
   boning: Item = Item.get("electric boning knife");
   loc: Location = Location.get(
     "The Castle in the Clouds in the Sky (Ground Floor)"
   );
+  monster: Monster = Monster.get("Alphabet Giant");
+
+  isAbsorbed(): boolean {
+    return AbsorbsProvider.getReabsorbedMonsters().includes(this.monster);
+  }
+
+  isDelayBurning() {
+    return (
+      availableAmount(this.boning) > 0 &&
+      this.isAbsorbed() &&
+      this.loc.turnsSpent < 11
+    );
+  }
 
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
@@ -31,6 +46,18 @@ export class QuestL10GiantGround implements QuestInfo {
       run: () => {
         let props = new PropertyManager();
         let hasBone = availableAmount(this.boning) > 0;
+
+        if (this.isDelayBurning()) {
+          let ready = DelayBurners.getReadyDelayBurner();
+
+          if (ready != null) {
+            ready.doFightSetup();
+          } else {
+            DelayBurners.tryReplaceCombats();
+          }
+        } else if (this.isAbsorbed()) {
+          DelayBurners.tryReplaceCombats();
+        }
 
         try {
           props.setChoice(672, hasBone ? 2 : 1);
@@ -63,6 +90,16 @@ export class QuestL10GiantGround implements QuestInfo {
 
     if (status > 8) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (this.isDelayBurning()) {
+      if (DelayBurners.isDelayBurnerReady()) {
+        return QuestStatus.READY;
+      }
+
+      if (DelayBurners.isDelayBurnerFeasible()) {
+        return QuestStatus.FASTER_LATER;
+      }
     }
 
     return QuestStatus.READY;

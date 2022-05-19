@@ -4,6 +4,7 @@ import {
   getProperty,
   Item,
   Location,
+  Monster,
   myAscensions,
   myLevel,
   myMeat,
@@ -12,7 +13,7 @@ import {
   toInt,
   use,
 } from "kolmafia";
-import { greyAdv } from "../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreySettings } from "../../utils/GreySettings";
 import {
@@ -29,6 +30,7 @@ export class QuestCar implements QuestInfo {
   toolbox: Item = Item.get("Gnollish toolbox");
   sweetRims: Item = Item.get("Sweet Rims");
   dopeWheels: Item = Item.get("Dope Wheels");
+  bugbear: Monster = Monster.get("Guard Bugbear");
 
   level(): number {
     return 11;
@@ -80,7 +82,11 @@ export class QuestCar implements QuestInfo {
       outfit: outfit,
       location: this.tinkersThingy,
       run: () => {
-        greyAdv(this.tinkersThingy, outfit);
+        greyAdv(
+          this.tinkersThingy,
+          outfit,
+          new AdventureSettings().addBanish(this.bugbear)
+        );
 
         this.tryMakeBitchCar();
       },

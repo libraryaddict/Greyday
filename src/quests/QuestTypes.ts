@@ -168,7 +168,6 @@ export type QuestMisc =
   | "Misc / FamEquip"
   | "Misc / MeatCar"
   | "Misc / ManorLights"
-  | "Misc / ColdMedicineCabinet"
   | "Misc / UnlockDungeonsOfDoom"
   | "Misc / GrabZapWand"
   | "Misc / InitialStart"

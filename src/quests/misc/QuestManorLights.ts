@@ -83,10 +83,20 @@ export class QuestManorLights implements QuestInfo {
     );
   }
 
+  hasFamiliarRecommendation(): Familiar {
+    if (!this.isSteveFight() || familiarWeight(this.goose) >= 7) {
+      return null;
+    }
+
+    return this.goose;
+  }
+
   shouldDoSteve(): boolean {
     return (
       this.isSteveReady() &&
-      (!this.isSteveFight() || familiarWeight(this.goose) >= 6)
+      (!this.isSteveFight() ||
+        familiarWeight(this.goose) >=
+          (getProperty("questL13Final") == "unstarted" ? 7 : 6))
     );
   }
 
@@ -176,9 +186,7 @@ export class QuestManorLights implements QuestInfo {
             null,
             null,
             new AdventureSettings().setStartOfFightMacro(
-              Macro.skill(Skill.get("Emit Matter Duplicating Drones")).trySkill(
-                Skill.get("Emit Matter Duplicating Drones")
-              )
+              Macro.skill(Skill.get("Emit Matter Duplicating Drones"))
             )
           );
         }

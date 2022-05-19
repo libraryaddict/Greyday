@@ -139,11 +139,24 @@ export class QuestL12Worms implements QuestInfo {
   }
 
   mustBeDone(): boolean {
-    return (
-      this.effects
-        .filter((i) => i[0] != null)
-        .map((i) => effectModifier(i[0], "Effect"))
-        .find((e) => haveEffect(e) > 0) != null
-    );
+    for (let [glandRequired, loc] of this.effects) {
+      if (glandRequired == null) {
+        continue;
+      }
+
+      let effect = effectModifier(glandRequired, "Effect");
+
+      // If the gland is in operation
+      if (haveEffect(effect) > 0) {
+        return true;
+      }
+
+      // If the gland is available
+      if (availableAmount(glandRequired) > 0) {
+        return false;
+      }
+    }
+
+    return false;
   }
 }

@@ -1,5 +1,13 @@
-import { availableAmount, getProperty, Item, Location } from "kolmafia";
+import {
+  availableAmount,
+  getProperty,
+  Item,
+  Location,
+  Monster,
+} from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
+import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
@@ -8,9 +16,16 @@ import { QuestType } from "../../QuestTypes";
 export class QuestL6FriarHeart implements QuestInfo {
   item: Item = Item.get("box of birthday candles");
   location: Location = Location.get("Dark Heart of the Woods");
+  absorbs: Monster[] = [Monster.get("G imp"), Monster.get("P imp")];
 
   level(): number {
     return 6;
+  }
+
+  isAllAbsorbed(): boolean {
+    let absorbed = AbsorbsProvider.getReabsorbedMonsters();
+
+    return this.absorbs.find((a) => !absorbed.includes(a)) == null;
   }
 
   getLocations(): Location[] {
@@ -43,6 +58,10 @@ export class QuestL6FriarHeart implements QuestInfo {
       location: this.location,
       outfit: outfit,
       run: () => {
+        if (this.isAllAbsorbed()) {
+          DelayBurners.tryReplaceCombats();
+        }
+
         greyAdv(this.location, outfit);
       },
     };

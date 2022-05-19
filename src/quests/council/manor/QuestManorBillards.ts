@@ -32,6 +32,7 @@ export class QuestManorBillards implements QuestInfo {
   invis: Effect = Effect.get("Invisible Avatar");
   invisSkill: Skill = Skill.get("CHEAT CODE: Invisible Avatar");
   key: Item = Item.get("[7302]Spookyraven library key");
+  cue: Item = Item.get("pool cue");
 
   getId(): QuestType {
     return "Manor / Billards";
@@ -63,13 +64,14 @@ export class QuestManorBillards implements QuestInfo {
     let outfit = new GreyOutfit().setNoCombat();
 
     outfit.addItem(Item.get("Staff of Fats"));
-    outfit.addItem(Item.get("pool cue"));
+    outfit.addItem(this.cue);
 
     return {
       outfit: outfit,
       location: this.billards,
       run: () => {
         if (
+          availableAmount(this.cue) > 0 &&
           haveEffect(this.chalkEffect) == 0 &&
           availableAmount(this.chalk) > 0
         ) {

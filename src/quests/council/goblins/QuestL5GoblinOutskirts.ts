@@ -1,4 +1,5 @@
 import { availableAmount, Familiar, Item, Location, use } from "kolmafia";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../utils/GreyLocations";
 import {
   getQuestStatus,
@@ -32,6 +33,16 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (this.location.turnsSpent < 10) {
+      if (DelayBurners.isDelayBurnerReady()) {
+        return QuestStatus.READY;
+      }
+
+      if (DelayBurners.isDelayBurnerFeasible()) {
+        return QuestStatus.FASTER_LATER;
+      }
+    }
+
     return QuestStatus.READY;
   }
 
@@ -42,6 +53,14 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
         if (availableAmount(this.map) > 0 && availableAmount(this.key)) {
           use(this.map);
         } else {
+          let ready = DelayBurners.getReadyDelayBurner();
+
+          if (ready != null) {
+            ready.doFightSetup();
+          } else {
+            DelayBurners.tryReplaceCombats();
+          }
+
           greyAdv(this.location);
         }
       },

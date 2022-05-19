@@ -4,10 +4,16 @@ import {
   haveSkill,
   Item,
   myAdventures,
+  myHp,
+  myLevel,
+  myMaxmp,
+  myMeat,
+  myMp,
   print,
   Skill,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../GreyAdventurer";
+import { getQuestStatus } from "../quests/Quests";
 import { GreySettings } from "./GreySettings";
 import { setUmbrella, UmbrellaState } from "./GreyUtils";
 
@@ -52,11 +58,27 @@ export class GreyOutfit {
 
   setWeights() {
     this.addBonus("+10 bonus mafia thumb ring");
-    this.addBonus("+2 bonus powerful glove");
+
+    if (getQuestStatus("questL13Final") <= 5) {
+      this.addBonus("+3.5 bonus powerful glove");
+    }
+
     this.addBonus("-equip screwing pooch");
 
+    if (myLevel() > 15) {
+      this.initWeight = 0.001;
+    }
+
+    if (myMeat() > 12000) {
+      this.meatDropWeight = 0.01;
+    }
+
     if (!haveSkill(Skill.get("Hivemindedness"))) {
-      this.mpRegenWeight += 2;
+      this.mpRegenWeight += 1;
+
+      if (myMp() < 42) {
+        this.mpRegenWeight += 2;
+      }
     }
 
     if (

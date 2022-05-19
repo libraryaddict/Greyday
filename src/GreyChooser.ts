@@ -509,7 +509,7 @@ class GreyQuester {
       }
 
       if (
-        q.level() * (haveSkill(Skill.get("Infinite Loop")) ? 2 : 6) >
+        q.level() * (haveSkill(Skill.get("Infinite Loop")) ? 1 : 6) >
         myBasestat(Stat.get("Muscle"))
       ) {
         return;

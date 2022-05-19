@@ -95,7 +95,7 @@ export class QuestSkillRegistry implements QuestInfo {
       );
     }
 
-    let level = Math.max(5, Math.sqrt(location.recommendedStat) * 1.35);
+    let level = Math.max(5, Math.sqrt(location.recommendedStat) * 1.5);
 
     this.children.push(
       new QuestSkillAbstract(level, location, monster, skill, questType)

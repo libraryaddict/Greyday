@@ -23,6 +23,7 @@ export class QuestL10GiantBasement implements QuestInfo {
   loc: Location = Location.get(
     "The Castle in the Clouds in the Sky (Basement)"
   );
+  // TODO Once we've got the absorbs, try replace combats if it doesn't interfere with our slots cos umbrella
 
   constructor() {
     let umbrella = Item.get("Unbreakable Umbrella");

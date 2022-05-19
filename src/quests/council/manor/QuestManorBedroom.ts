@@ -20,6 +20,8 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
+import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 
 export class ManorBedroom implements QuestInfo {
   location: Location = Location.get("The Haunted Bedroom");
@@ -31,6 +33,7 @@ export class ManorBedroom implements QuestInfo {
     "Animated Rustic Nightstand",
     "Wardröb nightstand",
   ].map((m) => Monster.get(m));
+  advsProvider: Monster = Monster.get("animated rustic nightstand");
 
   needCamera(): boolean {
     return (
@@ -40,8 +43,18 @@ export class ManorBedroom implements QuestInfo {
     );
   }
 
+  needGlasses(): boolean {
+    return availableAmount(this.spectacles) == 0;
+  }
+
   level(): number {
     return 5;
+  }
+
+  needDress(): boolean {
+    return (
+      getQuestStatus("questM21Dance") <= 2 && availableAmount(this.item) == 0
+    );
   }
 
   status(): QuestStatus {
@@ -58,14 +71,26 @@ export class ManorBedroom implements QuestInfo {
     }
 
     if (this.hasDelay()) {
-      return QuestStatus.READY;
+      if (DelayBurners.isDelayBurnerReady()) {
+        return QuestStatus.READY;
+      }
+
+      if (DelayBurners.isDelayBurnerFeasible()) {
+        return QuestStatus.FASTER_LATER;
+      }
     }
 
     return QuestStatus.READY;
   }
 
   hasDelay(): boolean {
-    return this.location.turnsSpent < 5;
+    return (
+      this.location.turnsSpent < 5 &&
+      !this.needCamera() &&
+      !this.needGlasses() &&
+      this.needDress() &&
+      AbsorbsProvider.getReabsorbedMonsters().includes(this.advsProvider)
+    );
   }
 
   run(): QuestAdventure {
@@ -84,10 +109,7 @@ export class ManorBedroom implements QuestInfo {
           props.setChoice(876, 1);
           props.setChoice(879, 2);
 
-          if (
-            getQuestStatus("questM21Dance") <= 2 &&
-            availableAmount(this.item) == 0
-          ) {
+          if (this.needDress()) {
             props.setChoice(880, 1);
           } else {
             props.setChoice(880, 2);
@@ -104,6 +126,14 @@ export class ManorBedroom implements QuestInfo {
           let settings = new AdventureSettings();
 
           this.dontLike.forEach((m) => settings.addBanish(m));
+
+          if (this.hasDelay()) {
+            let delay = DelayBurners.getReadyDelayBurner();
+
+            if (delay != null) {
+              delay.doFightSetup();
+            }
+          }
 
           try {
             greyAdv(this.location, outfit, settings);

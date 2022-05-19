@@ -37,6 +37,7 @@ export class QuestL11RonProtesters implements QuestInfo {
   cig: Item = Item.get("cigarette lighter");
   flaming: Item = Item.get("Flamin' Whatshisname");
   musky: Effect = Effect.get("Musky");
+  // TODO Once we've got the absorbs, try replace combats
 
   isReady(): boolean {
     return (

@@ -126,7 +126,9 @@ export class OilHandler implements QuestInfo {
         equip(Slot.get("Acc3"), item);
       }
 
-      this.doMonsterLevel();
+      if (numericModifier("Monster Level") <= 50) {
+        throw "Need to raise your monster level, TODO!";
+      }
     }
   }
 

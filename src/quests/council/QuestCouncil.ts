@@ -30,7 +30,6 @@ import { QuestL9Smut } from "./QuestL9OrcsAndPeaks";
 import { QuestManor } from "./QuestManor";
 
 export class QuestCouncil implements QuestInfo {
-  lastLevelVisited: number = toInt(getProperty("lastCouncilVisit"));
   quests: QuestInfo[] = [];
 
   constructor() {
@@ -54,32 +53,15 @@ export class QuestCouncil implements QuestInfo {
   }
 
   level(): number {
-    return 0;
+    return -1;
   }
 
   status(): QuestStatus {
-    this.lastLevelVisited = Math.min(
-      toInt(getProperty("lastCouncilVisit")),
-      this.lastLevelVisited
-    );
-
-    if (this.lastLevelVisited < myLevel()) {
-      return QuestStatus.READY;
-    }
-
-    return QuestStatus.NOT_READY;
+    return QuestStatus.COMPLETED;
   }
 
   run(): QuestAdventure {
-    return {
-      location: null,
-      outfit: new GreyOutfit("-tie"),
-      run: () => {
-        council();
-        this.lastLevelVisited = myLevel();
-        cliExecute("refresh inventory");
-      },
-    };
+    throw "Not implemented";
   }
 
   getLocations(): Location[] {

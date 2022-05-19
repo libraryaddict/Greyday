@@ -10,6 +10,7 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
+import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 
 export class QuestTowerWallBones implements QuestInfo {
   knife: Item = Item.get("Electric Boning Knife");
@@ -105,6 +106,7 @@ export class QuestTowerBoningKnife implements QuestInfo {
       outfit: outfit,
       run: () => {
         let props = new PropertyManager();
+        DelayBurners.tryReplaceCombats();
 
         try {
           props.setChoice(672, 1);

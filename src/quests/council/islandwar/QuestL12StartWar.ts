@@ -17,6 +17,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { GreyPulls } from "../../../utils/GreyResources";
@@ -76,6 +77,8 @@ export class QuestL12StartWar implements QuestInfo {
       location: this.loc,
       outfit: outfit,
       run: () => {
+        DelayBurners.tryReplaceCombats();
+
         greyAdv(this.loc, outfit);
 
         if (getProperty("warProgress") != "unstarted") {

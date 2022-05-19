@@ -24,9 +24,11 @@ import {
 } from "kolmafia";
 import { AdventureFinder, FoundAdventure } from "./GreyChooser";
 import { QuestAdventure } from "./quests/Quests";
+import { TaskCouncil } from "./tasks/TaskCouncil";
 import { TaskEater } from "./tasks/TaskEater";
 import { Task } from "./tasks/Tasks";
 import { TaskSellCrap } from "./tasks/TaskSellCrap";
+import { TaskWorkshed } from "./tasks/TaskWorkshed";
 import { AdventureLocation } from "./utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "./utils/GreyLocations";
 import { GreyOutfit } from "./utils/GreyOutfitter";
@@ -36,7 +38,12 @@ export class GreyAdventurer {
   goose: Familiar = Familiar.get("Grey Goose");
   adventureFinder: AdventureFinder = new AdventureFinder();
   goTime: boolean;
-  tasks: Task[] = [new TaskEater(), new TaskSellCrap()];
+  tasks: Task[] = [
+    new TaskEater(),
+    new TaskSellCrap(),
+    new TaskWorkshed(),
+    new TaskCouncil(),
+  ];
 
   runTurn(goTime: boolean): boolean {
     this.goTime = goTime;

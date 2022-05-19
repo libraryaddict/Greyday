@@ -1,4 +1,4 @@
-import { availableAmount, Item, Location } from "kolmafia";
+import { availableAmount, Item, Location, Monster } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import {
   hasNonCombatSkillActive,
@@ -13,10 +13,13 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
+import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 
 export class ManorBathroom implements QuestInfo {
   location: Location = Location.get("The Haunted Bathroom");
   item: Item = Item.get("Lady Spookyraven's powder puff");
+  monster: Monster = Monster.get("toilet papergeist");
 
   level(): number {
     return 5;
@@ -38,14 +41,23 @@ export class ManorBathroom implements QuestInfo {
     }
 
     if (this.hasDelay()) {
-      return QuestStatus.READY;
+      if (DelayBurners.isDelayBurnerReady()) {
+        return QuestStatus.READY;
+      }
+
+      if (DelayBurners.isDelayBurnerFeasible()) {
+        return QuestStatus.FASTER_LATER;
+      }
     }
 
     return QuestStatus.READY;
   }
 
   hasDelay(): boolean {
-    return this.location.turnsSpent < 5;
+    return (
+      this.location.turnsSpent < 5 &&
+      AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)
+    );
   }
 
   run(): QuestAdventure {
@@ -61,6 +73,14 @@ export class ManorBathroom implements QuestInfo {
       run: () => {
         let props = new PropertyManager();
         props.setChoice(882, 1);
+
+        if (this.hasDelay()) {
+          let delay = DelayBurners.getReadyDelayBurner();
+
+          if (delay != null) {
+            delay.doFightSetup();
+          }
+        }
 
         try {
           greyAdv(this.location, outfit);

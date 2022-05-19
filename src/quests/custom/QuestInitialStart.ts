@@ -38,6 +38,7 @@ export class QuestInitialStart implements QuestInfo {
   weightRequired: number;
   spaceBlanket: Item = Item.get("Space Blanket");
   mayday: Item = Item.get("MayDay™ supply package");
+  saber: Item = Item.get("Fourth of May Cosplay Saber");
 
   getLocations(): Location[] {
     return [];
@@ -49,6 +50,10 @@ export class QuestInitialStart implements QuestInfo {
 
   status(): QuestStatus {
     if (availableAmount(this.mayday) > 0) {
+      return QuestStatus.READY;
+    }
+
+    if (availableAmount(this.saber) > 0 && getProperty("_saberMod") == "0") {
       return QuestStatus.READY;
     }
 
@@ -64,19 +69,34 @@ export class QuestInitialStart implements QuestInfo {
           visitUrl("peevpee.php?place=fight");
         }
 
+        if (
+          availableAmount(this.saber) > 0 &&
+          getProperty("_saberMod") == "0"
+        ) {
+          cliExecute("saber resistance");
+        }
+
         cliExecute("boombox food");
 
         if (!GreySettings.isHardcoreMode()) {
           GreyPulls.pullStartingGear();
         }
 
-        use(this.mayday);
+        if (availableAmount(this.mayday) > 0) {
+          use(this.mayday);
 
-        if (availableAmount(this.spaceBlanket) > 0) {
-          autosell(this.spaceBlanket, 1);
+          if (availableAmount(this.spaceBlanket) > 0) {
+            autosell(this.spaceBlanket, 1);
+          }
         }
 
-        cliExecute("breakfaster");
+        let breakfastScript = getProperty("breakfastScript");
+
+        if (breakfastScript == "") {
+          breakfastScript = "breakfast";
+        }
+
+        cliExecute(breakfastScript);
       },
     };
   }

@@ -12,6 +12,7 @@ import { PropertyManager } from "../../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../../../Quests";
 import { QuestType } from "../../../../QuestTypes";
+import { DelayBurners } from "../../../../../iotms/delayburners/DelayBurners";
 
 export class QuestL11Curses implements QuestInfo {
   curse1: Effect = Effect.get("Once-Cursed");
@@ -32,6 +33,10 @@ export class QuestL11Curses implements QuestInfo {
   }
 
   mustBeDone(): boolean {
+    if (haveEffect(this.curse3) > 10) {
+      return false;
+    }
+
     return (
       haveEffect(this.curse1) +
         haveEffect(this.curse2) +
@@ -80,6 +85,16 @@ export class QuestL11Curses implements QuestInfo {
 
         if (haveEffect(this.curse3)) {
           props.setChoice(780, 1);
+
+          if (this.delayForNextNC() > 0) {
+            let ready = DelayBurners.getReadyDelayBurner();
+
+            if (ready != null) {
+              ready.doFightSetup();
+            } else {
+              DelayBurners.tryReplaceCombats();
+            }
+          }
         } else {
           props.setChoice(780, 2);
         }

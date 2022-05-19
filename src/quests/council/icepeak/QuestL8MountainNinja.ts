@@ -21,6 +21,7 @@ import { MountainStatus } from "../QuestL8IcePeak";
 
 export class QuestL8MountainNinja implements QuestInfo {
   ninja: Location = Location.get("Lair of the Ninja Snowmen");
+  // TODO Once we've got the absorbs, try replace combats if assassins isnt done cos we're really just stacking +combat
 
   getId(): QuestType {
     return "Council / Ice / Ninjas";

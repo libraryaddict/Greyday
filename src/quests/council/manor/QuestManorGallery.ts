@@ -1,4 +1,4 @@
-import { availableAmount, Item, Location } from "kolmafia";
+import { availableAmount, Item, Location, Monster } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import {
   hasNonCombatSkillActive,
@@ -13,11 +13,14 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
+import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 
 export class ManorGallery implements QuestInfo {
   location: Location = Location.get("The Haunted Gallery");
   item: Item = Item.get("Lady Spookyraven's dancing shoes");
   sword: Item = Item.get("serpentine sword");
+  pitchfork: Monster = Monster.get("guy with a pitchfork, and his wife");
 
   level(): number {
     return 5;
@@ -39,14 +42,23 @@ export class ManorGallery implements QuestInfo {
     }
 
     if (this.hasDelay()) {
-      return QuestStatus.READY;
+      if (DelayBurners.isDelayBurnerReady()) {
+        return QuestStatus.READY;
+      }
+
+      if (DelayBurners.isDelayBurnerFeasible()) {
+        return QuestStatus.FASTER_LATER;
+      }
     }
 
     return QuestStatus.READY;
   }
 
   hasDelay(): boolean {
-    return this.location.turnsSpent < 5;
+    return (
+      this.location.turnsSpent < 5 &&
+      AbsorbsProvider.getReabsorbedMonsters().includes(this.pitchfork)
+    );
   }
 
   run(): QuestAdventure {
@@ -58,6 +70,14 @@ export class ManorGallery implements QuestInfo {
       run: () => {
         // TODO Handle NCs
         let props = new PropertyManager();
+
+        if (this.hasDelay()) {
+          let delay = DelayBurners.getReadyDelayBurner();
+
+          if (delay != null) {
+            delay.doFightSetup();
+          }
+        }
 
         /* if (availableAmount(this.sword) == 0) {
           props.setChoice(89, 2);

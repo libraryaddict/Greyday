@@ -127,7 +127,6 @@ export class QuestRegistry {
       { id: "Council / MacGruffin / HiddenCity / Vines" },
 
       { id: "Misc / ManorLights" },
-      { id: "Misc / ColdMedicineCabinet" },
       { id: "Misc / UnlockDungeonsOfDoom" },
       { id: "Misc / GrabZapWand" },
       {

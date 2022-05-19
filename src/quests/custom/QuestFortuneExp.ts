@@ -4,6 +4,9 @@ import {
   getProperty,
   familiarWeight,
   cliExecute,
+  familiarEquipment,
+  Item,
+  availableAmount,
 } from "kolmafia";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
@@ -11,6 +14,7 @@ import { QuestType } from "../QuestTypes";
 
 export class QuestFortuneExp implements QuestInfo {
   fam: Familiar = Familiar.get("Grey Goose");
+  equip: Item = familiarEquipment(this.fam);
 
   getId(): QuestType {
     return "Misc / FortuneExp";
@@ -25,7 +29,7 @@ export class QuestFortuneExp implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (familiarWeight(this.fam) > 2) {
+    if (familiarWeight(this.fam) > 2 || availableAmount(this.equip) == 0) {
       return QuestStatus.NOT_READY;
     }
 
@@ -37,7 +41,7 @@ export class QuestFortuneExp implements QuestInfo {
       location: null,
       outfit: new GreyOutfit("-tie"),
       run: () => {
-        cliExecute("fortune familiar");
+        cliExecute("fortune buff familiar");
       },
     };
   }

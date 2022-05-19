@@ -5,7 +5,6 @@ import { QuestDungeonsOfDoom } from "./custom/QuestDungeonsOfDoom";
 import { QuestGetZapWand } from "./custom/QuestGetZapWand";
 import { QuestLocketFantasyRealm } from "./locket/QuestFantasyRealm";
 import { QuestNPCStuff } from "./custom/QuestNpcStuff";
-import { QuestWorkshed } from "./custom/QuestWorkshed";
 import { QuestCustomPurchases } from "./custom/QuestCustomPurchases";
 import { QuestGoblinTortureHarem } from "./custom/goblin/QuestGoblinTortureHarem";
 import { QuestGoblinTortureLab } from "./custom/goblin/QuestGoblinTortureLab";
@@ -39,7 +38,6 @@ export class QuestsCustom implements QuestInfo {
     this.quests.push(new QuestDungeonsOfDoom());
     this.quests.push(new QuestGetZapWand());
     this.quests.push(new QuestNPCStuff());
-    this.quests.push(new QuestWorkshed());
     this.quests.push(new QuestCustomPurchases());
     this.quests.push(new QuestGrabHippyOutfit());
     this.quests.push(new QuestGrabBoatVacation());

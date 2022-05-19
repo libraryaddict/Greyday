@@ -9,6 +9,8 @@ import {
   print,
   use,
 } from "kolmafia";
+import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
+import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { GreyChoices } from "../../../../utils/GreyChoices";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -22,6 +24,7 @@ export class QuestL11TempleUnlock implements QuestInfo {
   sapling: Item = Item.get("Spooky Sapling");
   spookyLoc: Location = Location.get("The Spooky Forest");
   choices: TempleChoices;
+  monster: Monster = Monster.get("warwelf");
 
   getId(): QuestType {
     return "Council / MacGruffin / Temple / Unlock";
@@ -38,6 +41,16 @@ export class QuestL11TempleUnlock implements QuestInfo {
 
     if (getProperty("questM16Temple") == "unstarted") {
       return QuestStatus.NOT_READY;
+    }
+
+    if (this.isDelayBurning()) {
+      if (DelayBurners.isDelayBurnerReady()) {
+        return QuestStatus.READY;
+      }
+
+      if (DelayBurners.isDelayBurnerFeasible()) {
+        return QuestStatus.FASTER_LATER;
+      }
     }
 
     return QuestStatus.READY;
@@ -89,6 +102,13 @@ export class QuestL11TempleUnlock implements QuestInfo {
     }
   }
 
+  isDelayBurning(): boolean {
+    return (
+      this.spookyLoc.turnsSpent < 5 &&
+      AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)
+    );
+  }
+
   run(): QuestAdventure {
     let outfit = new GreyOutfit().setNoCombat();
 
@@ -100,6 +120,14 @@ export class QuestL11TempleUnlock implements QuestInfo {
 
         if (this.templeFound()) {
           return;
+        }
+
+        if (this.isDelayBurning()) {
+          let delay = DelayBurners.getReadyDelayBurner();
+
+          if (delay != null) {
+            delay.doFightSetup();
+          }
         }
 
         this.runSpookyChoices();

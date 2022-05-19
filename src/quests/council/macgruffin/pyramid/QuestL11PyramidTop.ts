@@ -24,6 +24,8 @@ export class QuestL11PyramidTop implements QuestInfo {
   staff: Item = Item.get("Staff of Fats");
   staff2: Item = Item.get("[2325]Staff Of Ed");
 
+  // TODO Once we've got the absorbs, try replace combats
+
   getId(): QuestType {
     return "Council / MacGruffin / Pyramid / Top";
   }

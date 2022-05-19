@@ -1,37 +1,23 @@
 import {
-  adv1,
-  adventure,
   availableAmount,
   council,
-  Effect,
   getProperty,
-  handlingChoice,
-  haveEffect,
-  haveSkill,
   Item,
-  itemAmount,
   Location,
-  maximize,
-  myLevel,
-  myMp,
-  numericModifier,
-  Skill,
-  useSkill,
+  Monster,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
-import {
-  OutfitImportance,
-  QuestAdventure,
-  QuestInfo,
-  QuestStatus,
-} from "../Quests";
+import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
 import { greyAdv } from "../../utils/GreyLocations";
 import { QuestType } from "../QuestTypes";
+import { DelayBurners } from "../../iotms/delayburners/DelayBurners";
+import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 
 export class QuestL2SpookyLarva implements QuestInfo {
   location: Location = Location.get("The Spooky Forest");
+  monster: Monster = Monster.get("warwelf");
 
   level(): number {
     return 2;
@@ -48,8 +34,14 @@ export class QuestL2SpookyLarva implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (this.location.turnsSpent < 5) {
-      //   return QuestStatus.HAS_DELAY_BURNING;
+    if (this.isDelayBurning()) {
+      if (DelayBurners.isDelayBurnerReady()) {
+        return QuestStatus.READY;
+      }
+
+      if (DelayBurners.isDelayBurnerFeasible()) {
+        return QuestStatus.FASTER_LATER;
+      }
     }
 
     if (!hasNonCombatSkillsReady(false)) {
@@ -57,6 +49,13 @@ export class QuestL2SpookyLarva implements QuestInfo {
     }
 
     return QuestStatus.READY;
+  }
+
+  isDelayBurning(): boolean {
+    return (
+      this.location.turnsSpent < 5 &&
+      AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)
+    );
   }
 
   run(): QuestAdventure {
@@ -79,6 +78,14 @@ export class QuestL2SpookyLarva implements QuestInfo {
 
         props.setChoice(502, 2);
         props.setChoice(505, 1);
+
+        if (this.isDelayBurning()) {
+          let delay = DelayBurners.getReadyDelayBurner();
+
+          if (delay != null) {
+            delay.doFightSetup();
+          }
+        }
 
         try {
           greyAdv(this.location);

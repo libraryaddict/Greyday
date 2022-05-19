@@ -17,6 +17,8 @@ export class QuestL10GiantShip implements QuestInfo {
   wig: Item = Item.get("Mohawk Wig");
   loc: Location = Location.get("The Penultimate Fantasy Airship");
 
+  // TODO Once we've got the items and absorbs, try replace combats
+
   run(): QuestAdventure {
     let outfit = new GreyOutfit().setNoCombat();
     let wantDrops =

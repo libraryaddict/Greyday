@@ -169,7 +169,7 @@ export class ABooHandler implements QuestInfo {
 
   createOutfit(): GreyOutfit {
     let outfit = new GreyOutfit().addBonus("+40 cold res +40 spooky res");
-    outfit.hpWeight = 1;
+    outfit.hpWeight = 2;
 
     return outfit;
   }

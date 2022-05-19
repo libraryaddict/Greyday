@@ -238,25 +238,29 @@ class GreyRequirements {
     let dontHave: string[] = [];
 
     if (!haveFamiliar(Familiar.get("Grey Goose"))) {
-      dontHave.push("Grey Goose");
+      dontHave.push("Grey Goose, you must have this.");
     }
 
     if (availableAmount(Item.get("Combat Lover's Locket")) == 0) {
-      dontHave.push("Combat Lovers Locket");
+      dontHave.push("Combat Lovers Locket, very useful");
     }
 
     if (availableAmount(Item.get("industrial fire extinguisher")) == 0) {
-      dontHave.push("industrial fire extinguisher");
+      dontHave.push("industrial fire extinguisher, saves 8ish turns?");
     }
 
     if (availableAmount(Item.get("backup camera")) == 0) {
-      dontHave.push("Backup Camera");
+      dontHave.push(
+        "Backup Camera, can range from must have to saves 6+ turns"
+      );
     }
 
     if (
       availableAmount(Item.get("unwrapped knock-off retro superhero cape")) == 0
     ) {
-      dontHave.push("unwrapped knock-off retro superhero cape");
+      dontHave.push(
+        "unwrapped knock-off retro superhero cape, saves 15ish turns"
+      );
     }
 
     // TODO  MayDay™ supply package
