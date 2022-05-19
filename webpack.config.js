@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   entry: {
-    locket: "./src/GreyYouMain.ts",
+    grey: "./src/GreyYouMain.ts",
   },
   mode: "production",
   module: {
