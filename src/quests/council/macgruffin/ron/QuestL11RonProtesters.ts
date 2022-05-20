@@ -25,6 +25,7 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
+import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 
 export class QuestL11RonProtesters implements QuestInfo {
   proLoc: Location = Location.get("A Mob Of Zeppelin Protesters");
@@ -38,6 +39,7 @@ export class QuestL11RonProtesters implements QuestInfo {
   cig: Item = Item.get("cigarette lighter");
   flaming: Item = Item.get("Flamin' Whatshisname");
   musky: Effect = Effect.get("Musky");
+  toAbsorb: Monster[];
   // TODO Once we've got the absorbs, try replace combats
 
   isReady(): boolean {
@@ -116,6 +118,10 @@ export class QuestL11RonProtesters implements QuestInfo {
           );
           settings.addNoBanish(Monster.get("Blue Oyster Cultist"));
           settings.addNoBanish(Monster.get("Lynyrd Skinner"));
+
+          if (this.toAbsorb.length == 0) {
+            DelayBurners.tryReplaceCombats();
+          }
 
           greyAdv(
             Location.get("A Mob Of Zeppelin Protesters"),

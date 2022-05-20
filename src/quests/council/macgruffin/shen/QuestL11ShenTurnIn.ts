@@ -8,9 +8,10 @@ import {
   getProperty,
   toInt,
   use,
+  Monster,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
-import { greyAdv } from "../../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -18,11 +19,17 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
+import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 
 export class QuestL11ShenTurnIn implements QuestInfo {
   disguise: Item = Item.get("Crappy Waiter Disguise");
   shenClub: Location = Location.get("The Copperhead Club");
   crappy: Effect = Effect.get("Crappily Disguised as a Waiter");
+  crappyDisguises: Monster[] = [
+    "Waiter dressed as a ninja",
+    "Ninja dressed as a waiter",
+  ].map((s) => Monster.get(s));
+  toAbsorb: Monster[];
 
   getId(): QuestType {
     return "Council / MacGruffin / Shen / TurnIn";
@@ -73,9 +80,25 @@ export class QuestL11ShenTurnIn implements QuestInfo {
             props.setChoice(855, 3); // Light lanterns on fire
           } else {
             props.setChoice(855, 4); // Get unnamed cocktails
+
+            if (this.toAbsorb.length == 0) {
+              let ready = DelayBurners.getReadyDelayBurner();
+
+              if (ready != null) {
+                ready.doFightSetup();
+              } else {
+                DelayBurners.tryReplaceCombats();
+              }
+            }
           }
 
-          greyAdv(this.shenClub);
+          let settings = new AdventureSettings();
+
+          for (let m of this.crappyDisguises) {
+            settings.addNoBanish(m);
+          }
+
+          greyAdv(this.shenClub, null, settings);
         } finally {
           props.resetAll();
         }
