@@ -2,6 +2,7 @@ import {
   appearanceRates,
   Effect,
   equippedAmount,
+  Familiar,
   getMonsters,
   getProperty,
   haveEffect,
@@ -14,6 +15,7 @@ import {
   myAscensions,
   myBasestat,
   myBuffedstat,
+  myFamiliar,
   myHp,
   myLevel,
   myLocation,
@@ -140,7 +142,7 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
   let macro = new Macro();
 
   if (haveEffect(Effect.get("Temporary Amnesia")) == 0) {
-    if (myLevel() < 5) {
+    if (myLevel() < 5 && myFamiliar() == Familiar.get("Grey Goose")) {
       macro = macro.trySkill(" Convert Matter to Pomade");
     }
 

@@ -7,6 +7,8 @@ import {
   Item,
   Skill,
   toInt,
+  Monster,
+  print,
 } from "kolmafia";
 import { greyAdv, AdventureSettings } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -22,6 +24,7 @@ import { QuestType } from "../../QuestTypes";
 export class QuestL5GoblinHarem implements QuestInfo {
   harem: Location = Location.get("Cobb's Knob Harem");
   extingisher: Item = Item.get("industrial fire extinguisher");
+  toAbsorb: Monster[];
 
   // TODO Don't fire extingush the absorb
 
@@ -72,12 +75,19 @@ export class QuestL5GoblinHarem implements QuestInfo {
       outfit: outfit,
       run: () => {
         // When we have access to the harem, blast it down
+        let macro: Macro = Macro.trySkill(
+          Skill.get("Fire Extinguisher: Zone Specific")
+        );
+
+        // If its a monster we want to absorb, don't blast it down
+        for (let absorb of this.toAbsorb) {
+          macro = Macro.if_(absorb as Monster, macro, true);
+        }
+
         greyAdv(
           Location.get("Cobb's Knob Harem"),
           outfit,
-          new AdventureSettings().setStartOfFightMacro(
-            new Macro().trySkill(Skill.get("Fire Extinguisher: Zone Specific"))
-          )
+          new AdventureSettings().setStartOfFightMacro(macro)
         );
       },
     };

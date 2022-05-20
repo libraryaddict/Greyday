@@ -83,11 +83,17 @@ export class QuestInitialStart implements QuestInfo {
           cliExecute("saber resistance");
         }
 
-        if (availableAmount(Item.get("SongBoom™ BoomBox")) > 0) {
+        if (
+          availableAmount(Item.get("SongBoom™ BoomBox")) > 0 &&
+          getProperty("_boomBoxSongsLeft") == "11"
+        ) {
           cliExecute("boombox food");
         }
 
-        if (!GreySettings.isHardcoreMode()) {
+        if (
+          !GreySettings.isHardcoreMode() &&
+          availableAmount(Item.get("Mafia Thumb Ring")) == 0
+        ) {
           GreyPulls.pullStartingGear();
         }
 
@@ -99,13 +105,15 @@ export class QuestInitialStart implements QuestInfo {
           }
         }
 
-        let breakfastScript = getProperty("breakfastScript");
+        if (getProperty("breakfastCompleted") == "false") {
+          let breakfastScript = getProperty("breakfastScript");
 
-        if (breakfastScript == "") {
-          breakfastScript = "breakfast";
+          if (breakfastScript == "") {
+            breakfastScript = "breakfast";
+          }
+
+          cliExecute(breakfastScript);
         }
-
-        cliExecute(breakfastScript);
       },
     };
   }

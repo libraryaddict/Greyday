@@ -48,9 +48,33 @@ export class AdventureFinder {
 
   start() {
     this.viableQuests = this.quester.getDoableQuests();
+    this.setAbsorbs();
     this.defeated = this.absorbs.getAbsorbedMonstersFromInstance();
     this.goodAbsorbs = this.absorbs.getExtraAdventures(this.defeated, true);
     this.setQuestLocations();
+  }
+
+  setAbsorbs() {
+    let defeated = this.absorbs.getAbsorbedMonstersFromInstance();
+
+    for (let quest of this.quester.getAllQuests()) {
+      if (
+        quest.status() == QuestStatus.NOT_READY ||
+        quest.status() == QuestStatus.COMPLETED
+      ) {
+        continue;
+      }
+
+      let run = quest.run();
+
+      if (run.location == null) {
+        continue;
+      }
+
+      let result = this.absorbs.getAdventuresInLocation(defeated, run.location);
+
+      quest.toAbsorb = result == null ? [] : result.monsters;
+    }
   }
 
   setQuestLocations() {
@@ -337,8 +361,10 @@ export class AdventureFinder {
       return;
     }
 
-    let lookForAdventures: boolean = myAdventures() <= 15;
-    let hasBlessing = haveEffect(Effect.get("Brother Corsican's Blessing")) > 0;
+    let hasBlessing =
+      haveEffect(Effect.get("Brother Corsican's Blessing")) +
+        haveEffect(Effect.get("A Girl Named Sue")) >
+      0;
 
     let quests: [QuestInfo, AdventureLocation][] = [];
     let nonQuests: [AdventureLocation, number][] = [];
@@ -504,6 +530,8 @@ class GreyQuester {
     let quests: QuestInfo[] = [];
 
     let tryAdd = (q: QuestInfo) => {
+      q.toAbsorb = null;
+
       if (q.level() > myLevel()) {
         return;
       }

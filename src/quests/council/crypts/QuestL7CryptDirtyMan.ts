@@ -1,4 +1,5 @@
 import {
+  availableAmount,
   Familiar,
   getProperty,
   haveSkill,
@@ -49,8 +50,11 @@ export class CryptL7DirtyMan extends CryptL7Template {
         let killing = greyKillingBlow(outfit);
 
         if (this.canSprayDown()) {
-          killing = Macro.trySkill(
-            Skill.get("Fire Extinguisher: Zone Specific")
+          // If its a dirty lich, don't spray down
+          killing = Macro.if_(
+            this.dirty,
+            Macro.trySkill(Skill.get("Fire Extinguisher: Zone Specific")),
+            true
           ).step(killing);
         }
 
@@ -77,6 +81,7 @@ export class CryptL7DirtyMan extends CryptL7Template {
 
   canSprayDown(): boolean {
     return (
+      availableAmount(this.fire) > 0 &&
       getProperty("fireExtinguisherCyrptUsed") != "true" &&
       toInt(getProperty("_fireExtinguisherCharge")) >= 20
     );

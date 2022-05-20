@@ -66,16 +66,16 @@ export class AbsorbsProvider {
       [
         ["Advanced Exo-Alloy", "100 DA"],
         ["Conifer Polymers", "3 Stench Resist"],
-        ["Clammy Microcilia", "2 Stench Resist"],
-        ["Cooling Tubules", "10 Cold Damage"],
+        //["Clammy Microcilia", "2 Stench Resist"],
+        //["Cooling Tubules", "10 Cold Damage"],
         ["Cryocurrency", "5 Cold Damage"],
-        ["Ire Proof", "+3 Hot Resist"],
-        ["Snow-Cooling System", "+15 Cold Dmg"],
+        // ["Ire Proof", "+3 Hot Resist"],
+        // ["Snow-Cooling System", "+15 Cold Dmg"],
         ["Cooling Tubules", "+10 Cold Dmg"],
-        ["Financial Spreadsheets", "+40% Meat from Monsters"],
-        ["Innuendo Circuitry", "+15 Sleaze Damage"],
+        //["Financial Spreadsheets", "+40% Meat from Monsters"],
+        //["Innuendo Circuitry", "+15 Sleaze Damage"],
         ["Ponzi Apparatus", "Scaling meat%"],
-        ["Procgen Ribaldry", "10 Sleaze Damage"],
+        // ["Procgen Ribaldry", "10 Sleaze Damage"],
         ["Propagation Drive", "20% Item Drops"],
       ].map((s) => [toSkill(s[0]), s[1]])
     );
