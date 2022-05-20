@@ -47,3 +47,4 @@
 // Potentially try to unlock dungeons of doom easier / absorb +mp mobs
 // spooky putty? Forgot what it does
 // Maybe stuffing fluffers, look at loopcasual to see what dirty tricks it pulls
+// Use kramco when its ready and there's no zones that wants it
