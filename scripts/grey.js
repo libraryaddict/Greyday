@@ -5290,6 +5290,7 @@ function QuestL11RonProtesters_createForOfIteratorHelper(o, allowArrayLike) {var
 
 
 
+
 var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtesters() {QuestL11RonProtesters_classCallCheck(this, QuestL11RonProtesters);QuestL11RonProtesters_defineProperty(this, "proLoc",
     external_kolmafia_namespaceObject.Location.get("A Mob Of Zeppelin Protesters"));QuestL11RonProtesters_defineProperty(this, "deck",
     external_kolmafia_namespaceObject.Item.get("deck of lewd playing cards"));QuestL11RonProtesters_defineProperty(this, "lyrndCostume",
@@ -5301,7 +5302,8 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
     external_kolmafia_namespaceObject.Item.get("lynyrd musk"));QuestL11RonProtesters_defineProperty(this, "cig",
     external_kolmafia_namespaceObject.Item.get("cigarette lighter"));QuestL11RonProtesters_defineProperty(this, "flaming",
     external_kolmafia_namespaceObject.Item.get("Flamin' Whatshisname"));QuestL11RonProtesters_defineProperty(this, "musky",
-    external_kolmafia_namespaceObject.Effect.get("Musky"));}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "isReady", value:
+    external_kolmafia_namespaceObject.Effect.get("Musky"));QuestL11RonProtesters_defineProperty(this, "toAbsorb", void 0);}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "isReady", value:
+
     // TODO Once we've got the absorbs, try replace combats
 
     function isReady() {
@@ -5380,6 +5382,10 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
 
             settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Blue Oyster Cultist"));
             settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Lynyrd Skinner"));
+
+            if (this.toAbsorb.length == 0) {
+              DelayBurners.tryReplaceCombats();
+            }
 
             greyAdv(
             external_kolmafia_namespaceObject.Location.get("A Mob Of Zeppelin Protesters"),
@@ -5658,7 +5664,8 @@ var QuestL11ShenNinja = /*#__PURE__*/function () {function QuestL11ShenNinja() {
       return [this.location];
     } }]);return QuestL11ShenNinja;}();
 ;// CONCATENATED MODULE: ./src/quests/council/macgruffin/shen/QuestL11ShenTurnIn.ts
-function QuestL11ShenTurnIn_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL11ShenTurnIn_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL11ShenTurnIn_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL11ShenTurnIn_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL11ShenTurnIn_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL11ShenTurnIn_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL11ShenTurnIn_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL11ShenTurnIn_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestL11ShenTurnIn_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL11ShenTurnIn_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL11ShenTurnIn_arrayLikeToArray(o, minLen);}function QuestL11ShenTurnIn_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL11ShenTurnIn_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL11ShenTurnIn_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL11ShenTurnIn_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL11ShenTurnIn_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL11ShenTurnIn_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL11ShenTurnIn_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -5667,7 +5674,12 @@ function QuestL11ShenTurnIn_classCallCheck(instance, Constructor) {if (!(instanc
 var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn() {QuestL11ShenTurnIn_classCallCheck(this, QuestL11ShenTurnIn);QuestL11ShenTurnIn_defineProperty(this, "disguise",
     external_kolmafia_namespaceObject.Item.get("Crappy Waiter Disguise"));QuestL11ShenTurnIn_defineProperty(this, "shenClub",
     external_kolmafia_namespaceObject.Location.get("The Copperhead Club"));QuestL11ShenTurnIn_defineProperty(this, "crappy",
-    external_kolmafia_namespaceObject.Effect.get("Crappily Disguised as a Waiter"));}QuestL11ShenTurnIn_createClass(QuestL11ShenTurnIn, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Effect.get("Crappily Disguised as a Waiter"));QuestL11ShenTurnIn_defineProperty(this, "crappyDisguises",
+    [
+    "Waiter dressed as a ninja",
+    "Ninja dressed as a waiter"].
+    map((s) => external_kolmafia_namespaceObject.Monster.get(s)));QuestL11ShenTurnIn_defineProperty(this, "toAbsorb", void 0);}QuestL11ShenTurnIn_createClass(QuestL11ShenTurnIn, [{ key: "getId", value:
+
 
     function getId() {
       return "Council / MacGruffin / Shen / TurnIn";
@@ -5718,9 +5730,25 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
               props.setChoice(855, 3); // Light lanterns on fire
             } else {
               props.setChoice(855, 4); // Get unnamed cocktails
+
+              if (this.toAbsorb.length == 0) {
+                var ready = DelayBurners.getReadyDelayBurner();
+
+                if (ready != null) {
+                  ready.doFightSetup();
+                } else {
+                  DelayBurners.tryReplaceCombats();
+                }
+              }
             }
 
-            greyAdv(this.shenClub);
+            var settings = new AdventureSettings();var _iterator = QuestL11ShenTurnIn_createForOfIteratorHelper(
+
+            this.crappyDisguises),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var m = _step.value;
+                settings.addNoBanish(m);
+              }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+
+            greyAdv(this.shenClub, null, settings);
           } finally {
             props.resetAll();
           }
@@ -13041,6 +13069,10 @@ var QuestL9Smut = /*#__PURE__*/function () {function QuestL9Smut() {QuestL9OrcsA
       }
 
       return QuestStatus.NOT_READY;
+    } }, { key: "mustBeDone", value:
+
+    function mustBeDone() {
+      return true;
     } }, { key: "getStatus", value:
 
     function getStatus() {
