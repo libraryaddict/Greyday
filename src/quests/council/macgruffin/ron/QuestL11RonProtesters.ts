@@ -40,7 +40,7 @@ export class QuestL11RonProtesters implements QuestInfo {
   flaming: Item = Item.get("Flamin' Whatshisname");
   musky: Effect = Effect.get("Musky");
   toAbsorb: Monster[];
-  // TODO Once we've got the absorbs, try replace combats
+  // TODO Once we've got the absorbs, try replace combats if it won't hurt our NCs
 
   isReady(): boolean {
     return (
@@ -118,10 +118,6 @@ export class QuestL11RonProtesters implements QuestInfo {
           );
           settings.addNoBanish(Monster.get("Blue Oyster Cultist"));
           settings.addNoBanish(Monster.get("Lynyrd Skinner"));
-
-          if (this.toAbsorb.length == 0) {
-            DelayBurners.tryReplaceCombats();
-          }
 
           greyAdv(
             Location.get("A Mob Of Zeppelin Protesters"),

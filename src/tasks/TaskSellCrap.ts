@@ -1,4 +1,4 @@
-import { autosell, Item, itemAmount, use } from "kolmafia";
+import { autosell, Item, itemAmount, myMeat, use } from "kolmafia";
 import { Task } from "./Tasks";
 
 export class TaskSellCrap implements Task {
@@ -19,6 +19,10 @@ export class TaskSellCrap implements Task {
   ].map((s) => Item.get(s));
 
   run(): void {
+    if (myMeat() > 15000) {
+      return;
+    }
+
     for (let i of this.autosells) {
       if (itemAmount(i) == 0) {
         continue;

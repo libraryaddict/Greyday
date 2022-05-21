@@ -36,7 +36,7 @@ export class QuestL8MountainBoss implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().addBonus("+cold res");
+    let outfit = new GreyOutfit().addBonus("+2 cold res");
 
     return {
       location: this.peak,

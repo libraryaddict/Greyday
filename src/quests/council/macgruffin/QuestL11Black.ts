@@ -6,6 +6,7 @@ import {
   getProperty,
   Item,
   Location,
+  Monster,
   myLevel,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
@@ -18,14 +19,26 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
+import { hasUnlockedLatteFlavor, LatteFlavor } from "../../../utils/LatteUtils";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 
 export class QuestL11Black implements QuestInfo {
   boots: Item = Item.get("Blackberry Galoshes");
   beehive: Item = Item.get("Beehive");
   loc: Location = Location.get("The Black Forest");
+  latte: Item = Item.get("Latte lovers member's mug");
+  blackbird: Item = Item.get("reassembled blackbird");
+  toAbsorb: Monster[];
 
   level(): number {
     return 11;
+  }
+
+  shouldWearLatte(): boolean {
+    return (
+      availableAmount(this.latte) > 0 &&
+      !hasUnlockedLatteFlavor(LatteFlavor.MEAT_DROP)
+    );
   }
 
   getLocations(): Location[] {
@@ -53,9 +66,13 @@ export class QuestL11Black implements QuestInfo {
       outfit.addItem(this.boots);
     }
 
+    if (this.shouldWearLatte()) {
+      outfit.addItem(this.latte);
+    }
+
     let fam: Familiar;
 
-    if (availableAmount(Item.get("reassembled blackbird")) == 0) {
+    if (availableAmount(this.blackbird) == 0) {
       fam = Familiar.get("Reassembled Blackbird");
     }
 
@@ -65,6 +82,10 @@ export class QuestL11Black implements QuestInfo {
       familiar: fam,
       run: () => {
         let props = new PropertyManager();
+
+        if (fam != null && !this.shouldWearLatte()) {
+          DelayBurners.tryReplaceCombats();
+        }
 
         try {
           if (availableAmount(this.beehive) == 0) {

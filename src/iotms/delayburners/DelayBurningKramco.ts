@@ -6,6 +6,7 @@ import {
   equip,
   Item,
   Slot,
+  print,
 } from "kolmafia";
 import { DelayBurner } from "./DelayBurnerAbstract";
 
@@ -72,11 +73,11 @@ export class DelayBurningKramco implements DelayBurner {
 
   getChanceOfFight(): number {
     let chance =
-      ((this.getLastGoblinTurn() + 1.0) / (5.0 + this.getGoblinsFought())) *
-        3.0 +
-      this.getGoblinMultiplier() *
+      (this.getLastGoblinTurn() + 1.0) /
+      ((5.0 + this.getGoblinsFought()) * 3.0 +
         this.getGoblinMultiplier() *
-        this.getGoblinMultiplier();
+          this.getGoblinMultiplier() *
+          this.getGoblinMultiplier());
 
     if (chance > 1) {
       chance = 1;

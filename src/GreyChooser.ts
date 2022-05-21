@@ -47,11 +47,30 @@ export class AdventureFinder {
   questLocations: Location[];
 
   start() {
+    this.setPreAbsorbs();
     this.viableQuests = this.quester.getDoableQuests();
     this.setAbsorbs();
     this.defeated = this.absorbs.getAbsorbedMonstersFromInstance();
     this.goodAbsorbs = this.absorbs.getExtraAdventures(this.defeated, true);
     this.setQuestLocations();
+  }
+
+  setPreAbsorbs() {
+    let defeated = this.absorbs.getAbsorbedMonstersFromInstance();
+
+    for (let quest of this.quester.getAllQuests()) {
+      quest.toAbsorb = [];
+
+      for (let loc of quest.getLocations()) {
+        let result = this.absorbs.getAdventuresInLocation(defeated, loc);
+
+        if (result == null) {
+          continue;
+        }
+
+        quest.toAbsorb.push(...result.monsters);
+      }
+    }
   }
 
   setAbsorbs() {
@@ -530,8 +549,6 @@ class GreyQuester {
     let quests: QuestInfo[] = [];
 
     let tryAdd = (q: QuestInfo) => {
-      q.toAbsorb = null;
-
       if (q.level() > myLevel()) {
         return;
       }

@@ -33,7 +33,7 @@ export class ManorBedroom implements QuestInfo {
     "Animated Rustic Nightstand",
     "Wardröb nightstand",
   ].map((m) => Monster.get(m));
-  advsProvider: Monster = Monster.get("animated rustic nightstand");
+  toAbsorb: Monster[];
 
   needCamera(): boolean {
     return (
@@ -85,11 +85,11 @@ export class ManorBedroom implements QuestInfo {
 
   hasDelay(): boolean {
     return (
+      this.toAbsorb.length == 0 &&
       this.location.turnsSpent < 5 &&
       !this.needCamera() &&
       !this.needGlasses() &&
-      this.needDress() &&
-      AbsorbsProvider.getReabsorbedMonsters().includes(this.advsProvider)
+      this.needDress()
     );
   }
 

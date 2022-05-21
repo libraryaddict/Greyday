@@ -17,16 +17,12 @@ export class QuestL10GiantGround implements QuestInfo {
   loc: Location = Location.get(
     "The Castle in the Clouds in the Sky (Ground Floor)"
   );
-  monster: Monster = Monster.get("Alphabet Giant");
-
-  isAbsorbed(): boolean {
-    return AbsorbsProvider.getReabsorbedMonsters().includes(this.monster);
-  }
+  toAbsorb: Monster[];
 
   isDelayBurning() {
     return (
       availableAmount(this.boning) > 0 &&
-      this.isAbsorbed() &&
+      this.toAbsorb.length == 0 &&
       this.loc.turnsSpent < 11
     );
   }
@@ -55,7 +51,7 @@ export class QuestL10GiantGround implements QuestInfo {
           } else {
             DelayBurners.tryReplaceCombats();
           }
-        } else if (this.isAbsorbed()) {
+        } else if (this.toAbsorb.length == 0) {
           DelayBurners.tryReplaceCombats();
         }
 

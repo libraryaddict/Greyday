@@ -1,6 +1,7 @@
 import {
   availableAmount,
   getProperty,
+  hippyStoneBroken,
   Item,
   Location,
   Monster,
@@ -10,6 +11,7 @@ import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { hasUnlockedLatteFlavor, LatteFlavor } from "../../../utils/LatteUtils";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -17,9 +19,18 @@ export class QuestL6FriarNeck implements QuestInfo {
   item: Item = Item.get("dodecagram");
   location: Location = Location.get("Dark Neck of the Woods");
   absorbs: Monster[] = [Monster.get("P imp"), Monster.get("W imp")];
+  latte: Item = Item.get("Latte lovers member's mug");
 
   level(): number {
     return 6;
+  }
+
+  shouldWearLatte(): boolean {
+    return (
+      hippyStoneBroken() &&
+      availableAmount(this.latte) > 0 &&
+      !hasUnlockedLatteFlavor(LatteFlavor.PVP_FIGHTS)
+    );
   }
 
   isAllAbsorbed(): boolean {
@@ -54,11 +65,15 @@ export class QuestL6FriarNeck implements QuestInfo {
   run(): QuestAdventure {
     let outfit = new GreyOutfit().setNoCombat();
 
+    if (this.shouldWearLatte()) {
+      outfit.addItem(this.latte);
+    }
+
     return {
       location: this.location,
       outfit: outfit,
       run: () => {
-        if (this.isAllAbsorbed()) {
+        if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
           DelayBurners.tryReplaceCombats();
         }
 

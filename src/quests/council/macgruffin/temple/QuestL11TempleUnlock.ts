@@ -1,4 +1,5 @@
 import {
+  availableAmount,
   cliExecute,
   Familiar,
   getProperty,
@@ -9,11 +10,16 @@ import {
   print,
   use,
 } from "kolmafia";
+import { hasNonCombatSkillsReady } from "../../../../GreyAdventurer";
 import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { GreyChoices } from "../../../../utils/GreyChoices";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import {
+  hasUnlockedLatteFlavor,
+  LatteFlavor,
+} from "../../../../utils/LatteUtils";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
@@ -24,7 +30,15 @@ export class QuestL11TempleUnlock implements QuestInfo {
   sapling: Item = Item.get("Spooky Sapling");
   spookyLoc: Location = Location.get("The Spooky Forest");
   choices: TempleChoices;
-  monster: Monster = Monster.get("warwelf");
+  latte: Item = Item.get("Latte lovers member's mug");
+  toAbsorb: Monster[];
+
+  shouldWearLatte(): boolean {
+    return (
+      availableAmount(this.latte) > 0 &&
+      !hasUnlockedLatteFlavor(LatteFlavor.FAMILIAR_WEIGHT)
+    );
+  }
 
   getId(): QuestType {
     return "Council / MacGruffin / Temple / Unlock";
@@ -103,14 +117,15 @@ export class QuestL11TempleUnlock implements QuestInfo {
   }
 
   isDelayBurning(): boolean {
-    return (
-      this.spookyLoc.turnsSpent < 5 &&
-      AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)
-    );
+    return this.spookyLoc.turnsSpent < 5 && this.toAbsorb.length == 0;
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    let outfit = new GreyOutfit();
+
+    if (this.spookyLoc.turnsSpent >= 5) {
+      outfit.setNoCombat();
+    }
 
     return {
       location: this.spookyLoc,
@@ -122,11 +137,13 @@ export class QuestL11TempleUnlock implements QuestInfo {
           return;
         }
 
-        if (this.isDelayBurning()) {
+        if (!this.shouldWearLatte() && this.toAbsorb.length == 0) {
           let delay = DelayBurners.getReadyDelayBurner();
 
           if (delay != null) {
             delay.doFightSetup();
+          } else if (hasNonCombatSkillsReady()) {
+            DelayBurners.tryReplaceCombats();
           }
         }
 

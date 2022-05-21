@@ -7,7 +7,7 @@
 // Use other banishers
 // Use backups in quest zones
 // Don't spend vacation when we're unlocking dungeons of doom
-// Avoid adventure burning places if we're running +familiar exp, eg: vacation, vacation papers, and some other place I forget
+// Avoid adventure burning places if we're running +familiar exp, eg: vacation, vacation papers, hidden temple pyramid
 // Consider doing filthworms early if we have nanovision and need to burn turns
 // Centralize pulls better and do early pulls if possible
 // Provide some kind of plan to display to the user for debug reasons
@@ -33,7 +33,7 @@
 // Maybe use the vampire cloak, esp for nuns and maybe kitchen
 // Use doctor's bag specials?
 // Do boxing day buff? Though it's not remarkable
-// Equip latte, esp for certain zones that gives you drinks. Such as +pvp fights
+// Equip latte, can get fam exp from friars gate, meat drop from black forest, item drop from dire warren
 // Use NEP's free fights & buffs
 // Do bastille?
 // Use locked mumming trunk
@@ -48,3 +48,6 @@
 // spooky putty? Forgot what it does
 // Maybe stuffing fluffers, look at loopcasual to see what dirty tricks it pulls
 // Use kramco when its ready and there's no zones that wants it
+// Pull some source of infinite free runs and run whenever it's a fight we don't care about
+// Level up camel when we can, which if we're running lots of +fam exp, is often. Delay zones that'd like that spit. Mountain Man, Middle Pyramid, Goat Cheese, Lobster, sonar?, giants for their mohawk/amulet?, enchanted bean?, stephen?, stars, white pixel, evil eye, funky junk key?, filth worms glands?, bowler?, glark cables?, cig lighter?, crappy disguise?, stone wool?, bitchin car?, knob perfume? Rusty hedge trimmers
+// Adjust familiar weight bonus based on how soon we're going to need it

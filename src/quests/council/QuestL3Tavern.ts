@@ -60,6 +60,10 @@ export class QuestL3Tavern implements QuestInfo {
       return QuestStatus.FASTER_LATER;
     }
 
+    if (getProperty("middleChamberUnlock") == "true") {
+      return QuestStatus.READY;
+    }
+
     // Always put this off as long as possible, aka until every quest wants to delay
     return QuestStatus.FASTER_LATER;
   }

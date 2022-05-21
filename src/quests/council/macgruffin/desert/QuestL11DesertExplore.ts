@@ -10,6 +10,8 @@ import {
   toInt,
   toItem,
   myAdventures,
+  print,
+  visitUrl,
 } from "kolmafia";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -89,7 +91,11 @@ export class QuestL11DesertExplore implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    if (canAdv(this.oasis) && haveEffect(this.hydrated) == 0) {
+    if (
+      canAdv(this.oasis) &&
+      haveEffect(this.hydrated) == 0 &&
+      this.getExploredRemaining() > 3
+    ) {
       return {
         location: this.desert,
         run: () => {
@@ -112,11 +118,18 @@ export class QuestL11DesertExplore implements QuestInfo {
           Macro.attack().repeat()
         ).step(greyKillingBlow(outfit));
 
+        let explored = this.getExplored();
+
         greyAdv(
           this.desert,
           outfit,
           new AdventureSettings().setFinishingBlowMacro(killing)
         );
+
+        if (explored == this.getExplored()) {
+          print("Checking explored..", "blue");
+          visitUrl("place.php?whichplace=desertbeach", false);
+        }
       },
     };
   }

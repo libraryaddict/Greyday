@@ -54,7 +54,7 @@ export class QuestL11PalinStew implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setItemDrops();
+    let outfit = new GreyOutfit().setItemDrops().setPlusCombat();
 
     return {
       location: this.grove,

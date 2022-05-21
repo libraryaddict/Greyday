@@ -20,7 +20,7 @@ export class ManorGallery implements QuestInfo {
   location: Location = Location.get("The Haunted Gallery");
   item: Item = Item.get("Lady Spookyraven's dancing shoes");
   sword: Item = Item.get("serpentine sword");
-  pitchfork: Monster = Monster.get("guy with a pitchfork, and his wife");
+  toAbsorb: Monster[];
 
   level(): number {
     return 5;
@@ -55,10 +55,7 @@ export class ManorGallery implements QuestInfo {
   }
 
   hasDelay(): boolean {
-    return (
-      this.location.turnsSpent < 5 &&
-      AbsorbsProvider.getReabsorbedMonsters().includes(this.pitchfork)
-    );
+    return this.location.turnsSpent < 5 && this.toAbsorb.length == 0;
   }
 
   run(): QuestAdventure {
@@ -77,6 +74,8 @@ export class ManorGallery implements QuestInfo {
           if (delay != null) {
             delay.doFightSetup();
           }
+        } else if (this.toAbsorb.length == 0) {
+          DelayBurners.tryReplaceCombats();
         }
 
         /* if (availableAmount(this.sword) == 0) {

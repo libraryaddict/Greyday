@@ -10,6 +10,7 @@ import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { hasUnlockedLatteFlavor, LatteFlavor } from "../../../utils/LatteUtils";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -17,9 +18,17 @@ export class QuestL6FriarElbow implements QuestInfo {
   item: Item = Item.get("Eldritch butterknife");
   location: Location = Location.get("Dark Elbow of the Woods");
   absorbs: Monster[] = [Monster.get("G imp"), Monster.get("L imp")];
+  latte: Item = Item.get("Latte lovers member's mug");
 
   level(): number {
     return 6;
+  }
+
+  shouldWearLatte(): boolean {
+    return (
+      availableAmount(this.latte) > 0 &&
+      !hasUnlockedLatteFlavor(LatteFlavor.FAM_EXP)
+    );
   }
 
   isAllAbsorbed(): boolean {
@@ -54,11 +63,15 @@ export class QuestL6FriarElbow implements QuestInfo {
   run(): QuestAdventure {
     let outfit = new GreyOutfit().setNoCombat();
 
+    if (this.shouldWearLatte()) {
+      outfit.addItem(this.latte);
+    }
+
     return {
       location: this.location,
       outfit: outfit,
       run: () => {
-        if (this.isAllAbsorbed()) {
+        if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
           DelayBurners.tryReplaceCombats();
         }
 

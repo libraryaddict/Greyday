@@ -26,6 +26,7 @@ import { AdventureFinder, FoundAdventure } from "./GreyChooser";
 import { QuestAdventure } from "./quests/Quests";
 import { TaskCouncil } from "./tasks/TaskCouncil";
 import { TaskEater } from "./tasks/TaskEater";
+import { TaskLatteFiller } from "./tasks/TaskLatteFiller";
 import { Task } from "./tasks/Tasks";
 import { TaskSellCrap } from "./tasks/TaskSellCrap";
 import { TaskWorkshed } from "./tasks/TaskWorkshed";
@@ -43,6 +44,7 @@ export class GreyAdventurer {
     new TaskSellCrap(),
     new TaskWorkshed(),
     new TaskCouncil(),
+    new TaskLatteFiller(),
   ];
 
   runTurn(goTime: boolean): boolean {
@@ -199,8 +201,8 @@ export class GreyAdventurer {
 
     useFamiliar(familiar);
 
-    if (familiar == this.goose && familiarWeight(this.goose) >= 6) {
-      outfit.famExpWeight = 0.1;
+    if (familiarWeight(this.goose) >= 6) {
+      outfit.famExpWeight = 1;
     }
 
     maximize(

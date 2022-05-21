@@ -14,10 +14,19 @@ import { greyAdv } from "../../utils/GreyLocations";
 import { QuestType } from "../QuestTypes";
 import { DelayBurners } from "../../iotms/delayburners/DelayBurners";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
+import { hasUnlockedLatteFlavor, LatteFlavor } from "../../utils/LatteUtils";
 
 export class QuestL2SpookyLarva implements QuestInfo {
   location: Location = Location.get("The Spooky Forest");
-  monster: Monster = Monster.get("warwelf");
+  latte: Item = Item.get("Latte lovers member's mug");
+  toAbsorb: Monster[];
+
+  shouldWearLatte(): boolean {
+    return (
+      availableAmount(this.latte) > 0 &&
+      !hasUnlockedLatteFlavor(LatteFlavor.FAMILIAR_WEIGHT)
+    );
+  }
 
   level(): number {
     return 2;
@@ -52,23 +61,19 @@ export class QuestL2SpookyLarva implements QuestInfo {
   }
 
   isDelayBurning(): boolean {
-    return (
-      this.location.turnsSpent < 5 &&
-      AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)
-    );
+    return this.location.turnsSpent < 5 && this.toAbsorb.length == 0;
   }
 
   run(): QuestAdventure {
-    if (this.location.turnsSpent < 5) {
-      return {
-        location: this.location,
-        run() {
-          greyAdv(this.location);
-        },
-      };
+    let outfit = new GreyOutfit();
+
+    if (this.shouldWearLatte()) {
+      outfit.addItem(this.latte);
     }
 
-    let outfit = new GreyOutfit().setNoCombat();
+    if (this.location.turnsSpent >= 5) {
+      outfit.setNoCombat();
+    }
 
     return {
       location: this.location,
@@ -79,11 +84,13 @@ export class QuestL2SpookyLarva implements QuestInfo {
         props.setChoice(502, 2);
         props.setChoice(505, 1);
 
-        if (this.isDelayBurning()) {
+        if (!this.shouldWearLatte() && this.toAbsorb.length == 0) {
           let delay = DelayBurners.getReadyDelayBurner();
 
           if (delay != null) {
             delay.doFightSetup();
+          } else if (hasNonCombatSkillsReady()) {
+            DelayBurners.tryReplaceCombats();
           }
         }
 

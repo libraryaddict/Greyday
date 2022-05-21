@@ -1,6 +1,7 @@
 import {
   Familiar,
   familiarWeight,
+  getProperty,
   haveSkill,
   Item,
   myAdventures,
@@ -11,6 +12,7 @@ import {
   myMp,
   print,
   Skill,
+  toInt,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../GreyAdventurer";
 import { getQuestStatus } from "../quests/Quests";
@@ -61,6 +63,10 @@ export class GreyOutfit {
 
     if (getQuestStatus("questL13Final") <= 5) {
       this.addBonus("+3.5 bonus powerful glove");
+
+      if (toInt(getProperty("scrapbookCharges")) < 100) {
+        this.addBonus("+5 bonus familiar scrapbook");
+      }
     }
 
     this.addBonus("-equip screwing pooch");

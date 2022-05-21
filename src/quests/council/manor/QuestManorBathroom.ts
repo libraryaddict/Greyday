@@ -19,7 +19,7 @@ import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 export class ManorBathroom implements QuestInfo {
   location: Location = Location.get("The Haunted Bathroom");
   item: Item = Item.get("Lady Spookyraven's powder puff");
-  monster: Monster = Monster.get("toilet papergeist");
+  toAbsorb: Monster[];
 
   level(): number {
     return 5;
@@ -54,10 +54,7 @@ export class ManorBathroom implements QuestInfo {
   }
 
   hasDelay(): boolean {
-    return (
-      this.location.turnsSpent < 5 &&
-      AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)
-    );
+    return this.location.turnsSpent < 5 && this.toAbsorb.length == 0;
   }
 
   run(): QuestAdventure {
@@ -80,6 +77,8 @@ export class ManorBathroom implements QuestInfo {
           if (delay != null) {
             delay.doFightSetup();
           }
+        } else if (this.toAbsorb.length == 0) {
+          DelayBurners.tryReplaceCombats();
         }
 
         try {
