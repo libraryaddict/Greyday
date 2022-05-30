@@ -232,7 +232,8 @@ export class AbsorbsProvider {
     return {
       location: location,
       turnsToGain: totalAdvs,
-      expectedTurnsProfit: totalAdvs - (advsSpent + 2),
+      expectedTurnsProfit:
+        totalAdvs - (advsSpent + Math.max(2, Math.floor(advsSpent * 0.3))),
       monsters: absorbs.map((a) => a.monster),
       skills: newSkills,
       shouldWait:
