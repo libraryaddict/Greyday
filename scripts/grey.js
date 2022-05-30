@@ -71,6 +71,12 @@ var QuestStatus;(function (QuestStatus) {QuestStatus[QuestStatus["READY"] = 0] =
 
 
 
+var DelayType;(function (DelayType) {DelayType[DelayType["TURN_BURNING"] = 0] = "TURN_BURNING";DelayType[DelayType["NONCOMBAT_HITTING"] = 1] = "NONCOMBAT_HITTING";})(DelayType || (DelayType = {}));
+
+
+
+
+
 
 
 
@@ -114,6 +120,10 @@ function hasBanished(location, banish) {
 
   if (banish.length == 0) {
     return false;
+  }
+
+  if (location == null) {
+    return true;
   }var _iterator = _createForOfIteratorHelper(
 
   Object.keys((0,external_kolmafia_namespaceObject.getLocationMonsters)(location)).map((m) =>
@@ -128,6 +138,12 @@ function hasBanished(location, banish) {
 
   return false;
 }
+
+var BanishReason;(function (BanishReason) {BanishReason[BanishReason["QUEST"] = 0] = "QUEST";BanishReason[BanishReason["REASBORB"] = 1] = "REASBORB";BanishReason[BanishReason["UNKNOWN"] = 2] = "UNKNOWN";})(BanishReason || (BanishReason = {}));
+
+
+
+
 
 var BanishType;(function (BanishType) {BanishType["BALEFUL_HOWL"] = "baleful howl";BanishType["BANISHING_SHOUT"] = "banishing shout";BanishType["BATTER_UP"] = "batter up!";BanishType["BEANCANNON"] = "beancannon";BanishType["BE_A_MIND_MASTER"] = "Be a Mind Master";BanishType["BLART_SPRAY_WIDE"] = "B. L. A. R. T. Spray (wide)";BanishType["BOWL_A_CURVEBALL"] = "Bowl a Curveball";BanishType["BREATHE_OUT"] = "breathe out";BanishType["BUNDLE_OF_FRAGRANT_HERBS"] = "bundle of &quot;fragrant&quot; herbs";BanishType["CHATTERBOXING"] = "chatterboxing";BanishType["CLASSY_MONKEY"] = "classy monkey";BanishType["COCKTAIL_NAPKIN"] = "cocktail napkin";BanishType["CRYSTAL_SKULL"] = "crystal skull";BanishType["CURSE_OF_VACATION"] = "curse of vacation";BanishType["DEATHCHUCKS"] = "deathchucks";BanishType["DIRTY_STINKBOMB"] = "dirty stinkbomb";BanishType["DIVINE_CHAMPAGNE_POPPER"] = "divine champagne popper";BanishType["FEEL_HATRED"] = "Feel Hatred";BanishType["GINGERBREAD_RESTRAINING_ORDER"] = "gingerbread restraining order";BanishType["HAROLDS_BELL"] = "harold's bell";BanishType["HOWL_OF_THE_ALPHA"] = "howl of the alpha";BanishType["HUMAN_MUSK"] = "human musk";BanishType["ICE_HOTEL_BELL"] = "ice hotel bell";BanishType["ICE_HOUSE"] = "ice house";BanishType["KGB_TRANQUILIZER_DART"] = "KGB tranquilizer dart";BanishType["LICORICE_ROPE"] = "licorice rope";BanishType["LOUDER_THAN_BOMB"] = "louder than bomb";BanishType["MAFIA_MIDDLEFINGER_RING"] = "mafia middle finger ring";BanishType["NANORHINO"] = "nanorhino";BanishType["PANTSGIVING"] = "pantsgiving";BanishType["PEEL_OUT"] = "peel out";BanishType["PULLED_INDIGO_TAFFY"] = "pulled indigo taffy";BanishType["REFLEX_HAMMER"] = "Reflex Hammer";BanishType["SABER_FORCE"] = "Saber Force";BanishType["SHOW_YOUR_BORING_FAMILIAR_PICTURES"] = "Show your boring familiar pictures";BanishType["SMOKE_GRENADE"] = "smoke grenade";BanishType["SNOKEBOMB"] = "snokebomb";BanishType["SPOOKY_MUSIC_BOX_MECHANISM"] = "spooky music box mechanism";BanishType["SPRING_LOADED_FRONT_BUMPER"] = "Spring-Loaded Front Bumper";BanishType["STAFF_OF_THE_STANDALONE_CHEESE"] = "staff of the standalone cheese";BanishType["STINKY_CHEESE_EYE"] = "stinky cheese eye";BanishType["SYSTEM_SWEEP"] = "System Sweep";BanishType["TENNIS_BALL"] = "tennis ball";BanishType["THROW_LATTE_ON_OPPONENT"] = "Throw Latte on Opponent";BanishType["THUNDER_CLAP"] = "thunder clap";BanishType["TRYPTOPHAN_DART"] = "tryptophan dart";BanishType["ULTRA_HAMMER"] = "Ultra Hammer";BanishType["V_FOR_VIVALA_MASK"] = "v for vivala mask";BanishType["WALK_AWAY_FROM_EXPLOSION"] = "walk away from explosion";})(BanishType || (BanishType = {}));var
 
@@ -187,7 +203,14 @@ Banisher = /*#__PURE__*/_createClass(function Banisher() {_classCallCheck(this, 
 
 
 
-var Banish = /*#__PURE__*/_createClass(function Banish() {_classCallCheck(this, Banish);_defineProperty(this, "monster", void 0);_defineProperty(this, "turnBanished", void 0);_defineProperty(this, "banisher", void 0);});
+var Banish = /*#__PURE__*/_createClass(function Banish() {_classCallCheck(this, Banish);_defineProperty(this, "monster", void 0);_defineProperty(this, "turnBanished", void 0);_defineProperty(this, "banisher", void 0);_defineProperty(this, "reason", void 0);});
+
+
+
+
+
+
+
 
 
 
@@ -341,7 +364,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
       return this.isHardcoreMode();
     } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);
 ;// CONCATENATED MODULE: ./src/utils/MacroBuilder.ts
-function _get() {if (typeof Reflect !== "undefined" && Reflect.get) {_get = Reflect.get;} else {_get = function _get(target, property, receiver) {var base = _superPropBase(target, property);if (!base) return;var desc = Object.getOwnPropertyDescriptor(base, property);if (desc.get) {return desc.get.call(arguments.length < 3 ? target : receiver);}return desc.value;};}return _get.apply(this, arguments);}function _superPropBase(object, property) {while (!Object.prototype.hasOwnProperty.call(object, property)) {object = _getPrototypeOf(object);if (object === null) break;}return object;}function MacroBuilder_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = MacroBuilder_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || MacroBuilder_unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function MacroBuilder_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return MacroBuilder_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return MacroBuilder_arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return MacroBuilder_arrayLikeToArray(arr);}function MacroBuilder_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function MacroBuilder_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function MacroBuilder_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function MacroBuilder_createClass(Constructor, protoProps, staticProps) {if (protoProps) MacroBuilder_defineProperties(Constructor.prototype, protoProps);if (staticProps) MacroBuilder_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function MacroBuilder_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) _setPrototypeOf(subClass, superClass);}function _createSuper(Derived) {var hasNativeReflectConstruct = _isNativeReflectConstruct();return function _createSuperInternal() {var Super = _getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = _getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return _possibleConstructorReturn(this, result);};}function _possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return _assertThisInitialized(self);}function _assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function _wrapNativeSuper(Class) {var _cache = typeof Map === "function" ? new Map() : undefined;_wrapNativeSuper = function _wrapNativeSuper(Class) {if (Class === null || !_isNativeFunction(Class)) return Class;if (typeof Class !== "function") {throw new TypeError("Super expression must either be null or a function");}if (typeof _cache !== "undefined") {if (_cache.has(Class)) return _cache.get(Class);_cache.set(Class, Wrapper);}function Wrapper() {return _construct(Class, arguments, _getPrototypeOf(this).constructor);}Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });return _setPrototypeOf(Wrapper, Class);};return _wrapNativeSuper(Class);}function _construct(Parent, args, Class) {if (_isNativeReflectConstruct()) {_construct = Reflect.construct;} else {_construct = function _construct(Parent, args, Class) {var a = [null];a.push.apply(a, args);var Constructor = Function.bind.apply(Parent, a);var instance = new Constructor();if (Class) _setPrototypeOf(instance, Class.prototype);return instance;};}return _construct.apply(null, arguments);}function _isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function _isNativeFunction(fn) {return Function.toString.call(fn).indexOf("[native code]") !== -1;}function _setPrototypeOf(o, p) {_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return _setPrototypeOf(o, p);}function _getPrototypeOf(o) {_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return _getPrototypeOf(o);}
+function _get() {if (typeof Reflect !== "undefined" && Reflect.get) {_get = Reflect.get.bind();} else {_get = function _get(target, property, receiver) {var base = _superPropBase(target, property);if (!base) return;var desc = Object.getOwnPropertyDescriptor(base, property);if (desc.get) {return desc.get.call(arguments.length < 3 ? target : receiver);}return desc.value;};}return _get.apply(this, arguments);}function _superPropBase(object, property) {while (!Object.prototype.hasOwnProperty.call(object, property)) {object = _getPrototypeOf(object);if (object === null) break;}return object;}function MacroBuilder_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = MacroBuilder_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || MacroBuilder_unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function MacroBuilder_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return MacroBuilder_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return MacroBuilder_arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return MacroBuilder_arrayLikeToArray(arr);}function MacroBuilder_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function MacroBuilder_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function MacroBuilder_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function MacroBuilder_createClass(Constructor, protoProps, staticProps) {if (protoProps) MacroBuilder_defineProperties(Constructor.prototype, protoProps);if (staticProps) MacroBuilder_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function MacroBuilder_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) _setPrototypeOf(subClass, superClass);}function _createSuper(Derived) {var hasNativeReflectConstruct = _isNativeReflectConstruct();return function _createSuperInternal() {var Super = _getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = _getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return _possibleConstructorReturn(this, result);};}function _possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return _assertThisInitialized(self);}function _assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function _wrapNativeSuper(Class) {var _cache = typeof Map === "function" ? new Map() : undefined;_wrapNativeSuper = function _wrapNativeSuper(Class) {if (Class === null || !_isNativeFunction(Class)) return Class;if (typeof Class !== "function") {throw new TypeError("Super expression must either be null or a function");}if (typeof _cache !== "undefined") {if (_cache.has(Class)) return _cache.get(Class);_cache.set(Class, Wrapper);}function Wrapper() {return _construct(Class, arguments, _getPrototypeOf(this).constructor);}Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });return _setPrototypeOf(Wrapper, Class);};return _wrapNativeSuper(Class);}function _construct(Parent, args, Class) {if (_isNativeReflectConstruct()) {_construct = Reflect.construct.bind();} else {_construct = function _construct(Parent, args, Class) {var a = [null];a.push.apply(a, args);var Constructor = Function.bind.apply(Parent, a);var instance = new Constructor();if (Class) _setPrototypeOf(instance, Class.prototype);return instance;};}return _construct.apply(null, arguments);}function _isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function _isNativeFunction(fn) {return Function.toString.call(fn).indexOf("[native code]") !== -1;}function _setPrototypeOf(o, p) {_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return _setPrototypeOf(o, p);}function _getPrototypeOf(o) {_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return _getPrototypeOf(o);}
 
 var MACRO_NAME = "Script Autoattack Macro";
 /**
@@ -1146,8 +1169,6 @@ MacroFiller = /*#__PURE__*/(/* unused pure expression or super */ null && (funct
 function greyDuringFightMacro(settings) {
   var macro = new Macro();
 
-  macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Bowl Straight Up"));
-
   var monster = (0,external_kolmafia_namespaceObject.lastMonster)();
   var absorb = AbsorbsProvider.getAbsorb(monster);
   var hasAbsorbed = AbsorbsProvider.getReabsorbedMonsters().includes(monster);
@@ -1160,10 +1181,7 @@ function greyDuringFightMacro(settings) {
     if (absorb.adventures > 0) {
       macro = macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Re-Process Matter"));
     }
-  } else if (
-  isBanishable(settings, monster) &&
-  !hasBanished((0,external_kolmafia_namespaceObject.myLocation)(), BanishType.SYSTEM_SWEEP))
-  {
+  } else if (isBanishable(settings, monster)) {
     // If they have no good absorbs, or we've already absorbed them
     if (
     absorb == null ||
@@ -1172,18 +1190,40 @@ function greyDuringFightMacro(settings) {
     absorb.mp == 0 && (
     absorb.skill == null || (0,external_kolmafia_namespaceObject.haveSkill)(absorb.skill)))
     {
-      // If we are not using crystal ball and didn't just banish something..
-      if (
-      (0,external_kolmafia_namespaceObject.getMonsters)((0,external_kolmafia_namespaceObject.myLocation)()).includes(monster) && (
-      (0,external_kolmafia_namespaceObject.equippedAmount)(external_kolmafia_namespaceObject.Item.get("miniature crystal ball")) == 0 ||
-      getBanished().filter(
-      (b) =>
-      b.banisher.type == BanishType.SYSTEM_SWEEP &&
-      b.turnBanished + 2 >= (0,external_kolmafia_namespaceObject.myTurncount)()).
-      length == 0))
+      // If the script explicitly wanted to banish these
+      if (settings.banishThese != null || settings.dontBanishThese != null) {
+        if (
+        !hasBanished((0,external_kolmafia_namespaceObject.myLocation)(), BanishType.SPRING_LOADED_FRONT_BUMPER) &&
+        (0,external_kolmafia_namespaceObject.getFuel)() >= 50)
+        {
+          macro.trySkill("Asdon Martin: Spring-Loaded Front Bumper");
+        }
 
-        // If we do want to banish something..
-        macro.trySkill(external_kolmafia_namespaceObject.Skill.get("System Sweep"));
+        if (
+        !hasBanished((0,external_kolmafia_namespaceObject.myLocation)(), BanishType.BOWL_A_CURVEBALL) &&
+        (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Cosmic bowling ball")) > 0)
+        {
+          macro.trySkill("Bowl a Curveball");
+        }
+      }
+
+      if (
+      !hasBanished((0,external_kolmafia_namespaceObject.myLocation)(), BanishType.SYSTEM_SWEEP) &&
+      (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("System Sweep")))
+      {
+        // If we are not using crystal ball and didn't just banish something..
+        if (
+        (0,external_kolmafia_namespaceObject.getMonsters)((0,external_kolmafia_namespaceObject.myLocation)()).includes(monster) && (
+        (0,external_kolmafia_namespaceObject.equippedAmount)(external_kolmafia_namespaceObject.Item.get("miniature crystal ball")) == 0 ||
+        getBanished().filter(
+        (b) =>
+        b.banisher.type == BanishType.SYSTEM_SWEEP &&
+        b.turnBanished + 2 >= (0,external_kolmafia_namespaceObject.myTurncount)()).
+        length == 0))
+
+          // If we do want to banish something..
+          macro.trySkill(external_kolmafia_namespaceObject.Skill.get("System Sweep"));
+      }
     }
   }
 
@@ -1434,9 +1474,9 @@ var GreyOutfit = /*#__PURE__*/function () {
       if (!(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Hivemindedness"))) {
         this.mpRegenWeight += 1;
 
-        if ((0,external_kolmafia_namespaceObject.myMp)() < 42) {
+        /*if (myMp() < 42) {
           this.mpRegenWeight += 2;
-        }
+        }*/
       }
 
       if (
@@ -1519,11 +1559,11 @@ var GreyOutfit = /*#__PURE__*/function () {
       }
 
       if (this.plusCombatWeight > 0) {
-        modifiers.push("+" + this.plusCombatWeight + " combat");
+        modifiers.push("+" + this.plusCombatWeight + " combat 25 MAX");
       }
 
       if (this.minusCombatWeight > 0) {
-        modifiers.push("-" + this.minusCombatWeight + " combat");
+        modifiers.push("-" + this.minusCombatWeight + " combat 25 MAX");
       }
 
       if (this.plusMonsterLevelWeight > 0) {
@@ -2409,7 +2449,7 @@ function DelayBurningKramco_classCallCheck(instance, Constructor) {if (!(instanc
 
 
 var DelayBurningKramco = /*#__PURE__*/function () {function DelayBurningKramco() {DelayBurningKramco_classCallCheck(this, DelayBurningKramco);DelayBurningKramco_defineProperty(this, "kramco",
-    external_kolmafia_namespaceObject.Item.get("Kramco Sausage-o-Matic™"));}DelayBurningKramco_createClass(DelayBurningKramco, [{ key: "doFightSetup", value:
+    external_kolmafia_namespaceObject.Item.get("Kramco Sausage-o-Matic"));}DelayBurningKramco_createClass(DelayBurningKramco, [{ key: "doFightSetup", value:
 
     function doFightSetup() {
       (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Slot.get("Off-Hand"), this.kramco);
@@ -3268,7 +3308,7 @@ flavor2,
 flavor3)
 {}
 ;// CONCATENATED MODULE: ./src/quests/council/macgruffin/QuestL11Black.ts
-function QuestL11Black_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL11Black_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL11Black_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL11Black_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL11Black_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL11Black_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL11Black_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL11Black_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestL11Black_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL11Black_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL11Black_arrayLikeToArray(o, minLen);}function QuestL11Black_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL11Black_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL11Black_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL11Black_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL11Black_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL11Black_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL11Black_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -3282,7 +3322,10 @@ var QuestL11Black = /*#__PURE__*/function () {function QuestL11Black() {QuestL11
     external_kolmafia_namespaceObject.Item.get("Beehive"));QuestL11Black_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("The Black Forest"));QuestL11Black_defineProperty(this, "latte",
     external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));QuestL11Black_defineProperty(this, "blackbird",
-    external_kolmafia_namespaceObject.Item.get("reassembled blackbird"));QuestL11Black_defineProperty(this, "toAbsorb", void 0);}QuestL11Black_createClass(QuestL11Black, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("reassembled blackbird"));QuestL11Black_defineProperty(this, "dontBanish",
+    ["Black Adder", "Black Panther"].map((s) =>
+    external_kolmafia_namespaceObject.Monster.get(s)));QuestL11Black_defineProperty(this, "toAbsorb", void 0);}QuestL11Black_createClass(QuestL11Black, [{ key: "level", value:
+
 
 
     function level() {
@@ -3357,7 +3400,15 @@ var QuestL11Black = /*#__PURE__*/function () {function QuestL11Black() {QuestL11
               props.setChoice(924, 1); // Fight bush
             }
 
-            greyAdv(this.loc, outfit);
+            var settings = new AdventureSettings();
+
+            if ((0,external_kolmafia_namespaceObject.availableAmount)(this.blackbird) == 0) {var _iterator = QuestL11Black_createForOfIteratorHelper(
+              this.dontBanish),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var mon = _step.value;
+                  settings.addNoBanish(mon);
+                }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+            }
+
+            greyAdv(this.loc, outfit, settings);
           } finally {
             props.resetAll();
           }
@@ -3721,8 +3772,8 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
         dontHave.push(["Deck of lewd playing cards", Required.USEFUL]);
       }
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("SongBoom™ BoomBox")) == 0) {
-        dontHave.push(["SongBoom™ BoomBox", Required.MINOR]);
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("SongBoom&trade; BoomBox")) == 0) {
+        dontHave.push(["SongBoom&trade; BoomBox", Required.MINOR]);
       }
 
       for (var _i = 0, _dontHave = dontHave; _i < _dontHave.length; _i++) {var _dontHave$_i = GreyResources_slicedToArray(_dontHave[_i], 2),name = _dontHave$_i[0],required = _dontHave$_i[1];
@@ -3832,7 +3883,9 @@ var QuestL11DesertExplore = /*#__PURE__*/function () {function QuestL11DesertExp
     external_kolmafia_namespaceObject.Location.get("Oasis"));QuestL11DesertExplore_defineProperty(this, "desert",
     external_kolmafia_namespaceObject.Location.get("The Arid, Extra-Dry Desert"));QuestL11DesertExplore_defineProperty(this, "compass",
     external_kolmafia_namespaceObject.Item.get("UV-resistant compass"));QuestL11DesertExplore_defineProperty(this, "knife",
-    external_kolmafia_namespaceObject.Item.get("survival knife"));}QuestL11DesertExplore_createClass(QuestL11DesertExplore, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("survival knife"));QuestL11DesertExplore_defineProperty(this, "toAbsorb", void 0);QuestL11DesertExplore_defineProperty(this, "camel",
+
+    external_kolmafia_namespaceObject.Familiar.get("Melodramedary"));}QuestL11DesertExplore_createClass(QuestL11DesertExplore, [{ key: "getId", value:
 
     function getId() {
       return "Council / MacGruffin / Desert / Explore";
@@ -3913,7 +3966,8 @@ var QuestL11DesertExplore = /*#__PURE__*/function () {function QuestL11DesertExp
       return {
         outfit: outfit,
         location: this.desert,
-        familiar: external_kolmafia_namespaceObject.Familiar.get("Melodramedary"),
+        familiar: (0,external_kolmafia_namespaceObject.haveFamiliar)(this.camel) ? this.camel : null,
+        disableFamOverride: this.toAbsorb.length == 0 && (0,external_kolmafia_namespaceObject.haveFamiliar)(this.camel),
         run: () => {
           var killing = Macro.if_(
           external_kolmafia_namespaceObject.Effect.get("Tenuous Grip on Reality"),
@@ -5084,8 +5138,7 @@ var QuestL11PyramidMiddle = /*#__PURE__*/function () {function QuestL11PyramidMi
     external_kolmafia_namespaceObject.Location.get("The Middle Chamber"));QuestL11PyramidMiddle_defineProperty(this, "wheel",
     external_kolmafia_namespaceObject.Item.get("Crumbling Wooden Wheel"));QuestL11PyramidMiddle_defineProperty(this, "ratchet",
     external_kolmafia_namespaceObject.Item.get("Tomb Ratchet"));QuestL11PyramidMiddle_defineProperty(this, "book",
-    external_kolmafia_namespaceObject.Item.get("Familiar scrapbook"));QuestL11PyramidMiddle_defineProperty(this, "banisher",
-    external_kolmafia_namespaceObject.Skill.get("Show Your Boring Familiar Pictures"));QuestL11PyramidMiddle_defineProperty(this, "servant",
+    external_kolmafia_namespaceObject.Item.get("Familiar scrapbook"));QuestL11PyramidMiddle_defineProperty(this, "servant",
     external_kolmafia_namespaceObject.Monster.get("Tomb Servant"));}QuestL11PyramidMiddle_createClass(QuestL11PyramidMiddle, [{ key: "getId", value:
 
     function getId() {
@@ -5150,17 +5203,7 @@ var QuestL11PyramidMiddle = /*#__PURE__*/function () {function QuestL11PyramidMi
             startMacro.if_(this.tombRat, Macro.item(this.ratTangle));
           }
 
-          settings.addBanish(external_kolmafia_namespaceObject.Monster.get("Tomb Asp"));
-
-          if (
-          !(0,external_kolmafia_namespaceObject.isBanished)(this.servant) &&
-          (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("scrapbookCharges")) >= 100 &&
-          AbsorbsProvider.getReabsorbedMonsters().includes(this.servant))
-          {
-            startMacro.if_(this.servant, Macro.skill(this.banisher));
-          } else {
-            settings.addBanish(external_kolmafia_namespaceObject.Monster.get("Tomb Servant"));
-          }
+          settings.addNoBanish(this.tombRat);
 
           settings.setStartOfFightMacro(startMacro);
           greyAdv(this.middleLoc, outfit, settings);
@@ -5988,10 +6031,7 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
     } }, { key: "ownBall", value:
 
     function ownBall() {
-      return (
-        (0,external_kolmafia_namespaceObject.availableAmount)(this.cosmicBall) > 0 ||
-        (0,external_kolmafia_namespaceObject.getProperty)("cosmicBowlingBallReturnCombats") != "-1");
-
+      return (0,external_kolmafia_namespaceObject.getProperty)("hasCosmicBowlingBall") == "true";
     } }, { key: "getId", value:
 
     function getId() {
@@ -6685,6 +6725,10 @@ var QuestL11HiddenBookMatches = /*#__PURE__*/function () {function QuestL11Hidde
     } }, { key: "status", value:
 
     function status() {
+      if (getQuestStatus("questL11Worship") < 3) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (this.barUnlocked()) {
         return QuestStatus.COMPLETED;
       }
@@ -6799,6 +6843,8 @@ var QuestL11TempleGrabWool = /*#__PURE__*/function () {function QuestL11TempleGr
         outfit: outfit,
         run: () => {
           var settings = new AdventureSettings();
+          settings.addNoBanish(this.woolMonster);
+
           settings.setStartOfFightMacro(
           Macro.if_(this.woolMonster, Macro.skill(this.polar).skill(this.polar)));
 
@@ -7758,7 +7804,11 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
     external_kolmafia_namespaceObject.Familiar.get("Hobo Monkey"));QuestL12Nuns_defineProperty(this, "hotness",
     external_kolmafia_namespaceObject.Item.get("Mick's IcyVapoHotness Inhaler"));QuestL12Nuns_defineProperty(this, "effect",
     (0,external_kolmafia_namespaceObject.effectModifier)(this.hotness, "Effect"));QuestL12Nuns_defineProperty(this, "winkles",
-    external_kolmafia_namespaceObject.Effect.get("Winklered"));}QuestL12Nuns_createClass(Quest12WarNuns, [{ key: "hasAlreadyPulled", value:
+    external_kolmafia_namespaceObject.Effect.get("Winklered"));QuestL12Nuns_defineProperty(this, "bowlStraightUp",
+    external_kolmafia_namespaceObject.Effect.get("Cosmic Ball in the Air"));QuestL12Nuns_defineProperty(this, "cosmicBall",
+    external_kolmafia_namespaceObject.Item.get("Cosmic Bowling Ball"));QuestL12Nuns_defineProperty(this, "asdonMartin",
+    external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestL12Nuns_defineProperty(this, "driving",
+    external_kolmafia_namespaceObject.Effect.get("Driving Observantly"));}QuestL12Nuns_createClass(Quest12WarNuns, [{ key: "hasAlreadyPulled", value:
 
     function hasAlreadyPulled() {
       return (
@@ -7788,6 +7838,13 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
 
     function getId() {
       return "Council / War / Nuns";
+    } }, { key: "isBowlingBallNextCombat", value:
+
+    function isBowlingBallNextCombat() {
+      return (
+        (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("cosmicBowlingBallReturnCombats")) <= 0 ||
+        (0,external_kolmafia_namespaceObject.availableAmount)(this.cosmicBall) > 0);
+
     } }, { key: "status", value:
 
     function status() {
@@ -7803,6 +7860,15 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
       }
 
       if (!(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Financial Spreadsheets"))) {
+        return QuestStatus.FASTER_LATER;
+      }
+
+      if (
+      !this.mustBeDone() &&
+      (0,external_kolmafia_namespaceObject.getProperty)("hasCosmicBowlingBall") == "true" &&
+      !(0,external_kolmafia_namespaceObject.haveEffect)(this.bowlStraightUp) &&
+      !this.isBowlingBallNextCombat())
+      {
         return QuestStatus.FASTER_LATER;
       }
 
@@ -7827,15 +7893,15 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
             (0,external_kolmafia_namespaceObject.cliExecute)("boombox meat");
           }
 
-          var meat = this.getMeat();
-
           this.tryToBuff();
+
+          var meat = this.getMeat();
 
           greyAdv(
           this.loc,
           outfit,
           new AdventureSettings().setStartOfFightMacro(
-          Macro.trySkill("sing along")));
+          Macro.trySkill("sing along").trySkill(external_kolmafia_namespaceObject.Skill.get("Bowl Straight Up"))));
 
 
 
@@ -7863,6 +7929,14 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
     } }, { key: "tryToBuff", value:
 
     function tryToBuff() {
+      if (
+      (0,external_kolmafia_namespaceObject.getWorkshed)() == this.asdonMartin &&
+      (0,external_kolmafia_namespaceObject.getFuel)() > 37 &&
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.driving) == 0)
+      {
+        (0,external_kolmafia_namespaceObject.cliExecute)("asdonmartin drive Observantly");
+      }
+
       if (!this.hasAlreadyPulled()) {
         GreyPulls.pullMeatBuffers();
 
@@ -8113,6 +8187,7 @@ function QuestL12WarBoss_createForOfIteratorHelper(o, allowArrayLike) {var it = 
 
 
 
+
 var QuestL12WarBoss = /*#__PURE__*/function () {function QuestL12WarBoss() {QuestL12WarBoss_classCallCheck(this, QuestL12WarBoss);}QuestL12WarBoss_createClass(QuestL12WarBoss, [{ key: "getId", value:
     function getId() {
       return "Council / War / Boss";
@@ -8153,7 +8228,11 @@ var QuestL12WarBoss = /*#__PURE__*/function () {function QuestL12WarBoss() {Ques
           (0,external_kolmafia_namespaceObject.visitUrl)("bigisland.php?place=camp&whichcamp=1");
           (0,external_kolmafia_namespaceObject.visitUrl)("bigisland.php?place=camp&whichcamp=2");
 
-          greyAdv("bigisland.php?action=bossfight&pwd");
+          greyAdv(
+          "bigisland.php?action=bossfight&pwd",
+          null,
+          new AdventureSettings().setFinishingBlowMacro(Macro.attack().repeat()));
+
 
           (0,external_kolmafia_namespaceObject.council)();
         } };
@@ -9153,7 +9232,7 @@ var QuestKeyStuffAbstract = /*#__PURE__*/function () {function QuestKeyStuffAbst
       return this.zappables;
     } }]);return QuestKeyStuffAbstract;}();
 ;// CONCATENATED MODULE: ./src/quests/council/tower/stages/QuestTowerKeys.ts
-function QuestTowerKeys_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestTowerKeys_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestTowerKeys_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestTowerKeys_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestTowerKeys_arrayLikeToArray(o, minLen);}function QuestTowerKeys_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestTowerKeys_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerKeys_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerKeys_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerKeys_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerKeys_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerKeys_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestTowerKeys_setPrototypeOf(subClass, superClass);}function QuestTowerKeys_setPrototypeOf(o, p) {QuestTowerKeys_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestTowerKeys_setPrototypeOf(o, p);}function QuestTowerKeys_createSuper(Derived) {var hasNativeReflectConstruct = QuestTowerKeys_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestTowerKeys_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestTowerKeys_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestTowerKeys_possibleConstructorReturn(this, result);};}function QuestTowerKeys_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestTowerKeys_assertThisInitialized(self);}function QuestTowerKeys_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestTowerKeys_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestTowerKeys_getPrototypeOf(o) {QuestTowerKeys_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestTowerKeys_getPrototypeOf(o);}function QuestTowerKeys_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestTowerKeys_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestTowerKeys_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestTowerKeys_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestTowerKeys_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestTowerKeys_arrayLikeToArray(o, minLen);}function QuestTowerKeys_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestTowerKeys_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerKeys_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerKeys_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerKeys_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerKeys_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerKeys_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestTowerKeys_setPrototypeOf(subClass, superClass);}function QuestTowerKeys_setPrototypeOf(o, p) {QuestTowerKeys_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestTowerKeys_setPrototypeOf(o, p);}function QuestTowerKeys_createSuper(Derived) {var hasNativeReflectConstruct = QuestTowerKeys_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestTowerKeys_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestTowerKeys_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestTowerKeys_possibleConstructorReturn(this, result);};}function QuestTowerKeys_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestTowerKeys_assertThisInitialized(self);}function QuestTowerKeys_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestTowerKeys_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestTowerKeys_getPrototypeOf(o) {QuestTowerKeys_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestTowerKeys_getPrototypeOf(o);}function QuestTowerKeys_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -9824,7 +9903,8 @@ function QuestTowerShadow_classCallCheck(instance, Constructor) {if (!(instance 
 var QuestTowerShadow = /*#__PURE__*/function () {function QuestTowerShadow() {QuestTowerShadow_classCallCheck(this, QuestTowerShadow);QuestTowerShadow_defineProperty(this, "badge",
     external_kolmafia_namespaceObject.Item.get("Attorney's badge"));QuestTowerShadow_defineProperty(this, "potato",
     external_kolmafia_namespaceObject.Familiar.get("Levitating Potato"));QuestTowerShadow_defineProperty(this, "guaze",
-    external_kolmafia_namespaceObject.Item.get("Gauze garter"));}QuestTowerShadow_createClass(QuestTowerShadow, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Gauze garter"));QuestTowerShadow_defineProperty(this, "cape",
+    external_kolmafia_namespaceObject.Item.get("Unwrapped knock-off retro superhero cape"));}QuestTowerShadow_createClass(QuestTowerShadow, [{ key: "getId", value:
 
     function getId() {
       return "Council / Tower / Shadow";
@@ -9857,12 +9937,20 @@ var QuestTowerShadow = /*#__PURE__*/function () {function QuestTowerShadow() {Qu
 
       var outfit = new GreyOutfit(maximize);
 
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.cape) > 0) {
+        outfit.addItem(this.cape);
+      }
+
       return {
         familiar: this.potato,
         outfit: outfit,
         location: null,
         run: () => {
-          if ((0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)()) {
+          if ((0,external_kolmafia_namespaceObject.equippedAmount)(this.cape) > 0) {
+            (0,external_kolmafia_namespaceObject.cliExecute)("retrocape heck hold"); // Make sure we stun the shadow
+          }
+
+          if ((0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)() && (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_hotTubSoaks")) < 5) {
             (0,external_kolmafia_namespaceObject.cliExecute)("hottub");
           }
 
@@ -10006,6 +10094,7 @@ function QuestTowerKillWitch_classCallCheck(instance, Constructor) {if (!(instan
 
 
 
+
 var QuestTowerKillWitch = /*#__PURE__*/function () {function QuestTowerKillWitch() {QuestTowerKillWitch_classCallCheck(this, QuestTowerKillWitch);}QuestTowerKillWitch_createClass(QuestTowerKillWitch, [{ key: "getId", value:
     function getId() {
       return "Council / Tower / NaughtyBoss";
@@ -10043,7 +10132,13 @@ var QuestTowerKillWitch = /*#__PURE__*/function () {function QuestTowerKillWitch
         run: () => {
           for (var i = 0; i < 2; i++) {
             try {
-              greyAdv("place.php?whichplace=nstower&action=ns_10_sorcfight");
+              greyAdv(
+              "place.php?whichplace=nstower&action=ns_10_sorcfight",
+              null,
+              new AdventureSettings().setFinishingBlowMacro(
+              Macro.attack().repeat()));
+
+
               (0,external_kolmafia_namespaceObject.visitUrl)("choice.php");
             } catch (e) {}
           }
@@ -10367,7 +10462,7 @@ var QuestL3Tavern = /*#__PURE__*/function () {function QuestL3Tavern() {QuestL3T
       var outfit;
 
       if (!advTime) {
-        outfit = null;
+        outfit = new GreyOutfit("-tie");
       } else {
         outfit = new GreyOutfit();
 
@@ -11411,7 +11506,7 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
       return CryptStatus.BOSS;
     } }]);return CryptL7Template;}();
 ;// CONCATENATED MODULE: ./src/quests/council/crypts/QuestL7CryptDirtyMan.ts
-function QuestL7CryptDirtyMan_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL7CryptDirtyMan_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL7CryptDirtyMan_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL7CryptDirtyMan_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL7CryptDirtyMan_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL7CryptDirtyMan_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL7CryptDirtyMan_setPrototypeOf(subClass, superClass);}function QuestL7CryptDirtyMan_setPrototypeOf(o, p) {QuestL7CryptDirtyMan_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL7CryptDirtyMan_setPrototypeOf(o, p);}function QuestL7CryptDirtyMan_createSuper(Derived) {var hasNativeReflectConstruct = QuestL7CryptDirtyMan_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL7CryptDirtyMan_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL7CryptDirtyMan_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL7CryptDirtyMan_possibleConstructorReturn(this, result);};}function QuestL7CryptDirtyMan_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL7CryptDirtyMan_assertThisInitialized(self);}function QuestL7CryptDirtyMan_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL7CryptDirtyMan_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL7CryptDirtyMan_getPrototypeOf(o) {QuestL7CryptDirtyMan_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL7CryptDirtyMan_getPrototypeOf(o);}function QuestL7CryptDirtyMan_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL7CryptDirtyMan_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL7CryptDirtyMan_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL7CryptDirtyMan_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL7CryptDirtyMan_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL7CryptDirtyMan_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL7CryptDirtyMan_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL7CryptDirtyMan_setPrototypeOf(subClass, superClass);}function QuestL7CryptDirtyMan_setPrototypeOf(o, p) {QuestL7CryptDirtyMan_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL7CryptDirtyMan_setPrototypeOf(o, p);}function QuestL7CryptDirtyMan_createSuper(Derived) {var hasNativeReflectConstruct = QuestL7CryptDirtyMan_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL7CryptDirtyMan_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL7CryptDirtyMan_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL7CryptDirtyMan_possibleConstructorReturn(this, result);};}function QuestL7CryptDirtyMan_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL7CryptDirtyMan_assertThisInitialized(self);}function QuestL7CryptDirtyMan_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL7CryptDirtyMan_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL7CryptDirtyMan_getPrototypeOf(o) {QuestL7CryptDirtyMan_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL7CryptDirtyMan_getPrototypeOf(o);}function QuestL7CryptDirtyMan_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -11509,7 +11604,7 @@ var CryptL7DirtyMan = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptDirt
       return [this.loc];
     } }]);return CryptL7DirtyMan;}(CryptL7Template);
 ;// CONCATENATED MODULE: ./src/quests/council/crypts/QuestL7CryptEyes.ts
-function QuestL7CryptEyes_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL7CryptEyes_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL7CryptEyes_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL7CryptEyes_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL7CryptEyes_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL7CryptEyes_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL7CryptEyes_setPrototypeOf(subClass, superClass);}function QuestL7CryptEyes_setPrototypeOf(o, p) {QuestL7CryptEyes_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL7CryptEyes_setPrototypeOf(o, p);}function QuestL7CryptEyes_createSuper(Derived) {var hasNativeReflectConstruct = QuestL7CryptEyes_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL7CryptEyes_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL7CryptEyes_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL7CryptEyes_possibleConstructorReturn(this, result);};}function QuestL7CryptEyes_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL7CryptEyes_assertThisInitialized(self);}function QuestL7CryptEyes_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL7CryptEyes_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL7CryptEyes_getPrototypeOf(o) {QuestL7CryptEyes_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL7CryptEyes_getPrototypeOf(o);}function QuestL7CryptEyes_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL7CryptEyes_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL7CryptEyes_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL7CryptEyes_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL7CryptEyes_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL7CryptEyes_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL7CryptEyes_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL7CryptEyes_setPrototypeOf(subClass, superClass);}function QuestL7CryptEyes_setPrototypeOf(o, p) {QuestL7CryptEyes_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL7CryptEyes_setPrototypeOf(o, p);}function QuestL7CryptEyes_createSuper(Derived) {var hasNativeReflectConstruct = QuestL7CryptEyes_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL7CryptEyes_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL7CryptEyes_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL7CryptEyes_possibleConstructorReturn(this, result);};}function QuestL7CryptEyes_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL7CryptEyes_assertThisInitialized(self);}function QuestL7CryptEyes_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL7CryptEyes_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL7CryptEyes_getPrototypeOf(o) {QuestL7CryptEyes_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL7CryptEyes_getPrototypeOf(o);}function QuestL7CryptEyes_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -11562,7 +11657,7 @@ var CryptL7Eyes = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptEyes_inh
       return [this.loc];
     } }]);return CryptL7Eyes;}(CryptL7Template);
 ;// CONCATENATED MODULE: ./src/quests/council/crypts/QuestL7CryptRattling.ts
-function QuestL7CryptRattling_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL7CryptRattling_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL7CryptRattling_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL7CryptRattling_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL7CryptRattling_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL7CryptRattling_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL7CryptRattling_setPrototypeOf(subClass, superClass);}function QuestL7CryptRattling_setPrototypeOf(o, p) {QuestL7CryptRattling_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL7CryptRattling_setPrototypeOf(o, p);}function QuestL7CryptRattling_createSuper(Derived) {var hasNativeReflectConstruct = QuestL7CryptRattling_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL7CryptRattling_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL7CryptRattling_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL7CryptRattling_possibleConstructorReturn(this, result);};}function QuestL7CryptRattling_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL7CryptRattling_assertThisInitialized(self);}function QuestL7CryptRattling_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL7CryptRattling_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL7CryptRattling_getPrototypeOf(o) {QuestL7CryptRattling_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL7CryptRattling_getPrototypeOf(o);}function QuestL7CryptRattling_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL7CryptRattling_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL7CryptRattling_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL7CryptRattling_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL7CryptRattling_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL7CryptRattling_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL7CryptRattling_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL7CryptRattling_setPrototypeOf(subClass, superClass);}function QuestL7CryptRattling_setPrototypeOf(o, p) {QuestL7CryptRattling_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL7CryptRattling_setPrototypeOf(o, p);}function QuestL7CryptRattling_createSuper(Derived) {var hasNativeReflectConstruct = QuestL7CryptRattling_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL7CryptRattling_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL7CryptRattling_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL7CryptRattling_possibleConstructorReturn(this, result);};}function QuestL7CryptRattling_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL7CryptRattling_assertThisInitialized(self);}function QuestL7CryptRattling_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL7CryptRattling_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL7CryptRattling_getPrototypeOf(o) {QuestL7CryptRattling_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL7CryptRattling_getPrototypeOf(o);}function QuestL7CryptRattling_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -11611,7 +11706,7 @@ var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRatt
       return [this.loc];
     } }]);return CryptL7Rattling;}(CryptL7Template);
 ;// CONCATENATED MODULE: ./src/quests/council/crypts/QuestL7CryptSprinters.ts
-function QuestL7CryptSprinters_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL7CryptSprinters_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL7CryptSprinters_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL7CryptSprinters_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL7CryptSprinters_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL7CryptSprinters_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL7CryptSprinters_setPrototypeOf(subClass, superClass);}function QuestL7CryptSprinters_setPrototypeOf(o, p) {QuestL7CryptSprinters_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL7CryptSprinters_setPrototypeOf(o, p);}function QuestL7CryptSprinters_createSuper(Derived) {var hasNativeReflectConstruct = QuestL7CryptSprinters_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL7CryptSprinters_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL7CryptSprinters_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL7CryptSprinters_possibleConstructorReturn(this, result);};}function QuestL7CryptSprinters_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL7CryptSprinters_assertThisInitialized(self);}function QuestL7CryptSprinters_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL7CryptSprinters_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL7CryptSprinters_getPrototypeOf(o) {QuestL7CryptSprinters_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL7CryptSprinters_getPrototypeOf(o);}function QuestL7CryptSprinters_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL7CryptSprinters_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL7CryptSprinters_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL7CryptSprinters_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL7CryptSprinters_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL7CryptSprinters_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL7CryptSprinters_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL7CryptSprinters_setPrototypeOf(subClass, superClass);}function QuestL7CryptSprinters_setPrototypeOf(o, p) {QuestL7CryptSprinters_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL7CryptSprinters_setPrototypeOf(o, p);}function QuestL7CryptSprinters_createSuper(Derived) {var hasNativeReflectConstruct = QuestL7CryptSprinters_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL7CryptSprinters_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL7CryptSprinters_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL7CryptSprinters_possibleConstructorReturn(this, result);};}function QuestL7CryptSprinters_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL7CryptSprinters_assertThisInitialized(self);}function QuestL7CryptSprinters_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL7CryptSprinters_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL7CryptSprinters_getPrototypeOf(o) {QuestL7CryptSprinters_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL7CryptSprinters_getPrototypeOf(o);}function QuestL7CryptSprinters_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -11799,7 +11894,8 @@ function QuestL8MountainGoats_classCallCheck(instance, Constructor) {if (!(insta
 
 var QuestL8MountainGoats = /*#__PURE__*/function () {function QuestL8MountainGoats() {QuestL8MountainGoats_classCallCheck(this, QuestL8MountainGoats);QuestL8MountainGoats_defineProperty(this, "goats",
     external_kolmafia_namespaceObject.Location.get("The Goatlet"));QuestL8MountainGoats_defineProperty(this, "cheese",
-    external_kolmafia_namespaceObject.Item.get("Goat Cheese"));}QuestL8MountainGoats_createClass(QuestL8MountainGoats, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Goat Cheese"));QuestL8MountainGoats_defineProperty(this, "dairy",
+    external_kolmafia_namespaceObject.Monster.get("Dairy Goat"));}QuestL8MountainGoats_createClass(QuestL8MountainGoats, [{ key: "getId", value:
 
     function getId() {
       return "Council / Ice / Goats";
@@ -11856,7 +11952,11 @@ var QuestL8MountainGoats = /*#__PURE__*/function () {function QuestL8MountainGoa
         location: this.goats,
         outfit: outfit,
         run: () => {
-          greyAdv(this.goats, outfit);
+          greyAdv(
+          this.goats,
+          outfit,
+          new AdventureSettings().addNoBanish(this.dairy));
+
 
           if ((0,external_kolmafia_namespaceObject.availableAmount)(this.cheese) >= 3 && this.getOreRemaining() <= 0) {
             this.talkTrapper();
@@ -11988,7 +12088,7 @@ var QuestL8MountainOre = /*#__PURE__*/function () {function QuestL8MountainOre()
       return getQuestStatus("questL08Trapper");
     } }]);return QuestL8MountainOre;}();
 ;// CONCATENATED MODULE: ./src/quests/council/icepeak/QuestL8MountainOreClover.ts
-function QuestL8MountainOreClover_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOreClover_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOreClover_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOreClover_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOreClover_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOreClover_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOreClover_setPrototypeOf(subClass, superClass);}function QuestL8MountainOreClover_setPrototypeOf(o, p) {QuestL8MountainOreClover_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOreClover_setPrototypeOf(o, p);}function QuestL8MountainOreClover_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOreClover_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOreClover_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOreClover_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOreClover_possibleConstructorReturn(this, result);};}function QuestL8MountainOreClover_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOreClover_assertThisInitialized(self);}function QuestL8MountainOreClover_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOreClover_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOreClover_getPrototypeOf(o) {QuestL8MountainOreClover_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOreClover_getPrototypeOf(o);}function QuestL8MountainOreClover_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL8MountainOreClover_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOreClover_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOreClover_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOreClover_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOreClover_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOreClover_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOreClover_setPrototypeOf(subClass, superClass);}function QuestL8MountainOreClover_setPrototypeOf(o, p) {QuestL8MountainOreClover_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOreClover_setPrototypeOf(o, p);}function QuestL8MountainOreClover_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOreClover_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOreClover_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOreClover_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOreClover_possibleConstructorReturn(this, result);};}function QuestL8MountainOreClover_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOreClover_assertThisInitialized(self);}function QuestL8MountainOreClover_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOreClover_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOreClover_getPrototypeOf(o) {QuestL8MountainOreClover_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOreClover_getPrototypeOf(o);}function QuestL8MountainOreClover_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -12045,7 +12145,7 @@ var QuestL8MountainOreClover = /*#__PURE__*/function (_QuestL8MountainOre) {Ques
       return [];
     } }]);return QuestL8MountainOreClover;}(QuestL8MountainOre);
 ;// CONCATENATED MODULE: ./src/quests/locket/QuestL8MountainOreMan.ts
-function QuestL8MountainOreMan_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOreMan_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOreMan_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOreMan_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOreMan_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOreMan_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOreMan_setPrototypeOf(subClass, superClass);}function QuestL8MountainOreMan_setPrototypeOf(o, p) {QuestL8MountainOreMan_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOreMan_setPrototypeOf(o, p);}function QuestL8MountainOreMan_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOreMan_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOreMan_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOreMan_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOreMan_possibleConstructorReturn(this, result);};}function QuestL8MountainOreMan_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOreMan_assertThisInitialized(self);}function QuestL8MountainOreMan_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOreMan_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOreMan_getPrototypeOf(o) {QuestL8MountainOreMan_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOreMan_getPrototypeOf(o);}function QuestL8MountainOreMan_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL8MountainOreMan_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOreMan_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOreMan_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOreMan_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOreMan_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOreMan_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOreMan_setPrototypeOf(subClass, superClass);}function QuestL8MountainOreMan_setPrototypeOf(o, p) {QuestL8MountainOreMan_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOreMan_setPrototypeOf(o, p);}function QuestL8MountainOreMan_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOreMan_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOreMan_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOreMan_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOreMan_possibleConstructorReturn(this, result);};}function QuestL8MountainOreMan_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOreMan_assertThisInitialized(self);}function QuestL8MountainOreMan_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOreMan_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOreMan_getPrototypeOf(o) {QuestL8MountainOreMan_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOreMan_getPrototypeOf(o);}function QuestL8MountainOreMan_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -12223,7 +12323,7 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
       return 3;
     } }]);return QuestL8MountainOreMan;}(QuestL8MountainOre);
 ;// CONCATENATED MODULE: ./src/quests/council/icepeak/QuestL8MountainOreMiningOutfit.ts
-function QuestL8MountainOreMiningOutfit_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOreMiningOutfit_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOreMiningOutfit_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOreMiningOutfit_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOreMiningOutfit_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOreMiningOutfit_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOreMiningOutfit_setPrototypeOf(subClass, superClass);}function QuestL8MountainOreMiningOutfit_setPrototypeOf(o, p) {QuestL8MountainOreMiningOutfit_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOreMiningOutfit_setPrototypeOf(o, p);}function QuestL8MountainOreMiningOutfit_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOreMiningOutfit_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOreMiningOutfit_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOreMiningOutfit_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOreMiningOutfit_possibleConstructorReturn(this, result);};}function QuestL8MountainOreMiningOutfit_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOreMiningOutfit_assertThisInitialized(self);}function QuestL8MountainOreMiningOutfit_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOreMiningOutfit_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOreMiningOutfit_getPrototypeOf(o) {QuestL8MountainOreMiningOutfit_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOreMiningOutfit_getPrototypeOf(o);}function QuestL8MountainOreMiningOutfit_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL8MountainOreMiningOutfit_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOreMiningOutfit_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOreMiningOutfit_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOreMiningOutfit_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOreMiningOutfit_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOreMiningOutfit_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOreMiningOutfit_setPrototypeOf(subClass, superClass);}function QuestL8MountainOreMiningOutfit_setPrototypeOf(o, p) {QuestL8MountainOreMiningOutfit_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOreMiningOutfit_setPrototypeOf(o, p);}function QuestL8MountainOreMiningOutfit_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOreMiningOutfit_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOreMiningOutfit_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOreMiningOutfit_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOreMiningOutfit_possibleConstructorReturn(this, result);};}function QuestL8MountainOreMiningOutfit_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOreMiningOutfit_assertThisInitialized(self);}function QuestL8MountainOreMiningOutfit_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOreMiningOutfit_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOreMiningOutfit_getPrototypeOf(o) {QuestL8MountainOreMiningOutfit_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOreMiningOutfit_getPrototypeOf(o);}function QuestL8MountainOreMiningOutfit_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -12268,7 +12368,7 @@ var QuestL8MountainOreMiningOutfit = /*#__PURE__*/function (_QuestL8MountainOre)
       return [this.mines];
     } }]);return QuestL8MountainOreMiningOutfit;}(QuestL8MountainOre);
 ;// CONCATENATED MODULE: ./src/quests/council/icepeak/QuestL8MountainOreMining.ts
-function QuestL8MountainOreMining_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOreMining_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOreMining_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOreMining_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOreMining_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOreMining_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOreMining_setPrototypeOf(subClass, superClass);}function QuestL8MountainOreMining_setPrototypeOf(o, p) {QuestL8MountainOreMining_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOreMining_setPrototypeOf(o, p);}function QuestL8MountainOreMining_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOreMining_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOreMining_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOreMining_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOreMining_possibleConstructorReturn(this, result);};}function QuestL8MountainOreMining_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOreMining_assertThisInitialized(self);}function QuestL8MountainOreMining_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOreMining_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOreMining_getPrototypeOf(o) {QuestL8MountainOreMining_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOreMining_getPrototypeOf(o);}function QuestL8MountainOreMining_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL8MountainOreMining_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOreMining_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOreMining_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOreMining_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOreMining_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOreMining_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOreMining_setPrototypeOf(subClass, superClass);}function QuestL8MountainOreMining_setPrototypeOf(o, p) {QuestL8MountainOreMining_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOreMining_setPrototypeOf(o, p);}function QuestL8MountainOreMining_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOreMining_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOreMining_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOreMining_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOreMining_possibleConstructorReturn(this, result);};}function QuestL8MountainOreMining_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOreMining_assertThisInitialized(self);}function QuestL8MountainOreMining_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOreMining_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOreMining_getPrototypeOf(o) {QuestL8MountainOreMining_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOreMining_getPrototypeOf(o);}function QuestL8MountainOreMining_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -12901,7 +13001,8 @@ function QuestL9AbooPeak_classCallCheck(instance, Constructor) {if (!(instance i
 var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooPeak_classCallCheck(this, ABooHandler);QuestL9AbooPeak_defineProperty(this, "clue",
     external_kolmafia_namespaceObject.Item.get("A-Boo Clue"));QuestL9AbooPeak_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("A-Boo Peak"));QuestL9AbooPeak_defineProperty(this, "damageLevels",
-    [13, 25, 50, 125, 250]);}QuestL9AbooPeak_createClass(ABooHandler, [{ key: "level", value:
+    [13, 25, 50, 125, 250]);QuestL9AbooPeak_defineProperty(this, "canOfPaint",
+    external_kolmafia_namespaceObject.Item.get("Can of black paint"));}QuestL9AbooPeak_createClass(ABooHandler, [{ key: "level", value:
 
     function level() {
       return 9;
@@ -12931,6 +13032,11 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
         outfit: outfit,
         run: () => {
           var props = new PropertyManager();
+
+          if ((0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(this.canOfPaint, "Effect")) == 0) {
+            (0,external_kolmafia_namespaceObject.cliExecute)("acquire 1 " + this.canOfPaint.name);
+            (0,external_kolmafia_namespaceObject.use)(this.canOfPaint);
+          }
 
           try {
             props.setChoice(611, 1);
@@ -13076,6 +13182,10 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
       }
 
       if (this.canUseClue()) {
+        return QuestStatus.READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.myLevel)() >= 20) {
         return QuestStatus.READY;
       }
 
@@ -13230,6 +13340,7 @@ function QuestL9OrcsAndPeaks_classCallCheck(instance, Constructor) {if (!(instan
 
 
 
+
 var QuestL9Smut = /*#__PURE__*/function () {function QuestL9Smut() {QuestL9OrcsAndPeaks_classCallCheck(this, QuestL9Smut);QuestL9OrcsAndPeaks_defineProperty(this, "peaks",
     [
     new SmutOrcs(),
@@ -13285,6 +13396,7 @@ var QuestL9Smut = /*#__PURE__*/function () {function QuestL9Smut() {QuestL9OrcsA
     function run() {
       return {
         location: null,
+        outfit: new GreyOutfit("-tie"),
         run: () => {
           this.visitMiLord();
           (0,external_kolmafia_namespaceObject.council)();
@@ -13486,7 +13598,7 @@ var ManorBedroom = /*#__PURE__*/function () {function ManorBedroom() {QuestManor
     [
     "Animated Mahogany Nightstand",
     "Animated Rustic Nightstand",
-    "Wardröb nightstand"].
+    "Wardrob nightstand"].
     map((m) => external_kolmafia_namespaceObject.Monster.get(m)));QuestManorBedroom_defineProperty(this, "toAbsorb", void 0);}QuestManorBedroom_createClass(ManorBedroom, [{ key: "needCamera", value:
 
 
@@ -13800,9 +13912,13 @@ function QuestManorKitchen_classCallCheck(instance, Constructor) {if (!(instance
 
 
 
+
 var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {QuestManorKitchen_classCallCheck(this, QuestManorKitchen);QuestManorKitchen_defineProperty(this, "kitchen",
     external_kolmafia_namespaceObject.Location.get("The Haunted Kitchen"));QuestManorKitchen_defineProperty(this, "stenchResist",
-    external_kolmafia_namespaceObject.Skill.get("Conifer Polymers"));}QuestManorKitchen_createClass(QuestManorKitchen, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Skill.get("Conifer Polymers"));QuestManorKitchen_defineProperty(this, "albinoBat",
+    external_kolmafia_namespaceObject.Monster.get("Albino Bat"));QuestManorKitchen_defineProperty(this, "lastResist",
+    0);QuestManorKitchen_defineProperty(this, "lastResistTurnCheck",
+    0);}QuestManorKitchen_createClass(QuestManorKitchen, [{ key: "getId", value:
 
     function getId() {
       return "Manor / Kitchen";
@@ -13813,6 +13929,9 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
     } }, { key: "status", value:
 
     function status() {
+      // Each 3 resist in each element is another drawer searched.
+      // 21 drawers searched.
+      // Max of 9 total res
       var status = getQuestStatus("questM20Necklace");
 
       if (status < 0) {
@@ -13823,7 +13942,10 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
         return QuestStatus.COMPLETED;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.stenchResist)) {
+      if (
+      !(0,external_kolmafia_namespaceObject.haveSkill)(this.stenchResist) &&
+      !AbsorbsProvider.getReabsorbedMonsters().includes(this.albinoBat))
+      {
         return QuestStatus.FASTER_LATER;
       }
 
@@ -13831,9 +13953,11 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().
-      addBonus("+4 hot res").
-      addBonus("+4 stench res");
+      var outfit = new GreyOutfit();
+
+      if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("manorDrawerCount")) < 20) {
+        outfit.addBonus("+10 hot res").addBonus("+10 stench res");
+      }
 
       return {
         outfit: outfit,
@@ -13859,9 +13983,7 @@ var QuestManorLibrary = /*#__PURE__*/function () {function QuestManorLibrary() {
     external_kolmafia_namespaceObject.Location.get("The Haunted Library"));QuestManorLibrary_defineProperty(this, "killingJar",
     external_kolmafia_namespaceObject.Item.get("Killing Jar"));QuestManorLibrary_defineProperty(this, "key",
     external_kolmafia_namespaceObject.Item.get("[7302]Spookyraven library key"));QuestManorLibrary_defineProperty(this, "librarian",
-    external_kolmafia_namespaceObject.Monster.get("Banshee Librarian"));QuestManorLibrary_defineProperty(this, "book",
-    external_kolmafia_namespaceObject.Item.get("Familiar scrapbook"));QuestManorLibrary_defineProperty(this, "banisher",
-    external_kolmafia_namespaceObject.Skill.get("Show Your Boring Familiar Pictures"));QuestManorLibrary_defineProperty(this, "sweep",
+    external_kolmafia_namespaceObject.Monster.get("Banshee Librarian"));QuestManorLibrary_defineProperty(this, "sweep",
     external_kolmafia_namespaceObject.Skill.get("System Sweep"));}QuestManorLibrary_createClass(QuestManorLibrary, [{ key: "getId", value:
 
     function getId() {
@@ -13891,42 +14013,24 @@ var QuestManorLibrary = /*#__PURE__*/function () {function QuestManorLibrary() {
         return QuestStatus.FASTER_LATER;
       }
 
-      if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.book) > 0 &&
-      (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("scrapbookCharges")) < 100 &&
-      !(0,external_kolmafia_namespaceObject.isBanished)(this.librarian))
-      {
-        return QuestStatus.FASTER_LATER;
-      }
-
       return QuestStatus.READY;
     } }, { key: "run", value:
 
     function run() {
       var outfit = new GreyOutfit();
       var banishLibrarian =
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.killingJar) > 0 &&
-      !(0,external_kolmafia_namespaceObject.isBanished)(this.librarian) &&
-      (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("scrapbookCharges")) >= 100;
-
-      if (banishLibrarian) {
-        outfit.addItem(this.book);
-      }
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.killingJar) > 0 && !(0,external_kolmafia_namespaceObject.isBanished)(this.librarian);
 
       return {
         location: this.library,
         run: () => {
           var settings = new AdventureSettings();
 
-          if (banishLibrarian) {
-            settings.setStartOfFightMacro(
-            Macro.if_(this.librarian, Macro.skill(this.banisher)));
+          settings.addBanish(external_kolmafia_namespaceObject.Monster.get("bookbat"));
 
-          } else if ((0,external_kolmafia_namespaceObject.availableAmount)(this.killingJar) > 0) {
+          if (banishLibrarian) {
             settings.addBanish(this.librarian);
           }
-
-          settings.addBanish(external_kolmafia_namespaceObject.Monster.get("bookbat"));
 
           greyAdv(this.library, null, settings);
         } };
@@ -14248,15 +14352,11 @@ var QuestManorLights = /*#__PURE__*/function () {
     function isTime() {
       var last = this.getLastLightsOut();
 
-      if (last == -1) {
-        return false;
-      }
-
       if (last >= (0,external_kolmafia_namespaceObject.totalTurnsPlayed)()) {
         return false;
       }
 
-      return (last + (0,external_kolmafia_namespaceObject.totalTurnsPlayed)()) % 37 == 0;
+      return (0,external_kolmafia_namespaceObject.totalTurnsPlayed)() % 37 == 0;
     } }, { key: "getLastLightsOut", value:
 
     function getLastLightsOut() {
@@ -14422,7 +14522,7 @@ var QuestInitialStart = /*#__PURE__*/function () {function QuestInitialStart() {
 
 
     external_kolmafia_namespaceObject.Item.get("Space Blanket"));QuestInitialStart_defineProperty(this, "mayday",
-    external_kolmafia_namespaceObject.Item.get("MayDay™ supply package"));QuestInitialStart_defineProperty(this, "saber",
+    external_kolmafia_namespaceObject.Item.get("MayDay supply package"));QuestInitialStart_defineProperty(this, "saber",
     external_kolmafia_namespaceObject.Item.get("Fourth of May Cosplay Saber"));}QuestInitialStart_createClass(QuestInitialStart, [{ key: "getLocations", value:
 
     function getLocations() {
@@ -14434,12 +14534,18 @@ var QuestInitialStart = /*#__PURE__*/function () {function QuestInitialStart() {
     } }, { key: "status", value:
 
     function status() {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.mayday) > 0) {
+        return QuestStatus.READY;
+      }
+
       if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.mayday) > 0 ||
-      (0,external_kolmafia_namespaceObject.myLocation)() != null &&
-      (0,external_kolmafia_namespaceObject.myLocation)().combatQueue.length > 0 &&
-      (0,external_kolmafia_namespaceObject.getProperty)("breakfastCompleted") == "false")
+      (0,external_kolmafia_namespaceObject.getProperty)("hasMaydayContract") == "true" &&
+      (0,external_kolmafia_namespaceObject.getProperty)("_maydayDropped") == "false")
       {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("breakfastCompleted") == "false") {
         return QuestStatus.READY;
       }
 
@@ -14468,7 +14574,7 @@ var QuestInitialStart = /*#__PURE__*/function () {function QuestInitialStart() {
           }
 
           if (
-          (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("SongBoom™ BoomBox")) > 0 &&
+          (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("SongBoom&trade; BoomBox")) > 0 &&
           (0,external_kolmafia_namespaceObject.getProperty)("_boomBoxSongsLeft") == "11")
           {
             (0,external_kolmafia_namespaceObject.cliExecute)("boombox food");
@@ -15202,7 +15308,7 @@ function QuestCustomPurchases_createForOfIteratorHelper(o, allowArrayLike) {var 
 
 
 var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchases() {QuestCustomPurchases_classCallCheck(this, QuestCustomPurchases);QuestCustomPurchases_defineProperty(this, "toPurchase",
-    ["sombrero-mounted sparkler"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));}QuestCustomPurchases_createClass(QuestCustomPurchases, [{ key: "getId", value:
+    ["Porkpie-mounted popper"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));}QuestCustomPurchases_createClass(QuestCustomPurchases, [{ key: "getId", value:
 
     function getId() {
       return "Misc / Purchases";
@@ -15220,6 +15326,10 @@ var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchas
       var missing = this.getMissing();
 
       if (missing.length == 0) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("_fireworksShopHatBought") == "true") {
         return QuestStatus.COMPLETED;
       }
 
@@ -16163,7 +16273,7 @@ var QuestGrabBoatVacation = /*#__PURE__*/function () {function QuestGrabBoatVaca
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.myAdventures)() < 20) {
+      if ((0,external_kolmafia_namespaceObject.myAdventures)() < 20 || (0,external_kolmafia_namespaceObject.myLevel)() < 11) {
         return QuestStatus.FASTER_LATER;
       }
 
@@ -16244,7 +16354,7 @@ var QuestGrabBoatVacation = /*#__PURE__*/function () {function QuestGrabBoatVaca
       return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("lastIslandUnlock")) == (0,external_kolmafia_namespaceObject.myAscensions)();
     } }]);return QuestGrabBoatVacation;}();
 ;// CONCATENATED MODULE: ./src/quests/custom/QuestMirrorDupe.ts
-function QuestMirrorDupe_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestMirrorDupe_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestMirrorDupe_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestMirrorDupe_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestMirrorDupe_arrayLikeToArray(o, minLen);}function QuestMirrorDupe_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestMirrorDupe_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestMirrorDupe_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestMirrorDupe_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestMirrorDupe_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestMirrorDupe_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestMirrorDupe_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestMirrorDupe_setPrototypeOf(subClass, superClass);}function QuestMirrorDupe_setPrototypeOf(o, p) {QuestMirrorDupe_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestMirrorDupe_setPrototypeOf(o, p);}function QuestMirrorDupe_createSuper(Derived) {var hasNativeReflectConstruct = QuestMirrorDupe_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestMirrorDupe_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestMirrorDupe_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestMirrorDupe_possibleConstructorReturn(this, result);};}function QuestMirrorDupe_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestMirrorDupe_assertThisInitialized(self);}function QuestMirrorDupe_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestMirrorDupe_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestMirrorDupe_getPrototypeOf(o) {QuestMirrorDupe_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestMirrorDupe_getPrototypeOf(o);}function QuestMirrorDupe_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestMirrorDupe_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestMirrorDupe_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestMirrorDupe_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestMirrorDupe_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestMirrorDupe_arrayLikeToArray(o, minLen);}function QuestMirrorDupe_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestMirrorDupe_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestMirrorDupe_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestMirrorDupe_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestMirrorDupe_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestMirrorDupe_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestMirrorDupe_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestMirrorDupe_setPrototypeOf(subClass, superClass);}function QuestMirrorDupe_setPrototypeOf(o, p) {QuestMirrorDupe_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestMirrorDupe_setPrototypeOf(o, p);}function QuestMirrorDupe_createSuper(Derived) {var hasNativeReflectConstruct = QuestMirrorDupe_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestMirrorDupe_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestMirrorDupe_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestMirrorDupe_possibleConstructorReturn(this, result);};}function QuestMirrorDupe_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestMirrorDupe_assertThisInitialized(self);}function QuestMirrorDupe_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestMirrorDupe_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestMirrorDupe_getPrototypeOf(o) {QuestMirrorDupe_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestMirrorDupe_getPrototypeOf(o);}function QuestMirrorDupe_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -16480,7 +16590,7 @@ var QuestMirrorDupe = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestMirror
       return [];
     } }]);return QuestMirrorDupe;}(QuestKeyStuffAbstract);
 ;// CONCATENATED MODULE: ./src/quests/custom/QuestPullZappableKey.ts
-function QuestPullZappableKey_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestPullZappableKey_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestPullZappableKey_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestPullZappableKey_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestPullZappableKey_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestPullZappableKey_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestPullZappableKey_setPrototypeOf(subClass, superClass);}function QuestPullZappableKey_setPrototypeOf(o, p) {QuestPullZappableKey_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestPullZappableKey_setPrototypeOf(o, p);}function QuestPullZappableKey_createSuper(Derived) {var hasNativeReflectConstruct = QuestPullZappableKey_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestPullZappableKey_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestPullZappableKey_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestPullZappableKey_possibleConstructorReturn(this, result);};}function QuestPullZappableKey_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestPullZappableKey_assertThisInitialized(self);}function QuestPullZappableKey_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestPullZappableKey_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestPullZappableKey_getPrototypeOf(o) {QuestPullZappableKey_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestPullZappableKey_getPrototypeOf(o);}
+function QuestPullZappableKey_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestPullZappableKey_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestPullZappableKey_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestPullZappableKey_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestPullZappableKey_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestPullZappableKey_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestPullZappableKey_setPrototypeOf(subClass, superClass);}function QuestPullZappableKey_setPrototypeOf(o, p) {QuestPullZappableKey_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestPullZappableKey_setPrototypeOf(o, p);}function QuestPullZappableKey_createSuper(Derived) {var hasNativeReflectConstruct = QuestPullZappableKey_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestPullZappableKey_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestPullZappableKey_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestPullZappableKey_possibleConstructorReturn(this, result);};}function QuestPullZappableKey_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestPullZappableKey_assertThisInitialized(self);}function QuestPullZappableKey_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestPullZappableKey_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestPullZappableKey_getPrototypeOf(o) {QuestPullZappableKey_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestPullZappableKey_getPrototypeOf(o);}
 
 
 
@@ -16545,7 +16655,7 @@ var QuestPullZappableKey = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestP
       return [];
     } }]);return QuestPullZappableKey;}(QuestKeyStuffAbstract);
 ;// CONCATENATED MODULE: ./src/quests/custom/QuestZapKeys.ts
-function QuestZapKeys_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestZapKeys_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestZapKeys_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestZapKeys_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestZapKeys_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestZapKeys_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestZapKeys_setPrototypeOf(subClass, superClass);}function QuestZapKeys_setPrototypeOf(o, p) {QuestZapKeys_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestZapKeys_setPrototypeOf(o, p);}function QuestZapKeys_createSuper(Derived) {var hasNativeReflectConstruct = QuestZapKeys_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestZapKeys_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestZapKeys_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestZapKeys_possibleConstructorReturn(this, result);};}function QuestZapKeys_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestZapKeys_assertThisInitialized(self);}function QuestZapKeys_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestZapKeys_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestZapKeys_getPrototypeOf(o) {QuestZapKeys_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestZapKeys_getPrototypeOf(o);}
+function QuestZapKeys_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestZapKeys_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestZapKeys_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestZapKeys_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestZapKeys_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestZapKeys_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestZapKeys_setPrototypeOf(subClass, superClass);}function QuestZapKeys_setPrototypeOf(o, p) {QuestZapKeys_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestZapKeys_setPrototypeOf(o, p);}function QuestZapKeys_createSuper(Derived) {var hasNativeReflectConstruct = QuestZapKeys_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestZapKeys_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestZapKeys_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestZapKeys_possibleConstructorReturn(this, result);};}function QuestZapKeys_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestZapKeys_assertThisInitialized(self);}function QuestZapKeys_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestZapKeys_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestZapKeys_getPrototypeOf(o) {QuestZapKeys_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestZapKeys_getPrototypeOf(o);}
 
 
 
@@ -16644,7 +16754,7 @@ var QuestZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestZapKeys_i
       return [];
     } }]);return QuestZapKeys;}(QuestKeyStuffAbstract);
 ;// CONCATENATED MODULE: ./src/quests/custom/QuestMonsterBait.ts
-function QuestMonsterBait_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestMonsterBait_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestMonsterBait_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestMonsterBait_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestMonsterBait_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestMonsterBait_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestMonsterBait_setPrototypeOf(subClass, superClass);}function QuestMonsterBait_setPrototypeOf(o, p) {QuestMonsterBait_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestMonsterBait_setPrototypeOf(o, p);}function QuestMonsterBait_createSuper(Derived) {var hasNativeReflectConstruct = QuestMonsterBait_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestMonsterBait_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestMonsterBait_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestMonsterBait_possibleConstructorReturn(this, result);};}function QuestMonsterBait_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestMonsterBait_assertThisInitialized(self);}function QuestMonsterBait_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestMonsterBait_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestMonsterBait_getPrototypeOf(o) {QuestMonsterBait_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestMonsterBait_getPrototypeOf(o);}function QuestMonsterBait_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestMonsterBait_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestMonsterBait_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestMonsterBait_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestMonsterBait_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestMonsterBait_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestMonsterBait_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestMonsterBait_setPrototypeOf(subClass, superClass);}function QuestMonsterBait_setPrototypeOf(o, p) {QuestMonsterBait_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestMonsterBait_setPrototypeOf(o, p);}function QuestMonsterBait_createSuper(Derived) {var hasNativeReflectConstruct = QuestMonsterBait_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestMonsterBait_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestMonsterBait_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestMonsterBait_possibleConstructorReturn(this, result);};}function QuestMonsterBait_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestMonsterBait_assertThisInitialized(self);}function QuestMonsterBait_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestMonsterBait_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestMonsterBait_getPrototypeOf(o) {QuestMonsterBait_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestMonsterBait_getPrototypeOf(o);}function QuestMonsterBait_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -16747,7 +16857,7 @@ var QuestFamiliarEquip = /*#__PURE__*/function () {function QuestFamiliarEquip()
         location: null,
         run: () => {
           (0,external_kolmafia_namespaceObject.useFamiliar)(this.familiar);
-          (0,external_kolmafia_namespaceObject.maximize)("familiar experience", false);
+          (0,external_kolmafia_namespaceObject.maximize)("familiar experience +familiar weight -tie", false);
 
           while (
           (0,external_kolmafia_namespaceObject.availableAmount)(this.equip) == 0 &&
@@ -16957,8 +17067,81 @@ var QuestPowerLeveling = /*#__PURE__*/function () {
     function getId() {
       return "Misc / PowerLeveling";
     } }]);return QuestPowerLeveling;}();
+;// CONCATENATED MODULE: ./src/quests/custom/QuestBugbearBakery.ts
+function QuestBugbearBakery_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestBugbearBakery_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestBugbearBakery_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestBugbearBakery_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestBugbearBakery_arrayLikeToArray(o, minLen);}function QuestBugbearBakery_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestBugbearBakery_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestBugbearBakery_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestBugbearBakery_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestBugbearBakery_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestBugbearBakery_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestBugbearBakery_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+var QuestBugbearBakery = /*#__PURE__*/function () {function QuestBugbearBakery() {QuestBugbearBakery_classCallCheck(this, QuestBugbearBakery);QuestBugbearBakery_defineProperty(this, "asdon",
+    external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestBugbearBakery_defineProperty(this, "garage",
+    external_kolmafia_namespaceObject.Location.get("The Degrassi Knoll Garage"));QuestBugbearBakery_defineProperty(this, "guard",
+    external_kolmafia_namespaceObject.Monster.get("Guard Bugbear"));QuestBugbearBakery_defineProperty(this, "effect",
+    external_kolmafia_namespaceObject.Effect.get("Everything Looks Yellow"));QuestBugbearBakery_defineProperty(this, "nanovision",
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));}QuestBugbearBakery_createClass(QuestBugbearBakery, [{ key: "getId", value:
+
+    function getId() {
+      return "Misc / BugbearBakery";
+    } }, { key: "level", value:
+
+    function level() {
+      return 6;
+    } }, { key: "status", value:
+
+    function status() {
+      if (
+      (0,external_kolmafia_namespaceObject.haveOutfit)("Bugbear Costume") ||
+      !(0,external_kolmafia_namespaceObject.knollAvailable)() && (0,external_kolmafia_namespaceObject.getWorkshed)() != this.asdon)
+      {
+        return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.myMeat)() < 200 || (0,external_kolmafia_namespaceObject.isBanished)(this.guard)) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.haveEffect)(this.effect) > 0) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.READY;
+    } }, { key: "run", value:
+
+    function run() {
+      if ((0,external_kolmafia_namespaceObject.knollAvailable)()) {
+        return {
+          location: null,
+          outfit: new GreyOutfit("-tie"),
+          run: () => {var _iterator = QuestBugbearBakery_createForOfIteratorHelper(
+            (0,external_kolmafia_namespaceObject.outfitPieces)("Bugbear Costume")),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var item = _step.value;
+                (0,external_kolmafia_namespaceObject.cliExecute)("acquire " + item.name);
+              }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+          } };
+
+      }
+
+      var outfit = new GreyOutfit().setItemDrops();
+
+      return {
+        location: this.garage,
+        outfit: outfit,
+        run: () => {
+          greyAdv(
+          this.garage,
+          outfit,
+          new AdventureSettings().addNoBanish(this.guard));
+
+        } };
+
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [this.garage];
+    } }]);return QuestBugbearBakery;}();
 ;// CONCATENATED MODULE: ./src/quests/QuestsCustom.ts
 function QuestsCustom_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestsCustom_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestsCustom_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestsCustom_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestsCustom_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestsCustom_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -17010,6 +17193,7 @@ var QuestsCustom = /*#__PURE__*/function () {
     this.quests.push(new QuestFamiliarEquip());
     this.quests.push(new QuestFortuneExp());
     this.quests.push(new QuestPowerLeveling(4));
+    this.quests.push(new QuestBugbearBakery());
   }QuestsCustom_createClass(QuestsCustom, [{ key: "level", value:
 
     function level() {
@@ -17179,6 +17363,7 @@ var QuestRegistry = /*#__PURE__*/function () {
       // Always try to buy access to the shore, 8-9 adventures spent trying to farm stuff up?
       { id: "Council / MacGruffin / Shore" },
       { id: "Misc / MeatCar", testValid: () => false },
+      { id: "Misc / BugbearBakery" },
 
       // Get goblin done early so we can grab our first -combat skill
       { id: "Council / Goblins / Outskirts" },
@@ -17247,6 +17432,11 @@ var QuestRegistry = /*#__PURE__*/function () {
       { id: "Council / MacGruffin / Temple / Nostril" },
       { id: "Council / MacGruffin / Temple / HiddenCity" },
 
+      // Now we do our bowling, we prioritize this because of special code that has the bowling ball with combat turns = 0
+      // We also prioritize it for double nanovision
+      { id: "Council / MacGruffin / HiddenCity / BookOfMatches" },
+      { id: "Council / MacGruffin / HiddenCity / Bowling" },
+
       // Do library after we should have system sweep stuff
       { id: "Manor / Library" },
 
@@ -17309,10 +17499,6 @@ var QuestRegistry = /*#__PURE__*/function () {
 
       // We do shaman first to potentially grab extra accountant stuff
       { id: "Council / MacGruffin / HiddenCity / Curses" },
-
-      // Now we do our bowling, we prioritize this because of special code that has the bowling ball with combat turns = 0
-      { id: "Council / MacGruffin / HiddenCity / BookOfMatches" },
-      { id: "Council / MacGruffin / HiddenCity / Bowling" },
 
       { id: "Council / MacGruffin / HiddenCity / Accountants" },
 
@@ -18002,13 +18188,21 @@ var TaskCouncil = /*#__PURE__*/function () {function TaskCouncil() {TaskCouncil_
       (0,external_kolmafia_namespaceObject.cliExecute)("refresh inventory");
     } }]);return TaskCouncil;}();
 ;// CONCATENATED MODULE: ./src/tasks/TaskEater.ts
-function TaskEater_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskEater_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskEater_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskEater_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskEater_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskEater_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function TaskEater_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskEater_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskEater_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskEater_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskEater_arrayLikeToArray(o, minLen);}function TaskEater_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskEater_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskEater_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskEater_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskEater_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskEater_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskEater_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 var TaskEater = /*#__PURE__*/function () {
 
 
-  function TaskEater() {TaskEater_classCallCheck(this, TaskEater);TaskEater_defineProperty(this, "prop", "_greyEatenToday");
+
+
+
+
+
+
+
+
+  function TaskEater() {TaskEater_classCallCheck(this, TaskEater);TaskEater_defineProperty(this, "prop", "_greyEatenToday");TaskEater_defineProperty(this, "npcFoods", ["Hot buttered roll", "Ketchup", "Catsup", "cup of lukewarm tea", "Fortune Cookie", "Pickled Egg"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));
     if ((0,external_kolmafia_namespaceObject.getProperty)(this.prop) == "") {
       var dontEat = [];
       // Goat cheese quest
@@ -18030,7 +18224,59 @@ var TaskEater = /*#__PURE__*/function () {
 
       (0,external_kolmafia_namespaceObject.setProperty)(this.prop, dontEat.map((s) => (0,external_kolmafia_namespaceObject.toInt)(s)).join(","));
     }
-  }TaskEater_createClass(TaskEater, [{ key: "run", value:
+  }TaskEater_createClass(TaskEater, [{ key: "doAlwaysAvailable", value:
+
+    function doAlwaysAvailable(eaten) {
+      if ((0,external_kolmafia_namespaceObject.myMeat)() < 2000) {
+        return;
+      }var _iterator = TaskEater_createForOfIteratorHelper(
+
+      this.npcFoods),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var item = _step.value;
+          var id = (0,external_kolmafia_namespaceObject.toInt)(item).toString();
+
+          if (eaten.includes(id)) {
+            continue;
+          }
+
+          (0,external_kolmafia_namespaceObject.cliExecute)("acquire 1 " + item.name);
+        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+    } }, { key: "doChez", value:
+
+    function doChez(eaten) {
+      if (!(0,external_kolmafia_namespaceObject.canadiaAvailable)() || (0,external_kolmafia_namespaceObject.myMeat)() < 2000) {
+        return;
+      }
+
+      var daily = (0,external_kolmafia_namespaceObject.toInt)(external_kolmafia_namespaceObject.Item.get((0,external_kolmafia_namespaceObject.getProperty)("_dailySpecial"))).toString();
+
+      if (eaten.includes(daily)) {
+        return;
+      }
+
+      eaten.push(daily);
+
+      for (var _i = 0, _arr = ["-1", "-2", "-3", daily]; _i < _arr.length; _i++) {var itemId = _arr[_i];
+        (0,external_kolmafia_namespaceObject.visitUrl)("cafe.php?cafeid=1&pwd=&action=CONSUME!&whichitem=" + itemId);
+      }
+    } }, { key: "doGnomes", value:
+
+    function doGnomes(eaten) {
+      if (!(0,external_kolmafia_namespaceObject.gnomadsAvailable)() || (0,external_kolmafia_namespaceObject.myMeat)() < 2000) {
+        return;
+      }
+
+      var daily = (0,external_kolmafia_namespaceObject.toInt)(external_kolmafia_namespaceObject.Item.get((0,external_kolmafia_namespaceObject.getProperty)("_dailySpecial"))).toString();
+
+      if (eaten.includes(daily)) {
+        return;
+      }
+
+      eaten.push(daily);
+
+      for (var _i2 = 0, _arr2 = ["-1", "-2", "-3", daily]; _i2 < _arr2.length; _i2++) {var itemId = _arr2[_i2];
+        (0,external_kolmafia_namespaceObject.visitUrl)("cafe.php?cafeid=2&pwd=&action=CONSUME!&whichitem=" + itemId);
+      }
+    } }, { key: "run", value:
 
     function run() {
       if ((0,external_kolmafia_namespaceObject.pullsRemaining)() == -1) {
@@ -18039,7 +18285,11 @@ var TaskEater = /*#__PURE__*/function () {
 
       var eaten = (0,external_kolmafia_namespaceObject.getProperty)(this.prop).split(",");
 
-      for (var _i = 0, _Object$keys = Object.keys((0,external_kolmafia_namespaceObject.getInventory)()); _i < _Object$keys.length; _i++) {var i = _Object$keys[_i];
+      this.doAlwaysAvailable(eaten);
+      this.doChez(eaten);
+      this.doGnomes(eaten);
+
+      for (var _i3 = 0, _Object$keys = Object.keys((0,external_kolmafia_namespaceObject.getInventory)()); _i3 < _Object$keys.length; _i3++) {var i = _Object$keys[_i3];
         var item = external_kolmafia_namespaceObject.Item.get(i);
 
         if (item.fullness == 0 && item.inebriety == 0 && item.spleen == 0) {
@@ -18069,6 +18319,88 @@ var TaskEater = /*#__PURE__*/function () {
     } }, { key: "tryMakeCraftables", value:
 
     function tryMakeCraftables() {} }]);return TaskEater;}();
+;// CONCATENATED MODULE: ./src/tasks/TaskFuelAsdon.ts
+function TaskFuelAsdon_slicedToArray(arr, i) {return TaskFuelAsdon_arrayWithHoles(arr) || TaskFuelAsdon_iterableToArrayLimit(arr, i) || TaskFuelAsdon_unsupportedIterableToArray(arr, i) || TaskFuelAsdon_nonIterableRest();}function TaskFuelAsdon_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskFuelAsdon_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskFuelAsdon_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskFuelAsdon_arrayLikeToArray(o, minLen);}function TaskFuelAsdon_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskFuelAsdon_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function TaskFuelAsdon_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskFuelAsdon_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskFuelAsdon_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskFuelAsdon_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskFuelAsdon_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskFuelAsdon_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskFuelAsdon_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+var TaskFuelAsdon = /*#__PURE__*/function () {function TaskFuelAsdon() {TaskFuelAsdon_classCallCheck(this, TaskFuelAsdon);TaskFuelAsdon_defineProperty(this, "sodaBread",
+    external_kolmafia_namespaceObject.Item.get("Loaf of Soda Bread"));TaskFuelAsdon_defineProperty(this, "eachFuelWorth",
+    24);TaskFuelAsdon_defineProperty(this, "invalidFuels",
+    []);TaskFuelAsdon_defineProperty(this, "asdonMartin",
+    external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));}TaskFuelAsdon_createClass(TaskFuelAsdon, [{ key: "run", value:
+
+    function run() {
+      if ((0,external_kolmafia_namespaceObject.myMeat)() < 1500 || (0,external_kolmafia_namespaceObject.getWorkshed)() != this.asdonMartin) {
+        return;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getFuel)() >= 150 || !(0,external_kolmafia_namespaceObject.haveOutfit)("Bugbear Costume")) {
+        return;
+      }
+
+      while ((0,external_kolmafia_namespaceObject.myMeat)() > 1500 && (0,external_kolmafia_namespaceObject.getFuel)() < 50) {
+        // Each soda bread is worth 5-7 so lets always keep 50 / 6 = 9ish on hand
+        var toUse = Math.ceil((50 - (0,external_kolmafia_namespaceObject.getFuel)()) / 6);
+
+        (0,external_kolmafia_namespaceObject.cliExecute)("asdonmartin fuel " + toUse + " " + this.sodaBread);
+      }
+    } }, { key: "getAvailableItems", value:
+
+    function getAvailableItems() {
+      // Returns <Item, Amount, Each Fuel Worth in Mall>
+      var items = [];
+
+      for (var _i = 0, _Object$entries = Object.entries((0,external_kolmafia_namespaceObject.getInventory)()); _i < _Object$entries.length; _i++) {var _Object$entries$_i = TaskFuelAsdon_slicedToArray(_Object$entries[_i], 2),itemName = _Object$entries$_i[0],amount = _Object$entries$_i[1];
+        var item = external_kolmafia_namespaceObject.Item.get(itemName);
+
+        if (this.invalidFuels.includes(item)) {
+          continue;
+        }
+
+        if (item.fullness == 0 && item.inebriety == 0) {
+          this.invalidFuels.push(item);
+          continue;
+        }
+
+        if (item.quest || !item.tradeable || item.gift) {
+          this.invalidFuels.push(item);
+          continue;
+        }
+
+        var histPrice = (0,external_kolmafia_namespaceObject.historicalPrice)(item);
+
+        if (histPrice <= 10) {
+          continue;
+        }
+
+        if (!item.adventures.match(/^[0-9]+(-[0-9]+)?$/)) {
+          this.invalidFuels.push(item);
+          continue;
+        }
+
+        // Make sure we don't consume something great
+        if (
+        item.quality != "crappy" &&
+        item.quality != "decent" &&
+        item.quality != "good")
+        {
+          histPrice = Math.max(histPrice, (0,external_kolmafia_namespaceObject.mallPrice)(item));
+        }
+
+        var advs = (0,external_kolmafia_namespaceObject.toInt)(item.adventures.split("-")[0]);
+        var costPerFuel = histPrice / advs;
+
+        // If the fuel would cost more than soda bread..
+        if (costPerFuel > this.eachFuelWorth) {
+          this.invalidFuels.push(item);
+          continue;
+        }
+
+        items.push([item, amount, costPerFuel]);
+      }
+
+      return items;
+    } }]);return TaskFuelAsdon;}();
 ;// CONCATENATED MODULE: ./src/tasks/TaskLatteFiller.ts
 function TaskLatteFiller_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskLatteFiller_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskLatteFiller_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskLatteFiller_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskLatteFiller_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskLatteFiller_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -18113,6 +18445,22 @@ var TaskLatteFiller = /*#__PURE__*/function () {function TaskLatteFiller() {Task
 
       (0,external_kolmafia_namespaceObject.cliExecute)("latte refill " + flavors.join(" "));
     } }]);return TaskLatteFiller;}();
+;// CONCATENATED MODULE: ./src/tasks/TaskMaintainStatus.ts
+function TaskMaintainStatus_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskMaintainStatus_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskMaintainStatus_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskMaintainStatus_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskMaintainStatus_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}
+
+
+var TaskMaintainStatus = /*#__PURE__*/function () {function TaskMaintainStatus() {TaskMaintainStatus_classCallCheck(this, TaskMaintainStatus);}TaskMaintainStatus_createClass(TaskMaintainStatus, [{ key: "run", value:
+    function run() {
+      while ((0,external_kolmafia_namespaceObject.myMeat)() > 100 && (0,external_kolmafia_namespaceObject.myMp)() < ((0,external_kolmafia_namespaceObject.myMaxmp)() < 40 ? 20 : 40)) {
+        (0,external_kolmafia_namespaceObject.cliExecute)("acquire 1 Doc Galaktik's Invigorating Tonic");
+        (0,external_kolmafia_namespaceObject.cliExecute)("use Doc Galaktik's Invigorating Tonic");
+      }
+
+      while ((0,external_kolmafia_namespaceObject.myMeat)() > 100 && (0,external_kolmafia_namespaceObject.myHp)() < Math.min((0,external_kolmafia_namespaceObject.myMaxhp)() / 2, 50)) {
+        (0,external_kolmafia_namespaceObject.cliExecute)("acquire 1 Doc Galaktik's Homeopathic Elixir");
+        (0,external_kolmafia_namespaceObject.cliExecute)("use Doc Galaktik's Homeopathic Elixir");
+      }
+    } }]);return TaskMaintainStatus;}();
 ;// CONCATENATED MODULE: ./src/tasks/TaskSellCrap.ts
 function TaskSellCrap_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskSellCrap_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskSellCrap_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskSellCrap_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskSellCrap_arrayLikeToArray(o, minLen);}function TaskSellCrap_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskSellCrap_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskSellCrap_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskSellCrap_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskSellCrap_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskSellCrap_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskSellCrap_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -18234,6 +18582,8 @@ function GreyAdventurer_createForOfIteratorHelper(o, allowArrayLike) {var it = t
 
 
 
+
+
 var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAdventurer_classCallCheck(this, GreyAdventurer);GreyAdventurer_defineProperty(this, "goose",
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));GreyAdventurer_defineProperty(this, "adventureFinder",
     new AdventureFinder());GreyAdventurer_defineProperty(this, "goTime", void 0);GreyAdventurer_defineProperty(this, "tasks",
@@ -18243,7 +18593,9 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
     new TaskSellCrap(),
     new TaskWorkshed(),
     new TaskCouncil(),
-    new TaskLatteFiller()]);}GreyAdventurer_createClass(GreyAdventurer, [{ key: "runTurn", value:
+    new TaskLatteFiller(),
+    new TaskMaintainStatus(),
+    new TaskFuelAsdon()]);}GreyAdventurer_createClass(GreyAdventurer, [{ key: "runTurn", value:
 
 
     function runTurn(goTime) {
@@ -18514,6 +18866,7 @@ function hasNonCombatSkillActive() {
 }
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 var
