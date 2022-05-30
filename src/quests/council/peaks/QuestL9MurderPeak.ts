@@ -90,7 +90,7 @@ export class MurderHandler implements QuestInfo {
       outfit.setItemDrops();
     }
 
-    if (this.needsInit()) {
+    if (this.needsInit() && !haveSkill(Skill.get("Overclocking"))) {
       outfit.addItem(Item.get("Backup Camera")).addBonus("+init");
     }
 

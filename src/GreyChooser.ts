@@ -30,6 +30,7 @@ import {
 import { GreySettings } from "./utils/GreySettings";
 import { currentPredictions, doColor } from "./utils/GreyUtils";
 import { QuestRegistry } from "./quests/QuestRegistry";
+import { ResourceClaim, ResourceType } from "./utils/GreyResources";
 
 export interface FoundAdventure {
   quest?: QuestInfo;
@@ -45,14 +46,69 @@ export class AdventureFinder {
   goose: Familiar = Familiar.get("Grey Goose");
   goodAbsorbs: AdventureLocation[];
   questLocations: Location[];
+  resources: ResourceClaim[];
 
   start() {
     this.setPreAbsorbs();
+    this.doResourceClaims();
     this.viableQuests = this.quester.getDoableQuests();
     this.setAbsorbs();
     this.defeated = this.absorbs.getAbsorbedMonstersFromInstance();
     this.goodAbsorbs = this.absorbs.getExtraAdventures(this.defeated, true);
     this.setQuestLocations();
+  }
+
+  noteResourceClaims() {
+    for (let resourceType of Object.keys(ResourceType)) {
+      let id = ResourceType[resourceType];
+
+      print(resourceType);
+      let totalDesired = 0;
+
+      for (let claim of this.resources) {
+        if (claim.resource != id) {
+          continue;
+        }
+
+        print(
+          claim.reason +
+            " - Wants " +
+            claim.amountDesired +
+            " - saves " +
+            claim.turnsSaved
+        );
+
+        totalDesired += claim.amountDesired;
+      }
+
+      if (totalDesired > ResourceClaim.getResourcesLeft(id)) {
+        print(
+          "We want to use " +
+            totalDesired +
+            " but we only have " +
+            ResourceClaim.getResourcesLeft(id) +
+            " left on " +
+            resourceType,
+          "red"
+        );
+      }
+    }
+  }
+
+  doResourceClaims() {
+    this.resources = [];
+
+    for (let quest of this.quester.getAllQuests()) {
+      if (quest.level() < 1 || quest.getResourceClaims == null) {
+        continue;
+      }
+
+      if (quest.status() == QuestStatus.COMPLETED) {
+        continue;
+      }
+
+      this.resources.push(...quest.getResourceClaims());
+    }
   }
 
   setPreAbsorbs() {

@@ -7,6 +7,7 @@ import {
   toInt,
 } from "kolmafia";
 import { GreyOutfit } from "../utils/GreyOutfitter";
+import { ResourceClaim } from "../utils/GreyResources";
 import { QuestType } from "./QuestTypes";
 
 export interface QuestInfo {
@@ -19,6 +20,7 @@ export interface QuestInfo {
   getChildren?(): QuestInfo[]; // For helpfully grouping quests together
   mustBeDone?(): boolean; // If there's some state that requires this to be done asap, like effects that'll run out
   hasFamiliarRecommendation?(): Familiar; // This quest would like this familiar leveled up as it'd be useful
+  getResourceClaims?(): ResourceClaim[];
   toAbsorb?: Monster[]; // Monster[] is calculated by use of run() and set to null before calling status()
 }
 

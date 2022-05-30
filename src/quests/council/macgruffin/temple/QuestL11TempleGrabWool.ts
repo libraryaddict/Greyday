@@ -18,6 +18,7 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
+import { ResourceClaim, ResourceType } from "../../../../utils/GreyResources";
 
 export class QuestL11TempleGrabWool implements QuestInfo {
   wool: Item = Item.get("Stone Wool");
@@ -25,6 +26,16 @@ export class QuestL11TempleGrabWool implements QuestInfo {
   indus: Item = Item.get("industrial fire extinguisher");
   polar: Skill = Skill.get("Fire Extinguisher: Polar Vortex");
   woolMonster: Monster = Monster.get("Baa-relief sheep");
+  resourceClaim: ResourceClaim = new ResourceClaim(
+    ResourceType.FIRE_EXTINGUSHER,
+    20,
+    "Polar Vortex Stone Wool",
+    6
+  );
+
+  getResourceClaims(): ResourceClaim[] {
+    return [this.resourceClaim];
+  }
 
   getId(): QuestType {
     return "Council / MacGruffin / Temple / GrabWool";

@@ -32,6 +32,7 @@ import {
 import { QuestType } from "../QuestTypes";
 import { MountainStatus } from "../council/QuestL8IcePeak";
 import { QuestL8MountainOre } from "../council/icepeak/QuestL8MountainOre";
+import { ResourceClaim, ResourceType } from "../../utils/GreyResources";
 
 export class QuestL8MountainOreMan extends QuestL8MountainOre {
   mountainMan: Monster = Monster.get("Mountain Man");
@@ -40,6 +41,16 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
   polar: Skill = Skill.get("Fire Extinguisher: Polar Vortex");
   rocket: Item = Item.get("Yellow Rocket");
   effect: Effect = Effect.get("Everything Looks Yellow");
+  resourceClaim: ResourceClaim = new ResourceClaim(
+    ResourceType.FIRE_EXTINGUSHER,
+    40,
+    "Polar Vortex Ores",
+    6
+  );
+
+  getResourceClaims(): ResourceClaim[] {
+    return [this.resourceClaim];
+  }
 
   getId(): QuestType {
     return "Council / Ice / MountainMan";

@@ -10,6 +10,7 @@ import {
   equip,
 } from "kolmafia";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { ResourceClaim } from "../../../utils/GreyResources";
 import { QuestInfo, QuestStatus, QuestAdventure } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { CryptStatus } from "../QuestL7Crypt";
@@ -31,6 +32,7 @@ export abstract class CryptL7Template implements QuestInfo {
     "white sword",
     "sweet ninja sword",
   ].map((s) => Item.get(s));
+  cape: Item = Item.get("Unwrapped knock-off retro superhero cape");
 
   getSword(): Item {
     let items = this.swords.filter((i) => availableAmount(i) > 0);
@@ -58,7 +60,7 @@ export abstract class CryptL7Template implements QuestInfo {
   }
 
   adjustRetroCape() {
-    equip(Item.get("Unwrapped knock-off retro superhero cape"));
+    equip(this.cape);
 
     if (
       getProperty("retroCapeSuperhero") == "vampire" &&

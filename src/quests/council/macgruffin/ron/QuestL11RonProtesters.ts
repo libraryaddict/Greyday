@@ -90,7 +90,7 @@ export class QuestL11RonProtesters implements QuestInfo {
       }
     }
 
-    let outfit = new GreyOutfit().setNoCombat();
+    let outfit = new GreyOutfit().setNoCombat().setItemDrops();
     outfit.addBonus("+sleaze dmg +sleaze spell dmg");
 
     for (let i of this.lyrndCostume) {
@@ -110,7 +110,8 @@ export class QuestL11RonProtesters implements QuestInfo {
 
           props.setChoice(856, 1);
           props.setChoice(857, 1);
-          props.setChoice(858, 1);
+          // If we don't have any flaming, just skip cos 3 isn't that fast
+          props.setChoice(858, availableAmount(this.flaming) > 0 ? 1 : 2);
 
           let settings = new AdventureSettings();
           settings.setFinishingBlowMacro(

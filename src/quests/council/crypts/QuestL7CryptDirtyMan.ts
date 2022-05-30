@@ -14,6 +14,7 @@ import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { greyKillingBlow } from "../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
@@ -26,6 +27,20 @@ export class CryptL7DirtyMan extends CryptL7Template {
   sniff: Skill = Skill.get("Get a Good Whiff of This Guy");
   banisher: Skill = Skill.get("System Sweep");
   fire: Item = Item.get("industrial fire extinguisher");
+  resourceClaim: ResourceClaim = new ResourceClaim(
+    ResourceType.FIRE_EXTINGUSHER,
+    20,
+    "Spray down Dirty Old Man",
+    availableAmount(this.cape) > 0 ? 4 : 9
+  );
+
+  getResourceClaims(): ResourceClaim[] {
+    if (getProperty("fireExtinguisherCyrptUsed") == "true") {
+      return [];
+    }
+
+    return [this.resourceClaim];
+  }
 
   run(): QuestAdventure {
     let outfit = this.addRetroSword();

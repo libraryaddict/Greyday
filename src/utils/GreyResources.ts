@@ -10,9 +10,12 @@ import {
   mallPrice,
   outfitPieces,
   print,
+  pullsRemaining,
   storageAmount,
+  toInt,
   use,
 } from "kolmafia";
+import { GreySettings } from "./GreySettings";
 
 export function getBanishers() {
   // Scrapbook
@@ -386,5 +389,85 @@ export class GreyRequirements {
 
     print("End Requirements.");
     // TODO Camelcalf?
+  }
+}
+
+/**
+ * Limited usage resources
+ */
+export enum ResourceType {
+  PULL,
+  BACKUP_CAMERA,
+  COMBAT_LOCKET,
+  CARGO_SHORTS,
+  POWERFUL_GLOVE,
+  FIRE_EXTINGUSHER,
+}
+
+export class ResourceClaim {
+  amountDesired: number;
+  resource: ResourceType;
+  reason: string;
+  turnsSaved: number;
+
+  constructor(
+    resource: ResourceType,
+    amount: number,
+    reason: string,
+    turnsSaved: number
+  ) {
+    this.amountDesired = amount;
+    this.resource = resource;
+    this.reason = reason;
+    this.turnsSaved = turnsSaved;
+  }
+
+  isRequired(): boolean {
+    return this.turnsSaved > 100;
+  }
+
+  static getResourcesLeft(resourceType: ResourceType): number {
+    switch (resourceType) {
+      case ResourceType.PULL:
+        return GreySettings.isHardcoreMode() ? 0 : pullsRemaining();
+      case ResourceType.BACKUP_CAMERA:
+        return availableAmount(Item.get("Backup Camera")) > 0
+          ? 11 - toInt(getProperty("_backUpUses"))
+          : 0;
+      case ResourceType.COMBAT_LOCKET:
+        return availableAmount(Item.get("Combat Lover's Locket")) > 0
+          ? 3 -
+              getProperty("_locketMonstersFought")
+                .split(",")
+                .filter((s) => s.length > 0).length
+          : 0;
+      case ResourceType.CARGO_SHORTS:
+        return availableAmount(Item.get("Cargo Cultist Shorts")) == 0 ||
+          getProperty("_cargoPocketEmptied") == "true"
+          ? 0
+          : 1;
+      case ResourceType.POWERFUL_GLOVE:
+        return availableAmount(Item.get("Powerful Glove")) > 0
+          ? 100 - toInt(getProperty("_powerfulGloveBatteryPowerUsed"))
+          : 0;
+      case ResourceType.FIRE_EXTINGUSHER:
+        return availableAmount(Item.get("industrial fire extinguisher")) > 0
+          ? toInt(getProperty("_fireExtinguisherCharge"))
+          : 0;
+      default:
+        throw (
+          "No idea what the resource " + ResourceType[resourceType] + " is."
+        );
+    }
+  }
+}
+
+export class ResourcePullClaim extends ResourceClaim {
+  item: Item;
+
+  constructor(item: Item, reason: string, turnsSaved: number) {
+    super(1, ResourceType.PULL, reason, turnsSaved);
+
+    this.item = item;
   }
 }

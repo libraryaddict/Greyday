@@ -12,6 +12,7 @@ import {
 } from "kolmafia";
 import { greyAdv, AdventureSettings } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
 import { Macro } from "../../../utils/MacroBuilder";
 import {
   getQuestStatus,
@@ -25,8 +26,20 @@ export class QuestL5GoblinHarem implements QuestInfo {
   harem: Location = Location.get("Cobb's Knob Harem");
   extingisher: Item = Item.get("industrial fire extinguisher");
   toAbsorb: Monster[];
+  resourceClaim: ResourceClaim = new ResourceClaim(
+    ResourceType.FIRE_EXTINGUSHER,
+    20,
+    "Spray down thirsty goblin harem",
+    5
+  );
 
-  // TODO Don't fire extingush the absorb
+  getResourceClaims(): ResourceClaim[] {
+    if (getProperty("fireExtinguisherHaremUsed") == "true") {
+      return [];
+    }
+
+    return [this.resourceClaim];
+  }
 
   getId(): QuestType {
     return "Council / Goblins / HaremOutfit";

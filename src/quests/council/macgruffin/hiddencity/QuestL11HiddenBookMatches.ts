@@ -49,6 +49,7 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
 
     // Might still hit the drop!
     if (
+      toInt(getProperty("relocatePygmyJanitor")) < myAscensions() &&
       //getProperty("questL11Business") != "finished" ||
       // getProperty("questL11Doctor") != "finished" ||
       getProperty("questL11Curses") != "finished"

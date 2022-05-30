@@ -5,9 +5,11 @@ import {
   availableAmount,
   use,
   Skill,
+  getProperty,
 } from "kolmafia";
 import { greyAdv, AdventureSettings } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
 import { GreySettings } from "../../../utils/GreySettings";
 import { Macro } from "../../../utils/MacroBuilder";
 import {
@@ -22,6 +24,20 @@ export class QuestL4BatsCenter implements QuestInfo {
   fire: Item = Item.get("industrial fire extinguisher");
   loc: Location = Location.get("Guano Junction");
   sonar: Item = Item.get("sonar-in-a-biscuit");
+  resourceClaim: ResourceClaim = new ResourceClaim(
+    ResourceType.FIRE_EXTINGUSHER,
+    20,
+    "Spray down bat cave",
+    5
+  );
+
+  getResourceClaims(): ResourceClaim[] {
+    if (getProperty("fireExtinguisherBatHoleUsed") == "true") {
+      return [];
+    }
+
+    return [this.resourceClaim];
+  }
 
   getId(): QuestType {
     return "Council / Bats / UnlockLeft";
