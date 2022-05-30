@@ -31,7 +31,7 @@ export class ManorBedroom implements QuestInfo {
   dontLike: Monster[] = [
     "Animated Mahogany Nightstand",
     "Animated Rustic Nightstand",
-    "Wardröb nightstand",
+    "Wardrob nightstand",
   ].map((m) => Monster.get(m));
   toAbsorb: Monster[];
 

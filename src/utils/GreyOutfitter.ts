@@ -82,9 +82,9 @@ export class GreyOutfit {
     if (!haveSkill(Skill.get("Hivemindedness"))) {
       this.mpRegenWeight += 1;
 
-      if (myMp() < 42) {
+      /*if (myMp() < 42) {
         this.mpRegenWeight += 2;
-      }
+      }*/
     }
 
     if (
@@ -167,11 +167,11 @@ export class GreyOutfit {
     }
 
     if (this.plusCombatWeight > 0) {
-      modifiers.push("+" + this.plusCombatWeight + " combat");
+      modifiers.push("+" + this.plusCombatWeight + " combat 25 MAX");
     }
 
     if (this.minusCombatWeight > 0) {
-      modifiers.push("-" + this.minusCombatWeight + " combat");
+      modifiers.push("-" + this.minusCombatWeight + " combat 25 MAX");
     }
 
     if (this.plusMonsterLevelWeight > 0) {

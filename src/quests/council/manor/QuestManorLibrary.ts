@@ -28,8 +28,6 @@ export class QuestManorLibrary implements QuestInfo {
   killingJar: Item = Item.get("Killing Jar");
   key: Item = Item.get("[7302]Spookyraven library key");
   librarian: Monster = Monster.get("Banshee Librarian");
-  book: Item = Item.get("Familiar scrapbook");
-  banisher: Skill = Skill.get("Show Your Boring Familiar Pictures");
   sweep: Skill = Skill.get("System Sweep");
 
   getId(): QuestType {
@@ -59,42 +57,24 @@ export class QuestManorLibrary implements QuestInfo {
       return QuestStatus.FASTER_LATER;
     }
 
-    if (
-      availableAmount(this.book) > 0 &&
-      toInt(getProperty("scrapbookCharges")) < 100 &&
-      !isBanished(this.librarian)
-    ) {
-      return QuestStatus.FASTER_LATER;
-    }
-
     return QuestStatus.READY;
   }
 
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
     let banishLibrarian =
-      availableAmount(this.killingJar) > 0 &&
-      !isBanished(this.librarian) &&
-      toInt(getProperty("scrapbookCharges")) >= 100;
-
-    if (banishLibrarian) {
-      outfit.addItem(this.book);
-    }
+      availableAmount(this.killingJar) > 0 && !isBanished(this.librarian);
 
     return {
       location: this.library,
       run: () => {
         let settings = new AdventureSettings();
 
+        settings.addBanish(Monster.get("bookbat"));
+
         if (banishLibrarian) {
-          settings.setStartOfFightMacro(
-            Macro.if_(this.librarian, Macro.skill(this.banisher))
-          );
-        } else if (availableAmount(this.killingJar) > 0) {
           settings.addBanish(this.librarian);
         }
-
-        settings.addBanish(Monster.get("bookbat"));
 
         greyAdv(this.library, null, settings);
       },

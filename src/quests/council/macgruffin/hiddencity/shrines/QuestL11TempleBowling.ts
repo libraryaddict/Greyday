@@ -39,10 +39,7 @@ export class QuestL11Bowling implements QuestInfo {
   }
 
   ownBall(): boolean {
-    return (
-      availableAmount(this.cosmicBall) > 0 ||
-      getProperty("cosmicBowlingBallReturnCombats") != "-1"
-    );
+    return getProperty("hasCosmicBowlingBall") == "true";
   }
 
   getId(): QuestType {

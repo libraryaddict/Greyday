@@ -26,7 +26,9 @@ import { AdventureFinder, FoundAdventure } from "./GreyChooser";
 import { QuestAdventure } from "./quests/Quests";
 import { TaskCouncil } from "./tasks/TaskCouncil";
 import { TaskEater } from "./tasks/TaskEater";
+import { TaskFuelAsdon } from "./tasks/TaskFuelAsdon";
 import { TaskLatteFiller } from "./tasks/TaskLatteFiller";
+import { TaskMaintainStatus } from "./tasks/TaskMaintainStatus";
 import { Task } from "./tasks/Tasks";
 import { TaskSellCrap } from "./tasks/TaskSellCrap";
 import { TaskWorkshed } from "./tasks/TaskWorkshed";
@@ -45,6 +47,8 @@ export class GreyAdventurer {
     new TaskWorkshed(),
     new TaskCouncil(),
     new TaskLatteFiller(),
+    new TaskMaintainStatus(),
+    new TaskFuelAsdon(),
   ];
 
   runTurn(goTime: boolean): boolean {

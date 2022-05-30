@@ -7,6 +7,9 @@ import {
   myMaxhp,
   availableAmount,
   max,
+  equippedAmount,
+  toInt,
+  getProperty,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -23,6 +26,7 @@ export class QuestTowerShadow implements QuestInfo {
   badge: Item = Item.get("Attorney's badge");
   potato: Familiar = Familiar.get("Levitating Potato");
   guaze: Item = Item.get("Gauze garter");
+  cape: Item = Item.get("Unwrapped knock-off retro superhero cape");
 
   getId(): QuestType {
     return "Council / Tower / Shadow";
@@ -55,12 +59,20 @@ export class QuestTowerShadow implements QuestInfo {
 
     let outfit = new GreyOutfit(maximize);
 
+    if (availableAmount(this.cape) > 0) {
+      outfit.addItem(this.cape);
+    }
+
     return {
       familiar: this.potato,
       outfit: outfit,
       location: null,
       run: () => {
-        if (myHp() < myMaxhp()) {
+        if (equippedAmount(this.cape) > 0) {
+          cliExecute("retrocape heck hold"); // Make sure we stun the shadow
+        }
+
+        if (myHp() < myMaxhp() && toInt(getProperty("_hotTubSoaks")) < 5) {
           cliExecute("hottub");
         }
 

@@ -150,6 +150,7 @@ export class QuestRegistry {
       // Always try to buy access to the shore, 8-9 adventures spent trying to farm stuff up?
       { id: "Council / MacGruffin / Shore" },
       { id: "Misc / MeatCar", testValid: () => false },
+      { id: "Misc / BugbearBakery" },
 
       // Get goblin done early so we can grab our first -combat skill
       { id: "Council / Goblins / Outskirts" },
@@ -218,6 +219,11 @@ export class QuestRegistry {
       { id: "Council / MacGruffin / Temple / Nostril" },
       { id: "Council / MacGruffin / Temple / HiddenCity" },
 
+      // Now we do our bowling, we prioritize this because of special code that has the bowling ball with combat turns = 0
+      // We also prioritize it for double nanovision
+      { id: "Council / MacGruffin / HiddenCity / BookOfMatches" },
+      { id: "Council / MacGruffin / HiddenCity / Bowling" },
+
       // Do library after we should have system sweep stuff
       { id: "Manor / Library" },
 
@@ -280,10 +286,6 @@ export class QuestRegistry {
 
       // We do shaman first to potentially grab extra accountant stuff
       { id: "Council / MacGruffin / HiddenCity / Curses" },
-
-      // Now we do our bowling, we prioritize this because of special code that has the bowling ball with combat turns = 0
-      { id: "Council / MacGruffin / HiddenCity / BookOfMatches" },
-      { id: "Council / MacGruffin / HiddenCity / Bowling" },
 
       { id: "Council / MacGruffin / HiddenCity / Accountants" },
 

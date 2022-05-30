@@ -6,8 +6,9 @@ import {
   getProperty,
   turnsPlayed,
 } from "kolmafia";
-import { greyAdv } from "../../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreySettings } from "../../../../utils/GreySettings";
+import { Macro } from "../../../../utils/MacroBuilder";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -53,7 +54,13 @@ export class QuestTowerKillWitch implements QuestInfo {
       run: () => {
         for (let i = 0; i < 2; i++) {
           try {
-            greyAdv("place.php?whichplace=nstower&action=ns_10_sorcfight");
+            greyAdv(
+              "place.php?whichplace=nstower&action=ns_10_sorcfight",
+              null,
+              new AdventureSettings().setFinishingBlowMacro(
+                Macro.attack().repeat()
+              )
+            );
             visitUrl("choice.php");
           } catch (e) {}
         }

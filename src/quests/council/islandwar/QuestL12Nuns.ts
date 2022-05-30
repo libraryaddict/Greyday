@@ -1,10 +1,13 @@
 import {
+  availableAmount,
   cliExecute,
   Effect,
   effectModifier,
   Familiar,
   familiarWeight,
+  getFuel,
   getProperty,
+  getWorkshed,
   haveEffect,
   haveSkill,
   Item,
@@ -30,6 +33,10 @@ export class Quest12WarNuns implements QuestInfo {
   hotness: Item = Item.get("Mick's IcyVapoHotness Inhaler");
   effect: Effect = effectModifier(this.hotness, "Effect");
   winkles: Effect = Effect.get("Winklered");
+  bowlStraightUp: Effect = Effect.get("Cosmic Ball in the Air");
+  cosmicBall: Item = Item.get("Cosmic Bowling Ball");
+  asdonMartin: Item = Item.get("Asdon Martin keyfob");
+  driving: Effect = Effect.get("Driving Observantly");
 
   hasAlreadyPulled(): boolean {
     return (
@@ -61,6 +68,13 @@ export class Quest12WarNuns implements QuestInfo {
     return "Council / War / Nuns";
   }
 
+  isBowlingBallNextCombat(): boolean {
+    return (
+      toInt(getProperty("cosmicBowlingBallReturnCombats")) <= 0 ||
+      availableAmount(this.cosmicBall) > 0
+    );
+  }
+
   status(): QuestStatus {
     if (getProperty("sidequestNunsCompleted") != "none") {
       return QuestStatus.COMPLETED;
@@ -74,6 +88,15 @@ export class Quest12WarNuns implements QuestInfo {
     }
 
     if (!haveSkill(Skill.get("Financial Spreadsheets"))) {
+      return QuestStatus.FASTER_LATER;
+    }
+
+    if (
+      !this.mustBeDone() &&
+      getProperty("hasCosmicBowlingBall") == "true" &&
+      !haveEffect(this.bowlStraightUp) &&
+      !this.isBowlingBallNextCombat()
+    ) {
       return QuestStatus.FASTER_LATER;
     }
 
@@ -98,15 +121,15 @@ export class Quest12WarNuns implements QuestInfo {
           cliExecute("boombox meat");
         }
 
-        let meat = this.getMeat();
-
         this.tryToBuff();
+
+        let meat = this.getMeat();
 
         greyAdv(
           this.loc,
           outfit,
           new AdventureSettings().setStartOfFightMacro(
-            Macro.trySkill("sing along")
+            Macro.trySkill("sing along").trySkill(Skill.get("Bowl Straight Up"))
           )
         );
 
@@ -134,6 +157,14 @@ export class Quest12WarNuns implements QuestInfo {
   }
 
   tryToBuff() {
+    if (
+      getWorkshed() == this.asdonMartin &&
+      getFuel() > 37 &&
+      haveEffect(this.driving) == 0
+    ) {
+      cliExecute("asdonmartin drive Observantly");
+    }
+
     if (!this.hasAlreadyPulled()) {
       GreyPulls.pullMeatBuffers();
 

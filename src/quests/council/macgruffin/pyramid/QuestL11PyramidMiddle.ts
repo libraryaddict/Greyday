@@ -28,7 +28,6 @@ export class QuestL11PyramidMiddle implements QuestInfo {
   wheel: Item = Item.get("Crumbling Wooden Wheel");
   ratchet: Item = Item.get("Tomb Ratchet");
   book: Item = Item.get("Familiar scrapbook");
-  banisher: Skill = Skill.get("Show Your Boring Familiar Pictures");
   servant: Monster = Monster.get("Tomb Servant");
 
   getId(): QuestType {
@@ -93,17 +92,7 @@ export class QuestL11PyramidMiddle implements QuestInfo {
           startMacro.if_(this.tombRat, Macro.item(this.ratTangle));
         }
 
-        settings.addBanish(Monster.get("Tomb Asp"));
-
-        if (
-          !isBanished(this.servant) &&
-          toInt(getProperty("scrapbookCharges")) >= 100 &&
-          AbsorbsProvider.getReabsorbedMonsters().includes(this.servant)
-        ) {
-          startMacro.if_(this.servant, Macro.skill(this.banisher));
-        } else {
-          settings.addBanish(Monster.get("Tomb Servant"));
-        }
+        settings.addNoBanish(this.tombRat);
 
         settings.setStartOfFightMacro(startMacro);
         greyAdv(this.middleLoc, outfit, settings);

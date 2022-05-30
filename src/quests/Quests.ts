@@ -29,11 +29,17 @@ export enum QuestStatus {
   COMPLETED,
 }
 
+export enum DelayType {
+  TURN_BURNING,
+  NONCOMBAT_HITTING,
+}
+
 export interface QuestAdventure {
   outfit?: GreyOutfit;
   familiar?: Familiar;
   disableFamOverride?: boolean; // If set to true, familiar is forced
   location: Location; // The place we are going to adventure, set to null if this is effectively zoneless
+  delay?: DelayType;
   run: () => void;
 }
 

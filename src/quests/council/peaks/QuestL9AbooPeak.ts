@@ -12,6 +12,10 @@ import {
   getProperty,
   print,
   numericModifier,
+  haveEffect,
+  effectModifier,
+  cliExecute,
+  myLevel,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -30,6 +34,7 @@ export class ABooHandler implements QuestInfo {
   clue: Item = Item.get("A-Boo Clue");
   loc: Location = Location.get("A-Boo Peak");
   damageLevels: number[] = [13, 25, 50, 125, 250];
+  canOfPaint: Item = Item.get("Can of black paint");
 
   level(): number {
     return 9;
@@ -59,6 +64,11 @@ export class ABooHandler implements QuestInfo {
       outfit: outfit,
       run: () => {
         let props = new PropertyManager();
+
+        if (haveEffect(effectModifier(this.canOfPaint, "Effect")) == 0) {
+          cliExecute("acquire 1 " + this.canOfPaint.name);
+          use(this.canOfPaint);
+        }
 
         try {
           props.setChoice(611, 1);
@@ -204,6 +214,10 @@ export class ABooHandler implements QuestInfo {
     }
 
     if (this.canUseClue()) {
+      return QuestStatus.READY;
+    }
+
+    if (myLevel() >= 20) {
       return QuestStatus.READY;
     }
 

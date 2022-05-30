@@ -13,7 +13,12 @@ import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { GreyPulls } from "../../../../utils/GreyResources";
 import { GreySettings } from "../../../../utils/GreySettings";
-import { QuestAdventure, QuestInfo, QuestStatus } from "../../../Quests";
+import {
+  getQuestStatus,
+  QuestAdventure,
+  QuestInfo,
+  QuestStatus,
+} from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
 export class QuestL11HiddenBookMatches implements QuestInfo {
@@ -30,6 +35,10 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
   }
 
   status(): QuestStatus {
+    if (getQuestStatus("questL11Worship") < 3) {
+      return QuestStatus.NOT_READY;
+    }
+
     if (this.barUnlocked()) {
       return QuestStatus.COMPLETED;
     }

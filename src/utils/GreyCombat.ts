@@ -1,8 +1,10 @@
 import {
   appearanceRates,
+  availableAmount,
   Effect,
   equippedAmount,
   Familiar,
+  getFuel,
   getMonsters,
   getProperty,
   haveEffect,
@@ -65,8 +67,6 @@ class MacroFiller {
 export function greyDuringFightMacro(settings: AdventureSettings): Macro {
   let macro = new Macro();
 
-  macro.trySkill(Skill.get("Bowl Straight Up"));
-
   let monster = lastMonster();
   let absorb = AbsorbsProvider.getAbsorb(monster);
   let hasAbsorbed = AbsorbsProvider.getReabsorbedMonsters().includes(monster);
@@ -79,10 +79,7 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
     if (absorb.adventures > 0) {
       macro = macro.trySkill(Skill.get("Re-Process Matter"));
     }
-  } else if (
-    isBanishable(settings, monster) &&
-    !hasBanished(myLocation(), BanishType.SYSTEM_SWEEP)
-  ) {
+  } else if (isBanishable(settings, monster)) {
     // If they have no good absorbs, or we've already absorbed them
     if (
       absorb == null ||
@@ -91,18 +88,40 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
         absorb.mp == 0 &&
         (absorb.skill == null || haveSkill(absorb.skill)))
     ) {
-      // If we are not using crystal ball and didn't just banish something..
+      // If the script explicitly wanted to banish these
+      if (settings.banishThese != null || settings.dontBanishThese != null) {
+        if (
+          !hasBanished(myLocation(), BanishType.SPRING_LOADED_FRONT_BUMPER) &&
+          getFuel() >= 50
+        ) {
+          macro.trySkill("Asdon Martin: Spring-Loaded Front Bumper");
+        }
+
+        if (
+          !hasBanished(myLocation(), BanishType.BOWL_A_CURVEBALL) &&
+          availableAmount(Item.get("Cosmic bowling ball")) > 0
+        ) {
+          macro.trySkill("Bowl a Curveball");
+        }
+      }
+
       if (
-        getMonsters(myLocation()).includes(monster) &&
-        (equippedAmount(Item.get("miniature crystal ball")) == 0 ||
-          getBanished().filter(
-            (b) =>
-              b.banisher.type == BanishType.SYSTEM_SWEEP &&
-              b.turnBanished + 2 >= myTurncount()
-          ).length == 0)
-      )
-        // If we do want to banish something..
-        macro.trySkill(Skill.get("System Sweep"));
+        !hasBanished(myLocation(), BanishType.SYSTEM_SWEEP) &&
+        haveSkill(Skill.get("System Sweep"))
+      ) {
+        // If we are not using crystal ball and didn't just banish something..
+        if (
+          getMonsters(myLocation()).includes(monster) &&
+          (equippedAmount(Item.get("miniature crystal ball")) == 0 ||
+            getBanished().filter(
+              (b) =>
+                b.banisher.type == BanishType.SYSTEM_SWEEP &&
+                b.turnBanished + 2 >= myTurncount()
+            ).length == 0)
+        )
+          // If we do want to banish something..
+          macro.trySkill(Skill.get("System Sweep"));
+      }
     }
   }
 

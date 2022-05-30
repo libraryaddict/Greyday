@@ -1,6 +1,7 @@
 import {
   Effect,
   haveEffect,
+  myLocation,
   myPath,
   myTurncount,
   pathIdToName,
@@ -9,6 +10,7 @@ import {
 } from "kolmafia";
 import { GreyAdventurer } from "./GreyAdventurer";
 import { QuestRegistry } from "./quests/QuestRegistry";
+import { hasBanished, BanishType } from "./utils/Banishers";
 import { GreyRequirements } from "./utils/GreyResources";
 
 class GreyYouMain {

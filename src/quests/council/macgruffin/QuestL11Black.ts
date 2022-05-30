@@ -10,7 +10,7 @@ import {
   myLevel,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
-import { greyAdv } from "../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
   OutfitImportance,
@@ -28,6 +28,9 @@ export class QuestL11Black implements QuestInfo {
   loc: Location = Location.get("The Black Forest");
   latte: Item = Item.get("Latte lovers member's mug");
   blackbird: Item = Item.get("reassembled blackbird");
+  dontBanish: Monster[] = ["Black Adder", "Black Panther"].map((s) =>
+    Monster.get(s)
+  );
   toAbsorb: Monster[];
 
   level(): number {
@@ -102,7 +105,15 @@ export class QuestL11Black implements QuestInfo {
             props.setChoice(924, 1); // Fight bush
           }
 
-          greyAdv(this.loc, outfit);
+          let settings = new AdventureSettings();
+
+          if (availableAmount(this.blackbird) == 0) {
+            for (let mon of this.dontBanish) {
+              settings.addNoBanish(mon);
+            }
+          }
+
+          greyAdv(this.loc, outfit, settings);
         } finally {
           props.resetAll();
         }

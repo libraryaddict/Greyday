@@ -73,7 +73,7 @@ export class QuestGrabBoatVacation implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (myAdventures() < 20) {
+    if (myAdventures() < 20 || myLevel() < 11) {
       return QuestStatus.FASTER_LATER;
     }
 

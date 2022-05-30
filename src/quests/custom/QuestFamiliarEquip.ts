@@ -46,7 +46,7 @@ export class QuestFamiliarEquip implements QuestInfo {
       location: null,
       run: () => {
         useFamiliar(this.familiar);
-        maximize("familiar experience", false);
+        maximize("familiar experience +familiar weight -tie", false);
 
         while (
           availableAmount(this.equip) == 0 &&

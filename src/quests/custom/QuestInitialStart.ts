@@ -38,7 +38,7 @@ export class QuestInitialStart implements QuestInfo {
   desiredLevel: number;
   weightRequired: number;
   spaceBlanket: Item = Item.get("Space Blanket");
-  mayday: Item = Item.get("MayDay™ supply package");
+  mayday: Item = Item.get("MayDay supply package");
   saber: Item = Item.get("Fourth of May Cosplay Saber");
 
   getLocations(): Location[] {
@@ -50,12 +50,18 @@ export class QuestInitialStart implements QuestInfo {
   }
 
   status(): QuestStatus {
+    if (availableAmount(this.mayday) > 0) {
+      return QuestStatus.READY;
+    }
+
     if (
-      availableAmount(this.mayday) > 0 ||
-      (myLocation() != null &&
-        myLocation().combatQueue.length > 0 &&
-        getProperty("breakfastCompleted") == "false")
+      getProperty("hasMaydayContract") == "true" &&
+      getProperty("_maydayDropped") == "false"
     ) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (getProperty("breakfastCompleted") == "false") {
       return QuestStatus.READY;
     }
 
@@ -84,7 +90,7 @@ export class QuestInitialStart implements QuestInfo {
         }
 
         if (
-          availableAmount(Item.get("SongBoom™ BoomBox")) > 0 &&
+          availableAmount(Item.get("SongBoom&trade; BoomBox")) > 0 &&
           getProperty("_boomBoxSongsLeft") == "11"
         ) {
           cliExecute("boombox food");

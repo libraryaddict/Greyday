@@ -115,15 +115,11 @@ export class QuestManorLights implements QuestInfo {
   isTime(): boolean {
     let last = this.getLastLightsOut();
 
-    if (last == -1) {
-      return false;
-    }
-
     if (last >= totalTurnsPlayed()) {
       return false;
     }
 
-    return (last + totalTurnsPlayed()) % 37 == 0;
+    return totalTurnsPlayed() % 37 == 0;
   }
 
   getLastLightsOut(): number {

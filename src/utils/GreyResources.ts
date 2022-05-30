@@ -364,8 +364,8 @@ export class GreyRequirements {
       dontHave.push(["Deck of lewd playing cards", Required.USEFUL]);
     }
 
-    if (availableAmount(Item.get("SongBoom™ BoomBox")) == 0) {
-      dontHave.push(["SongBoom™ BoomBox", Required.MINOR]);
+    if (availableAmount(Item.get("SongBoom&trade; BoomBox")) == 0) {
+      dontHave.push(["SongBoom&trade; BoomBox", Required.MINOR]);
     }
 
     for (let [name, required] of dontHave) {

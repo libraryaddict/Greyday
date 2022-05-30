@@ -5,8 +5,9 @@ import {
   availableAmount,
   getProperty,
   visitUrl,
+  Monster,
 } from "kolmafia";
-import { greyAdv } from "../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
   getQuestStatus,
@@ -20,6 +21,7 @@ import { MountainStatus } from "../QuestL8IcePeak";
 export class QuestL8MountainGoats implements QuestInfo {
   goats: Location = Location.get("The Goatlet");
   cheese: Item = Item.get("Goat Cheese");
+  dairy: Monster = Monster.get("Dairy Goat");
 
   getId(): QuestType {
     return "Council / Ice / Goats";
@@ -76,7 +78,11 @@ export class QuestL8MountainGoats implements QuestInfo {
       location: this.goats,
       outfit: outfit,
       run: () => {
-        greyAdv(this.goats, outfit);
+        greyAdv(
+          this.goats,
+          outfit,
+          new AdventureSettings().addNoBanish(this.dairy)
+        );
 
         if (availableAmount(this.cheese) >= 3 && this.getOreRemaining() <= 0) {
           this.talkTrapper();

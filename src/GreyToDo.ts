@@ -51,3 +51,8 @@
 // Pull some source of infinite free runs and run whenever it's a fight we don't care about
 // Level up camel when we can, which if we're running lots of +fam exp, is often. Delay zones that'd like that spit. Mountain Man, Middle Pyramid, Goat Cheese, Lobster, sonar?, giants for their mohawk/amulet?, enchanted bean?, stephen?, stars, white pixel, evil eye, funky junk key?, filth worms glands?, bowler?, glark cables?, cig lighter?, crappy disguise?, stone wool?, bitchin car?, knob perfume? Rusty hedge trimmers
 // Adjust familiar weight bonus based on how soon we're going to need it
+// Don't bowl straight up all the time
+// Smart banishers, such as some method to get number of available banishers and if banishers will be available in the future.
+// Create some kind of earmark system where quests/tasks can preregister what resources/meat they need. So I can burn resources on optional stuff without worrying about interfering with something else
+// Use pocket wishes for absorbs
+// Investigate why it would do "Visit Oil Baron, hit introduction, decide to go somewhere else, hit another introduction, go back to oil". It should just try again.

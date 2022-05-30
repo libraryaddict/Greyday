@@ -1,23 +1,39 @@
 import {
+  canadiaAvailable,
   chew,
+  cliExecute,
+  Coinmaster,
   drink,
   drinksilent,
   eat,
   eatsilent,
   getInventory,
   getProperty,
+  gnomadsAvailable,
+  hermit,
   historicalPrice,
+  isAccessible,
   Item,
   myLevel,
+  myMeat,
   print,
   pullsRemaining,
   setProperty,
   toInt,
+  visitUrl,
 } from "kolmafia";
 import { Task } from "./Tasks";
 
 export class TaskEater implements Task {
   prop: string = "_greyEatenToday";
+  npcFoods: Item[] = [
+    "Hot buttered roll",
+    "Ketchup",
+    "Catsup",
+    "cup of lukewarm tea",
+    "Fortune Cookie",
+    "Pickled Egg",
+  ].map((s) => Item.get(s));
 
   constructor() {
     if (getProperty(this.prop) == "") {
@@ -43,12 +59,68 @@ export class TaskEater implements Task {
     }
   }
 
+  doAlwaysAvailable(eaten: string[]) {
+    if (myMeat() < 2000) {
+      return;
+    }
+
+    for (let item of this.npcFoods) {
+      let id = toInt(item).toString();
+
+      if (eaten.includes(id)) {
+        continue;
+      }
+
+      cliExecute("acquire 1 " + item.name);
+    }
+  }
+
+  doChez(eaten: string[]) {
+    if (!canadiaAvailable() || myMeat() < 2000) {
+      return;
+    }
+
+    let daily = toInt(Item.get(getProperty("_dailySpecial"))).toString();
+
+    if (eaten.includes(daily)) {
+      return;
+    }
+
+    eaten.push(daily);
+
+    for (let itemId of ["-1", "-2", "-3", daily]) {
+      visitUrl("cafe.php?cafeid=1&pwd=&action=CONSUME!&whichitem=" + itemId);
+    }
+  }
+
+  doGnomes(eaten: string[]) {
+    if (!gnomadsAvailable() || myMeat() < 2000) {
+      return;
+    }
+
+    let daily = toInt(Item.get(getProperty("_dailySpecial"))).toString();
+
+    if (eaten.includes(daily)) {
+      return;
+    }
+
+    eaten.push(daily);
+
+    for (let itemId of ["-1", "-2", "-3", daily]) {
+      visitUrl("cafe.php?cafeid=2&pwd=&action=CONSUME!&whichitem=" + itemId);
+    }
+  }
+
   run() {
     if (pullsRemaining() == -1) {
       return;
     }
 
     let eaten: string[] = getProperty(this.prop).split(",");
+
+    this.doAlwaysAvailable(eaten);
+    this.doChez(eaten);
+    this.doGnomes(eaten);
 
     for (let i of Object.keys(getInventory())) {
       let item = Item.get(i);

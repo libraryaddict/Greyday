@@ -11,8 +11,9 @@ import {
   toSlot,
   visitUrl,
 } from "kolmafia";
-import { greyAdv } from "../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -56,7 +57,11 @@ export class QuestL12WarBoss implements QuestInfo {
         visitUrl("bigisland.php?place=camp&whichcamp=1");
         visitUrl("bigisland.php?place=camp&whichcamp=2");
 
-        greyAdv("bigisland.php?action=bossfight&pwd");
+        greyAdv(
+          "bigisland.php?action=bossfight&pwd",
+          null,
+          new AdventureSettings().setFinishingBlowMacro(Macro.attack().repeat())
+        );
 
         council();
       },

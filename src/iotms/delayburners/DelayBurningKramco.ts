@@ -11,7 +11,7 @@ import {
 import { DelayBurner } from "./DelayBurnerAbstract";
 
 export class DelayBurningKramco implements DelayBurner {
-  kramco: Item = Item.get("Kramco Sausage-o-Matic™");
+  kramco: Item = Item.get("Kramco Sausage-o-Matic");
 
   doFightSetup(): Slot[] {
     equip(Slot.get("Off-Hand"), this.kramco);

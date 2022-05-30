@@ -7,12 +7,13 @@ import {
   buy,
   print,
   retrieveItem,
+  getProperty,
 } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
 export class QuestCustomPurchases implements QuestInfo {
-  toPurchase: Item[] = ["sombrero-mounted sparkler"].map((s) => Item.get(s));
+  toPurchase: Item[] = ["Porkpie-mounted popper"].map((s) => Item.get(s));
 
   getId(): QuestType {
     return "Misc / Purchases";
@@ -30,6 +31,10 @@ export class QuestCustomPurchases implements QuestInfo {
     let missing = this.getMissing();
 
     if (missing.length == 0) {
+      return QuestStatus.COMPLETED;
+    }
+
+    if (getProperty("_fireworksShopHatBought") == "true") {
       return QuestStatus.COMPLETED;
     }
 

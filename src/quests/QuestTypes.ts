@@ -175,7 +175,8 @@ export type QuestMisc =
   | "Misc / FortuneExp"
   | "Misc / Purchases"
   | "Misc / FriarExp"
-  | "Misc / MonsterBait";
+  | "Misc / MonsterBait"
+  | "Misc / BugbearBakery";
 export type QuestCombatLocket =
   | "CombatLocket / SystemSweep"
   | "CombatLocket / InfiniteLoop";

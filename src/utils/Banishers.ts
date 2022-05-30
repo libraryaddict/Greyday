@@ -24,6 +24,10 @@ export function hasBanished(location: Location, banish: BanishType): boolean {
     return false;
   }
 
+  if (location == null) {
+    return true;
+  }
+
   for (let mob of Object.keys(getLocationMonsters(location)).map((m) =>
     Monster.get(m)
   )) {
@@ -35,6 +39,12 @@ export function hasBanished(location: Location, banish: BanishType): boolean {
   }
 
   return false;
+}
+
+export enum BanishReason {
+  QUEST,
+  REASBORB,
+  UNKNOWN,
 }
 
 export enum BanishType {
@@ -99,6 +109,13 @@ export class Banish {
   monster: Monster;
   turnBanished: number;
   banisher: Banisher;
+  reason: BanishReason;
+}
+
+export interface BanishProvider {
+  getTurns(): number;
+  isAvailable(): boolean;
+  getReadyIn(): boolean;
 }
 
 export function getBanished(): Banish[] {

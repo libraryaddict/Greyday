@@ -61,6 +61,8 @@ export class QuestL11TempleGrabWool implements QuestInfo {
       outfit: outfit,
       run: () => {
         let settings = new AdventureSettings();
+        settings.addNoBanish(this.woolMonster);
+
         settings.setStartOfFightMacro(
           Macro.if_(this.woolMonster, Macro.skill(this.polar).skill(this.polar))
         );

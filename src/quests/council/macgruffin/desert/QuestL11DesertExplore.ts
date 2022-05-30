@@ -12,6 +12,8 @@ import {
   myAdventures,
   print,
   visitUrl,
+  Monster,
+  haveFamiliar,
 } from "kolmafia";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -31,6 +33,8 @@ export class QuestL11DesertExplore implements QuestInfo {
   desert: Location = Location.get("The Arid, Extra-Dry Desert");
   compass: Item = Item.get("UV-resistant compass");
   knife: Item = Item.get("survival knife");
+  toAbsorb: Monster[];
+  camel: Familiar = Familiar.get("Melodramedary");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / Explore";
@@ -111,7 +115,8 @@ export class QuestL11DesertExplore implements QuestInfo {
     return {
       outfit: outfit,
       location: this.desert,
-      familiar: Familiar.get("Melodramedary"),
+      familiar: haveFamiliar(this.camel) ? this.camel : null,
+      disableFamOverride: this.toAbsorb.length == 0 && haveFamiliar(this.camel),
       run: () => {
         let killing: Macro = Macro.if_(
           Effect.get("Tenuous Grip on Reality"),

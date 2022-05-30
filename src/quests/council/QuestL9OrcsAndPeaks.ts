@@ -38,6 +38,7 @@ import { SmutOrcs } from "./peaks/QuestL9SmutOrcs";
 import { ABooHandler } from "./peaks/QuestL9AbooPeak";
 import { OilHandler } from "./peaks/QuestL9OilPeak";
 import { QuestType } from "../QuestTypes";
+import { GreyOutfit } from "../../utils/GreyOutfitter";
 
 export class QuestL9Smut implements QuestInfo {
   peaks: QuestInfo[] = [
@@ -94,6 +95,7 @@ export class QuestL9Smut implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: new GreyOutfit("-tie"),
       run: () => {
         this.visitMiLord();
         council();

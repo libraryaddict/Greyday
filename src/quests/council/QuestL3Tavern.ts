@@ -85,7 +85,7 @@ export class QuestL3Tavern implements QuestInfo {
     let outfit: GreyOutfit;
 
     if (!advTime) {
-      outfit = null;
+      outfit = new GreyOutfit("-tie");
     } else {
       outfit = new GreyOutfit();
 
