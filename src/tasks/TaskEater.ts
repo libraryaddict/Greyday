@@ -22,6 +22,7 @@ import {
   toInt,
   visitUrl,
 } from "kolmafia";
+import { getQuestStatus } from "../quests/Quests";
 import { Task } from "./Tasks";
 
 export class TaskEater implements Task {
@@ -34,6 +35,7 @@ export class TaskEater implements Task {
     "Fortune Cookie",
     "Pickled Egg",
   ].map((s) => Item.get(s));
+  blackberry: Item = Item.get("Blackberry");
 
   constructor() {
     if (getProperty(this.prop) == "") {
@@ -134,6 +136,10 @@ export class TaskEater implements Task {
       }
 
       if (eaten.includes(toInt(item) + "") || historicalPrice(item) > 4000) {
+        continue;
+      }
+
+      if (item == this.blackberry && getQuestStatus("questL11Black") <= 1) {
         continue;
       }
 

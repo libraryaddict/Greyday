@@ -3,6 +3,7 @@ import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { getLocations } from "../../utils/GreyLocations";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
+import { QuestMPRegen } from "./QuestMPRegen";
 import { QuestSkillAbstract } from "./QuestSkillAbstract";
 import {
   QuestSkillColdDamage10,
@@ -36,9 +37,9 @@ export class QuestSkillRegistry implements QuestInfo {
     );
     this.addSkill("Skills / HPRegen", Skill.get("Fluid Dynamics Simulation"));
     this.addSkill("Skills / ScalingDR", Skill.get("Subatomic Hardening"));
-    this.addSkill("Skills / MPRegen", Skill.get("Hivemindedness"));
     this.addSkill("Skills / ScalingMeat", Skill.get("Ponzi Apparatus"));
 
+    this.children.push(new QuestMPRegen());
     this.children.push(new QuestSkillSystemSweep());
     this.children.push(
       new QuestSkillAbstract(

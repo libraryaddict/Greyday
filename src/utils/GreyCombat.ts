@@ -88,8 +88,11 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
         absorb.mp == 0 &&
         (absorb.skill == null || haveSkill(absorb.skill)))
     ) {
-      // If the script explicitly wanted to banish these
-      if (settings.banishThese != null || settings.dontBanishThese != null) {
+      // If the script explicitly wanted to banish these and this isn't a non-quest
+      if (
+        !settings.nonquest &&
+        (settings.banishThese != null || settings.dontBanishThese != null)
+      ) {
         if (
           !hasBanished(myLocation(), BanishType.SPRING_LOADED_FRONT_BUMPER) &&
           getFuel() >= 50
@@ -161,7 +164,7 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
   let macro = new Macro();
 
   if (haveEffect(Effect.get("Temporary Amnesia")) == 0) {
-    if (myLevel() < 5 && myFamiliar() == Familiar.get("Grey Goose")) {
+    if (myLevel() < 4 && myFamiliar() == Familiar.get("Grey Goose")) {
       macro = macro.trySkill(" Convert Matter to Pomade");
     }
 

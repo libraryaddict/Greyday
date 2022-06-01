@@ -130,7 +130,7 @@ export class QuestL11Bowling implements QuestInfo {
 
         let macro: Macro = null;
 
-        if (this.getProgress() == 1 && this.ownBall()) {
+        if (this.getProgress() <= 1 && this.ownBall()) {
           macro = new Macro().item(this.cosmicBall);
 
           if (itemAmount(this.ball) > 0) {

@@ -61,7 +61,14 @@ export class QuestManorBillards implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    let outfit = new GreyOutfit();
+
+    if (
+      availableAmount(this.cue) > 0 &&
+      (haveEffect(this.chalkEffect) > 0 || availableAmount(this.chalk) > 0)
+    ) {
+      outfit.setNoCombat();
+    }
 
     outfit.addItem(Item.get("Staff of Fats"));
     outfit.addItem(this.cue);

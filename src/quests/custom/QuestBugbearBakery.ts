@@ -13,6 +13,7 @@ import {
   outfitPieces,
   myMeat,
   cliExecute,
+  haveSkill,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -46,8 +47,8 @@ export class QuestBugbearBakery implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (haveEffect(this.effect) > 0) {
-      return QuestStatus.NOT_READY;
+    if (!haveSkill(this.nanovision)) {
+      return QuestStatus.FASTER_LATER;
     }
 
     return QuestStatus.READY;

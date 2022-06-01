@@ -25,6 +25,7 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
   book: Item = Item.get("Book of matches");
   monster: Monster = Monster.get("pygmy janitor");
   location: Location = Location.get("The Hidden Park");
+  toAbsorb: Monster[];
 
   getId(): QuestType {
     return "Council / MacGruffin / HiddenCity / BookOfMatches";
@@ -65,12 +66,13 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let needToAdv =
-      availableAmount(this.book) == 0 && GreySettings.isHardcoreMode();
-
     let outfit = new GreyOutfit();
 
-    if (needToAdv) {
+    if (
+      this.toAbsorb.length == 0 &&
+      availableAmount(this.book) == 0 &&
+      GreySettings.isHardcoreMode()
+    ) {
       outfit.setItemDrops();
       outfit.setPlusCombat();
     }
@@ -80,7 +82,7 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
       outfit: outfit,
       run: () => {
         if (availableAmount(this.book) == 0) {
-          if (GreySettings.isHardcoreMode()) {
+          if (this.toAbsorb.length > 0 || GreySettings.isHardcoreMode()) {
             let settings = new AdventureSettings().addNoBanish(this.monster);
 
             greyAdv(this.location, outfit, settings);

@@ -8,8 +8,10 @@ import {
   getMonsters,
   getProperty,
   haveSkill,
+  lastMonster,
   Location,
   Monster,
+  myAdventures,
   numericModifier,
   print,
   printHtml,
@@ -21,6 +23,7 @@ import {
   toSkill,
   toString,
   totalTurnsPlayed,
+  turnsPlayed,
   visitUrl,
 } from "kolmafia";
 import { getLocations } from "./GreyLocations";
@@ -233,7 +236,7 @@ export class AbsorbsProvider {
       location: location,
       turnsToGain: totalAdvs,
       expectedTurnsProfit:
-        totalAdvs - (advsSpent + Math.max(2, Math.floor(advsSpent * 0.3))),
+        totalAdvs - (advsSpent + Math.max(2, Math.ceil(advsSpent * 0.2))),
       monsters: absorbs.map((a) => a.monster),
       skills: newSkills,
       shouldWait:
@@ -324,9 +327,9 @@ export class AbsorbsProvider {
   getAbsorbedMonstersFromInstance(): Map<Monster, Reabsorbed> {
     let monsters: Map<Monster, Reabsorbed> = new Map();
     let reabsorbed: Monster[] = AbsorbsProvider.getReabsorbedMonsters();
-    let absorbedProp = "_absorbedMonstersToday";
+    let absorbedProp = "_monstersFoughtToday";
 
-    if (getProperty(absorbedProp) == "") {
+    if (getProperty(absorbedProp) == "" || turnsPlayed() % 50 == 1) {
       this.getAbsorbedMonstersFromUrl().forEach((m) =>
         monsters.set(
           m,
@@ -348,25 +351,12 @@ export class AbsorbsProvider {
       monsters.set(m, Reabsorbed.REABSORBED);
     }
 
-    for (let loc of Location.all()) {
-      for (let s of loc.combatQueue.split("; ")) {
-        if (s.length == 0) {
-          continue;
-        }
-
-        let monster = Monster.get(s);
-
-        if (monsters.has(monster)) {
-          continue;
-        }
-
-        monsters.set(
-          monster,
-          reabsorbed.includes(monster)
-            ? Reabsorbed.REABSORBED
-            : Reabsorbed.NOT_REABSORBED
-        );
-      }
+    if (
+      lastMonster() != null &&
+      !monsters.has(lastMonster()) &&
+      AbsorbsProvider.getAbsorb(lastMonster()) != null
+    ) {
+      monsters.set(lastMonster(), Reabsorbed.NOT_REABSORBED);
     }
 
     if (getProperty(absorbedProp).split(",").length != monsters.size) {

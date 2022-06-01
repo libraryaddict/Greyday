@@ -34,6 +34,7 @@ export class AdventureSettings {
   choices: GreyChoices;
   dontBanishThese: Monster[];
   banishThese: Monster[];
+  nonquest: boolean = false;
 
   addBanish(monster: Monster): AdventureSettings {
     if (this.dontBanishThese != null) {

@@ -13,6 +13,7 @@ import { PropertyManager } from "../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
+  getQuestStatus,
   OutfitImportance,
   QuestAdventure,
   QuestInfo,
@@ -32,6 +33,7 @@ export class QuestL11Black implements QuestInfo {
     Monster.get(s)
   );
   toAbsorb: Monster[];
+  blackberry: Item = Item.get("Blackberry");
 
   level(): number {
     return 11;
@@ -53,9 +55,13 @@ export class QuestL11Black implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getProperty("questL11Black");
+    let status = getQuestStatus("questL11Black");
 
-    if (status != "started" && status != "step1") {
+    if (status < 0) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (status > 1) {
       return QuestStatus.COMPLETED;
     }
 
@@ -86,10 +92,6 @@ export class QuestL11Black implements QuestInfo {
       run: () => {
         let props = new PropertyManager();
 
-        if (fam != null && !this.shouldWearLatte()) {
-          DelayBurners.tryReplaceCombats();
-        }
-
         try {
           if (availableAmount(this.beehive) == 0) {
             props.setChoice(924, 3); // Beezzzz
@@ -97,7 +99,7 @@ export class QuestL11Black implements QuestInfo {
             props.setChoice(1019, 1);
           } else if (
             availableAmount(this.boots) == 0 &&
-            availableAmount(Item.get("Blackberry")) >= 3
+            availableAmount(this.blackberry) >= 3
           ) {
             props.setChoice(924, 2); // Cobble
             props.setChoice(928, 4); // Make boots

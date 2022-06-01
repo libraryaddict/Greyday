@@ -28,11 +28,16 @@ import { TaskCouncil } from "./tasks/TaskCouncil";
 import { TaskEater } from "./tasks/TaskEater";
 import { TaskFuelAsdon } from "./tasks/TaskFuelAsdon";
 import { TaskLatteFiller } from "./tasks/TaskLatteFiller";
-import { TaskMaintainStatus } from "./tasks/TaskMaintainStatus";
+import { restoreMPTo, TaskMaintainStatus } from "./tasks/TaskMaintainStatus";
 import { Task } from "./tasks/Tasks";
 import { TaskSellCrap } from "./tasks/TaskSellCrap";
 import { TaskWorkshed } from "./tasks/TaskWorkshed";
-import { AdventureLocation } from "./utils/GreyAbsorber";
+import {
+  Absorb,
+  AbsorbsProvider,
+  AdventureLocation,
+  Reabsorbed,
+} from "./utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "./utils/GreyLocations";
 import { GreyOutfit } from "./utils/GreyOutfitter";
 import { doColor, setUmbrella } from "./utils/GreyUtils";
@@ -99,10 +104,35 @@ export class GreyAdventurer {
       }
 
       if (goodAdventure.locationInfo.monsters != null) {
-        plan.push(
-          "Fight: " +
-            goodAdventure.locationInfo.monsters.map((m) => m.name).join(", ")
-        );
+        let monsters: string[] = [];
+
+        let absorbed = this.adventureFinder.defeated;
+
+        goodAdventure.locationInfo.monsters
+          .map((m) => {
+            let absorb = AbsorbsProvider.getAbsorb(m);
+
+            if (absorb == null) {
+              return m.name;
+            }
+
+            if (absorb.skill != null) {
+              return m.name + " (Skill)";
+            }
+
+            if ((absorb.adventures || 0) <= 0) {
+              return m.name;
+            }
+
+            if (absorbed.get(m) == Reabsorbed.REABSORBED) {
+              return m.name;
+            }
+
+            return m.name + " (Advs x " + (!absorbed.has(m) ? "2" : "1") + ")";
+          })
+          .forEach((m) => monsters.push(m));
+
+        plan.push("Fight: " + monsters.join(", "));
       }
     }
 
@@ -138,6 +168,7 @@ export class GreyAdventurer {
     }
 
     let settings = new AdventureSettings();
+    settings.nonquest = true;
     adv.monsters.forEach((m) => settings.addNoBanish(m));
 
     return {
@@ -258,7 +289,7 @@ export function castNoCombatSkills() {
   if (
     haveSkill(Skill.get("Phase Shift")) &&
     haveEffect(Effect.get("Shifted Phase")) == 0 &&
-    myMp() >= 50
+    restoreMPTo(50)
   ) {
     useSkill(Skill.get("Phase Shift"));
   }
@@ -266,7 +297,7 @@ export function castNoCombatSkills() {
   if (
     haveSkill(Skill.get("Photonic Shroud")) &&
     haveEffect(Effect.get("Darkened Photons")) == 0 &&
-    myMp() >= 50
+    restoreMPTo(50)
   ) {
     useSkill(Skill.get("Photonic Shroud"));
   }
@@ -276,7 +307,7 @@ export function castCombatSkill() {
   if (
     haveSkill(Skill.get("Piezoelectric Honk")) &&
     haveEffect(Effect.get("Hooooooooonk!")) == 0 &&
-    myMp() >= 50
+    restoreMPTo(50)
   ) {
     useSkill(Skill.get("Piezoelectric Honk"));
   }

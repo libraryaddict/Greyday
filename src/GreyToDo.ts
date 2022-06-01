@@ -56,3 +56,9 @@
 // Create some kind of earmark system where quests/tasks can preregister what resources/meat they need. So I can burn resources on optional stuff without worrying about interfering with something else
 // Use pocket wishes for absorbs
 // Investigate why it would do "Visit Oil Baron, hit introduction, decide to go somewhere else, hit another introduction, go back to oil". It should just try again.
+// Restore MP when wanting to cast buffs and no other 'great' choices
+
+// Convert quest status to 'READY' 'NOT READY' 'COMPLETED'. And add subquest status to 'READY' where it can declare a priority over other stuff.
+// YR the hatchlings every step
+// Look at wishing in stuff
+// YR the frat boy instead of pulling, wish, locket or cargo shorts him

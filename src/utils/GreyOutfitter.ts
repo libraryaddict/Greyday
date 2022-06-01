@@ -1,4 +1,5 @@
 import {
+  availableAmount,
   Familiar,
   familiarWeight,
   getProperty,
@@ -59,10 +60,10 @@ export class GreyOutfit {
   }
 
   setWeights() {
-    this.addBonus("+10 bonus mafia thumb ring");
+    this.addBonus("+50 bonus mafia thumb ring");
 
     if (getQuestStatus("questL13Final") <= 5) {
-      this.addBonus("+4 bonus powerful glove");
+      this.addBonus("+4.5 bonus powerful glove");
 
       if (toInt(getProperty("scrapbookCharges")) < 100) {
         this.addBonus("+2 bonus familiar scrapbook");
@@ -106,7 +107,11 @@ export class GreyOutfit {
   }
 
   addItem(item: Item, weight: number = 999999): GreyOutfit {
-    this.itemsWeight.push([item, weight]);
+    if (weight < 999999 || availableAmount(item) == 0) {
+      this.itemsWeight.push([item, weight]);
+    } else {
+      this.addBonus("+equip " + item.name);
+    }
 
     return this;
   }

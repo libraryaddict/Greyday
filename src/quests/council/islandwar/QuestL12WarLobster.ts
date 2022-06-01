@@ -56,11 +56,11 @@ export class QuestL12Lobster implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (this.hasVoidAndGlove() && !this.isVoidReady()) {
-      return QuestStatus.NOT_READY;
-    }
-
-    if (!hasCombatSkillReady()) {
+    if (this.hasVoidAndGlove()) {
+      if (!this.isVoidReady()) {
+        return QuestStatus.NOT_READY;
+      }
+    } else if (!hasCombatSkillReady()) {
       return QuestStatus.FASTER_LATER;
     }
 
