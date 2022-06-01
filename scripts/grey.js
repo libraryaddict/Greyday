@@ -7684,7 +7684,6 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
 
     function run() {
       var outfit = new GreyOutfit();
-      outfit.setItemDrops();
       outfit.addItem(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
       outfit.addItem(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
       outfit.addItem(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
@@ -8050,7 +8049,9 @@ function QuestL12Worms_slicedToArray(arr, i) {return QuestL12Worms_arrayWithHole
 
 
 
-var QuestL12Worms = /*#__PURE__*/function () {function QuestL12Worms() {QuestL12Worms_classCallCheck(this, QuestL12Worms);QuestL12Worms_defineProperty(this, "effects",
+var QuestL12Worms = /*#__PURE__*/function () {function QuestL12Worms() {QuestL12Worms_classCallCheck(this, QuestL12Worms);QuestL12Worms_defineProperty(this, "nanovision",
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestL12Worms_defineProperty(this, "effects",
+
 
 
 
@@ -8091,6 +8092,10 @@ var QuestL12Worms = /*#__PURE__*/function () {function QuestL12Worms() {QuestL12
         return QuestStatus.NOT_READY;
       }
 
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
+        return QuestStatus.NOT_READY;
+      }
+
       return QuestStatus.READY;
     } }, { key: "outfitNeeded", value:
 
@@ -8120,7 +8125,7 @@ var QuestL12Worms = /*#__PURE__*/function () {function QuestL12Worms() {QuestL12
 
       if (
       (0,external_kolmafia_namespaceObject.itemAmount)(external_kolmafia_namespaceObject.Item.get("filthworm royal guard scent gland")) > 0 ||
-      (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Filthworm Guard Stench")))
+      (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Filthworm Guard Stench")) > 0)
       {
         outfit.meatDropWeight = 4;
       } else {
@@ -8140,7 +8145,13 @@ var QuestL12Worms = /*#__PURE__*/function () {function QuestL12Worms() {QuestL12
         run: () => {
           this.useGlands();
 
-          greyAdv(chamber, outfit);
+          greyAdv(
+          chamber,
+          outfit,
+          new AdventureSettings().setFinishingBlowMacro(
+          Macro.skill(this.nanovision).repeat()));
+
+
         } };
 
     } }, { key: "useGlands", value:
@@ -10148,14 +10159,14 @@ var QuestTowerMirror = /*#__PURE__*/function () {function QuestTowerMirror() {Qu
 
     } }, { key: "createWand", value:
 
-    function createWand() {
-      // if (availableAmount(this.clover) > 0) {
-      //   return this.tryClover(); // Won't ever be true hey
-      // }
-      var _iterator = QuestTowerMirror_createForOfIteratorHelper(
+    function createWand() {var _this = this;var _iterator = QuestTowerMirror_createForOfIteratorHelper(
       this.locations),_step;try {var _loop = function _loop() {var locs = _step.value;
           if ((0,external_kolmafia_namespaceObject.availableAmount)(locs[0]) > 0) {
             return "continue";
+          }
+
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(_this.clover) > 0) {
+            return { v: _this.tryClover() };
           }
 
           var outfit = new GreyOutfit().setItemDrops();
@@ -11574,7 +11585,7 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
 
 
     function addRetroSword() {var outfit = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new GreyOutfit();
-      outfit.addItem(this.getSword());
+      outfit.addItem(this.getSword(), 99999);
       outfit.addBonus("-back");
 
       return outfit;
@@ -13402,11 +13413,14 @@ var OilHandler = /*#__PURE__*/function () {function OilHandler() {QuestL9OilPeak
       }
 
       if (this.needsAbsorb()) {
-        if (
-        (0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) < 6 ||
-        (0,external_kolmafia_namespaceObject.numericModifier)("Monster Level") > 40)
-        {
-          return QuestStatus.NOT_READY;
+        if ((0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) < 6) {
+          var effects = Object.keys((0,external_kolmafia_namespaceObject.myEffects)()).
+          map((e) => external_kolmafia_namespaceObject.Effect.get(e)).
+          reduce((p, e) => (0,external_kolmafia_namespaceObject.numericModifier)(e, "Monster Level") + p, 0);
+
+          if (effects != 0) {
+            return QuestStatus.NOT_READY;
+          }
         }
       }
 
@@ -14414,6 +14428,7 @@ function QuestManorLights_createForOfIteratorHelper(o, allowArrayLike) {var it =
 
 
 
+
 var QuestManorLights = /*#__PURE__*/function () {
 
 
@@ -14470,6 +14485,10 @@ var QuestManorLights = /*#__PURE__*/function () {
 
     function isSteveReady() {
       return (0,external_kolmafia_namespaceObject.getProperty)("nextSpookyravenStephenRoom") != "none";
+    } }, { key: "isElizaFight", value:
+
+    function isElizaFight() {
+      return (0,external_kolmafia_namespaceObject.getProperty)("nextSpookyravenElizabethRoom") == "The Haunted Gallery";
     } }, { key: "isSteveFight", value:
 
     function isSteveFight() {
@@ -14551,6 +14570,7 @@ var QuestManorLights = /*#__PURE__*/function () {
       return {
         location: null,
         familiar: fight ? this.goose : null,
+        outfit: !fight ? new GreyOutfit("-tie") : null,
         run: () => {
           if (false) {}
 
@@ -14606,9 +14626,11 @@ var QuestManorLights = /*#__PURE__*/function () {
 
     function doEliza() {
       var eliza = this.getEliza();
+      var fight = this.isElizaFight();
 
       return {
         location: null,
+        outfit: !fight ? new GreyOutfit("-tie") : null,
         run: () => {
           var both = this.getBoth();
           (0,external_kolmafia_namespaceObject.visitUrl)("adventure.php?snarfblat=" + (0,external_kolmafia_namespaceObject.toInt)(eliza[0]));
@@ -17043,7 +17065,7 @@ var QuestMonsterBait = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestMonst
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.monsterBait) > 0) {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.monsterBait) > -40) {
         return QuestStatus.COMPLETED;
       }
 
