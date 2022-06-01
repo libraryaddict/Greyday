@@ -28,6 +28,7 @@ export class QuestGrabHippyOutfit implements QuestInfo {
   rocket: Item = Item.get("Yellow Rocket");
   effect: Effect = Effect.get("Everything Looks Yellow");
   battery: Item = Item.get("Battery (9-Volt)");
+  shorts: Item = Item.get("Cargo Cultist Shorts");
 
   hasShockingLick(): boolean {
     return toInt(getProperty("shockingLickCharges")) > 0;
@@ -52,6 +53,13 @@ export class QuestGrabHippyOutfit implements QuestInfo {
       haveOutfit("Frat Warrior Fatigues")
     ) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (
+      availableAmount(this.shorts) > 0 &&
+      getProperty("_cargoPocketEmptied") != "true"
+    ) {
+      return QuestStatus.NOT_READY;
     }
 
     if (!this.hasBoat() || myLevel() >= 12) {

@@ -13,6 +13,7 @@ import {
   itemAmount,
   retrieveItem,
   outfitPieces,
+  availableAmount,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv, AdventureSettings } from "../../../utils/GreyLocations";
@@ -27,6 +28,7 @@ export class QuestL12GrabWarOutfit implements QuestInfo {
   location: Location = Location.get("Frat House");
   rocket: Item = Item.get("Yellow Rocket");
   effect: Effect = Effect.get("Everything Looks Yellow");
+  shorts: Item = Item.get("Cargo Cultist Shorts");
 
   getId(): QuestType {
     return "Council / War / FratOutfit";
@@ -43,6 +45,13 @@ export class QuestL12GrabWarOutfit implements QuestInfo {
   status(): QuestStatus {
     if (haveOutfit("Frat Warrior Fatigues")) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (
+      availableAmount(this.shorts) > 0 &&
+      getProperty("_cargoPocketEmptied") != "true"
+    ) {
+      return QuestStatus.NOT_READY;
     }
 
     if (GreySettings.isHardcoreMode() && !haveOutfit("Filthy Hippy Disguise")) {

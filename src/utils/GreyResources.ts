@@ -288,10 +288,12 @@ export class GreyRequirements {
       ]);
     }
 
-    dontHave.push([
-      "Can't see if you own the mayday supply, but..",
-      Required.USEFUL,
-    ]);
+    if (getProperty("maydayContractOwned") == "true") {
+      dontHave.push([
+        "Can't see if you own the mayday supply, but..",
+        Required.USEFUL,
+      ]);
+    }
 
     if (availableAmount(Item.get("Unbreakable Umbrella")) == 0) {
       dontHave.push([

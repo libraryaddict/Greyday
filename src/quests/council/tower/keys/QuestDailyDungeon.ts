@@ -4,11 +4,12 @@ import {
   getProperty,
   getRelated,
   Item,
+  itemAmount,
   Location,
   retrieveItem,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
-import { greyAdv } from "../../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
   getQuestStatus,
@@ -17,6 +18,7 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
+import { Macro } from "../../../../utils/MacroBuilder";
 
 export class QuestDailyDungeon implements QuestInfo {
   pole: Item = Item.get("eleven-foot pole");
@@ -28,6 +30,7 @@ export class QuestDailyDungeon implements QuestInfo {
   zappables: Item[] = [];
   location: Location = Location.get("The Daily Dungeon");
   fam: Familiar = Familiar.get("Gelatinous Cubeling");
+  malware: Item = Item.get("Daily dungeon malware");
 
   getLocations(): Location[] {
     return [this.location];
@@ -89,9 +92,17 @@ export class QuestDailyDungeon implements QuestInfo {
       run: () => {
         let props = new PropertyManager();
         props.setChoice(692, 3);
+        let settings = new AdventureSettings();
+
+        if (
+          itemAmount(this.malware) > 0 &&
+          getProperty("_dailyDungeonMalwareUsed") != "true"
+        ) {
+          settings.setStartOfFightMacro(Macro.item(this.malware));
+        }
 
         try {
-          greyAdv(this.location, outfit);
+          greyAdv(this.location, outfit, settings);
         } finally {
           props.resetAll();
         }

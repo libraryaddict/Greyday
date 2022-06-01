@@ -26,7 +26,7 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
-import { QuestCargoShorts } from "./QuestCargoShorts";
+import { QuestCargoShorts } from "./QuestSmutOrcsCargoShorts";
 
 export class SmutOrcs implements QuestInfo {
   loc: Location = Location.get("The Smut Orc Logging Camp");
@@ -219,9 +219,9 @@ export class SmutOrcs implements QuestInfo {
     };
   }
 
-  getChildren(): QuestInfo[] {
-    return [this.shorts];
-  }
+  // getChildren(): QuestInfo[] {
+  //   return [this.shorts];
+  // }
 
   simMax(ma: string): number {
     let sim = maximize(ma, 0, 0, true, true);

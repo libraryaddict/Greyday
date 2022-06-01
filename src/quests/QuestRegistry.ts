@@ -145,6 +145,7 @@ export class QuestRegistry {
       // We do this early so we can grab our hippy outfit asap
       { id: "Boat / Junkyard" },
       { id: "Boat / Vacation" },
+      { id: "Council / War / Frat Cargo Shorts" },
       { id: "Council / War / HippyOutfit" },
 
       // Always try to buy access to the shore, 8-9 adventures spent trying to farm stuff up?
@@ -337,7 +338,7 @@ export class QuestRegistry {
       { id: "Skills / ColdDamage10" },
 
       // Given that we earn nothing from peaks, just delay it until we should've hit our max +cold damage
-      { id: "Council / Peaks / CargoShortsSmut" },
+      // { id: "Council / Peaks / CargoShortsSmut" },
       { id: "Council / Peaks / Orcs" },
       { id: "Council / Peaks / AbooPeak" },
       { id: "Council / Peaks / TwinPeak" },

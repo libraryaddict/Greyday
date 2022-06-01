@@ -106,6 +106,7 @@ export type QuestManorMacGruffin =
   | "Council / MacGruffin / Manor / Boss";
 export type QuestIslandWar =
   | "Council / War / Parent"
+  | "Council / War / Frat Cargo Shorts"
   | "Council / War / HippyOutfit"
   | "Council / War / FratOutfit"
   | "Council / War / Start"

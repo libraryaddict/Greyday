@@ -10,6 +10,7 @@ import { QuestL12Lobster } from "./islandwar/QuestL12WarLobster";
 import { QuestL12GrabWarOutfit } from "./islandwar/QuestL12GrabWarOutfit";
 import { QuestType } from "../QuestTypes";
 import { QuestL12WarFlyers } from "./islandwar/QuestL12WarFlyers";
+import { QuestL12FratCargoShorts } from "./islandwar/QuestL12FratCargoShorts";
 
 export class QuestL12War implements QuestInfo {
   children: QuestInfo[] = [
@@ -20,8 +21,9 @@ export class QuestL12War implements QuestInfo {
     new QuestL12StartWar(),
     new QuestL12WarBoss(),
     new QuestL12Lobster(),
-    new QuestL12GrabWarOutfit(),
     new QuestL12WarFlyers(),
+    new QuestL12FratCargoShorts(),
+    new QuestL12GrabWarOutfit(),
   ];
 
   getLocations(): Location[] {

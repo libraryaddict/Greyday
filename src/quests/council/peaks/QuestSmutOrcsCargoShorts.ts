@@ -16,6 +16,7 @@ import {
 } from "kolmafia";
 import { greyKillingBlow } from "../../../utils/GreyCombat";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
 import { Macro } from "../../../utils/MacroBuilder";
 import {
   getQuestStatus,
@@ -89,5 +90,11 @@ export class QuestCargoShorts implements QuestInfo {
     }
 
     return false;
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return [
+      new ResourceClaim(ResourceType.CARGO_SHORTS, 1, "Smut Orc Pervert", 4),
+    ];
   }
 }

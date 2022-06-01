@@ -1,5 +1,6 @@
 import {
   Effect,
+  getRevision,
   haveEffect,
   myLocation,
   myPath,
@@ -17,6 +18,14 @@ class GreyYouMain {
   adventures: GreyAdventurer;
 
   handleCommand(command: string) {
+    if (getRevision() < 26419) {
+      print(
+        `Please update your mafia. You are using ${getRevision()} but we need at least r26419`,
+        "red"
+      );
+      return;
+    }
+
     if (command == "required") {
       new GreyRequirements().hasRequired();
       return;
