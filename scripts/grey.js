@@ -9999,7 +9999,7 @@ var QuestTowerBoningKnife = /*#__PURE__*/function () {function QuestTowerBoningK
       return [];
     } }]);return QuestTowerBoningKnife;}();
 ;// CONCATENATED MODULE: ./src/quests/council/tower/stages/QuestTowerShadow.ts
-function QuestTowerShadow_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerShadow_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerShadow_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerShadow_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerShadow_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerShadow_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestTowerShadow_slicedToArray(arr, i) {return QuestTowerShadow_arrayWithHoles(arr) || QuestTowerShadow_iterableToArrayLimit(arr, i) || QuestTowerShadow_unsupportedIterableToArray(arr, i) || QuestTowerShadow_nonIterableRest();}function QuestTowerShadow_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestTowerShadow_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function QuestTowerShadow_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestTowerShadow_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestTowerShadow_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestTowerShadow_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestTowerShadow_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestTowerShadow_arrayLikeToArray(o, minLen);}function QuestTowerShadow_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestTowerShadow_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerShadow_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerShadow_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerShadow_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerShadow_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerShadow_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -10010,7 +10010,8 @@ var QuestTowerShadow = /*#__PURE__*/function () {function QuestTowerShadow() {Qu
     external_kolmafia_namespaceObject.Item.get("Attorney's badge"));QuestTowerShadow_defineProperty(this, "potato",
     external_kolmafia_namespaceObject.Familiar.get("Levitating Potato"));QuestTowerShadow_defineProperty(this, "guaze",
     external_kolmafia_namespaceObject.Item.get("Gauze garter"));QuestTowerShadow_defineProperty(this, "cape",
-    external_kolmafia_namespaceObject.Item.get("Unwrapped knock-off retro superhero cape"));}QuestTowerShadow_createClass(QuestTowerShadow, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Unwrapped knock-off retro superhero cape"));QuestTowerShadow_defineProperty(this, "overclocking",
+    external_kolmafia_namespaceObject.Skill.get("Overclocking"));}QuestTowerShadow_createClass(QuestTowerShadow, [{ key: "getId", value:
 
     function getId() {
       return "Council / Tower / Shadow";
@@ -10028,24 +10029,130 @@ var QuestTowerShadow = /*#__PURE__*/function () {function QuestTowerShadow() {Qu
       }
 
       if (status > 10) {
-        return QuestStatus.COMPLETED;
+        //  return QuestStatus.COMPLETED;
       }
 
       return QuestStatus.READY;
+    } }, { key: "getBestEquips", value:
+
+    function getBestEquips(modifier) {
+      var equips = [];
+      var none = external_kolmafia_namespaceObject.Slot.get("None");
+      var weapon = external_kolmafia_namespaceObject.Slot.get("Weapon");var _iterator = QuestTowerShadow_createForOfIteratorHelper(
+
+      external_kolmafia_namespaceObject.Item.all()),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var i = _step.value;
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(i) == 0) {
+            continue;
+          }
+
+          var slot = (0,external_kolmafia_namespaceObject.toSlot)(i);
+
+          if (slot == none || !(0,external_kolmafia_namespaceObject.canEquip)(i)) {
+            continue;
+          }
+
+          if (slot == weapon && (0,external_kolmafia_namespaceObject.weaponHands)(i) > 1) {
+            continue;
+          }
+
+          var mod = (0,external_kolmafia_namespaceObject.numericModifier)(i, modifier);
+
+          if (mod <= 0) {
+            continue;
+          }
+
+          equips.push([slot, i, mod]);
+        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+
+      equips.sort((e1, e2) => e2[2] - e1[2]);
+      var items = [];
+      var toReturn = [];var _iterator2 = QuestTowerShadow_createForOfIteratorHelper(
+
+      [
+      "Hat",
+      "Weapon",
+      "Offhand",
+      "Back",
+      "Pants",
+      "Acc1",
+      "Acc2",
+      "Acc3"].
+      map((s) => external_kolmafia_namespaceObject.Slot.get(s))),_step2;try {var _loop = function _loop() {var slot = _step2.value;
+          var lookFor = slot;
+
+          if (slot == external_kolmafia_namespaceObject.Slot.get("Acc2") || slot == external_kolmafia_namespaceObject.Slot.get("Acc3")) {
+            lookFor = external_kolmafia_namespaceObject.Slot.get("Acc1");
+          }
+
+          var item = equips.reduce((p, i) => {
+            if (i[0] != lookFor || items.includes(i[1])) {
+              return p;
+            }
+
+            if (p != null && p[2] > i[2]) {
+              return p;
+            }
+
+            return i;
+          }, null);
+
+          if (item != null) {
+            items.push(item[1]);
+            toReturn.push([slot, item[1]]);
+          }};for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {_loop();
+        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+
+      return toReturn;
     } }, { key: "run", value:
 
     function run() {
-      var maximize = "hp +init";
+      var map = new Map();
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.badge) > 0) {
-        maximize += " +equip " + this.badge.name;
+        map.set(external_kolmafia_namespaceObject.Slot.get("Acc3"), this.badge);
       }
-
-      var outfit = new GreyOutfit(maximize);
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.cape) > 0) {
-        outfit.addItem(this.cape);
+        map.set(external_kolmafia_namespaceObject.Slot.get("Back"), this.cape);
       }
+
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.overclocking)) {
+        var init = this.getBestEquips("Initiative");
+        var total = 0;var _iterator3 = QuestTowerShadow_createForOfIteratorHelper(
+
+        init),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var _step3$value = QuestTowerShadow_slicedToArray(_step3.value, 2),slot = _step3$value[0],item = _step3$value[1];
+            if (map.has(slot)) {
+              continue;
+            }
+
+            var count = (0,external_kolmafia_namespaceObject.numericModifier)(item, "Initiative");
+
+            total += count;
+            map.set(slot, item);
+
+            if (total > 150) {
+              break;
+            }
+          }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+      }
+
+      var hp = this.getBestEquips("Maximum HP");var _iterator4 = QuestTowerShadow_createForOfIteratorHelper(
+
+      hp),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var _step4$value = QuestTowerShadow_slicedToArray(_step4.value, 2),_slot = _step4$value[0],_item = _step4$value[1];
+          if (map.has(_slot)) {
+            continue;
+          }
+
+          map.set(_slot, _item);
+        }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
+
+      var maximize = "-tie";var _iterator5 = QuestTowerShadow_createForOfIteratorHelper(
+
+      map.values()),_step5;try {for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {var i = _step5.value;
+          maximize += " +equip " + i.name;
+        }} catch (err) {_iterator5.e(err);} finally {_iterator5.f();}
+
+      var outfit = new GreyOutfit(maximize);
 
       return {
         familiar: this.potato,
