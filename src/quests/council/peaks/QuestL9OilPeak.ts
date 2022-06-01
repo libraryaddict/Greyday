@@ -20,6 +20,7 @@ import {
   familiarWeight,
   Familiar,
   Slot,
+  Effect,
 } from "kolmafia";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -75,11 +76,14 @@ export class OilHandler implements QuestInfo {
     }
 
     if (this.needsAbsorb()) {
-      if (
-        familiarWeight(Familiar.get("Grey Goose")) < 6 ||
-        numericModifier("Monster Level") > 40
-      ) {
-        return QuestStatus.NOT_READY;
+      if (familiarWeight(Familiar.get("Grey Goose")) < 6) {
+        let effects = Object.keys(myEffects())
+          .map((e) => Effect.get(e))
+          .reduce((p, e) => numericModifier(e, "Monster Level") + p, 0);
+
+        if (effects != 0) {
+          return QuestStatus.NOT_READY;
+        }
       }
     }
 

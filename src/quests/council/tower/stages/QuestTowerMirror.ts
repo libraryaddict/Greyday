@@ -99,13 +99,13 @@ export class QuestTowerMirror implements QuestInfo {
   }
 
   createWand(): QuestAdventure {
-    // if (availableAmount(this.clover) > 0) {
-    //   return this.tryClover(); // Won't ever be true hey
-    // }
-
     for (let locs of this.locations) {
       if (availableAmount(locs[0]) > 0) {
         continue;
+      }
+
+      if (availableAmount(this.clover) > 0) {
+        return this.tryClover();
       }
 
       let outfit = new GreyOutfit().setItemDrops();

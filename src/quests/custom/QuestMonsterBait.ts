@@ -30,7 +30,7 @@ export class QuestMonsterBait
   }
 
   status(): QuestStatus {
-    if (availableAmount(this.monsterBait) > 0) {
+    if (availableAmount(this.monsterBait) > -40) {
       return QuestStatus.COMPLETED;
     }
 

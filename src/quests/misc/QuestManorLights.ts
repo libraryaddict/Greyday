@@ -15,6 +15,7 @@ import {
   Skill,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
+import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -75,6 +76,10 @@ export class QuestManorLights implements QuestInfo {
 
   isSteveReady(): boolean {
     return getProperty("nextSpookyravenStephenRoom") != "none";
+  }
+
+  isElizaFight(): boolean {
+    return getProperty("nextSpookyravenElizabethRoom") == "The Haunted Gallery";
   }
 
   isSteveFight(): boolean {
@@ -156,6 +161,7 @@ export class QuestManorLights implements QuestInfo {
     return {
       location: null,
       familiar: fight ? this.goose : null,
+      outfit: !fight ? new GreyOutfit("-tie") : null,
       run: () => {
         if (false) {
           throw (
@@ -218,9 +224,11 @@ export class QuestManorLights implements QuestInfo {
 
   doEliza(): QuestAdventure {
     let eliza = this.getEliza();
+    let fight = this.isElizaFight();
 
     return {
       location: null,
+      outfit: !fight ? new GreyOutfit("-tie") : null,
       run: () => {
         let both = this.getBoth();
         visitUrl("adventure.php?snarfblat=" + toInt(eliza[0]));

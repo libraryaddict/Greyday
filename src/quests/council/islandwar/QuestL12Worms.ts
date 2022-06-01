@@ -4,6 +4,7 @@ import {
   effectModifier,
   getProperty,
   haveEffect,
+  haveSkill,
   Item,
   itemAmount,
   Location,
@@ -14,13 +15,15 @@ import {
   use,
   visitUrl,
 } from "kolmafia";
-import { greyAdv } from "../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
 export class QuestL12Worms implements QuestInfo {
+  nanovision: Skill = Skill.get("Double Nanovision");
+
   getId(): QuestType {
     return "Council / War / Filthworms";
   }
@@ -61,6 +64,10 @@ export class QuestL12Worms implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (!haveSkill(this.nanovision)) {
+      return QuestStatus.NOT_READY;
+    }
+
     return QuestStatus.READY;
   }
 
@@ -90,7 +97,7 @@ export class QuestL12Worms implements QuestInfo {
 
     if (
       itemAmount(Item.get("filthworm royal guard scent gland")) > 0 ||
-      haveEffect(Effect.get("Filthworm Guard Stench"))
+      haveEffect(Effect.get("Filthworm Guard Stench")) > 0
     ) {
       outfit.meatDropWeight = 4;
     } else {
@@ -110,7 +117,13 @@ export class QuestL12Worms implements QuestInfo {
       run: () => {
         this.useGlands();
 
-        greyAdv(chamber, outfit);
+        greyAdv(
+          chamber,
+          outfit,
+          new AdventureSettings().setFinishingBlowMacro(
+            Macro.skill(this.nanovision).repeat()
+          )
+        );
       },
     };
   }

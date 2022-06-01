@@ -62,7 +62,6 @@ export class QuestL12Battlefield implements QuestInfo {
 
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
-    outfit.setItemDrops();
     outfit.addItem(Item.get("Beer Helmet"));
     outfit.addItem(Item.get("distressed denim pants"));
     outfit.addItem(Item.get("bejeweled pledge pin"));
