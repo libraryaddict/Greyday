@@ -1192,8 +1192,11 @@ function greyDuringFightMacro(settings) {
     absorb.mp == 0 && (
     absorb.skill == null || (0,external_kolmafia_namespaceObject.haveSkill)(absorb.skill)))
     {
-      // If the script explicitly wanted to banish these
-      if (settings.banishThese != null || settings.dontBanishThese != null) {
+      // If the script explicitly wanted to banish these and this isn't a non-quest
+      if (
+      !settings.nonquest && (
+      settings.banishThese != null || settings.dontBanishThese != null))
+      {
         if (
         !hasBanished((0,external_kolmafia_namespaceObject.myLocation)(), BanishType.SPRING_LOADED_FRONT_BUMPER) &&
         (0,external_kolmafia_namespaceObject.getFuel)() >= 50)
@@ -1265,7 +1268,7 @@ function greyKillingBlow(outfit) {
   var macro = new Macro();
 
   if ((0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Temporary Amnesia")) == 0) {
-    if ((0,external_kolmafia_namespaceObject.myLevel)() < 5 && (0,external_kolmafia_namespaceObject.myFamiliar)() == external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) {
+    if ((0,external_kolmafia_namespaceObject.myLevel)() < 4 && (0,external_kolmafia_namespaceObject.myFamiliar)() == external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) {
       macro = macro.trySkill(" Convert Matter to Pomade");
     }
 
@@ -1453,10 +1456,10 @@ var GreyOutfit = /*#__PURE__*/function () {
     } }, { key: "setWeights", value:
 
     function setWeights() {
-      this.addBonus("+10 bonus mafia thumb ring");
+      this.addBonus("+50 bonus mafia thumb ring");
 
       if (getQuestStatus("questL13Final") <= 5) {
-        this.addBonus("+4 bonus powerful glove");
+        this.addBonus("+4.5 bonus powerful glove");
 
         if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("scrapbookCharges")) < 100) {
           this.addBonus("+2 bonus familiar scrapbook");
@@ -1500,7 +1503,11 @@ var GreyOutfit = /*#__PURE__*/function () {
     } }, { key: "addItem", value:
 
     function addItem(item) {var weight = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 999999;
-      this.itemsWeight.push([item, weight]);
+      if (weight < 999999 || (0,external_kolmafia_namespaceObject.availableAmount)(item) == 0) {
+        this.itemsWeight.push([item, weight]);
+      } else {
+        this.addBonus("+equip " + item.name);
+      }
 
       return this;
     } }, { key: "setNoCombat", value:
@@ -1603,13 +1610,14 @@ function GreyLocations_createForOfIteratorHelper(o, allowArrayLike) {var it = ty
 
 
 
-var AdventureSettings = /*#__PURE__*/function () {function AdventureSettings() {GreyLocations_classCallCheck(this, AdventureSettings);GreyLocations_defineProperty(this, "startOfFightMacro", void 0);GreyLocations_defineProperty(this, "duringFightMacro", void 0);GreyLocations_defineProperty(this, "finishingBlowMacro", void 0);GreyLocations_defineProperty(this, "choices", void 0);GreyLocations_defineProperty(this, "dontBanishThese", void 0);GreyLocations_defineProperty(this, "banishThese", void 0);}GreyLocations_createClass(AdventureSettings, [{ key: "addBanish", value:
+var AdventureSettings = /*#__PURE__*/function () {function AdventureSettings() {GreyLocations_classCallCheck(this, AdventureSettings);GreyLocations_defineProperty(this, "startOfFightMacro", void 0);GreyLocations_defineProperty(this, "duringFightMacro", void 0);GreyLocations_defineProperty(this, "finishingBlowMacro", void 0);GreyLocations_defineProperty(this, "choices", void 0);GreyLocations_defineProperty(this, "dontBanishThese", void 0);GreyLocations_defineProperty(this, "banishThese", void 0);GreyLocations_defineProperty(this, "nonquest",
 
 
 
 
 
 
+    false);}GreyLocations_createClass(AdventureSettings, [{ key: "addBanish", value:
 
     function addBanish(monster) {
       if (this.dontBanishThese != null) {
@@ -2017,7 +2025,7 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
         location: location,
         turnsToGain: totalAdvs,
         expectedTurnsProfit:
-        totalAdvs - (advsSpent + Math.max(2, Math.floor(advsSpent * 0.3))),
+        totalAdvs - (advsSpent + Math.max(2, Math.ceil(advsSpent * 0.2))),
         monsters: absorbs.map((a) => a.monster),
         skills: newSkills,
         shouldWait:
@@ -2108,9 +2116,9 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
     function getAbsorbedMonstersFromInstance() {
       var monsters = new Map();
       var reabsorbed = AbsorbsProvider.getReabsorbedMonsters();
-      var absorbedProp = "_absorbedMonstersToday";
+      var absorbedProp = "_monstersFoughtToday";
 
-      if ((0,external_kolmafia_namespaceObject.getProperty)(absorbedProp) == "") {
+      if ((0,external_kolmafia_namespaceObject.getProperty)(absorbedProp) == "" || (0,external_kolmafia_namespaceObject.turnsPlayed)() % 50 == 1) {
         this.getAbsorbedMonstersFromUrl().forEach((m) =>
         monsters.set(
         m,
@@ -2130,28 +2138,15 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
 
       reabsorbed),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var m = _step4.value;
           monsters.set(m, Reabsorbed.REABSORBED);
-        }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}var _iterator5 = GreyAbsorber_createForOfIteratorHelper(
+        }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
 
-      external_kolmafia_namespaceObject.Location.all()),_step5;try {for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {var loc = _step5.value;var _iterator6 = GreyAbsorber_createForOfIteratorHelper(
-          loc.combatQueue.split("; ")),_step6;try {for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {var s = _step6.value;
-              if (s.length == 0) {
-                continue;
-              }
-
-              var monster = external_kolmafia_namespaceObject.Monster.get(s);
-
-              if (monsters.has(monster)) {
-                continue;
-              }
-
-              monsters.set(
-              monster,
-              reabsorbed.includes(monster) ?
-              Reabsorbed.REABSORBED :
-              Reabsorbed.NOT_REABSORBED);
-
-            }} catch (err) {_iterator6.e(err);} finally {_iterator6.f();}
-        }} catch (err) {_iterator5.e(err);} finally {_iterator5.f();}
+      if (
+      (0,external_kolmafia_namespaceObject.lastMonster)() != null &&
+      !monsters.has((0,external_kolmafia_namespaceObject.lastMonster)()) &&
+      AbsorbsProvider.getAbsorb((0,external_kolmafia_namespaceObject.lastMonster)()) != null)
+      {
+        monsters.set((0,external_kolmafia_namespaceObject.lastMonster)(), Reabsorbed.NOT_REABSORBED);
+      }
 
       if ((0,external_kolmafia_namespaceObject.getProperty)(absorbedProp).split(",").length != monsters.size) {
         var prop = (0,external_kolmafia_namespaceObject.getProperty)("logPreferenceChange");
@@ -2195,24 +2190,24 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
     defeated)
 
     {var includeSkills = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      var map = new Map();var _iterator7 = GreyAbsorber_createForOfIteratorHelper(
+      var map = new Map();var _iterator5 = GreyAbsorber_createForOfIteratorHelper(
 
       AbsorbsProvider.loadAbsorbs().filter(
       (a) =>
       (includeSkills || a.adventures > 0) &&
-      defeated.get(a.monster) != Reabsorbed.REABSORBED)),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;)
-        {var absorb = _step7.value;var _iterator8 = GreyAbsorber_createForOfIteratorHelper(
-          getLocations(absorb.monster)),_step8;try {for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {var l = _step8.value;
+      defeated.get(a.monster) != Reabsorbed.REABSORBED)),_step5;try {for (_iterator5.s(); !(_step5 = _iterator5.n()).done;)
+        {var absorb = _step5.value;var _iterator6 = GreyAbsorber_createForOfIteratorHelper(
+          getLocations(absorb.monster)),_step6;try {for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {var l = _step6.value;
               if (map.has(l)) {
                 continue;
               }
 
               map.set(l, this.getAdventuresInLocation(defeated, l, includeSkills));
-            }} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}
-        }} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}
+            }} catch (err) {_iterator6.e(err);} finally {_iterator6.f();}
+        }} catch (err) {_iterator5.e(err);} finally {_iterator5.f();}
 
       return GreyAbsorber_toConsumableArray(map.values()).filter((a) => a != null);
-    } }], [{ key: "getAbsorb", value: function getAbsorb(monster) {var _iterator9 = GreyAbsorber_createForOfIteratorHelper(AbsorbsProvider.loadAbsorbs()),_step9;try {for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {var absorb = _step9.value;if (absorb.monster != monster) {continue;}return absorb;}} catch (err) {_iterator9.e(err);} finally {_iterator9.f();}return null;} }, { key: "loadAbsorbs", value: function loadAbsorbs() {if (AbsorbsProvider.allAbsorbs != null) {return AbsorbsProvider.allAbsorbs;}AbsorbsProvider.allAbsorbs = [];var _iterator10 = GreyAbsorber_createForOfIteratorHelper((0,external_kolmafia_namespaceObject.fileToBuffer)("data/grey_you_data.txt").split("\n")),_step10;try {for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {var line = _step10.value;var spl = line.split("\t");if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {continue;}var mons = (0,external_kolmafia_namespaceObject.toMonster)(spl[0]);if (mons == external_kolmafia_namespaceObject.Monster.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown " + spl[0]);continue;}var absorb = new Absorb();absorb.monster = mons;if (spl[1].endsWith("adventures")) {absorb.adventures = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("muscle")) {absorb.mus = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("mysticality")) {absorb.mys = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("moxie")) {absorb.mox = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("maximum hp")) {absorb.hp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else if (spl[1].endsWith("maximum mp")) {absorb.mp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else {absorb.skill = (0,external_kolmafia_namespaceObject.toSkill)(spl[1]);if (absorb.skill == external_kolmafia_namespaceObject.Skill.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown thingy " + spl[1]);}}AbsorbsProvider.allAbsorbs.push(absorb);}} catch (err) {_iterator10.e(err);} finally {_iterator10.f();}return AbsorbsProvider.allAbsorbs;} }, { key: "getReabsorbedMonsters", value: function getReabsorbedMonsters() {return (0,external_kolmafia_namespaceObject.getProperty)("gooseReprocessed").split(",").filter((s) => s != "").map((m) => (0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.toInt)(m)));} }]);return AbsorbsProvider;}();GreyAbsorber_defineProperty(AbsorbsProvider, "allAbsorbs", void 0);
+    } }], [{ key: "getAbsorb", value: function getAbsorb(monster) {var _iterator7 = GreyAbsorber_createForOfIteratorHelper(AbsorbsProvider.loadAbsorbs()),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var absorb = _step7.value;if (absorb.monster != monster) {continue;}return absorb;}} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}return null;} }, { key: "loadAbsorbs", value: function loadAbsorbs() {if (AbsorbsProvider.allAbsorbs != null) {return AbsorbsProvider.allAbsorbs;}AbsorbsProvider.allAbsorbs = [];var _iterator8 = GreyAbsorber_createForOfIteratorHelper((0,external_kolmafia_namespaceObject.fileToBuffer)("data/grey_you_data.txt").split("\n")),_step8;try {for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {var line = _step8.value;var spl = line.split("\t");if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {continue;}var mons = (0,external_kolmafia_namespaceObject.toMonster)(spl[0]);if (mons == external_kolmafia_namespaceObject.Monster.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown " + spl[0]);continue;}var absorb = new Absorb();absorb.monster = mons;if (spl[1].endsWith("adventures")) {absorb.adventures = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("muscle")) {absorb.mus = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("mysticality")) {absorb.mys = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("moxie")) {absorb.mox = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("maximum hp")) {absorb.hp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else if (spl[1].endsWith("maximum mp")) {absorb.mp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else {absorb.skill = (0,external_kolmafia_namespaceObject.toSkill)(spl[1]);if (absorb.skill == external_kolmafia_namespaceObject.Skill.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown thingy " + spl[1]);}}AbsorbsProvider.allAbsorbs.push(absorb);}} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}return AbsorbsProvider.allAbsorbs;} }, { key: "getReabsorbedMonsters", value: function getReabsorbedMonsters() {return (0,external_kolmafia_namespaceObject.getProperty)("gooseReprocessed").split(",").filter((s) => s != "").map((m) => (0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.toInt)(m)));} }]);return AbsorbsProvider;}();GreyAbsorber_defineProperty(AbsorbsProvider, "allAbsorbs", void 0);
 
 
 
@@ -3327,9 +3322,10 @@ var QuestL11Black = /*#__PURE__*/function () {function QuestL11Black() {QuestL11
     external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));QuestL11Black_defineProperty(this, "blackbird",
     external_kolmafia_namespaceObject.Item.get("reassembled blackbird"));QuestL11Black_defineProperty(this, "dontBanish",
     ["Black Adder", "Black Panther"].map((s) =>
-    external_kolmafia_namespaceObject.Monster.get(s)));QuestL11Black_defineProperty(this, "toAbsorb", void 0);}QuestL11Black_createClass(QuestL11Black, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Monster.get(s)));QuestL11Black_defineProperty(this, "toAbsorb", void 0);QuestL11Black_defineProperty(this, "blackberry",
 
 
+    external_kolmafia_namespaceObject.Item.get("Blackberry"));}QuestL11Black_createClass(QuestL11Black, [{ key: "level", value:
 
     function level() {
       return 11;
@@ -3351,9 +3347,13 @@ var QuestL11Black = /*#__PURE__*/function () {function QuestL11Black() {QuestL11
     } }, { key: "status", value:
 
     function status() {
-      var status = (0,external_kolmafia_namespaceObject.getProperty)("questL11Black");
+      var status = getQuestStatus("questL11Black");
 
-      if (status != "started" && status != "step1") {
+      if (status < 0) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (status > 1) {
         return QuestStatus.COMPLETED;
       }
 
@@ -3384,10 +3384,6 @@ var QuestL11Black = /*#__PURE__*/function () {function QuestL11Black() {QuestL11
         run: () => {
           var props = new PropertyManager();
 
-          if (fam != null && !this.shouldWearLatte()) {
-            DelayBurners.tryReplaceCombats();
-          }
-
           try {
             if ((0,external_kolmafia_namespaceObject.availableAmount)(this.beehive) == 0) {
               props.setChoice(924, 3); // Beezzzz
@@ -3395,7 +3391,7 @@ var QuestL11Black = /*#__PURE__*/function () {function QuestL11Black() {QuestL11
               props.setChoice(1019, 1);
             } else if (
             (0,external_kolmafia_namespaceObject.availableAmount)(this.boots) == 0 &&
-            (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Blackberry")) >= 3)
+            (0,external_kolmafia_namespaceObject.availableAmount)(this.blackberry) >= 3)
             {
               props.setChoice(924, 2); // Cobble
               props.setChoice(928, 4); // Make boots
@@ -6207,7 +6203,7 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
 
           var macro = null;
 
-          if (this.getProgress() == 1 && this.ownBall()) {
+          if (this.getProgress() <= 1 && this.ownBall()) {
             macro = new Macro().item(this.cosmicBall);
 
             if ((0,external_kolmafia_namespaceObject.itemAmount)(this.ball) > 0) {
@@ -6799,7 +6795,8 @@ function QuestL11HiddenBookMatches_classCallCheck(instance, Constructor) {if (!(
 var QuestL11HiddenBookMatches = /*#__PURE__*/function () {function QuestL11HiddenBookMatches() {QuestL11HiddenBookMatches_classCallCheck(this, QuestL11HiddenBookMatches);QuestL11HiddenBookMatches_defineProperty(this, "book",
     external_kolmafia_namespaceObject.Item.get("Book of matches"));QuestL11HiddenBookMatches_defineProperty(this, "monster",
     external_kolmafia_namespaceObject.Monster.get("pygmy janitor"));QuestL11HiddenBookMatches_defineProperty(this, "location",
-    external_kolmafia_namespaceObject.Location.get("The Hidden Park"));}QuestL11HiddenBookMatches_createClass(QuestL11HiddenBookMatches, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Location.get("The Hidden Park"));QuestL11HiddenBookMatches_defineProperty(this, "toAbsorb", void 0);}QuestL11HiddenBookMatches_createClass(QuestL11HiddenBookMatches, [{ key: "getId", value:
+
 
     function getId() {
       return "Council / MacGruffin / HiddenCity / BookOfMatches";
@@ -6840,12 +6837,13 @@ var QuestL11HiddenBookMatches = /*#__PURE__*/function () {function QuestL11Hidde
     } }, { key: "run", value:
 
     function run() {
-      var needToAdv =
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.book) == 0 && GreySettings.isHardcoreMode();
-
       var outfit = new GreyOutfit();
 
-      if (needToAdv) {
+      if (
+      this.toAbsorb.length == 0 &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.book) == 0 &&
+      GreySettings.isHardcoreMode())
+      {
         outfit.setItemDrops();
         outfit.setPlusCombat();
       }
@@ -6855,7 +6853,7 @@ var QuestL11HiddenBookMatches = /*#__PURE__*/function () {function QuestL11Hidde
         outfit: outfit,
         run: () => {
           if ((0,external_kolmafia_namespaceObject.availableAmount)(this.book) == 0) {
-            if (GreySettings.isHardcoreMode()) {
+            if (this.toAbsorb.length > 0 || GreySettings.isHardcoreMode()) {
               var settings = new AdventureSettings().addNoBanish(this.monster);
 
               greyAdv(this.location, outfit, settings);
@@ -8429,11 +8427,11 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
         return QuestStatus.NOT_READY;
       }
 
-      if (this.hasVoidAndGlove() && !this.isVoidReady()) {
-        return QuestStatus.NOT_READY;
-      }
-
-      if (!hasCombatSkillReady()) {
+      if (this.hasVoidAndGlove()) {
+        if (!this.isVoidReady()) {
+          return QuestStatus.NOT_READY;
+        }
+      } else if (!hasCombatSkillReady()) {
         return QuestStatus.FASTER_LATER;
       }
 
@@ -13923,7 +13921,14 @@ var QuestManorBillards = /*#__PURE__*/function () {function QuestManorBillards()
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().setNoCombat();
+      var outfit = new GreyOutfit();
+
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.cue) > 0 && (
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.chalkEffect) > 0 || (0,external_kolmafia_namespaceObject.availableAmount)(this.chalk) > 0))
+      {
+        outfit.setNoCombat();
+      }
 
       outfit.addItem(external_kolmafia_namespaceObject.Item.get("Staff of Fats"));
       outfit.addItem(this.cue);
@@ -15752,6 +15757,111 @@ var QuestLocketSystemSweep = /*#__PURE__*/function () {function QuestLocketSyste
     function getLocations() {
       return [];
     } }]);return QuestLocketSystemSweep;}();
+;// CONCATENATED MODULE: ./src/quests/skills/QuestMPRegen.ts
+function QuestMPRegen_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestMPRegen_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestMPRegen_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestMPRegen_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestMPRegen_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestMPRegen_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+
+
+
+
+var QuestMPRegen = /*#__PURE__*/function () {function QuestMPRegen() {QuestMPRegen_classCallCheck(this, QuestMPRegen);QuestMPRegen_defineProperty(this, "realDung",
+    external_kolmafia_namespaceObject.Location.get("The Dungeons of Doom"));QuestMPRegen_defineProperty(this, "wand",
+    [
+    "aluminum wand",
+    "ebony wand",
+    "hexagonal wand",
+    "marble wand",
+    "pine wand"].
+    map((s) => external_kolmafia_namespaceObject.Item.get(s)));QuestMPRegen_defineProperty(this, "deadMimic",
+    external_kolmafia_namespaceObject.Item.get("dead mimic"));QuestMPRegen_defineProperty(this, "skill",
+    external_kolmafia_namespaceObject.Skill.get("Hivemindedness"));}QuestMPRegen_createClass(QuestMPRegen, [{ key: "getId", value:
+
+    function getId() {
+      return "Skills / MPRegen";
+    } }, { key: "level", value:
+
+    function level() {
+      return 8;
+    } }, { key: "shouldHaveWand", value:
+
+    function shouldHaveWand() {
+      return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("lastZapperWand")) == (0,external_kolmafia_namespaceObject.myAscensions)();
+    } }, { key: "getTimesZapped", value:
+
+    function getTimesZapped() {
+      return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_zapCount"));
+    } }, { key: "status", value:
+
+    function status() {
+      if ((0,external_kolmafia_namespaceObject.haveSkill)(this.skill)) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if (this.getWand() == null) {
+        if ((0,external_kolmafia_namespaceObject.myMeat)() < 5000 || getQuestStatus("questL11Black") < 3) {
+          return QuestStatus.NOT_READY;
+        }
+
+        if (!hasNonCombatSkillsReady()) {
+          return QuestStatus.FASTER_LATER;
+        }
+      }
+
+      return QuestStatus.READY;
+    } }, { key: "getWand", value:
+
+    function getWand() {
+      return this.wand.find((w) => (0,external_kolmafia_namespaceObject.availableAmount)(w) > 0);
+    } }, { key: "hasWandExploded", value:
+
+    function hasWandExploded() {
+      return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("lastZapperWandExplosionDay")) == (0,external_kolmafia_namespaceObject.myDaycount)();
+    } }, { key: "run", value:
+
+    function run() {
+      var outfit = new GreyOutfit();
+      var seekingWand = this.getWand() == null && (0,external_kolmafia_namespaceObject.myMeat)() >= 5000;
+
+      if (this.getWand() == null) {
+        outfit.setNoCombat();
+      } else {
+        outfit.plusCombatWeight = 1;
+      }
+
+      return {
+        outfit: outfit,
+        location: this.realDung,
+        run: () => {
+          var props = new PropertyManager();
+
+          props.setChoice(25, seekingWand ? 2 : 4);
+
+          try {
+            greyAdv(this.realDung, outfit);
+          } finally {
+            props.resetAll();
+          }
+
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(this.deadMimic) > 0) {
+            (0,external_kolmafia_namespaceObject.use)(this.deadMimic);
+
+            if (this.getWand() == null) {
+              (0,external_kolmafia_namespaceObject.print)(
+              "Something has gone wrong. We used a dead mimic but didn't get a wand.");
+
+            }
+          }
+        } };
+
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [this.realDung];
+    } }]);return QuestMPRegen;}();
 ;// CONCATENATED MODULE: ./src/quests/skills/QuestSkillAbstract.ts
 function QuestSkillAbstract_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestSkillAbstract_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestSkillAbstract_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestSkillAbstract_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestSkillAbstract_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestSkillAbstract_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -15984,6 +16094,7 @@ function QuestSkillRegistry_createForOfIteratorHelper(o, allowArrayLike) {var it
 
 
 
+
 var QuestSkillRegistry = /*#__PURE__*/function () {
 
 
@@ -16010,9 +16121,9 @@ var QuestSkillRegistry = /*#__PURE__*/function () {
 
     this.addSkill("Skills / HPRegen", external_kolmafia_namespaceObject.Skill.get("Fluid Dynamics Simulation"));
     this.addSkill("Skills / ScalingDR", external_kolmafia_namespaceObject.Skill.get("Subatomic Hardening"));
-    this.addSkill("Skills / MPRegen", external_kolmafia_namespaceObject.Skill.get("Hivemindedness"));
     this.addSkill("Skills / ScalingMeat", external_kolmafia_namespaceObject.Skill.get("Ponzi Apparatus"));
 
+    this.children.push(new QuestMPRegen());
     this.children.push(new QuestSkillSystemSweep());
     this.children.push(
     new QuestSkillAbstract(
@@ -17254,8 +17365,8 @@ var QuestBugbearBakery = /*#__PURE__*/function () {function QuestBugbearBakery()
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.haveEffect)(this.effect) > 0) {
-        return QuestStatus.NOT_READY;
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
+        return QuestStatus.FASTER_LATER;
       }
 
       return QuestStatus.READY;
@@ -18400,6 +18511,7 @@ var TaskCouncil = /*#__PURE__*/function () {function TaskCouncil() {TaskCouncil_
 function TaskEater_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskEater_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskEater_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskEater_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskEater_arrayLikeToArray(o, minLen);}function TaskEater_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskEater_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskEater_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskEater_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskEater_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskEater_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskEater_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
+
 var TaskEater = /*#__PURE__*/function () {
 
 
@@ -18411,7 +18523,8 @@ var TaskEater = /*#__PURE__*/function () {
 
 
 
-  function TaskEater() {TaskEater_classCallCheck(this, TaskEater);TaskEater_defineProperty(this, "prop", "_greyEatenToday");TaskEater_defineProperty(this, "npcFoods", ["Hot buttered roll", "Ketchup", "Catsup", "cup of lukewarm tea", "Fortune Cookie", "Pickled Egg"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));
+
+  function TaskEater() {TaskEater_classCallCheck(this, TaskEater);TaskEater_defineProperty(this, "prop", "_greyEatenToday");TaskEater_defineProperty(this, "npcFoods", ["Hot buttered roll", "Ketchup", "Catsup", "cup of lukewarm tea", "Fortune Cookie", "Pickled Egg"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));TaskEater_defineProperty(this, "blackberry", external_kolmafia_namespaceObject.Item.get("Blackberry"));
     if ((0,external_kolmafia_namespaceObject.getProperty)(this.prop) == "") {
       var dontEat = [];
       // Goat cheese quest
@@ -18510,6 +18623,10 @@ var TaskEater = /*#__PURE__*/function () {
         }
 
         if (eaten.includes((0,external_kolmafia_namespaceObject.toInt)(item) + "") || (0,external_kolmafia_namespaceObject.historicalPrice)(item) > 4000) {
+          continue;
+        }
+
+        if (item == this.blackberry && getQuestStatus("questL11Black") <= 1) {
           continue;
         }
 
@@ -18655,21 +18772,101 @@ var TaskLatteFiller = /*#__PURE__*/function () {function TaskLatteFiller() {Task
       (0,external_kolmafia_namespaceObject.cliExecute)("latte refill " + flavors.join(" "));
     } }]);return TaskLatteFiller;}();
 ;// CONCATENATED MODULE: ./src/tasks/TaskMaintainStatus.ts
-function TaskMaintainStatus_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskMaintainStatus_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskMaintainStatus_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskMaintainStatus_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskMaintainStatus_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}
+function TaskMaintainStatus_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskMaintainStatus_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskMaintainStatus_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskMaintainStatus_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskMaintainStatus_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskMaintainStatus_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
-var TaskMaintainStatus = /*#__PURE__*/function () {function TaskMaintainStatus() {TaskMaintainStatus_classCallCheck(this, TaskMaintainStatus);}TaskMaintainStatus_createClass(TaskMaintainStatus, [{ key: "run", value:
+
+
+
+
+
+
+
+var TaskMaintainStatus = /*#__PURE__*/function () {function TaskMaintainStatus() {TaskMaintainStatus_classCallCheck(this, TaskMaintainStatus);TaskMaintainStatus_defineProperty(this, "restorers",
+    []);}TaskMaintainStatus_createClass(TaskMaintainStatus, [{ key: "fillRestorers", value:
+
+    function fillRestorers() {
+      this.restorers.push({
+        item: external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer"),
+        mpRestored: 11,
+        available: () =>
+        (0,external_kolmafia_namespaceObject.dispensaryAvailable)() ||
+        (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer")) > 0,
+        price: 80 });
+
+      this.restorers.push({
+        item: external_kolmafia_namespaceObject.Item.get("Black cherry soda"),
+        mpRestored: 11,
+        available: () =>
+        (0,external_kolmafia_namespaceObject.blackMarketAvailable)() ||
+        (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Black cherry soda")) > 0,
+        price: 80 });
+
+      this.restorers.push({
+        item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Invigorating Tonic"),
+        mpRestored: 11,
+        available: () => true,
+        price: 90 });
+
+    } }, { key: "restoreMPTo", value:
+
+    function restoreMPTo(mp) {
+      var desiredMp = Math.min(mp, (0,external_kolmafia_namespaceObject.myMaxmp)());
+
+      while ((0,external_kolmafia_namespaceObject.myMeat)() > 100 && (0,external_kolmafia_namespaceObject.myMp)() < desiredMp) {
+        var restorer = this.restorers.find((r) => (0,external_kolmafia_namespaceObject.availableAmount)(r.item) > 0);
+
+        if (restorer == null) {
+          restorer = this.restorers.find((r) => r.available());
+        }
+
+        if (restorer == null) {
+          return false;
+        }
+
+        var toUse = Math.ceil(desiredMp / restorer.mpRestored);
+
+        if ((0,external_kolmafia_namespaceObject.availableAmount)(restorer.item) > 0) {
+          toUse = Math.min(toUse, (0,external_kolmafia_namespaceObject.availableAmount)(restorer.item));
+        } else {
+          toUse = Math.min(Math.floor((0,external_kolmafia_namespaceObject.myMeat)() / restorer.price), toUse);
+
+          (0,external_kolmafia_namespaceObject.cliExecute)("acquire " + toUse + " " + restorer.item);
+        }
+
+        (0,external_kolmafia_namespaceObject.cliExecute)("use " + toUse + " " + restorer.item);
+      }
+
+      return (0,external_kolmafia_namespaceObject.myMp)() >= mp;
+    } }, { key: "run", value:
+
     function run() {
-      while ((0,external_kolmafia_namespaceObject.myMeat)() > 100 && (0,external_kolmafia_namespaceObject.myMp)() < ((0,external_kolmafia_namespaceObject.myMaxmp)() < 40 ? 20 : 40)) {
-        (0,external_kolmafia_namespaceObject.cliExecute)("acquire 1 Doc Galaktik's Invigorating Tonic");
-        (0,external_kolmafia_namespaceObject.cliExecute)("use Doc Galaktik's Invigorating Tonic");
-      }
+      var desiredMp = (0,external_kolmafia_namespaceObject.myMaxmp)() < 40 ? 20 : 40;
 
-      while ((0,external_kolmafia_namespaceObject.myMeat)() > 100 && (0,external_kolmafia_namespaceObject.myHp)() < Math.min((0,external_kolmafia_namespaceObject.myMaxhp)() / 2, 50)) {
-        (0,external_kolmafia_namespaceObject.cliExecute)("acquire 1 Doc Galaktik's Homeopathic Elixir");
-        (0,external_kolmafia_namespaceObject.cliExecute)("use Doc Galaktik's Homeopathic Elixir");
-      }
+      this.restoreMPTo(desiredMp);
     } }]);return TaskMaintainStatus;}();
+
+
+var maintainStatus = new TaskMaintainStatus();
+
+function restoreMPTo(mp) {
+  // If we can't hit that MP
+  if (mp > (0,external_kolmafia_namespaceObject.myMaxmp)()) {
+    return false;
+  }
+
+  // If we already have that amount
+  if (mp >= (0,external_kolmafia_namespaceObject.myMp)()) {
+    return true;
+  }
+
+  // If we don't have 100 meat per 10 mp
+  if (Math.ceil(((0,external_kolmafia_namespaceObject.myMp)() - mp) / 10) * 100 > (0,external_kolmafia_namespaceObject.myMeat)()) {
+    return false;
+  }
+
+  return maintainStatus.restoreMPTo(mp);
+}
 ;// CONCATENATED MODULE: ./src/tasks/TaskSellCrap.ts
 function TaskSellCrap_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskSellCrap_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskSellCrap_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskSellCrap_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskSellCrap_arrayLikeToArray(o, minLen);}function TaskSellCrap_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskSellCrap_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskSellCrap_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskSellCrap_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskSellCrap_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskSellCrap_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskSellCrap_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -18855,10 +19052,35 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
         }
 
         if (goodAdventure.locationInfo.monsters != null) {
-          plan.push(
-          "Fight: " +
-          goodAdventure.locationInfo.monsters.map((m) => m.name).join(", "));
+          var monsters = [];
 
+          var absorbed = this.adventureFinder.defeated;
+
+          goodAdventure.locationInfo.monsters.
+          map((m) => {
+            var absorb = AbsorbsProvider.getAbsorb(m);
+
+            if (absorb == null) {
+              return m.name;
+            }
+
+            if (absorb.skill != null) {
+              return m.name + " (Skill)";
+            }
+
+            if ((absorb.adventures || 0) <= 0) {
+              return m.name;
+            }
+
+            if (absorbed.get(m) == Reabsorbed.REABSORBED) {
+              return m.name;
+            }
+
+            return m.name + " (Advs x " + (!absorbed.has(m) ? "2" : "1") + ")";
+          }).
+          forEach((m) => monsters.push(m));
+
+          plan.push("Fight: " + monsters.join(", "));
         }
       }
 
@@ -18894,6 +19116,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       }
 
       var settings = new AdventureSettings();
+      settings.nonquest = true;
       adv.monsters.forEach((m) => settings.addNoBanish(m));
 
       return {
@@ -19014,7 +19237,7 @@ function castNoCombatSkills() {
   if (
   (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Phase Shift")) &&
   (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Shifted Phase")) == 0 &&
-  (0,external_kolmafia_namespaceObject.myMp)() >= 50)
+  restoreMPTo(50))
   {
     (0,external_kolmafia_namespaceObject.useSkill)(external_kolmafia_namespaceObject.Skill.get("Phase Shift"));
   }
@@ -19022,7 +19245,7 @@ function castNoCombatSkills() {
   if (
   (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Photonic Shroud")) &&
   (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Darkened Photons")) == 0 &&
-  (0,external_kolmafia_namespaceObject.myMp)() >= 50)
+  restoreMPTo(50))
   {
     (0,external_kolmafia_namespaceObject.useSkill)(external_kolmafia_namespaceObject.Skill.get("Photonic Shroud"));
   }
@@ -19032,7 +19255,7 @@ function castCombatSkill() {
   if (
   (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Piezoelectric Honk")) &&
   (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Hooooooooonk!")) == 0 &&
-  (0,external_kolmafia_namespaceObject.myMp)() >= 50)
+  restoreMPTo(50))
   {
     (0,external_kolmafia_namespaceObject.useSkill)(external_kolmafia_namespaceObject.Skill.get("Piezoelectric Honk"));
   }
