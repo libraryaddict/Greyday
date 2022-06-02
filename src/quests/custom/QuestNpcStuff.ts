@@ -15,7 +15,11 @@ import {
   setProperty,
   use,
   myAscensions,
+  knollAvailable,
+  Monster,
 } from "kolmafia";
+import { GreyOutfit } from "../../utils/GreyOutfitter";
+import { ResourceClaim } from "../../utils/GreyResources";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -32,6 +36,7 @@ export class QuestNPCStuff implements QuestInfo {
     new QuestMadBaker(),
     new QuestUntinker(),
     new QuestDruggie(),
+    new QuestKnollMayor(),
   ];
 
   getId(): QuestType {
@@ -56,6 +61,46 @@ export class QuestNPCStuff implements QuestInfo {
 
   getChildren(): QuestInfo[] {
     return this.children;
+  }
+}
+
+class QuestKnollMayor implements QuestInfo {
+  getLocations(): Location[] {
+    return [];
+  }
+
+  getId(): QuestType {
+    return "NPC / Knoll Mayor";
+  }
+
+  level(): number {
+    return 2;
+  }
+
+  status(): QuestStatus {
+    if (!knollAvailable()) {
+      return QuestStatus.COMPLETED;
+    }
+
+    if (getProperty("questL02Larva") == "unstarted") {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (getProperty("questM03Bugbear") != "unstarted") {
+      return QuestStatus.COMPLETED;
+    }
+
+    return QuestStatus.READY;
+  }
+
+  run(): QuestAdventure {
+    return {
+      outfit: new GreyOutfit("-tie"),
+      location: null,
+      run: () => {
+        visitUrl("place.php?whichplace=knoll_friendly&action=dk_mayor");
+      },
+    };
   }
 }
 

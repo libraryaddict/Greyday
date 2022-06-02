@@ -29,6 +29,7 @@ export class QuestManorLibrary implements QuestInfo {
   key: Item = Item.get("[7302]Spookyraven library key");
   librarian: Monster = Monster.get("Banshee Librarian");
   sweep: Skill = Skill.get("System Sweep");
+  nano: Skill = Skill.get("Double Nanovision");
 
   getId(): QuestType {
     return "Manor / Library";
@@ -53,7 +54,7 @@ export class QuestManorLibrary implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!haveSkill(this.sweep)) {
+    if (!haveSkill(this.sweep) || !haveSkill(this.nano)) {
       return QuestStatus.FASTER_LATER;
     }
 
@@ -65,8 +66,13 @@ export class QuestManorLibrary implements QuestInfo {
     let banishLibrarian =
       availableAmount(this.killingJar) > 0 && !isBanished(this.librarian);
 
+    if (!banishLibrarian) {
+      outfit.setItemDrops();
+    }
+
     return {
       location: this.library,
+      outfit,
       run: () => {
         let settings = new AdventureSettings();
 
@@ -74,6 +80,8 @@ export class QuestManorLibrary implements QuestInfo {
 
         if (banishLibrarian) {
           settings.addBanish(this.librarian);
+        } else if (haveSkill(this.nano)) {
+          settings.setFinishingBlowMacro(Macro.skill(this.nano));
         }
 
         greyAdv(this.library, null, settings);

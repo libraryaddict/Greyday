@@ -4,6 +4,11 @@ import {
   availableAmount,
   equippedAmount,
   Item,
+  turnsPlayed,
+  itemAmount,
+  lastChoice,
+  equip,
+  print,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -36,45 +41,74 @@ export class QuestL10GiantBasement implements QuestInfo {
   run(): QuestAdventure {
     let outfit = new GreyOutfit().setNoCombat();
 
-    if (availableAmount(this.umbrella) > 0) {
-      outfit.addItem(this.umbrella);
-    }
-
-    if (availableAmount(this.amulet) > 0) {
-      outfit.addBonus("+equip " + this.amulet.name);
-      //      outfit.addItem(this.amulet);
-    }
-
     return {
       location: this.loc,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        let turnsSpent = turnsPlayed();
+        this.runAdv(outfit);
 
-        try {
-          // Do umbrella
-          props.setChoice(669, 1);
-
-          // If have amulet otherwise grab dumbbell (or skips it)
-          if (equippedAmount(this.amulet) > 0) {
-            props.setChoice(670, 4);
-          } else {
-            props.setChoice(670, 1);
-          }
-
-          if (availableAmount(this.dumbell) > 0) {
-            props.setChoice(671, 1);
-          } else {
-            // Go to gym
-            props.setChoice(671, 4);
-          }
-
-          greyAdv(this.loc, outfit);
-        } finally {
-          props.resetAll();
+        // If we took a turn, or the last choice wasn't one asking for umbrella & amulet
+        if (
+          turnsSpent != turnsPlayed() ||
+          (lastChoice() != 669 && lastChoice() != 670)
+        ) {
+          return;
         }
+
+        print(
+          "Detected that we've hit the giant NC and want to wear an umbrella/amulet.. So equipping that and trying it again.",
+          "blue"
+        );
+
+        for (let i of [this.umbrella, this.amulet]) {
+          if (equippedAmount(i) > 0 || itemAmount(i) == 0) {
+            continue;
+          }
+
+          equip(i);
+        }
+
+        this.runAdv(outfit);
       },
     };
+  }
+
+  runAdv(outfit: GreyOutfit) {
+    let props = new PropertyManager();
+
+    try {
+      // Do umbrella
+      if (equippedAmount(this.umbrella) > 0 || itemAmount(this.umbrella) == 0) {
+        // If we have umbrella equipped, or don't have one
+        props.setChoice(669, 1);
+      } else {
+        props.setChoice(669, 3); // Skip so we can resume
+      }
+
+      // If have amulet otherwise grab dumbbell (or skips it)
+      if (equippedAmount(this.amulet) > 0) {
+        props.setChoice(670, 4);
+      } else if (itemAmount(this.amulet) == 0) {
+        // Grab dumbbell
+        props.setChoice(670, 1);
+      } else {
+        // Skip
+        props.setChoice(670, 5);
+      }
+
+      // Use dumbbell to open stuff
+      if (availableAmount(this.dumbell) > 0) {
+        props.setChoice(671, 1);
+      } else {
+        // Go to gym
+        props.setChoice(671, 4);
+      }
+
+      greyAdv(this.loc, outfit);
+    } finally {
+      props.resetAll();
+    }
   }
 
   getId(): QuestType {

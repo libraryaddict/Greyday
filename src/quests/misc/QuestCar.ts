@@ -3,6 +3,7 @@ import {
   create,
   getProperty,
   Item,
+  knollAvailable,
   Location,
   Monster,
   myAscensions,
@@ -56,7 +57,10 @@ export class QuestCar implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (toInt(getProperty("lastDesertUnlock")) == myAscensions()) {
+    if (
+      toInt(getProperty("lastDesertUnlock")) == myAscensions() ||
+      !knollAvailable()
+    ) {
       return QuestStatus.COMPLETED;
     }
 
@@ -64,18 +68,32 @@ export class QuestCar implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (
+    if (knollAvailable()) {
+      return QuestStatus.READY;
+    }
+
+    /*if (
       myLevel() < 11 ||
       !GreySettings.isHippyMode() ||
       (this.hasBoat() && getQuestStatus("questL11Black") <= 1)
     ) {
       return QuestStatus.FASTER_LATER;
-    }
+    }*/
 
     return QuestStatus.READY;
   }
 
   run(): QuestAdventure {
+    //if (knollAvailable()) {
+    return {
+      location: null,
+      outfit: new GreyOutfit("-tie"),
+      run: () => {
+        this.tryMakeBitchCar();
+      },
+    };
+    /*}
+
     let outfit = new GreyOutfit().setItemDrops();
 
     return {
@@ -90,7 +108,7 @@ export class QuestCar implements QuestInfo {
 
         this.tryMakeBitchCar();
       },
-    };
+    };*/
   }
 
   getId(): QuestType {

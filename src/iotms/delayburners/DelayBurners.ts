@@ -64,7 +64,7 @@ export class DelayBurners {
   }
 
   static isDelayBurnerFeasible(): boolean {
-    return this.getDelayBurners().find((d) => d.readyIn() < 20) != null;
+    return this.getDelayBurners().find((d) => d.readyIn() < 12) != null;
   }
 
   private static getDelayBurner(freeOnly: boolean = false): DelayBurner {

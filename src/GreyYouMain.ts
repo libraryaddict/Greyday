@@ -41,7 +41,10 @@ class GreyYouMain {
 
     this.adventures = new GreyAdventurer();
 
-    if (command == "sim") {
+    if (command == "absorbs") {
+      this.adventures.adventureFinder.absorbs.printRemainingAbsorbs();
+      return;
+    } else if (command == "sim") {
       this.adventures.runTurn(false);
     } else if (command != null) {
       let s = command.split(" ");
@@ -70,7 +73,7 @@ class GreyYouMain {
       }
     }
 
-    print("Provide go or sim");
+    print("Provide absorbs, go or sim");
   }
 }
 

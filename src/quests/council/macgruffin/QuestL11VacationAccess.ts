@@ -8,6 +8,7 @@ import {
   myAscensions,
   toInt,
   Item,
+  knollAvailable,
 } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
@@ -22,7 +23,10 @@ export class QuestL11ShoreAccess implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (toInt(getProperty("lastDesertUnlock")) == myAscensions()) {
+    if (
+      toInt(getProperty("lastDesertUnlock")) == myAscensions() ||
+      knollAvailable()
+    ) {
       return QuestStatus.COMPLETED;
     }
 

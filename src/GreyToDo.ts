@@ -58,3 +58,4 @@
 // Convert quest status to 'READY' 'NOT READY' 'COMPLETED'. And add subquest status to 'READY' where it can declare a priority over other stuff.
 // YR the hatchlings every step
 // Look at wishing in stuff
+// Use crystal ball to fish for non-absorbs monsters that we want and where spending turns in the zone benifits no one. Such as blur, the +meat plant. We can switch to other zones that want progression and cost us nothing in resources to spend away

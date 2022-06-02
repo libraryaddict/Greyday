@@ -6,6 +6,7 @@ import {
   equippedAmount,
   Item,
   lastChoice,
+  getProperty,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { greyAdv } from "../../../../utils/GreyLocations";
@@ -32,7 +33,14 @@ export class QuestL11ShenGiants implements QuestInfo {
   gothNC: number = 675;
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    let outfit = new GreyOutfit();
+
+    if (
+      availableAmount(this.rocketToStars) == 0 ||
+      getProperty("questL10Garbage") != "finished"
+    ) {
+      outfit.setNoCombat();
+    }
 
     if (availableAmount(this.wig) > 0) {
       outfit.addItem(this.wig);

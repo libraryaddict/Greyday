@@ -4,6 +4,7 @@ import {
   haveEffect,
   haveSkill,
   Item,
+  knollAvailable,
   myMeat,
   print,
   Skill,
@@ -104,9 +105,19 @@ export class QuestRegistry {
       { id: "NPC / Untinkerer" },
       { id: "NPC / Baker" },
       { id: "NPC / Druggie" },
+      { id: "NPC / Knoll Mayor" },
       { id: "Misc / Purchases" },
       { id: "Misc / FriarExp" },
       { id: "Misc / MonsterBait" },
+
+      {
+        id: "Council / MacGruffin / Desert / StoneRose",
+        testValid: () => haveEffect(Effect.get("Ultrahydrated")) > 0,
+      },
+      {
+        id: "Council / MacGruffin / Desert / Explore",
+        testValid: () => haveEffect(Effect.get("Ultrahydrated")) > 0,
+      },
 
       // We might want system sweep after all! This needs to be cleaned
       { id: "Council / MacGruffin / HiddenCity / HiddenPark" },
@@ -150,7 +161,7 @@ export class QuestRegistry {
 
       // Always try to buy access to the shore, 8-9 adventures spent trying to farm stuff up?
       { id: "Council / MacGruffin / Shore" },
-      { id: "Misc / MeatCar", testValid: () => false },
+      { id: "Misc / MeatCar" },
       { id: "Misc / BugbearBakery" },
 
       // Get goblin done early so we can grab our first -combat skill
@@ -184,14 +195,6 @@ export class QuestRegistry {
 
       // Do the king cos he's lonely, also has 2k meat
       { id: "Council / Goblins / King" },
-      {
-        id: "Council / MacGruffin / Desert / StoneRose",
-        testValid: () => haveEffect(Effect.get("Ultrahydrated")) > 0,
-      },
-      {
-        id: "Council / MacGruffin / Desert / Explore",
-        testValid: () => haveEffect(Effect.get("Ultrahydrated")) > 0,
-      },
 
       // Register these here, because we want to burn their backups in delay zones
       { id: "Council / Tower / Keys / FantasyBandit" },

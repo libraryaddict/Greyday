@@ -117,12 +117,12 @@ export class GreyOutfit {
   }
 
   setNoCombat(): GreyOutfit {
-    this.minusCombatWeight = 10;
+    this.minusCombatWeight += 10;
     return this;
   }
 
   setPlusCombat(): GreyOutfit {
-    this.plusCombatWeight = 10;
+    this.plusCombatWeight += 10;
     return this;
   }
 

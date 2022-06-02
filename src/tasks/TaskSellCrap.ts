@@ -5,6 +5,24 @@ export class TaskSellCrap implements Task {
   autosells: Item[] = ["dense meat stack", "meat stack"].map((s) =>
     Item.get(s)
   );
+  junk: Item[] = [
+    "adder bladder",
+    "loose teeth",
+    "skeleton bone",
+    "bottle of whiskey",
+    "cranberries",
+    "spiked femur",
+    "batgut",
+    "bat wing",
+    "bone flute",
+    "bottle of rum",
+    "bottle of tequila",
+    "spooky stick",
+    "tequila grenade",
+    "ancient frozen dinner",
+    "accidental cider",
+    "bottle of gin",
+  ].map((s) => Item.get(s));
   autouse: Item[] = [
     "Ancient Vinyl Coin Purse",
     "Black Pension Check",
@@ -37,6 +55,14 @@ export class TaskSellCrap implements Task {
       }
 
       use(itemAmount(i), i);
+    }
+
+    for (let i of this.junk) {
+      if (itemAmount(i) <= 1) {
+        continue;
+      }
+
+      autosell(itemAmount(i) - 1, i);
     }
   }
 }

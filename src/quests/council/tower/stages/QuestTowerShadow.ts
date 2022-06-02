@@ -52,7 +52,7 @@ export class QuestTowerShadow implements QuestInfo {
     }
 
     if (status > 10) {
-      //  return QuestStatus.COMPLETED;
+      return QuestStatus.COMPLETED;
     }
 
     return QuestStatus.READY;

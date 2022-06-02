@@ -8,8 +8,11 @@ import {
   availableAmount,
   getProperty,
   toInt,
+  Monster,
 } from "kolmafia";
-import { greyAdv } from "../../../../utils/GreyLocations";
+import { GreyAdventurer } from "../../../../GreyAdventurer";
+import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
+import { GreySettings } from "../../../../utils/GreySettings";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -22,6 +25,7 @@ export class QuestL11DesertStoneRose implements QuestInfo {
   hydrated: Effect = Effect.get("Ultrahydrated");
   oasis: Location = Location.get("Oasis");
   rose: Item = Item.get("Stone Rose");
+  blur: Monster = Monster.get("Blur");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / StoneRose";
@@ -57,7 +61,10 @@ export class QuestL11DesertStoneRose implements QuestInfo {
     return {
       location: this.oasis,
       run: () => {
-        greyAdv(this.oasis);
+        let settings = new AdventureSettings();
+        settings.addNoBanish(this.blur);
+
+        greyAdv(this.oasis, null, settings);
       },
     };
   }

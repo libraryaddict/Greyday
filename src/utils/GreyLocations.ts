@@ -36,6 +36,14 @@ export class AdventureSettings {
   banishThese: Monster[];
   nonquest: boolean = false;
 
+  addBanishes(monsters: Monster[]): AdventureSettings {
+    for (let monster of monsters) {
+      this.addBanish(monster);
+    }
+
+    return this;
+  }
+
   addBanish(monster: Monster): AdventureSettings {
     if (this.dontBanishThese != null) {
       throw "Already declared banish everything but";
@@ -46,6 +54,14 @@ export class AdventureSettings {
     }
 
     this.banishThese.push(monster);
+
+    return this;
+  }
+
+  addNoBanishes(monsters: Monster[]): AdventureSettings {
+    for (let monster of monsters) {
+      this.addNoBanish(monster);
+    }
 
     return this;
   }

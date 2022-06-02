@@ -6,6 +6,7 @@ import {
   familiarWeight,
   getProperty,
   haveEffect,
+  haveFamiliar,
   haveSkill,
   Item,
   itemAmount,
@@ -16,6 +17,7 @@ import {
   print,
   printHtml,
   putCloset,
+  replace,
   setLocation,
   Skill,
   toInt,
@@ -213,9 +215,27 @@ export class GreyAdventurer {
       familiar = toRun.familiar;
     } else if (gooseReplaceable) {
       let replaceWith = this.adventureFinder.getRecommendedFamiliars();
-      replaceWith.push(Familiar.get("Jumpsuited Hound Dog"));
 
-      familiar = replaceWith[0];
+      if (toInt(getProperty("camelSpit")) < 100) {
+        replaceWith.push(Familiar.get("Melodramedary"));
+      }
+
+      for (let fam of [
+        "Pocket Professor",
+        "Robortender",
+        "Hobomonkey",
+        "Jumpsuited Hound Dog",
+      ].map((s) => Familiar.get(s))) {
+        if (familiarWeight(fam) >= 20) {
+          continue;
+        }
+
+        replaceWith.push(fam);
+      }
+
+      replaceWith.push(familiar);
+
+      familiar = replaceWith.filter((f) => haveFamiliar(f))[0];
     }
 
     let doOrb: boolean = false;
@@ -301,6 +321,8 @@ export function castNoCombatSkills() {
   ) {
     useSkill(Skill.get("Photonic Shroud"));
   }
+
+  restoreMPTo(20);
 }
 
 export function castCombatSkill() {
@@ -311,6 +333,8 @@ export function castCombatSkill() {
   ) {
     useSkill(Skill.get("Piezoelectric Honk"));
   }
+
+  restoreMPTo(20);
 }
 
 export function hasNonCombatSkillsReady(wantBoth: boolean = true): boolean {

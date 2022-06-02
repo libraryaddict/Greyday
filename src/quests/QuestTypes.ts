@@ -204,7 +204,8 @@ export type QuestNPCs =
   | "NPC / Painter"
   | "NPC / Untinkerer"
   | "NPC / Baker"
-  | "NPC / Druggie";
+  | "NPC / Druggie"
+  | "NPC / Knoll Mayor";
 export type QuestGoblinsExperiments =
   | "GoblinLabs / LabUnlock"
   | "GoblinLabs / MegUnlock";

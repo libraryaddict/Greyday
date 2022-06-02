@@ -26,6 +26,7 @@ import {
   turnsPlayed,
   visitUrl,
 } from "kolmafia";
+import { getQuestStatus } from "../quests/Quests";
 import { getLocations } from "./GreyLocations";
 import { GreySettings } from "./GreySettings";
 
@@ -109,7 +110,7 @@ export class AbsorbsProvider {
 
     let monsters = getMonsters(location);
 
-    for (let absorb of AbsorbsProvider.allAbsorbs) {
+    for (let absorb of AbsorbsProvider.loadAbsorbs()) {
       if (!monsters.includes(absorb.monster)) {
         continue;
       }
@@ -324,12 +325,14 @@ export class AbsorbsProvider {
     return AbsorbsProvider.allAbsorbs;
   }
 
-  getAbsorbedMonstersFromInstance(): Map<Monster, Reabsorbed> {
+  getAbsorbedMonstersFromInstance(
+    fresh: boolean = turnsPlayed() % 50 == 1
+  ): Map<Monster, Reabsorbed> {
     let monsters: Map<Monster, Reabsorbed> = new Map();
     let reabsorbed: Monster[] = AbsorbsProvider.getReabsorbedMonsters();
     let absorbedProp = "_monstersFoughtToday";
 
-    if (getProperty(absorbedProp) == "" || turnsPlayed() % 50 == 1) {
+    if (getProperty(absorbedProp) == "" || fresh) {
       this.getAbsorbedMonstersFromUrl().forEach((m) =>
         monsters.set(
           m,
@@ -418,6 +421,46 @@ export class AbsorbsProvider {
     }
 
     return [...map.values()].filter((a) => a != null);
+  }
+
+  printRemainingAbsorbs() {
+    let defeated = this.getAbsorbedMonstersFromInstance(true);
+    let absorbs = AbsorbsProvider.loadAbsorbs().filter(
+      (a) =>
+        a.adventures > 0 && defeated.get(a.monster) != Reabsorbed.REABSORBED
+    );
+
+    absorbs.sort((a1, a2) => a2.adventures - a1.adventures);
+
+    if (absorbs.length == 0) {
+      print("No adventures to absorb!", "blue");
+      return;
+    }
+
+    if (
+      familiarWeight(Familiar.get("Grey Goose")) >= 6 &&
+      getQuestStatus("questL13Final") > 11
+    ) {
+      print(
+        "The remaining absorbs are likely either out of reach or judged to be wasteful to acquire",
+        "red"
+      );
+    }
+
+    printHtml(
+      "<font color='blue'>Absorbs:</font> " +
+        absorbs
+          .map(
+            (a) =>
+              a.monster.name +
+              " <font color='gray'>(" +
+              a.adventures +
+              " advs x " +
+              (defeated.has(a.monster) ? "1" : "2") +
+              ")</font>"
+          )
+          .join(", ")
+    );
   }
 }
 

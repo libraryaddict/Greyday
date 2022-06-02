@@ -90,7 +90,7 @@ export class QuestL11RonProtesters implements QuestInfo {
       }
     }
 
-    let outfit = new GreyOutfit().setNoCombat().setItemDrops();
+    let outfit = new GreyOutfit().setNoCombat().setNoCombat().setItemDrops();
     outfit.addBonus("+sleaze dmg +sleaze spell dmg");
 
     for (let i of this.lyrndCostume) {

@@ -9,6 +9,7 @@ import {
   toInt,
   Skill,
 } from "kolmafia";
+import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -50,7 +51,7 @@ export class QuestL11PyramidMiddle implements QuestInfo {
     if (
       getProperty("lowerChamberUnlock") == "true" &&
       getProperty("controlRoomUnlock") == "true" &&
-      availableAmount(this.wheel) + availableAmount(this.ratchet) >= 10
+      this.haveEnough()
     ) {
       return QuestStatus.COMPLETED;
     }
@@ -68,6 +69,10 @@ export class QuestL11PyramidMiddle implements QuestInfo {
     }
 
     return QuestStatus.READY;
+  }
+
+  haveEnough(): boolean {
+    return availableAmount(this.wheel) + availableAmount(this.ratchet) >= 10;
   }
 
   run(): QuestAdventure {
@@ -90,6 +95,8 @@ export class QuestL11PyramidMiddle implements QuestInfo {
 
         if (availableAmount(this.ratTangle) > 0) {
           startMacro.if_(this.tombRat, Macro.item(this.ratTangle));
+        } else if (this.haveEnough() && DelayBurners.isDelayBurnerReady()) {
+          DelayBurners.tryReplaceCombats();
         }
 
         settings.addNoBanish(this.tombRat);

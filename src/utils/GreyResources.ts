@@ -404,6 +404,7 @@ export enum ResourceType {
   CARGO_SHORTS,
   POWERFUL_GLOVE,
   FIRE_EXTINGUSHER,
+  YELLOW_RAY,
 }
 
 export class ResourceClaim {
@@ -461,6 +462,12 @@ export class ResourceClaim {
           "No idea what the resource " + ResourceType[resourceType] + " is."
         );
     }
+  }
+}
+
+export class ResourceYRClaim extends ResourceClaim {
+  constructor(reason: string, turnsSaved: number) {
+    super(1, ResourceType.YELLOW_RAY, reason, turnsSaved);
   }
 }
 

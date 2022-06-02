@@ -5,7 +5,12 @@ import {
   print,
   getProperty,
   turnsPlayed,
+  myAdventures,
+  Item,
+  toItem,
+  toInt,
 } from "kolmafia";
+import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreySettings } from "../../../../utils/GreySettings";
 import { Macro } from "../../../../utils/MacroBuilder";
@@ -69,20 +74,31 @@ export class QuestTowerKillWitch implements QuestInfo {
         print("Should be all done", "blue");
 
         if (!GreySettings.isHardcoreMode()) {
-          let pulls: number =
-            getProperty("_roninStoragePulls").split(",").length;
+          let pulls: Item[] = getProperty("_roninStoragePulls")
+            .split(",")
+            .map((s) => toItem(toInt(s)));
 
           print(
             "Used " +
               pulls +
               " / 20 pulls. Could've done another " +
-              (20 - pulls) +
+              (20 - pulls.length) +
               " pulls..",
             "blue"
           );
+
+          print("Pulled: " + pulls.map((i) => i.name).join(", "));
         }
 
-        print("Took " + turnsPlayed() + " turns this run!", "blue");
+        print(
+          "Took " +
+            turnsPlayed() +
+            " turns this run! " +
+            myAdventures() +
+            " turns left to play with!",
+          "blue"
+        );
+        new AbsorbsProvider().printRemainingAbsorbs();
       },
     };
   }
