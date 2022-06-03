@@ -94,7 +94,10 @@ export class QuestManorBillards implements QuestInfo {
           toInt(getProperty("poolSkill")) + numericModifier("pool skill") + 10;
 
         try {
-          props.setChoice(875, poolSkill >= 14 ? 1 : 2); //Fight or train
+          props.setChoice(
+            875,
+            poolSkill >= 14 || haveEffect(this.chalkEffect) == 0 ? 1 : 2
+          ); //Fight or train
           greyAdv(this.billards, outfit);
         } finally {
           props.resetAll();

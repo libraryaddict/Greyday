@@ -109,6 +109,7 @@ export class QuestRegistry {
       { id: "Misc / Purchases" },
       { id: "Misc / FriarExp" },
       { id: "Misc / MonsterBait" },
+      { id: "Misc / Moonsign" },
 
       {
         id: "Council / MacGruffin / Desert / StoneRose",
@@ -196,6 +197,12 @@ export class QuestRegistry {
       // Do the king cos he's lonely, also has 2k meat
       { id: "Council / Goblins / King" },
 
+      // Register this here cos I'm lazy
+      {
+        id: "Council / War / Filthworms",
+        testValid: () => haveEffect(Effect.get("Everything Looks Yellow")) == 0,
+      },
+
       // Register these here, because we want to burn their backups in delay zones
       { id: "Council / Tower / Keys / FantasyBandit" },
       { id: "Council / War / Lobsters" },
@@ -227,6 +234,8 @@ export class QuestRegistry {
       // We also prioritize it for double nanovision
       { id: "Council / MacGruffin / HiddenCity / BookOfMatches" },
       { id: "Council / MacGruffin / HiddenCity / Bowling" },
+
+      { id: "Council / War / Gremlins" },
 
       // Do library after we should have system sweep stuff
       { id: "Manor / Library" },
@@ -269,6 +278,7 @@ export class QuestRegistry {
       { id: "Council / Tower / Keys / HoleInSkyUnlock" },
       // Oh wow, hole in sky unlocked but still no boss. Lets just do it manually.
       { id: "Council / MacGruffin / Shen / Giants" },
+      { id: "Council / Tower / Keys / Star" },
 
       { id: "Council / MacGruffin / Ron / Crowd" },
       { id: "Council / MacGruffin / Ron / Zepp" },
@@ -349,9 +359,11 @@ export class QuestRegistry {
       { id: "Council / Peaks / Lord" },
 
       // OMG who cares about your stupid war
-      { id: "Council / War / Gremlins" },
+      {
+        id: "Council / War / Filthworms",
+        testValid: () => haveEffect(Effect.get("Everything Looks Yellow")) > 0,
+      },
       { id: "Council / War / Battlefield" },
-      { id: "Council / War / Filthworms" },
       { id: "Council / War / Boss" },
 
       // Alright, this run is just about over kids. Lets finish it.
@@ -362,7 +374,6 @@ export class QuestRegistry {
       { id: "Council / Tower / Keys / ZapKeys" },
       { id: "Council / Tower / Keys / DailyDungeon" },
       { id: "Council / Tower / Keys / Digital" },
-      { id: "Council / Tower / Keys / Star" },
       { id: "Council / Tower / Keys / Skeleton" },
 
       { id: "Council / War / Nuns" },

@@ -18,7 +18,12 @@ import {
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv, AdventureSettings } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { GreyPulls } from "../../../utils/GreyResources";
+import {
+  GreyPulls,
+  ResourceClaim,
+  ResourcePullClaim,
+  ResourceType,
+} from "../../../utils/GreyResources";
 import { GreySettings } from "../../../utils/GreySettings";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestInfo, QuestStatus, QuestAdventure } from "../../Quests";
@@ -71,6 +76,26 @@ export class QuestL12GrabWarOutfit implements QuestInfo {
     }
 
     return QuestStatus.READY;
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    if (GreySettings.isHardcoreMode()) {
+      return [
+        new ResourceClaim(ResourceType.CARGO_SHORTS, 1, "YR Frat Boy", 16),
+      ];
+    }
+
+    let claim: ResourceClaim[] = [];
+
+    for (let i of outfitPieces("Frat Warrior Fatigues")) {
+      if (availableAmount(i) > 0) {
+        continue;
+      }
+
+      claim.push(new ResourcePullClaim(i, "Frat Outfit", 5));
+    }
+
+    return claim;
   }
 
   run(): QuestAdventure {

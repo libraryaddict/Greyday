@@ -1,6 +1,12 @@
 import { availableAmount, Item, Location } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
-import { GreyClovers, GreyPulls } from "../../../utils/GreyResources";
+import {
+  GreyClovers,
+  GreyPulls,
+  ResourceClaim,
+  ResourcePullClaim,
+  ResourceType,
+} from "../../../utils/GreyResources";
 import { GreySettings } from "../../../utils/GreySettings";
 import { QuestStatus, QuestAdventure } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
@@ -20,7 +26,7 @@ export class QuestL8MountainOreClover extends QuestL8MountainOre {
     }
 
     if (availableAmount(this.clover) < 2) {
-      return QuestStatus.COMPLETED;
+      return QuestStatus.NOT_READY;
     }
 
     if (this.getStatus() < MountainStatus.TRAPPER_DEMANDS) {
@@ -53,5 +59,12 @@ export class QuestL8MountainOreClover extends QuestL8MountainOre {
 
   getLocations(): Location[] {
     return [];
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return [
+      new ResourceClaim(ResourceType.CLOVER, 2, "Clover Ores", 20),
+      new ResourcePullClaim(Item.get("asbestos ore"), "Pull Ice Peak Ore", 10),
+    ];
   }
 }

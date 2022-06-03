@@ -80,7 +80,7 @@ export class QuestTowerKillWitch implements QuestInfo {
 
           print(
             "Used " +
-              pulls +
+              pulls.length +
               " / 20 pulls. Could've done another " +
               (20 - pulls.length) +
               " pulls..",

@@ -59,3 +59,10 @@
 // YR the hatchlings every step
 // Look at wishing in stuff
 // Use crystal ball to fish for non-absorbs monsters that we want and where spending turns in the zone benifits no one. Such as blur, the +meat plant. We can switch to other zones that want progression and cost us nothing in resources to spend away
+
+// Resource Claims.
+// Have every class expose the resources they claim to deserve to accomplish a task?
+// For tasks that have different ways to accomplish them, maybe add a way to group each class. Then define "Must pick X of these" for a group.
+// So if we're short on 2 keys, we have 4 key sources all in a group. We can pick two of those key sources based on what resources they claim to need.
+// Which means that each class should always claim the resources they need to do their task. If there's a slightly different way to do a task, but with different resources..
+// We should make a new class. Each class is limited to the resources they claim, or less. Never more.

@@ -96,6 +96,10 @@ export class QuestManor implements QuestInfo {
     return QuestStatus.READY;
   }
 
+  mustBeDone(): boolean {
+    return true;
+  }
+
   run(): QuestAdventure {
     if (getQuestStatus("questM20Necklace") < 100) {
       return this.doUpstairs();
@@ -128,6 +132,10 @@ export class QuestManor implements QuestInfo {
         visitUrl("place.php?whichplace=manor2&action=manor2_ladys");
       },
     };
+  }
+
+  needAdventures(): number {
+    return 0;
   }
 }
 

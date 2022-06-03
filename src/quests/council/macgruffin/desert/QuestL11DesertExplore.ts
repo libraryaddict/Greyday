@@ -14,6 +14,9 @@ import {
   visitUrl,
   Monster,
   haveFamiliar,
+  myFamiliar,
+  equippedAmount,
+  maximize,
 } from "kolmafia";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -35,6 +38,8 @@ export class QuestL11DesertExplore implements QuestInfo {
   knife: Item = Item.get("survival knife");
   toAbsorb: Monster[];
   camel: Familiar = Familiar.get("Melodramedary");
+  ball: Item = Item.get("miniature crystal ball");
+  page: Item = Item.get("worm-riding manual page");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / Explore";
@@ -123,6 +128,10 @@ export class QuestL11DesertExplore implements QuestInfo {
           Macro.attack().repeat()
         ).step(greyKillingBlow(outfit));
 
+        if (myFamiliar() != this.camel && equippedAmount(this.ball) > 0) {
+          maximize("familiar -equip " + this.ball.name, false);
+        }
+
         let explored = this.getExplored();
 
         greyAdv(
@@ -134,6 +143,10 @@ export class QuestL11DesertExplore implements QuestInfo {
         if (explored == this.getExplored()) {
           print("Checking explored..", "blue");
           visitUrl("place.php?whichplace=desertbeach", false);
+        }
+
+        if ((toInt(getProperty("gnasirProgress")) & 8) != 8) {
+          print("Worm Pages: " + availableAmount(this.page) + " / 15", "blue");
         }
       },
     };

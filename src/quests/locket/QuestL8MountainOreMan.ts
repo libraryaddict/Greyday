@@ -49,7 +49,16 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
   );
 
   getResourceClaims(): ResourceClaim[] {
-    return [this.resourceClaim];
+    return [
+      this.resourceClaim,
+      new ResourceClaim(ResourceType.YELLOW_RAY, 1, "YR Mountain Man", 10),
+      new ResourceClaim(
+        ResourceType.COMBAT_LOCKET,
+        1,
+        "Locket Mountain Man",
+        10
+      ),
+    ];
   }
 
   getId(): QuestType {

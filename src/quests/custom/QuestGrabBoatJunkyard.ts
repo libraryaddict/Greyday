@@ -63,6 +63,10 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (myLevel() < 11) {
+      return QuestStatus.FASTER_LATER;
+    }
+
     return QuestStatus.READY;
   }
 

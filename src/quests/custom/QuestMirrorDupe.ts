@@ -24,7 +24,11 @@ import {
   print,
 } from "kolmafia";
 import { greyAdv } from "../../utils/GreyLocations";
-import { GreyPulls } from "../../utils/GreyResources";
+import {
+  GreyPulls,
+  ResourceClaim,
+  ResourceType,
+} from "../../utils/GreyResources";
 import { GreySettings } from "../../utils/GreySettings";
 import { canCombatLocket } from "../../utils/GreyUtils";
 import {
@@ -49,6 +53,10 @@ export class QuestMirrorDupe
 
   level(): number {
     return 7;
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return [new ResourceClaim(ResourceType.CLOVER, 3, "Dupe Zappable Key")];
   }
 
   status(): QuestStatus {

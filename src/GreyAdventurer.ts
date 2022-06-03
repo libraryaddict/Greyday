@@ -323,6 +323,10 @@ export function castNoCombatSkills() {
   }
 
   restoreMPTo(20);
+
+  if (myMp() <= 20) {
+    throw "Expected at least 20 mp";
+  }
 }
 
 export function castCombatSkill() {
@@ -335,6 +339,9 @@ export function castCombatSkill() {
   }
 
   restoreMPTo(20);
+  if (myMp() <= 20) {
+    throw "Expected at least 20 mp";
+  }
 }
 
 export function hasNonCombatSkillsReady(wantBoth: boolean = true): boolean {

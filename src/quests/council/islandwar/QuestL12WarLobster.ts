@@ -16,6 +16,7 @@ import {
 import { hasCombatSkillReady } from "../../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
@@ -29,6 +30,17 @@ export class QuestL12Lobster implements QuestInfo {
 
   level(): number {
     return 12;
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return [
+      new ResourceClaim(
+        ResourceType.BACKUP_CAMERA,
+        4,
+        "Backup Lobsterfrogman",
+        5 * 4
+      ),
+    ];
   }
 
   status(): QuestStatus {

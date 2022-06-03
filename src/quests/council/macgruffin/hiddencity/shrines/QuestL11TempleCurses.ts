@@ -7,6 +7,7 @@ import {
   Location,
   Monster,
   myLevel,
+  toInt,
 } from "kolmafia";
 import { PropertyManager } from "../../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
@@ -33,7 +34,7 @@ export class QuestL11Curses implements QuestInfo {
   }
 
   mustBeDone(): boolean {
-    if (haveEffect(this.curse3) > 10) {
+    if (haveEffect(this.curse3) > 9) {
       return false;
     }
 
@@ -57,6 +58,10 @@ export class QuestL11Curses implements QuestInfo {
     }
 
     if (status == "unstarted") {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (toInt(getProperty("hiddenBowlingAlleyProgress")) <= 1) {
       return QuestStatus.NOT_READY;
     }
 

@@ -6,6 +6,7 @@ import {
   Item,
   visitUrl,
 } from "kolmafia";
+import { ResourceClaim } from "../../../utils/GreyResources";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -45,4 +46,6 @@ export abstract class QuestL8MountainOre implements QuestInfo {
   getStatus(): MountainStatus {
     return getQuestStatus("questL08Trapper");
   }
+
+  abstract getResourceClaims(): ResourceClaim[];
 }

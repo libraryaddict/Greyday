@@ -10,12 +10,19 @@ import {
   toInt,
   use,
   storageAmount,
+  Skill,
+  gnomadsAvailable,
+  haveSkill,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
-import { GreyPulls } from "../../../../utils/GreyResources";
+import {
+  GreyPulls,
+  ResourceClaim,
+  ResourcePullClaim,
+} from "../../../../utils/GreyResources";
 import { GreySettings } from "../../../../utils/GreySettings";
 import { Macro } from "../../../../utils/MacroBuilder";
 import {
@@ -40,6 +47,7 @@ export class QuestL11RonProtesters implements QuestInfo {
   flaming: Item = Item.get("Flamin' Whatshisname");
   musky: Effect = Effect.get("Musky");
   toAbsorb: Monster[];
+  torsoAwareness: Skill = Skill.get("Torso Awareness");
   // TODO Once we've got the absorbs, try replace combats if it won't hurt our NCs
 
   isReady(): boolean {
@@ -48,6 +56,26 @@ export class QuestL11RonProtesters implements QuestInfo {
       getProperty("questL11Ron") == "step1" ||
       toInt(getProperty("zeppelinProtestors")) <= 80
     );
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    let claims: ResourceClaim[] = [];
+
+    for (let i of this.lyrndCostume) {
+      if (availableAmount(i) > 0) {
+        continue;
+      }
+
+      claims.push(new ResourcePullClaim(i, "Lynyrdskin Outfit", 20));
+    }
+
+    if (availableAmount(this.deck) == 0) {
+      claims.push(
+        new ResourcePullClaim(this.deck, "Sleaze for Ron Protestors", 20)
+      );
+    }
+
+    return claims;
   }
 
   getId(): QuestType {
@@ -66,6 +94,10 @@ export class QuestL11RonProtesters implements QuestInfo {
     }
 
     if (status < 0) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (gnomadsAvailable() && !haveSkill(this.torsoAwareness)) {
       return QuestStatus.NOT_READY;
     }
 

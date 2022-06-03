@@ -6,7 +6,11 @@ import {
   availableAmount,
   print,
 } from "kolmafia";
-import { GreyPulls } from "../../utils/GreyResources";
+import {
+  GreyPulls,
+  ResourceClaim,
+  ResourcePullClaim,
+} from "../../utils/GreyResources";
 import { GreySettings } from "../../utils/GreySettings";
 import {
   getQuestStatus,
@@ -21,12 +25,21 @@ export class QuestPullZappableKey
   extends QuestKeyStuffAbstract
   implements QuestInfo
 {
+  pullResource: ResourceClaim = new ResourcePullClaim(
+    GreyPulls.getPullableKey(),
+    "Key for Tower"
+  );
+
   getId(): QuestType {
     return "Council / Tower / Keys / PullZappableKey";
   }
 
   level(): number {
     return 8;
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return [this.pullResource];
   }
 
   status(): QuestStatus {

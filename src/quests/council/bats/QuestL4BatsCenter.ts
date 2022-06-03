@@ -72,13 +72,13 @@ export class QuestL4BatsCenter implements QuestInfo {
       outfit: outfit,
       location: this.loc,
       run: () => {
-        greyAdv(
-          this.loc,
-          outfit,
-          new AdventureSettings().setStartOfFightMacro(
-            new Macro().trySkill(Skill.get("Fire Extinguisher: Zone Specific"))
-          )
+        let settings = new AdventureSettings();
+
+        settings.setStartOfFightMacro(
+          new Macro().trySkill(Skill.get("Fire Extinguisher: Zone Specific"))
         );
+
+        greyAdv(this.loc, outfit, settings);
         this.doSonars();
       },
     };

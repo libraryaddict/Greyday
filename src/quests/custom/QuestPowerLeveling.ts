@@ -95,7 +95,7 @@ export class QuestPowerLeveling implements QuestInfo {
   }
 
   level(): number {
-    return 0;
+    return 1;
   }
 
   status(): QuestStatus {

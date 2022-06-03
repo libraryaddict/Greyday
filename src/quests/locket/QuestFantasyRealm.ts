@@ -15,6 +15,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
+import { ResourceClaim, ResourceType } from "../../utils/GreyResources";
 import { canCombatLocket } from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
 import {
@@ -29,6 +30,17 @@ export class QuestLocketFantasyRealm implements QuestInfo {
   fought: string = "_foughtFantasyRealm";
   monster: Monster = Monster.get("Fantasy Bandit");
   camera: Item = Item.get("Backup Camera");
+
+  getResourceClaims(): ResourceClaim[] {
+    return [
+      new ResourceClaim(ResourceType.BACKUP_CAMERA, 4, "Backup Fantasy Realm"),
+      new ResourceClaim(
+        ResourceType.COMBAT_LOCKET,
+        1,
+        "Locket Fantasyrealm Bandit"
+      ),
+    ];
+  }
 
   getFoughtToday(): number {
     let setting = getProperty(this.fought);

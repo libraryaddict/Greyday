@@ -21,7 +21,11 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { GreyPulls } from "../../../utils/GreyResources";
+import {
+  GreyPulls,
+  ResourceClaim,
+  ResourcePullClaim,
+} from "../../../utils/GreyResources";
 import { GreySettings } from "../../../utils/GreySettings";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
@@ -46,6 +50,10 @@ export class Quest12WarNuns implements QuestInfo {
         .map((s) => toItem(toInt(s)))
         .includes(this.hotness)
     );
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return [new ResourcePullClaim(this.hotness, "+Meat Nuns", 10)];
   }
 
   getLocations(): Location[] {

@@ -18,6 +18,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
+import { ResourceClaim, ResourceYRClaim } from "../../utils/GreyResources";
 import { GreySettings } from "../../utils/GreySettings";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
@@ -40,6 +41,10 @@ export class QuestGrabHippyOutfit implements QuestInfo {
 
   level(): number {
     return 5;
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return [new ResourceYRClaim("Hippy Outfit", 10)];
   }
 
   hasBoat(): boolean {

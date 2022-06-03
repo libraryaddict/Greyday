@@ -16,6 +16,9 @@ import {
   effectModifier,
   cliExecute,
   myLevel,
+  Effect,
+  getFuel,
+  getWorkshed,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -35,6 +38,8 @@ export class ABooHandler implements QuestInfo {
   loc: Location = Location.get("A-Boo Peak");
   damageLevels: number[] = [13, 25, 50, 125, 250];
   canOfPaint: Item = Item.get("Can of black paint");
+  asdonMartin: Item = Item.get("Asdon Martin keyfob");
+  driveSafe: Effect = Effect.get("Driving Safely");
 
   level(): number {
     return 9;
@@ -68,6 +73,14 @@ export class ABooHandler implements QuestInfo {
         if (haveEffect(effectModifier(this.canOfPaint, "Effect")) == 0) {
           cliExecute("acquire 1 " + this.canOfPaint.name);
           use(this.canOfPaint);
+        }
+
+        if (
+          getWorkshed() == this.asdonMartin &&
+          haveEffect(this.driveSafe) == 0 &&
+          getFuel() >= 37
+        ) {
+          cliExecute("asdonmartin drive safely");
         }
 
         try {

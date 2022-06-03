@@ -44,14 +44,6 @@ export class QuestL12StartWar implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (!this.hasOutfit()) {
-      if (haveEffect(Effect.get("Everything Looks Yellow")) > 0) {
-        return QuestStatus.NOT_READY;
-      }
-
-      return QuestStatus.READY;
-    }
-
     if (!hasNonCombatSkillsReady()) {
       return QuestStatus.FASTER_LATER;
     }

@@ -14,6 +14,14 @@ import {
   haveSkill,
   myMp,
   Skill,
+  storageAmount,
+  myMeat,
+  Effect,
+  effectModifier,
+  haveEffect,
+  cliExecute,
+  getWorkshed,
+  getFuel,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
@@ -27,13 +35,33 @@ import {
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { QuestCargoShorts } from "./QuestSmutOrcsCargoShorts";
+import { ResourceClaim, ResourcePullClaim } from "../../../utils/GreyResources";
 
 export class SmutOrcs implements QuestInfo {
   loc: Location = Location.get("The Smut Orc Logging Camp");
   shorts: QuestCargoShorts = new QuestCargoShorts();
+  hoaReg: Item = Item.get("HOA regulation book");
+  spaceTrip: Item = Item.get("Space Trip safety headphones");
+  canOfPaint: Item = Item.get("Can of black paint");
+  paintRes: Effect = effectModifier(this.canOfPaint, "Effect");
+  asdonMartin: Item = Item.get("Asdon Martin keyfob");
+  driveSafe: Effect = Effect.get("Driving Safely");
 
   level(): number {
     return 7;
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    if (availableAmount(this.hoaReg) + storageAmount(this.hoaReg) > 0) {
+      return [new ResourcePullClaim(this.hoaReg, "-ML for Smut Orcs", 25)];
+    } else if (
+      availableAmount(this.spaceTrip) + availableAmount(this.hoaReg) >
+      0
+    ) {
+      return [new ResourcePullClaim(this.spaceTrip, "-ML for Smut Orcs", 25)];
+    }
+
+    return [];
   }
 
   status(): QuestStatus {
@@ -48,6 +76,10 @@ export class SmutOrcs implements QuestInfo {
     }
 
     if (getProperty("questL11Shen") != "finished") {
+      return QuestStatus.FASTER_LATER;
+    }
+
+    if (this.isNCTime() && myMeat() <= 1000) {
       return QuestStatus.FASTER_LATER;
     }
 
@@ -155,7 +187,41 @@ export class SmutOrcs implements QuestInfo {
       location: null,
       run: () => {
         let props = new PropertyManager();
-        let best = this.doBestBlechOutfit();
+        let outfits = this.getBestBlechOutfit();
+
+        if (outfits[0][2] < 14) {
+          let mox = outfits.find((o) => o[0] == 3);
+          let extraRes =
+            (haveEffect(this.paintRes) == 0 ? 1 : 0) +
+            (getWorkshed() == this.asdonMartin &&
+            haveEffect(this.driveSafe) == 0 &&
+            getFuel() >= 37
+              ? 1
+              : 0);
+
+          if (
+            extraRes > 0 &&
+            (mox == outfits[0] || mox[2] + extraRes > outfits[0][2])
+          ) {
+            if (myMeat() >= 1000 && haveEffect(this.paintRes) == 0) {
+              cliExecute("retrieve " + this.canOfPaint);
+              use(this.canOfPaint);
+            }
+
+            if (
+              getWorkshed() == this.asdonMartin &&
+              haveEffect(this.driveSafe) == 0 &&
+              getFuel() >= 37
+            ) {
+              cliExecute("asdonmartin drive safely");
+            }
+
+            outfits = this.getBestBlechOutfit();
+          }
+        }
+
+        let best = outfits[0];
+
         maximize(best[1], false);
 
         try {
@@ -168,6 +234,8 @@ export class SmutOrcs implements QuestInfo {
       },
     };
   }
+
+  tryExtraRes() {}
 
   isNCTime(): boolean {
     let progress = getProperty("smutOrcNoncombatProgress");
@@ -234,14 +302,15 @@ export class SmutOrcs implements QuestInfo {
     return score;
   }
 
-  doBestBlechOutfit(): [number, string] {
+  getBestBlechOutfit(): [number, string, number][] {
     // Stolen from autoscend
     // floor(sqrt((mus+flat_weapon_damage)/15*(1+percent_weapon_damage/100)))
-    let mustry = "100muscle,100weapon damage,1000weapon damage percent";
-    let mystry = "100mysticality,100spell damage,1000 spell damage percent";
-    let moxtry = "100moxie,1000sleaze resistance";
+    let musMaximizer = "100muscle,100weapon damage,1000weapon damage percent";
+    let mysMaximizer =
+      "100mysticality,100spell damage,1000 spell damage percent";
+    let moxMaximizer = "100moxie,1000sleaze resistance";
 
-    this.simMax(mustry);
+    this.simMax(musMaximizer);
     let musmus = numericModifier("Generated:_spec", "Buffed Muscle");
     let musflat = numericModifier("Generated:_spec", "Weapon Damage");
     let musperc = numericModifier("Generated:_spec", "Weapon Damage Percent");
@@ -249,7 +318,7 @@ export class SmutOrcs implements QuestInfo {
       Math.sqrt(((musmus + musflat) / 15) * (1 + musperc / 100))
     );
 
-    this.simMax(mystry);
+    this.simMax(mysMaximizer);
     let mysmys = numericModifier("Generated:_spec", "Buffed Mysticality");
     let mysflat = numericModifier("Generated:_spec", "Spell Damage");
     let mysperc = numericModifier("Generated:_spec", "Spell Damage Percent");
@@ -257,7 +326,7 @@ export class SmutOrcs implements QuestInfo {
       Math.sqrt(((mysmys + mysflat) / 15) * (1 + mysperc / 100))
     );
 
-    this.simMax(moxtry);
+    this.simMax(moxMaximizer);
     let moxmox = numericModifier("Generated:_spec", "Buffed Moxie");
     let moxres = numericModifier("Generated:_spec", "Sleaze Resistance");
     let moxScore = Math.floor(Math.sqrt((moxmox / 30) * (1 + moxres * 0.69)));
@@ -266,14 +335,10 @@ export class SmutOrcs implements QuestInfo {
     print("Myst Score: " + mystScore, "blue");
     print("Moxie Score: " + moxScore, "blue");
 
-    if (muscleScore >= moxScore && muscleScore >= mystScore) {
-      return [1, mustry];
-    }
+    let mus: [number, string, number] = [1, musMaximizer, muscleScore];
+    let mys: [number, string, number] = [2, mysMaximizer, mystScore];
+    let mox: [number, string, number] = [3, moxMaximizer, moxScore];
 
-    if (mystScore >= muscleScore && mystScore >= moxScore) {
-      return [2, mystry];
-    }
-
-    return [3, moxtry];
+    return [mus, mys, mox].sort((m1, m2) => m2[2] - m1[2]);
   }
 }

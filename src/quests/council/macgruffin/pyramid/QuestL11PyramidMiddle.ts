@@ -30,6 +30,7 @@ export class QuestL11PyramidMiddle implements QuestInfo {
   ratchet: Item = Item.get("Tomb Ratchet");
   book: Item = Item.get("Familiar scrapbook");
   servant: Monster = Monster.get("Tomb Servant");
+  toAbsorb: Monster[];
 
   getId(): QuestType {
     return "Council / MacGruffin / Pyramid / Middle";
@@ -60,12 +61,14 @@ export class QuestL11PyramidMiddle implements QuestInfo {
       return QuestStatus.FASTER_LATER;
     }
 
-    if (
-      availableAmount(this.book) > 0 &&
-      !isBanished(this.servant) &&
-      toInt(getProperty("scrapbookCharges")) < 100
-    ) {
-      return QuestStatus.FASTER_LATER;
+    if (this.toAbsorb.length == 0 && this.haveEnough()) {
+      if (DelayBurners.isDelayBurnerReady()) {
+        return QuestStatus.READY;
+      }
+
+      if (DelayBurners.isDelayBurnerFeasible()) {
+        return QuestStatus.FASTER_LATER;
+      }
     }
 
     return QuestStatus.READY;
@@ -95,8 +98,14 @@ export class QuestL11PyramidMiddle implements QuestInfo {
 
         if (availableAmount(this.ratTangle) > 0) {
           startMacro.if_(this.tombRat, Macro.item(this.ratTangle));
-        } else if (this.haveEnough() && DelayBurners.isDelayBurnerReady()) {
-          DelayBurners.tryReplaceCombats();
+        } else if (this.haveEnough() && this.toAbsorb.length == 0) {
+          let delay = DelayBurners.getReadyDelayBurner();
+
+          if (delay != null) {
+            delay.doFightSetup();
+          } else {
+            DelayBurners.tryReplaceCombats();
+          }
         }
 
         settings.addNoBanish(this.tombRat);

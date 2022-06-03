@@ -5,6 +5,8 @@ import {
   closetAmount,
   council,
   Effect,
+  Familiar,
+  familiarWeight,
   getProperty,
   haveEffect,
   Item,
@@ -33,6 +35,8 @@ export class QuestL11Bowling implements QuestInfo {
   loc: Location = Location.get("The Hidden Bowling Alley");
   ball: Item = Item.get("Bowling Ball");
   cosmicBall: Item = Item.get("Cosmic Bowling Ball");
+  goose: Familiar = Familiar.get("Grey Goose");
+  toAbsorb: Monster[];
 
   level(): number {
     return 11;
@@ -62,6 +66,10 @@ export class QuestL11Bowling implements QuestInfo {
   }
 
   mustBeDone(): boolean {
+    if (this.toAbsorb.length > 0 && familiarWeight(this.goose) < 6) {
+      return false;
+    }
+
     if (!this.ownBall()) {
       return false;
     }

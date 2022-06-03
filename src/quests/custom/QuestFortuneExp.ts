@@ -21,7 +21,7 @@ export class QuestFortuneExp implements QuestInfo {
   }
 
   level(): number {
-    return 5;
+    return 7;
   }
 
   status(): QuestStatus {

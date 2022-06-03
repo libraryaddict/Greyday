@@ -11,7 +11,11 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
-import { GreyPulls } from "../../../../utils/GreyResources";
+import {
+  GreyPulls,
+  ResourceClaim,
+  ResourcePullClaim,
+} from "../../../../utils/GreyResources";
 import { GreySettings } from "../../../../utils/GreySettings";
 import {
   getQuestStatus,
@@ -35,13 +39,23 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
     return 11;
   }
 
-  status(): QuestStatus {
-    if (getQuestStatus("questL11Worship") < 3) {
-      return QuestStatus.NOT_READY;
-    }
+  getResourceClaims(): ResourceClaim[] {
+    return [
+      new ResourcePullClaim(
+        this.book,
+        "Book of Matches to unlock Bowling Bar",
+        5
+      ),
+    ];
+  }
 
+  status(): QuestStatus {
     if (this.barUnlocked()) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (getQuestStatus("questL11Worship") < 3) {
+      return QuestStatus.NOT_READY;
     }
 
     if (availableAmount(this.book) > 0) {

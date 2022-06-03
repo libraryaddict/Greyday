@@ -1,4 +1,3 @@
-import { canAdv } from "canadv.ash";
 import {
   Monster,
   Familiar,
@@ -15,6 +14,7 @@ import {
   printHtml,
   haveEffect,
   Effect,
+  toInt,
 } from "kolmafia";
 import {
   hasCombatSkillActive,
@@ -31,6 +31,7 @@ import { GreySettings } from "./utils/GreySettings";
 import { currentPredictions, doColor } from "./utils/GreyUtils";
 import { QuestRegistry } from "./quests/QuestRegistry";
 import { ResourceClaim, ResourceType } from "./utils/GreyResources";
+import { canAdv } from "canadv.ash";
 
 export interface FoundAdventure {
   quest?: QuestInfo;
@@ -59,14 +60,14 @@ export class AdventureFinder {
   }
 
   noteResourceClaims() {
-    for (let resourceType of Object.keys(ResourceType)) {
-      let id = ResourceType[resourceType];
-
-      print(resourceType);
+    for (let resourceType of Object.keys(ResourceType)
+      .filter((k) => k.length == 1)
+      .map((k) => toInt(k))) {
+      print("Now doing resource " + ResourceType[resourceType], "blue");
       let totalDesired = 0;
 
       for (let claim of this.resources) {
-        if (claim.resource != id) {
+        if (claim.resource != resourceType) {
           continue;
         }
 
@@ -81,15 +82,23 @@ export class AdventureFinder {
         totalDesired += claim.amountDesired;
       }
 
-      if (totalDesired > ResourceClaim.getResourcesLeft(id)) {
+      if (totalDesired > ResourceClaim.getResourcesLeft(resourceType)) {
         print(
           "We want to use " +
             totalDesired +
             " but we only have " +
-            ResourceClaim.getResourcesLeft(id) +
+            ResourceClaim.getResourcesLeft(resourceType) +
             " left on " +
-            resourceType,
+            ResourceType[resourceType],
           "red"
+        );
+      } else {
+        print(
+          "We want to use " +
+            totalDesired +
+            " / " +
+            ResourceClaim.getResourcesLeft(resourceType),
+          "gray"
         );
       }
     }

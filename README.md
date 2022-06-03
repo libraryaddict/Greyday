@@ -26,13 +26,14 @@ svn checkout https://github.com/libraryaddict/KolLocket/branches/release/
 **Moon Signs**
 
 You can pick whatever moon sign you like, all the areas should be supported.
-Though I personally pick gnomes so that the script will pick up Torso Awareness.
-Does it help? Probably not, shirts kinda suck.
 
 If you are low IOTM, then picking Marmot may be the best idea for the +1 res. This is mainly helpful for Ice Peak, Haunted Kitchen, A-Boo Peak and a few other tests.
 If you have low progression in this path, picking Vole is a decent idea for the extra MP and HP.
 
-I myself pick Blender, for the extra 5 adventures when drinking booze. It only takes effect when I choose a normal class however.
+If you have the rune moon spoon, then you should pick up a knoll moon sign, and set the property `greyTuneMoonSpoon` to another moon sign. I myself recommend a gnome sign.
+
+So I ascend with the moon sign `Vole` for the 20% combat initiative, and extra 20 MP/HP. As well as knoll access.
+Then I set `greyTuneMoonSpoon` to `blender` so that when I break the prism, I get 5 adventures from drinking. As well as unlocking Torso Awareness and other gnome related skills.
 
 **Workshed**
 

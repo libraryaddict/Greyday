@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  cliExecute,
   Effect,
   effectModifier,
   getProperty,
@@ -9,6 +10,7 @@ import {
   itemAmount,
   Location,
   Monster,
+  myMeat,
   Skill,
   toInt,
   toMonster,
@@ -17,39 +19,72 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
 export class QuestL12Worms implements QuestInfo {
   nanovision: Skill = Skill.get("Double Nanovision");
+  worms: WormProgress[] = [];
+  heart: Item = Item.get("heart of the filthworm queen");
+  effect: Effect = Effect.get("Everything Looks Yellow");
+  rocket: Item = Item.get("Yellow Rocket");
+
+  constructor() {
+    this.worms.push(
+      new WormProgress(
+        Item.get("filthworm royal guard scent gland"),
+        Location.get("The Queen's Chamber")
+      )
+    );
+    this.worms.push(
+      new WormProgress(
+        Item.get("filthworm drone scent gland"),
+        Location.get("The Royal Guard Chamber")
+      )
+    );
+    this.worms.push(
+      new WormProgress(
+        Item.get("Filthworm hatchling scent gland"),
+        Location.get("The Feeding Chamber")
+      )
+    );
+    this.worms.push(
+      new WormProgress(null, Location.get("The Hatching Chamber"))
+    );
+  }
 
   getId(): QuestType {
     return "Council / War / Filthworms";
   }
 
-  effects: [Item, Location][] = [
-    [
-      Item.get("filthworm royal guard scent gland"),
-      Location.get("The Queen's Chamber"),
-    ],
-    [
-      Item.get("filthworm drone scent gland"),
-      Location.get("The Royal Guard Chamber"),
-    ],
-    [
-      Item.get("Filthworm hatchling scent gland"),
-      Location.get("The Feeding Chamber"),
-    ],
-    [null, Location.get("The Hatching Chamber")],
-  ];
-
   getLocations(): Location[] {
-    return this.effects.map((e) => e[1]);
+    return this.worms.map((e) => e.location);
   }
 
   level(): number {
     return 12;
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    let yrs: number = 0;
+
+    for (let worm of this.worms) {
+      if (worm.isDoable()) {
+        break;
+      }
+
+      yrs++;
+    }
+
+    if (yrs == 0) {
+      return [];
+    }
+
+    return [
+      new ResourceClaim(ResourceType.YELLOW_RAY, yrs, "Filthworms YR", yrs * 5),
+    ];
   }
 
   status(): QuestStatus {
@@ -57,26 +92,49 @@ export class QuestL12Worms implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    // If we can't access this place yet
+    if (getProperty("warProgress") != "started") {
+      return QuestStatus.NOT_READY;
+    }
+
+    // If we can't turn this in
     if (
-      getProperty("warProgress") != "started" ||
-      toInt(getProperty("hippiesDefeated")) < 64
+      toInt(getProperty("hippiesDefeated")) < 64 &&
+      availableAmount(this.heart) > 0
     ) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (this.isKillingQueen()) {
+      return QuestStatus.READY;
+    }
+
+    // If we're going to YR
+    if (haveEffect(this.effect) == 0) {
+      // If we can't afford to YR
+      if (myMeat() < 500) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.READY;
     }
 
     if (!haveSkill(this.nanovision)) {
       return QuestStatus.NOT_READY;
     }
 
-    return QuestStatus.READY;
+    return QuestStatus.FASTER_LATER;
   }
 
-  outfitNeeded(): boolean {
-    return itemAmount(Item.get("heart of the filthworm queen")) > 0;
+  isKillingQueen(): boolean {
+    return (
+      itemAmount(Item.get("filthworm royal guard scent gland")) > 0 ||
+      haveEffect(Effect.get("Filthworm Guard Stench")) > 0
+    );
   }
 
   run(): QuestAdventure {
-    if (itemAmount(Item.get("heart of the filthworm queen")) > 0) {
+    if (itemAmount(this.heart) > 0) {
       let outfit = new GreyOutfit();
       outfit.addItem(Item.get("Beer Helmet"));
       outfit.addItem(Item.get("distressed denim pants"));
@@ -95,81 +153,82 @@ export class QuestL12Worms implements QuestInfo {
 
     let outfit = new GreyOutfit();
 
-    if (
-      itemAmount(Item.get("filthworm royal guard scent gland")) > 0 ||
-      haveEffect(Effect.get("Filthworm Guard Stench")) > 0
-    ) {
+    if (this.isKillingQueen()) {
       outfit.meatDropWeight = 4;
-    } else {
+    } else if (haveEffect(this.effect) > 0) {
       outfit.setItemDrops();
     }
 
-    let chamber = this.effects.find(
-      (e) =>
-        e[0] == null ||
-        availableAmount(e[0]) > 0 ||
-        haveEffect(effectModifier(e[0], "Effect")) > 0
-    )[1];
+    let chamber = this.worms.find((worm) => worm.isDoable());
 
     return {
-      location: chamber,
+      location: chamber.location,
       outfit: outfit,
       run: () => {
-        this.useGlands();
+        if (chamber.effect != null && haveEffect(chamber.effect) == 0) {
+          use(chamber.glands);
+        }
+
+        let killingBlow: Macro;
+
+        if (haveEffect(this.effect) == 0 && !this.isKillingQueen()) {
+          cliExecute("acquire yellow rocket");
+          killingBlow = Macro.item(this.rocket);
+        } else {
+          killingBlow = Macro.skill(this.nanovision).repeat();
+        }
 
         greyAdv(
-          chamber,
+          chamber.location,
           outfit,
-          new AdventureSettings().setFinishingBlowMacro(
-            Macro.skill(this.nanovision).repeat()
-          )
+          new AdventureSettings().setFinishingBlowMacro(killingBlow)
         );
       },
     };
   }
 
-  useGlands() {
-    for (let i of this.effects) {
-      if (i[0] == null) {
-        continue;
-      }
-
-      let effect = effectModifier(i[0], "Effect");
-
-      if (haveEffect(effect) > 0) {
-        break;
-      }
-
-      let amount = itemAmount(i[0]);
-
-      if (amount == 0) {
-        continue;
-      }
-
-      use(i[0], 1);
-      break;
-    }
-  }
-
   mustBeDone(): boolean {
-    for (let [glandRequired, loc] of this.effects) {
-      if (glandRequired == null) {
+    for (let worm of this.worms) {
+      if (worm.effect == null) {
         continue;
       }
-
-      let effect = effectModifier(glandRequired, "Effect");
 
       // If the gland is in operation
-      if (haveEffect(effect) > 0) {
+      if (haveEffect(worm.effect) > 0) {
         return true;
       }
 
       // If the gland is available
-      if (availableAmount(glandRequired) > 0) {
+      if (availableAmount(worm.glands) > 0) {
         return false;
       }
     }
 
     return false;
+  }
+}
+
+class WormProgress {
+  glands: Item;
+  effect: Effect;
+  location: Location;
+
+  constructor(item: Item, location: Location) {
+    this.location = location;
+    this.glands = item;
+
+    if (item == null) {
+      return;
+    }
+
+    this.effect = effectModifier(item, "Effect");
+  }
+
+  isDoable() {
+    return (
+      this.glands == null ||
+      haveEffect(this.effect) > 0 ||
+      availableAmount(this.glands) > 0
+    );
   }
 }

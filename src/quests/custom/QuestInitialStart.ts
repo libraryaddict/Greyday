@@ -27,7 +27,11 @@ import {
   visitUrl,
 } from "kolmafia";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { GreyPulls } from "../../utils/GreyResources";
+import {
+  GreyPulls,
+  ResourceClaim,
+  ResourcePullClaim,
+} from "../../utils/GreyResources";
 import { GreySettings } from "../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -40,13 +44,31 @@ export class QuestInitialStart implements QuestInfo {
   spaceBlanket: Item = Item.get("Space Blanket");
   mayday: Item = Item.get("MayDay supply package");
   saber: Item = Item.get("Fourth of May Cosplay Saber");
+  initialPulls: ResourcePullClaim[] = [
+    new ResourcePullClaim(Item.get("Yule Hatchet"), "Faster familiar leveling"),
+    new ResourcePullClaim(Item.get("Mafia Thumb Ring"), "Extra Adventures", 35),
+    new ResourcePullClaim(
+      Item.get(" Portable cassette player"),
+      "Extra monster level & +combat accessory",
+      5
+    ),
+    new ResourcePullClaim(
+      Item.get('"Remember the Trees" Shirt'),
+      "+combat shirt",
+      30
+    ),
+  ];
 
   getLocations(): Location[] {
     return [];
   }
 
   level(): number {
-    return 0;
+    return 1;
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return this.initialPulls;
   }
 
   status(): QuestStatus {

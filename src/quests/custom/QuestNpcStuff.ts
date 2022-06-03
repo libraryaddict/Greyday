@@ -146,7 +146,7 @@ class QuestGnomeTrainer implements QuestInfo {
     //"Cosmic Ugnderstanding",
     "Powers of Observatiogn",
     "Gnefarious Pickpocketing",
-    "Gnomish Hardigness",
+    // "Gnomish Hardigness",
   ].map((s) => Skill.get(s));
   letter: Item = Item.get("Letter for Melvign the Gnome");
 
@@ -155,7 +155,7 @@ class QuestGnomeTrainer implements QuestInfo {
   }
 
   level(): number {
-    return 0;
+    return 1;
   }
 
   getLocations(): Location[] {
@@ -212,7 +212,7 @@ class QuestArtist implements QuestInfo {
   pail: Item = Item.get("Pail of Pretentious Paint");
 
   level(): number {
-    return 0;
+    return 1;
   }
 
   getId(): QuestType {
@@ -286,7 +286,7 @@ class QuestArtist implements QuestInfo {
 
 class QuestMadBaker implements QuestInfo {
   level(): number {
-    return 0;
+    return 1;
   }
 
   getId(): QuestType {
@@ -367,7 +367,7 @@ class QuestUntinker implements QuestInfo {
       return QuestStatus.READY;
     }
 
-    if (availableAmount(this.item) == 0) {
+    if (availableAmount(this.item) == 0 && !knollAvailable()) {
       return QuestStatus.NOT_READY;
     }
 
@@ -387,6 +387,15 @@ class QuestUntinker implements QuestInfo {
       };
     }
 
+    if (knollAvailable() && availableAmount(this.item) == 0) {
+      return {
+        location: null,
+        run: () => {
+          visitUrl("place.php?whichplace=knoll_friendly&action=dk_innabox");
+        },
+      };
+    }
+
     return {
       location: null,
       run: () => {
@@ -402,7 +411,7 @@ class QuestMeatSmith implements QuestInfo {
   }
 
   level(): number {
-    return 0;
+    return 1;
   }
 
   run(): QuestAdventure {

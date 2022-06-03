@@ -3,12 +3,15 @@ import {
   blackMarketAvailable,
   cliExecute,
   dispensaryAvailable,
+  Effect,
+  haveEffect,
   Item,
   myHp,
   myMaxhp,
   myMaxmp,
   myMeat,
   myMp,
+  print,
 } from "kolmafia";
 import { Task } from "./Tasks";
 
@@ -21,6 +24,13 @@ interface MPRestorer {
 
 export class TaskMaintainStatus implements Task {
   restorers: MPRestorer[] = [];
+  toRemove: Effect[] = [
+    "Really Quite Poisoned",
+    "Majorly Poisoned",
+    "Somewhat Poisoned",
+    "A Little Bit Poisoned",
+    "Hardly Poisoned at All",
+  ].map((s) => Effect.get(s));
 
   fillRestorers() {
     this.restorers.push({
@@ -45,6 +55,10 @@ export class TaskMaintainStatus implements Task {
       available: () => true,
       price: 90,
     });
+  }
+
+  constructor() {
+    this.fillRestorers();
   }
 
   restoreMPTo(mp: number): boolean {
@@ -78,7 +92,23 @@ export class TaskMaintainStatus implements Task {
   }
 
   run(): void {
-    let desiredMp = myMaxmp() < 40 ? 20 : 40;
+    for (let effect of this.toRemove) {
+      if (haveEffect(effect) == 0) {
+        continue;
+      }
+
+      cliExecute("shrug " + effect.name);
+
+      if (haveEffect(effect) > 0) {
+        throw "Tried to remove " + effect.name + " but failed!";
+      }
+    }
+
+    if (myMaxmp() < 20) {
+      return;
+    }
+
+    let desiredMp = 20; //myMaxmp() < 40 ? 20 : 40;
 
     this.restoreMPTo(desiredMp);
   }
@@ -93,7 +123,7 @@ export function restoreMPTo(mp: number): boolean {
   }
 
   // If we already have that amount
-  if (mp >= myMp()) {
+  if (mp <= myMp()) {
     return true;
   }
 

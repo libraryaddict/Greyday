@@ -94,7 +94,7 @@ export class QuestCargoShorts implements QuestInfo {
 
   getResourceClaims(): ResourceClaim[] {
     return [
-      new ResourceClaim(ResourceType.CARGO_SHORTS, 1, "Smut Orc Pervert", 4),
+      new ResourceClaim(ResourceType.CARGO_SHORTS, 1, "Smut Orc Pervert"),
     ];
   }
 }

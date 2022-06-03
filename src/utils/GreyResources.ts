@@ -13,6 +13,7 @@ import {
   pullsRemaining,
   storageAmount,
   toInt,
+  turnsPlayed,
   use,
 } from "kolmafia";
 import { GreySettings } from "./GreySettings";
@@ -79,7 +80,7 @@ export class GreyPulls {
       GreyPulls.tryPull(Item.get("Space Trip safety headphones"));
     }
 
-    GreyPulls.tryPull(Item.get("Hemlock Helm"));
+    GreyPulls.tryPull(Item.get("Portable cassette player"));
     GreyPulls.tryPull(Item.get('"Remember the Trees" Shirt'));
   }
 
@@ -119,7 +120,7 @@ export class GreyPulls {
     this.tryPull(ore);
   }
 
-  static pullZappableKey() {
+  static getPullableKey(): Item {
     let items = getZappables(Item.get("Jarlsberg's key")).filter(
       (i) => !i.quest
     );
@@ -129,13 +130,16 @@ export class GreyPulls {
         continue;
       }
 
-      this.tryPull(i);
-      return;
+      return i;
     }
 
     items.sort((i1, i2) => mallPrice(i1) - mallPrice(i2));
 
-    this.tryPull(items[0]);
+    return items[0];
+  }
+
+  static pullZappableKey() {
+    this.tryPull(this.getPullableKey());
   }
 
   static pullRatTangles() {
@@ -405,6 +409,7 @@ export enum ResourceType {
   POWERFUL_GLOVE,
   FIRE_EXTINGUSHER,
   YELLOW_RAY,
+  CLOVER,
 }
 
 export class ResourceClaim {
@@ -417,7 +422,7 @@ export class ResourceClaim {
     resource: ResourceType,
     amount: number,
     reason: string,
-    turnsSaved: number
+    turnsSaved: number = -1
   ) {
     this.amountDesired = amount;
     this.resource = resource;
@@ -426,7 +431,7 @@ export class ResourceClaim {
   }
 
   isRequired(): boolean {
-    return this.turnsSaved > 100;
+    return this.turnsSaved == -1;
   }
 
   static getResourcesLeft(resourceType: ResourceType): number {
@@ -457,6 +462,10 @@ export class ResourceClaim {
         return availableAmount(Item.get("industrial fire extinguisher")) > 0
           ? toInt(getProperty("_fireExtinguisherCharge"))
           : 0;
+      case ResourceType.YELLOW_RAY:
+        return Math.floor((700 - turnsPlayed()) / 75);
+      case ResourceType.CLOVER:
+        return availableAmount(Item.get("11-leaf clover"));
       default:
         throw (
           "No idea what the resource " + ResourceType[resourceType] + " is."
@@ -466,16 +475,16 @@ export class ResourceClaim {
 }
 
 export class ResourceYRClaim extends ResourceClaim {
-  constructor(reason: string, turnsSaved: number) {
-    super(1, ResourceType.YELLOW_RAY, reason, turnsSaved);
+  constructor(reason: string, turnsSaved: number = -1) {
+    super(ResourceType.YELLOW_RAY, 1, reason, turnsSaved);
   }
 }
 
 export class ResourcePullClaim extends ResourceClaim {
   item: Item;
 
-  constructor(item: Item, reason: string, turnsSaved: number) {
-    super(1, ResourceType.PULL, reason, turnsSaved);
+  constructor(item: Item, reason: string, turnsSaved: number = -1) {
+    super(ResourceType.PULL, 1, reason, turnsSaved);
 
     this.item = item;
   }

@@ -70,6 +70,9 @@ export class QuestL12FratCargoShorts implements QuestInfo {
   }
 
   getResourceClaims(): ResourceClaim[] {
-    return [new ResourceClaim(ResourceType.CARGO_SHORTS, 1, "YR Frat Boy", 16)];
+    return [
+      new ResourceClaim(ResourceType.CARGO_SHORTS, 1, "YR Frat Boy", 16),
+      new ResourceClaim(ResourceType.YELLOW_RAY, 1, "YR Frat Boy", 16),
+    ];
   }
 }

@@ -19,6 +19,11 @@ import {
   cliExecute,
 } from "kolmafia";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
+import {
+  ResourceClaim,
+  ResourceType,
+  ResourceYRClaim,
+} from "../../utils/GreyResources";
 import { GreySettings } from "../../utils/GreySettings";
 import { canCombatLocket } from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
@@ -32,7 +37,18 @@ export class QuestLocketSystemSweep implements QuestInfo {
   effect: Effect = Effect.get("Everything Looks Yellow");
 
   level(): number {
-    return 0;
+    return 1;
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return [
+      new ResourceClaim(
+        ResourceType.COMBAT_LOCKET,
+        1,
+        "Combat Locket for System Sweep",
+        10
+      ),
+    ];
   }
 
   status(): QuestStatus {

@@ -23,6 +23,7 @@ import { QuestFamiliarEquip } from "./custom/QuestFamiliarEquip";
 import { QuestFortuneExp } from "./custom/QuestFortuneExp";
 import { QuestPowerLeveling } from "./custom/QuestPowerLeveling";
 import { QuestBugbearBakery } from "./custom/QuestBugbearBakery";
+import { QuestMoonSign } from "./custom/QuestMoonSign";
 
 export class QuestsCustom implements QuestInfo {
   // This is a wrapper class around some of our custom routing goals. Like combat locket or so.
@@ -52,6 +53,7 @@ export class QuestsCustom implements QuestInfo {
     this.quests.push(new QuestFortuneExp());
     this.quests.push(new QuestPowerLeveling(4));
     this.quests.push(new QuestBugbearBakery());
+    this.quests.push(new QuestMoonSign());
   }
 
   level(): number {
