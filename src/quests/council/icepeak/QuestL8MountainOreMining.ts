@@ -1,4 +1,5 @@
 import { Location, Item, haveOutfit } from "kolmafia";
+import { ResourceClaim } from "../../../utils/GreyResources";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -14,6 +15,10 @@ export class QuestL8MountainOreMining extends QuestL8MountainOre {
 
   getId(): QuestType {
     return "Council / Ice / OreMining";
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return [];
   }
 
   status(): QuestStatus {

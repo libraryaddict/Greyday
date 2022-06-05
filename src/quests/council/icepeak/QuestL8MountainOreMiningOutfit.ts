@@ -1,4 +1,5 @@
 import { haveOutfit, Location, min } from "kolmafia";
+import { ResourceClaim } from "../../../utils/GreyResources";
 import { QuestStatus, QuestAdventure } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { MountainStatus } from "../QuestL8IcePeak";
@@ -9,6 +10,10 @@ export class QuestL8MountainOreMiningOutfit extends QuestL8MountainOre {
 
   getId(): QuestType {
     return "Council / Ice / OreOutfit";
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return [];
   }
 
   status(): QuestStatus {
