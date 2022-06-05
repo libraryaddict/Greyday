@@ -225,6 +225,8 @@ export class QuestRegistry {
       },
       { id: "Skills / Photonic Shroud" },
 
+      // Meh
+      { id: "Council / MacGruffin / HiddenCity / Boss" },
       { id: "Council / MacGruffin / Temple / Unlock" },
       { id: "Council / MacGruffin / Temple / GrabWool" },
       { id: "Council / MacGruffin / Temple / Nostril" },
@@ -305,9 +307,6 @@ export class QuestRegistry {
 
       // Meh
       { id: "Council / MacGruffin / HiddenCity / Doctor" },
-
-      // Meh
-      { id: "Council / MacGruffin / HiddenCity / Boss" },
 
       // Nothing interesting from desert and pyramid yawn
       { id: "Council / MacGruffin / Desert / Compass" },

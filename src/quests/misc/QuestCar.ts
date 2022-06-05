@@ -34,7 +34,7 @@ export class QuestCar implements QuestInfo {
   bugbear: Monster = Monster.get("Guard Bugbear");
 
   level(): number {
-    return 11;
+    return knollAvailable() ? 7 : 11;
   }
 
   tryMakeBitchCar() {

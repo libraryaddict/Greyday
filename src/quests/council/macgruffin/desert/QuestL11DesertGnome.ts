@@ -86,6 +86,14 @@ export class QuestL11DesertGnome implements QuestInfo {
     return QuestStatus.COMPLETED;
   }
 
+  mustBeDone(): boolean {
+    return true;
+  }
+
+  needAdventures(): number {
+    return 0;
+  }
+
   run(): QuestAdventure {
     if (this.wantsGnomePaint() && myMeat() >= 1000) {
       return {

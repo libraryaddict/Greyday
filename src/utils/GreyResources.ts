@@ -82,6 +82,7 @@ export class GreyPulls {
 
     GreyPulls.tryPull(Item.get("Portable cassette player"));
     GreyPulls.tryPull(Item.get('"Remember the Trees" Shirt'));
+    GreyPulls.tryPull(Item.get("Daily dungeon malware"));
   }
 
   static pullNinjaGear() {

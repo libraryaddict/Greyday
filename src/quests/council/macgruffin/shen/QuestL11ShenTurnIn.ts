@@ -9,6 +9,8 @@ import {
   toInt,
   use,
   Monster,
+  Skill,
+  haveSkill,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -20,6 +22,7 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
+import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 
 export class QuestL11ShenTurnIn implements QuestInfo {
   disguise: Item = Item.get("Crappy Waiter Disguise");
@@ -30,6 +33,8 @@ export class QuestL11ShenTurnIn implements QuestInfo {
     "Ninja dressed as a waiter",
   ].map((s) => Monster.get(s));
   toAbsorb: Monster[];
+  nanovision: Skill = Skill.get("Double Nanovision");
+  cocktail: Item = Item.get("Unnamed cocktail");
 
   getId(): QuestType {
     return "Council / MacGruffin / Shen / TurnIn";
@@ -54,6 +59,10 @@ export class QuestL11ShenTurnIn implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (!haveSkill(this.nanovision)) {
+      return QuestStatus.FASTER_LATER;
+    }
+
     return QuestStatus.READY;
   }
 
@@ -64,6 +73,15 @@ export class QuestL11ShenTurnIn implements QuestInfo {
   }
 
   run(): QuestAdventure {
+    let outfit = new GreyOutfit();
+
+    if (
+      getProperty("copperheadClubHazard") != "lantern" ||
+      availableAmount(this.cocktail) < 2
+    ) {
+      outfit.setItemDrops();
+    }
+
     return {
       location: this.shenClub,
       run: () => {
@@ -110,7 +128,7 @@ export class QuestL11ShenTurnIn implements QuestInfo {
     let turnsSpent = this.shenClub.turnsSpent;
     let nextMeeting = Math.floor(getQuestStatus("questL11Shen") / 2) * 5;
 
-    return turnsSpent >= nextMeeting - 1;
+    return turnsSpent > nextMeeting - 1;
   }
 
   getLocations(): Location[] {

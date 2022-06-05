@@ -71,7 +71,10 @@ export class QuestKeyStuffAbstract {
       keys += 1;
     }
 
-    if (canCombatLocket(Monster.get("Fantasy Bandit"))) {
+    if (
+      canCombatLocket(Monster.get("Fantasy Bandit")) &&
+      getProperty("dailyDungeonMalwareUsed") == "false"
+    ) {
       keys += 1;
     }
 

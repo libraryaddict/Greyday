@@ -16,6 +16,7 @@ import {
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { ResourceClaim, ResourceType } from "../../utils/GreyResources";
+import { GreySettings } from "../../utils/GreySettings";
 import { canCombatLocket } from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
 import {
@@ -73,7 +74,7 @@ export class QuestLocketFantasyRealm implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (this.hasFoughtEnough()) {
+    if (this.hasFoughtEnough() || !GreySettings.isHardcoreMode()) {
       return QuestStatus.COMPLETED;
     }
 

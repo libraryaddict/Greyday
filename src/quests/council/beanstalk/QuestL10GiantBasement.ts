@@ -83,7 +83,7 @@ export class QuestL10GiantBasement implements QuestInfo {
         // If we have umbrella equipped, or don't have one
         props.setChoice(669, 1);
       } else {
-        props.setChoice(669, 3); // Skip so we can resume
+        props.setChoice(669, 4); // Skip so we can resume
       }
 
       // If have amulet otherwise grab dumbbell (or skips it)

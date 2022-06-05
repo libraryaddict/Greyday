@@ -19,6 +19,10 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 import { Macro } from "../../../../utils/MacroBuilder";
+import {
+  ResourceClaim,
+  ResourcePullClaim,
+} from "../../../../utils/GreyResources";
 
 export class QuestDailyDungeon implements QuestInfo {
   pole: Item = Item.get("eleven-foot pole");
@@ -48,6 +52,12 @@ export class QuestDailyDungeon implements QuestInfo {
         this.zappables.push(i);
       });
     }
+  }
+
+  getResourceClaims(): ResourceClaim[] {
+    return [
+      new ResourcePullClaim(this.malware, "Malware for Fat Loot Token", -1),
+    ];
   }
 
   isDailyDoneToday() {

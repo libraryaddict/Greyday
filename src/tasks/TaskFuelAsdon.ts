@@ -21,7 +21,7 @@ export class TaskFuelAsdon implements Task {
   asdonMartin: Item = Item.get("Asdon Martin keyfob");
 
   run(): void {
-    if (myMeat() < 1500 || getWorkshed() != this.asdonMartin) {
+    if (myMeat() < 6000 || getWorkshed() != this.asdonMartin) {
       return;
     }
 

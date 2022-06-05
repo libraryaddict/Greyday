@@ -71,6 +71,7 @@ export class QuestTowerKillWitch implements QuestInfo {
         }
 
         greyAdv("choice.php"); // Final fight
+        visitUrl("place.php?whichplace=nstower");
         print("Should be all done", "blue");
 
         if (!GreySettings.isHardcoreMode()) {

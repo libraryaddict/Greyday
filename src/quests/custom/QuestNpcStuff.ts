@@ -330,6 +330,10 @@ class QuestMadBaker implements QuestInfo {
         visitUrl("shop.php?whichshop=armory");
         visitUrl("shop.php?whichshop=armory&action=talk");
         visitUrl("choice.php?pwd=&whichchoice=1065&option=1");
+
+        if (getProperty("choiceAdventure1061") == "0") {
+          setProperty("choiceAdventure1061", "1");
+        }
       },
     };
   }

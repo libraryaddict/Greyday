@@ -66,3 +66,4 @@
 // So if we're short on 2 keys, we have 4 key sources all in a group. We can pick two of those key sources based on what resources they claim to need.
 // Which means that each class should always claim the resources they need to do their task. If there's a slightly different way to do a task, but with different resources..
 // We should make a new class. Each class is limited to the resources they claim, or less. Never more.
+// When using camel in desert, run a crystal ball on it. Hit the fire ants, switch to goose for absorb then back to camel until done.
