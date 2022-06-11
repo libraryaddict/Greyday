@@ -1,4 +1,3 @@
-import { canAdv } from "canadv.ash";
 import {
   adv1,
   availableAmount,

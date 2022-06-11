@@ -47,12 +47,12 @@ export class QuestL11ShenTurnIn implements QuestInfo {
   status(): QuestStatus {
     let status = getQuestStatus("questL11Shen");
 
-    if (status < 2) {
-      return QuestStatus.NOT_READY;
-    }
-
     if (status > 6) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (status < 2) {
+      return QuestStatus.NOT_READY;
     }
 
     if (status % 2 == 1) {
@@ -75,15 +75,16 @@ export class QuestL11ShenTurnIn implements QuestInfo {
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
 
-    if (
+    /*  if (
       getProperty("copperheadClubHazard") != "lantern" ||
       availableAmount(this.cocktail) < 2
-    ) {
+    )*/ {
       outfit.setItemDrops();
     }
 
     return {
       location: this.shenClub,
+      outfit: outfit,
       run: () => {
         if (!this.hittingNC()) {
           if (!this.haveEffect() && availableAmount(this.disguise) > 0) {
@@ -116,7 +117,7 @@ export class QuestL11ShenTurnIn implements QuestInfo {
             settings.addNoBanish(m);
           }
 
-          greyAdv(this.shenClub, null, settings);
+          greyAdv(this.shenClub, outfit, settings);
         } finally {
           props.resetAll();
         }

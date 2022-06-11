@@ -1,11 +1,20 @@
 import {
+  cliExecute,
+  Effect,
+  effectModifier,
   Familiar,
+  getFuel,
   getProperty,
+  getWorkshed,
+  haveEffect,
   haveSkill,
+  Item,
   Location,
   Monster,
+  myMeat,
   Skill,
   toInt,
+  use,
 } from "kolmafia";
 import { AbsorbsProvider, Reabsorbed } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -24,6 +33,9 @@ export class QuestManorKitchen implements QuestInfo {
   albinoBat: Monster = Monster.get("Albino Bat");
   lastResist: number = 0;
   lastResistTurnCheck: number = 0;
+  canOfPaint: Item = Item.get("Can of black paint");
+  asdonMartin: Item = Item.get("Asdon Martin keyfob");
+  driveSafe: Effect = Effect.get("Driving Safely");
 
   getId(): QuestType {
     return "Manor / Kitchen";
@@ -39,7 +51,7 @@ export class QuestManorKitchen implements QuestInfo {
     // Max of 9 total res
     let status = getQuestStatus("questM20Necklace");
 
-    if (status < 0) {
+    if (status < 0 || getQuestStatus("questL11Black") < 2 || myMeat() < 1200) {
       return QuestStatus.NOT_READY;
     }
 
@@ -68,6 +80,21 @@ export class QuestManorKitchen implements QuestInfo {
       outfit: outfit,
       location: this.kitchen,
       run: () => {
+        if (toInt(getProperty("manorDrawerCount")) < 20) {
+          if (haveEffect(effectModifier(this.canOfPaint, "Effect")) == 0) {
+            cliExecute("acquire 1 " + this.canOfPaint.name);
+            use(this.canOfPaint);
+          }
+
+          if (
+            getWorkshed() == this.asdonMartin &&
+            haveEffect(this.driveSafe) == 0 &&
+            getFuel() >= 37
+          ) {
+            cliExecute("asdonmartin drive safely");
+          }
+        }
+
         greyAdv(this.kitchen, outfit);
       },
     };

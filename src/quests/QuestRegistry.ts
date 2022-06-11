@@ -106,6 +106,7 @@ export class QuestRegistry {
       { id: "NPC / Baker" },
       { id: "NPC / Druggie" },
       { id: "NPC / Knoll Mayor" },
+      { id: "NPC / Doctor" },
       { id: "Misc / Purchases" },
       { id: "Misc / FriarExp" },
       { id: "Misc / MonsterBait" },
@@ -128,6 +129,8 @@ export class QuestRegistry {
       { id: "Skills / HPRegen" },
       { id: "Skills / ScalingItem" },
       { id: "Skills / ScalingMeat" },
+      { id: "Skills / DoubleNanovision" },
+
       {
         id: "Skills / ScalingDR",
         testValid: () => getQuestStatus("questM20Necklace") > 2,

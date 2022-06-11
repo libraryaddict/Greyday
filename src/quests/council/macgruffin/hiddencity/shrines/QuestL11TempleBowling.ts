@@ -128,14 +128,19 @@ export class QuestL11Bowling implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setItemDrops();
+    let outfit = new GreyOutfit();
+
+    if (this.getProgress() >= 5 && availableAmount(this.ball) > 0) {
+      outfit.addBonus("+max 0.1 elemental dmg");
+    } else {
+      outfit.setItemDrops();
+    }
+
     // Banishers
     return {
       location: this.loc,
       outfit: outfit,
       run: () => {
-        retrieveItem(this.bowl);
-
         let macro: Macro = null;
 
         if (this.getProgress() <= 1 && this.ownBall()) {
@@ -146,6 +151,10 @@ export class QuestL11Bowling implements QuestInfo {
           }
         } else if (closetAmount(this.ball) > 0) {
           takeCloset(this.ball, closetAmount(this.ball));
+        }
+
+        if (itemAmount(this.ball) == 0) {
+          retrieveItem(this.bowl);
         }
 
         let props = new PropertyManager();

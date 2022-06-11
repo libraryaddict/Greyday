@@ -56,9 +56,12 @@ export class QuestL10GiantGround implements QuestInfo {
         }
 
         try {
-          props.setChoice(672, hasBone ? 2 : 1);
-          props.setChoice(673, hasBone ? 2 : 1);
-          props.setChoice(674, hasBone ? 2 : 1);
+          // props.setChoice(672, hasBone ? 2 : 1);
+          // props.setChoice(673, hasBone ? 2 : 1);
+          // props.setChoice(674, hasBone ? 2 : 1);
+          props.setChoice(672, 2);
+          props.setChoice(673, 2);
+          props.setChoice(674, 2);
           props.setChoice(1026, hasBone ? 3 : 2);
 
           greyAdv(this.loc, outfit);

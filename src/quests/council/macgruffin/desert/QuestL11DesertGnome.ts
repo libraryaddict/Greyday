@@ -15,6 +15,7 @@ import {
   myMeat,
 } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
+import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { GreyPulls } from "../../../../utils/GreyResources";
 import {
   getQuestStatus,
@@ -98,6 +99,7 @@ export class QuestL11DesertGnome implements QuestInfo {
     if (this.wantsGnomePaint() && myMeat() >= 1000) {
       return {
         location: null,
+        outfit: new GreyOutfit("-tie"),
         run: () => {
           if (itemAmount(Item.get("Can of black paint")) == 0) {
             retrieveItem(Item.get("Can of black paint"));
@@ -112,6 +114,7 @@ export class QuestL11DesertGnome implements QuestInfo {
     if (this.wantsGnomeKillingJar() && availableAmount(this.killingJar) > 0) {
       return {
         location: null,
+        outfit: new GreyOutfit("-tie"),
         run: () => {
           print("Giving gnome their killing jar");
 
@@ -123,6 +126,7 @@ export class QuestL11DesertGnome implements QuestInfo {
     if (this.wantsWormPages() && !this.needsMorePages()) {
       return {
         location: null,
+        outfit: new GreyOutfit("-tie"),
         run: () => {
           print("Giving gnome their pages");
           this.turnInItem();
@@ -133,6 +137,7 @@ export class QuestL11DesertGnome implements QuestInfo {
     if (this.wantsGnomeRose() && availableAmount(this.rose) > 0) {
       return {
         location: null,
+        outfit: new GreyOutfit("-tie"),
         run: () => {
           print("Giving gnome their rose");
           this.turnInItem();

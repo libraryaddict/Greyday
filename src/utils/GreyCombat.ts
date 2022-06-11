@@ -182,10 +182,11 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
 
       // Only infinite loop if we're underleveled or have the outfit
       if (
-        !GreySettings.isHippyMode() ||
         myLevel() <= 10 ||
-        haveOutfit("Filthy Hippy Disguise") ||
-        haveOutfit("Frat Warrior Fatigues")
+        (myLevel() < 20 &&
+          (!GreySettings.isHippyMode() ||
+            haveOutfit("Filthy Hippy Disguise") ||
+            haveOutfit("Frat Warrior Fatigues")))
       ) {
         macro = macro.trySkillRepeat(Skill.get("Infinite Loop"));
       }
@@ -194,6 +195,10 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
     }
   }
 
+  macro.if_(
+    "!pastround 15 && !hppercentbelow 30",
+    Macro.tryItem(Item.get("Beehive"))
+  );
   macro.while_("!pastround 15 && !hppercentbelow 30", Macro.attack());
   macro.abort();
 

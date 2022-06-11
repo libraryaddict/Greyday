@@ -51,7 +51,10 @@ export class QuestDungeonsOfDoom implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (getProperty("questL02Larva") != "finished") {
+    if (
+      getProperty("questL02Larva") != "finished" &&
+      availableAmount(this.plusSign) > 0
+    ) {
       return QuestStatus.NOT_READY;
     }
 

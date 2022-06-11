@@ -17,10 +17,14 @@ import {
   myFamiliar,
   equippedAmount,
   maximize,
+  useFamiliar,
+  equip,
+  familiarWeight,
 } from "kolmafia";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { currentPredictions } from "../../../../utils/GreyUtils";
 import { Macro } from "../../../../utils/MacroBuilder";
 import {
   getQuestStatus,
@@ -40,6 +44,7 @@ export class QuestL11DesertExplore implements QuestInfo {
   camel: Familiar = Familiar.get("Melodramedary");
   ball: Item = Item.get("miniature crystal ball");
   page: Item = Item.get("worm-riding manual page");
+  goose: Familiar = Familiar.get("Grey Goose");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / Explore";
@@ -77,6 +82,17 @@ export class QuestL11DesertExplore implements QuestInfo {
     }
 
     if (
+      haveEffect(Effect.get("Tenuous Grip on Reality")) ||
+      haveEffect(Effect.get("Barking Dogs"))
+    ) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (haveEffect(this.hydrated) == 0 && familiarWeight(this.goose) < 6) {
+      return QuestStatus.FASTER_LATER;
+    }
+
+    if (
       getQuestStatus("questM20Necklace") < 4 &&
       this.getExplored() > 40 &&
       haveEffect(this.hydrated) == 0
@@ -87,13 +103,6 @@ export class QuestL11DesertExplore implements QuestInfo {
     if (myAdventures() < 70) {
       //|| !haveEffect(this.hydrated)) {
       return QuestStatus.FASTER_LATER;
-    }
-
-    if (
-      haveEffect(Effect.get("Tenuous Grip on Reality")) ||
-      haveEffect(Effect.get("Barking Dogs"))
-    ) {
-      return QuestStatus.NOT_READY;
     }
 
     return QuestStatus.READY;
@@ -107,6 +116,7 @@ export class QuestL11DesertExplore implements QuestInfo {
     ) {
       return {
         location: this.desert,
+        outfit: new GreyOutfit("-tie"),
         run: () => {
           greyAdv(this.oasis);
         },
@@ -128,8 +138,22 @@ export class QuestL11DesertExplore implements QuestInfo {
           Macro.attack().repeat()
         ).step(greyKillingBlow(outfit));
 
-        if (myFamiliar() != this.camel && equippedAmount(this.ball) > 0) {
-          maximize("familiar -equip " + this.ball.name, false);
+        // If we're looking for an absorb, have the crystal ball and have the camel
+        if (
+          this.toAbsorb.length > 0 &&
+          availableAmount(this.ball) > 0 &&
+          haveFamiliar(this.camel)
+        ) {
+          const crystalBall: Map<Location, Monster> = currentPredictions();
+
+          // If we already have a prediction, and the prediction isn't what we want
+          if (
+            crystalBall.has(this.desert) &&
+            !this.toAbsorb.includes(crystalBall.get(this.desert))
+          ) {
+            useFamiliar(this.camel);
+            equip(this.ball);
+          }
         }
 
         let explored = this.getExplored();

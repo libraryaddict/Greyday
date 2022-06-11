@@ -9,6 +9,7 @@ import {
   getProperty,
   toInt,
   Monster,
+  familiarWeight,
 } from "kolmafia";
 import { GreyAdventurer } from "../../../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -26,6 +27,8 @@ export class QuestL11DesertStoneRose implements QuestInfo {
   oasis: Location = Location.get("Oasis");
   rose: Item = Item.get("Stone Rose");
   blur: Monster = Monster.get("Blur");
+  toAbsorb: Monster[];
+  fam: Familiar = Familiar.get("Grey Goose");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / StoneRose";
@@ -52,6 +55,12 @@ export class QuestL11DesertStoneRose implements QuestInfo {
 
     if (!this.wantsGnomeRose() || availableAmount(this.rose) > 0) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (this.toAbsorb.length > 0) {
+      if (familiarWeight(this.fam) < 6) {
+        return QuestStatus.NOT_READY;
+      }
     }
 
     return QuestStatus.READY;

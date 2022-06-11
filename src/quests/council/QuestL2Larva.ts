@@ -51,9 +51,7 @@ export class QuestL2SpookyLarva implements QuestInfo {
       if (DelayBurners.isDelayBurnerFeasible()) {
         return QuestStatus.FASTER_LATER;
       }
-    }
-
-    if (!hasNonCombatSkillsReady(false)) {
+    } else if (!hasNonCombatSkillsReady(false)) {
       return QuestStatus.FASTER_LATER;
     }
 

@@ -73,6 +73,9 @@ export class QuestL11Black implements QuestInfo {
 
     if (availableAmount(this.boots) > 0) {
       outfit.addItem(this.boots);
+    } else if (availableAmount(this.blackberry) <= 1) {
+      outfit.setItemDrops();
+      outfit.addBonus("+0.1 booze drop +0.1 food drop");
     }
 
     if (this.shouldWearLatte()) {

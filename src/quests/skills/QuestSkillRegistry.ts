@@ -9,6 +9,7 @@ import {
   QuestSkillColdDamage10,
   QuestSkillColdDamage15,
 } from "./QuestSkillColdDamage";
+import { QuestSkillDoubleNanovision } from "./QuestSkillDoubleNanovision";
 import { QuestSkillSystemSweep } from "./QuestSkillSystemSweep";
 
 export class QuestSkillRegistry implements QuestInfo {
@@ -52,6 +53,7 @@ export class QuestSkillRegistry implements QuestInfo {
     );
     this.children.push(new QuestSkillColdDamage15());
     this.children.push(new QuestSkillColdDamage10());
+    this.children.push(new QuestSkillDoubleNanovision());
   }
 
   addSkill(questType: QuestType, skill?: Skill) {

@@ -53,8 +53,12 @@ export class QuestL11TempleUnlock implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (getProperty("questM16Temple") == "unstarted") {
+    if (!hasNonCombatSkillsReady(true)) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (getProperty("questM16Temple") == "unstarted") {
+      //   return QuestStatus.NOT_READY;
     }
 
     if (this.isDelayBurning()) {

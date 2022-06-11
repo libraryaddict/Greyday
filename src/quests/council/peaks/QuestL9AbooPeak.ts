@@ -214,7 +214,10 @@ export class ABooHandler implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (getQuestStatus("questL09Topping") < 1) {
+    if (
+      getQuestStatus("questL09Topping") < 1 ||
+      getQuestStatus("questL11Black") < 2
+    ) {
       return QuestStatus.NOT_READY;
     }
 

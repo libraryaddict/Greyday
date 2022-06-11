@@ -17,6 +17,7 @@ import {
   myAscensions,
   knollAvailable,
   Monster,
+  runChoice,
 } from "kolmafia";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { ResourceClaim } from "../../utils/GreyResources";
@@ -37,6 +38,7 @@ export class QuestNPCStuff implements QuestInfo {
     new QuestUntinker(),
     new QuestDruggie(),
     new QuestKnollMayor(),
+    new QuestDoctor(),
   ];
 
   getId(): QuestType {
@@ -61,6 +63,39 @@ export class QuestNPCStuff implements QuestInfo {
 
   getChildren(): QuestInfo[] {
     return this.children;
+  }
+}
+
+class QuestDoctor implements QuestInfo {
+  getId(): QuestType {
+    return "NPC / Doctor";
+  }
+
+  level(): number {
+    return 5;
+  }
+
+  status(): QuestStatus {
+    if (getProperty("questM24Doc") != "unstarted") {
+      return QuestStatus.COMPLETED;
+    }
+
+    return QuestStatus.READY;
+  }
+
+  run(): QuestAdventure {
+    return {
+      location: null,
+      outfit: new GreyOutfit("-tie"),
+      run: () => {
+        visitUrl("shop.php?whichshop=doc&action=talk");
+        runChoice(1);
+      },
+    };
+  }
+
+  getLocations(): Location[] {
+    return [];
   }
 }
 

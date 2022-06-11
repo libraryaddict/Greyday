@@ -48,6 +48,9 @@ export class QuestL11RonProtesters implements QuestInfo {
   musky: Effect = Effect.get("Musky");
   toAbsorb: Monster[];
   torsoAwareness: Skill = Skill.get("Torso Awareness");
+  sleazeSkill: Skill = Skill.get("Procgen Ribaldry");
+  sleazeSkill2: Skill = Skill.get("Innuendo Circuitry");
+  starChart: Item = Item.get("Star Chart");
   // TODO Once we've got the absorbs, try replace combats if it won't hurt our NCs
 
   isReady(): boolean {
@@ -101,10 +104,16 @@ export class QuestL11RonProtesters implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (
-      getQuestStatus("questL11Shen") <= 6 ||
-      getQuestStatus("questL09Topping") < 1
-    ) {
+    // If we don't have max flaming boozes
+    if (getQuestStatus("questL11Shen") <= 6) {
+      return QuestStatus.FASTER_LATER;
+    }
+
+    if (!haveSkill(this.sleazeSkill2) && availableAmount(this.starChart) == 0) {
+      return QuestStatus.FASTER_LATER;
+    }
+
+    if (!haveSkill(this.sleazeSkill) && getQuestStatus("questL09Topping") < 1) {
       return QuestStatus.FASTER_LATER;
     }
 
@@ -123,7 +132,7 @@ export class QuestL11RonProtesters implements QuestInfo {
     }
 
     let outfit = new GreyOutfit().setNoCombat().setNoCombat().setItemDrops();
-    outfit.addBonus("+sleaze dmg +sleaze spell dmg");
+    outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");
 
     for (let i of this.lyrndCostume) {
       outfit.addItem(i, 60);

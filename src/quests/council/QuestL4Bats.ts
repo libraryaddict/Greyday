@@ -55,6 +55,10 @@ export class QuestL4Bats implements QuestInfo {
     return 4;
   }
 
+  mustBeDone(): boolean {
+    return true;
+  }
+
   status(): QuestStatus {
     let status = getQuestStatus("questL04Bat");
 
@@ -76,6 +80,7 @@ export class QuestL4Bats implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: new GreyOutfit("-tie"),
       run: () => {
         while (
           availableAmount(this.sonar) > 0 &&

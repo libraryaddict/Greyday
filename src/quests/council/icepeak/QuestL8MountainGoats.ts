@@ -6,6 +6,8 @@ import {
   getProperty,
   visitUrl,
   Monster,
+  Skill,
+  haveSkill,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -22,6 +24,8 @@ export class QuestL8MountainGoats implements QuestInfo {
   goats: Location = Location.get("The Goatlet");
   cheese: Item = Item.get("Goat Cheese");
   dairy: Monster = Monster.get("Dairy Goat");
+  elementalSkill: Skill = Skill.get("Secondary Fermentation");
+  drunk: Monster = Monster.get("Drunk Goat");
 
   getId(): QuestType {
     return "Council / Ice / Goats";
@@ -36,6 +40,10 @@ export class QuestL8MountainGoats implements QuestInfo {
 
     if (status < MountainStatus.TRAPPER_DEMANDS) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (!haveSkill(this.elementalSkill)) {
+      return QuestStatus.READY;
     }
 
     if (status > MountainStatus.TRAPPER_DEMANDS) {
@@ -78,11 +86,20 @@ export class QuestL8MountainGoats implements QuestInfo {
       location: this.goats,
       outfit: outfit,
       run: () => {
-        greyAdv(
-          this.goats,
-          outfit,
-          new AdventureSettings().addNoBanish(this.dairy)
-        );
+        let settings = new AdventureSettings();
+
+        if (!haveSkill(this.elementalSkill)) {
+          settings.addNoBanish(this.drunk);
+        }
+
+        if (
+          availableAmount(this.cheese) < 3 &&
+          this.getStatus() <= MountainStatus.TRAPPER_DEMANDS
+        ) {
+          settings.addNoBanish(this.dairy);
+        }
+
+        greyAdv(this.goats, outfit);
 
         if (availableAmount(this.cheese) >= 3 && this.getOreRemaining() <= 0) {
           this.talkTrapper();

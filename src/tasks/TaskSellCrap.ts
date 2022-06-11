@@ -22,6 +22,15 @@ export class TaskSellCrap implements Task {
     "ancient frozen dinner",
     "accidental cider",
     "bottle of gin",
+    "imp ale",
+    "hot wing",
+    "hellion cube",
+    "hot katana blade",
+    "ice-cold Willer",
+    "lihc eye",
+    "snifter of thoroughly aged brandy",
+    "wussiness potion",
+    "ancient pills",
   ].map((s) => Item.get(s));
   autouse: Item[] = [
     "Ancient Vinyl Coin Purse",

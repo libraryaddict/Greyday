@@ -41,6 +41,7 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
     "antique cigar sign",
   ].map((s) => Item.get(s));
   magazine: Item = Item.get("Worse Homes and Gardens");
+  toAbsorb: Monster[];
 
   getId(): QuestType {
     return "Boat / Junkyard";
@@ -96,7 +97,7 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
         let props = new PropertyManager();
 
         if (this.needParts()) {
-          if (closetAmount(this.junkKey) > 0) {
+          if (closetAmount(this.junkKey) > 0 && this.toAbsorb.length == 0) {
             takeCloset(this.junkKey);
           } else {
             // We immediately try to replace combats because the key drops the longer we spend

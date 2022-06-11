@@ -12,6 +12,7 @@ import {
   myMeat,
   toInt,
 } from "kolmafia";
+import { getQuestStatus } from "../quests/Quests";
 import { Task } from "./Tasks";
 
 export class TaskFuelAsdon implements Task {
@@ -21,7 +22,11 @@ export class TaskFuelAsdon implements Task {
   asdonMartin: Item = Item.get("Asdon Martin keyfob");
 
   run(): void {
-    if (myMeat() < 6000 || getWorkshed() != this.asdonMartin) {
+    if (
+      myMeat() < 7000 ||
+      getWorkshed() != this.asdonMartin ||
+      getQuestStatus("questL11Black") < 2
+    ) {
       return;
     }
 

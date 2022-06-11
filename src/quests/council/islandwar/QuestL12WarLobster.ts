@@ -8,6 +8,7 @@ import {
   Location,
   Monster,
   myAdventures,
+  myLevel,
   Skill,
   toInt,
   toMonster,
@@ -50,6 +51,10 @@ export class QuestL12Lobster implements QuestInfo {
 
     if (getProperty("warProgress") != "started") {
       return QuestStatus.NOT_READY;
+    }
+
+    if (myLevel() < 16 && getProperty("sidequestArenaCompleted") == "none") {
+      return QuestStatus.FASTER_LATER;
     }
 
     if (myAdventures() < 22) {

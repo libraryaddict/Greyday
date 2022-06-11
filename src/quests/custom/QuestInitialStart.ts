@@ -44,6 +44,8 @@ export class QuestInitialStart implements QuestInfo {
   spaceBlanket: Item = Item.get("Space Blanket");
   mayday: Item = Item.get("MayDay supply package");
   saber: Item = Item.get("Fourth of May Cosplay Saber");
+  flimsyScraps: Item = Item.get("Flimsy hardwood scraps");
+  birchBattery: Item = Item.get("Birch battery");
   initialPulls: ResourcePullClaim[] = [
     new ResourcePullClaim(Item.get("Yule Hatchet"), "Faster familiar leveling"),
     new ResourcePullClaim(Item.get("Mafia Thumb Ring"), "Extra Adventures", 35),
@@ -141,6 +143,13 @@ export class QuestInitialStart implements QuestInfo {
           }
 
           cliExecute(breakfastScript);
+        }
+
+        if (
+          availableAmount(this.flimsyScraps) > 0 &&
+          availableAmount(this.birchBattery) == 0
+        ) {
+          cliExecute("acquire " + this.birchBattery.name);
         }
       },
     };

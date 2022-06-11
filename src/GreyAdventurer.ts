@@ -13,6 +13,7 @@ import {
   Location,
   maximize,
   Monster,
+  myMeat,
   myMp,
   print,
   printHtml,
@@ -29,6 +30,7 @@ import { QuestAdventure } from "./quests/Quests";
 import { TaskCouncil } from "./tasks/TaskCouncil";
 import { TaskEater } from "./tasks/TaskEater";
 import { TaskFuelAsdon } from "./tasks/TaskFuelAsdon";
+import { TaskJuneCleaver } from "./tasks/TaskJuneCleaver";
 import { TaskLatteFiller } from "./tasks/TaskLatteFiller";
 import { restoreMPTo, TaskMaintainStatus } from "./tasks/TaskMaintainStatus";
 import { Task } from "./tasks/Tasks";
@@ -56,6 +58,7 @@ export class GreyAdventurer {
     new TaskLatteFiller(),
     new TaskMaintainStatus(),
     new TaskFuelAsdon(),
+    new TaskJuneCleaver(),
   ];
 
   runTurn(goTime: boolean): boolean {
@@ -203,9 +206,18 @@ export class GreyAdventurer {
       toInt(getProperty("cursedMagnifyingGlassCount")) < 13 &&
       getProperty("sidequestLighthouseCompleted") == "none" &&
       availableAmount(Item.get("barrel of gunpowder")) == 0;
+    let doOrb: boolean = false;
+
+    if (adventure.locationInfo != null && adventure.locationInfo.shouldRunOrb) {
+      doOrb = true;
+    }
 
     if (canDoMagGlass) {
       outfit.addBonus("+100 bonus cursed magnifying glass");
+    }
+
+    if (doOrb) {
+      outfit.addBonus("+10 bonus june cleaver");
     }
 
     if (
@@ -236,12 +248,6 @@ export class GreyAdventurer {
       replaceWith.push(familiar);
 
       familiar = replaceWith.filter((f) => haveFamiliar(f))[0];
-    }
-
-    let doOrb: boolean = false;
-
-    if (adventure.locationInfo != null && adventure.locationInfo.shouldRunOrb) {
-      doOrb = true;
     }
 
     let locationToSet = toRun.location;
@@ -353,10 +359,14 @@ export function hasNonCombatSkillsReady(wantBoth: boolean = true): boolean {
   let s2e = haveEffect(Effect.get("Darkened Photons")) > 0;
 
   if (wantBoth) {
-    return s1 && s2 && (s1e ? 0 : 50) + (s2e ? 0 : 50) + 20 <= myMp();
+    return (
+      s1 &&
+      s2 &&
+      (s1e ? 0 : 50) + (s2e ? 0 : 40) + 20 <= myMp() + myMeat() / 200
+    );
   }
 
-  return s1e || s2e || ((s1 || s2) && myMp() >= 70);
+  return s1e || s2e || ((s1 || s2) && myMp() >= 60);
 }
 
 export function hasCombatSkillReady(): boolean {

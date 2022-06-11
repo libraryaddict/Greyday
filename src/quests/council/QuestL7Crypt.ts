@@ -78,7 +78,7 @@ export class QuestL7Crypt implements QuestInfo {
         greyAdv("crypt.php?action=heart");
         council();
 
-        if (availableAmount(this.chest) > 0) {
+        if (availableAmount(this.chest) > 0 && myMeat() < 6000) {
           use(this.chest);
         }
       },

@@ -8,6 +8,7 @@ import {
   toInt,
   toLocation,
   toMonster,
+  turnsPlayed,
   visitUrl,
 } from "kolmafia";
 
@@ -69,6 +70,7 @@ const ballProp = () =>
         ]
     );
 
+let lastBallCheck: number = 0;
 /**
  * Returns a map of locations, and the monsters predicted.
  *
@@ -79,9 +81,10 @@ export function currentPredictions(
 ): Map<Location, Monster> {
   let predictions = ballProp();
 
-  if (predictions.find(([turn]) => turn + 2 <= myTurncount())) {
+  if (lastBallCheck != turnsPlayed()) {
     visitUrl("inventory.php?ponder=1", false);
 
+    lastBallCheck = turnsPlayed();
     predictions = ballProp();
   }
 

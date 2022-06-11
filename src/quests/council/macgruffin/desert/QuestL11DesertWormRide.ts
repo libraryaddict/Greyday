@@ -7,6 +7,8 @@ import {
   getProperty,
   toInt,
   use,
+  Monster,
+  familiarWeight,
 } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -22,6 +24,8 @@ export class QuestL11DesertWormRide implements QuestInfo {
   hooks: Item = Item.get("worm-riding hooks");
   drum: Item = Item.get("Drum Machine");
   oasis: Location = Location.get("Oasis");
+  toAbsorb: Monster[];
+  fam: Familiar = Familiar.get("Grey Goose");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / WormRide";
@@ -42,6 +46,16 @@ export class QuestL11DesertWormRide implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (this.toAbsorb.length > 0 && availableAmount(this.hooks) == 0) {
+      if (familiarWeight(this.fam) < 6) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (status > 0) {
+        return QuestStatus.READY;
+      }
+    }
+
     if (availableAmount(this.hooks) == 0) {
       return QuestStatus.NOT_READY;
     }
@@ -55,6 +69,10 @@ export class QuestL11DesertWormRide implements QuestInfo {
 
   getGnome(): number {
     return toInt(getProperty("gnasirProgress"));
+  }
+
+  mustBeDone(): boolean {
+    return true;
   }
 
   wantsToWormRide(): boolean {
@@ -85,7 +103,7 @@ export class QuestL11DesertWormRide implements QuestInfo {
   }
 
   getLocations(): Location[] {
-    return [];
+    return [this.oasis];
   }
 
   getExplored(): number {

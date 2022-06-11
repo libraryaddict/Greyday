@@ -2,7 +2,10 @@ import {
   Effect,
   getRevision,
   haveEffect,
+  lastChoice,
+  myHp,
   myLocation,
+  myMaxhp,
   myPath,
   myTurncount,
   pathIdToName,
@@ -63,11 +66,15 @@ class GreyYouMain {
         turns = toInt(s[1]);
       }
 
+      let effect: Effect = Effect.get("Beaten Up");
+      let lastBeaten: number = 0;
+
       for (
         let i = 0;
-        i < turns && haveEffect(Effect.get("Beaten Up")) == 0;
+        i < turns && haveEffect(Effect.get("Beaten Up")) - lastBeaten != 3;
         i++
       ) {
+        lastBeaten = haveEffect(effect);
         let run = this.adventures.runTurn(true);
 
         if (!run) {

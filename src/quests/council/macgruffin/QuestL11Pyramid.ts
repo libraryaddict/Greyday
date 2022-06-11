@@ -74,7 +74,7 @@ export class QuestL11Pyramid implements QuestInfo {
 
     let fam = Familiar.get("Grey Goose");
 
-    if (familiarWeight(fam) < 6 && familiarWeight(fam) >= 3) {
+    if (familiarWeight(fam) >= 3) {
       return QuestStatus.FASTER_LATER;
     }
 

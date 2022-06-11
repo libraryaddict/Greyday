@@ -163,7 +163,8 @@ export type QuestSkills =
   | "Skills / Conifer Polymers"
   | "Skills / System Sweep"
   | "Skills / ColdDamage15"
-  | "Skills / ColdDamage10";
+  | "Skills / ColdDamage10"
+  | "Skills / DoubleNanovision";
 export type QuestMisc =
   | "Misc / Custom"
   | "Misc / FamEquip"
@@ -206,7 +207,8 @@ export type QuestNPCs =
   | "NPC / Untinkerer"
   | "NPC / Baker"
   | "NPC / Druggie"
-  | "NPC / Knoll Mayor";
+  | "NPC / Knoll Mayor"
+  | "NPC / Doctor";
 export type QuestGoblinsExperiments =
   | "GoblinLabs / LabUnlock"
   | "GoblinLabs / MegUnlock";

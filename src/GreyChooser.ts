@@ -177,6 +177,29 @@ export class AdventureFinder {
     return familiarWeight(this.goose) >= 6;
   }
 
+  getNumberOfQuestsWithAdventures(): number {
+    let count = 0;
+
+    loop: for (let quest of this.quester.getAllQuests()) {
+      if (quest.level() < 1 || quest.status() == QuestStatus.COMPLETED) {
+        continue;
+      }
+
+      for (let loc of quest.getLocations()) {
+        let advs = this.absorbs.getAdventuresInLocation(this.defeated, loc);
+
+        if (advs == null || advs.turnsToGain == 0) {
+          continue;
+        }
+
+        count++;
+        continue loop;
+      }
+    }
+
+    return count;
+  }
+
   getQuestsWithAdventures(): [QuestInfo, AdventureLocation][] {
     // We want to generate our adventues
 
@@ -445,6 +468,13 @@ export class AdventureFinder {
       return;
     }
 
+    let getPredicts = () => {
+      if (predicts == null) {
+        predicts = currentPredictions();
+      }
+
+      return predicts;
+    };
     let hasBlessing =
       haveEffect(Effect.get("Brother Corsican's Blessing")) +
         haveEffect(Effect.get("A Girl Named Sue")) >
@@ -456,6 +486,14 @@ export class AdventureFinder {
     if (this.hasEnoughGooseWeight() && myLevel() >= 5) {
       quests = this.getQuestsWithAdventures();
       nonQuests = this.getNonQuestsWithAdventures();
+
+      nonQuests = nonQuests.filter(([loc, num]) => {
+        let mon = getPredicts().get(loc.location);
+
+        loc.shouldRunOrb = mon == null || loc.monsters.includes(mon);
+
+        return loc.shouldRunOrb;
+      });
     } else {
       // It doesn't have enough goose weight to absorb adventures, so lets try do non-quests without adventures
       // This is mostly skills
@@ -478,20 +516,14 @@ export class AdventureFinder {
     let bestQuest: [QuestInfo, AdventureLocation];
     let bestStatus: QuestStatus;
     let bestWantsResetOrb: boolean;
+    let bestWantsToRunOrb: boolean;
     let predicts: Map<Location, Monster>;
-
-    let getPredicts = () => {
-      if (predicts == null) {
-        predicts = currentPredictions();
-      }
-
-      return predicts;
-    };
 
     for (let quest of quests) {
       let status = quest[0].status();
       let runned: QuestAdventure;
       let wantToResetOrb: boolean = false;
+      let wantsToRunOrb: boolean = false;
 
       if (
         this.hasEnoughGooseWeight() &&
@@ -504,6 +536,7 @@ export class AdventureFinder {
         let current = getPredicts().get(a.location);
 
         if (current == null || a.monsters.includes(current)) {
+          wantsToRunOrb = true;
           a.shouldRunOrb = true;
 
           if (
@@ -538,20 +571,27 @@ export class AdventureFinder {
         }
       }
 
-      if (
-        bestQuest != null && bestWantsResetOrb && !wantToResetOrb
-          ? status > bestStatus
-          : status >= bestStatus
-      ) {
-        continue;
+      if (bestQuest != null) {
+        if (bestWantsToRunOrb) {
+          if (status >= bestStatus) {
+            continue;
+          }
+        } else if (!bestWantsResetOrb && wantToResetOrb) {
+          continue;
+        } else if (!wantsToRunOrb) {
+          if (status >= bestStatus) {
+            continue;
+          }
+        }
       }
 
       bestQuest = quest;
       bestStatus = quest[0].status();
       bestWantsResetOrb = wantToResetOrb;
+      bestWantsToRunOrb = wantsToRunOrb;
     }
 
-    if (bestQuest != null && bestQuest[0].status() == QuestStatus.READY) {
+    if (bestQuest != null && bestWantsToRunOrb) {
       return {
         quest: bestQuest[0],
         locationInfo: bestQuest[1],
@@ -582,10 +622,12 @@ export class AdventureFinder {
         }
       }
 
-      return {
-        quest: null,
-        locationInfo: best,
-      };
+      if (best != null && (bestQuest == null || best.shouldRunOrb)) {
+        return {
+          quest: null,
+          locationInfo: best,
+        };
+      }
     }
 
     if (bestQuest != null) {

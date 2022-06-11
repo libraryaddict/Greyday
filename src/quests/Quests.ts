@@ -21,6 +21,7 @@ export interface QuestInfo {
   mustBeDone?(): boolean; // If there's some state that requires this to be done asap, like effects that'll run out
   hasFamiliarRecommendation?(): Familiar; // This quest would like this familiar leveled up as it'd be useful
   getResourceClaims?(): ResourceClaim[];
+  getAdventuresRemaining?(): number; // The amount of adventures remaining and needed to finish this location. Used when seeking absorbs
   toAbsorb?: Monster[]; // Monster[] is calculated by use of run() and set to null before calling status()
 }
 

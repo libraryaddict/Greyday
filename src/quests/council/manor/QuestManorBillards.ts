@@ -70,8 +70,8 @@ export class QuestManorBillards implements QuestInfo {
       outfit.setNoCombat();
     }
 
-    outfit.addItem(Item.get("Staff of Fats"));
     outfit.addItem(this.cue);
+    outfit.addBonus("+max 0.1 elemental dmg");
 
     return {
       outfit: outfit,
