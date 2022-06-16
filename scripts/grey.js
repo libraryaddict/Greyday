@@ -65,6 +65,7 @@ const external_kolmafia_namespaceObject = require("kolmafia");
 
 
 
+
 var QuestStatus;(function (QuestStatus) {QuestStatus[QuestStatus["READY"] = 0] = "READY";QuestStatus[QuestStatus["FASTER_LATER"] = 1] = "FASTER_LATER";QuestStatus[QuestStatus["NOT_READY"] = 2] = "NOT_READY";QuestStatus[QuestStatus["COMPLETED"] = 3] = "COMPLETED";})(QuestStatus || (QuestStatus = {}));
 
 
@@ -1951,6 +1952,82 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
       }
 
       return mult;
+    } }, { key: "getAdventuresByAbsorbs", value:
+
+    function getAdventuresByAbsorbs(
+    defeated,
+    monsters)
+
+    {var includeSkills = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+      var skills = this.getMustHaveSkills();
+
+      if (!GreySettings.speedRunMode) {var _iterator2 = GreyAbsorber_createForOfIteratorHelper(
+        this.getUsefulSkills()),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var entry = _step2.value;
+            skills.set(entry[0], entry[1]);
+          }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+      }
+
+      // for (let entry of this.getRolloverAdvs()) {
+      //   skills.set(entry[0], entry[1]);
+      // }
+
+      var absorbs = monsters.
+      map((m) => AbsorbsProvider.getAbsorb(m)).
+      filter((a) => {
+        if (
+        a.adventures <= 0 && (
+        a.skill == null || !includeSkills || !skills.has(a.skill)))
+        {
+          return false;
+        }
+
+        if (
+        a.adventures > 0 &&
+        defeated.get(a.monster) == Reabsorbed.REABSORBED)
+        {
+          return false;
+        }
+
+        if (a.skill != null && (0,external_kolmafia_namespaceObject.haveSkill)(a.skill)) {
+          return false;
+        }
+
+        return true;
+      });
+
+      if (absorbs.length == 0) {
+        return null;
+      }
+
+      var advsSpent = 1;
+
+      var totalAdvs = absorbs.reduce(
+      (p, a) =>
+      Math.max(0, a.adventures) * this.getMultiplier(a.monster, defeated) + p,
+      0);
+
+      var newSkills = new Map();var _iterator3 = GreyAbsorber_createForOfIteratorHelper(
+
+      absorbs),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var a = _step3.value;
+          if (!skills.has(a.skill)) {
+            continue;
+          }
+
+          newSkills.set(a, skills.get(a.skill));
+        }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+
+      return {
+        location: null,
+        turnsToGain: totalAdvs,
+        expectedTurnsProfit:
+        totalAdvs - (advsSpent + Math.max(2, Math.ceil(advsSpent * 0.2))),
+        monsters: absorbs.map((a) => a.monster),
+        skills: newSkills,
+        shouldWait:
+        absorbs.filter((a) => a.adventures > 0 && !defeated.has(a.monster)).
+        length > 0,
+        shouldRunOrb: false };
+
     } }, { key: "getAdventuresInLocation", value:
 
     function getAdventuresInLocation(
@@ -1960,10 +2037,10 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
     {var includeSkills = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
       var skills = this.getMustHaveSkills();
 
-      if (!GreySettings.speedRunMode) {var _iterator2 = GreyAbsorber_createForOfIteratorHelper(
-        this.getUsefulSkills()),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var entry = _step2.value;
+      if (!GreySettings.speedRunMode) {var _iterator4 = GreyAbsorber_createForOfIteratorHelper(
+        this.getUsefulSkills()),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var entry = _step4.value;
             skills.set(entry[0], entry[1]);
-          }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+          }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
       }
 
       // for (let entry of this.getRolloverAdvs()) {
@@ -2038,15 +2115,15 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
       Math.max(0, a.adventures) * this.getMultiplier(a.monster, defeated) + p,
       0);
 
-      var newSkills = new Map();var _iterator3 = GreyAbsorber_createForOfIteratorHelper(
+      var newSkills = new Map();var _iterator5 = GreyAbsorber_createForOfIteratorHelper(
 
-      absorbs),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var a = _step3.value;
+      absorbs),_step5;try {for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {var a = _step5.value;
           if (!skills.has(a.skill)) {
             continue;
           }
 
           newSkills.set(a, skills.get(a.skill));
-        }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+        }} catch (err) {_iterator5.e(err);} finally {_iterator5.f();}
 
       return {
         location: location,
@@ -2163,11 +2240,11 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
         forEach((m) => {
           monsters.set(m, Reabsorbed.NOT_REABSORBED);
         });
-      }var _iterator4 = GreyAbsorber_createForOfIteratorHelper(
+      }var _iterator6 = GreyAbsorber_createForOfIteratorHelper(
 
-      reabsorbed),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var m = _step4.value;
+      reabsorbed),_step6;try {for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {var m = _step6.value;
           monsters.set(m, Reabsorbed.REABSORBED);
-        }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
+        }} catch (err) {_iterator6.e(err);} finally {_iterator6.f();}
 
       if (
       (0,external_kolmafia_namespaceObject.lastMonster)() != null &&
@@ -2219,21 +2296,21 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
     defeated)
 
     {var includeSkills = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      var map = new Map();var _iterator5 = GreyAbsorber_createForOfIteratorHelper(
+      var map = new Map();var _iterator7 = GreyAbsorber_createForOfIteratorHelper(
 
       AbsorbsProvider.loadAbsorbs().filter(
       (a) =>
       (includeSkills || a.adventures > 0) &&
-      defeated.get(a.monster) != Reabsorbed.REABSORBED)),_step5;try {for (_iterator5.s(); !(_step5 = _iterator5.n()).done;)
-        {var absorb = _step5.value;var _iterator6 = GreyAbsorber_createForOfIteratorHelper(
-          getLocations(absorb.monster)),_step6;try {for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {var l = _step6.value;
+      defeated.get(a.monster) != Reabsorbed.REABSORBED)),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;)
+        {var absorb = _step7.value;var _iterator8 = GreyAbsorber_createForOfIteratorHelper(
+          getLocations(absorb.monster)),_step8;try {for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {var l = _step8.value;
               if (map.has(l)) {
                 continue;
               }
 
               map.set(l, this.getAdventuresInLocation(defeated, l, includeSkills));
-            }} catch (err) {_iterator6.e(err);} finally {_iterator6.f();}
-        }} catch (err) {_iterator5.e(err);} finally {_iterator5.f();}
+            }} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}
+        }} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}
 
       return GreyAbsorber_toConsumableArray(map.values()).filter((a) => a != null);
     } }, { key: "printRemainingAbsorbs", value:
@@ -2276,7 +2353,7 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
 
       join(", "));
 
-    } }], [{ key: "getAbsorb", value: function getAbsorb(monster) {var _iterator7 = GreyAbsorber_createForOfIteratorHelper(AbsorbsProvider.loadAbsorbs()),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var absorb = _step7.value;if (absorb.monster != monster) {continue;}return absorb;}} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}return null;} }, { key: "loadAbsorbs", value: function loadAbsorbs() {if (AbsorbsProvider.allAbsorbs != null) {return AbsorbsProvider.allAbsorbs;}AbsorbsProvider.allAbsorbs = [];var _iterator8 = GreyAbsorber_createForOfIteratorHelper((0,external_kolmafia_namespaceObject.fileToBuffer)("data/grey_you_data.txt").split("\n")),_step8;try {for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {var line = _step8.value;var spl = line.split("\t");if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {continue;}var mons = (0,external_kolmafia_namespaceObject.toMonster)(spl[0]);if (mons == external_kolmafia_namespaceObject.Monster.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown " + spl[0]);continue;}var absorb = new Absorb();absorb.monster = mons;if (spl[1].endsWith("adventures")) {absorb.adventures = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("muscle")) {absorb.mus = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("mysticality")) {absorb.mys = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("moxie")) {absorb.mox = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("maximum hp")) {absorb.hp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else if (spl[1].endsWith("maximum mp")) {absorb.mp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else {absorb.skill = (0,external_kolmafia_namespaceObject.toSkill)(spl[1]);if (absorb.skill == external_kolmafia_namespaceObject.Skill.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown thingy " + spl[1]);}}AbsorbsProvider.allAbsorbs.push(absorb);}} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}return AbsorbsProvider.allAbsorbs;} }, { key: "getReabsorbedMonsters", value: function getReabsorbedMonsters() {return (0,external_kolmafia_namespaceObject.getProperty)("gooseReprocessed").split(",").filter((s) => s != "").map((m) => (0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.toInt)(m)));} }]);return AbsorbsProvider;}();GreyAbsorber_defineProperty(AbsorbsProvider, "allAbsorbs", void 0);
+    } }], [{ key: "getAbsorb", value: function getAbsorb(monster) {var _iterator9 = GreyAbsorber_createForOfIteratorHelper(AbsorbsProvider.loadAbsorbs()),_step9;try {for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {var absorb = _step9.value;if (absorb.monster != monster) {continue;}return absorb;}} catch (err) {_iterator9.e(err);} finally {_iterator9.f();}return null;} }, { key: "loadAbsorbs", value: function loadAbsorbs() {if (AbsorbsProvider.allAbsorbs != null) {return AbsorbsProvider.allAbsorbs;}AbsorbsProvider.allAbsorbs = [];var _iterator10 = GreyAbsorber_createForOfIteratorHelper((0,external_kolmafia_namespaceObject.fileToBuffer)("data/grey_you_data.txt").split("\n")),_step10;try {for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {var line = _step10.value;var spl = line.split("\t");if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {continue;}var mons = (0,external_kolmafia_namespaceObject.toMonster)(spl[0]);if (mons == external_kolmafia_namespaceObject.Monster.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown " + spl[0]);continue;}var absorb = new Absorb();absorb.monster = mons;if (spl[1].endsWith("adventures")) {absorb.adventures = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("muscle")) {absorb.mus = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("mysticality")) {absorb.mys = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("moxie")) {absorb.mox = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("maximum hp")) {absorb.hp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else if (spl[1].endsWith("maximum mp")) {absorb.mp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else {absorb.skill = (0,external_kolmafia_namespaceObject.toSkill)(spl[1]);if (absorb.skill == external_kolmafia_namespaceObject.Skill.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown thingy " + spl[1]);}}AbsorbsProvider.allAbsorbs.push(absorb);}} catch (err) {_iterator10.e(err);} finally {_iterator10.f();}return AbsorbsProvider.allAbsorbs;} }, { key: "getReabsorbedMonsters", value: function getReabsorbedMonsters() {return (0,external_kolmafia_namespaceObject.getProperty)("gooseReprocessed").split(",").filter((s) => s != "").map((m) => (0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.toInt)(m)));} }]);return AbsorbsProvider;}();GreyAbsorber_defineProperty(AbsorbsProvider, "allAbsorbs", void 0);
 
 
 
@@ -3542,7 +3619,7 @@ var QuestTowerKillSkin = /*#__PURE__*/function () {function QuestTowerKillSkin()
     external_kolmafia_namespaceObject.Familiar.get("Shorter-Order Cook"));QuestTowerWallSkin_defineProperty(this, "hotPlate",
     external_kolmafia_namespaceObject.Item.get("Hot Plate"));QuestTowerWallSkin_defineProperty(this, "maximizeString",
 
-    "hot dmg 1 max +stench dmg 1 max +cold dmg 1 max +sleaze dmg 1 max +spooky dmg 1 max -tie -offhand -familiar");QuestTowerWallSkin_defineProperty(this, "familiarEquips",
+    "hot dmg 1 max +stench dmg 1 max +cold dmg 1 max +sleaze dmg 1 max +spooky dmg 1 max -tie");QuestTowerWallSkin_defineProperty(this, "familiarEquips",
     [
     "Muscle band",
     "Ant Hoe",
@@ -3551,7 +3628,9 @@ var QuestTowerKillSkin = /*#__PURE__*/function () {function QuestTowerKillSkin()
     "Ant Rake",
     "Ant Sickle",
     "Tiny bowler"].
-    map((s) => external_kolmafia_namespaceObject.Item.get(s)));}QuestTowerWallSkin_createClass(QuestTowerKillSkin, [{ key: "isPossible", value:
+    map((s) => external_kolmafia_namespaceObject.Item.get(s)));QuestTowerWallSkin_defineProperty(this, "lastPossible",
+    0);QuestTowerWallSkin_defineProperty(this, "possible", void 0);}QuestTowerWallSkin_createClass(QuestTowerKillSkin, [{ key: "isPossible", value:
+
 
     function isPossible() {
       if (!(0,external_kolmafia_namespaceObject.haveFamiliar)(this.familiar)) {
@@ -3561,6 +3640,12 @@ var QuestTowerKillSkin = /*#__PURE__*/function () {function QuestTowerKillSkin()
       if (getQuestStatus("questL13Final") < 6) {
         return true;
       }
+
+      if (this.lastPossible == (0,external_kolmafia_namespaceObject.turnsPlayed)()) {
+        return this.possible;
+      }
+
+      this.lastPossible = (0,external_kolmafia_namespaceObject.turnsPlayed)();
 
       // Short cook and physical damage
       var damagePerRound = 7;
@@ -3575,7 +3660,7 @@ var QuestTowerKillSkin = /*#__PURE__*/function () {function QuestTowerKillSkin()
         damagePerRound++;
       }
 
-      (0,external_kolmafia_namespaceObject.maximize)(this.maximizeString, true);
+      (0,external_kolmafia_namespaceObject.maximize)(this.maximizeString + " -offhand -familiar", true);
 
       for (var _i = 0, _arr = ["Cold", "Hot", "Sleaze", "Spooky", "Stench"]; _i < _arr.length; _i++) {var ele = _arr[_i];
         var mod = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", ele + " Damage");
@@ -3585,7 +3670,7 @@ var QuestTowerKillSkin = /*#__PURE__*/function () {function QuestTowerKillSkin()
         }
       }
 
-      return damagePerRound >= 13;
+      return this.possible = damagePerRound >= 13;
     } }, { key: "run", value:
 
     function run() {
@@ -3613,13 +3698,17 @@ var QuestTowerKillSkin = /*#__PURE__*/function () {function QuestTowerKillSkin()
             throw "Expected to be using cook!";
           }
 
+          if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_hotTubSoaks")) < 5 && (0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)()) {
+            (0,external_kolmafia_namespaceObject.cliExecute)("hottub");
+          }
+
           if ((0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)()) {
             throw "Not healthy enough!";
           }
 
           greyAdv(
           "place.php?whichplace=nstower&action=ns_05_monster1",
-          null,
+          outfit,
           new AdventureSettings().setStartOfFightMacro(
           Macro.skill("Grey Noise").repeat()));
 
@@ -3784,6 +3873,10 @@ var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_cl
 
           GreyPulls.tryPull(i);
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+    } }, { key: "pullCrypts", value:
+
+    function pullCrypts() {
+      GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Gravy Boat"));
     } }, { key: "pullDeckOfLewdCards", value:
 
     function pullDeckOfLewdCards() {
@@ -3815,7 +3908,6 @@ var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_cl
       }
 
       GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Portable cassette player"));
-      GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get('"Remember the Trees" Shirt'));
       GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Daily dungeon malware"));
     } }, { key: "pullNinjaGear", value:
 
@@ -3839,6 +3931,10 @@ var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_cl
 
     function pullMeatBuffers() {
       GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Mick's IcyVapoHotness Inhaler"));
+    } }, { key: "pullTorsoAwareness", value:
+
+    function pullTorsoAwareness() {
+      GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get('"Remember the Trees" Shirt'));
     } }, { key: "pullOre", value:
 
     function pullOre() {
@@ -4234,7 +4330,8 @@ function QuestL11DesertCompass_classCallCheck(instance, Constructor) {if (!(inst
 
 var QuestL11DesertCompass = /*#__PURE__*/function () {function QuestL11DesertCompass() {QuestL11DesertCompass_classCallCheck(this, QuestL11DesertCompass);QuestL11DesertCompass_defineProperty(this, "compass",
     external_kolmafia_namespaceObject.Item.get("UV-resistant compass"));QuestL11DesertCompass_defineProperty(this, "script",
-    external_kolmafia_namespaceObject.Item.get("Shore Inc. Ship Trip Scrip"));}QuestL11DesertCompass_createClass(QuestL11DesertCompass, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Shore Inc. Ship Trip Scrip"));QuestL11DesertCompass_defineProperty(this, "dontPullScriptAt",
+    6);}QuestL11DesertCompass_createClass(QuestL11DesertCompass, [{ key: "getId", value:
 
     function getId() {
       return "Council / MacGruffin / Desert / Compass";
@@ -4245,6 +4342,10 @@ var QuestL11DesertCompass = /*#__PURE__*/function () {function QuestL11DesertCom
     } }, { key: "getResourceClaims", value:
 
     function getResourceClaims() {
+      if ((0,external_kolmafia_namespaceObject.storageAmount)(this.script) <= this.dontPullScriptAt) {
+        return [];
+      }
+
       return [new ResourcePullClaim(this.script, "Script for Compass", 3)];
     } }, { key: "status", value:
 
@@ -4271,7 +4372,10 @@ var QuestL11DesertCompass = /*#__PURE__*/function () {function QuestL11DesertCom
       return {
         location: null,
         run: () => {
-          if (GreySettings.isHardcoreMode()) {
+          if (
+          GreySettings.isHardcoreMode() ||
+          (0,external_kolmafia_namespaceObject.storageAmount)(this.script) <= this.dontPullScriptAt)
+          {
             var props = new PropertyManager();
 
             try {
@@ -9029,7 +9133,7 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) > 1) {
+      if ((0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) > 2) {
         return QuestStatus.NOT_READY;
       }
 
@@ -10433,6 +10537,7 @@ function QuestTowerWallMeat_classCallCheck(instance, Constructor) {if (!(instanc
 
 
 
+
 var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat() {QuestTowerWallMeat_classCallCheck(this, QuestTowerWallMeat);}QuestTowerWallMeat_createClass(QuestTowerWallMeat, [{ key: "getId", value:
     function getId() {
       return "Council / Tower / WallOfMeat";
@@ -10459,6 +10564,7 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
     function run() {
       var outfit = new GreyOutfit();
       outfit.meatDropWeight = 5;
+      outfit.addBonus("+0.01 moxie");
 
       return {
         outfit: outfit,
@@ -10466,7 +10572,13 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
         disableFamOverride: true,
         location: null,
         run: () => {
-          greyAdv("place.php?whichplace=nstower&action=ns_06_monster2", outfit);
+          greyAdv(
+          "place.php?whichplace=nstower&action=ns_06_monster2",
+          outfit,
+          new AdventureSettings().setFinishingBlowMacro(
+          Macro.trySkillRepeat(external_kolmafia_namespaceObject.Skill.get("Infinite Loop"))));
+
+
         } };
 
     } }, { key: "getLocations", value:
@@ -12279,6 +12391,7 @@ function CryptTemplate_classCallCheck(instance, Constructor) {if (!(instance ins
 
 
 
+
 var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {CryptTemplate_classCallCheck(this, CryptL7Template);CryptTemplate_defineProperty(this, "swords",
     [
     "ebony epee",
@@ -12296,7 +12409,17 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
     "white sword",
     "sweet ninja sword"].
     map((s) => external_kolmafia_namespaceObject.Item.get(s)));CryptTemplate_defineProperty(this, "cape",
-    external_kolmafia_namespaceObject.Item.get("Unwrapped knock-off retro superhero cape"));}CryptTemplate_createClass(CryptL7Template, [{ key: "getSword", value:
+    external_kolmafia_namespaceObject.Item.get("Unwrapped knock-off retro superhero cape"));CryptTemplate_defineProperty(this, "gravyboat",
+    external_kolmafia_namespaceObject.Item.get("Gravy Boat"));CryptTemplate_defineProperty(this, "boatResource",
+    new ResourcePullClaim(
+    this.gravyboat,
+    "Crypt Evil Supression",
+    10));}CryptTemplate_createClass(CryptL7Template, [{ key: "getResourceClaims", value:
+
+
+    function getResourceClaims() {
+      return [this.boatResource];
+    } }, { key: "getSword", value:
 
     function getSword() {
       var items = this.swords.filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0);
@@ -12318,7 +12441,15 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
 
     function addRetroSword() {var outfit = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new GreyOutfit();
       outfit.addItem(this.getSword(), 99999);
+      outfit.addItem(this.gravyboat, 99999);
       outfit.addBonus("-back");
+
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.gravyboat) == 0 &&
+      !GreySettings.isHardcoreMode())
+      {
+        GreyPulls.pullCrypts();
+      }
 
       return outfit;
     } }, { key: "adjustRetroCape", value:
@@ -13781,9 +13912,9 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     function tryCombat() {
       // max -ml, max cold dmg, raise item drop finally
       var outfit = new GreyOutfit();
-      outfit.minusMonsterLevelWeight = 3;
+      outfit.minusMonsterLevelWeight = 5;
       outfit.setItemDrops();
-      outfit.addBonus("+5 cold dmg");
+      outfit.addBonus("+5 cold dmg +5 cold spell dmg");
 
       if (
       this.getLumberHave() <= this.getFastenersHave() &&
@@ -13956,10 +14087,11 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     function getBestBlechOutfit() {
       // Stolen from autoscend
       // floor(sqrt((mus+flat_weapon_damage)/15*(1+percent_weapon_damage/100)))
-      var musMaximizer = "100muscle,100weapon damage,1000weapon damage percent";
+      var musMaximizer =
+      "100muscle,100weapon damage,1000weapon damage percent +switch left-hand man";
       var mysMaximizer =
-      "100mysticality,100spell damage,1000 spell damage percent";
-      var moxMaximizer = "100moxie,1000sleaze resistance";
+      "100mysticality,100spell damage,1000 spell damage percent +switch left-hand man";
+      var moxMaximizer = "100moxie,1000sleaze resistance +switch left-hand man";
 
       this.simMax(musMaximizer);
       var musmus = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Buffed Muscle");
@@ -15621,12 +15753,7 @@ var QuestInitialStart = /*#__PURE__*/function () {function QuestInitialStart() {
     new ResourcePullClaim(
     external_kolmafia_namespaceObject.Item.get(" Portable cassette player"),
     "Extra monster level & +combat accessory",
-    5),
-
-    new ResourcePullClaim(
-    external_kolmafia_namespaceObject.Item.get('"Remember the Trees" Shirt'),
-    "+combat shirt",
-    30)]);}QuestInitialStart_createClass(QuestInitialStart, [{ key: "getLocations", value:
+    5)]);}QuestInitialStart_createClass(QuestInitialStart, [{ key: "getLocations", value:
 
 
 
@@ -16233,7 +16360,19 @@ QuestGnomeTrainer = /*#__PURE__*/function () {function QuestGnomeTrainer() {Ques
     "Gnefarious Pickpocketing"
     // "Gnomish Hardigness",
     ].map((s) => external_kolmafia_namespaceObject.Skill.get(s)));QuestNpcStuff_defineProperty(this, "letter",
-    external_kolmafia_namespaceObject.Item.get("Letter for Melvign the Gnome"));}QuestNpcStuff_createClass(QuestGnomeTrainer, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Letter for Melvign the Gnome"));QuestNpcStuff_defineProperty(this, "shirtPulls",
+    [
+    new ResourcePullClaim(
+    external_kolmafia_namespaceObject.Item.get('"Remember the Trees" Shirt'),
+    "+combat shirt",
+    30)]);QuestNpcStuff_defineProperty(this, "torso",
+
+
+    external_kolmafia_namespaceObject.Skill.get("Torso Awareness"));}QuestNpcStuff_createClass(QuestGnomeTrainer, [{ key: "getResourceClaims", value:
+
+    function getResourceClaims() {
+      return this.shirtPulls;
+    } }, { key: "getId", value:
 
     function getId() {
       return "NPC / GnomeSkills";
@@ -16282,10 +16421,13 @@ QuestGnomeTrainer = /*#__PURE__*/function () {function QuestGnomeTrainer() {Ques
       return {
         location: null,
         run: () => {
-          (0,external_kolmafia_namespaceObject.visitUrl)(
-          "gnomes.php?action=trainskill&whichskill=" +
-          (0,external_kolmafia_namespaceObject.toInt)(this.getSkillLacking()));
+          var skill = this.getSkillLacking();
 
+          (0,external_kolmafia_namespaceObject.visitUrl)("gnomes.php?action=trainskill&whichskill=" + (0,external_kolmafia_namespaceObject.toInt)(skill));
+
+          if ((0,external_kolmafia_namespaceObject.haveSkill)(skill) && skill == this.torso) {
+            GreyPulls.pullTorsoAwareness();
+          }
         } };
 
     } }]);return QuestGnomeTrainer;}();var
@@ -18722,8 +18864,182 @@ var QuestMoonSign = /*#__PURE__*/function () {function QuestMoonSign() {QuestMoo
 
       return true;
     } }]);return QuestMoonSign;}();
+;// CONCATENATED MODULE: ./src/quests/absorbs/QuestAbsorbCanadiaMonster.ts
+function QuestAbsorbCanadiaMonster_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestAbsorbCanadiaMonster_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestAbsorbCanadiaMonster_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestAbsorbCanadiaMonster_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestAbsorbCanadiaMonster_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestAbsorbCanadiaMonster_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+
+
+var QuestAbsorbCanadiaMonster = /*#__PURE__*/function () {function QuestAbsorbCanadiaMonster() {QuestAbsorbCanadiaMonster_classCallCheck(this, QuestAbsorbCanadiaMonster);QuestAbsorbCanadiaMonster_defineProperty(this, "monster",
+    external_kolmafia_namespaceObject.Monster.get("cloud of disembodied whiskers"));QuestAbsorbCanadiaMonster_defineProperty(this, "familiar",
+    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestAbsorbCanadiaMonster_defineProperty(this, "spoon",
+    external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"));}QuestAbsorbCanadiaMonster_createClass(QuestAbsorbCanadiaMonster, [{ key: "getId", value:
+
+    function getId() {
+      return "Absorbs / Canadia";
+    } }, { key: "level", value:
+
+    function level() {
+      return 18;
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [];
+    } }, { key: "status", value:
+
+    function status() {
+      if (AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if (!canCombatLocket(this.monster)) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.familiar) < 6) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.spoon) > 0 && (0,external_kolmafia_namespaceObject.getProperty)("moonTuned") != "true") {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.canadiaAvailable)()) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.FASTER_LATER;
+    } }, { key: "run", value:
+
+    function run() {
+      return {
+        location: null,
+        outfit: null,
+        familiar: this.familiar,
+        disableFamOverride: true,
+        run: () => {
+          var page1 = (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?reminisce=1", false);
+          var url =
+          "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
+          (0,external_kolmafia_namespaceObject.toInt)(this.monster);
+
+          (0,external_kolmafia_namespaceObject.visitUrl)(url);
+          Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Re-Process Matter")).
+          trySkillRepeat(external_kolmafia_namespaceObject.Skill.get("Infinite Loop")).
+          submit();
+
+          if ((0,external_kolmafia_namespaceObject.handlingChoice)() || (0,external_kolmafia_namespaceObject.currentRound)() != 0) {
+            throw "We're supposed to be done with this locket fight!";
+          }
+        } };
+
+    } }, { key: "getResourceClaims", value:
+
+    function getResourceClaims() {
+      return [
+      new ResourceClaim(
+      ResourceType.COMBAT_LOCKET,
+      1,
+      "Locket Canadia Monster",
+      19)];
+
+
+    } }, { key: "getAbsorbs", value:
+
+    function getAbsorbs() {
+      return [this.monster];
+    } }]);return QuestAbsorbCanadiaMonster;}();
+;// CONCATENATED MODULE: ./src/quests/absorbs/QuestAbsorbStarMonster.ts
+function QuestAbsorbStarMonster_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestAbsorbStarMonster_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestAbsorbStarMonster_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestAbsorbStarMonster_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestAbsorbStarMonster_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestAbsorbStarMonster_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+
+
+var QuestAbsorbStarMonster = /*#__PURE__*/function () {function QuestAbsorbStarMonster() {QuestAbsorbStarMonster_classCallCheck(this, QuestAbsorbStarMonster);QuestAbsorbStarMonster_defineProperty(this, "evenMonster",
+    external_kolmafia_namespaceObject.Monster.get("One-Eyed Willie"));QuestAbsorbStarMonster_defineProperty(this, "oddMonster",
+    external_kolmafia_namespaceObject.Monster.get("Little Man in the Canoe"));QuestAbsorbStarMonster_defineProperty(this, "familiar",
+    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));}QuestAbsorbStarMonster_createClass(QuestAbsorbStarMonster, [{ key: "getMonster", value:
+
+    function getMonster() {
+      return (0,external_kolmafia_namespaceObject.myAscensions)() % 2 != 0 ? this.evenMonster : this.oddMonster;
+    } }, { key: "getId", value:
+
+    function getId() {
+      return "Absorbs / Hole in Sky";
+    } }, { key: "level", value:
+
+    function level() {
+      return 18;
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [];
+    } }, { key: "status", value:
+
+    function status() {
+      if (AbsorbsProvider.getReabsorbedMonsters().includes(this.getMonster())) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if (!canCombatLocket(this.getMonster())) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.familiar) < 6) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.FASTER_LATER;
+    } }, { key: "run", value:
+
+    function run() {
+      return {
+        location: null,
+        outfit: null,
+        familiar: this.familiar,
+        disableFamOverride: true,
+        run: () => {
+          var page1 = (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?reminisce=1", false);
+          var url =
+          "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
+          (0,external_kolmafia_namespaceObject.toInt)(this.getMonster());
+
+          (0,external_kolmafia_namespaceObject.visitUrl)(url);
+          Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Re-Process Matter")).
+          trySkillRepeat(external_kolmafia_namespaceObject.Skill.get("Infinite Loop")).
+          submit();
+
+          if ((0,external_kolmafia_namespaceObject.handlingChoice)() || (0,external_kolmafia_namespaceObject.currentRound)() != 0) {
+            throw "We're supposed to be done with this locket fight!";
+          }
+        } };
+
+    } }, { key: "getResourceClaims", value:
+
+    function getResourceClaims() {
+      return [
+      new ResourceClaim(
+      ResourceType.COMBAT_LOCKET,
+      1,
+      "Locket Star Monster",
+      19)];
+
+
+    } }, { key: "getAbsorbs", value:
+
+    function getAbsorbs() {
+      return [this.getMonster()];
+    } }]);return QuestAbsorbStarMonster;}();
 ;// CONCATENATED MODULE: ./src/quests/QuestsCustom.ts
 function QuestsCustom_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestsCustom_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestsCustom_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestsCustom_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestsCustom_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestsCustom_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
 
 
 
@@ -18779,6 +19095,8 @@ var QuestsCustom = /*#__PURE__*/function () {
     this.quests.push(new QuestPowerLeveling(4));
     this.quests.push(new QuestBugbearBakery());
     this.quests.push(new QuestMoonSign());
+    this.quests.push(new QuestAbsorbCanadiaMonster());
+    this.quests.push(new QuestAbsorbStarMonster());
   }QuestsCustom_createClass(QuestsCustom, [{ key: "level", value:
 
     function level() {
@@ -19190,7 +19508,10 @@ var QuestRegistry = /*#__PURE__*/function () {
 
       { id: "Council / Tower / Shadow" },
       { id: "Council / Tower / Mirror" },
-      { id: "Council / Tower / NaughtyBoss" }];
+      { id: "Council / Tower / NaughtyBoss" },
+
+      { id: "Absorbs / Hole in Sky" },
+      { id: "Absorbs / Canadia" }];
 
 
       return order.
@@ -19399,7 +19720,7 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
       this.viableQuests.forEach((q) => {
         var run = q.run();
 
-        if (run.location == null) {
+        if (run.location == null && q.getAbsorbs == null) {
           return;
         }
 
@@ -19413,10 +19734,19 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
           return;
         }
 
-        var advs = this.absorbs.getAdventuresInLocation(
-        this.defeated,
-        run.location);
+        var advs;
 
+        if (q.getAbsorbs != null) {
+          advs = this.absorbs.getAdventuresByAbsorbs(
+          this.defeated,
+          q.getAbsorbs());
+
+        } else {
+          advs = this.absorbs.getAdventuresInLocation(
+          this.defeated,
+          run.location);
+
+        }
 
         if (advs == null || advs.turnsToGain == 0) {
           return;
@@ -20845,9 +21175,9 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
 
 
     function handleCommand(command) {
-      if ((0,external_kolmafia_namespaceObject.getRevision)() < 26419) {
+      if ((0,external_kolmafia_namespaceObject.getRevision)() < 26499) {
         (0,external_kolmafia_namespaceObject.print)("Please update your mafia. You are using ".concat(
-        (0,external_kolmafia_namespaceObject.getRevision)(), " but we need at least r26419"),
+        (0,external_kolmafia_namespaceObject.getRevision)(), " but we need at least r26499"),
         "red");
 
         return;
