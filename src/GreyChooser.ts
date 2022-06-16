@@ -208,7 +208,7 @@ export class AdventureFinder {
     this.viableQuests.forEach((q) => {
       let run = q.run();
 
-      if (run.location == null) {
+      if (run.location == null && q.getAbsorbs == null) {
         return;
       }
 
@@ -222,10 +222,19 @@ export class AdventureFinder {
         return;
       }
 
-      let advs = this.absorbs.getAdventuresInLocation(
-        this.defeated,
-        run.location
-      );
+      let advs;
+
+      if (q.getAbsorbs != null) {
+        advs = this.absorbs.getAdventuresByAbsorbs(
+          this.defeated,
+          q.getAbsorbs()
+        );
+      } else {
+        advs = this.absorbs.getAdventuresInLocation(
+          this.defeated,
+          run.location
+        );
+      }
 
       if (advs == null || advs.turnsToGain == 0) {
         return;

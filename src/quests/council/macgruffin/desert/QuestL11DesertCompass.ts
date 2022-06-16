@@ -6,6 +6,7 @@ import {
   Item,
   getProperty,
   myAdventures,
+  storageAmount,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { greyAdv } from "../../../../utils/GreyLocations";
@@ -21,6 +22,7 @@ import { QuestType } from "../../../QuestTypes";
 export class QuestL11DesertCompass implements QuestInfo {
   compass: Item = Item.get("UV-resistant compass");
   script: Item = Item.get("Shore Inc. Ship Trip Scrip");
+  dontPullScriptAt: number = 6;
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / Compass";
@@ -31,6 +33,10 @@ export class QuestL11DesertCompass implements QuestInfo {
   }
 
   getResourceClaims(): ResourceClaim[] {
+    if (storageAmount(this.script) <= this.dontPullScriptAt) {
+      return [];
+    }
+
     return [new ResourcePullClaim(this.script, "Script for Compass", 3)];
   }
 
@@ -57,7 +63,10 @@ export class QuestL11DesertCompass implements QuestInfo {
     return {
       location: null,
       run: () => {
-        if (GreySettings.isHardcoreMode()) {
+        if (
+          GreySettings.isHardcoreMode() ||
+          storageAmount(this.script) <= this.dontPullScriptAt
+        ) {
           let props = new PropertyManager();
 
           try {

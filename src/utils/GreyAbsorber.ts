@@ -138,6 +138,82 @@ export class AbsorbsProvider {
     return mult;
   }
 
+  getAdventuresByAbsorbs(
+    defeated: Map<Monster, Reabsorbed>,
+    monsters: Monster[],
+    includeSkills: boolean = true
+  ) {
+    let skills = this.getMustHaveSkills();
+
+    if (!GreySettings.speedRunMode) {
+      for (let entry of this.getUsefulSkills()) {
+        skills.set(entry[0], entry[1]);
+      }
+    }
+
+    // for (let entry of this.getRolloverAdvs()) {
+    //   skills.set(entry[0], entry[1]);
+    // }
+
+    let absorbs = monsters
+      .map((m) => AbsorbsProvider.getAbsorb(m))
+      .filter((a) => {
+        if (
+          a.adventures <= 0 &&
+          (a.skill == null || !includeSkills || !skills.has(a.skill))
+        ) {
+          return false;
+        }
+
+        if (
+          a.adventures > 0 &&
+          defeated.get(a.monster) == Reabsorbed.REABSORBED
+        ) {
+          return false;
+        }
+
+        if (a.skill != null && haveSkill(a.skill)) {
+          return false;
+        }
+
+        return true;
+      });
+
+    if (absorbs.length == 0) {
+      return null;
+    }
+
+    let advsSpent = 1;
+
+    let totalAdvs = absorbs.reduce(
+      (p, a) =>
+        Math.max(0, a.adventures) * this.getMultiplier(a.monster, defeated) + p,
+      0
+    );
+    let newSkills: Map<Absorb, string> = new Map();
+
+    for (let a of absorbs) {
+      if (!skills.has(a.skill)) {
+        continue;
+      }
+
+      newSkills.set(a, skills.get(a.skill));
+    }
+
+    return {
+      location: null,
+      turnsToGain: totalAdvs,
+      expectedTurnsProfit:
+        totalAdvs - (advsSpent + Math.max(2, Math.ceil(advsSpent * 0.2))),
+      monsters: absorbs.map((a) => a.monster),
+      skills: newSkills,
+      shouldWait:
+        absorbs.filter((a) => a.adventures > 0 && !defeated.has(a.monster))
+          .length > 0,
+      shouldRunOrb: false,
+    };
+  }
+
   getAdventuresInLocation(
     defeated: Map<Monster, Reabsorbed>,
     location: Location,

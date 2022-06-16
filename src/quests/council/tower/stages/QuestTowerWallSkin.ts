@@ -13,6 +13,10 @@ import {
   myFamiliar,
   myMaxhp,
   myHp,
+  toInt,
+  getProperty,
+  cliExecute,
+  turnsPlayed,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -153,7 +157,7 @@ export class QuestTowerKillSkin {
   familiar: Familiar = Familiar.get("Shorter-Order Cook");
   hotPlate: Item = Item.get("Hot Plate");
   maximizeString: string =
-    "hot dmg 1 max +stench dmg 1 max +cold dmg 1 max +sleaze dmg 1 max +spooky dmg 1 max -tie -offhand -familiar";
+    "hot dmg 1 max +stench dmg 1 max +cold dmg 1 max +sleaze dmg 1 max +spooky dmg 1 max -tie";
   familiarEquips: Item[] = [
     "Muscle band",
     "Ant Hoe",
@@ -163,6 +167,8 @@ export class QuestTowerKillSkin {
     "Ant Sickle",
     "Tiny bowler",
   ].map((s) => Item.get(s));
+  lastPossible: number = 0;
+  possible: boolean;
 
   isPossible(): boolean {
     if (!haveFamiliar(this.familiar)) {
@@ -172,6 +178,12 @@ export class QuestTowerKillSkin {
     if (getQuestStatus("questL13Final") < 6) {
       return true;
     }
+
+    if (this.lastPossible == turnsPlayed()) {
+      return this.possible;
+    }
+
+    this.lastPossible = turnsPlayed();
 
     // Short cook and physical damage
     let damagePerRound = 7;
@@ -186,7 +198,7 @@ export class QuestTowerKillSkin {
       damagePerRound++;
     }
 
-    maximize(this.maximizeString, true);
+    maximize(this.maximizeString + " -offhand -familiar", true);
 
     for (let ele of ["Cold", "Hot", "Sleaze", "Spooky", "Stench"]) {
       let mod = numericModifier("Generated:_spec", ele + " Damage");
@@ -196,7 +208,7 @@ export class QuestTowerKillSkin {
       }
     }
 
-    return damagePerRound >= 13;
+    return (this.possible = damagePerRound >= 13);
   }
 
   run(): QuestAdventure {
@@ -224,13 +236,17 @@ export class QuestTowerKillSkin {
           throw "Expected to be using cook!";
         }
 
+        if (toInt(getProperty("_hotTubSoaks")) < 5 && myHp() < myMaxhp()) {
+          cliExecute("hottub");
+        }
+
         if (myHp() < myMaxhp()) {
           throw "Not healthy enough!";
         }
 
         greyAdv(
           "place.php?whichplace=nstower&action=ns_05_monster1",
-          null,
+          outfit,
           new AdventureSettings().setStartOfFightMacro(
             Macro.skill("Grey Noise").repeat()
           )

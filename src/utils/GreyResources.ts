@@ -52,6 +52,10 @@ export class GreyPulls {
     }
   }
 
+  static pullCrypts() {
+    GreyPulls.tryPull(Item.get("Gravy Boat"));
+  }
+
   static pullDeckOfLewdCards() {
     GreyPulls.tryPull(Item.get("deck of lewd playing cards"));
   }
@@ -81,7 +85,6 @@ export class GreyPulls {
     }
 
     GreyPulls.tryPull(Item.get("Portable cassette player"));
-    GreyPulls.tryPull(Item.get('"Remember the Trees" Shirt'));
     GreyPulls.tryPull(Item.get("Daily dungeon malware"));
   }
 
@@ -105,6 +108,10 @@ export class GreyPulls {
 
   static pullMeatBuffers() {
     GreyPulls.tryPull(Item.get("Mick's IcyVapoHotness Inhaler"));
+  }
+
+  static pullTorsoAwareness() {
+    GreyPulls.tryPull(Item.get('"Remember the Trees" Shirt'));
   }
 
   static pullOre() {

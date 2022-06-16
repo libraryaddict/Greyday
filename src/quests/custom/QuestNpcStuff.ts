@@ -20,7 +20,11 @@ import {
   runChoice,
 } from "kolmafia";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { ResourceClaim } from "../../utils/GreyResources";
+import {
+  GreyPulls,
+  ResourceClaim,
+  ResourcePullClaim,
+} from "../../utils/GreyResources";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -184,6 +188,18 @@ class QuestGnomeTrainer implements QuestInfo {
     // "Gnomish Hardigness",
   ].map((s) => Skill.get(s));
   letter: Item = Item.get("Letter for Melvign the Gnome");
+  shirtPulls: ResourceClaim[] = [
+    new ResourcePullClaim(
+      Item.get('"Remember the Trees" Shirt'),
+      "+combat shirt",
+      30
+    ),
+  ];
+  torso: Skill = Skill.get("Torso Awareness");
+
+  getResourceClaims() {
+    return this.shirtPulls;
+  }
 
   getId(): QuestType {
     return "NPC / GnomeSkills";
@@ -232,10 +248,13 @@ class QuestGnomeTrainer implements QuestInfo {
     return {
       location: null,
       run: () => {
-        visitUrl(
-          "gnomes.php?action=trainskill&whichskill=" +
-            toInt(this.getSkillLacking())
-        );
+        let skill = this.getSkillLacking();
+
+        visitUrl("gnomes.php?action=trainskill&whichskill=" + toInt(skill));
+
+        if (haveSkill(skill) && skill == this.torso) {
+          GreyPulls.pullTorsoAwareness();
+        }
       },
     };
   }

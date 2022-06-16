@@ -23,6 +23,7 @@ export interface QuestInfo {
   getResourceClaims?(): ResourceClaim[];
   getAdventuresRemaining?(): number; // The amount of adventures remaining and needed to finish this location. Used when seeking absorbs
   toAbsorb?: Monster[]; // Monster[] is calculated by use of run() and set to null before calling status()
+  getAbsorbs?(): Monster[]; // Unexposed by Locations[], this is a backup for getting available absorbs
 }
 
 export enum QuestStatus {

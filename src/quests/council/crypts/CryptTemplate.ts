@@ -10,7 +10,12 @@ import {
   equip,
 } from "kolmafia";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { ResourceClaim } from "../../../utils/GreyResources";
+import {
+  GreyPulls,
+  ResourceClaim,
+  ResourcePullClaim,
+} from "../../../utils/GreyResources";
+import { GreySettings } from "../../../utils/GreySettings";
 import { QuestInfo, QuestStatus, QuestAdventure } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { CryptStatus } from "../QuestL7Crypt";
@@ -33,6 +38,16 @@ export abstract class CryptL7Template implements QuestInfo {
     "sweet ninja sword",
   ].map((s) => Item.get(s));
   cape: Item = Item.get("Unwrapped knock-off retro superhero cape");
+  gravyboat: Item = Item.get("Gravy Boat");
+  boatResource: ResourceClaim = new ResourcePullClaim(
+    this.gravyboat,
+    "Crypt Evil Supression",
+    10
+  );
+
+  getResourceClaims() {
+    return [this.boatResource];
+  }
 
   getSword(): Item {
     let items = this.swords.filter((i) => availableAmount(i) > 0);
@@ -54,7 +69,15 @@ export abstract class CryptL7Template implements QuestInfo {
 
   addRetroSword(outfit: GreyOutfit = new GreyOutfit()): GreyOutfit {
     outfit.addItem(this.getSword(), 99999);
+    outfit.addItem(this.gravyboat, 99999);
     outfit.addBonus("-back");
+
+    if (
+      availableAmount(this.gravyboat) == 0 &&
+      !GreySettings.isHardcoreMode()
+    ) {
+      GreyPulls.pullCrypts();
+    }
 
     return outfit;
   }

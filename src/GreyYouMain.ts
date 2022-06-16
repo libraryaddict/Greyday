@@ -21,9 +21,9 @@ class GreyYouMain {
   adventures: GreyAdventurer;
 
   handleCommand(command: string) {
-    if (getRevision() < 26419) {
+    if (getRevision() < 26499) {
       print(
-        `Please update your mafia. You are using ${getRevision()} but we need at least r26419`,
+        `Please update your mafia. You are using ${getRevision()} but we need at least r26499`,
         "red"
       );
       return;

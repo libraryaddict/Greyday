@@ -1,6 +1,7 @@
-import { Location, Familiar } from "kolmafia";
-import { greyAdv } from "../../../../utils/GreyLocations";
+import { Location, Familiar, myBasestat, Stat, Skill } from "kolmafia";
+import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { Macro } from "../../../../utils/MacroBuilder";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -35,6 +36,7 @@ export class QuestTowerWallMeat implements QuestInfo {
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
     outfit.meatDropWeight = 5;
+    outfit.addBonus("+0.01 moxie");
 
     return {
       outfit: outfit,
@@ -42,7 +44,13 @@ export class QuestTowerWallMeat implements QuestInfo {
       disableFamOverride: true,
       location: null,
       run: () => {
-        greyAdv("place.php?whichplace=nstower&action=ns_06_monster2", outfit);
+        greyAdv(
+          "place.php?whichplace=nstower&action=ns_06_monster2",
+          outfit,
+          new AdventureSettings().setFinishingBlowMacro(
+            Macro.trySkillRepeat(Skill.get("Infinite Loop"))
+          )
+        );
       },
     };
   }

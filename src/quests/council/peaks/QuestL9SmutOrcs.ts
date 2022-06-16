@@ -130,9 +130,9 @@ export class SmutOrcs implements QuestInfo {
   tryCombat(): QuestAdventure {
     // max -ml, max cold dmg, raise item drop finally
     let outfit = new GreyOutfit();
-    outfit.minusMonsterLevelWeight = 3;
+    outfit.minusMonsterLevelWeight = 5;
     outfit.setItemDrops();
-    outfit.addBonus("+5 cold dmg");
+    outfit.addBonus("+5 cold dmg +5 cold spell dmg");
 
     if (
       this.getLumberHave() <= this.getFastenersHave() &&
@@ -305,10 +305,11 @@ export class SmutOrcs implements QuestInfo {
   getBestBlechOutfit(): [number, string, number][] {
     // Stolen from autoscend
     // floor(sqrt((mus+flat_weapon_damage)/15*(1+percent_weapon_damage/100)))
-    let musMaximizer = "100muscle,100weapon damage,1000weapon damage percent";
+    let musMaximizer =
+      "100muscle,100weapon damage,1000weapon damage percent +switch left-hand man";
     let mysMaximizer =
-      "100mysticality,100spell damage,1000 spell damage percent";
-    let moxMaximizer = "100moxie,1000sleaze resistance";
+      "100mysticality,100spell damage,1000 spell damage percent +switch left-hand man";
+    let moxMaximizer = "100moxie,1000sleaze resistance +switch left-hand man";
 
     this.simMax(musMaximizer);
     let musmus = numericModifier("Generated:_spec", "Buffed Muscle");

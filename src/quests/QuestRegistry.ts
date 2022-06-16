@@ -394,6 +394,9 @@ export class QuestRegistry {
       { id: "Council / Tower / Shadow" },
       { id: "Council / Tower / Mirror" },
       { id: "Council / Tower / NaughtyBoss" },
+
+      { id: "Absorbs / Hole in Sky" },
+      { id: "Absorbs / Canadia" },
     ];
 
     return order

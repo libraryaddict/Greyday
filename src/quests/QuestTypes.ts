@@ -212,7 +212,7 @@ export type QuestNPCs =
 export type QuestGoblinsExperiments =
   | "GoblinLabs / LabUnlock"
   | "GoblinLabs / MegUnlock";
-
+export type QuestAbsorbs = "Absorbs / Hole in Sky" | "Absorbs / Canadia";
 export type QuestType =
   | QuestCouncil
   | QuestMisc
@@ -221,4 +221,5 @@ export type QuestType =
   | QuestNPCs
   | QuestSkills
   | QuestCombatLocket
-  | QuestIslandUnlock;
+  | QuestIslandUnlock
+  | QuestAbsorbs;

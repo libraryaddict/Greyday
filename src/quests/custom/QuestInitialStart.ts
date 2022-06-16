@@ -54,11 +54,6 @@ export class QuestInitialStart implements QuestInfo {
       "Extra monster level & +combat accessory",
       5
     ),
-    new ResourcePullClaim(
-      Item.get('"Remember the Trees" Shirt'),
-      "+combat shirt",
-      30
-    ),
   ];
 
   getLocations(): Location[] {
