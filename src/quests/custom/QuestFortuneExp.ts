@@ -7,6 +7,8 @@ import {
   familiarEquipment,
   Item,
   availableAmount,
+  myAscensions,
+  toInt,
 } from "kolmafia";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
@@ -29,7 +31,11 @@ export class QuestFortuneExp implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (familiarWeight(this.fam) > 2 || availableAmount(this.equip) == 0) {
+    if (
+      familiarWeight(this.fam) > 2 ||
+      availableAmount(this.equip) == 0 ||
+      toInt(getProperty("lastDesertUnlock")) != myAscensions()
+    ) {
       return QuestStatus.NOT_READY;
     }
 

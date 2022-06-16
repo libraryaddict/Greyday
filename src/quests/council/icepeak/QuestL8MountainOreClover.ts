@@ -1,4 +1,4 @@
-import { availableAmount, Item, Location } from "kolmafia";
+import { availableAmount, Effect, haveEffect, Item, Location } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import {
   GreyClovers,
@@ -30,6 +30,10 @@ export class QuestL8MountainOreClover extends QuestL8MountainOre {
     }
 
     if (this.getStatus() < MountainStatus.TRAPPER_DEMANDS) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (haveEffect(Effect.get("A Girl Named Sue")) > 0) {
       return QuestStatus.NOT_READY;
     }
 

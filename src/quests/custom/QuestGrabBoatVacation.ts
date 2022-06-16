@@ -22,6 +22,8 @@ import {
   familiarWeight,
   Monster,
   itemAmount,
+  haveEffect,
+  Effect,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
@@ -70,6 +72,14 @@ export class QuestGrabBoatVacation implements QuestInfo {
     }
 
     if (myMeat() < 2000) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (
+      !GreySettings.isHippyMode() &&
+      myLevel() < 11 &&
+      haveEffect(Effect.get("A Girl Named Sue")) > 0
+    ) {
       return QuestStatus.NOT_READY;
     }
 

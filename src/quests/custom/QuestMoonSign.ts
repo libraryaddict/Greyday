@@ -76,11 +76,11 @@ export class QuestMoonSign implements QuestInfo {
       location: null,
       outfit: new GreyOutfit("-tie"),
       run: () => {
-        let confirm = userConfirm("Ready to change moon signs?");
+        /*let confirm = userConfirm("Ready to change moon signs?");
 
         if (!confirm) {
           throw "User wasn't ready";
-        }
+        }*/
 
         cliExecute("spoon " + getProperty(this.property));
 

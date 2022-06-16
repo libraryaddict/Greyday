@@ -69,11 +69,7 @@ class GreyYouMain {
       let effect: Effect = Effect.get("Beaten Up");
       let lastBeaten: number = 0;
 
-      for (
-        let i = 0;
-        i < turns && haveEffect(Effect.get("Beaten Up")) - lastBeaten != 3;
-        i++
-      ) {
+      for (let i = 0; i < turns && haveEffect(effect) - lastBeaten != 3; i++) {
         lastBeaten = haveEffect(effect);
         let run = this.adventures.runTurn(true);
 

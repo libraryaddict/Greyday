@@ -22,6 +22,7 @@ import {
 import { QuestType } from "../../QuestTypes";
 import { hasUnlockedLatteFlavor, LatteFlavor } from "../../../utils/LatteUtils";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
+import { QuestTowerKillSkin } from "../tower/stages/QuestTowerWallSkin";
 
 export class QuestL11Black implements QuestInfo {
   boots: Item = Item.get("Blackberry Galoshes");
@@ -34,6 +35,7 @@ export class QuestL11Black implements QuestInfo {
   );
   toAbsorb: Monster[];
   blackberry: Item = Item.get("Blackberry");
+  skinKiller: QuestTowerKillSkin = new QuestTowerKillSkin();
 
   level(): number {
     return 11;
@@ -96,7 +98,10 @@ export class QuestL11Black implements QuestInfo {
         let props = new PropertyManager();
 
         try {
-          if (availableAmount(this.beehive) == 0) {
+          if (
+            availableAmount(this.beehive) == 0 &&
+            !this.skinKiller.isPossible()
+          ) {
             props.setChoice(924, 3); // Beezzzz
             props.setChoice(1018, 1);
             props.setChoice(1019, 1);

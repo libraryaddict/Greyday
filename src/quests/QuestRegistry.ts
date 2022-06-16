@@ -336,9 +336,6 @@ export class QuestRegistry {
       // Nothing special from the top of the pyramid, but burn some turns here anyways
       { id: "Council / MacGruffin / Pyramid / Top" },
 
-      // Tavern needs Larva done
-      { id: "Council / Tavern" },
-
       // Alright, unlock the control room and the undying man. And keep going until you have enough rats
       { id: "Council / MacGruffin / Pyramid / Middle" },
       { id: "Council / MacGruffin / Pyramid / Wheel" },
@@ -367,6 +364,9 @@ export class QuestRegistry {
       },
       { id: "Council / War / Battlefield" },
       { id: "Council / War / Boss" },
+
+      // Tavern needs Larva done
+      { id: "Council / Tavern" },
 
       // Alright, this run is just about over kids. Lets finish it.
       { id: "Council / Tower / Contests" },

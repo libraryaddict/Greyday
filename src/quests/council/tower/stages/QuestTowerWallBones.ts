@@ -126,3 +126,13 @@ export class QuestTowerBoningKnife implements QuestInfo {
     return [];
   }
 }
+
+export class QuestTowerKillBones {
+  isPossible(): boolean {
+    return false;
+  }
+
+  run(): QuestInfo {
+    return null;
+  }
+}

@@ -172,7 +172,7 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
       getProperty("retroCapeSuperhero") == "vampire" &&
       getProperty("retroCapeWashingInstructions") == "kill"
     ) {
-      macro = macro.trySkill("Slay the dead");
+      macro = macro.trySkillRepeat("Slay the dead");
     }
 
     if (lastMonster().physicalResistance < 70 && myMp() >= 20) {

@@ -59,7 +59,7 @@ export class QuestL11DesertExplore implements QuestInfo {
       return false;
     }
 
-    if (this.getExploredRemaining() <= 0) {
+    if (this.getExploredRemaining() <= 0 || this.toAbsorb.length == 0) {
       return false;
     }
 

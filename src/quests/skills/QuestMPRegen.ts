@@ -103,7 +103,7 @@ export class QuestMPRegen implements QuestInfo {
       run: () => {
         let props = new PropertyManager();
 
-        props.setChoice(25, seekingWand ? 2 : 4);
+        props.setChoice(25, seekingWand ? 2 : 3);
 
         try {
           greyAdv(this.realDung, outfit);

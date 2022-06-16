@@ -214,6 +214,10 @@ export function greyAdv(
   while (currentRound() != 0 || choiceFollowsFight() || handlingChoice()) {
     if (currentRound() != 0) {
       runCombat();
+
+      if (currentRound() != 0) {
+        throw "Didn't expect to still be in combat!";
+      }
     } else {
       runChoice();
     }

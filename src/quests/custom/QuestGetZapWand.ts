@@ -42,6 +42,7 @@ export class QuestGetZapWand implements QuestInfo {
     "pine wand",
   ].map((s) => Item.get(s));
   deadMimic: Item = Item.get("dead mimic");
+  plusSign: Item = Item.get("plus sign");
 
   getId(): QuestType {
     return "Misc / GrabZapWand";
@@ -55,6 +56,13 @@ export class QuestGetZapWand implements QuestInfo {
     return toInt(getProperty("lastZapperWand")) == myAscensions();
   }
 
+  isDoomUnlocked(): boolean {
+    return (
+      toInt(getProperty("lastPlusSignUnlock")) == myAscensions() &&
+      availableAmount(this.plusSign) == 0
+    );
+  }
+
   getTimesZapped(): number {
     return toInt(getProperty("_zapCount"));
   }
@@ -64,13 +72,13 @@ export class QuestGetZapWand implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (myMeat() < 6000) {
+    if (myMeat() < 6000 || !this.isDoomUnlocked()) {
       //|| getQuestStatus("questL11Black") < 3) {
       return QuestStatus.NOT_READY;
     }
 
-    if (!hasNonCombatSkillsReady()) {
-      return QuestStatus.FASTER_LATER;
+    if (!hasNonCombatSkillsReady(true)) {
+      return QuestStatus.NOT_READY;
     }
 
     return QuestStatus.READY;

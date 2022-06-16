@@ -53,23 +53,11 @@ export class QuestL12Lobster implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (myLevel() < 16 && getProperty("sidequestArenaCompleted") == "none") {
-      return QuestStatus.FASTER_LATER;
-    }
-
     if (myAdventures() < 22) {
       return QuestStatus.NOT_READY;
     }
 
-    if (availableAmount(this.item) >= 5) {
-      return QuestStatus.READY;
-    }
-
-    if (this.isBackupReady()) {
-      return QuestStatus.READY;
-    }
-
-    if (familiarWeight(Familiar.get("Grey Goose")) > 3) {
+    if (familiarWeight(Familiar.get("Grey Goose")) > 1) {
       return QuestStatus.NOT_READY;
     }
 
@@ -79,6 +67,18 @@ export class QuestL12Lobster implements QuestInfo {
       }
     } else if (!hasCombatSkillReady()) {
       return QuestStatus.FASTER_LATER;
+    }
+
+    if (myLevel() < 16 && getProperty("sidequestArenaCompleted") == "none") {
+      return QuestStatus.FASTER_LATER;
+    }
+
+    if (availableAmount(this.item) >= 5) {
+      return QuestStatus.READY;
+    }
+
+    if (this.isBackupReady()) {
+      return QuestStatus.READY;
     }
 
     return QuestStatus.READY;

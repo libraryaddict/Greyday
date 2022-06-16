@@ -1,4 +1,19 @@
-import { Location, Familiar, Item, availableAmount } from "kolmafia";
+import {
+  Location,
+  Familiar,
+  Item,
+  availableAmount,
+  Skill,
+  haveSkill,
+  haveFamiliar,
+  maximize,
+  Element,
+  numericModifier,
+  equip,
+  myFamiliar,
+  myMaxhp,
+  myHp,
+} from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -15,6 +30,7 @@ import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 export class QuestTowerWallSkin implements QuestInfo {
   beehive: Item = Item.get("Beehive");
   forest: QuestInfo = new QuestTowerBeeHive();
+  killer: QuestTowerKillSkin = new QuestTowerKillSkin();
 
   getChildren(): QuestInfo[] {
     return [this.forest];
@@ -39,7 +55,7 @@ export class QuestTowerWallSkin implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (availableAmount(this.beehive) == 0) {
+    if (!this.killer.isPossible() && availableAmount(this.beehive) == 0) {
       return QuestStatus.NOT_READY;
     }
 
@@ -47,6 +63,10 @@ export class QuestTowerWallSkin implements QuestInfo {
   }
 
   run(): QuestAdventure {
+    if (availableAmount(this.beehive) == 0 && this.killer.isPossible()) {
+      return this.killer.run();
+    }
+
     return {
       location: null,
       run: () => {
@@ -69,6 +89,7 @@ export class QuestTowerWallSkin implements QuestInfo {
 export class QuestTowerBeeHive implements QuestInfo {
   beehive: Item = Item.get("Beehive");
   blackForest: Location = Location.get("The Black Forest");
+  killer: QuestTowerKillSkin = new QuestTowerKillSkin();
 
   getId(): QuestType {
     return "Council / Tower / WallOfSkin / Beehive";
@@ -85,7 +106,11 @@ export class QuestTowerBeeHive implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (status > 6 || availableAmount(this.beehive) > 0) {
+    if (
+      status > 6 ||
+      this.killer.isPossible() ||
+      availableAmount(this.beehive) > 0
+    ) {
       return QuestStatus.COMPLETED;
     }
 
@@ -121,5 +146,96 @@ export class QuestTowerBeeHive implements QuestInfo {
 
   needAdventures(): number {
     return 3;
+  }
+}
+
+export class QuestTowerKillSkin {
+  familiar: Familiar = Familiar.get("Shorter-Order Cook");
+  hotPlate: Item = Item.get("Hot Plate");
+  maximizeString: string =
+    "hot dmg 1 max +stench dmg 1 max +cold dmg 1 max +sleaze dmg 1 max +spooky dmg 1 max -tie -offhand -familiar";
+  familiarEquips: Item[] = [
+    "Muscle band",
+    "Ant Hoe",
+    "Ant Pick",
+    "Ant Pitchfork",
+    "Ant Rake",
+    "Ant Sickle",
+    "Tiny bowler",
+  ].map((s) => Item.get(s));
+
+  isPossible(): boolean {
+    if (!haveFamiliar(this.familiar)) {
+      return false;
+    }
+
+    if (getQuestStatus("questL13Final") < 6) {
+      return true;
+    }
+
+    // Short cook and physical damage
+    let damagePerRound = 7;
+
+    if (availableAmount(this.hotPlate) > 0) {
+      damagePerRound += 1;
+    }
+
+    if (
+      this.familiarEquips.find((equip) => availableAmount(equip) > 0) != null
+    ) {
+      damagePerRound++;
+    }
+
+    maximize(this.maximizeString, true);
+
+    for (let ele of ["Cold", "Hot", "Sleaze", "Spooky", "Stench"]) {
+      let mod = numericModifier("Generated:_spec", ele + " Damage");
+
+      if (mod > 0) {
+        damagePerRound += 1;
+      }
+    }
+
+    return damagePerRound >= 13;
+  }
+
+  run(): QuestAdventure {
+    let str = this.maximizeString;
+
+    let fam = this.familiarEquips.find((i) => availableAmount(i) > 0);
+
+    if (fam != null) {
+      str += " +equip " + fam;
+    }
+
+    if (availableAmount(this.hotPlate) > 0) {
+      str += " +equip " + this.hotPlate;
+    }
+
+    let outfit = new GreyOutfit(str);
+
+    return {
+      location: null,
+      familiar: this.familiar,
+      disableFamOverride: true,
+      outfit: outfit,
+      run: () => {
+        if (myFamiliar() != this.familiar) {
+          throw "Expected to be using cook!";
+        }
+
+        if (myHp() < myMaxhp()) {
+          throw "Not healthy enough!";
+        }
+
+        greyAdv(
+          "place.php?whichplace=nstower&action=ns_05_monster1",
+          null,
+          new AdventureSettings().setStartOfFightMacro(
+            Macro.skill("Grey Noise").repeat()
+          )
+        );
+      },
+    };
   }
 }

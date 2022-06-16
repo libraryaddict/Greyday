@@ -51,14 +51,20 @@ export class QuestDungeonsOfDoom implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    // If we have not purchased the 5k forged documents yet, or the tavern is not available yet
     if (
-      getProperty("questL02Larva") != "finished" &&
+      ((myMeat() < 7000 && getProperty("questL11Black") != "finished") ||
+        getProperty("questL02Larva") != "finished") &&
       availableAmount(this.plusSign) > 0
     ) {
       return QuestStatus.NOT_READY;
     }
 
-    if (myLevel() < 16) {
+    if (myLevel() < 12) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (availableAmount(this.plusSign) > 0 && myLevel() < 16) {
       return QuestStatus.FASTER_LATER;
     }
 
