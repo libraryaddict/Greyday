@@ -1,4 +1,4 @@
-import { changeMcd, Location } from "kolmafia";
+import { changeMcd, Location, toInt } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -10,10 +10,16 @@ export class CryptL7Rattling extends CryptL7Template {
   loc: Location = Location.get("The Defiled Cranny");
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    let outfit = new GreyOutfit();
 
-    outfit.plusMonsterLevelWeight = 4;
     this.addRetroSword(outfit);
+
+    if (toInt(this.getProperty()) <= 25) {
+      outfit.meatDropWeight = 5;
+    } else {
+      outfit.setNoCombat();
+      outfit.plusMonsterLevelWeight = 4;
+    }
 
     return {
       location: this.loc,

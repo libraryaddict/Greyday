@@ -1,4 +1,4 @@
-import { Location } from "kolmafia";
+import { Location, toInt } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -11,8 +11,13 @@ export class CryptL7Sprinters extends CryptL7Template {
 
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
-    outfit.initWeight = 2;
     this.addRetroSword(outfit);
+
+    if (toInt(this.getProperty()) <= 25) {
+      outfit.meatDropWeight = 5;
+    } else {
+      outfit.initWeight = 2;
+    }
 
     return {
       location: this.loc,

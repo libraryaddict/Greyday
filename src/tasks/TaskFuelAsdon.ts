@@ -23,7 +23,7 @@ export class TaskFuelAsdon implements Task {
 
   run(): void {
     if (
-      myMeat() < 7000 ||
+      myMeat() < 8000 ||
       getWorkshed() != this.asdonMartin ||
       getQuestStatus("questL11Black") < 2
     ) {

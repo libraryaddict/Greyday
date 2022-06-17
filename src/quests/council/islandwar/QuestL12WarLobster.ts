@@ -66,7 +66,10 @@ export class QuestL12Lobster implements QuestInfo {
       return QuestStatus.READY;
     }
 
-    if (familiarWeight(Familiar.get("Grey Goose")) > 2) {
+    if (
+      familiarWeight(Familiar.get("Grey Goose")) > 2 &&
+      familiarWeight(Familiar.get("Grey Goose")) < 6
+    ) {
       return QuestStatus.NOT_READY;
     }
 

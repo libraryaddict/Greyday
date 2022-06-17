@@ -205,7 +205,7 @@ export class GreyAdventurer {
       outfit.itemDropWeight < 1 &&
       toInt(getProperty("cursedMagnifyingGlassCount")) < 13 &&
       getProperty("sidequestLighthouseCompleted") == "none" &&
-      availableAmount(Item.get("barrel of gunpowder")) == 0;
+      availableAmount(Item.get("barrel of gunpowder")) < 5;
     let doOrb: boolean = false;
 
     if (adventure.locationInfo != null && adventure.locationInfo.shouldRunOrb) {
