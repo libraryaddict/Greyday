@@ -9142,7 +9142,10 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
         return QuestStatus.READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) > 2) {
+      if (
+      (0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) > 2 &&
+      (0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) < 6)
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -12709,10 +12712,16 @@ var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRatt
     external_kolmafia_namespaceObject.Location.get("The Defiled Cranny"));return _this;}QuestL7CryptRattling_createClass(CryptL7Rattling, [{ key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().setNoCombat();
+      var outfit = new GreyOutfit();
 
-      outfit.plusMonsterLevelWeight = 4;
       this.addRetroSword(outfit);
+
+      if ((0,external_kolmafia_namespaceObject.toInt)(this.getProperty()) <= 25) {
+        outfit.meatDropWeight = 5;
+      } else {
+        outfit.setNoCombat();
+        outfit.plusMonsterLevelWeight = 4;
+      }
 
       return {
         location: this.loc,
@@ -12759,8 +12768,13 @@ var CryptL7Sprinters = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptSpr
 
     function run() {
       var outfit = new GreyOutfit();
-      outfit.initWeight = 2;
       this.addRetroSword(outfit);
+
+      if ((0,external_kolmafia_namespaceObject.toInt)(this.getProperty()) <= 25) {
+        outfit.meatDropWeight = 5;
+      } else {
+        outfit.initWeight = 2;
+      }
 
       return {
         location: this.loc,
@@ -20402,7 +20416,7 @@ var TaskFuelAsdon = /*#__PURE__*/function () {function TaskFuelAsdon() {TaskFuel
 
     function run() {
       if (
-      (0,external_kolmafia_namespaceObject.myMeat)() < 7000 ||
+      (0,external_kolmafia_namespaceObject.myMeat)() < 8000 ||
       (0,external_kolmafia_namespaceObject.getWorkshed)() != this.asdonMartin ||
       getQuestStatus("questL11Black") < 2)
       {
@@ -21012,7 +21026,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       outfit.itemDropWeight < 1 &&
       (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("cursedMagnifyingGlassCount")) < 13 &&
       (0,external_kolmafia_namespaceObject.getProperty)("sidequestLighthouseCompleted") == "none" &&
-      (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("barrel of gunpowder")) == 0;
+      (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("barrel of gunpowder")) < 5;
       var doOrb = false;
 
       if (adventure.locationInfo != null && adventure.locationInfo.shouldRunOrb) {
