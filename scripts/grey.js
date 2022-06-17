@@ -11375,7 +11375,10 @@ var QuestL3Tavern = /*#__PURE__*/function () {function QuestL3Tavern() {QuestL3T
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questL02Larva") != "finished" || (0,external_kolmafia_namespaceObject.myLevel)() < 13) {
+      if (
+      (0,external_kolmafia_namespaceObject.getProperty)("questL02Larva") != "finished" ||
+      (0,external_kolmafia_namespaceObject.myLevel)() < 13 && (0,external_kolmafia_namespaceObject.haveEffect)(this.teleportis) == 0)
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -12627,7 +12630,7 @@ var CryptL7DirtyMan = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptDirt
 
     function cryptStatus() {
       if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.banisher)) {
-        return QuestStatus.FASTER_LATER;
+        // return QuestStatus.FASTER_LATER;
       }
 
       return QuestStatus.READY;
