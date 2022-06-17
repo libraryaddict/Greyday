@@ -9103,7 +9103,8 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
     external_kolmafia_namespaceObject.Item.get("barrel of gunpowder"));QuestL12WarLobster_defineProperty(this, "monster",
     external_kolmafia_namespaceObject.Monster.get("Lobsterfrogman"));QuestL12WarLobster_defineProperty(this, "cursed",
     external_kolmafia_namespaceObject.Item.get("Cursed Magnifying Glass"));QuestL12WarLobster_defineProperty(this, "glove",
-    external_kolmafia_namespaceObject.Item.get("Powerful Glove"));}QuestL12WarLobster_createClass(QuestL12Lobster, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("Powerful Glove"));QuestL12WarLobster_defineProperty(this, "backupCamera",
+    external_kolmafia_namespaceObject.Item.get("Backup Camera"));}QuestL12WarLobster_createClass(QuestL12Lobster, [{ key: "level", value:
 
     function level() {
       return 12;
@@ -9133,6 +9134,14 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
         return QuestStatus.NOT_READY;
       }
 
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.backupCamera) > 0 && this.isBackupReady()) {
+        return QuestStatus.READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.item) >= 5) {
+        return QuestStatus.READY;
+      }
+
       if ((0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) > 2) {
         return QuestStatus.NOT_READY;
       }
@@ -9147,14 +9156,6 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
 
       if ((0,external_kolmafia_namespaceObject.myLevel)() < 16 && (0,external_kolmafia_namespaceObject.getProperty)("sidequestArenaCompleted") == "none") {
         return QuestStatus.FASTER_LATER;
-      }
-
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.item) >= 5) {
-        return QuestStatus.READY;
-      }
-
-      if (this.isBackupReady()) {
-        return QuestStatus.READY;
       }
 
       return QuestStatus.READY;
@@ -11374,7 +11375,7 @@ var QuestL3Tavern = /*#__PURE__*/function () {function QuestL3Tavern() {QuestL3T
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questL02Larva") != "finished") {
+      if ((0,external_kolmafia_namespaceObject.getProperty)("questL02Larva") != "finished" || (0,external_kolmafia_namespaceObject.myLevel)() < 13) {
         return QuestStatus.NOT_READY;
       }
 
@@ -12050,7 +12051,8 @@ var QuestL6FriarElbow = /*#__PURE__*/function () {function QuestL6FriarElbow() {
     external_kolmafia_namespaceObject.Item.get("Eldritch butterknife"));QuestL6FriarElbow_defineProperty(this, "location",
     external_kolmafia_namespaceObject.Location.get("Dark Elbow of the Woods"));QuestL6FriarElbow_defineProperty(this, "absorbs",
     [external_kolmafia_namespaceObject.Monster.get("G imp"), external_kolmafia_namespaceObject.Monster.get("L imp")]);QuestL6FriarElbow_defineProperty(this, "latte",
-    external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));}QuestL6FriarElbow_createClass(QuestL6FriarElbow, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));QuestL6FriarElbow_defineProperty(this, "umbrella",
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));}QuestL6FriarElbow_createClass(QuestL6FriarElbow, [{ key: "level", value:
 
     function level() {
       return 6;
@@ -12103,7 +12105,11 @@ var QuestL6FriarElbow = /*#__PURE__*/function () {function QuestL6FriarElbow() {
         location: this.location,
         outfit: outfit,
         run: () => {
-          if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
+          if (
+          this.isAllAbsorbed() &&
+          !this.shouldWearLatte() &&
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0)
+          {
             DelayBurners.tryReplaceCombats();
           }
 
@@ -12178,7 +12184,8 @@ var QuestL6FriarHeart = /*#__PURE__*/function () {function QuestL6FriarHeart() {
     external_kolmafia_namespaceObject.Item.get("box of birthday candles"));QuestL6FriarHeart_defineProperty(this, "location",
     external_kolmafia_namespaceObject.Location.get("Dark Heart of the Woods"));QuestL6FriarHeart_defineProperty(this, "absorbs",
     [external_kolmafia_namespaceObject.Monster.get("G imp"), external_kolmafia_namespaceObject.Monster.get("P imp")]);QuestL6FriarHeart_defineProperty(this, "latte",
-    external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));}QuestL6FriarHeart_createClass(QuestL6FriarHeart, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));QuestL6FriarHeart_defineProperty(this, "umbrella",
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));}QuestL6FriarHeart_createClass(QuestL6FriarHeart, [{ key: "level", value:
 
     function level() {
       return 6;
@@ -12231,7 +12238,11 @@ var QuestL6FriarHeart = /*#__PURE__*/function () {function QuestL6FriarHeart() {
         location: this.location,
         outfit: outfit,
         run: () => {
-          if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
+          if (
+          this.isAllAbsorbed() &&
+          !this.shouldWearLatte() &&
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0)
+          {
             DelayBurners.tryReplaceCombats();
           }
 
@@ -12258,7 +12269,8 @@ var QuestL6FriarNeck = /*#__PURE__*/function () {function QuestL6FriarNeck() {Qu
     external_kolmafia_namespaceObject.Item.get("dodecagram"));QuestL6FriarNeck_defineProperty(this, "location",
     external_kolmafia_namespaceObject.Location.get("Dark Neck of the Woods"));QuestL6FriarNeck_defineProperty(this, "absorbs",
     [external_kolmafia_namespaceObject.Monster.get("P imp"), external_kolmafia_namespaceObject.Monster.get("W imp")]);QuestL6FriarNeck_defineProperty(this, "latte",
-    external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));}QuestL6FriarNeck_createClass(QuestL6FriarNeck, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));QuestL6FriarNeck_defineProperty(this, "umbrella",
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));}QuestL6FriarNeck_createClass(QuestL6FriarNeck, [{ key: "level", value:
 
     function level() {
       return 6;
@@ -12312,7 +12324,11 @@ var QuestL6FriarNeck = /*#__PURE__*/function () {function QuestL6FriarNeck() {Qu
         location: this.location,
         outfit: outfit,
         run: () => {
-          if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
+          if (
+          this.isAllAbsorbed() &&
+          !this.shouldWearLatte() &&
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0)
+          {
             DelayBurners.tryReplaceCombats();
           }
 
@@ -12440,9 +12456,12 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
 
 
     function addRetroSword() {var outfit = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new GreyOutfit();
-      outfit.addItem(this.getSword(), 99999);
       outfit.addItem(this.gravyboat, 99999);
-      outfit.addBonus("-back");
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.cape) > 0) {
+        outfit.addItem(this.getSword(), 99999);
+        outfit.addBonus("-back");
+      }
 
       if (
       (0,external_kolmafia_namespaceObject.availableAmount)(this.gravyboat) == 0 &&
@@ -12455,6 +12474,10 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
     } }, { key: "adjustRetroCape", value:
 
     function adjustRetroCape() {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.cape) == 0) {
+        return;
+      }
+
       (0,external_kolmafia_namespaceObject.equip)(this.cape);
 
       if (
@@ -14925,8 +14948,9 @@ var QuestManorBillards = /*#__PURE__*/function () {function QuestManorBillards()
       var outfit = new GreyOutfit();
 
       if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.cue) > 0 && (
-      (0,external_kolmafia_namespaceObject.haveEffect)(this.chalkEffect) > 0 || (0,external_kolmafia_namespaceObject.availableAmount)(this.chalk) > 0))
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.cue) == 0 ||
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.chalkEffect) > 0 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.chalk) > 0)
       {
         outfit.setNoCombat();
       }
@@ -20455,9 +20479,17 @@ function TaskJuneCleaver_classCallCheck(instance, Constructor) {if (!(instance i
 
 var TaskJuneCleaver = /*#__PURE__*/function () {function TaskJuneCleaver() {TaskJuneCleaver_classCallCheck(this, TaskJuneCleaver);TaskJuneCleaver_defineProperty(this, "hasSet",
     false);TaskJuneCleaver_defineProperty(this, "hasSet2",
-    false);}TaskJuneCleaver_createClass(TaskJuneCleaver, [{ key: "run", value:
+    false);TaskJuneCleaver_defineProperty(this, "wasPoor", void 0);}TaskJuneCleaver_createClass(TaskJuneCleaver, [{ key: "run", value:
+
 
     function run() {
+      if (this.wasPoor != (0,external_kolmafia_namespaceObject.myMeat)() < 10000) {
+        this.wasPoor = (0,external_kolmafia_namespaceObject.myMeat)() < 10000;
+
+        // Alligator
+        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1469", this.wasPoor ? "3" : "2"); // Dads brandy or meat
+      }
+
       if (!this.hasSet) {
         this.hasSet = true;
 
@@ -20465,8 +20497,6 @@ var TaskJuneCleaver = /*#__PURE__*/function () {function TaskJuneCleaver() {Task
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1467", "3"); // Get adventures
         // Teachers
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1470", "2"); // Teachers pen
-        // Alligator
-        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1469", "2"); // Dads brandy
         // Sprouts
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1474", "2"); // Get food
         // Hypnotic
