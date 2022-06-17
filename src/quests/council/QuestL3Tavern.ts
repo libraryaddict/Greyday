@@ -52,7 +52,10 @@ export class QuestL3Tavern implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (getProperty("questL02Larva") != "finished" || myLevel() < 13) {
+    if (
+      getProperty("questL02Larva") != "finished" ||
+      (myLevel() < 13 && haveEffect(this.teleportis) == 0)
+    ) {
       return QuestStatus.NOT_READY;
     }
 

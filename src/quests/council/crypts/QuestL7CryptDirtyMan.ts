@@ -108,7 +108,7 @@ export class CryptL7DirtyMan extends CryptL7Template {
 
   cryptStatus(): QuestStatus {
     if (!haveSkill(this.banisher)) {
-      return QuestStatus.FASTER_LATER;
+      // return QuestStatus.FASTER_LATER;
     }
 
     return QuestStatus.READY;
