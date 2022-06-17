@@ -20,6 +20,7 @@ export class QuestL6FriarNeck implements QuestInfo {
   location: Location = Location.get("Dark Neck of the Woods");
   absorbs: Monster[] = [Monster.get("P imp"), Monster.get("W imp")];
   latte: Item = Item.get("Latte lovers member's mug");
+  umbrella: Item = Item.get("Unbreakable Umbrella");
 
   level(): number {
     return 6;
@@ -73,7 +74,11 @@ export class QuestL6FriarNeck implements QuestInfo {
       location: this.location,
       outfit: outfit,
       run: () => {
-        if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
+        if (
+          this.isAllAbsorbed() &&
+          !this.shouldWearLatte() &&
+          availableAmount(this.umbrella) == 0
+        ) {
           DelayBurners.tryReplaceCombats();
         }
 

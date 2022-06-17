@@ -1,11 +1,19 @@
-import { getProperty, setProperty, toInt } from "kolmafia";
+import { getProperty, myMeat, setProperty, toInt } from "kolmafia";
 import { Task } from "./Tasks";
 
 export class TaskJuneCleaver implements Task {
   hasSet: boolean = false;
   hasSet2: boolean = false;
+  wasPoor: boolean;
 
   run(): void {
+    if (this.wasPoor != myMeat() < 10000) {
+      this.wasPoor = myMeat() < 10000;
+
+      // Alligator
+      setProperty("choiceAdventure1469", this.wasPoor ? "3" : "2"); // Dads brandy or meat
+    }
+
     if (!this.hasSet) {
       this.hasSet = true;
 
@@ -13,8 +21,6 @@ export class TaskJuneCleaver implements Task {
       setProperty("choiceAdventure1467", "3"); // Get adventures
       // Teachers
       setProperty("choiceAdventure1470", "2"); // Teachers pen
-      // Alligator
-      setProperty("choiceAdventure1469", "2"); // Dads brandy
       // Sprouts
       setProperty("choiceAdventure1474", "2"); // Get food
       // Hypnotic

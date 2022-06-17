@@ -19,6 +19,7 @@ export class QuestL6FriarHeart implements QuestInfo {
   location: Location = Location.get("Dark Heart of the Woods");
   absorbs: Monster[] = [Monster.get("G imp"), Monster.get("P imp")];
   latte: Item = Item.get("Latte lovers member's mug");
+  umbrella: Item = Item.get("Unbreakable Umbrella");
 
   level(): number {
     return 6;
@@ -71,7 +72,11 @@ export class QuestL6FriarHeart implements QuestInfo {
       location: this.location,
       outfit: outfit,
       run: () => {
-        if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
+        if (
+          this.isAllAbsorbed() &&
+          !this.shouldWearLatte() &&
+          availableAmount(this.umbrella) == 0
+        ) {
           DelayBurners.tryReplaceCombats();
         }
 

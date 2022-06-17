@@ -28,6 +28,7 @@ export class QuestL12Lobster implements QuestInfo {
   monster: Monster = Monster.get("Lobsterfrogman");
   cursed: Item = Item.get("Cursed Magnifying Glass");
   glove: Item = Item.get("Powerful Glove");
+  backupCamera: Item = Item.get("Backup Camera");
 
   level(): number {
     return 12;
@@ -57,6 +58,14 @@ export class QuestL12Lobster implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (availableAmount(this.backupCamera) > 0 && this.isBackupReady()) {
+      return QuestStatus.READY;
+    }
+
+    if (availableAmount(this.item) >= 5) {
+      return QuestStatus.READY;
+    }
+
     if (familiarWeight(Familiar.get("Grey Goose")) > 2) {
       return QuestStatus.NOT_READY;
     }
@@ -71,14 +80,6 @@ export class QuestL12Lobster implements QuestInfo {
 
     if (myLevel() < 16 && getProperty("sidequestArenaCompleted") == "none") {
       return QuestStatus.FASTER_LATER;
-    }
-
-    if (availableAmount(this.item) >= 5) {
-      return QuestStatus.READY;
-    }
-
-    if (this.isBackupReady()) {
-      return QuestStatus.READY;
     }
 
     return QuestStatus.READY;

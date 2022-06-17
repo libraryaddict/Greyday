@@ -64,8 +64,9 @@ export class QuestManorBillards implements QuestInfo {
     let outfit = new GreyOutfit();
 
     if (
-      availableAmount(this.cue) > 0 &&
-      (haveEffect(this.chalkEffect) > 0 || availableAmount(this.chalk) > 0)
+      availableAmount(this.cue) == 0 ||
+      haveEffect(this.chalkEffect) > 0 ||
+      availableAmount(this.chalk) > 0
     ) {
       outfit.setNoCombat();
     }
