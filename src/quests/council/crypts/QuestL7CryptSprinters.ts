@@ -4,6 +4,7 @@ import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
+import { CryptStatus } from "../QuestL7Crypt";
 import { CryptL7Template } from "./CryptTemplate";
 
 export class CryptL7Sprinters extends CryptL7Template {
@@ -13,7 +14,7 @@ export class CryptL7Sprinters extends CryptL7Template {
     let outfit = new GreyOutfit();
     this.addRetroSword(outfit);
 
-    if (toInt(this.getProperty()) <= 25) {
+    if (this.getStatus() == CryptStatus.BOSS) {
       outfit.meatDropWeight = 5;
     } else {
       outfit.initWeight = 2;

@@ -51,7 +51,8 @@ export class QuestManorKitchen implements QuestInfo {
     // Max of 9 total res
     let status = getQuestStatus("questM20Necklace");
 
-    if (status < 0 || getQuestStatus("questL11Black") < 2 || myMeat() < 1200) {
+    // If we haven't purchased our vacation pass yet, don't even think about it.
+    if (status < 0 || getQuestStatus("questL11Black") <= 2 || myMeat() < 1200) {
       return QuestStatus.NOT_READY;
     }
 

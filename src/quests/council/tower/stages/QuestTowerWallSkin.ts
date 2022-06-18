@@ -17,6 +17,8 @@ import {
   getProperty,
   cliExecute,
   turnsPlayed,
+  haveEffect,
+  Effect,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -251,6 +253,10 @@ export class QuestTowerKillSkin {
             Macro.skill("Grey Noise").repeat()
           )
         );
+
+        if (haveEffect(Effect.get("Beaten Up")) == 0) {
+          cliExecute("hottub");
+        }
       },
     };
   }

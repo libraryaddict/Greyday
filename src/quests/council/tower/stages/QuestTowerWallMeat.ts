@@ -1,4 +1,4 @@
-import { Location, Familiar, myBasestat, Stat, Skill } from "kolmafia";
+import { Location, Familiar, myBasestat, Stat, Skill, myHp } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
@@ -44,6 +44,10 @@ export class QuestTowerWallMeat implements QuestInfo {
       disableFamOverride: true,
       location: null,
       run: () => {
+        if (myHp() < 200) {
+          throw "HP too low";
+        }
+
         greyAdv(
           "place.php?whichplace=nstower&action=ns_06_monster2",
           outfit,

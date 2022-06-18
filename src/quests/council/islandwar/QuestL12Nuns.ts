@@ -41,6 +41,7 @@ export class Quest12WarNuns implements QuestInfo {
   cosmicBall: Item = Item.get("Cosmic Bowling Ball");
   asdonMartin: Item = Item.get("Asdon Martin keyfob");
   driving: Effect = Effect.get("Driving Observantly");
+  savingsBond: Item = Item.get("Savings bond");
 
   hasAlreadyPulled(): boolean {
     return (
@@ -181,6 +182,13 @@ export class Quest12WarNuns implements QuestInfo {
 
     if (!toBoolean(getProperty("concertVisited"))) {
       cliExecute("concert 2"); // Feeling wrinkled
+    }
+
+    if (
+      availableAmount(this.savingsBond) > 0 &&
+      haveEffect(effectModifier(this.savingsBond, "Effect")) == 0
+    ) {
+      use(this.savingsBond);
     }
   }
 }

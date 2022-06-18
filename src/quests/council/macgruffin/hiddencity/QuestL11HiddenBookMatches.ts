@@ -8,6 +8,8 @@ import {
   myAscensions,
   toInt,
   use,
+  Skill,
+  haveSkill,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -29,7 +31,9 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
   book: Item = Item.get("Book of matches");
   monster: Monster = Monster.get("pygmy janitor");
   location: Location = Location.get("The Hidden Park");
+  nanovision: Skill = Skill.get("Double Nanovision");
   toAbsorb: Monster[];
+  doPull: boolean = false;
 
   getId(): QuestType {
     return "Council / MacGruffin / HiddenCity / BookOfMatches";
@@ -40,6 +44,10 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
   }
 
   getResourceClaims(): ResourceClaim[] {
+    if (!this.doPull) {
+      return [];
+    }
+
     return [
       new ResourcePullClaim(
         this.book,
@@ -72,6 +80,10 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (!haveSkill(this.nanovision)) {
+      return QuestStatus.FASTER_LATER;
+    }
+
     return QuestStatus.READY;
   }
 
@@ -81,12 +93,13 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
 
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
-
-    if (
-      this.toAbsorb.length == 0 &&
+    let wantToPull =
+      this.doPull &&
       availableAmount(this.book) == 0 &&
-      GreySettings.isHardcoreMode()
-    ) {
+      !GreySettings.isHardcoreMode() &&
+      this.toAbsorb.length == 0;
+
+    if (!wantToPull) {
       outfit.setItemDrops();
       outfit.setPlusCombat();
     }
@@ -96,7 +109,7 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
       outfit: outfit,
       run: () => {
         if (availableAmount(this.book) == 0) {
-          if (this.toAbsorb.length > 0 || GreySettings.isHardcoreMode()) {
+          if (!wantToPull) {
             let settings = new AdventureSettings().addNoBanish(this.monster);
 
             greyAdv(this.location, outfit, settings);
