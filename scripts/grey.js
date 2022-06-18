@@ -3713,6 +3713,10 @@ var QuestTowerKillSkin = /*#__PURE__*/function () {function QuestTowerKillSkin()
           Macro.skill("Grey Noise").repeat()));
 
 
+
+          if ((0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Beaten Up")) == 0) {
+            (0,external_kolmafia_namespaceObject.cliExecute)("hottub");
+          }
         } };
 
     } }]);return QuestTowerKillSkin;}();
@@ -6712,8 +6716,14 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
     external_kolmafia_namespaceObject.Location.get("The Hidden Bowling Alley"));QuestL11TempleBowling_defineProperty(this, "ball",
     external_kolmafia_namespaceObject.Item.get("Bowling Ball"));QuestL11TempleBowling_defineProperty(this, "cosmicBall",
     external_kolmafia_namespaceObject.Item.get("Cosmic Bowling Ball"));QuestL11TempleBowling_defineProperty(this, "goose",
-    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL11TempleBowling_defineProperty(this, "toAbsorb", void 0);}QuestL11TempleBowling_createClass(QuestL11Bowling, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL11TempleBowling_defineProperty(this, "cosmicBowled",
+    "_greyCosmicBowled");QuestL11TempleBowling_defineProperty(this, "nanovision",
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestL11TempleBowling_defineProperty(this, "toAbsorb", void 0);}QuestL11TempleBowling_createClass(QuestL11Bowling, [{ key: "hasCosmicBowled", value:
 
+
+    function hasCosmicBowled() {
+      return (0,external_kolmafia_namespaceObject.getProperty)(this.cosmicBowled) == "true";
+    } }, { key: "level", value:
 
     function level() {
       return 11;
@@ -6785,20 +6795,32 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
         return QuestStatus.NOT_READY;
       }
 
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.ball) > 0) {
+        return QuestStatus.READY;
+      }
+
+      // If we don't have nanovision yet
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
+        return QuestStatus.READY;
+      }
+
+      // If we have the cosmic ball, but have not bowled yet. Lets delay this until we can definitely score some progress.
       if (
       this.ownBall() &&
-      this.getProgress() == 1 &&
+      !this.hasCosmicBowled() &&
+      this.getProgress() <= 3 &&
       !this.isBowlingBallNextCombat())
       {
         return QuestStatus.NOT_READY;
       }
 
+      // If we can't skip a drunk, faster later
       if ((0,external_kolmafia_namespaceObject.myMeat)() < 1000 && (0,external_kolmafia_namespaceObject.availableAmount)(this.bowl) == 0) {
         return QuestStatus.FASTER_LATER;
       }
 
       if (this.getProgress() > 6) {
-        throw "Shouldn't be at this point";
+        throw "Shouldn't be at this point for bowling. Did we cosmic ball late?";
       }
 
       return QuestStatus.READY;
@@ -6819,9 +6841,15 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
         outfit: outfit,
         run: () => {
           var macro = null;
+          var couldBeBowling = false;
 
-          if (this.getProgress() <= 1 && this.ownBall()) {
+          if (
+          this.hasCosmicBowled() &&
+          this.ownBall() &&
+          this.isBowlingBallNextCombat())
+          {
             macro = new Macro().item(this.cosmicBall);
+            couldBeBowling = true;
 
             if ((0,external_kolmafia_namespaceObject.itemAmount)(this.ball) > 0) {
               (0,external_kolmafia_namespaceObject.putCloset)(this.ball, (0,external_kolmafia_namespaceObject.availableAmount)(this.ball));
@@ -6833,6 +6861,8 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
           if ((0,external_kolmafia_namespaceObject.itemAmount)(this.ball) == 0) {
             (0,external_kolmafia_namespaceObject.retrieveItem)(this.bowl);
           }
+
+          var progressPrior = this.getProgress();
 
           var props = new PropertyManager();
           props.setChoice(788, 1);
@@ -6847,6 +6877,10 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
 
           } finally {
             props.resetAll();
+          }
+
+          if (couldBeBowling && this.getProgress() > progressPrior) {
+            (0,external_kolmafia_namespaceObject.setProperty)(this.cosmicBowled, "true");
           }
         } };
 
@@ -7420,8 +7454,10 @@ function QuestL11HiddenBookMatches_classCallCheck(instance, Constructor) {if (!(
 var QuestL11HiddenBookMatches = /*#__PURE__*/function () {function QuestL11HiddenBookMatches() {QuestL11HiddenBookMatches_classCallCheck(this, QuestL11HiddenBookMatches);QuestL11HiddenBookMatches_defineProperty(this, "book",
     external_kolmafia_namespaceObject.Item.get("Book of matches"));QuestL11HiddenBookMatches_defineProperty(this, "monster",
     external_kolmafia_namespaceObject.Monster.get("pygmy janitor"));QuestL11HiddenBookMatches_defineProperty(this, "location",
-    external_kolmafia_namespaceObject.Location.get("The Hidden Park"));QuestL11HiddenBookMatches_defineProperty(this, "toAbsorb", void 0);}QuestL11HiddenBookMatches_createClass(QuestL11HiddenBookMatches, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Location.get("The Hidden Park"));QuestL11HiddenBookMatches_defineProperty(this, "nanovision",
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestL11HiddenBookMatches_defineProperty(this, "toAbsorb", void 0);QuestL11HiddenBookMatches_defineProperty(this, "doPull",
 
+    false);}QuestL11HiddenBookMatches_createClass(QuestL11HiddenBookMatches, [{ key: "getId", value:
 
     function getId() {
       return "Council / MacGruffin / HiddenCity / BookOfMatches";
@@ -7432,6 +7468,10 @@ var QuestL11HiddenBookMatches = /*#__PURE__*/function () {function QuestL11Hidde
     } }, { key: "getResourceClaims", value:
 
     function getResourceClaims() {
+      if (!this.doPull) {
+        return [];
+      }
+
       return [
       new ResourcePullClaim(
       this.book,
@@ -7464,6 +7504,10 @@ var QuestL11HiddenBookMatches = /*#__PURE__*/function () {function QuestL11Hidde
         return QuestStatus.NOT_READY;
       }
 
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
+        return QuestStatus.FASTER_LATER;
+      }
+
       return QuestStatus.READY;
     } }, { key: "barUnlocked", value:
 
@@ -7473,12 +7517,13 @@ var QuestL11HiddenBookMatches = /*#__PURE__*/function () {function QuestL11Hidde
 
     function run() {
       var outfit = new GreyOutfit();
-
-      if (
-      this.toAbsorb.length == 0 &&
+      var wantToPull =
+      this.doPull &&
       (0,external_kolmafia_namespaceObject.availableAmount)(this.book) == 0 &&
-      GreySettings.isHardcoreMode())
-      {
+      !GreySettings.isHardcoreMode() &&
+      this.toAbsorb.length == 0;
+
+      if (!wantToPull) {
         outfit.setItemDrops();
         outfit.setPlusCombat();
       }
@@ -7488,7 +7533,7 @@ var QuestL11HiddenBookMatches = /*#__PURE__*/function () {function QuestL11Hidde
         outfit: outfit,
         run: () => {
           if ((0,external_kolmafia_namespaceObject.availableAmount)(this.book) == 0) {
-            if (this.toAbsorb.length > 0 || GreySettings.isHardcoreMode()) {
+            if (!wantToPull) {
               var settings = new AdventureSettings().addNoBanish(this.monster);
 
               greyAdv(this.location, outfit, settings);
@@ -8544,7 +8589,8 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
     external_kolmafia_namespaceObject.Effect.get("Cosmic Ball in the Air"));QuestL12Nuns_defineProperty(this, "cosmicBall",
     external_kolmafia_namespaceObject.Item.get("Cosmic Bowling Ball"));QuestL12Nuns_defineProperty(this, "asdonMartin",
     external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestL12Nuns_defineProperty(this, "driving",
-    external_kolmafia_namespaceObject.Effect.get("Driving Observantly"));}QuestL12Nuns_createClass(Quest12WarNuns, [{ key: "hasAlreadyPulled", value:
+    external_kolmafia_namespaceObject.Effect.get("Driving Observantly"));QuestL12Nuns_defineProperty(this, "savingsBond",
+    external_kolmafia_namespaceObject.Item.get("Savings bond"));}QuestL12Nuns_createClass(Quest12WarNuns, [{ key: "hasAlreadyPulled", value:
 
     function hasAlreadyPulled() {
       return (
@@ -8685,6 +8731,13 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
 
       if (!(0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("concertVisited"))) {
         (0,external_kolmafia_namespaceObject.cliExecute)("concert 2"); // Feeling wrinkled
+      }
+
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.savingsBond) > 0 &&
+      (0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(this.savingsBond, "Effect")) == 0)
+      {
+        (0,external_kolmafia_namespaceObject.use)(this.savingsBond);
       }
     } }]);return Quest12WarNuns;}();
 ;// CONCATENATED MODULE: ./src/quests/council/islandwar/QuestL12Worms.ts
@@ -10576,6 +10629,10 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
         disableFamOverride: true,
         location: null,
         run: () => {
+          if ((0,external_kolmafia_namespaceObject.myHp)() < 200) {
+            throw "HP too low";
+          }
+
           greyAdv(
           "place.php?whichplace=nstower&action=ns_06_monster2",
           outfit,
@@ -12708,6 +12765,7 @@ function QuestL7CryptRattling_classCallCheck(instance, Constructor) {if (!(insta
 
 
 
+
 var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRattling_inherits(CryptL7Rattling, _CryptL7Template);var _super = QuestL7CryptRattling_createSuper(CryptL7Rattling);function CryptL7Rattling() {var _this;QuestL7CryptRattling_classCallCheck(this, CryptL7Rattling);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "loc",
     external_kolmafia_namespaceObject.Location.get("The Defiled Cranny"));return _this;}QuestL7CryptRattling_createClass(CryptL7Rattling, [{ key: "run", value:
 
@@ -12716,7 +12774,7 @@ var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRatt
 
       this.addRetroSword(outfit);
 
-      if ((0,external_kolmafia_namespaceObject.toInt)(this.getProperty()) <= 25) {
+      if (this.getStatus() == CryptStatus.BOSS) {
         outfit.meatDropWeight = 5;
       } else {
         outfit.setNoCombat();
@@ -12763,6 +12821,7 @@ function QuestL7CryptSprinters_classCallCheck(instance, Constructor) {if (!(inst
 
 
 
+
 var CryptL7Sprinters = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptSprinters_inherits(CryptL7Sprinters, _CryptL7Template);var _super = QuestL7CryptSprinters_createSuper(CryptL7Sprinters);function CryptL7Sprinters() {var _this;QuestL7CryptSprinters_classCallCheck(this, CryptL7Sprinters);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL7CryptSprinters_defineProperty(QuestL7CryptSprinters_assertThisInitialized(_this), "loc",
     external_kolmafia_namespaceObject.Location.get("The Defiled Alcove"));return _this;}QuestL7CryptSprinters_createClass(CryptL7Sprinters, [{ key: "run", value:
 
@@ -12770,7 +12829,7 @@ var CryptL7Sprinters = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptSpr
       var outfit = new GreyOutfit();
       this.addRetroSword(outfit);
 
-      if ((0,external_kolmafia_namespaceObject.toInt)(this.getProperty()) <= 25) {
+      if (this.getStatus() == CryptStatus.BOSS) {
         outfit.meatDropWeight = 5;
       } else {
         outfit.initWeight = 2;
@@ -15140,7 +15199,8 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
       // Max of 9 total res
       var status = getQuestStatus("questM20Necklace");
 
-      if (status < 0 || getQuestStatus("questL11Black") < 2 || (0,external_kolmafia_namespaceObject.myMeat)() < 1200) {
+      // If we haven't purchased our vacation pass yet, don't even think about it.
+      if (status < 0 || getQuestStatus("questL11Black") <= 2 || (0,external_kolmafia_namespaceObject.myMeat)() < 1200) {
         return QuestStatus.NOT_READY;
       }
 
