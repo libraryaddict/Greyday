@@ -1466,7 +1466,10 @@ var GreyOutfit = /*#__PURE__*/function () {
       this.addBonus("+50 bonus mafia thumb ring");
 
       if (getQuestStatus("questL13Final") <= 5) {
-        this.addBonus("+4.5 bonus powerful glove");
+        if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("powerful glove")) > 0) {
+          this.addBonus("-4 bonus hewn moon-rune spoon");
+          this.addBonus("+4.5 bonus powerful glove");
+        }
 
         if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("scrapbookCharges")) < 100) {
           this.addBonus("+2 bonus familiar scrapbook");
@@ -5786,7 +5789,7 @@ var QuestL11PyramidMiddle = /*#__PURE__*/function () {function QuestL11PyramidMi
       }
 
       if ((0,external_kolmafia_namespaceObject.getProperty)("questL03Rat") != "finished") {
-        return QuestStatus.FASTER_LATER;
+        return QuestStatus.NOT_READY;
       }
 
       if (this.toAbsorb.length == 0 && this.haveEnough()) {
@@ -19568,9 +19571,9 @@ var QuestRegistry = /*#__PURE__*/function () {
       // Given that we earn nothing from peaks, just delay it until we should've hit our max +cold damage
       // { id: "Council / Peaks / CargoShortsSmut" },
       { id: "Council / Peaks / Orcs" },
-      { id: "Council / Peaks / AbooPeak" },
-      { id: "Council / Peaks / TwinPeak" },
       { id: "Council / Peaks / OilPeak" },
+      { id: "Council / Peaks / TwinPeak" },
+      { id: "Council / Peaks / AbooPeak" },
       { id: "Council / Peaks / Lord" },
 
       // OMG who cares about your stupid war
