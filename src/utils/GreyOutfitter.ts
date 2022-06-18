@@ -63,7 +63,10 @@ export class GreyOutfit {
     this.addBonus("+50 bonus mafia thumb ring");
 
     if (getQuestStatus("questL13Final") <= 5) {
-      this.addBonus("+4.5 bonus powerful glove");
+      if (availableAmount(Item.get("powerful glove")) > 0) {
+        this.addBonus("-4 bonus hewn moon-rune spoon");
+        this.addBonus("+4.5 bonus powerful glove");
+      }
 
       if (toInt(getProperty("scrapbookCharges")) < 100) {
         this.addBonus("+2 bonus familiar scrapbook");

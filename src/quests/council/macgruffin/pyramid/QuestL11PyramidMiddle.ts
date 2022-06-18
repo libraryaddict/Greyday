@@ -58,7 +58,7 @@ export class QuestL11PyramidMiddle implements QuestInfo {
     }
 
     if (getProperty("questL03Rat") != "finished") {
-      return QuestStatus.FASTER_LATER;
+      return QuestStatus.NOT_READY;
     }
 
     if (this.toAbsorb.length == 0 && this.haveEnough()) {

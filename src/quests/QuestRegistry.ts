@@ -352,9 +352,9 @@ export class QuestRegistry {
       // Given that we earn nothing from peaks, just delay it until we should've hit our max +cold damage
       // { id: "Council / Peaks / CargoShortsSmut" },
       { id: "Council / Peaks / Orcs" },
-      { id: "Council / Peaks / AbooPeak" },
-      { id: "Council / Peaks / TwinPeak" },
       { id: "Council / Peaks / OilPeak" },
+      { id: "Council / Peaks / TwinPeak" },
+      { id: "Council / Peaks / AbooPeak" },
       { id: "Council / Peaks / Lord" },
 
       // OMG who cares about your stupid war
