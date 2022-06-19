@@ -6538,7 +6538,9 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
     map((s) => external_kolmafia_namespaceObject.Monster.get(s)));QuestL11ShenTurnIn_defineProperty(this, "toAbsorb", void 0);QuestL11ShenTurnIn_defineProperty(this, "nanovision",
 
     external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestL11ShenTurnIn_defineProperty(this, "cocktail",
-    external_kolmafia_namespaceObject.Item.get("Unnamed cocktail"));}QuestL11ShenTurnIn_createClass(QuestL11ShenTurnIn, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Unnamed cocktail"));QuestL11ShenTurnIn_defineProperty(this, "penguin",
+    external_kolmafia_namespaceObject.Monster.get("Mob Penguin Capo"));QuestL11ShenTurnIn_defineProperty(this, "robor",
+    external_kolmafia_namespaceObject.Familiar.get("Robortender"));}QuestL11ShenTurnIn_createClass(QuestL11ShenTurnIn, [{ key: "getId", value:
 
     function getId() {
       return "Council / MacGruffin / Shen / TurnIn";
@@ -6589,6 +6591,12 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
       return {
         location: this.shenClub,
         outfit: outfit,
+        familiar:
+        (0,external_kolmafia_namespaceObject.haveFamiliar)(this.robor) &&
+        !(0,external_kolmafia_namespaceObject.isBanished)(this.penguin) &&
+        this.toAbsorb.length == 0 ?
+        this.robor :
+        null,
         run: () => {
           if (!this.hittingNC()) {
             if (!this.haveEffect() && (0,external_kolmafia_namespaceObject.availableAmount)(this.disguise) > 0) {
@@ -6620,6 +6628,10 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
             this.crappyDisguises),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var m = _step.value;
                 settings.addNoBanish(m);
               }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+
+            if ((0,external_kolmafia_namespaceObject.haveFamiliar)(this.robor)) {
+              settings.addNoBanish(this.penguin);
+            }
 
             greyAdv(this.shenClub, outfit, settings);
           } finally {
@@ -6721,7 +6733,8 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
     external_kolmafia_namespaceObject.Item.get("Cosmic Bowling Ball"));QuestL11TempleBowling_defineProperty(this, "goose",
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL11TempleBowling_defineProperty(this, "cosmicBowled",
     "_greyCosmicBowled");QuestL11TempleBowling_defineProperty(this, "nanovision",
-    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestL11TempleBowling_defineProperty(this, "toAbsorb", void 0);}QuestL11TempleBowling_createClass(QuestL11Bowling, [{ key: "hasCosmicBowled", value:
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestL11TempleBowling_defineProperty(this, "drunk",
+    external_kolmafia_namespaceObject.Monster.get("Drunk pygmy"));QuestL11TempleBowling_defineProperty(this, "toAbsorb", void 0);}QuestL11TempleBowling_createClass(QuestL11Bowling, [{ key: "hasCosmicBowled", value:
 
 
     function hasCosmicBowled() {
@@ -6794,7 +6807,7 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
         return QuestStatus.NOT_READY;
       }
 
-      if (!this.barUnlocked()) {
+      if (!this.barUnlocked() && (0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -6803,7 +6816,7 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
       }
 
       // If we don't have nanovision yet
-      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision) && !(0,external_kolmafia_namespaceObject.isBanished)(this.drunk)) {
         return QuestStatus.READY;
       }
 
@@ -6871,13 +6884,15 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
           props.setChoice(788, 1);
 
           try {
-            greyAdv(
-            this.loc,
-            outfit,
-            new AdventureSettings().
-            setStartOfFightMacro(macro).
-            addNoBanish(external_kolmafia_namespaceObject.Monster.get("pygmy bowler")));
+            var settings = new AdventureSettings();
+            settings.setStartOfFightMacro(macro);
+            settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Pygmy Bowler"));
 
+            if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
+              settings.addNoBanish(this.drunk);
+            }
+
+            greyAdv(this.loc, outfit, settings);
           } finally {
             props.resetAll();
           }
@@ -6979,7 +6994,7 @@ var QuestL11Business = /*#__PURE__*/function () {function QuestL11Business() {Qu
           run: () => {
             var props = new PropertyManager();
 
-            props.setChoice(780, 4); // Skip
+            props.setChoice(780, 6); // Skip
             var settings = new AdventureSettings().addBanish(
             external_kolmafia_namespaceObject.Monster.get("pygmy witch lawyer"));
 
@@ -7485,7 +7500,7 @@ var QuestL11HiddenBookMatches = /*#__PURE__*/function () {function QuestL11Hidde
     } }, { key: "status", value:
 
     function status() {
-      if (this.barUnlocked()) {
+      if (this.barUnlocked() || (0,external_kolmafia_namespaceObject.getProperty)("questL11Spare") == "finished") {
         return QuestStatus.COMPLETED;
       }
 
@@ -15277,6 +15292,13 @@ var QuestManorLibrary = /*#__PURE__*/function () {function QuestManorLibrary() {
 
     function level() {
       return 8;
+    } }, { key: "getGnome", value:
+    function getGnome() {
+      return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("gnasirProgress"));
+    } }, { key: "wantsGnomeKillingJar", value:
+
+    function wantsGnomeKillingJar() {
+      return (this.getGnome() & 4) != 4;
     } }, { key: "status", value:
 
     function status() {
@@ -15304,7 +15326,8 @@ var QuestManorLibrary = /*#__PURE__*/function () {function QuestManorLibrary() {
     function run() {
       var outfit = new GreyOutfit();
       var banishLibrarian =
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.killingJar) > 0 && !(0,external_kolmafia_namespaceObject.isBanished)(this.librarian);
+      (!this.wantsGnomeKillingJar() || (0,external_kolmafia_namespaceObject.availableAmount)(this.killingJar) > 0) &&
+      !(0,external_kolmafia_namespaceObject.isBanished)(this.librarian);
 
       if (!banishLibrarian) {
         outfit.setItemDrops();
@@ -17391,7 +17414,8 @@ function QuestSkillDoubleNanovision_classCallCheck(instance, Constructor) {if (!
 var QuestSkillDoubleNanovision = /*#__PURE__*/function () {function QuestSkillDoubleNanovision() {QuestSkillDoubleNanovision_classCallCheck(this, QuestSkillDoubleNanovision);QuestSkillDoubleNanovision_defineProperty(this, "bowling",
     external_kolmafia_namespaceObject.Location.get("The Hidden Bowling Alley"));QuestSkillDoubleNanovision_defineProperty(this, "skill",
     external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestSkillDoubleNanovision_defineProperty(this, "ball",
-    external_kolmafia_namespaceObject.Item.get("Bowling Ball"));}QuestSkillDoubleNanovision_createClass(QuestSkillDoubleNanovision, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Bowling Ball"));QuestSkillDoubleNanovision_defineProperty(this, "drunk",
+    external_kolmafia_namespaceObject.Monster.get("Drunk pygmy"));}QuestSkillDoubleNanovision_createClass(QuestSkillDoubleNanovision, [{ key: "getId", value:
 
     function getId() {
       return "Skills / DoubleNanovision";
@@ -17407,6 +17431,10 @@ var QuestSkillDoubleNanovision = /*#__PURE__*/function () {function QuestSkillDo
       }
 
       if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Spare") != "finished") {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.isBanished)(this.drunk)) {
         return QuestStatus.NOT_READY;
       }
 
