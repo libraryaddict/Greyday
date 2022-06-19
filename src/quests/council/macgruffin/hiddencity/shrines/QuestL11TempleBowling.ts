@@ -10,6 +10,7 @@ import {
   getProperty,
   haveEffect,
   haveSkill,
+  isBanished,
   Item,
   itemAmount,
   Location,
@@ -41,6 +42,7 @@ export class QuestL11Bowling implements QuestInfo {
   goose: Familiar = Familiar.get("Grey Goose");
   cosmicBowled: string = "_greyCosmicBowled";
   nanovision: Skill = Skill.get("Double Nanovision");
+  drunk: Monster = Monster.get("Drunk pygmy");
   toAbsorb: Monster[];
 
   hasCosmicBowled(): boolean {
@@ -113,7 +115,7 @@ export class QuestL11Bowling implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (!this.barUnlocked()) {
+    if (!this.barUnlocked() && haveSkill(this.nanovision)) {
       return QuestStatus.NOT_READY;
     }
 
@@ -122,7 +124,7 @@ export class QuestL11Bowling implements QuestInfo {
     }
 
     // If we don't have nanovision yet
-    if (!haveSkill(this.nanovision)) {
+    if (!haveSkill(this.nanovision) && !isBanished(this.drunk)) {
       return QuestStatus.READY;
     }
 
@@ -190,13 +192,15 @@ export class QuestL11Bowling implements QuestInfo {
         props.setChoice(788, 1);
 
         try {
-          greyAdv(
-            this.loc,
-            outfit,
-            new AdventureSettings()
-              .setStartOfFightMacro(macro)
-              .addNoBanish(Monster.get("pygmy bowler"))
-          );
+          let settings = new AdventureSettings();
+          settings.setStartOfFightMacro(macro);
+          settings.addNoBanish(Monster.get("Pygmy Bowler"));
+
+          if (!haveSkill(this.nanovision)) {
+            settings.addNoBanish(this.drunk);
+          }
+
+          greyAdv(this.loc, outfit, settings);
         } finally {
           props.resetAll();
         }

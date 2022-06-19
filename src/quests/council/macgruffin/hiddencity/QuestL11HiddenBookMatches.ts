@@ -58,7 +58,7 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (this.barUnlocked()) {
+    if (this.barUnlocked() || getProperty("questL11Spare") == "finished") {
       return QuestStatus.COMPLETED;
     }
 

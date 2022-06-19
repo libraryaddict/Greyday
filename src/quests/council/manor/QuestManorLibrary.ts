@@ -38,6 +38,13 @@ export class QuestManorLibrary implements QuestInfo {
   level(): number {
     return 8;
   }
+  getGnome(): number {
+    return toInt(getProperty("gnasirProgress"));
+  }
+
+  wantsGnomeKillingJar(): boolean {
+    return (this.getGnome() & 4) != 4;
+  }
 
   status(): QuestStatus {
     let status = getQuestStatus("questM20Necklace");
@@ -64,7 +71,8 @@ export class QuestManorLibrary implements QuestInfo {
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
     let banishLibrarian =
-      availableAmount(this.killingJar) > 0 && !isBanished(this.librarian);
+      (!this.wantsGnomeKillingJar() || availableAmount(this.killingJar) > 0) &&
+      !isBanished(this.librarian);
 
     if (!banishLibrarian) {
       outfit.setItemDrops();

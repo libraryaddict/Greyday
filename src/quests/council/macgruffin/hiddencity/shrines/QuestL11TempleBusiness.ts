@@ -95,7 +95,7 @@ export class QuestL11Business implements QuestInfo {
         run: () => {
           let props = new PropertyManager();
 
-          props.setChoice(780, 4); // Skip
+          props.setChoice(780, 6); // Skip
           let settings = new AdventureSettings().addBanish(
             Monster.get("pygmy witch lawyer")
           );

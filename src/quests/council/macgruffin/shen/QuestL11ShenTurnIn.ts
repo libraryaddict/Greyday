@@ -11,6 +11,8 @@ import {
   Monster,
   Skill,
   haveSkill,
+  haveFamiliar,
+  isBanished,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -35,6 +37,8 @@ export class QuestL11ShenTurnIn implements QuestInfo {
   toAbsorb: Monster[];
   nanovision: Skill = Skill.get("Double Nanovision");
   cocktail: Item = Item.get("Unnamed cocktail");
+  penguin: Monster = Monster.get("Mob Penguin Capo");
+  robor: Familiar = Familiar.get("Robortender");
 
   getId(): QuestType {
     return "Council / MacGruffin / Shen / TurnIn";
@@ -85,6 +89,12 @@ export class QuestL11ShenTurnIn implements QuestInfo {
     return {
       location: this.shenClub,
       outfit: outfit,
+      familiar:
+        haveFamiliar(this.robor) &&
+        !isBanished(this.penguin) &&
+        this.toAbsorb.length == 0
+          ? this.robor
+          : null,
       run: () => {
         if (!this.hittingNC()) {
           if (!this.haveEffect() && availableAmount(this.disguise) > 0) {
@@ -115,6 +125,10 @@ export class QuestL11ShenTurnIn implements QuestInfo {
 
           for (let m of this.crappyDisguises) {
             settings.addNoBanish(m);
+          }
+
+          if (haveFamiliar(this.robor)) {
+            settings.addNoBanish(this.penguin);
           }
 
           greyAdv(this.shenClub, outfit, settings);

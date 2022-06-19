@@ -10,6 +10,8 @@ import {
   availableAmount,
   itemAmount,
   putCloset,
+  Monster,
+  isBanished,
 } from "kolmafia";
 import { greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -20,6 +22,7 @@ export class QuestSkillDoubleNanovision implements QuestInfo {
   bowling: Location = Location.get("The Hidden Bowling Alley");
   skill: Skill = Skill.get("Double Nanovision");
   ball: Item = Item.get("Bowling Ball");
+  drunk: Monster = Monster.get("Drunk pygmy");
 
   getId(): QuestType {
     return "Skills / DoubleNanovision";
@@ -35,6 +38,10 @@ export class QuestSkillDoubleNanovision implements QuestInfo {
     }
 
     if (getProperty("questL11Spare") != "finished") {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (isBanished(this.drunk)) {
       return QuestStatus.NOT_READY;
     }
 
