@@ -106,7 +106,7 @@ export class QuestL11RonProtesters implements QuestInfo {
 
     // If we don't have max flaming boozes
     if (getQuestStatus("questL11Shen") <= 6) {
-      return QuestStatus.FASTER_LATER;
+      return QuestStatus.NOT_READY;
     }
 
     if (!haveSkill(this.sleazeSkill2) && availableAmount(this.starChart) == 0) {

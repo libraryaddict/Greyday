@@ -73,12 +73,11 @@ export class QuestTowerKillWitch implements QuestInfo {
         greyAdv("choice.php"); // Final fight
         visitUrl("place.php?whichplace=nstower");
         print("Should be all done", "blue");
+        let pulls: Item[] = getProperty("_roninStoragePulls")
+          .split(",")
+          .map((s) => toItem(toInt(s)));
 
         if (!GreySettings.isHardcoreMode()) {
-          let pulls: Item[] = getProperty("_roninStoragePulls")
-            .split(",")
-            .map((s) => toItem(toInt(s)));
-
           print(
             "Used " +
               pulls.length +
@@ -87,8 +86,6 @@ export class QuestTowerKillWitch implements QuestInfo {
               " pulls..",
             "blue"
           );
-
-          print("Pulled: " + pulls.map((i) => i.name).join(", "));
         }
 
         print(
@@ -100,6 +97,7 @@ export class QuestTowerKillWitch implements QuestInfo {
           "blue"
         );
         new AbsorbsProvider().printRemainingAbsorbs();
+        print("Pulled: " + pulls.map((i) => i.name).join(", "), "gray");
       },
     };
   }

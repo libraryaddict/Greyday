@@ -169,7 +169,7 @@ export class QuestL11DesertExplore implements QuestInfo {
           visitUrl("place.php?whichplace=desertbeach", false);
         }
 
-        if ((toInt(getProperty("gnasirProgress")) & 8) != 8) {
+        if (explored >= 10 && (toInt(getProperty("gnasirProgress")) & 8) != 8) {
           print("Worm Pages: " + availableAmount(this.page) + " / 15", "blue");
         }
       },
