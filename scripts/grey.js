@@ -2944,7 +2944,7 @@ var DelayBurners = /*#__PURE__*/function () {function DelayBurners() {DelayBurne
     } }, { key: "isDelayBurnerFeasible", value:
 
     function isDelayBurnerFeasible() {
-      return this.getDelayBurners().find((d) => d.readyIn() < 12) != null;
+      return this.getDelayBurners().find((d) => d.readyIn() < 7) != null;
     } }, { key: "getDelayBurner", value:
 
     function getDelayBurner() {var freeOnly = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
@@ -4560,7 +4560,7 @@ var QuestL11DesertExplore = /*#__PURE__*/function () {function QuestL11DesertExp
             (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=desertbeach", false);
           }
 
-          if (((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("gnasirProgress")) & 8) != 8) {
+          if (explored >= 10 && ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("gnasirProgress")) & 8) != 8) {
             (0,external_kolmafia_namespaceObject.print)("Worm Pages: " + (0,external_kolmafia_namespaceObject.availableAmount)(this.page) + " / 15", "blue");
           }
         } };
@@ -6181,7 +6181,7 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
 
       // If we don't have max flaming boozes
       if (getQuestStatus("questL11Shen") <= 6) {
-        return QuestStatus.FASTER_LATER;
+        return QuestStatus.NOT_READY;
       }
 
       if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.sleazeSkill2) && (0,external_kolmafia_namespaceObject.availableAmount)(this.starChart) == 0) {
@@ -11160,12 +11160,11 @@ var QuestTowerKillWitch = /*#__PURE__*/function () {function QuestTowerKillWitch
           greyAdv("choice.php"); // Final fight
           (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=nstower");
           (0,external_kolmafia_namespaceObject.print)("Should be all done", "blue");
+          var pulls = (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls").
+          split(",").
+          map((s) => (0,external_kolmafia_namespaceObject.toItem)((0,external_kolmafia_namespaceObject.toInt)(s)));
 
           if (!GreySettings.isHardcoreMode()) {
-            var pulls = (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls").
-            split(",").
-            map((s) => (0,external_kolmafia_namespaceObject.toItem)((0,external_kolmafia_namespaceObject.toInt)(s)));
-
             (0,external_kolmafia_namespaceObject.print)(
             "Used " +
             pulls.length +
@@ -11174,8 +11173,6 @@ var QuestTowerKillWitch = /*#__PURE__*/function () {function QuestTowerKillWitch
             " pulls..",
             "blue");
 
-
-            (0,external_kolmafia_namespaceObject.print)("Pulled: " + pulls.map((i) => i.name).join(", "));
           }
 
           (0,external_kolmafia_namespaceObject.print)(
@@ -11187,6 +11184,7 @@ var QuestTowerKillWitch = /*#__PURE__*/function () {function QuestTowerKillWitch
           "blue");
 
           new AbsorbsProvider().printRemainingAbsorbs();
+          (0,external_kolmafia_namespaceObject.print)("Pulled: " + pulls.map((i) => i.name).join(", "), "gray");
         } };
 
     } }]);return QuestTowerKillWitch;}();
