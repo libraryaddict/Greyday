@@ -112,7 +112,7 @@ export class QuestInitialStart implements QuestInfo {
           availableAmount(Item.get("SongBoom&trade; BoomBox")) > 0 &&
           getProperty("_boomBoxSongsLeft") == "11"
         ) {
-          cliExecute("boombox food");
+          cliExecute("boombox meat");
         }
 
         if (

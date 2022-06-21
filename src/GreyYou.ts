@@ -18,6 +18,7 @@ import {
   toString,
   visitUrl,
 } from "kolmafia";
+import { GreySettings } from "./utils/GreySettings";
 
 class Absorb {
   monster: Monster;
@@ -61,20 +62,27 @@ class GreyUtils {
   }
 
   getMustHaveSkills(): Map<Skill, string> {
-    return new Map(
-      [
-        ["Infinite Loop", "Fast Leveling"],
-        ["Gravitational Compression", "Scaling Item Drop"],
-        ["Hivemindedness", "Scaling MP Regen"],
-        ["Ire Proof", "+3 Hot Resist"],
-        ["Conifer Polymers", "+3 Stench Resist"],
-        ["Snow-Cooling System", "+15 Cold Dmg"],
-        ["Cooling Tubules", "+10 Cold Dmg"],
-        ["Photonic Shroud", "-10 Combat"],
-        ["Piezoelectric Honk", "+10 Combat"],
-        ["Phase Shift", "-10 Combat"],
-      ].map((s) => [toSkill(s[0]), s[1]])
-    );
+    let values: [Skill, string][] = [
+      ["Infinite Loop", "Fast Leveling"],
+      ["Gravitational Compression", "Scaling Item Drop"],
+      ["Hivemindedness", "Scaling MP Regen"],
+      ["Ire Proof", "+3 Hot Resist"],
+      ["Conifer Polymers", "+3 Stench Resist"],
+      ["Photonic Shroud", "-10 Combat"],
+      ["Piezoelectric Honk", "+10 Combat"],
+      ["Phase Shift", "-10 Combat"],
+    ].map((s) => [toSkill(s[0]), s[1]]);
+
+    if (GreySettings.isHardcoreMode()) {
+      values.push(
+        ...([
+          ["Snow-Cooling System", "+15 Cold Dmg"],
+          ["Cooling Tubules", "+10 Cold Dmg"],
+        ].map((s) => [toSkill(s[0]), s[1]]) as [Skill, string][])
+      );
+    }
+
+    return new Map(values);
   }
 
   getAbsorbsInLocation(location: Location): Absorb[] {

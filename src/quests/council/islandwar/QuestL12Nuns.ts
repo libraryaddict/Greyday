@@ -9,6 +9,7 @@ import {
   getProperty,
   getWorkshed,
   haveEffect,
+  haveFamiliar,
   haveSkill,
   Item,
   Location,
@@ -17,6 +18,7 @@ import {
   toInt,
   toItem,
   use,
+  useFamiliar,
   visitUrl,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
@@ -33,7 +35,9 @@ import { QuestType } from "../../QuestTypes";
 
 export class Quest12WarNuns implements QuestInfo {
   loc: Location = Location.get("The Themthar Hills");
+  lep: Familiar = Familiar.get("Leprechaun");
   hobo: Familiar = Familiar.get("Hobo Monkey");
+  robor: Familiar = Familiar.get("Robortender");
   hotness: Item = Item.get("Mick's IcyVapoHotness Inhaler");
   effect: Effect = effectModifier(this.hotness, "Effect");
   winkles: Effect = Effect.get("Winklered");
@@ -42,6 +46,15 @@ export class Quest12WarNuns implements QuestInfo {
   asdonMartin: Item = Item.get("Asdon Martin keyfob");
   driving: Effect = Effect.get("Driving Observantly");
   savingsBond: Item = Item.get("Savings bond");
+
+  fishHead: Item = Item.get("Fish Head");
+  boxedWine: Item = Item.get("Boxed Wine");
+  piscatini: Item = Item.get("Piscatini");
+  grapefruit: Item = Item.get("Grapefruit");
+  driveby: Item = Item.get("Drive-by shooting");
+  grapes: Item = Item.get("Bunch of square grapes");
+
+  roborDrinks: Item[] = [this.fishHead, this.piscatini, this.driveby];
 
   hasAlreadyPulled(): boolean {
     return (
@@ -61,12 +74,65 @@ export class Quest12WarNuns implements QuestInfo {
     return [this.loc];
   }
 
+  hasMeatBooze(): boolean {
+    return this.roborDrinks.find((i) => availableAmount(i) > 0) != null;
+  }
+
+  hasDrunkMeat(): boolean {
+    return getProperty("_roboDrinks").includes("drive-by shooting");
+  }
+
+  getFamiliarToUse(): Familiar {
+    if (
+      haveFamiliar(this.robor) &&
+      (this.hasMeatBooze() || this.hasDrunkMeat())
+    ) {
+      return this.robor;
+    }
+
+    return haveFamiliar(this.hobo)
+      ? this.hobo
+      : haveFamiliar(this.lep)
+      ? this.lep
+      : null;
+  }
+
   hasFamiliarRecommendation(): Familiar {
-    if (familiarWeight(this.hobo) < 20) {
-      return this.hobo;
+    let toLevel: Familiar = this.getFamiliarToUse();
+
+    if (familiarWeight(toLevel) < 20) {
+      return toLevel;
     }
 
     return null;
+  }
+
+  doRoboDrinks() {
+    if (
+      !haveFamiliar(this.robor) ||
+      this.hasDrunkMeat() ||
+      !this.hasMeatBooze()
+    ) {
+      return;
+    }
+
+    // Now check if we can make this
+
+    if (
+      availableAmount(this.driveby) == 0 &&
+      availableAmount(this.piscatini) == 0 &&
+      availableAmount(this.boxedWine) == 0 &&
+      availableAmount(this.grapes) == 0
+    ) {
+      return;
+    }
+
+    if (availableAmount(this.driveby) == 0) {
+      cliExecute("create " + this.driveby.name);
+    }
+
+    useFamiliar(this.robor);
+    cliExecute("robo drive-by shooting");
   }
 
   level(): number {
@@ -119,11 +185,13 @@ export class Quest12WarNuns implements QuestInfo {
     outfit.addItem(Item.get("bejeweled pledge pin"));
     outfit.meatDropWeight = 10;
 
+    this.doRoboDrinks();
+
     return {
-      familiar: this.hobo,
+      familiar: this.getFamiliarToUse(),
       location: this.loc,
       outfit: outfit,
-      disableFamOverride: true,
+      disableFamOverride: this.getFamiliarToUse() != null,
       run: () => {
         if (this.getMeat() == 0) {
           this.visitNuns();

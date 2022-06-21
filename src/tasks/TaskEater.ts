@@ -1,4 +1,5 @@
 import {
+  availableAmount,
   canadiaAvailable,
   chew,
   cliExecute,
@@ -35,6 +36,9 @@ export class TaskEater implements Task {
     "Fortune Cookie",
     "Pickled Egg",
   ].map((s) => Item.get(s));
+  keepOnHand: Item[] = ["Bunch of square grapes", "Boxed Wine"].map((s) =>
+    Item.get(s)
+  );
   blackberry: Item = Item.get("Blackberry");
 
   constructor() {
@@ -56,6 +60,10 @@ export class TaskEater implements Task {
       dontEat.push(Item.get("Booze-soaked cherry"));
       dontEat.push(Item.get("Sponge cake"));
       dontEat.push(Item.get("Gin-soaked blotter paper"));
+
+      // Protesters quest item
+      dontEat.push(Item.get("Unnamed cocktail"));
+      dontEat.push(Item.get("Flamin' Whatshisname"));
 
       setProperty(this.prop, dontEat.map((s) => toInt(s)).join(","));
     }
@@ -128,6 +136,10 @@ export class TaskEater implements Task {
       let item = Item.get(i);
 
       if (item.fullness == 0 && item.inebriety == 0 && item.spleen == 0) {
+        continue;
+      }
+
+      if (availableAmount(item) <= 1 && this.keepOnHand.includes(item)) {
         continue;
       }
 

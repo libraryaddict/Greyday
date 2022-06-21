@@ -143,7 +143,6 @@ export class QuestRegistry {
 
       { id: "Misc / ManorLights" },
       { id: "Misc / UnlockDungeonsOfDoom" },
-      { id: "Misc / GrabZapWand" },
       {
         id: "Skills / MPRegen",
         testValid: () =>
@@ -226,7 +225,9 @@ export class QuestRegistry {
         id: "Council / MacGruffin / Black",
         testValid: () => haveSkill(Skill.get("Photonic Shroud")),
       },
+
       { id: "Skills / Photonic Shroud" },
+      { id: "Misc / GrabZapWand" },
 
       // Meh
       { id: "Council / MacGruffin / HiddenCity / Boss" },

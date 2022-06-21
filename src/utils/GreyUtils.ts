@@ -1,14 +1,19 @@
 import {
+  availableAmount,
   cliExecute,
+  currentRound,
   getLocketMonsters,
   getProperty,
+  Item,
   Location,
   Monster,
   myTurncount,
+  print,
   toInt,
   toLocation,
   toMonster,
   turnsPlayed,
+  urlEncode,
   visitUrl,
 } from "kolmafia";
 
@@ -47,6 +52,32 @@ export function canCombatLocket(monster: Monster): boolean {
   }
 
   return true;
+}
+
+export function doPocketWishFight(monster: Monster) {
+  if (availableAmount(Item.get("Pocket Wish")) == 0) {
+    throw "Not enough pocket wishes!";
+  }
+
+  visitUrl("inv_use.php?pwd=&which=99&whichitem=9537");
+  visitUrl("choice.php?forceoption=0");
+
+  try {
+    visitUrl(
+      "choice.php?pwd=&option=1&whichchoice=1267&wish=" +
+        urlEncode("to fight " + monster.name),
+      true,
+      true
+    );
+  } catch (e) {
+    print(e);
+  }
+
+  visitUrl("choice.php");
+
+  if (currentRound() == 0) {
+    throw "Failed to wish in a monster";
+  }
 }
 
 export function getBackupsRemaining() {

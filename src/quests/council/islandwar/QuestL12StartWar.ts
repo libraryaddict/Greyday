@@ -16,7 +16,10 @@ import {
   toInt,
   visitUrl,
 } from "kolmafia";
-import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
+import {
+  hasNonCombatSkillActive,
+  hasNonCombatSkillsReady,
+} from "../../../GreyAdventurer";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -69,7 +72,10 @@ export class QuestL12StartWar implements QuestInfo {
       location: this.loc,
       outfit: outfit,
       run: () => {
-        DelayBurners.tryReplaceCombats();
+        // If we can cast both NC skills
+        if (hasNonCombatSkillsReady(true)) {
+          DelayBurners.tryReplaceCombats();
+        }
 
         greyAdv(this.loc, outfit);
 

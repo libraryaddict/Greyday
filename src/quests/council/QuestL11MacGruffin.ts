@@ -1,6 +1,7 @@
 import {
   adv1,
   availableAmount,
+  cliExecute,
   council,
   getProperty,
   Item,
@@ -33,6 +34,7 @@ export class QuestL11MacGruffin implements QuestInfo {
   questInfo: QuestInfo[] = [];
   forged: Item = Item.get("Forged Identification Documents");
   diary: Item = Item.get("Your Father's Macguffin Diary");
+  holidaySale: Item = Item.get("post-holiday sale coupon");
 
   constructor() {
     // Register the subquests
@@ -88,6 +90,11 @@ export class QuestL11MacGruffin implements QuestInfo {
       run: () => {
         if (availableAmount(this.diary) == 0) {
           if (availableAmount(this.forged) == 0) {
+            // 10% off coupon from pantsgiving
+            if (availableAmount(this.holidaySale) > 0) {
+              use(this.holidaySale);
+            }
+
             retrieveItem(this.forged);
           }
 
@@ -103,6 +110,14 @@ export class QuestL11MacGruffin implements QuestInfo {
         }
 
         use(this.diary);
+
+        // It should have been in meat mode all this time!
+        if (
+          availableAmount(Item.get("SongBoom&trade; BoomBox")) > 0 &&
+          getProperty("_boomBoxSongsLeft") == "10"
+        ) {
+          cliExecute("boombox food");
+        }
       },
     };
   }

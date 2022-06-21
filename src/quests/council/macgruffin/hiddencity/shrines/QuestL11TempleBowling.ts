@@ -43,6 +43,7 @@ export class QuestL11Bowling implements QuestInfo {
   cosmicBowled: string = "_greyCosmicBowled";
   nanovision: Skill = Skill.get("Double Nanovision");
   drunk: Monster = Monster.get("Drunk pygmy");
+  book: Item = Item.get("Book of matches");
   toAbsorb: Monster[];
 
   hasCosmicBowled(): boolean {
@@ -180,6 +181,10 @@ export class QuestL11Bowling implements QuestInfo {
           }
         } else if (closetAmount(this.ball) > 0) {
           takeCloset(this.ball, closetAmount(this.ball));
+        }
+
+        if (availableAmount(this.book) > 0 && !this.barUnlocked()) {
+          use(this.book);
         }
 
         if (itemAmount(this.ball) == 0) {

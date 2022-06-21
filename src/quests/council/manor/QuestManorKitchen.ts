@@ -10,10 +10,14 @@ import {
   haveSkill,
   Item,
   Location,
+  maximize,
   Monster,
   myMeat,
+  myTurncount,
+  numericModifier,
   Skill,
   toInt,
+  totalTurnsPlayed,
   use,
 } from "kolmafia";
 import { AbsorbsProvider, Reabsorbed } from "../../../utils/GreyAbsorber";
@@ -31,7 +35,7 @@ export class QuestManorKitchen implements QuestInfo {
   kitchen: Location = Location.get("The Haunted Kitchen");
   stenchResist: Skill = Skill.get("Conifer Polymers");
   albinoBat: Monster = Monster.get("Albino Bat");
-  lastResist: number = 0;
+  enoughRes: boolean = false;
   lastResistTurnCheck: number = 0;
   canOfPaint: Item = Item.get("Can of black paint");
   asdonMartin: Item = Item.get("Asdon Martin keyfob");
@@ -45,19 +49,42 @@ export class QuestManorKitchen implements QuestInfo {
     return 8;
   }
 
+  hasEnoughRes(): boolean {
+    if (
+      this.lastResistTurnCheck + (this.enoughRes ? 3 : 10) >
+      totalTurnsPlayed()
+    ) {
+      return this.enoughRes;
+    }
+
+    this.lastResistTurnCheck = totalTurnsPlayed();
+
+    maximize("hot res 9 max, stench res 9 max -tie", true);
+    let hotRes = numericModifier("Generated:_spec", "Hot Resistance");
+    let stenchRes = numericModifier("Generated:_spec", "Stench Resistance");
+
+    this.enoughRes = hotRes >= 9 && stenchRes >= 9;
+
+    return this.enoughRes;
+  }
+
   status(): QuestStatus {
     // Each 3 resist in each element is another drawer searched.
     // 21 drawers searched.
     // Max of 9 total res
     let status = getQuestStatus("questM20Necklace");
 
-    // If we haven't purchased our vacation pass yet, don't even think about it.
-    if (status < 0 || getQuestStatus("questL11Black") <= 2 || myMeat() < 1200) {
-      return QuestStatus.NOT_READY;
-    }
-
     if (status > 0) {
       return QuestStatus.COMPLETED;
+    }
+
+    // If we haven't purchased our vacation pass yet, don't even think about it.
+    if (
+      status < 0 ||
+      ((getQuestStatus("questL11Black") <= 2 || myMeat() < 1200) &&
+        !this.hasEnoughRes())
+    ) {
+      return QuestStatus.NOT_READY;
     }
 
     if (
@@ -81,7 +108,10 @@ export class QuestManorKitchen implements QuestInfo {
       outfit: outfit,
       location: this.kitchen,
       run: () => {
-        if (toInt(getProperty("manorDrawerCount")) < 20) {
+        if (
+          toInt(getProperty("manorDrawerCount")) < 20 &&
+          !this.hasEnoughRes()
+        ) {
           if (haveEffect(effectModifier(this.canOfPaint, "Effect")) == 0) {
             cliExecute("acquire 1 " + this.canOfPaint.name);
             use(this.canOfPaint);

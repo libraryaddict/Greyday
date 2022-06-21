@@ -72,8 +72,13 @@ export class QuestGetZapWand implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (myMeat() < 6000 || !this.isDoomUnlocked()) {
-      //|| getQuestStatus("questL11Black") < 3) {
+    let meatOnHand = 6000;
+
+    if (getQuestStatus("questL11Black") < 3) {
+      meatOnHand += 3000;
+    }
+
+    if (myMeat() < meatOnHand || !this.isDoomUnlocked()) {
       return QuestStatus.NOT_READY;
     }
 

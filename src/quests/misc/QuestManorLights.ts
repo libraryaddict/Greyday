@@ -157,11 +157,16 @@ export class QuestManorLights implements QuestInfo {
   doSteve(): QuestAdventure {
     let steve = this.getSteve();
     let fight = this.isSteveFight();
+    let outfit: GreyOutfit = fight ? new GreyOutfit() : new GreyOutfit("-tie");
+
+    if (this.isSteveFight()) {
+      outfit.meatDropWeight = 2;
+    }
 
     return {
       location: null,
       familiar: fight ? this.goose : null,
-      outfit: !fight ? new GreyOutfit("-tie") : null,
+      outfit: outfit,
       run: () => {
         if (false) {
           throw (
@@ -186,7 +191,7 @@ export class QuestManorLights implements QuestInfo {
         if (currentRound() != 0) {
           greyAdv(
             null,
-            null,
+            outfit,
             new AdventureSettings().setStartOfFightMacro(
               Macro.skill(Skill.get("Emit Matter Duplicating Drones"))
             )

@@ -13,6 +13,8 @@ import {
   haveSkill,
   haveFamiliar,
   isBanished,
+  print,
+  equip,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -25,6 +27,7 @@ import {
 import { QuestType } from "../../../QuestTypes";
 import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { currentPredictions } from "../../../../utils/GreyUtils";
 
 export class QuestL11ShenTurnIn implements QuestInfo {
   disguise: Item = Item.get("Crappy Waiter Disguise");
@@ -39,6 +42,7 @@ export class QuestL11ShenTurnIn implements QuestInfo {
   cocktail: Item = Item.get("Unnamed cocktail");
   penguin: Monster = Monster.get("Mob Penguin Capo");
   robor: Familiar = Familiar.get("Robortender");
+  ball: Item = Item.get("miniature crystal ball");
 
   getId(): QuestType {
     return "Council / MacGruffin / Shen / TurnIn";
@@ -86,19 +90,28 @@ export class QuestL11ShenTurnIn implements QuestInfo {
       outfit.setItemDrops();
     }
 
+    let usingRobo =
+      haveFamiliar(this.robor) &&
+      !isBanished(this.penguin) &&
+      this.toAbsorb.length == 0;
+
     return {
       location: this.shenClub,
       outfit: outfit,
-      familiar:
-        haveFamiliar(this.robor) &&
-        !isBanished(this.penguin) &&
-        this.toAbsorb.length == 0
-          ? this.robor
-          : null,
+      familiar: usingRobo ? this.robor : null,
       run: () => {
         if (!this.hittingNC()) {
           if (!this.haveEffect() && availableAmount(this.disguise) > 0) {
             use(this.disguise);
+          }
+        }
+
+        if (usingRobo && availableAmount(this.ball) > 0) {
+          if (
+            !currentPredictions().has(this.shenClub) ||
+            currentPredictions().get(this.shenClub) == this.penguin
+          ) {
+            equip(this.ball);
           }
         }
 

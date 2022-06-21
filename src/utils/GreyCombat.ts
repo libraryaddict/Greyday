@@ -135,6 +135,18 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
     macro.tryItem(Item.get("rock band flyers"));
   }
 
+  if (
+    myHp() > monster.baseAttack * 2 &&
+    Math.max(monster.baseAttack, monster.baseHp) * 1.1 <
+      myBasestat(Stat.get("Moxie")) &&
+    getProperty("boomBoxSong") == "Total Eclipse of Your Meat"
+  ) {
+    // Always try to sing along if the mob is weak enough
+    macro.trySkill(Skill.get("Sing Along"));
+  }
+
+  macro.trySkill(Skill.get("Pocket Crumbs"));
+
   return macro;
 }
 

@@ -31,6 +31,7 @@ export class TaskSellCrap implements Task {
     "snifter of thoroughly aged brandy",
     "wussiness potion",
     "ancient pills",
+    "Fat stacks of cash",
   ].map((s) => Item.get(s));
   autouse: Item[] = [
     "Ancient Vinyl Coin Purse",
@@ -43,6 +44,7 @@ export class TaskSellCrap implements Task {
     "Pixellated Moneybag",
     "Old Coin Purse",
     "Shiny Stones",
+    "Briefcase",
   ].map((s) => Item.get(s));
 
   run(): void {

@@ -133,7 +133,9 @@ export class GreyAdventurer {
               return m.name;
             }
 
-            return m.name + " (Advs x " + (!absorbed.has(m) ? "2" : "1") + ")";
+            return (
+              m.name + " (Absorbs x " + (!absorbed.has(m) ? "2" : "1") + ")"
+            );
           })
           .forEach((m) => monsters.push(m));
 
@@ -204,6 +206,8 @@ export class GreyAdventurer {
       outfit.minusCombatWeight == 0 &&
       outfit.itemDropWeight < 1 &&
       toInt(getProperty("cursedMagnifyingGlassCount")) < 13 &&
+      toInt(getProperty("_voidFreeFights")) < 5;
+    let reallyLovesMagGlass =
       getProperty("sidequestLighthouseCompleted") == "none" &&
       availableAmount(Item.get("barrel of gunpowder")) < 5;
     let doOrb: boolean = false;
@@ -213,7 +217,13 @@ export class GreyAdventurer {
     }
 
     if (canDoMagGlass) {
-      outfit.addBonus("+100 bonus cursed magnifying glass");
+      let bonus = 10;
+
+      if (reallyLovesMagGlass) {
+        bonus = 100;
+      }
+
+      outfit.addBonus(`+${bonus} bonus cursed magnifying glass`);
     }
 
     if (doOrb) {
@@ -222,7 +232,7 @@ export class GreyAdventurer {
 
     if (
       toRun.familiar != null &&
-      (toRun.disableFamOverride == true || gooseReplaceable)
+      (toRun.disableFamOverride == true || !wantToAbsorb)
     ) {
       familiar = toRun.familiar;
     } else if (gooseReplaceable) {
@@ -232,9 +242,12 @@ export class GreyAdventurer {
         replaceWith.push(Familiar.get("Melodramedary"));
       }
 
+      if (getProperty("_roboDrinks").includes("drive-by shooting")) {
+        replaceWith.push(Familiar.get("Robortender"));
+      }
+
       for (let fam of [
         "Pocket Professor",
-        "Robortender",
         "Hobomonkey",
         "Jumpsuited Hound Dog",
       ].map((s) => Familiar.get(s))) {

@@ -40,8 +40,9 @@ export class QuestL4BatsBoss implements QuestInfo {
 
     return {
       location: this.loc,
+      outfit,
       run: () => {
-        greyAdv(this.loc);
+        greyAdv(this.loc, outfit);
 
         if (haveSkill(Skill.get("Grey Noise"))) {
           council();

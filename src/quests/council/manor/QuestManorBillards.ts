@@ -72,7 +72,7 @@ export class QuestManorBillards implements QuestInfo {
     }
 
     outfit.addItem(this.cue);
-    outfit.addBonus("+max 0.1 elemental dmg");
+    outfit.addBonus("+elemental dmg 1 min 1 max");
 
     return {
       outfit: outfit,

@@ -9,10 +9,13 @@ import {
   Skill,
   currentRound,
   handlingChoice,
+  Item,
+  availableAmount,
+  haveSkill,
 } from "kolmafia";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { ResourceClaim, ResourceType } from "../../utils/GreyResources";
-import { canCombatLocket } from "../../utils/GreyUtils";
+import { canCombatLocket, doPocketWishFight } from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -21,6 +24,8 @@ export class QuestAbsorbStarMonster implements QuestInfo {
   evenMonster: Monster = Monster.get("One-Eyed Willie");
   oddMonster: Monster = Monster.get("Little Man in the Canoe");
   familiar: Familiar = Familiar.get("Grey Goose");
+  pocketWish: Item = Item.get("Pocket Wish");
+  nanovision: Skill = Skill.get("Double Nanovision");
 
   getMonster(): Monster {
     return myAscensions() % 2 != 0 ? this.evenMonster : this.oddMonster;
@@ -43,7 +48,10 @@ export class QuestAbsorbStarMonster implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!canCombatLocket(this.getMonster())) {
+    if (
+      !canCombatLocket(this.getMonster()) &&
+      availableAmount(this.pocketWish) == 0
+    ) {
       return QuestStatus.COMPLETED;
     }
 
@@ -61,18 +69,29 @@ export class QuestAbsorbStarMonster implements QuestInfo {
       familiar: this.familiar,
       disableFamOverride: true,
       run: () => {
-        let page1 = visitUrl("inventory.php?reminisce=1", false);
-        let url =
-          "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
-          toInt(this.getMonster());
+        if (canCombatLocket(this.getMonster())) {
+          let page1 = visitUrl("inventory.php?reminisce=1", false);
+          let url =
+            "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
+            toInt(this.getMonster());
 
-        visitUrl(url);
-        Macro.trySkill(Skill.get("Re-Process Matter"))
-          .trySkillRepeat(Skill.get("Infinite Loop"))
-          .submit();
+          visitUrl(url);
+        } else {
+          doPocketWishFight(this.getMonster());
+        }
+
+        let macro = Macro.trySkill(Skill.get("Re-Process Matter"));
+
+        if (haveSkill(this.nanovision)) {
+          macro.trySkillRepeat(this.nanovision);
+        } else {
+          macro.trySkillRepeat(Skill.get("Infinite Loop"));
+        }
+
+        macro.submit();
 
         if (handlingChoice() || currentRound() != 0) {
-          throw "We're supposed to be done with this locket fight!";
+          throw "We're supposed to be done with this fight!";
         }
       },
     };

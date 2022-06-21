@@ -76,4 +76,12 @@ export class QuestL11Shen implements QuestInfo {
       },
     };
   }
+
+  mustBeDone(): boolean {
+    return true;
+  }
+
+  needAdventures(): number {
+    return 0;
+  }
 }
