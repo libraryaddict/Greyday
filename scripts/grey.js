@@ -1239,6 +1239,18 @@ function greyDuringFightMacro(settings) {
     macro.tryItem(external_kolmafia_namespaceObject.Item.get("rock band flyers"));
   }
 
+  if (
+  (0,external_kolmafia_namespaceObject.myHp)() > monster.baseAttack * 2 &&
+  Math.max(monster.baseAttack, monster.baseHp) * 1.1 <
+  (0,external_kolmafia_namespaceObject.myBasestat)(external_kolmafia_namespaceObject.Stat.get("Moxie")) &&
+  (0,external_kolmafia_namespaceObject.getProperty)("boomBoxSong") == "Total Eclipse of Your Meat")
+  {
+    // Always try to sing along if the mob is weak enough
+    macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Sing Along"));
+  }
+
+  macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Pocket Crumbs"));
+
   return macro;
 }
 
@@ -1346,6 +1358,32 @@ function canCombatLocket(monster) {
   }
 
   return true;
+}
+
+function doPocketWishFight(monster) {
+  if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Pocket Wish")) == 0) {
+    throw "Not enough pocket wishes!";
+  }
+
+  (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?pwd=&which=99&whichitem=9537");
+  (0,external_kolmafia_namespaceObject.visitUrl)("choice.php?forceoption=0");
+
+  try {
+    (0,external_kolmafia_namespaceObject.visitUrl)(
+    "choice.php?pwd=&option=1&whichchoice=1267&wish=" +
+    (0,external_kolmafia_namespaceObject.urlEncode)("to fight " + monster.name),
+    true,
+    true);
+
+  } catch (e) {
+    (0,external_kolmafia_namespaceObject.print)(e);
+  }
+
+  (0,external_kolmafia_namespaceObject.visitUrl)("choice.php");
+
+  if ((0,external_kolmafia_namespaceObject.currentRound)() == 0) {
+    throw "Failed to wish in a monster";
+  }
 }
 
 function getBackupsRemaining() {
@@ -2350,7 +2388,7 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
       a.monster.name +
       " <font color='gray'>(" +
       a.adventures +
-      " advs x " + (
+      " absorbs x " + (
       defeated.has(a.monster) ? "1" : "2") +
       ")</font>").
 
@@ -6528,6 +6566,7 @@ function QuestL11ShenTurnIn_createForOfIteratorHelper(o, allowArrayLike) {var it
 
 
 
+
 var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn() {QuestL11ShenTurnIn_classCallCheck(this, QuestL11ShenTurnIn);QuestL11ShenTurnIn_defineProperty(this, "disguise",
     external_kolmafia_namespaceObject.Item.get("Crappy Waiter Disguise"));QuestL11ShenTurnIn_defineProperty(this, "shenClub",
     external_kolmafia_namespaceObject.Location.get("The Copperhead Club"));QuestL11ShenTurnIn_defineProperty(this, "crappy",
@@ -6540,7 +6579,8 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
     external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestL11ShenTurnIn_defineProperty(this, "cocktail",
     external_kolmafia_namespaceObject.Item.get("Unnamed cocktail"));QuestL11ShenTurnIn_defineProperty(this, "penguin",
     external_kolmafia_namespaceObject.Monster.get("Mob Penguin Capo"));QuestL11ShenTurnIn_defineProperty(this, "robor",
-    external_kolmafia_namespaceObject.Familiar.get("Robortender"));}QuestL11ShenTurnIn_createClass(QuestL11ShenTurnIn, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Familiar.get("Robortender"));QuestL11ShenTurnIn_defineProperty(this, "ball",
+    external_kolmafia_namespaceObject.Item.get("miniature crystal ball"));}QuestL11ShenTurnIn_createClass(QuestL11ShenTurnIn, [{ key: "getId", value:
 
     function getId() {
       return "Council / MacGruffin / Shen / TurnIn";
@@ -6588,19 +6628,28 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
         outfit.setItemDrops();
       }
 
+      var usingRobo =
+      (0,external_kolmafia_namespaceObject.haveFamiliar)(this.robor) &&
+      !(0,external_kolmafia_namespaceObject.isBanished)(this.penguin) &&
+      this.toAbsorb.length == 0;
+
       return {
         location: this.shenClub,
         outfit: outfit,
-        familiar:
-        (0,external_kolmafia_namespaceObject.haveFamiliar)(this.robor) &&
-        !(0,external_kolmafia_namespaceObject.isBanished)(this.penguin) &&
-        this.toAbsorb.length == 0 ?
-        this.robor :
-        null,
+        familiar: usingRobo ? this.robor : null,
         run: () => {
           if (!this.hittingNC()) {
             if (!this.haveEffect() && (0,external_kolmafia_namespaceObject.availableAmount)(this.disguise) > 0) {
               (0,external_kolmafia_namespaceObject.use)(this.disguise);
+            }
+          }
+
+          if (usingRobo && (0,external_kolmafia_namespaceObject.availableAmount)(this.ball) > 0) {
+            if (
+            !currentPredictions().has(this.shenClub) ||
+            currentPredictions().get(this.shenClub) == this.penguin)
+            {
+              (0,external_kolmafia_namespaceObject.equip)(this.ball);
             }
           }
 
@@ -6715,6 +6764,14 @@ var QuestL11Shen = /*#__PURE__*/function () {
           greyAdv(this.shenClub);
         } };
 
+    } }, { key: "mustBeDone", value:
+
+    function mustBeDone() {
+      return true;
+    } }, { key: "needAdventures", value:
+
+    function needAdventures() {
+      return 0;
     } }]);return QuestL11Shen;}();
 ;// CONCATENATED MODULE: ./src/quests/council/macgruffin/hiddencity/shrines/QuestL11TempleBowling.ts
 function QuestL11TempleBowling_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL11TempleBowling_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL11TempleBowling_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL11TempleBowling_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL11TempleBowling_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL11TempleBowling_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
@@ -6734,7 +6791,8 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL11TempleBowling_defineProperty(this, "cosmicBowled",
     "_greyCosmicBowled");QuestL11TempleBowling_defineProperty(this, "nanovision",
     external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestL11TempleBowling_defineProperty(this, "drunk",
-    external_kolmafia_namespaceObject.Monster.get("Drunk pygmy"));QuestL11TempleBowling_defineProperty(this, "toAbsorb", void 0);}QuestL11TempleBowling_createClass(QuestL11Bowling, [{ key: "hasCosmicBowled", value:
+    external_kolmafia_namespaceObject.Monster.get("Drunk pygmy"));QuestL11TempleBowling_defineProperty(this, "book",
+    external_kolmafia_namespaceObject.Item.get("Book of matches"));QuestL11TempleBowling_defineProperty(this, "toAbsorb", void 0);}QuestL11TempleBowling_createClass(QuestL11Bowling, [{ key: "hasCosmicBowled", value:
 
 
     function hasCosmicBowled() {
@@ -6872,6 +6930,10 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
             }
           } else if ((0,external_kolmafia_namespaceObject.closetAmount)(this.ball) > 0) {
             (0,external_kolmafia_namespaceObject.takeCloset)(this.ball, (0,external_kolmafia_namespaceObject.closetAmount)(this.ball));
+          }
+
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(this.book) > 0 && !this.barUnlocked()) {
+            (0,external_kolmafia_namespaceObject.use)(this.book);
           }
 
           if ((0,external_kolmafia_namespaceObject.itemAmount)(this.ball) == 0) {
@@ -8255,7 +8317,8 @@ var QuestL11MacGruffin = /*#__PURE__*/function () {
 
 
 
-  function QuestL11MacGruffin() {QuestL11MacGruffin_classCallCheck(this, QuestL11MacGruffin);QuestL11MacGruffin_defineProperty(this, "questInfo", []);QuestL11MacGruffin_defineProperty(this, "forged", external_kolmafia_namespaceObject.Item.get("Forged Identification Documents"));QuestL11MacGruffin_defineProperty(this, "diary", external_kolmafia_namespaceObject.Item.get("Your Father's Macguffin Diary"));
+
+  function QuestL11MacGruffin() {QuestL11MacGruffin_classCallCheck(this, QuestL11MacGruffin);QuestL11MacGruffin_defineProperty(this, "questInfo", []);QuestL11MacGruffin_defineProperty(this, "forged", external_kolmafia_namespaceObject.Item.get("Forged Identification Documents"));QuestL11MacGruffin_defineProperty(this, "diary", external_kolmafia_namespaceObject.Item.get("Your Father's Macguffin Diary"));QuestL11MacGruffin_defineProperty(this, "holidaySale", external_kolmafia_namespaceObject.Item.get("post-holiday sale coupon"));
     // Register the subquests
     this.questInfo.push(new QuestL11ShoreAccess());
     this.questInfo.push(new QuestL11Black());
@@ -8309,6 +8372,11 @@ var QuestL11MacGruffin = /*#__PURE__*/function () {
         run: () => {
           if ((0,external_kolmafia_namespaceObject.availableAmount)(this.diary) == 0) {
             if ((0,external_kolmafia_namespaceObject.availableAmount)(this.forged) == 0) {
+              // 10% off coupon from pantsgiving
+              if ((0,external_kolmafia_namespaceObject.availableAmount)(this.holidaySale) > 0) {
+                (0,external_kolmafia_namespaceObject.use)(this.holidaySale);
+              }
+
               (0,external_kolmafia_namespaceObject.retrieveItem)(this.forged);
             }
 
@@ -8324,6 +8392,14 @@ var QuestL11MacGruffin = /*#__PURE__*/function () {
           }
 
           (0,external_kolmafia_namespaceObject.use)(this.diary);
+
+          // It should have been in meat mode all this time!
+          if (
+          (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("SongBoom&trade; BoomBox")) > 0 &&
+          (0,external_kolmafia_namespaceObject.getProperty)("_boomBoxSongsLeft") == "10")
+          {
+            (0,external_kolmafia_namespaceObject.cliExecute)("boombox food");
+          }
         } };
 
     } }, { key: "needAdventures", value:
@@ -8599,8 +8675,10 @@ function QuestL12Nuns_classCallCheck(instance, Constructor) {if (!(instance inst
 
 
 var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL12Nuns_classCallCheck(this, Quest12WarNuns);QuestL12Nuns_defineProperty(this, "loc",
-    external_kolmafia_namespaceObject.Location.get("The Themthar Hills"));QuestL12Nuns_defineProperty(this, "hobo",
-    external_kolmafia_namespaceObject.Familiar.get("Hobo Monkey"));QuestL12Nuns_defineProperty(this, "hotness",
+    external_kolmafia_namespaceObject.Location.get("The Themthar Hills"));QuestL12Nuns_defineProperty(this, "lep",
+    external_kolmafia_namespaceObject.Familiar.get("Leprechaun"));QuestL12Nuns_defineProperty(this, "hobo",
+    external_kolmafia_namespaceObject.Familiar.get("Hobo Monkey"));QuestL12Nuns_defineProperty(this, "robor",
+    external_kolmafia_namespaceObject.Familiar.get("Robortender"));QuestL12Nuns_defineProperty(this, "hotness",
     external_kolmafia_namespaceObject.Item.get("Mick's IcyVapoHotness Inhaler"));QuestL12Nuns_defineProperty(this, "effect",
     (0,external_kolmafia_namespaceObject.effectModifier)(this.hotness, "Effect"));QuestL12Nuns_defineProperty(this, "winkles",
     external_kolmafia_namespaceObject.Effect.get("Winklered"));QuestL12Nuns_defineProperty(this, "bowlStraightUp",
@@ -8608,7 +8686,16 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
     external_kolmafia_namespaceObject.Item.get("Cosmic Bowling Ball"));QuestL12Nuns_defineProperty(this, "asdonMartin",
     external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestL12Nuns_defineProperty(this, "driving",
     external_kolmafia_namespaceObject.Effect.get("Driving Observantly"));QuestL12Nuns_defineProperty(this, "savingsBond",
-    external_kolmafia_namespaceObject.Item.get("Savings bond"));}QuestL12Nuns_createClass(Quest12WarNuns, [{ key: "hasAlreadyPulled", value:
+    external_kolmafia_namespaceObject.Item.get("Savings bond"));QuestL12Nuns_defineProperty(this, "fishHead",
+
+    external_kolmafia_namespaceObject.Item.get("Fish Head"));QuestL12Nuns_defineProperty(this, "boxedWine",
+    external_kolmafia_namespaceObject.Item.get("Boxed Wine"));QuestL12Nuns_defineProperty(this, "piscatini",
+    external_kolmafia_namespaceObject.Item.get("Piscatini"));QuestL12Nuns_defineProperty(this, "grapefruit",
+    external_kolmafia_namespaceObject.Item.get("Grapefruit"));QuestL12Nuns_defineProperty(this, "driveby",
+    external_kolmafia_namespaceObject.Item.get("Drive-by shooting"));QuestL12Nuns_defineProperty(this, "grapes",
+    external_kolmafia_namespaceObject.Item.get("Bunch of square grapes"));QuestL12Nuns_defineProperty(this, "roborDrinks",
+
+    [this.fishHead, this.piscatini, this.driveby]);}QuestL12Nuns_createClass(Quest12WarNuns, [{ key: "hasAlreadyPulled", value:
 
     function hasAlreadyPulled() {
       return (
@@ -8626,14 +8713,67 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
 
     function getLocations() {
       return [this.loc];
+    } }, { key: "hasMeatBooze", value:
+
+    function hasMeatBooze() {
+      return this.roborDrinks.find((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0) != null;
+    } }, { key: "hasDrunkMeat", value:
+
+    function hasDrunkMeat() {
+      return (0,external_kolmafia_namespaceObject.getProperty)("_roboDrinks").includes("drive-by shooting");
+    } }, { key: "getFamiliarToUse", value:
+
+    function getFamiliarToUse() {
+      if (
+      (0,external_kolmafia_namespaceObject.haveFamiliar)(this.robor) && (
+      this.hasMeatBooze() || this.hasDrunkMeat()))
+      {
+        return this.robor;
+      }
+
+      return (0,external_kolmafia_namespaceObject.haveFamiliar)(this.hobo) ?
+      this.hobo :
+      (0,external_kolmafia_namespaceObject.haveFamiliar)(this.lep) ?
+      this.lep :
+      null;
     } }, { key: "hasFamiliarRecommendation", value:
 
     function hasFamiliarRecommendation() {
-      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.hobo) < 20) {
-        return this.hobo;
+      var toLevel = this.getFamiliarToUse();
+
+      if ((0,external_kolmafia_namespaceObject.familiarWeight)(toLevel) < 20) {
+        return toLevel;
       }
 
       return null;
+    } }, { key: "doRoboDrinks", value:
+
+    function doRoboDrinks() {
+      if (
+      !(0,external_kolmafia_namespaceObject.haveFamiliar)(this.robor) ||
+      this.hasDrunkMeat() ||
+      !this.hasMeatBooze())
+      {
+        return;
+      }
+
+      // Now check if we can make this
+
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.driveby) == 0 &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.piscatini) == 0 &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.boxedWine) == 0 &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.grapes) == 0)
+      {
+        return;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.driveby) == 0) {
+        (0,external_kolmafia_namespaceObject.cliExecute)("create " + this.driveby.name);
+      }
+
+      (0,external_kolmafia_namespaceObject.useFamiliar)(this.robor);
+      (0,external_kolmafia_namespaceObject.cliExecute)("robo drive-by shooting");
     } }, { key: "level", value:
 
     function level() {
@@ -8686,11 +8826,13 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
       outfit.addItem(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
       outfit.meatDropWeight = 10;
 
+      this.doRoboDrinks();
+
       return {
-        familiar: this.hobo,
+        familiar: this.getFamiliarToUse(),
         location: this.loc,
         outfit: outfit,
-        disableFamOverride: true,
+        disableFamOverride: this.getFamiliarToUse() != null,
         run: () => {
           if (this.getMeat() == 0) {
             this.visitNuns();
@@ -9029,7 +9171,10 @@ var QuestL12StartWar = /*#__PURE__*/function () {function QuestL12StartWar() {Qu
         location: this.loc,
         outfit: outfit,
         run: () => {
-          DelayBurners.tryReplaceCombats();
+          // If we can cast both NC skills
+          if (hasNonCombatSkillsReady(true)) {
+            DelayBurners.tryReplaceCombats();
+          }
 
           greyAdv(this.loc, outfit);
 
@@ -11601,8 +11746,9 @@ var QuestL4BatsBoss = /*#__PURE__*/function () {function QuestL4BatsBoss() {Ques
 
       return {
         location: this.loc,
+        outfit: outfit,
         run: () => {
-          greyAdv(this.loc);
+          greyAdv(this.loc, outfit);
 
           if ((0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Grey Noise"))) {
             (0,external_kolmafia_namespaceObject.council)();
@@ -13100,7 +13246,7 @@ var QuestL8MountainGoats = /*#__PURE__*/function () {function QuestL8MountainGoa
             settings.addNoBanish(this.dairy);
           }
 
-          greyAdv(this.goats, outfit);
+          greyAdv(this.goats, outfit, settings);
 
           if ((0,external_kolmafia_namespaceObject.availableAmount)(this.cheese) >= 3 && this.getOreRemaining() <= 0) {
             this.talkTrapper();
@@ -15048,7 +15194,7 @@ var QuestManorBillards = /*#__PURE__*/function () {function QuestManorBillards()
       }
 
       outfit.addItem(this.cue);
-      outfit.addBonus("+max 0.1 elemental dmg");
+      outfit.addBonus("+elemental dmg 1 min 1 max");
 
       return {
         outfit: outfit,
@@ -15194,8 +15340,8 @@ function QuestManorKitchen_classCallCheck(instance, Constructor) {if (!(instance
 var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {QuestManorKitchen_classCallCheck(this, QuestManorKitchen);QuestManorKitchen_defineProperty(this, "kitchen",
     external_kolmafia_namespaceObject.Location.get("The Haunted Kitchen"));QuestManorKitchen_defineProperty(this, "stenchResist",
     external_kolmafia_namespaceObject.Skill.get("Conifer Polymers"));QuestManorKitchen_defineProperty(this, "albinoBat",
-    external_kolmafia_namespaceObject.Monster.get("Albino Bat"));QuestManorKitchen_defineProperty(this, "lastResist",
-    0);QuestManorKitchen_defineProperty(this, "lastResistTurnCheck",
+    external_kolmafia_namespaceObject.Monster.get("Albino Bat"));QuestManorKitchen_defineProperty(this, "enoughRes",
+    false);QuestManorKitchen_defineProperty(this, "lastResistTurnCheck",
     0);QuestManorKitchen_defineProperty(this, "canOfPaint",
     external_kolmafia_namespaceObject.Item.get("Can of black paint"));QuestManorKitchen_defineProperty(this, "asdonMartin",
     external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestManorKitchen_defineProperty(this, "driveSafe",
@@ -15207,6 +15353,25 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
 
     function level() {
       return 8;
+    } }, { key: "hasEnoughRes", value:
+
+    function hasEnoughRes() {
+      if (
+      this.lastResistTurnCheck + (this.enoughRes ? 3 : 10) >
+      (0,external_kolmafia_namespaceObject.totalTurnsPlayed)())
+      {
+        return this.enoughRes;
+      }
+
+      this.lastResistTurnCheck = (0,external_kolmafia_namespaceObject.totalTurnsPlayed)();
+
+      (0,external_kolmafia_namespaceObject.maximize)("hot res 9 max, stench res 9 max -tie", true);
+      var hotRes = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Hot Resistance");
+      var stenchRes = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Stench Resistance");
+
+      this.enoughRes = hotRes >= 9 && stenchRes >= 9;
+
+      return this.enoughRes;
     } }, { key: "status", value:
 
     function status() {
@@ -15215,13 +15380,17 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
       // Max of 9 total res
       var status = getQuestStatus("questM20Necklace");
 
-      // If we haven't purchased our vacation pass yet, don't even think about it.
-      if (status < 0 || getQuestStatus("questL11Black") <= 2 || (0,external_kolmafia_namespaceObject.myMeat)() < 1200) {
-        return QuestStatus.NOT_READY;
-      }
-
       if (status > 0) {
         return QuestStatus.COMPLETED;
+      }
+
+      // If we haven't purchased our vacation pass yet, don't even think about it.
+      if (
+      status < 0 ||
+      (getQuestStatus("questL11Black") <= 2 || (0,external_kolmafia_namespaceObject.myMeat)() < 1200) &&
+      !this.hasEnoughRes())
+      {
+        return QuestStatus.NOT_READY;
       }
 
       if (
@@ -15245,7 +15414,10 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
         outfit: outfit,
         location: this.kitchen,
         run: () => {
-          if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("manorDrawerCount")) < 20) {
+          if (
+          (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("manorDrawerCount")) < 20 &&
+          !this.hasEnoughRes())
+          {
             if ((0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(this.canOfPaint, "Effect")) == 0) {
               (0,external_kolmafia_namespaceObject.cliExecute)("acquire 1 " + this.canOfPaint.name);
               (0,external_kolmafia_namespaceObject.use)(this.canOfPaint);
@@ -15732,11 +15904,16 @@ var QuestManorLights = /*#__PURE__*/function () {
     function doSteve() {
       var steve = this.getSteve();
       var fight = this.isSteveFight();
+      var outfit = fight ? new GreyOutfit() : new GreyOutfit("-tie");
+
+      if (this.isSteveFight()) {
+        outfit.meatDropWeight = 2;
+      }
 
       return {
         location: null,
         familiar: fight ? this.goose : null,
-        outfit: !fight ? new GreyOutfit("-tie") : null,
+        outfit: outfit,
         run: () => {
           if (false) {}
 
@@ -15754,7 +15931,7 @@ var QuestManorLights = /*#__PURE__*/function () {
           if ((0,external_kolmafia_namespaceObject.currentRound)() != 0) {
             greyAdv(
             null,
-            null,
+            outfit,
             new AdventureSettings().setStartOfFightMacro(
             Macro.skill(external_kolmafia_namespaceObject.Skill.get("Emit Matter Duplicating Drones"))));
 
@@ -15938,7 +16115,7 @@ var QuestInitialStart = /*#__PURE__*/function () {function QuestInitialStart() {
           (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("SongBoom&trade; BoomBox")) > 0 &&
           (0,external_kolmafia_namespaceObject.getProperty)("_boomBoxSongsLeft") == "11")
           {
-            (0,external_kolmafia_namespaceObject.cliExecute)("boombox food");
+            (0,external_kolmafia_namespaceObject.cliExecute)("boombox meat");
           }
 
           if (
@@ -16137,8 +16314,13 @@ var QuestGetZapWand = /*#__PURE__*/function () {function QuestGetZapWand() {Ques
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.myMeat)() < 6000 || !this.isDoomUnlocked()) {
-        //|| getQuestStatus("questL11Black") < 3) {
+      var meatOnHand = 6000;
+
+      if (getQuestStatus("questL11Black") < 3) {
+        meatOnHand += 3000;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.myMeat)() < meatOnHand || !this.isDoomUnlocked()) {
         return QuestStatus.NOT_READY;
       }
 
@@ -19094,7 +19276,9 @@ function QuestAbsorbStarMonster_classCallCheck(instance, Constructor) {if (!(ins
 var QuestAbsorbStarMonster = /*#__PURE__*/function () {function QuestAbsorbStarMonster() {QuestAbsorbStarMonster_classCallCheck(this, QuestAbsorbStarMonster);QuestAbsorbStarMonster_defineProperty(this, "evenMonster",
     external_kolmafia_namespaceObject.Monster.get("One-Eyed Willie"));QuestAbsorbStarMonster_defineProperty(this, "oddMonster",
     external_kolmafia_namespaceObject.Monster.get("Little Man in the Canoe"));QuestAbsorbStarMonster_defineProperty(this, "familiar",
-    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));}QuestAbsorbStarMonster_createClass(QuestAbsorbStarMonster, [{ key: "getMonster", value:
+    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestAbsorbStarMonster_defineProperty(this, "pocketWish",
+    external_kolmafia_namespaceObject.Item.get("Pocket Wish"));QuestAbsorbStarMonster_defineProperty(this, "nanovision",
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));}QuestAbsorbStarMonster_createClass(QuestAbsorbStarMonster, [{ key: "getMonster", value:
 
     function getMonster() {
       return (0,external_kolmafia_namespaceObject.myAscensions)() % 2 != 0 ? this.evenMonster : this.oddMonster;
@@ -19117,7 +19301,10 @@ var QuestAbsorbStarMonster = /*#__PURE__*/function () {function QuestAbsorbStarM
         return QuestStatus.COMPLETED;
       }
 
-      if (!canCombatLocket(this.getMonster())) {
+      if (
+      !canCombatLocket(this.getMonster()) &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.pocketWish) == 0)
+      {
         return QuestStatus.COMPLETED;
       }
 
@@ -19135,18 +19322,29 @@ var QuestAbsorbStarMonster = /*#__PURE__*/function () {function QuestAbsorbStarM
         familiar: this.familiar,
         disableFamOverride: true,
         run: () => {
-          var page1 = (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?reminisce=1", false);
-          var url =
-          "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
-          (0,external_kolmafia_namespaceObject.toInt)(this.getMonster());
+          if (canCombatLocket(this.getMonster())) {
+            var page1 = (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?reminisce=1", false);
+            var url =
+            "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
+            (0,external_kolmafia_namespaceObject.toInt)(this.getMonster());
 
-          (0,external_kolmafia_namespaceObject.visitUrl)(url);
-          Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Re-Process Matter")).
-          trySkillRepeat(external_kolmafia_namespaceObject.Skill.get("Infinite Loop")).
-          submit();
+            (0,external_kolmafia_namespaceObject.visitUrl)(url);
+          } else {
+            doPocketWishFight(this.getMonster());
+          }
+
+          var macro = Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Re-Process Matter"));
+
+          if ((0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
+            macro.trySkillRepeat(this.nanovision);
+          } else {
+            macro.trySkillRepeat(external_kolmafia_namespaceObject.Skill.get("Infinite Loop"));
+          }
+
+          macro.submit();
 
           if ((0,external_kolmafia_namespaceObject.handlingChoice)() || (0,external_kolmafia_namespaceObject.currentRound)() != 0) {
-            throw "We're supposed to be done with this locket fight!";
+            throw "We're supposed to be done with this fight!";
           }
         } };
 
@@ -19388,7 +19586,6 @@ var QuestRegistry = /*#__PURE__*/function () {
 
       { id: "Misc / ManorLights" },
       { id: "Misc / UnlockDungeonsOfDoom" },
-      { id: "Misc / GrabZapWand" },
       {
         id: "Skills / MPRegen",
         testValid: () =>
@@ -19471,7 +19668,9 @@ var QuestRegistry = /*#__PURE__*/function () {
         id: "Council / MacGruffin / Black",
         testValid: () => (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Photonic Shroud")) },
 
+
       { id: "Skills / Photonic Shroud" },
+      { id: "Misc / GrabZapWand" },
 
       // Meh
       { id: "Council / MacGruffin / HiddenCity / Boss" },
@@ -20371,7 +20570,10 @@ var TaskEater = /*#__PURE__*/function () {
 
 
 
-  function TaskEater() {TaskEater_classCallCheck(this, TaskEater);TaskEater_defineProperty(this, "prop", "_greyEatenToday");TaskEater_defineProperty(this, "npcFoods", ["Hot buttered roll", "Ketchup", "Catsup", "cup of lukewarm tea", "Fortune Cookie", "Pickled Egg"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));TaskEater_defineProperty(this, "blackberry", external_kolmafia_namespaceObject.Item.get("Blackberry"));
+
+
+
+  function TaskEater() {TaskEater_classCallCheck(this, TaskEater);TaskEater_defineProperty(this, "prop", "_greyEatenToday");TaskEater_defineProperty(this, "npcFoods", ["Hot buttered roll", "Ketchup", "Catsup", "cup of lukewarm tea", "Fortune Cookie", "Pickled Egg"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));TaskEater_defineProperty(this, "keepOnHand", ["Bunch of square grapes", "Boxed Wine"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));TaskEater_defineProperty(this, "blackberry", external_kolmafia_namespaceObject.Item.get("Blackberry"));
     if ((0,external_kolmafia_namespaceObject.getProperty)(this.prop) == "") {
       var dontEat = [];
       // Goat cheese quest
@@ -20390,6 +20592,10 @@ var TaskEater = /*#__PURE__*/function () {
       dontEat.push(external_kolmafia_namespaceObject.Item.get("Booze-soaked cherry"));
       dontEat.push(external_kolmafia_namespaceObject.Item.get("Sponge cake"));
       dontEat.push(external_kolmafia_namespaceObject.Item.get("Gin-soaked blotter paper"));
+
+      // Protesters quest item
+      dontEat.push(external_kolmafia_namespaceObject.Item.get("Unnamed cocktail"));
+      dontEat.push(external_kolmafia_namespaceObject.Item.get("Flamin' Whatshisname"));
 
       (0,external_kolmafia_namespaceObject.setProperty)(this.prop, dontEat.map((s) => (0,external_kolmafia_namespaceObject.toInt)(s)).join(","));
     }
@@ -20462,6 +20668,10 @@ var TaskEater = /*#__PURE__*/function () {
         var item = external_kolmafia_namespaceObject.Item.get(i);
 
         if (item.fullness == 0 && item.inebriety == 0 && item.spleen == 0) {
+          continue;
+        }
+
+        if ((0,external_kolmafia_namespaceObject.availableAmount)(item) <= 1 && this.keepOnHand.includes(item)) {
           continue;
         }
 
@@ -20830,7 +21040,8 @@ var TaskSellCrap = /*#__PURE__*/function () {function TaskSellCrap() {TaskSellCr
     "lihc eye",
     "snifter of thoroughly aged brandy",
     "wussiness potion",
-    "ancient pills"].
+    "ancient pills",
+    "Fat stacks of cash"].
     map((s) => external_kolmafia_namespaceObject.Item.get(s)));TaskSellCrap_defineProperty(this, "autouse",
     [
     "Ancient Vinyl Coin Purse",
@@ -20842,7 +21053,8 @@ var TaskSellCrap = /*#__PURE__*/function () {function TaskSellCrap() {TaskSellCr
     "Penultimate Fantasy Chest",
     "Pixellated Moneybag",
     "Old Coin Purse",
-    "Shiny Stones"].
+    "Shiny Stones",
+    "Briefcase"].
     map((s) => external_kolmafia_namespaceObject.Item.get(s)));}TaskSellCrap_createClass(TaskSellCrap, [{ key: "run", value:
 
     function run() {
@@ -21043,7 +21255,9 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
               return m.name;
             }
 
-            return m.name + " (Advs x " + (!absorbed.has(m) ? "2" : "1") + ")";
+            return (
+              m.name + " (Absorbs x " + (!absorbed.has(m) ? "2" : "1") + ")");
+
           }).
           forEach((m) => monsters.push(m));
 
@@ -21114,6 +21328,8 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       outfit.minusCombatWeight == 0 &&
       outfit.itemDropWeight < 1 &&
       (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("cursedMagnifyingGlassCount")) < 13 &&
+      (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_voidFreeFights")) < 5;
+      var reallyLovesMagGlass =
       (0,external_kolmafia_namespaceObject.getProperty)("sidequestLighthouseCompleted") == "none" &&
       (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("barrel of gunpowder")) < 5;
       var doOrb = false;
@@ -21123,7 +21339,13 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       }
 
       if (canDoMagGlass) {
-        outfit.addBonus("+100 bonus cursed magnifying glass");
+        var bonus = 10;
+
+        if (reallyLovesMagGlass) {
+          bonus = 100;
+        }
+
+        outfit.addBonus("+".concat(bonus, " bonus cursed magnifying glass"));
       }
 
       if (doOrb) {
@@ -21132,7 +21354,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
 
       if (
       toRun.familiar != null && (
-      toRun.disableFamOverride == true || gooseReplaceable))
+      toRun.disableFamOverride == true || !wantToAbsorb))
       {
         familiar = toRun.familiar;
       } else if (gooseReplaceable) {
@@ -21140,11 +21362,14 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
 
         if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("camelSpit")) < 100) {
           replaceWith.push(external_kolmafia_namespaceObject.Familiar.get("Melodramedary"));
+        }
+
+        if ((0,external_kolmafia_namespaceObject.getProperty)("_roboDrinks").includes("drive-by shooting")) {
+          replaceWith.push(external_kolmafia_namespaceObject.Familiar.get("Robortender"));
         }var _iterator2 = GreyAdventurer_createForOfIteratorHelper(
 
         [
         "Pocket Professor",
-        "Robortender",
         "Hobomonkey",
         "Jumpsuited Hound Dog"].
         map((s) => external_kolmafia_namespaceObject.Familiar.get(s))),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var fam = _step2.value;
