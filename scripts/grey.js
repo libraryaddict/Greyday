@@ -9331,7 +9331,7 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
     external_kolmafia_namespaceObject.Item.get("Backup Camera"));}QuestL12WarLobster_createClass(QuestL12Lobster, [{ key: "level", value:
 
     function level() {
-      return 12;
+      return 15;
     } }, { key: "getResourceClaims", value:
 
     function getResourceClaims() {
