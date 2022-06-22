@@ -61,7 +61,7 @@ export class QuestInitialStart implements QuestInfo {
     if (storageAmount(Item.get("Pantsgiving")) > 0) {
       this.initialPulls.push(
         new ResourcePullClaim(
-          Item.get("Initial Pulls"),
+          Item.get("Pantsgiving"),
           "Resist and useful items",
           10
         )
