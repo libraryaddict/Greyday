@@ -3954,6 +3954,12 @@ var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_cl
 
       GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Portable cassette player"));
       GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Daily dungeon malware"));
+
+      var pantsgiving = external_kolmafia_namespaceObject.Item.get("Pantsgiving");
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(pantsgiving) == 0 && (0,external_kolmafia_namespaceObject.storageAmount)(pantsgiving) > 0) {
+        GreyPulls.tryPull(pantsgiving);
+      }
     } }, { key: "pullNinjaGear", value:
 
     function pullNinjaGear() {
@@ -16039,25 +16045,37 @@ function QuestInitialStart_classCallCheck(instance, Constructor) {if (!(instance
 
 
 
-var QuestInitialStart = /*#__PURE__*/function () {function QuestInitialStart() {QuestInitialStart_classCallCheck(this, QuestInitialStart);QuestInitialStart_defineProperty(this, "familiar",
-    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestInitialStart_defineProperty(this, "equip",
-    external_kolmafia_namespaceObject.Item.get("Grey Down Vest"));QuestInitialStart_defineProperty(this, "desiredLevel", void 0);QuestInitialStart_defineProperty(this, "weightRequired", void 0);QuestInitialStart_defineProperty(this, "spaceBlanket",
+var QuestInitialStart = /*#__PURE__*/function () {
 
 
-    external_kolmafia_namespaceObject.Item.get("Space Blanket"));QuestInitialStart_defineProperty(this, "mayday",
-    external_kolmafia_namespaceObject.Item.get("MayDay supply package"));QuestInitialStart_defineProperty(this, "saber",
-    external_kolmafia_namespaceObject.Item.get("Fourth of May Cosplay Saber"));QuestInitialStart_defineProperty(this, "flimsyScraps",
-    external_kolmafia_namespaceObject.Item.get("Flimsy hardwood scraps"));QuestInitialStart_defineProperty(this, "birchBattery",
-    external_kolmafia_namespaceObject.Item.get("Birch battery"));QuestInitialStart_defineProperty(this, "initialPulls",
-    [
-    new ResourcePullClaim(external_kolmafia_namespaceObject.Item.get("Yule Hatchet"), "Faster familiar leveling"),
-    new ResourcePullClaim(external_kolmafia_namespaceObject.Item.get("Mafia Thumb Ring"), "Extra Adventures", 35),
-    new ResourcePullClaim(
-    external_kolmafia_namespaceObject.Item.get(" Portable cassette player"),
-    "Extra monster level & +combat accessory",
-    5)]);}QuestInitialStart_createClass(QuestInitialStart, [{ key: "getLocations", value:
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function QuestInitialStart() {QuestInitialStart_classCallCheck(this, QuestInitialStart);QuestInitialStart_defineProperty(this, "familiar", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestInitialStart_defineProperty(this, "equip", external_kolmafia_namespaceObject.Item.get("Grey Down Vest"));QuestInitialStart_defineProperty(this, "desiredLevel", void 0);QuestInitialStart_defineProperty(this, "weightRequired", void 0);QuestInitialStart_defineProperty(this, "spaceBlanket", external_kolmafia_namespaceObject.Item.get("Space Blanket"));QuestInitialStart_defineProperty(this, "mayday", external_kolmafia_namespaceObject.Item.get("MayDay supply package"));QuestInitialStart_defineProperty(this, "saber", external_kolmafia_namespaceObject.Item.get("Fourth of May Cosplay Saber"));QuestInitialStart_defineProperty(this, "flimsyScraps", external_kolmafia_namespaceObject.Item.get("Flimsy hardwood scraps"));QuestInitialStart_defineProperty(this, "birchBattery", external_kolmafia_namespaceObject.Item.get("Birch battery"));QuestInitialStart_defineProperty(this, "initialPulls", [new ResourcePullClaim(external_kolmafia_namespaceObject.Item.get("Yule Hatchet"), "Faster familiar leveling"), new ResourcePullClaim(external_kolmafia_namespaceObject.Item.get("Mafia Thumb Ring"), "Extra Adventures", 35), new ResourcePullClaim(external_kolmafia_namespaceObject.Item.get(" Portable cassette player"), "Extra monster level & +combat accessory", 5)]);
+    if ((0,external_kolmafia_namespaceObject.storageAmount)(external_kolmafia_namespaceObject.Item.get("Pantsgiving")) > 0) {
+      this.initialPulls.push(
+      new ResourcePullClaim(
+      external_kolmafia_namespaceObject.Item.get("Initial Pulls"),
+      "Resist and useful items",
+      10));
+
+
+    }
+  }QuestInitialStart_createClass(QuestInitialStart, [{ key: "getLocations", value:
 
     function getLocations() {
       return [];
