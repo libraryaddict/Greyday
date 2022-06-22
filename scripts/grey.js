@@ -3953,7 +3953,7 @@ var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_cl
       }
 
       GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Portable cassette player"));
-      GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Daily dungeon malware"));
+      GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Daily dungeon malware"), 50000);
 
       var pantsgiving = external_kolmafia_namespaceObject.Item.get("Pantsgiving");
 
