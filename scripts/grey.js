@@ -3846,6 +3846,8 @@ var QuestL11Black = /*#__PURE__*/function () {function QuestL11Black() {QuestL11
           var props = new PropertyManager();
 
           try {
+            props.setChoice(923, 1);
+
             if (
             (0,external_kolmafia_namespaceObject.availableAmount)(this.beehive) == 0 &&
             !this.skinKiller.isPossible())
@@ -12681,7 +12683,7 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
     } }, { key: "level", value:
 
     function level() {
-      return 7;
+      return (0,external_kolmafia_namespaceObject.availableAmount)(this.cape) > 0 ? 7 : 9;
     } }, { key: "addRetroSword", value:
 
 
