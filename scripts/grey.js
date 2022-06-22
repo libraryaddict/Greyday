@@ -9554,6 +9554,10 @@ var QuestL12GrabWarOutfit = /*#__PURE__*/function () {function QuestL12GrabWarOu
         return QuestStatus.NOT_READY;
       }
 
+      if ((0,external_kolmafia_namespaceObject.getProperty)("_photocopyUsed") == "false") {
+        return QuestStatus.NOT_READY;
+      }
+
       if (GreySettings.isHardcoreMode() && !(0,external_kolmafia_namespaceObject.haveOutfit)("Filthy Hippy Disguise")) {
         return QuestStatus.NOT_READY;
       }
@@ -9774,8 +9778,100 @@ var QuestL12FratCargoShorts = /*#__PURE__*/function () {function QuestL12FratCar
       new ResourceClaim(ResourceType.YELLOW_RAY, 1, "YR Frat Boy", 16)];
 
     } }]);return QuestL12FratCargoShorts;}();
+;// CONCATENATED MODULE: ./src/quests/council/islandwar/QuestL12FratFax.ts
+function QuestL12FratFax_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL12FratFax_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL12FratFax_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL12FratFax_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL12FratFax_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL12FratFax_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+var QuestL12FratFax = /*#__PURE__*/function () {function QuestL12FratFax() {QuestL12FratFax_classCallCheck(this, QuestL12FratFax);QuestL12FratFax_defineProperty(this, "shorts",
+    external_kolmafia_namespaceObject.Item.get("Cargo Cultist Shorts"));QuestL12FratFax_defineProperty(this, "rocket",
+    external_kolmafia_namespaceObject.Item.get("Yellow Rocket"));QuestL12FratFax_defineProperty(this, "effect",
+    external_kolmafia_namespaceObject.Effect.get("Everything Looks Yellow"));QuestL12FratFax_defineProperty(this, "monster",
+    external_kolmafia_namespaceObject.Monster.get("Orcish Frat Boy Spy"));}QuestL12FratFax_createClass(QuestL12FratFax, [{ key: "getId", value:
+
+    function getId() {
+      return "Council / War / Frat Fax";
+    } }, { key: "level", value:
+
+    function level() {
+      return 12;
+    } }, { key: "status", value:
+
+    function status() {
+      if ((0,external_kolmafia_namespaceObject.haveOutfit)("Frat Warrior Fatigues")) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("_photocopyUsed") == "true") {
+        return QuestStatus.COMPLETED;
+      }
+
+      // Don't try to fax if we haven't cargo shorts yet
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.shorts) > 0 &&
+      (0,external_kolmafia_namespaceObject.getProperty)("_cargoPocketEmptied") != "true")
+      {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.haveEffect)(this.effect) > 0 || (0,external_kolmafia_namespaceObject.myMeat)() < 300) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.READY;
+    } }, { key: "run", value:
+
+    function run() {
+      return {
+        location: null,
+        run: () => {
+          (0,external_kolmafia_namespaceObject.cliExecute)("acquire " + this.rocket.name);
+
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(this.rocket) == 0) {
+            throw "Expected a yellow rocket!";
+          }
+
+          if (!(0,external_kolmafia_namespaceObject.canFaxbot)(this.monster)) {
+            throw "Can't fax in " + this.monster.name;
+          }
+
+          (0,external_kolmafia_namespaceObject.faxbot)(this.monster);
+
+          if ((0,external_kolmafia_namespaceObject.getProperty)("photocopyMonster") != this.monster.name) {
+            throw (
+              "Expected " +
+              this.monster.name +
+              " but mafia reports we have a faxed " +
+              (0,external_kolmafia_namespaceObject.getProperty)("photocopyMonster"));
+
+          }
+
+          (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?which=3&whichitem=4873&pwd");
+
+          Macro.item(this.rocket).submit();
+
+          if (!(0,external_kolmafia_namespaceObject.haveOutfit)("Frat Warrior Fatigues")) {
+            throw "Something went wrong when trying to fax in a frat boy spy. We should've fought it, but we don't have the outfit";
+          }
+        } };
+
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [];
+    } }, { key: "getResourceClaims", value:
+
+    function getResourceClaims() {
+      return [
+      new ResourceClaim(ResourceType.CARGO_SHORTS, 1, "YR Frat Boy", 16),
+      new ResourceClaim(ResourceType.YELLOW_RAY, 1, "YR Frat Boy", 16)];
+
+    } }]);return QuestL12FratFax;}();
 ;// CONCATENATED MODULE: ./src/quests/council/QuestL12War.ts
 function QuestL12War_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL12War_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL12War_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL12War_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL12War_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL12War_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -9800,6 +9896,7 @@ var QuestL12War = /*#__PURE__*/function () {function QuestL12War() {QuestL12War_
     new QuestL12Lobster(),
     new QuestL12WarFlyers(),
     new QuestL12FratCargoShorts(),
+    new QuestL12FratFax(),
     new QuestL12GrabWarOutfit()]);}QuestL12War_createClass(QuestL12War, [{ key: "getLocations", value:
 
 
@@ -19625,6 +19722,7 @@ var QuestRegistry = /*#__PURE__*/function () {
       { id: "Boat / Junkyard" },
       { id: "Boat / Vacation" },
       { id: "Council / War / Frat Cargo Shorts" },
+      { id: "Council / War / Frat Fax" },
       { id: "Council / War / HippyOutfit" },
 
       // Always try to buy access to the shore, 8-9 adventures spent trying to farm stuff up?
