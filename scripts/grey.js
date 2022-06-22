@@ -16069,7 +16069,7 @@ var QuestInitialStart = /*#__PURE__*/function () {
     if ((0,external_kolmafia_namespaceObject.storageAmount)(external_kolmafia_namespaceObject.Item.get("Pantsgiving")) > 0) {
       this.initialPulls.push(
       new ResourcePullClaim(
-      external_kolmafia_namespaceObject.Item.get("Initial Pulls"),
+      external_kolmafia_namespaceObject.Item.get("Pantsgiving"),
       "Resist and useful items",
       10));
 
