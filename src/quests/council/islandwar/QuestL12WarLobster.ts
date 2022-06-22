@@ -31,7 +31,7 @@ export class QuestL12Lobster implements QuestInfo {
   backupCamera: Item = Item.get("Backup Camera");
 
   level(): number {
-    return 12;
+    return 15;
   }
 
   getResourceClaims(): ResourceClaim[] {
