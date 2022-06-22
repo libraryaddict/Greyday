@@ -6944,7 +6944,7 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
             (0,external_kolmafia_namespaceObject.use)(this.book);
           }
 
-          if ((0,external_kolmafia_namespaceObject.itemAmount)(this.ball) == 0) {
+          if ((0,external_kolmafia_namespaceObject.itemAmount)(this.ball) == 0 && this.barUnlocked()) {
             (0,external_kolmafia_namespaceObject.retrieveItem)(this.bowl);
           }
 
@@ -9441,6 +9441,8 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
 
       if (this.isBackupReady()) {
         var _outfit = new GreyOutfit().addItem(external_kolmafia_namespaceObject.Item.get("Backup Camera"));
+        _outfit.addBonus("-ML");
+
         var loc = external_kolmafia_namespaceObject.Location.get("The Dire Warren");
 
         // TODO Backup and ruin other zones delay
@@ -9470,6 +9472,8 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
       } else {
         outfit.setPlusCombat();
       }
+
+      outfit.addBonus("-ML");
 
       return {
         location: this.loc,
