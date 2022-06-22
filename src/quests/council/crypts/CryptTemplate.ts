@@ -62,7 +62,7 @@ export abstract class CryptL7Template implements QuestInfo {
   }
 
   level(): number {
-    return 7;
+    return availableAmount(this.cape) > 0 ? 7 : 9;
   }
 
   abstract getProperty(): string;

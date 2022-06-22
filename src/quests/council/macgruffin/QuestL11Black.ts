@@ -98,6 +98,8 @@ export class QuestL11Black implements QuestInfo {
         let props = new PropertyManager();
 
         try {
+          props.setChoice(923, 1);
+
           if (
             availableAmount(this.beehive) == 0 &&
             !this.skinKiller.isPossible()
