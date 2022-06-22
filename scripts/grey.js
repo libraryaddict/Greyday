@@ -13144,7 +13144,7 @@ var QuestL8MountainBoss = /*#__PURE__*/function () {function QuestL8MountainBoss
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().addBonus("+2 cold res");
+      var outfit = new GreyOutfit().addBonus("+cold res 5 min 5 max");
 
       return {
         location: this.peak,
