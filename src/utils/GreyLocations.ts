@@ -216,7 +216,7 @@ export function greyAdv(
       runCombat();
 
       if (currentRound() != 0) {
-        throw "Didn't expect to still be in combat!";
+        throw "Didn't expect to still be in combat! Maybe health is too low that we aborted to be safe?";
       }
     } else {
       runChoice();

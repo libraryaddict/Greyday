@@ -99,9 +99,7 @@ export class QuestManorLights implements QuestInfo {
   shouldDoSteve(): boolean {
     return (
       this.isSteveReady() &&
-      (!this.isSteveFight() ||
-        familiarWeight(this.goose) >=
-          (getProperty("questL13Final") == "unstarted" ? 7 : 6))
+      (!this.isSteveFight() || familiarWeight(this.goose) >= 7)
     );
   }
 
