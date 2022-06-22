@@ -1847,7 +1847,7 @@ settings)
       runCombat();
 
       if ((0,external_kolmafia_namespaceObject.currentRound)() != 0) {
-        throw "Didn't expect to still be in combat!";
+        throw "Didn't expect to still be in combat! Maybe health is too low that we aborted to be safe?";
       }
     } else {
       runChoice();
@@ -15858,9 +15858,7 @@ var QuestManorLights = /*#__PURE__*/function () {
     function shouldDoSteve() {
       return (
         this.isSteveReady() && (
-        !this.isSteveFight() ||
-        (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= (
-        (0,external_kolmafia_namespaceObject.getProperty)("questL13Final") == "unstarted" ? 7 : 6)));
+        !this.isSteveFight() || (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= 7));
 
     } }, { key: "getSteve", value:
 
