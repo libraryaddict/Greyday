@@ -59,6 +59,10 @@ export class QuestL12GrabWarOutfit implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (getProperty("_photocopyUsed") == "false") {
+      return QuestStatus.NOT_READY;
+    }
+
     if (GreySettings.isHardcoreMode() && !haveOutfit("Filthy Hippy Disguise")) {
       return QuestStatus.NOT_READY;
     }

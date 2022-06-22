@@ -160,6 +160,7 @@ export class QuestRegistry {
       { id: "Boat / Junkyard" },
       { id: "Boat / Vacation" },
       { id: "Council / War / Frat Cargo Shorts" },
+      { id: "Council / War / Frat Fax" },
       { id: "Council / War / HippyOutfit" },
 
       // Always try to buy access to the shore, 8-9 adventures spent trying to farm stuff up?
