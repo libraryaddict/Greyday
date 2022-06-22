@@ -187,7 +187,7 @@ export class QuestL11Bowling implements QuestInfo {
           use(this.book);
         }
 
-        if (itemAmount(this.ball) == 0) {
+        if (itemAmount(this.ball) == 0 && this.barUnlocked()) {
           retrieveItem(this.bowl);
         }
 

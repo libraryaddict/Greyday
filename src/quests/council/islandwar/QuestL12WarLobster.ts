@@ -141,6 +141,8 @@ export class QuestL12Lobster implements QuestInfo {
 
     if (this.isBackupReady()) {
       let outfit = new GreyOutfit().addItem(Item.get("Backup Camera"));
+      outfit.addBonus("-ML");
+
       let loc = Location.get("The Dire Warren");
 
       // TODO Backup and ruin other zones delay
@@ -170,6 +172,8 @@ export class QuestL12Lobster implements QuestInfo {
     } else {
       outfit.setPlusCombat();
     }
+
+    outfit.addBonus("-ML");
 
     return {
       location: this.loc,
