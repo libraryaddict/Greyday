@@ -86,6 +86,12 @@ export class GreyPulls {
 
     GreyPulls.tryPull(Item.get("Portable cassette player"));
     GreyPulls.tryPull(Item.get("Daily dungeon malware"));
+
+    let pantsgiving = Item.get("Pantsgiving");
+
+    if (availableAmount(pantsgiving) == 0 && storageAmount(pantsgiving) > 0) {
+      GreyPulls.tryPull(pantsgiving);
+    }
   }
 
   static pullNinjaGear() {

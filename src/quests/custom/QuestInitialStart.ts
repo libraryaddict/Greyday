@@ -19,6 +19,7 @@ import {
   print,
   setProperty,
   squareRoot,
+  storageAmount,
   toBoolean,
   toInt,
   turnsPlayed,
@@ -55,6 +56,18 @@ export class QuestInitialStart implements QuestInfo {
       5
     ),
   ];
+
+  constructor() {
+    if (storageAmount(Item.get("Pantsgiving")) > 0) {
+      this.initialPulls.push(
+        new ResourcePullClaim(
+          Item.get("Initial Pulls"),
+          "Resist and useful items",
+          10
+        )
+      );
+    }
+  }
 
   getLocations(): Location[] {
     return [];
