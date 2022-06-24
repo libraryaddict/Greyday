@@ -1955,7 +1955,8 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
       //["Innuendo Circuitry", "+15 Sleaze Damage"],
       ["Ponzi Apparatus", "Scaling meat%"],
       // ["Procgen Ribaldry", "10 Sleaze Damage"],
-      ["Propagation Drive", "20% Item Drops"]].
+      ["Propagation Drive", "20% Item Drops"],
+      ["Overclocking", "Scaling +init"]].
       map((s) => [(0,external_kolmafia_namespaceObject.toSkill)(s[0]), s[1]]));
 
     } }, { key: "getMustHaveSkills", value:
@@ -3542,8 +3543,219 @@ flavor1,
 flavor2,
 flavor3)
 {}
+;// CONCATENATED MODULE: ./src/tasks/TaskMaintainStatus.ts
+function TaskMaintainStatus_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskMaintainStatus_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskMaintainStatus_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskMaintainStatus_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskMaintainStatus_arrayLikeToArray(o, minLen);}function TaskMaintainStatus_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskMaintainStatus_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskMaintainStatus_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskMaintainStatus_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskMaintainStatus_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskMaintainStatus_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskMaintainStatus_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+
+
+
+
+
+var TaskMaintainStatus = /*#__PURE__*/function () {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function TaskMaintainStatus() {TaskMaintainStatus_classCallCheck(this, TaskMaintainStatus);TaskMaintainStatus_defineProperty(this, "restorers", []);TaskMaintainStatus_defineProperty(this, "toRemove", ["Really Quite Poisoned", "Majorly Poisoned", "Somewhat Poisoned", "A Little Bit Poisoned", "Hardly Poisoned at All", "Temporary Amnesia"].map((s) => external_kolmafia_namespaceObject.Effect.get(s)));
+    this.fillRestorers();
+  }TaskMaintainStatus_createClass(TaskMaintainStatus, [{ key: "fillRestorers", value: function fillRestorers() {this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer"), mpRestored: 11, hpRestored: 0, available: () => (0,external_kolmafia_namespaceObject.dispensaryAvailable)() || (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer")) > 0, price: 80 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Black cherry soda"), mpRestored: 11, hpRestored: 0, available: () => (0,external_kolmafia_namespaceObject.blackMarketAvailable)() || (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Black cherry soda")) > 0, price: 80 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Invigorating Tonic"), mpRestored: 11, hpRestored: 0, available: () => true, price: 90 }); // HP
+      this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Cast"), mpRestored: 0, hpRestored: 30, available: () => (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Cast")) > 0, price: 0 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Homeopathic Elixir"), mpRestored: 0, hpRestored: 19, available: () => true, price: 120 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Pungent Unguent"), mpRestored: 0, hpRestored: 4, available: () => true, price: 0 });} }, { key: "restoreHPTo", value:
+    function restoreHPTo(hp) {
+      var desiredHp = Math.min(hp, (0,external_kolmafia_namespaceObject.myMaxhp)());
+
+      while ((0,external_kolmafia_namespaceObject.myMeat)() > 100 && (0,external_kolmafia_namespaceObject.myHp)() < desiredHp) {
+        var restorer = this.restorers.find(
+        (r) => (0,external_kolmafia_namespaceObject.availableAmount)(r.item) > 0 && r.hpRestored > 0);
+
+
+        if (restorer == null) {
+          restorer = this.restorers.find(
+          (r) => r.available() && r.hpRestored > 0);
+
+        }
+
+        if (restorer == null) {
+          return false;
+        }
+
+        var toUse = Math.ceil(desiredHp / restorer.hpRestored);
+
+        if ((0,external_kolmafia_namespaceObject.availableAmount)(restorer.item) > 0) {
+          toUse = Math.min(toUse, (0,external_kolmafia_namespaceObject.availableAmount)(restorer.item));
+        } else {
+          toUse = Math.min(Math.floor((0,external_kolmafia_namespaceObject.myMeat)() / restorer.price), toUse);
+
+          (0,external_kolmafia_namespaceObject.cliExecute)("acquire " + toUse + " " + restorer.item);
+        }
+
+        (0,external_kolmafia_namespaceObject.cliExecute)("use " + toUse + " " + restorer.item);
+      }
+
+      return (0,external_kolmafia_namespaceObject.myHp)() >= hp;
+    } }, { key: "restoreMPTo", value:
+
+    function restoreMPTo(mp) {
+      var desiredMp = Math.min(mp, (0,external_kolmafia_namespaceObject.myMaxmp)());
+
+      while ((0,external_kolmafia_namespaceObject.myMeat)() > 100 && (0,external_kolmafia_namespaceObject.myMp)() < desiredMp) {
+        var restorer = this.restorers.find(
+        (r) => (0,external_kolmafia_namespaceObject.availableAmount)(r.item) > 0 && r.mpRestored > 0);
+
+
+        if (restorer == null) {
+          restorer = this.restorers.find(
+          (r) => r.available() && r.mpRestored > 0);
+
+        }
+
+        if (restorer == null) {
+          return false;
+        }
+
+        var toUse = Math.ceil(desiredMp / restorer.mpRestored);
+
+        if ((0,external_kolmafia_namespaceObject.availableAmount)(restorer.item) > 0) {
+          toUse = Math.min(toUse, (0,external_kolmafia_namespaceObject.availableAmount)(restorer.item));
+        } else {
+          toUse = Math.min(Math.floor((0,external_kolmafia_namespaceObject.myMeat)() / restorer.price), toUse);
+
+          (0,external_kolmafia_namespaceObject.cliExecute)("acquire " + toUse + " " + restorer.item);
+        }
+
+        (0,external_kolmafia_namespaceObject.cliExecute)("use " + toUse + " " + restorer.item);
+      }
+
+      return (0,external_kolmafia_namespaceObject.myMp)() >= mp;
+    } }, { key: "run", value:
+
+    function run() {var _iterator = TaskMaintainStatus_createForOfIteratorHelper(
+      this.toRemove),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var effect = _step.value;
+          if ((0,external_kolmafia_namespaceObject.haveEffect)(effect) == 0) {
+            continue;
+          }
+
+          (0,external_kolmafia_namespaceObject.cliExecute)("shrug " + effect.name);
+
+          if ((0,external_kolmafia_namespaceObject.haveEffect)(effect) > 0) {
+            throw "Tried to remove " + effect.name + " but failed!";
+          }
+        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+
+      if ((0,external_kolmafia_namespaceObject.myMaxmp)() < 20) {
+        return;
+      }
+
+      var desiredMp = 20; //myMaxmp() < 40 ? 20 : 40;
+
+      this.restoreMPTo(desiredMp);
+    } }]);return TaskMaintainStatus;}();
+
+
+var maintainStatus = new TaskMaintainStatus();
+
+function restoreMPTo(mp) {
+  // If we can't hit that MP
+  if (mp > (0,external_kolmafia_namespaceObject.myMaxmp)()) {
+    return false;
+  }
+
+  // If we already have that amount
+  if (mp <= (0,external_kolmafia_namespaceObject.myMp)()) {
+    return true;
+  }
+
+  // If we don't have 100 meat per 10 mp
+  if (Math.ceil(((0,external_kolmafia_namespaceObject.myMp)() - mp) / 10) * 100 > (0,external_kolmafia_namespaceObject.myMeat)()) {
+    return false;
+  }
+
+  return maintainStatus.restoreMPTo(mp);
+}
+
+function restoreHPTo(hp) {
+  // If we can't hit that MP
+  if (hp > (0,external_kolmafia_namespaceObject.myMaxhp)()) {
+    return false;
+  }
+
+  // If we already have that amount
+  if (hp <= (0,external_kolmafia_namespaceObject.myMp)()) {
+    return true;
+  }
+
+  // If we don't have 100 meat per 10 mp
+  if (Math.ceil(((0,external_kolmafia_namespaceObject.myHp)() - hp) / 10) * 100 > (0,external_kolmafia_namespaceObject.myMeat)()) {
+    return false;
+  }
+
+  return maintainStatus.restoreHPTo(hp);
+}
 ;// CONCATENATED MODULE: ./src/quests/council/tower/stages/QuestTowerWallSkin.ts
 function QuestTowerWallSkin_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerWallSkin_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerWallSkin_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerWallSkin_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerWallSkin_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerWallSkin_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -3758,7 +3970,11 @@ var QuestTowerKillSkin = /*#__PURE__*/function () {function QuestTowerKillSkin()
           }
 
           if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_hotTubSoaks")) < 5 && (0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)()) {
-            (0,external_kolmafia_namespaceObject.cliExecute)("hottub");
+            if ((0,external_kolmafia_namespaceObject.myMaxhp)() - (0,external_kolmafia_namespaceObject.myHp)() > 100) {
+              (0,external_kolmafia_namespaceObject.cliExecute)("hottub");
+            } else {
+              restoreHPTo((0,external_kolmafia_namespaceObject.myMaxhp)());
+            }
           }
 
           if ((0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)()) {
@@ -4622,9 +4838,10 @@ var QuestL11DesertExplore = /*#__PURE__*/function () {function QuestL11DesertExp
           if (explored == this.getExplored()) {
             (0,external_kolmafia_namespaceObject.print)("Checking explored..", "blue");
             (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=desertbeach", false);
-          }
-
-          if (explored >= 10 && ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("gnasirProgress")) & 8) != 8) {
+          } else if (
+          explored >= 10 &&
+          ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("gnasirProgress")) & 8) != 8)
+          {
             (0,external_kolmafia_namespaceObject.print)("Worm Pages: " + (0,external_kolmafia_namespaceObject.availableAmount)(this.page) + " / 15", "blue");
           }
         } };
@@ -10681,7 +10898,11 @@ var QuestTowerContestants = /*#__PURE__*/function () {function QuestTowerContest
       (0,external_kolmafia_namespaceObject.getProperty)(this.reachedTower) != "true")
       {
         (0,external_kolmafia_namespaceObject.setProperty)(this.reachedTower, "true");
-        throw "User requested we stop when we reach the tower";
+        (0,external_kolmafia_namespaceObject.print)(
+        "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
+        "blue");
+
+        throw "User Requested: Reached tower";
       }
 
       if (status > 3) {
@@ -11105,6 +11326,7 @@ function QuestTowerShadow_slicedToArray(arr, i) {return QuestTowerShadow_arrayWi
 
 
 
+
 var QuestTowerShadow = /*#__PURE__*/function () {function QuestTowerShadow() {QuestTowerShadow_classCallCheck(this, QuestTowerShadow);QuestTowerShadow_defineProperty(this, "badge",
     external_kolmafia_namespaceObject.Item.get("Attorney's badge"));QuestTowerShadow_defineProperty(this, "potato",
     external_kolmafia_namespaceObject.Familiar.get("Levitating Potato"));QuestTowerShadow_defineProperty(this, "guaze",
@@ -11262,8 +11484,14 @@ var QuestTowerShadow = /*#__PURE__*/function () {function QuestTowerShadow() {Qu
             (0,external_kolmafia_namespaceObject.cliExecute)("retrocape heck hold"); // Make sure we stun the shadow
           }
 
-          if ((0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)() && (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_hotTubSoaks")) < 5) {
+          if ((0,external_kolmafia_namespaceObject.myMaxhp)() - (0,external_kolmafia_namespaceObject.myHp)() > 100) {
             (0,external_kolmafia_namespaceObject.cliExecute)("hottub");
+          } else if ((0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)()) {
+            restoreHPTo((0,external_kolmafia_namespaceObject.myMaxhp)());
+          }
+
+          if ((0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)()) {
+            throw "Expected full health";
           }
 
           var macro = Macro.item(this.guaze).repeat();
@@ -21145,216 +21373,6 @@ var TaskLatteFiller = /*#__PURE__*/function () {function TaskLatteFiller() {Task
 
       (0,external_kolmafia_namespaceObject.cliExecute)("latte refill " + flavors.join(" "));
     } }]);return TaskLatteFiller;}();
-;// CONCATENATED MODULE: ./src/tasks/TaskMaintainStatus.ts
-function TaskMaintainStatus_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskMaintainStatus_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskMaintainStatus_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskMaintainStatus_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskMaintainStatus_arrayLikeToArray(o, minLen);}function TaskMaintainStatus_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskMaintainStatus_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskMaintainStatus_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskMaintainStatus_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskMaintainStatus_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskMaintainStatus_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskMaintainStatus_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
-
-
-
-
-
-
-
-
-
-
-var TaskMaintainStatus = /*#__PURE__*/function () {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  function TaskMaintainStatus() {TaskMaintainStatus_classCallCheck(this, TaskMaintainStatus);TaskMaintainStatus_defineProperty(this, "restorers", []);TaskMaintainStatus_defineProperty(this, "toRemove", ["Really Quite Poisoned", "Majorly Poisoned", "Somewhat Poisoned", "A Little Bit Poisoned", "Hardly Poisoned at All", "Temporary Amnesia"].map((s) => external_kolmafia_namespaceObject.Effect.get(s)));
-    this.fillRestorers();
-  }TaskMaintainStatus_createClass(TaskMaintainStatus, [{ key: "fillRestorers", value: function fillRestorers() {this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer"), mpRestored: 11, hpRestored: 0, available: () => (0,external_kolmafia_namespaceObject.dispensaryAvailable)() || (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer")) > 0, price: 80 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Black cherry soda"), mpRestored: 11, hpRestored: 0, available: () => (0,external_kolmafia_namespaceObject.blackMarketAvailable)() || (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Black cherry soda")) > 0, price: 80 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Invigorating Tonic"), mpRestored: 11, hpRestored: 0, available: () => true, price: 90 }); // HP
-      this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Cast"), mpRestored: 0, hpRestored: 30, available: () => (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Cast")) > 0, price: 0 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Homeopathic Elixir"), mpRestored: 0, hpRestored: 19, available: () => true, price: 120 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Pungent Unguent"), mpRestored: 0, hpRestored: 4, available: () => true, price: 0 });} }, { key: "restoreHPTo", value:
-    function restoreHPTo(hp) {
-      var desiredHp = Math.min(hp, (0,external_kolmafia_namespaceObject.myMaxhp)());
-
-      while ((0,external_kolmafia_namespaceObject.myMeat)() > 100 && (0,external_kolmafia_namespaceObject.myHp)() < desiredHp) {
-        var restorer = this.restorers.find(
-        (r) => (0,external_kolmafia_namespaceObject.availableAmount)(r.item) > 0 && r.hpRestored > 0);
-
-
-        if (restorer == null) {
-          restorer = this.restorers.find(
-          (r) => r.available() && r.hpRestored > 0);
-
-        }
-
-        if (restorer == null) {
-          return false;
-        }
-
-        var toUse = Math.ceil(desiredHp / restorer.hpRestored);
-
-        if ((0,external_kolmafia_namespaceObject.availableAmount)(restorer.item) > 0) {
-          toUse = Math.min(toUse, (0,external_kolmafia_namespaceObject.availableAmount)(restorer.item));
-        } else {
-          toUse = Math.min(Math.floor((0,external_kolmafia_namespaceObject.myMeat)() / restorer.price), toUse);
-
-          (0,external_kolmafia_namespaceObject.cliExecute)("acquire " + toUse + " " + restorer.item);
-        }
-
-        (0,external_kolmafia_namespaceObject.cliExecute)("use " + toUse + " " + restorer.item);
-      }
-
-      return (0,external_kolmafia_namespaceObject.myHp)() >= hp;
-    } }, { key: "restoreMPTo", value:
-
-    function restoreMPTo(mp) {
-      var desiredMp = Math.min(mp, (0,external_kolmafia_namespaceObject.myMaxmp)());
-
-      while ((0,external_kolmafia_namespaceObject.myMeat)() > 100 && (0,external_kolmafia_namespaceObject.myMp)() < desiredMp) {
-        var restorer = this.restorers.find(
-        (r) => (0,external_kolmafia_namespaceObject.availableAmount)(r.item) > 0 && r.mpRestored > 0);
-
-
-        if (restorer == null) {
-          restorer = this.restorers.find(
-          (r) => r.available() && r.mpRestored > 0);
-
-        }
-
-        if (restorer == null) {
-          return false;
-        }
-
-        var toUse = Math.ceil(desiredMp / restorer.mpRestored);
-
-        if ((0,external_kolmafia_namespaceObject.availableAmount)(restorer.item) > 0) {
-          toUse = Math.min(toUse, (0,external_kolmafia_namespaceObject.availableAmount)(restorer.item));
-        } else {
-          toUse = Math.min(Math.floor((0,external_kolmafia_namespaceObject.myMeat)() / restorer.price), toUse);
-
-          (0,external_kolmafia_namespaceObject.cliExecute)("acquire " + toUse + " " + restorer.item);
-        }
-
-        (0,external_kolmafia_namespaceObject.cliExecute)("use " + toUse + " " + restorer.item);
-      }
-
-      return (0,external_kolmafia_namespaceObject.myMp)() >= mp;
-    } }, { key: "run", value:
-
-    function run() {var _iterator = TaskMaintainStatus_createForOfIteratorHelper(
-      this.toRemove),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var effect = _step.value;
-          if ((0,external_kolmafia_namespaceObject.haveEffect)(effect) == 0) {
-            continue;
-          }
-
-          (0,external_kolmafia_namespaceObject.cliExecute)("shrug " + effect.name);
-
-          if ((0,external_kolmafia_namespaceObject.haveEffect)(effect) > 0) {
-            throw "Tried to remove " + effect.name + " but failed!";
-          }
-        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
-
-      if ((0,external_kolmafia_namespaceObject.myMaxmp)() < 20) {
-        return;
-      }
-
-      var desiredMp = 20; //myMaxmp() < 40 ? 20 : 40;
-
-      this.restoreMPTo(desiredMp);
-    } }]);return TaskMaintainStatus;}();
-
-
-var maintainStatus = new TaskMaintainStatus();
-
-function restoreMPTo(mp) {
-  // If we can't hit that MP
-  if (mp > (0,external_kolmafia_namespaceObject.myMaxmp)()) {
-    return false;
-  }
-
-  // If we already have that amount
-  if (mp <= (0,external_kolmafia_namespaceObject.myMp)()) {
-    return true;
-  }
-
-  // If we don't have 100 meat per 10 mp
-  if (Math.ceil(((0,external_kolmafia_namespaceObject.myMp)() - mp) / 10) * 100 > (0,external_kolmafia_namespaceObject.myMeat)()) {
-    return false;
-  }
-
-  return maintainStatus.restoreMPTo(mp);
-}
-
-function restoreHPTo(hp) {
-  // If we can't hit that MP
-  if (hp > myMaxhp()) {
-    return false;
-  }
-
-  // If we already have that amount
-  if (hp <= myMp()) {
-    return true;
-  }
-
-  // If we don't have 100 meat per 10 mp
-  if (Math.ceil((myHp() - hp) / 10) * 100 > myMeat()) {
-    return false;
-  }
-
-  return maintainStatus.restoreHPTo(hp);
-}
 ;// CONCATENATED MODULE: ./src/tasks/TaskSellCrap.ts
 function TaskSellCrap_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskSellCrap_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskSellCrap_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskSellCrap_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskSellCrap_arrayLikeToArray(o, minLen);}function TaskSellCrap_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskSellCrap_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskSellCrap_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskSellCrap_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskSellCrap_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskSellCrap_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskSellCrap_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
