@@ -6249,11 +6249,11 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
       }
 
       if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.sleazeSkill2) && (0,external_kolmafia_namespaceObject.availableAmount)(this.starChart) == 0) {
-        return QuestStatus.FASTER_LATER;
+        return QuestStatus.NOT_READY;
       }
 
       if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.sleazeSkill) && getQuestStatus("questL09Topping") < 1) {
-        return QuestStatus.FASTER_LATER;
+        return QuestStatus.NOT_READY;
       }
 
       return QuestStatus.READY;
@@ -21220,7 +21220,8 @@ var TaskMaintainStatus = /*#__PURE__*/function () {
 
 
 
-  function TaskMaintainStatus() {TaskMaintainStatus_classCallCheck(this, TaskMaintainStatus);TaskMaintainStatus_defineProperty(this, "restorers", []);TaskMaintainStatus_defineProperty(this, "toRemove", ["Really Quite Poisoned", "Majorly Poisoned", "Somewhat Poisoned", "A Little Bit Poisoned", "Hardly Poisoned at All"].map((s) => external_kolmafia_namespaceObject.Effect.get(s)));
+
+  function TaskMaintainStatus() {TaskMaintainStatus_classCallCheck(this, TaskMaintainStatus);TaskMaintainStatus_defineProperty(this, "restorers", []);TaskMaintainStatus_defineProperty(this, "toRemove", ["Really Quite Poisoned", "Majorly Poisoned", "Somewhat Poisoned", "A Little Bit Poisoned", "Hardly Poisoned at All", "Temporary Amnesia"].map((s) => external_kolmafia_namespaceObject.Effect.get(s)));
     this.fillRestorers();
   }TaskMaintainStatus_createClass(TaskMaintainStatus, [{ key: "fillRestorers", value: function fillRestorers() {this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer"), mpRestored: 11, hpRestored: 0, available: () => (0,external_kolmafia_namespaceObject.dispensaryAvailable)() || (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer")) > 0, price: 80 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Black cherry soda"), mpRestored: 11, hpRestored: 0, available: () => (0,external_kolmafia_namespaceObject.blackMarketAvailable)() || (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Black cherry soda")) > 0, price: 80 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Invigorating Tonic"), mpRestored: 11, hpRestored: 0, available: () => true, price: 90 }); // HP
       this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Cast"), mpRestored: 0, hpRestored: 30, available: () => (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Cast")) > 0, price: 0 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Homeopathic Elixir"), mpRestored: 0, hpRestored: 19, available: () => true, price: 120 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Pungent Unguent"), mpRestored: 0, hpRestored: 4, available: () => true, price: 0 });} }, { key: "restoreHPTo", value:
