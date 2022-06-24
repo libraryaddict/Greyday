@@ -33,6 +33,7 @@ import { QuestType } from "../QuestTypes";
 import { MountainStatus } from "../council/QuestL8IcePeak";
 import { QuestL8MountainOre } from "../council/icepeak/QuestL8MountainOre";
 import { ResourceClaim, ResourceType } from "../../utils/GreyResources";
+import { GreySettings } from "../../utils/GreySettings";
 
 export class QuestL8MountainOreMan extends QuestL8MountainOre {
   mountainMan: Monster = Monster.get("Mountain Man");
@@ -96,6 +97,14 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
       if (familiarWeight(this.goose) < 6) {
         return QuestStatus.NOT_READY;
       }
+    }
+
+    // User can sell their clovers, which will profit more according to their MPA
+    if (
+      !GreySettings.isHardcoreMode() &&
+      toInt(getProperty("valueOfAdventure")) < 4000
+    ) {
+      return QuestStatus.READY;
     }
 
     return QuestStatus.READY;

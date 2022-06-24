@@ -6,6 +6,8 @@ import {
   toInt,
   visitUrl,
   runChoice,
+  toBoolean,
+  setProperty,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { greyAdv } from "../../../../utils/GreyLocations";
@@ -21,6 +23,8 @@ import { QuestType } from "../../../QuestTypes";
 type ContestQuest = () => void;
 
 export class QuestTowerContestants implements QuestInfo {
+  private reachedTower: string = "_greyReachedTower";
+
   getId(): QuestType {
     return "Council / Tower / Contests";
   }
@@ -34,6 +38,14 @@ export class QuestTowerContestants implements QuestInfo {
 
     if (status < 0) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (
+      toBoolean(getProperty("greyBreakAtTower")) &&
+      getProperty(this.reachedTower) != "true"
+    ) {
+      setProperty(this.reachedTower, "true");
+      throw "User requested we stop when we reach the tower";
     }
 
     if (status > 3) {

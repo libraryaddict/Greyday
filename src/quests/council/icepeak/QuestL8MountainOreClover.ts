@@ -1,4 +1,12 @@
-import { availableAmount, Effect, haveEffect, Item, Location } from "kolmafia";
+import {
+  availableAmount,
+  Effect,
+  getProperty,
+  haveEffect,
+  Item,
+  Location,
+  toInt,
+} from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import {
   GreyClovers,
@@ -34,6 +42,11 @@ export class QuestL8MountainOreClover extends QuestL8MountainOre {
     }
 
     if (haveEffect(Effect.get("A Girl Named Sue")) > 0) {
+      return QuestStatus.NOT_READY;
+    }
+
+    // User can locket instead, which according to their MPA is more profitable
+    if (toInt(getProperty("valueOfAdventure")) >= 4000) {
       return QuestStatus.NOT_READY;
     }
 

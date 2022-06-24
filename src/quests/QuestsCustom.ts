@@ -3,7 +3,7 @@ import { QuestInitialStart } from "./custom/QuestInitialStart";
 import { QuestAdventure, QuestInfo, QuestStatus } from "./Quests";
 import { QuestDungeonsOfDoom } from "./custom/QuestDungeonsOfDoom";
 import { QuestGetZapWand } from "./custom/QuestGetZapWand";
-import { QuestLocketFantasyRealm } from "./locket/QuestFantasyRealm";
+import { QuestLocketFantasyBandit } from "./locket/QuestFantasyBandits";
 import { QuestNPCStuff } from "./custom/QuestNpcStuff";
 import { QuestCustomPurchases } from "./custom/QuestCustomPurchases";
 import { QuestGoblinTortureHarem } from "./custom/goblin/QuestGoblinTortureHarem";
@@ -26,6 +26,7 @@ import { QuestBugbearBakery } from "./custom/QuestBugbearBakery";
 import { QuestMoonSign } from "./custom/QuestMoonSign";
 import { QuestAbsorbCanadiaMonster } from "./absorbs/QuestAbsorbCanadiaMonster";
 import { QuestAbsorbStarMonster } from "./absorbs/QuestAbsorbStarMonster";
+import { QuestFantasyRealm } from "./council/tower/keys/QuestFantasyRealm";
 
 export class QuestsCustom implements QuestInfo {
   // This is a wrapper class around some of our custom routing goals. Like combat locket or so.
@@ -35,7 +36,7 @@ export class QuestsCustom implements QuestInfo {
   constructor() {
     this.quests.push(new QuestInitialStart());
     this.quests.push(new QuestLocketInfiniteLoop());
-    this.quests.push(new QuestLocketFantasyRealm());
+    this.quests.push(new QuestLocketFantasyBandit());
     this.quests.push(new QuestLocketSystemSweep());
     this.quests.push(new QuestGoblinTortureHarem());
     this.quests.push(new QuestGoblinTortureLab());
@@ -58,6 +59,7 @@ export class QuestsCustom implements QuestInfo {
     this.quests.push(new QuestMoonSign());
     this.quests.push(new QuestAbsorbCanadiaMonster());
     this.quests.push(new QuestAbsorbStarMonster());
+    this.quests.push(new QuestFantasyRealm());
   }
 
   level(): number {

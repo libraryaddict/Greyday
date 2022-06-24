@@ -6,7 +6,9 @@ import {
   use,
   print,
   Monster,
+  toInt,
 } from "kolmafia";
+import { GreySettings } from "../../utils/GreySettings";
 import { canCombatLocket } from "../../utils/GreyUtils";
 
 export class QuestKeyStuffAbstract {
@@ -69,13 +71,29 @@ export class QuestKeyStuffAbstract {
 
     if (getProperty("dailyDungeonDone") == "false") {
       keys += 1;
+
+      if (
+        !GreySettings.isHardcoreMode() &&
+        getProperty("dailyDungeonMalwareUsed") == "false"
+      ) {
+        keys += 1;
+      }
     }
 
-    if (
-      canCombatLocket(Monster.get("Fantasy Bandit")) &&
-      getProperty("dailyDungeonMalwareUsed") == "false"
-    ) {
-      keys += 1;
+    // If we can fight bandit
+    if (toInt("_foughtFantasyRealm") < 5) {
+      // If we own fantasyrealm
+      if (
+        getProperty("frAlways") == "true" ||
+        getProperty("_frToday") == "true"
+      ) {
+        keys++;
+      } else if (
+        canCombatLocket(Monster.get("Fantasy Bandit")) &&
+        11 - toInt(getProperty("_backUpUses")) >= 4
+      ) {
+        keys += 1;
+      }
     }
 
     return keys;

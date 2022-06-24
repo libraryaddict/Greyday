@@ -1,18 +1,5 @@
-import {
-  Location,
-  Familiar,
-  council,
-  getProperty,
-  myLevel,
-  toInt,
-  cliExecute,
-} from "kolmafia";
-import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { QuestGrabHippyOutfit } from "../custom/QuestGrabNormalHippyOutfit";
-import { QuestCar } from "../misc/QuestCar";
-import { QuestManorLights } from "../misc/QuestManorLights";
+import { Location } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
-import { QuestsCustom } from "../QuestsCustom";
 import { QuestType } from "../QuestTypes";
 import { QuestL10Beanstalk } from "./QuestL10Giants";
 import { QuestL11MacGruffin } from "./QuestL11MacGruffin";
@@ -27,7 +14,6 @@ import { QuestL6Friar } from "./QuestL6Friars";
 import { QuestL7Crypt } from "./QuestL7Crypt";
 import { QuestL8IcePeak } from "./QuestL8IcePeak";
 import { QuestL9Smut } from "./QuestL9OrcsAndPeaks";
-import { QuestManor } from "./QuestManor";
 
 export class QuestCouncil implements QuestInfo {
   quests: QuestInfo[] = [];

@@ -77,13 +77,12 @@ export class QuestGrabBoatVacation implements QuestInfo {
 
     if (
       !GreySettings.isHippyMode() &&
-      myLevel() < 11 &&
       haveEffect(Effect.get("A Girl Named Sue")) > 0
     ) {
       return QuestStatus.NOT_READY;
     }
 
-    if (myAdventures() < 20 || myLevel() < 11) {
+    if (myAdventures() < (myLevel() < 11 ? 35 : 20)) {
       return QuestStatus.FASTER_LATER;
     }
 

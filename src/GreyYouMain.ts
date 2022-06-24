@@ -1,7 +1,10 @@
 import {
+  availableAmount,
   Effect,
+  getProperty,
   getRevision,
   haveEffect,
+  Item,
   lastChoice,
   myHp,
   myLocation,
@@ -11,6 +14,7 @@ import {
   pathIdToName,
   print,
   toInt,
+  waitq,
 } from "kolmafia";
 import { GreyAdventurer } from "./GreyAdventurer";
 import { QuestRegistry } from "./quests/QuestRegistry";
@@ -27,6 +31,23 @@ class GreyYouMain {
         "red"
       );
       return;
+    }
+
+    if (
+      availableAmount(Item.get("hewn moon-rune spoon")) > 0 &&
+      getProperty("greyTuneMoonSpoon") == ""
+    ) {
+      print(
+        "Did you know you can set 'greyTuneMoonSpoon' to a moon sign, and it'll auto tune when it's finished? Currently only tested with Knoll > Gnomes, tell Irrat if you wanted canadia and he'll get around to it.",
+        "red"
+      );
+    }
+
+    if (getProperty("greyBreakAtTower") == "") {
+      print(
+        "'greyBreakAtTower' hasn't been set, setting it to true will mean when it hits the tower, the script will exit to be continued later.",
+        "gray"
+      );
     }
 
     if (command == "required") {

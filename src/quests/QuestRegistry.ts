@@ -11,8 +11,8 @@ import {
 } from "kolmafia";
 import { QuestCouncil } from "./council/QuestCouncil";
 import { QuestManor } from "./council/QuestManor";
-import { QuestCar } from "./misc/QuestCar";
-import { QuestManorLights } from "./misc/QuestManorLights";
+import { QuestCar } from "./custom/QuestCar";
+import { QuestManorLights } from "./custom/QuestManorLights";
 import { getQuestStatus, QuestInfo } from "./Quests";
 import { QuestsCustom } from "./QuestsCustom";
 import { QuestType } from "./QuestTypes";
@@ -207,6 +207,7 @@ export class QuestRegistry {
       },
 
       // Register these here, because we want to burn their backups in delay zones
+      { id: "Council / Tower / Keys / FantasyRealm" },
       { id: "Council / Tower / Keys / FantasyBandit" },
       { id: "Council / War / Lobsters" },
 

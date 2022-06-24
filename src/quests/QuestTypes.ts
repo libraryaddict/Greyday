@@ -141,7 +141,8 @@ export type QuestKeys =
   | "Council / Tower / Keys / HoleInSkyUnlock"
   | "Council / Tower / Keys / Star"
   | "Council / Tower / Keys / PullZappableKey"
-  | "Council / Tower / Keys / Skeleton";
+  | "Council / Tower / Keys / Skeleton"
+  | "Council / Tower / Keys / FantasyRealm";
 export type QuestManor =
   | "Manor / Chat"
   | "Manor / Kitchen"

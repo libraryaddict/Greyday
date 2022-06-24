@@ -27,7 +27,7 @@ import {
 } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
-export class QuestLocketFantasyRealm implements QuestInfo {
+export class QuestLocketFantasyBandit implements QuestInfo {
   fought: string = "_foughtFantasyRealm";
   monster: Monster = Monster.get("Fantasy Bandit");
   camera: Item = Item.get("Backup Camera");
@@ -75,6 +75,14 @@ export class QuestLocketFantasyRealm implements QuestInfo {
 
   status(): QuestStatus {
     if (this.hasFoughtEnough() || !GreySettings.isHardcoreMode()) {
+      return QuestStatus.COMPLETED;
+    }
+
+    // If we have the iotm, or used a day pass
+    if (
+      getProperty("frAlways") == "true" ||
+      getProperty("_frToday") == "true"
+    ) {
       return QuestStatus.COMPLETED;
     }
 
@@ -134,6 +142,7 @@ export class QuestLocketFantasyRealm implements QuestInfo {
       },
     };
   }
+
   lastMonster(): Monster {
     return toMonster(getProperty("lastCopyableMonster"));
   }
