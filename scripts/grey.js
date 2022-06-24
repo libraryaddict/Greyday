@@ -365,6 +365,140 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
     function isHippyMode() {
       return this.isHardcoreMode();
     } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);
+;// CONCATENATED MODULE: ./src/utils/GreyUtils.ts
+function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || GreyUtils_unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyUtils_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyUtils_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyUtils_arrayLikeToArray(o, minLen);}function GreyUtils_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
+
+var UmbrellaState;(function (UmbrellaState) {UmbrellaState["MONSTER_LEVEL"] = "broken";UmbrellaState["DAMAGE_REDUCTION_SHIELD"] = "forward";UmbrellaState["ITEM_DROPS"] = "bucket";UmbrellaState["WEAPON_DAMAGE"] = "pitchfork";UmbrellaState["SPELL_DAMAGE"] = "twirling";UmbrellaState["MINUS_COMBAT"] = "cocoon";})(UmbrellaState || (UmbrellaState = {}));
+
+
+
+
+
+
+
+
+function setUmbrella(setting) {
+  if ((0,external_kolmafia_namespaceObject.getProperty)("umbrellaState").includes(setting)) {
+    return;
+  }
+
+  (0,external_kolmafia_namespaceObject.cliExecute)("umbrella " + setting);
+}
+
+function canCombatLocket(monster) {
+  var foughtToday = (0,external_kolmafia_namespaceObject.getProperty)("_locketMonstersFought").
+  split(",").
+  map((s) => (0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.toInt)(s)));
+
+  if (foughtToday.length >= 3 || foughtToday.includes(monster)) {
+    return false;
+  }
+
+  var monsters = Object.keys((0,external_kolmafia_namespaceObject.getLocketMonsters)()).map((s) =>
+  (0,external_kolmafia_namespaceObject.toMonster)(s));
+
+
+  if (!monsters.includes(monster)) {
+    return false;
+  }
+
+  return true;
+}
+
+function doPocketWishFight(monster) {
+  if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Pocket Wish")) == 0) {
+    throw "Not enough pocket wishes!";
+  }
+
+  (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?pwd=&which=99&whichitem=9537");
+  (0,external_kolmafia_namespaceObject.visitUrl)("choice.php?forceoption=0");
+
+  try {
+    (0,external_kolmafia_namespaceObject.visitUrl)(
+    "choice.php?pwd=&option=1&whichchoice=1267&wish=" +
+    (0,external_kolmafia_namespaceObject.urlEncode)("to fight " + monster.name),
+    true,
+    true);
+
+  } catch (e) {
+    (0,external_kolmafia_namespaceObject.print)(e);
+  }
+
+  (0,external_kolmafia_namespaceObject.visitUrl)("choice.php");
+
+  if ((0,external_kolmafia_namespaceObject.currentRound)() == 0) {
+    throw "Failed to wish in a monster";
+  }
+}
+
+function getBackupsRemaining() {
+  return 11 - (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_backUpUses"));
+}
+
+function doColor(text, color) {
+  return "<font color='".concat(color, "'>").concat(text, "</font>");
+}
+
+var ballProp = () =>
+(0,external_kolmafia_namespaceObject.getProperty)("crystalBallPredictions").
+split("|").
+map((element) => element.split(":")).
+map(
+(_ref) => {var _ref2 = _slicedToArray(_ref, 3),turncount = _ref2[0],location = _ref2[1],monster = _ref2[2];return (
+    [parseInt(turncount), (0,external_kolmafia_namespaceObject.toLocation)(location), (0,external_kolmafia_namespaceObject.toMonster)(monster)]);});
+
+
+
+
+
+
+var lastBallCheck = 0;
+/**
+ * Returns a map of locations, and the monsters predicted.
+ *
+ * The boolean is a "Should we show fights that will still be valid if we waste a turn elsewhere"
+ */
+function currentPredictions()
+
+{var showPredictionsNotAboutToExpire = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+  var predictions = ballProp();
+
+  if (lastBallCheck != (0,external_kolmafia_namespaceObject.turnsPlayed)()) {
+    (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?ponder=1", false);
+
+    lastBallCheck = (0,external_kolmafia_namespaceObject.turnsPlayed)();
+    predictions = ballProp();
+  }
+
+  return new Map(
+  predictions.map((_ref3) => {var _ref4 = _slicedToArray(_ref3, 3),location = _ref4[1],monster = _ref4[2];return [location, monster];}));
+
+
+  /*// If a prediction should've been expired by mafia, ponder because something is wrong.
+  if (predictions.find(([turn]) => turn + 2 <= myTurncount())) {
+    visitUrl("inventory.php?ponder=1", false);
+     predictions = ballProp();
+  }
+   // The alternative is to make the 'gottenLastTurn' always return true if the predicted turns is smaller than turns
+   const gottenLastTurn = (predictedTurns: number, turns: number) =>
+    predictedTurns < turns;
+  const gottenThisTurn = (predictedTurns: number, turns: number) =>
+    predictedTurns === turns;
+   return new Map(
+    predictions
+      .filter(
+        ([turncount]) =>
+          gottenLastTurn(turncount, myTurncount()) ||
+          (showPredictionsNotAboutToExpire &&
+            gottenThisTurn(turncount, myTurncount()))
+      )
+      .map(([, location, monster]) => [location, monster])
+  );*/
+
+
+
+
+}
 ;// CONCATENATED MODULE: ./src/utils/MacroBuilder.ts
 function _get() {if (typeof Reflect !== "undefined" && Reflect.get) {_get = Reflect.get.bind();} else {_get = function _get(target, property, receiver) {var base = _superPropBase(target, property);if (!base) return;var desc = Object.getOwnPropertyDescriptor(base, property);if (desc.get) {return desc.get.call(arguments.length < 3 ? target : receiver);}return desc.value;};}return _get.apply(this, arguments);}function _superPropBase(object, property) {while (!Object.prototype.hasOwnProperty.call(object, property)) {object = _getPrototypeOf(object);if (object === null) break;}return object;}function MacroBuilder_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = MacroBuilder_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || MacroBuilder_unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function MacroBuilder_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return MacroBuilder_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return MacroBuilder_arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return MacroBuilder_arrayLikeToArray(arr);}function MacroBuilder_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function MacroBuilder_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function MacroBuilder_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function MacroBuilder_createClass(Constructor, protoProps, staticProps) {if (protoProps) MacroBuilder_defineProperties(Constructor.prototype, protoProps);if (staticProps) MacroBuilder_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function MacroBuilder_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) _setPrototypeOf(subClass, superClass);}function _createSuper(Derived) {var hasNativeReflectConstruct = _isNativeReflectConstruct();return function _createSuperInternal() {var Super = _getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = _getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return _possibleConstructorReturn(this, result);};}function _possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return _assertThisInitialized(self);}function _assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function _wrapNativeSuper(Class) {var _cache = typeof Map === "function" ? new Map() : undefined;_wrapNativeSuper = function _wrapNativeSuper(Class) {if (Class === null || !_isNativeFunction(Class)) return Class;if (typeof Class !== "function") {throw new TypeError("Super expression must either be null or a function");}if (typeof _cache !== "undefined") {if (_cache.has(Class)) return _cache.get(Class);_cache.set(Class, Wrapper);}function Wrapper() {return _construct(Class, arguments, _getPrototypeOf(this).constructor);}Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });return _setPrototypeOf(Wrapper, Class);};return _wrapNativeSuper(Class);}function _construct(Parent, args, Class) {if (_isNativeReflectConstruct()) {_construct = Reflect.construct.bind();} else {_construct = function _construct(Parent, args, Class) {var a = [null];a.push.apply(a, args);var Constructor = Function.bind.apply(Parent, a);var instance = new Constructor();if (Class) _setPrototypeOf(instance, Class.prototype);return instance;};}return _construct.apply(null, arguments);}function _isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function _isNativeFunction(fn) {return Function.toString.call(fn).indexOf("[native code]") !== -1;}function _setPrototypeOf(o, p) {_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return _setPrototypeOf(o, p);}function _getPrototypeOf(o) {_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return _getPrototypeOf(o);}
 
@@ -1137,6 +1271,7 @@ function GreyCombat_classCallCheck(instance, Constructor) {if (!(instance instan
 
 
 
+
 var
 
 MacroFiller = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {function MacroFiller() {GreyCombat_classCallCheck(this, MacroFiller);}GreyCombat_createClass(MacroFiller, [{ key: "addBanish", value:
@@ -1214,18 +1349,35 @@ function greyDuringFightMacro(settings) {
 
       if (
       !hasBanished((0,external_kolmafia_namespaceObject.myLocation)(), BanishType.SYSTEM_SWEEP) &&
-      (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("System Sweep")))
+      (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("System Sweep")) &&
+      (0,external_kolmafia_namespaceObject.getMonsters)((0,external_kolmafia_namespaceObject.myLocation)()).includes(monster))
       {
-        // If we are not using crystal ball and didn't just banish something..
-        if (
-        (0,external_kolmafia_namespaceObject.getMonsters)((0,external_kolmafia_namespaceObject.myLocation)()).includes(monster) && (
-        (0,external_kolmafia_namespaceObject.equippedAmount)(external_kolmafia_namespaceObject.Item.get("miniature crystal ball")) == 0 ||
+        // We want to banish always on quests, but not on non-quests which we're likely to be wasting a banish in
+        var wastedBanish =
+        settings.nonquest &&
         getBanished().filter(
         (b) =>
         b.banisher.type == BanishType.SYSTEM_SWEEP &&
-        b.turnBanished + 2 >= (0,external_kolmafia_namespaceObject.myTurncount)()).
-        length == 0))
+        b.turnBanished + 1 >= (0,external_kolmafia_namespaceObject.myTurncount)()).
+        length > 0;
 
+        // If we're using crystal ball on a non-quest and we're only aiming to hit one banish
+        if (
+        !wastedBanish &&
+        settings.nonquest &&
+        (0,external_kolmafia_namespaceObject.equippedAmount)(external_kolmafia_namespaceObject.Item.get("miniature crystal ball")) > 0 &&
+        settings.dontBanishThese != null &&
+        settings.dontBanishThese.length == 1)
+        {
+          // If our next monster is a monster we're aiming to hit.
+          var nextMonster = currentPredictions().get((0,external_kolmafia_namespaceObject.myLocation)());
+
+          // If our next predicted combat is against a monster we specifically don't want to banish.
+          wastedBanish =
+          nextMonster != null && !isBanishable(settings, nextMonster);
+        }
+
+        if (!wastedBanish)
           // If we do want to banish something..
           macro.trySkill(external_kolmafia_namespaceObject.Skill.get("System Sweep"));
       }
@@ -1319,140 +1471,6 @@ function greyKillingBlow(outfit) {
   macro.abort();
 
   return macro;
-}
-;// CONCATENATED MODULE: ./src/utils/GreyUtils.ts
-function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || GreyUtils_unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyUtils_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyUtils_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyUtils_arrayLikeToArray(o, minLen);}function GreyUtils_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
-
-var UmbrellaState;(function (UmbrellaState) {UmbrellaState["MONSTER_LEVEL"] = "broken";UmbrellaState["DAMAGE_REDUCTION_SHIELD"] = "forward";UmbrellaState["ITEM_DROPS"] = "bucket";UmbrellaState["WEAPON_DAMAGE"] = "pitchfork";UmbrellaState["SPELL_DAMAGE"] = "twirling";UmbrellaState["MINUS_COMBAT"] = "cocoon";})(UmbrellaState || (UmbrellaState = {}));
-
-
-
-
-
-
-
-
-function setUmbrella(setting) {
-  if ((0,external_kolmafia_namespaceObject.getProperty)("umbrellaState").includes(setting)) {
-    return;
-  }
-
-  (0,external_kolmafia_namespaceObject.cliExecute)("umbrella " + setting);
-}
-
-function canCombatLocket(monster) {
-  var foughtToday = (0,external_kolmafia_namespaceObject.getProperty)("_locketMonstersFought").
-  split(",").
-  map((s) => (0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.toInt)(s)));
-
-  if (foughtToday.length >= 3 || foughtToday.includes(monster)) {
-    return false;
-  }
-
-  var monsters = Object.keys((0,external_kolmafia_namespaceObject.getLocketMonsters)()).map((s) =>
-  (0,external_kolmafia_namespaceObject.toMonster)(s));
-
-
-  if (!monsters.includes(monster)) {
-    return false;
-  }
-
-  return true;
-}
-
-function doPocketWishFight(monster) {
-  if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Pocket Wish")) == 0) {
-    throw "Not enough pocket wishes!";
-  }
-
-  (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?pwd=&which=99&whichitem=9537");
-  (0,external_kolmafia_namespaceObject.visitUrl)("choice.php?forceoption=0");
-
-  try {
-    (0,external_kolmafia_namespaceObject.visitUrl)(
-    "choice.php?pwd=&option=1&whichchoice=1267&wish=" +
-    (0,external_kolmafia_namespaceObject.urlEncode)("to fight " + monster.name),
-    true,
-    true);
-
-  } catch (e) {
-    (0,external_kolmafia_namespaceObject.print)(e);
-  }
-
-  (0,external_kolmafia_namespaceObject.visitUrl)("choice.php");
-
-  if ((0,external_kolmafia_namespaceObject.currentRound)() == 0) {
-    throw "Failed to wish in a monster";
-  }
-}
-
-function getBackupsRemaining() {
-  return 11 - (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_backUpUses"));
-}
-
-function doColor(text, color) {
-  return "<font color='".concat(color, "'>").concat(text, "</font>");
-}
-
-var ballProp = () =>
-(0,external_kolmafia_namespaceObject.getProperty)("crystalBallPredictions").
-split("|").
-map((element) => element.split(":")).
-map(
-(_ref) => {var _ref2 = _slicedToArray(_ref, 3),turncount = _ref2[0],location = _ref2[1],monster = _ref2[2];return (
-    [parseInt(turncount), (0,external_kolmafia_namespaceObject.toLocation)(location), (0,external_kolmafia_namespaceObject.toMonster)(monster)]);});
-
-
-
-
-
-
-var lastBallCheck = 0;
-/**
- * Returns a map of locations, and the monsters predicted.
- *
- * The boolean is a "Should we show fights that will still be valid if we waste a turn elsewhere"
- */
-function currentPredictions()
-
-{var showPredictionsNotAboutToExpire = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-  var predictions = ballProp();
-
-  if (lastBallCheck != (0,external_kolmafia_namespaceObject.turnsPlayed)()) {
-    (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?ponder=1", false);
-
-    lastBallCheck = (0,external_kolmafia_namespaceObject.turnsPlayed)();
-    predictions = ballProp();
-  }
-
-  return new Map(
-  predictions.map((_ref3) => {var _ref4 = _slicedToArray(_ref3, 3),location = _ref4[1],monster = _ref4[2];return [location, monster];}));
-
-
-  /*// If a prediction should've been expired by mafia, ponder because something is wrong.
-  if (predictions.find(([turn]) => turn + 2 <= myTurncount())) {
-    visitUrl("inventory.php?ponder=1", false);
-     predictions = ballProp();
-  }
-   // The alternative is to make the 'gottenLastTurn' always return true if the predicted turns is smaller than turns
-   const gottenLastTurn = (predictedTurns: number, turns: number) =>
-    predictedTurns < turns;
-  const gottenThisTurn = (predictedTurns: number, turns: number) =>
-    predictedTurns === turns;
-   return new Map(
-    predictions
-      .filter(
-        ([turncount]) =>
-          gottenLastTurn(turncount, myTurncount()) ||
-          (showPredictionsNotAboutToExpire &&
-            gottenThisTurn(turncount, myTurncount()))
-      )
-      .map(([, location, monster]) => [location, monster])
-  );*/
-
-
-
-
 }
 ;// CONCATENATED MODULE: ./src/utils/GreyOutfitter.ts
 function GreyOutfitter_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyOutfitter_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyOutfitter_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyOutfitter_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyOutfitter_arrayLikeToArray(o, minLen);}function GreyOutfitter_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyOutfitter_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyOutfitter_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyOutfitter_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyOutfitter_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyOutfitter_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyOutfitter_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
