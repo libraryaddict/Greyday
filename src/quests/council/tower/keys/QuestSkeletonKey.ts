@@ -8,6 +8,7 @@ import {
   getProperty,
   myMeat,
   use,
+  pullsRemaining,
 } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -59,7 +60,10 @@ export class QuestSkeletonKey implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    if (availableAmount(this.bone) > 0 && availableAmount(this.teeth) > 0) {
+    if (
+      pullsRemaining() == -1 ||
+      (availableAmount(this.bone) > 0 && availableAmount(this.teeth) > 0)
+    ) {
       return this.craft();
     }
 

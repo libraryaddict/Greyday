@@ -5,6 +5,7 @@ import {
   Item,
   availableAmount,
   print,
+  pullsRemaining,
 } from "kolmafia";
 import {
   GreyPulls,
@@ -43,7 +44,7 @@ export class QuestPullZappableKey
   }
 
   status(): QuestStatus {
-    if (GreySettings.isHardcoreMode()) {
+    if (GreySettings.isHardcoreMode() || pullsRemaining() == -1) {
       return QuestStatus.COMPLETED;
     }
 

@@ -1,4 +1,15 @@
-import { Location, Familiar, myBasestat, Stat, Skill, myHp } from "kolmafia";
+import {
+  Location,
+  Familiar,
+  myBasestat,
+  Stat,
+  Skill,
+  myHp,
+  maximize,
+  myMaxhp,
+  print,
+} from "kolmafia";
+import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
@@ -34,23 +45,29 @@ export class QuestTowerWallMeat implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
-    outfit.meatDropWeight = 5;
-    outfit.addBonus("+0.01 moxie");
-
     return {
-      outfit: outfit,
-      familiar: Familiar.get("Hobo Monkey"),
-      disableFamOverride: true,
+      outfit: new GreyOutfit("-tie"),
       location: null,
       run: () => {
+        let result = maximize(
+          "+5 meat +0.03 moxie +0.01 hp 300 min +switch hobo monkey +switch robortender",
+          false
+        );
+
+        if (!result) {
+          print("Failed maximizer? Weird.", "red");
+          throw "Failed maximizer..";
+        }
+
+        restoreHPTo(Math.min(myMaxhp(), 600));
+
         if (myHp() < 200) {
           throw "HP too low";
         }
 
         greyAdv(
           "place.php?whichplace=nstower&action=ns_06_monster2",
-          outfit,
+          null,
           new AdventureSettings().setFinishingBlowMacro(
             Macro.trySkillRepeat(Skill.get("Infinite Loop"))
           )

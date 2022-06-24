@@ -11,6 +11,8 @@ import {
   itemAmount,
   create,
   Monster,
+  turnsPlayed,
+  pullsRemaining,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -117,7 +119,7 @@ export class QuestDigitalKey implements QuestInfo {
       };
     }
 
-    if (this.needPixels() <= 0) {
+    if (this.needPixels() <= 0 || pullsRemaining() == -1) {
       return {
         location: null,
         run: () => {

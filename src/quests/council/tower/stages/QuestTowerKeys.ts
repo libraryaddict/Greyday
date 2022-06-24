@@ -1,10 +1,13 @@
 import {
   availableAmount,
+  cliExecute,
   getProperty,
   Item,
   Location,
   print,
+  pullsRemaining,
   retrieveItem,
+  storageAmount,
   visitUrl,
 } from "kolmafia";
 import {
@@ -35,19 +38,28 @@ export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
     new QuestDailyDungeon(),
     new QuestDigitalKey(),
   ];
+  refreshedStorage: boolean = false;
+
+  getTokensAvailable(): number {
+    if (pullsRemaining() == -1 && !this.refreshedStorage) {
+      cliExecute("refresh storage");
+      this.refreshedStorage = true;
+    }
+
+    return (
+      availableAmount(this.token) +
+      (pullsRemaining() == -1 ? storageAmount(this.token) : 0)
+    );
+  }
 
   isReadyToRedeemTokens(): boolean {
-    let keys = this.keys.filter((k) => availableAmount(k) > 0);
+    let keysAvailable = this.keys.filter((k) => availableAmount(k) > 0).length;
 
-    if (keys.length >= 3) {
+    if (keysAvailable >= 3) {
       return false;
     }
 
-    if (availableAmount(this.token) + keys.length < 3) {
-      return false;
-    }
-
-    return true;
+    return keysAvailable + this.getTokensAvailable() >= 3;
   }
 
   redeemKeys(): QuestAdventure {

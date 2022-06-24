@@ -9,6 +9,7 @@ import {
   print,
   visitUrl,
   cliExecute,
+  pullsRemaining,
 } from "kolmafia";
 import {
   getQuestStatus,
@@ -56,6 +57,10 @@ export class QuestZapKeys extends QuestKeyStuffAbstract implements QuestInfo {
   }
 
   status(): QuestStatus {
+    if (pullsRemaining() == -1) {
+      return QuestStatus.COMPLETED;
+    }
+
     let status = getQuestStatus("questL13Final");
 
     if (status < 5) {

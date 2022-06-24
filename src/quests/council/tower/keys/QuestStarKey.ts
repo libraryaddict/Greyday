@@ -6,6 +6,8 @@ import {
   getProperty,
   retrieveItem,
   Familiar,
+  pullsRemaining,
+  Monster,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { greyAdv } from "../../../../utils/GreyLocations";
@@ -26,6 +28,7 @@ export class QuestStarKey implements QuestInfo {
   line: Item = Item.get("Line");
   key: Item = Item.get("Richard's star key");
   holeInSky: QuestInfo = new QuestTowerHoleInSkyUnlock();
+  toAbsorb: Monster[];
 
   getChildren(): QuestInfo[] {
     return [this.holeInSky];
@@ -52,14 +55,23 @@ export class QuestStarKey implements QuestInfo {
       return QuestStatus.NOT_READY;
     }*/
 
+    if (
+      this.toAbsorb.length == 0 &&
+      getProperty("greyBreakAtTower") == "true" &&
+      getProperty("_greyReachedTower") != "true"
+    ) {
+      return QuestStatus.NOT_READY;
+    }
+
     return QuestStatus.READY;
   }
 
   run(): QuestAdventure {
     if (
-      availableAmount(this.map) > 0 &&
-      availableAmount(this.line) >= 7 &&
-      availableAmount(this.star) >= 8
+      pullsRemaining() == -1 ||
+      (availableAmount(this.map) > 0 &&
+        availableAmount(this.line) >= 7 &&
+        availableAmount(this.star) >= 8)
     ) {
       return {
         location: null,
