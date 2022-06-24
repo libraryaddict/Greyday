@@ -10261,7 +10261,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
 
       }
 
-      if (this.needPixels() <= 0) {
+      if (this.needPixels() <= 0 || (0,external_kolmafia_namespaceObject.pullsRemaining)() == -1) {
         return {
           location: null,
           run: () => {
@@ -10461,7 +10461,10 @@ var QuestSkeletonKey = /*#__PURE__*/function () {function QuestSkeletonKey() {Qu
     } }, { key: "run", value:
 
     function run() {
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.bone) > 0 && (0,external_kolmafia_namespaceObject.availableAmount)(this.teeth) > 0) {
+      if (
+      (0,external_kolmafia_namespaceObject.pullsRemaining)() == -1 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.bone) > 0 && (0,external_kolmafia_namespaceObject.availableAmount)(this.teeth) > 0)
+      {
         return this.craft();
       }
 
@@ -10508,7 +10511,8 @@ var QuestStarKey = /*#__PURE__*/function () {function QuestStarKey() {QuestStarK
     external_kolmafia_namespaceObject.Item.get("Star Chart"));QuestStarKey_defineProperty(this, "line",
     external_kolmafia_namespaceObject.Item.get("Line"));QuestStarKey_defineProperty(this, "key",
     external_kolmafia_namespaceObject.Item.get("Richard's star key"));QuestStarKey_defineProperty(this, "holeInSky",
-    new QuestTowerHoleInSkyUnlock());}QuestStarKey_createClass(QuestStarKey, [{ key: "getChildren", value:
+    new QuestTowerHoleInSkyUnlock());QuestStarKey_defineProperty(this, "toAbsorb", void 0);}QuestStarKey_createClass(QuestStarKey, [{ key: "getChildren", value:
+
 
     function getChildren() {
       return [this.holeInSky];
@@ -10535,11 +10539,20 @@ var QuestStarKey = /*#__PURE__*/function () {function QuestStarKey() {QuestStarK
         return QuestStatus.NOT_READY;
       }*/
 
+      if (
+      this.toAbsorb.length == 0 &&
+      (0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") == "true" &&
+      (0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower") != "true")
+      {
+        return QuestStatus.NOT_READY;
+      }
+
       return QuestStatus.READY;
     } }, { key: "run", value:
 
     function run() {
       if (
+      (0,external_kolmafia_namespaceObject.pullsRemaining)() == -1 ||
       (0,external_kolmafia_namespaceObject.availableAmount)(this.map) > 0 &&
       (0,external_kolmafia_namespaceObject.availableAmount)(this.line) >= 7 &&
       (0,external_kolmafia_namespaceObject.availableAmount)(this.star) >= 8)
@@ -10764,21 +10777,30 @@ var QuestTowerKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestTowerKe
     new QuestSkeletonKey(),
     new QuestStarKey(),
     new QuestDailyDungeon(),
-    new QuestDigitalKey()]);return _this;}QuestTowerKeys_createClass(QuestTowerKeys, [{ key: "isReadyToRedeemTokens", value:
+    new QuestDigitalKey()]);QuestTowerKeys_defineProperty(QuestTowerKeys_assertThisInitialized(_this), "refreshedStorage",
 
+    false);return _this;}QuestTowerKeys_createClass(QuestTowerKeys, [{ key: "getTokensAvailable", value:
+
+    function getTokensAvailable() {
+      if ((0,external_kolmafia_namespaceObject.pullsRemaining)() == -1 && !this.refreshedStorage) {
+        (0,external_kolmafia_namespaceObject.cliExecute)("refresh storage");
+        this.refreshedStorage = true;
+      }
+
+      return (
+        (0,external_kolmafia_namespaceObject.availableAmount)(this.token) + (
+        (0,external_kolmafia_namespaceObject.pullsRemaining)() == -1 ? (0,external_kolmafia_namespaceObject.storageAmount)(this.token) : 0));
+
+    } }, { key: "isReadyToRedeemTokens", value:
 
     function isReadyToRedeemTokens() {
-      var keys = this.keys.filter((k) => (0,external_kolmafia_namespaceObject.availableAmount)(k) > 0);
+      var keysAvailable = this.keys.filter((k) => (0,external_kolmafia_namespaceObject.availableAmount)(k) > 0).length;
 
-      if (keys.length >= 3) {
+      if (keysAvailable >= 3) {
         return false;
       }
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.token) + keys.length < 3) {
-        return false;
-      }
-
-      return true;
+      return keysAvailable + this.getTokensAvailable() >= 3;
     } }, { key: "redeemKeys", value:
 
     function redeemKeys() {
@@ -11133,6 +11155,7 @@ function QuestTowerWallMeat_classCallCheck(instance, Constructor) {if (!(instanc
 
 
 
+
 var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat() {QuestTowerWallMeat_classCallCheck(this, QuestTowerWallMeat);}QuestTowerWallMeat_createClass(QuestTowerWallMeat, [{ key: "getId", value:
     function getId() {
       return "Council / Tower / WallOfMeat";
@@ -11157,23 +11180,29 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit();
-      outfit.meatDropWeight = 5;
-      outfit.addBonus("+0.01 moxie");
-
       return {
-        outfit: outfit,
-        familiar: external_kolmafia_namespaceObject.Familiar.get("Hobo Monkey"),
-        disableFamOverride: true,
+        outfit: new GreyOutfit("-tie"),
         location: null,
         run: () => {
+          var result = (0,external_kolmafia_namespaceObject.maximize)(
+          "+5 meat +0.03 moxie +0.01 hp 300 min +switch hobo monkey +switch robortender",
+          false);
+
+
+          if (!result) {
+            (0,external_kolmafia_namespaceObject.print)("Failed maximizer? Weird.", "red");
+            throw "Failed maximizer..";
+          }
+
+          restoreHPTo(Math.min((0,external_kolmafia_namespaceObject.myMaxhp)(), 600));
+
           if ((0,external_kolmafia_namespaceObject.myHp)() < 200) {
             throw "HP too low";
           }
 
           greyAdv(
           "place.php?whichplace=nstower&action=ns_06_monster2",
-          outfit,
+          null,
           new AdventureSettings().setFinishingBlowMacro(
           Macro.trySkillRepeat(external_kolmafia_namespaceObject.Skill.get("Infinite Loop"))));
 
@@ -18898,13 +18927,6 @@ function QuestPullZappableKey_classCallCheck(instance, Constructor) {if (!(insta
 
 
 
-
-
-
-
-
-
-
 var QuestPullZappableKey = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestPullZappableKey_inherits(QuestPullZappableKey, _QuestKeyStuffAbstrac);var _super = QuestPullZappableKey_createSuper(QuestPullZappableKey);function QuestPullZappableKey() {var _this;QuestPullZappableKey_classCallCheck(this, QuestPullZappableKey);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestPullZappableKey_defineProperty(QuestPullZappableKey_assertThisInitialized(_this), "pullResource",
 
 
@@ -18927,7 +18949,7 @@ var QuestPullZappableKey = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestP
     } }, { key: "status", value:
 
     function status() {
-      if (GreySettings.isHardcoreMode()) {
+      if (GreySettings.isHardcoreMode() || (0,external_kolmafia_namespaceObject.pullsRemaining)() == -1) {
         return QuestStatus.COMPLETED;
       }
 
@@ -19007,6 +19029,10 @@ var QuestZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestZapKeys_i
     } }, { key: "status", value:
 
     function status() {
+      if ((0,external_kolmafia_namespaceObject.pullsRemaining)() == -1) {
+        return QuestStatus.COMPLETED;
+      }
+
       var status = getQuestStatus("questL13Final");
 
       if (status < 5) {
