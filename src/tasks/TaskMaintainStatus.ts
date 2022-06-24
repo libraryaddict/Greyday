@@ -31,6 +31,7 @@ export class TaskMaintainStatus implements Task {
     "Somewhat Poisoned",
     "A Little Bit Poisoned",
     "Hardly Poisoned at All",
+    "Temporary Amnesia",
   ].map((s) => Effect.get(s));
 
   fillRestorers() {

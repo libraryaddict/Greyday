@@ -110,11 +110,11 @@ export class QuestL11RonProtesters implements QuestInfo {
     }
 
     if (!haveSkill(this.sleazeSkill2) && availableAmount(this.starChart) == 0) {
-      return QuestStatus.FASTER_LATER;
+      return QuestStatus.NOT_READY;
     }
 
     if (!haveSkill(this.sleazeSkill) && getQuestStatus("questL09Topping") < 1) {
-      return QuestStatus.FASTER_LATER;
+      return QuestStatus.NOT_READY;
     }
 
     return QuestStatus.READY;
