@@ -33,6 +33,7 @@ import { AbsorbsProvider, Reabsorbed } from "./GreyAbsorber";
 import { AdventureSettings } from "./GreyLocations";
 import { GreyOutfit } from "./GreyOutfitter";
 import { GreySettings } from "./GreySettings";
+import { currentPredictions } from "./GreyUtils";
 import { Macro } from "./MacroBuilder";
 
 class MacroFiller {
@@ -110,18 +111,35 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
 
       if (
         !hasBanished(myLocation(), BanishType.SYSTEM_SWEEP) &&
-        haveSkill(Skill.get("System Sweep"))
+        haveSkill(Skill.get("System Sweep")) &&
+        getMonsters(myLocation()).includes(monster)
       ) {
-        // If we are not using crystal ball and didn't just banish something..
+        // We want to banish always on quests, but not on non-quests which we're likely to be wasting a banish in
+        let wastedBanish =
+          settings.nonquest &&
+          getBanished().filter(
+            (b) =>
+              b.banisher.type == BanishType.SYSTEM_SWEEP &&
+              b.turnBanished + 1 >= myTurncount()
+          ).length > 0;
+
+        // If we're using crystal ball on a non-quest and we're only aiming to hit one banish
         if (
-          getMonsters(myLocation()).includes(monster) &&
-          (equippedAmount(Item.get("miniature crystal ball")) == 0 ||
-            getBanished().filter(
-              (b) =>
-                b.banisher.type == BanishType.SYSTEM_SWEEP &&
-                b.turnBanished + 2 >= myTurncount()
-            ).length == 0)
-        )
+          !wastedBanish &&
+          settings.nonquest &&
+          equippedAmount(Item.get("miniature crystal ball")) > 0 &&
+          settings.dontBanishThese != null &&
+          settings.dontBanishThese.length == 1
+        ) {
+          // If our next monster is a monster we're aiming to hit.
+          let nextMonster = currentPredictions().get(myLocation());
+
+          // If our next predicted combat is against a monster we specifically don't want to banish.
+          wastedBanish =
+            nextMonster != null && !isBanishable(settings, nextMonster);
+        }
+
+        if (!wastedBanish)
           // If we do want to banish something..
           macro.trySkill(Skill.get("System Sweep"));
       }
