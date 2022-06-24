@@ -32,6 +32,7 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
+import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
 
 export class QuestTowerWallSkin implements QuestInfo {
   beehive: Item = Item.get("Beehive");
@@ -239,7 +240,11 @@ export class QuestTowerKillSkin {
         }
 
         if (toInt(getProperty("_hotTubSoaks")) < 5 && myHp() < myMaxhp()) {
-          cliExecute("hottub");
+          if (myMaxhp() - myHp() > 100) {
+            cliExecute("hottub");
+          } else {
+            restoreHPTo(myMaxhp());
+          }
         }
 
         if (myHp() < myMaxhp()) {

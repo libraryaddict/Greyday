@@ -81,6 +81,7 @@ export class AbsorbsProvider {
         ["Ponzi Apparatus", "Scaling meat%"],
         // ["Procgen Ribaldry", "10 Sleaze Damage"],
         ["Propagation Drive", "20% Item Drops"],
+        ["Overclocking", "Scaling +init"],
       ].map((s) => [toSkill(s[0]), s[1]])
     );
   }

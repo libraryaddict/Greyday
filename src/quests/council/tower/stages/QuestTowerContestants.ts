@@ -8,6 +8,7 @@ import {
   runChoice,
   toBoolean,
   setProperty,
+  print,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { greyAdv } from "../../../../utils/GreyLocations";
@@ -45,7 +46,11 @@ export class QuestTowerContestants implements QuestInfo {
       getProperty(this.reachedTower) != "true"
     ) {
       setProperty(this.reachedTower, "true");
-      throw "User requested we stop when we reach the tower";
+      print(
+        "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
+        "blue"
+      );
+      throw "User Requested: Reached tower";
     }
 
     if (status > 3) {

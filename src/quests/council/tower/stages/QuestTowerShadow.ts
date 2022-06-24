@@ -18,6 +18,7 @@ import {
   haveSkill,
   Skill,
 } from "kolmafia";
+import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
@@ -186,8 +187,14 @@ export class QuestTowerShadow implements QuestInfo {
           cliExecute("retrocape heck hold"); // Make sure we stun the shadow
         }
 
-        if (myHp() < myMaxhp() && toInt(getProperty("_hotTubSoaks")) < 5) {
+        if (myMaxhp() - myHp() > 100) {
           cliExecute("hottub");
+        } else if (myHp() < myMaxhp()) {
+          restoreHPTo(myMaxhp());
+        }
+
+        if (myHp() < myMaxhp()) {
+          throw "Expected full health";
         }
 
         let macro = Macro.item(this.guaze).repeat();
