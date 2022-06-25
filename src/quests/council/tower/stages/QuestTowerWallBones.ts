@@ -1,4 +1,27 @@
-import { Location, Familiar, Item, availableAmount } from "kolmafia";
+import {
+  Location,
+  Familiar,
+  Item,
+  availableAmount,
+  pullsRemaining,
+  storageAmount,
+  myBuffedstat,
+  Stat,
+  maximize,
+  numericModifier,
+  useFamiliar,
+  retrieveItem,
+  visit,
+  visitUrl,
+  currentRound,
+  myHp,
+  myMaxhp,
+  cliExecute,
+  setProperty,
+  getProperty,
+  print,
+  itemAmount,
+} from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -15,6 +38,7 @@ import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 export class QuestTowerWallBones implements QuestInfo {
   knife: Item = Item.get("Electric Boning Knife");
   boning: QuestInfo = new QuestTowerBoningKnife();
+  killer = new QuestTowerKillBones();
 
   getChildren(): QuestInfo[] {
     return [this.boning];
@@ -39,7 +63,7 @@ export class QuestTowerWallBones implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (availableAmount(this.knife) == 0) {
+    if (availableAmount(this.knife) == 0 && !this.killer.isPossible()) {
       return QuestStatus.NOT_READY;
     }
 
@@ -47,6 +71,10 @@ export class QuestTowerWallBones implements QuestInfo {
   }
 
   run(): QuestAdventure {
+    if (availableAmount(this.knife) == 0 && this.killer.isPossible()) {
+      return this.killer.run();
+    }
+
     return {
       location: null,
       run: () => {
@@ -71,6 +99,7 @@ export class QuestTowerBoningKnife implements QuestInfo {
   loc: Location = Location.get(
     "The Castle in the Clouds in the Sky (Ground Floor)"
   );
+  bossKiller = new QuestTowerKillBones();
 
   getId(): QuestType {
     return "Council / Tower / WallOfBones / BoningKnife";
@@ -93,6 +122,10 @@ export class QuestTowerBoningKnife implements QuestInfo {
 
     if (availableAmount(this.knife) > 0) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (this.bossKiller.isPossible()) {
+      return QuestStatus.NOT_READY;
     }
 
     return QuestStatus.READY;
@@ -128,11 +161,113 @@ export class QuestTowerBoningKnife implements QuestInfo {
 }
 
 export class QuestTowerKillBones {
-  isPossible(): boolean {
-    return false;
+  damageMultiplier: number = 50.5;
+  health: number = 20000;
+  drunkBell: Item = Item.get("Drunkula's bell");
+  rocket: Item = Item.get("Great Wolf's rocket launcher");
+  property: string = "_triedBossKillingBones";
+  possible: boolean;
+
+  isRocketPossible(): boolean {
+    if (availableAmount(this.rocket) == 0 && storageAmount(this.rocket) == 0) {
+      return false;
+    }
+
+    maximize("moxie +equip " + this.rocket.name, true);
+
+    let moxie = numericModifier("Generated:_spec", "Buffed Moxie");
+    let damage = this.damageMultiplier * (moxie * 0.4);
+
+    print(
+      "Using rocket, we predict " +
+        Math.round(damage) +
+        " damage (Worst scenario)",
+      "blue"
+    );
+    return damage > this.health * 1.05;
   }
 
-  run(): QuestInfo {
-    return null;
+  isBellPossible(): boolean {
+    if (
+      availableAmount(this.drunkBell) == 0 &&
+      storageAmount(this.drunkBell) == 0
+    ) {
+      return false;
+    }
+
+    maximize("mys", true);
+
+    let mys = numericModifier("Generated:_spec", "Buffed Mysticality");
+    let damage = this.damageMultiplier * (mys * 0.15);
+
+    print(
+      "Using " +
+        this.drunkBell.name +
+        ", we predict " +
+        Math.round(damage) +
+        " damage (Worst scenario)",
+      "blue"
+    );
+
+    return damage > this.health * 1.05;
+  }
+
+  isPossible(): boolean {
+    if (pullsRemaining() != -1 || getProperty(this.property) == "true") {
+      return false;
+    }
+
+    if (this.possible != null) {
+      return this.possible;
+    }
+
+    return (this.possible = this.isRocketPossible() || this.isBellPossible());
+  }
+
+  run(): QuestAdventure {
+    return {
+      location: null,
+      outfit: new GreyOutfit("-tie"),
+      run: () => {
+        let macro: Macro;
+        useFamiliar(Familiar.get("None"));
+
+        if (this.isRocketPossible()) {
+          maximize("moxie +equip " + this.rocket.name, false);
+
+          macro = Macro.skill("Fire Rocket");
+        } else {
+          if (itemAmount(this.drunkBell) == 0) {
+            retrieveItem(this.drunkBell);
+          }
+
+          if (itemAmount(this.drunkBell) == 0) {
+            throw "We don't have the " + this.drunkBell.name + " on hand?";
+          }
+
+          maximize("mys", false);
+
+          macro = Macro.item(this.drunkBell);
+        }
+
+        if (myHp() < myMaxhp() * 0.5) {
+          cliExecute("hottub");
+        }
+
+        visitUrl("place.php?whichplace=nstower&action=ns_07_monster3");
+
+        if (currentRound() == 0) {
+          throw "Failed to start the bones attack";
+        }
+
+        setProperty(this.property, "true");
+
+        macro.submit();
+
+        if (currentRound() != 0) {
+          throw "Failed to kill the wall of bones in a single hit.";
+        }
+      },
+    };
   }
 }
