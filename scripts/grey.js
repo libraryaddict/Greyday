@@ -7037,7 +7037,7 @@ function QuestL11TempleBowling_classCallCheck(instance, Constructor) {if (!(inst
 
 var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {QuestL11TempleBowling_classCallCheck(this, QuestL11Bowling);QuestL11TempleBowling_defineProperty(this, "bowl",
     external_kolmafia_namespaceObject.Item.get("Bowl of Scorpions"));QuestL11TempleBowling_defineProperty(this, "loc",
-    external_kolmafia_namespaceObject.Location.get("The Hidden Bowling Alley"));QuestL11TempleBowling_defineProperty(this, "ball",
+    external_kolmafia_namespaceObject.Location.get("The Hidden Bowling Alley"));QuestL11TempleBowling_defineProperty(this, "bowlingBall",
     external_kolmafia_namespaceObject.Item.get("Bowling Ball"));QuestL11TempleBowling_defineProperty(this, "cosmicBall",
     external_kolmafia_namespaceObject.Item.get("Cosmic Bowling Ball"));QuestL11TempleBowling_defineProperty(this, "goose",
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL11TempleBowling_defineProperty(this, "cosmicBowled",
@@ -7053,9 +7053,9 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
 
     function level() {
       return 11;
-    } }, { key: "ownBall", value:
+    } }, { key: "ownCosmicBall", value:
 
-    function ownBall() {
+    function ownCosmicBall() {
       return (0,external_kolmafia_namespaceObject.getProperty)("hasCosmicBowlingBall") == "true";
     } }, { key: "getId", value:
 
@@ -7069,9 +7069,9 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
 
     function getProgress() {
       return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("hiddenBowlingAlleyProgress"));
-    } }, { key: "isBowlingBallNextCombat", value:
+    } }, { key: "isCosmicBallNextCombat", value:
 
-    function isBowlingBallNextCombat() {
+    function isCosmicBallNextCombat() {
       return (
         (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("cosmicBowlingBallReturnCombats")) <= 0 ||
         (0,external_kolmafia_namespaceObject.availableAmount)(this.cosmicBall) > 0);
@@ -7083,7 +7083,7 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
         return false;
       }
 
-      if (!this.ownBall()) {
+      if (!this.ownCosmicBall()) {
         return false;
       }
 
@@ -7095,7 +7095,7 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
         return false;
       }
 
-      if (this.getProgress() != 1 || !this.isBowlingBallNextCombat()) {
+      if (this.getProgress() != 1 || !this.isCosmicBallNextCombat()) {
         return false;
       }
 
@@ -7121,7 +7121,7 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.ball) > 0) {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.bowlingBall) > 0) {
         return QuestStatus.READY;
       }
 
@@ -7132,10 +7132,10 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
 
       // If we have the cosmic ball, but have not bowled yet. Lets delay this until we can definitely score some progress.
       if (
-      this.ownBall() &&
+      this.ownCosmicBall() &&
       !this.hasCosmicBowled() &&
       this.getProgress() <= 3 &&
-      !this.isBowlingBallNextCombat())
+      !this.isCosmicBallNextCombat())
       {
         return QuestStatus.NOT_READY;
       }
@@ -7155,7 +7155,7 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
     function run() {
       var outfit = new GreyOutfit();
 
-      if (this.getProgress() >= 5 && (0,external_kolmafia_namespaceObject.availableAmount)(this.ball) > 0) {
+      if (this.getProgress() >= 5 && (0,external_kolmafia_namespaceObject.availableAmount)(this.bowlingBall) > 0) {
         outfit.addBonus("+max 0.1 elemental dmg");
       } else {
         outfit.setItemDrops();
@@ -7170,25 +7170,25 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
           var couldBeBowling = false;
 
           if (
-          this.hasCosmicBowled() &&
-          this.ownBall() &&
-          this.isBowlingBallNextCombat())
+          !this.hasCosmicBowled() &&
+          this.ownCosmicBall() &&
+          this.isCosmicBallNextCombat())
           {
             macro = new Macro().item(this.cosmicBall);
             couldBeBowling = true;
 
-            if ((0,external_kolmafia_namespaceObject.itemAmount)(this.ball) > 0) {
-              (0,external_kolmafia_namespaceObject.putCloset)(this.ball, (0,external_kolmafia_namespaceObject.availableAmount)(this.ball));
+            if ((0,external_kolmafia_namespaceObject.itemAmount)(this.bowlingBall) > 0) {
+              (0,external_kolmafia_namespaceObject.putCloset)(this.bowlingBall, (0,external_kolmafia_namespaceObject.availableAmount)(this.bowlingBall));
             }
-          } else if ((0,external_kolmafia_namespaceObject.closetAmount)(this.ball) > 0) {
-            (0,external_kolmafia_namespaceObject.takeCloset)(this.ball, (0,external_kolmafia_namespaceObject.closetAmount)(this.ball));
+          } else if ((0,external_kolmafia_namespaceObject.closetAmount)(this.bowlingBall) > 0) {
+            (0,external_kolmafia_namespaceObject.takeCloset)(this.bowlingBall, (0,external_kolmafia_namespaceObject.closetAmount)(this.bowlingBall));
           }
 
           if ((0,external_kolmafia_namespaceObject.availableAmount)(this.book) > 0 && !this.barUnlocked()) {
             (0,external_kolmafia_namespaceObject.use)(this.book);
           }
 
-          if ((0,external_kolmafia_namespaceObject.itemAmount)(this.ball) == 0 && this.barUnlocked()) {
+          if ((0,external_kolmafia_namespaceObject.itemAmount)(this.bowlingBall) == 0 && this.barUnlocked()) {
             (0,external_kolmafia_namespaceObject.retrieveItem)(this.bowl);
           }
 
@@ -20955,9 +20955,9 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
                 if (outfit.minusCombatWeight > 0 && !hasNonCombatSkillActive()) {
                   status = QuestStatus.FASTER_LATER;
                 } else if (
+                outfit.plusCombatWeight > 0 &&
                 (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Piezoelectric Honk")) &&
-                !hasCombatSkillActive() &&
-                outfit.plusCombatWeight > 0)
+                !hasCombatSkillActive())
                 {
                   status = QuestStatus.FASTER_LATER;
                 }
