@@ -11235,7 +11235,8 @@ function QuestTowerWallBones_classCallCheck(instance, Constructor) {if (!(instan
 
 var QuestTowerWallBones = /*#__PURE__*/function () {function QuestTowerWallBones() {QuestTowerWallBones_classCallCheck(this, QuestTowerWallBones);QuestTowerWallBones_defineProperty(this, "knife",
     external_kolmafia_namespaceObject.Item.get("Electric Boning Knife"));QuestTowerWallBones_defineProperty(this, "boning",
-    new QuestTowerBoningKnife());}QuestTowerWallBones_createClass(QuestTowerWallBones, [{ key: "getChildren", value:
+    new QuestTowerBoningKnife());QuestTowerWallBones_defineProperty(this, "killer",
+    new QuestTowerKillBones());}QuestTowerWallBones_createClass(QuestTowerWallBones, [{ key: "getChildren", value:
 
     function getChildren() {
       return [this.boning];
@@ -11260,7 +11261,7 @@ var QuestTowerWallBones = /*#__PURE__*/function () {function QuestTowerWallBones
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.knife) == 0) {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.knife) == 0 && !this.killer.isPossible()) {
         return QuestStatus.NOT_READY;
       }
 
@@ -11268,6 +11269,10 @@ var QuestTowerWallBones = /*#__PURE__*/function () {function QuestTowerWallBones
     } }, { key: "run", value:
 
     function run() {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.knife) == 0 && this.killer.isPossible()) {
+        return this.killer.run();
+      }
+
       return {
         location: null,
         run: () => {
@@ -11290,8 +11295,9 @@ var QuestTowerWallBones = /*#__PURE__*/function () {function QuestTowerWallBones
 var QuestTowerBoningKnife = /*#__PURE__*/function () {function QuestTowerBoningKnife() {QuestTowerWallBones_classCallCheck(this, QuestTowerBoningKnife);QuestTowerWallBones_defineProperty(this, "knife",
     external_kolmafia_namespaceObject.Item.get("Electric Boning Knife"));QuestTowerWallBones_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get(
-    "The Castle in the Clouds in the Sky (Ground Floor)"));}QuestTowerWallBones_createClass(QuestTowerBoningKnife, [{ key: "getId", value:
+    "The Castle in the Clouds in the Sky (Ground Floor)"));QuestTowerWallBones_defineProperty(this, "bossKiller",
 
+    new QuestTowerKillBones());}QuestTowerWallBones_createClass(QuestTowerBoningKnife, [{ key: "getId", value:
 
     function getId() {
       return "Council / Tower / WallOfBones / BoningKnife";
@@ -11314,6 +11320,10 @@ var QuestTowerBoningKnife = /*#__PURE__*/function () {function QuestTowerBoningK
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.knife) > 0) {
         return QuestStatus.COMPLETED;
+      }
+
+      if (this.bossKiller.isPossible()) {
+        return QuestStatus.NOT_READY;
       }
 
       return QuestStatus.READY;
@@ -11348,14 +11358,116 @@ var QuestTowerBoningKnife = /*#__PURE__*/function () {function QuestTowerBoningK
     } }]);return QuestTowerBoningKnife;}();
 
 
-var QuestTowerKillBones = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {function QuestTowerKillBones() {QuestTowerWallBones_classCallCheck(this, QuestTowerKillBones);}QuestTowerWallBones_createClass(QuestTowerKillBones, [{ key: "isPossible", value:
+var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones() {QuestTowerWallBones_classCallCheck(this, QuestTowerKillBones);QuestTowerWallBones_defineProperty(this, "damageMultiplier",
+    50.5);QuestTowerWallBones_defineProperty(this, "health",
+    20000);QuestTowerWallBones_defineProperty(this, "drunkBell",
+    external_kolmafia_namespaceObject.Item.get("Drunkula's bell"));QuestTowerWallBones_defineProperty(this, "rocket",
+    external_kolmafia_namespaceObject.Item.get("Great Wolf's rocket launcher"));QuestTowerWallBones_defineProperty(this, "property",
+    "_triedBossKillingBones");QuestTowerWallBones_defineProperty(this, "possible", void 0);}QuestTowerWallBones_createClass(QuestTowerKillBones, [{ key: "isRocketPossible", value:
+
+
+    function isRocketPossible() {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.rocket) == 0 && (0,external_kolmafia_namespaceObject.storageAmount)(this.rocket) == 0) {
+        return false;
+      }
+
+      (0,external_kolmafia_namespaceObject.maximize)("moxie +equip " + this.rocket.name, true);
+
+      var moxie = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Buffed Moxie");
+      var damage = this.damageMultiplier * (moxie * 0.4);
+
+      (0,external_kolmafia_namespaceObject.print)(
+      "Using rocket, we predict " +
+      Math.round(damage) +
+      " damage (Worst scenario)",
+      "blue");
+
+      return damage > this.health * 1.05;
+    } }, { key: "isBellPossible", value:
+
+    function isBellPossible() {
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.drunkBell) == 0 &&
+      (0,external_kolmafia_namespaceObject.storageAmount)(this.drunkBell) == 0)
+      {
+        return false;
+      }
+
+      (0,external_kolmafia_namespaceObject.maximize)("mys", true);
+
+      var mys = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Buffed Mysticality");
+      var damage = this.damageMultiplier * (mys * 0.15);
+
+      (0,external_kolmafia_namespaceObject.print)(
+      "Using " +
+      this.drunkBell.name +
+      ", we predict " +
+      Math.round(damage) +
+      " damage (Worst scenario)",
+      "blue");
+
+
+      return damage > this.health * 1.05;
+    } }, { key: "isPossible", value:
+
     function isPossible() {
-      return false;
+      if ((0,external_kolmafia_namespaceObject.pullsRemaining)() != -1 || (0,external_kolmafia_namespaceObject.getProperty)(this.property) == "true") {
+        return false;
+      }
+
+      if (this.possible != null) {
+        return this.possible;
+      }
+
+      return this.possible = this.isRocketPossible() || this.isBellPossible();
     } }, { key: "run", value:
 
     function run() {
-      return null;
-    } }]);return QuestTowerKillBones;}()));
+      return {
+        location: null,
+        outfit: new GreyOutfit("-tie"),
+        run: () => {
+          var macro;
+          (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("None"));
+
+          if (this.isRocketPossible()) {
+            (0,external_kolmafia_namespaceObject.maximize)("moxie +equip " + this.rocket.name, false);
+
+            macro = Macro.skill("Fire Rocket");
+          } else {
+            if ((0,external_kolmafia_namespaceObject.itemAmount)(this.drunkBell) == 0) {
+              (0,external_kolmafia_namespaceObject.retrieveItem)(this.drunkBell);
+            }
+
+            if ((0,external_kolmafia_namespaceObject.itemAmount)(this.drunkBell) == 0) {
+              throw "We don't have the " + this.drunkBell.name + " on hand?";
+            }
+
+            (0,external_kolmafia_namespaceObject.maximize)("mys", false);
+
+            macro = Macro.item(this.drunkBell);
+          }
+
+          if ((0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)() * 0.5) {
+            (0,external_kolmafia_namespaceObject.cliExecute)("hottub");
+          }
+
+          (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=nstower&action=ns_07_monster3");
+
+          if ((0,external_kolmafia_namespaceObject.currentRound)() == 0) {
+            throw "Failed to start the bones attack";
+          }
+
+          (0,external_kolmafia_namespaceObject.setProperty)(this.property, "true");
+
+          macro.submit();
+
+          if ((0,external_kolmafia_namespaceObject.currentRound)() != 0) {
+            throw "Failed to kill the wall of bones in a single hit.";
+          }
+        } };
+
+    } }]);return QuestTowerKillBones;}();
 ;// CONCATENATED MODULE: ./src/quests/council/tower/stages/QuestTowerShadow.ts
 function QuestTowerShadow_slicedToArray(arr, i) {return QuestTowerShadow_arrayWithHoles(arr) || QuestTowerShadow_iterableToArrayLimit(arr, i) || QuestTowerShadow_unsupportedIterableToArray(arr, i) || QuestTowerShadow_nonIterableRest();}function QuestTowerShadow_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestTowerShadow_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function QuestTowerShadow_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestTowerShadow_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestTowerShadow_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestTowerShadow_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestTowerShadow_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestTowerShadow_arrayLikeToArray(o, minLen);}function QuestTowerShadow_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestTowerShadow_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerShadow_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerShadow_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerShadow_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerShadow_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerShadow_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
