@@ -21314,15 +21314,11 @@ var TaskJuneCleaver = /*#__PURE__*/function () {function TaskJuneCleaver() {Task
 
 
     function run() {
-      if (this.wasPoor != (0,external_kolmafia_namespaceObject.myMeat)() < 10000) {
-        this.wasPoor = (0,external_kolmafia_namespaceObject.myMeat)() < 10000;
-
-        // Alligator
-        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1469", this.wasPoor ? "3" : "2"); // Dads brandy or meat
-      }
-
       if (!this.hasSet) {
         this.hasSet = true;
+
+        // Alligator
+        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1469", "3"); // 1.5k meat
 
         // Peotic
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1467", "3"); // Get adventures
