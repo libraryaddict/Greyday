@@ -37,7 +37,7 @@ import { QuestType } from "../../../../QuestTypes";
 export class QuestL11Bowling implements QuestInfo {
   bowl: Item = Item.get("Bowl of Scorpions");
   loc: Location = Location.get("The Hidden Bowling Alley");
-  ball: Item = Item.get("Bowling Ball");
+  bowlingBall: Item = Item.get("Bowling Ball");
   cosmicBall: Item = Item.get("Cosmic Bowling Ball");
   goose: Familiar = Familiar.get("Grey Goose");
   cosmicBowled: string = "_greyCosmicBowled";
@@ -54,7 +54,7 @@ export class QuestL11Bowling implements QuestInfo {
     return 11;
   }
 
-  ownBall(): boolean {
+  ownCosmicBall(): boolean {
     return getProperty("hasCosmicBowlingBall") == "true";
   }
 
@@ -70,7 +70,7 @@ export class QuestL11Bowling implements QuestInfo {
     return toInt(getProperty("hiddenBowlingAlleyProgress"));
   }
 
-  isBowlingBallNextCombat(): boolean {
+  isCosmicBallNextCombat(): boolean {
     return (
       toInt(getProperty("cosmicBowlingBallReturnCombats")) <= 0 ||
       availableAmount(this.cosmicBall) > 0
@@ -82,7 +82,7 @@ export class QuestL11Bowling implements QuestInfo {
       return false;
     }
 
-    if (!this.ownBall()) {
+    if (!this.ownCosmicBall()) {
       return false;
     }
 
@@ -94,7 +94,7 @@ export class QuestL11Bowling implements QuestInfo {
       return false;
     }
 
-    if (this.getProgress() != 1 || !this.isBowlingBallNextCombat()) {
+    if (this.getProgress() != 1 || !this.isCosmicBallNextCombat()) {
       return false;
     }
 
@@ -120,7 +120,7 @@ export class QuestL11Bowling implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (availableAmount(this.ball) > 0) {
+    if (availableAmount(this.bowlingBall) > 0) {
       return QuestStatus.READY;
     }
 
@@ -131,10 +131,10 @@ export class QuestL11Bowling implements QuestInfo {
 
     // If we have the cosmic ball, but have not bowled yet. Lets delay this until we can definitely score some progress.
     if (
-      this.ownBall() &&
+      this.ownCosmicBall() &&
       !this.hasCosmicBowled() &&
       this.getProgress() <= 3 &&
-      !this.isBowlingBallNextCombat()
+      !this.isCosmicBallNextCombat()
     ) {
       return QuestStatus.NOT_READY;
     }
@@ -154,7 +154,7 @@ export class QuestL11Bowling implements QuestInfo {
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
 
-    if (this.getProgress() >= 5 && availableAmount(this.ball) > 0) {
+    if (this.getProgress() >= 5 && availableAmount(this.bowlingBall) > 0) {
       outfit.addBonus("+max 0.1 elemental dmg");
     } else {
       outfit.setItemDrops();
@@ -169,25 +169,25 @@ export class QuestL11Bowling implements QuestInfo {
         let couldBeBowling: boolean = false;
 
         if (
-          this.hasCosmicBowled() &&
-          this.ownBall() &&
-          this.isBowlingBallNextCombat()
+          !this.hasCosmicBowled() &&
+          this.ownCosmicBall() &&
+          this.isCosmicBallNextCombat()
         ) {
           macro = new Macro().item(this.cosmicBall);
           couldBeBowling = true;
 
-          if (itemAmount(this.ball) > 0) {
-            putCloset(this.ball, availableAmount(this.ball));
+          if (itemAmount(this.bowlingBall) > 0) {
+            putCloset(this.bowlingBall, availableAmount(this.bowlingBall));
           }
-        } else if (closetAmount(this.ball) > 0) {
-          takeCloset(this.ball, closetAmount(this.ball));
+        } else if (closetAmount(this.bowlingBall) > 0) {
+          takeCloset(this.bowlingBall, closetAmount(this.bowlingBall));
         }
 
         if (availableAmount(this.book) > 0 && !this.barUnlocked()) {
           use(this.book);
         }
 
-        if (itemAmount(this.ball) == 0 && this.barUnlocked()) {
+        if (itemAmount(this.bowlingBall) == 0 && this.barUnlocked()) {
           retrieveItem(this.bowl);
         }
 

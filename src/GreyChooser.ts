@@ -574,9 +574,9 @@ export class AdventureFinder {
             if (outfit.minusCombatWeight > 0 && !hasNonCombatSkillActive()) {
               status = QuestStatus.FASTER_LATER;
             } else if (
+              outfit.plusCombatWeight > 0 &&
               haveSkill(Skill.get("Piezoelectric Honk")) &&
-              !hasCombatSkillActive() &&
-              outfit.plusCombatWeight > 0
+              !hasCombatSkillActive()
             ) {
               status = QuestStatus.FASTER_LATER;
             }
