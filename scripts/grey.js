@@ -1391,6 +1391,8 @@ function greyDuringFightMacro(settings) {
     macro.tryItem(external_kolmafia_namespaceObject.Item.get("rock band flyers"));
   }
 
+  macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Pocket Crumbs"));
+
   if (
   (0,external_kolmafia_namespaceObject.myHp)() > monster.baseAttack * 2 &&
   Math.max(monster.baseAttack, monster.baseHp) * 1.1 <
@@ -1400,8 +1402,6 @@ function greyDuringFightMacro(settings) {
     // Always try to sing along if the mob is weak enough
     macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Sing Along"));
   }
-
-  macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Pocket Crumbs"));
 
   return macro;
 }
@@ -1445,7 +1445,10 @@ function greyKillingBlow(outfit) {
 
     if ((0,external_kolmafia_namespaceObject.lastMonster)().physicalResistance < 70 && (0,external_kolmafia_namespaceObject.myMp)() >= 20) {
       if (outfit.itemDropWeight >= 2 || (0,external_kolmafia_namespaceObject.myLevel)() > 20) {
-        macro = macro.trySkillRepeat(external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));
+        macro.while_(
+        "!pastround 15 && !hppercentbelow 30 && hasskill Double Nanovision",
+        Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Double Nanovision")));
+
       }
 
       // Only infinite loop if we're underleveled or have the outfit
@@ -1456,10 +1459,16 @@ function greyKillingBlow(outfit) {
       (0,external_kolmafia_namespaceObject.haveOutfit)("Filthy Hippy Disguise") ||
       (0,external_kolmafia_namespaceObject.haveOutfit)("Frat Warrior Fatigues")))
       {
-        macro = macro.trySkillRepeat(external_kolmafia_namespaceObject.Skill.get("Infinite Loop"));
+        macro.while_(
+        "!pastround 15 && !hppercentbelow 30 && hasskill Infinite Loop",
+        Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Infinite Loop")));
+
       }
 
-      macro = macro.trySkillRepeat(external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));
+      macro.while_(
+      "!pastround 15 && !hppercentbelow 30 && hasskill Double Nanovision",
+      Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Double Nanovision")));
+
     }
   }
 
@@ -12051,6 +12060,11 @@ var QuestL3Tavern = /*#__PURE__*/function () {function QuestL3Tavern() {QuestL3T
           outfit.setPlusCombat();
           outfit.plusMonsterLevelWeight = 10;
           outfit.addBonus("-offhand");
+
+          // Boost our damage
+          if ((0,external_kolmafia_namespaceObject.myLevel)() < 16) {
+            outfit.addBonus("+mox");
+          }
         } else {
           outfit.setNoCombat();
           outfit.addBonus(
@@ -13886,8 +13900,9 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
     ResourceType.FIRE_EXTINGUSHER,
     40,
     "Polar Vortex Ores",
-    6));return _this;}QuestL8MountainOreMan_createClass(QuestL8MountainOreMan, [{ key: "getResourceClaims", value:
+    6));QuestL8MountainOreMan_defineProperty(QuestL8MountainOreMan_assertThisInitialized(_this), "nanovision",
 
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));return _this;}QuestL8MountainOreMan_createClass(QuestL8MountainOreMan, [{ key: "getResourceClaims", value:
 
     function getResourceClaims() {
       return [
@@ -13930,6 +13945,16 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
       }
 
       if (!this.canBackup() && (0,external_kolmafia_namespaceObject.haveEffect)(this.effect) > 0) {
+        return QuestStatus.NOT_READY;
+      }
+
+      // Delay this if we can't dupe, and don't have nanovision
+      if (
+      this.getOreRemaining() == 3 &&
+      !this.doDuping() &&
+      !this.canBackup() &&
+      !(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision))
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -20082,6 +20107,7 @@ var QuestRegistry = /*#__PURE__*/function () {
 
       { id: "Skills / Infinite Loop" },
       { id: "Skills / System Sweep" },
+      { id: "Skills / Phase Shift" },
       { id: "Skills / HPRegen" },
       { id: "Skills / ScalingItem" },
       { id: "Skills / ScalingMeat" },
@@ -20091,7 +20117,6 @@ var QuestRegistry = /*#__PURE__*/function () {
         id: "Skills / ScalingDR",
         testValid: () => getQuestStatus("questM20Necklace") > 2 },
 
-      { id: "Skills / Phase Shift" },
       { id: "Skills / Conifer Polymers" },
 
       // Vines are free kills, why not prioritize them to unlock zones
@@ -20929,7 +20954,11 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
               } else if ((0,external_kolmafia_namespaceObject.myMp)() < 50) {
                 if (outfit.minusCombatWeight > 0 && !hasNonCombatSkillActive()) {
                   status = QuestStatus.FASTER_LATER;
-                } else if (!hasCombatSkillActive() && outfit.plusCombatWeight > 0) {
+                } else if (
+                (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Piezoelectric Honk")) &&
+                !hasCombatSkillActive() &&
+                outfit.plusCombatWeight > 0)
+                {
                   status = QuestStatus.FASTER_LATER;
                 }
               }
