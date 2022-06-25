@@ -7,15 +7,11 @@ export class TaskJuneCleaver implements Task {
   wasPoor: boolean;
 
   run(): void {
-    if (this.wasPoor != myMeat() < 10000) {
-      this.wasPoor = myMeat() < 10000;
-
-      // Alligator
-      setProperty("choiceAdventure1469", this.wasPoor ? "3" : "2"); // Dads brandy or meat
-    }
-
     if (!this.hasSet) {
       this.hasSet = true;
+
+      // Alligator
+      setProperty("choiceAdventure1469", "3"); // 1.5k meat
 
       // Peotic
       setProperty("choiceAdventure1467", "3"); // Get adventures
