@@ -126,6 +126,7 @@ export class QuestRegistry {
 
       { id: "Skills / Infinite Loop" },
       { id: "Skills / System Sweep" },
+      { id: "Skills / Phase Shift" },
       { id: "Skills / HPRegen" },
       { id: "Skills / ScalingItem" },
       { id: "Skills / ScalingMeat" },
@@ -135,7 +136,6 @@ export class QuestRegistry {
         id: "Skills / ScalingDR",
         testValid: () => getQuestStatus("questM20Necklace") > 2,
       },
-      { id: "Skills / Phase Shift" },
       { id: "Skills / Conifer Polymers" },
 
       // Vines are free kills, why not prioritize them to unlock zones

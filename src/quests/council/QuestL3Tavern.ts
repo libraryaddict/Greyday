@@ -96,6 +96,11 @@ export class QuestL3Tavern implements QuestInfo {
         outfit.setPlusCombat();
         outfit.plusMonsterLevelWeight = 10;
         outfit.addBonus("-offhand");
+
+        // Boost our damage
+        if (myLevel() < 16) {
+          outfit.addBonus("+mox");
+        }
       } else {
         outfit.setNoCombat();
         outfit.addBonus(

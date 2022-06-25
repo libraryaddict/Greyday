@@ -18,6 +18,7 @@ import {
   toInt,
   visitUrl,
   myAdventures,
+  haveSkill,
 } from "kolmafia";
 import { greyAdv, AdventureSettings } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -48,6 +49,7 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
     "Polar Vortex Ores",
     6
   );
+  nanovision: Skill = Skill.get("Double Nanovision");
 
   getResourceClaims(): ResourceClaim[] {
     return [
@@ -90,6 +92,16 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
     }
 
     if (!this.canBackup() && haveEffect(this.effect) > 0) {
+      return QuestStatus.NOT_READY;
+    }
+
+    // Delay this if we can't dupe, and don't have nanovision
+    if (
+      this.getOreRemaining() == 3 &&
+      !this.doDuping() &&
+      !this.canBackup() &&
+      !haveSkill(this.nanovision)
+    ) {
       return QuestStatus.NOT_READY;
     }
 

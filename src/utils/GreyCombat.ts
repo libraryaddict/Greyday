@@ -153,6 +153,8 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
     macro.tryItem(Item.get("rock band flyers"));
   }
 
+  macro.trySkill(Skill.get("Pocket Crumbs"));
+
   if (
     myHp() > monster.baseAttack * 2 &&
     Math.max(monster.baseAttack, monster.baseHp) * 1.1 <
@@ -162,8 +164,6 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
     // Always try to sing along if the mob is weak enough
     macro.trySkill(Skill.get("Sing Along"));
   }
-
-  macro.trySkill(Skill.get("Pocket Crumbs"));
 
   return macro;
 }
@@ -207,7 +207,10 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
 
     if (lastMonster().physicalResistance < 70 && myMp() >= 20) {
       if (outfit.itemDropWeight >= 2 || myLevel() > 20) {
-        macro = macro.trySkillRepeat(Skill.get("Double Nanovision"));
+        macro.while_(
+          "!pastround 15 && !hppercentbelow 30 && hasskill Double Nanovision",
+          Macro.trySkill(Skill.get("Double Nanovision"))
+        );
       }
 
       // Only infinite loop if we're underleveled or have the outfit
@@ -218,10 +221,16 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
             haveOutfit("Filthy Hippy Disguise") ||
             haveOutfit("Frat Warrior Fatigues")))
       ) {
-        macro = macro.trySkillRepeat(Skill.get("Infinite Loop"));
+        macro.while_(
+          "!pastround 15 && !hppercentbelow 30 && hasskill Infinite Loop",
+          Macro.trySkill(Skill.get("Infinite Loop"))
+        );
       }
 
-      macro = macro.trySkillRepeat(Skill.get("Double Nanovision"));
+      macro.while_(
+        "!pastround 15 && !hppercentbelow 30 && hasskill Double Nanovision",
+        Macro.trySkill(Skill.get("Double Nanovision"))
+      );
     }
   }
 
