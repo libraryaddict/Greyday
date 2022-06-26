@@ -261,16 +261,18 @@ export class AbsorbsProvider {
     let advsSpent = 0;
     let entries = Object.entries(appearanceRates(location));
     let rates: [Monster, number][] = [];
+    const combatPercent =
+      location == Location.get("Twin Peak") ? 100 : location.combatPercent;
 
     entries.forEach((v) => {
       let monster = Monster.get(v[0]);
       let rate = v[1];
 
-      if (rate <= 0 || location.combatPercent <= 0) {
+      if (rate <= 0 || combatPercent <= 0) {
         return;
       }
 
-      rates.push([monster, rate * (location.combatPercent / 100)]);
+      rates.push([monster, rate * (combatPercent / 100)]);
     });
 
     if (location == Location.get("Oil Peak")) {
