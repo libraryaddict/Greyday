@@ -20,7 +20,7 @@ export class DelayBurningKramco implements DelayBurner {
   }
 
   isViableAsCombatReplacer(): boolean {
-    return this.getChanceOfFight() > 0.1;
+    return this.getChanceOfFight() > 0.1; // 10% chance
   }
 
   isViable(): boolean {

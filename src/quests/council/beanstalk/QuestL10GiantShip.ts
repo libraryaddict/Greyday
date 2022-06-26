@@ -9,6 +9,7 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 
 export class QuestL10GiantShip implements QuestInfo {
   modelShip: Item = Item.get("Model airship");
@@ -16,11 +17,39 @@ export class QuestL10GiantShip implements QuestInfo {
   umbrella: Item = Item.get("Titanium Assault Umbrella");
   wig: Item = Item.get("Mohawk Wig");
   loc: Location = Location.get("The Penultimate Fantasy Airship");
+  wads: Item[] = [
+    "Tissue Paper Immateria",
+    "Tin Foil Immateria",
+    "Gauze Immateria",
+    "Plastic Wrap Immateria",
+  ].map((s) => Item.get(s));
 
-  // TODO Once we've got the items and absorbs, try replace combats
+  shouldRunNC(): boolean {
+    if (availableAmount(this.modelShip) == 0 || this.loc.turnsSpent >= 25) {
+      return true;
+    }
+
+    if (this.loc.turnsSpent < 5) {
+      return false;
+    }
+
+    let wadExpected = this.wads[Math.floor(this.loc.turnsSpent - 5) / 5];
+
+    // If we have this wad already, then we need to wait for the next wad to be available
+    if (wadExpected != null && availableAmount(wadExpected) > 0) {
+      return false;
+    }
+
+    return true;
+  }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    let outfit = new GreyOutfit();
+
+    if (this.shouldRunNC()) {
+      outfit.setNoCombat();
+    }
+
     let wantDrops =
       availableAmount(this.amulet) == 0 ||
       availableAmount(this.umbrella) == 0 ||
@@ -35,6 +64,16 @@ export class QuestL10GiantShip implements QuestInfo {
       outfit: outfit,
       run: () => {
         let props = new PropertyManager();
+
+        if (!this.shouldRunNC()) {
+          let ready = DelayBurners.getReadyDelayBurner();
+
+          if (ready != null) {
+            ready.doFightSetup();
+          } else {
+            DelayBurners.tryReplaceCombats();
+          }
+        }
 
         try {
           if (availableAmount(this.modelShip) == 0) {
