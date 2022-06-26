@@ -13833,6 +13833,10 @@ var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNin
 
       // If we've reached snowman time but don't have the skill
       if (!hasCombatSkillReady()) {
+        if ((0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Piezoelectric Honk"))) {
+          return QuestStatus.FASTER_LATER;
+        }
+
         return QuestStatus.NOT_READY;
       }
 
@@ -15933,12 +15937,15 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
       }
 
       // If we haven't purchased our vacation pass yet, don't even think about it.
+      if (status < 0) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (
-      status < 0 ||
       (getQuestStatus("questL11Black") <= 2 || (0,external_kolmafia_namespaceObject.myMeat)() < 1200) &&
       !this.hasEnoughRes())
       {
-        return QuestStatus.NOT_READY;
+        return QuestStatus.FASTER_LATER;
       }
 
       if (
@@ -22036,7 +22043,7 @@ function hasNonCombatSkillsReady() {var wantBoth = arguments.length > 0 && argum
 function hasCombatSkillReady() {
   return (
     hasCombatSkillActive() ||
-    (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Piezoelectric Honk")) && (0,external_kolmafia_namespaceObject.myMp)() >= 70);
+    (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Piezoelectric Honk")) && (0,external_kolmafia_namespaceObject.myMp)() >= 50);
 
 }
 
