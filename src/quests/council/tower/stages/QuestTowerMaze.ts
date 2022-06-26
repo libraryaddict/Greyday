@@ -30,7 +30,7 @@ export class QuestTowerMaze implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit("+hot res +spooky res +stench res");
+    let outfit = new GreyOutfit("+hot res +spooky res +stench res -tie");
 
     return {
       location: null,

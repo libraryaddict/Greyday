@@ -208,12 +208,15 @@ export class QuestTowerContestants implements QuestInfo {
   }
 
   doQuest1() {
-    maximize("init +switch left-hand man", false);
+    maximize("init +switch left-hand man -tie", false);
     this.turnInQuest(1);
   }
 
   doQuest2() {
-    maximize(getProperty("nsChallenge1") + " +switch left-hand man", false);
+    maximize(
+      getProperty("nsChallenge1") + " +switch left-hand man -tie",
+      false
+    );
     this.turnInQuest(2);
   }
 
@@ -221,7 +224,7 @@ export class QuestTowerContestants implements QuestInfo {
     let element = getProperty("nsChallenge2");
 
     maximize(
-      element + " dmg +" + element + " spell dmg +switch left-hand man",
+      element + " dmg +" + element + " spell dmg +switch left-hand man -tie",
       false
     );
     this.turnInQuest(3);
