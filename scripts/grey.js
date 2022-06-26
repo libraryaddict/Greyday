@@ -18282,7 +18282,7 @@ var QuestSkillSystemSweep = /*#__PURE__*/function () {function QuestSkillSystemS
 
     function run() {
       var outfit = new GreyOutfit();
-      outfit.setPlusCombat();
+      outfit.setPlusCombat().setItemDrops();
 
       return {
         location: this.park,
