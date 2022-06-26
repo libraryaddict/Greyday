@@ -2147,16 +2147,18 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
       var advsSpent = 0;
       var entries = Object.entries((0,external_kolmafia_namespaceObject.appearanceRates)(location));
       var rates = [];
+      var combatPercent =
+      location == external_kolmafia_namespaceObject.Location.get("Twin Peak") ? 100 : location.combatPercent;
 
       entries.forEach((v) => {
         var monster = external_kolmafia_namespaceObject.Monster.get(v[0]);
         var rate = v[1];
 
-        if (rate <= 0 || location.combatPercent <= 0) {
+        if (rate <= 0 || combatPercent <= 0) {
           return;
         }
 
-        rates.push([monster, rate * (location.combatPercent / 100)]);
+        rates.push([monster, rate * (combatPercent / 100)]);
       });
 
       if (location == external_kolmafia_namespaceObject.Location.get("Oil Peak")) {
