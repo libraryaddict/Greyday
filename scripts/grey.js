@@ -11147,12 +11147,15 @@ var QuestTowerContestants = /*#__PURE__*/function () {function QuestTowerContest
     } }, { key: "doQuest1", value:
 
     function doQuest1() {
-      (0,external_kolmafia_namespaceObject.maximize)("init +switch left-hand man", false);
+      (0,external_kolmafia_namespaceObject.maximize)("init +switch left-hand man -tie", false);
       this.turnInQuest(1);
     } }, { key: "doQuest2", value:
 
     function doQuest2() {
-      (0,external_kolmafia_namespaceObject.maximize)((0,external_kolmafia_namespaceObject.getProperty)("nsChallenge1") + " +switch left-hand man", false);
+      (0,external_kolmafia_namespaceObject.maximize)(
+      (0,external_kolmafia_namespaceObject.getProperty)("nsChallenge1") + " +switch left-hand man -tie",
+      false);
+
       this.turnInQuest(2);
     } }, { key: "doQuest3", value:
 
@@ -11160,7 +11163,7 @@ var QuestTowerContestants = /*#__PURE__*/function () {function QuestTowerContest
       var element = (0,external_kolmafia_namespaceObject.getProperty)("nsChallenge2");
 
       (0,external_kolmafia_namespaceObject.maximize)(
-      element + " dmg +" + element + " spell dmg +switch left-hand man",
+      element + " dmg +" + element + " spell dmg +switch left-hand man -tie",
       false);
 
       this.turnInQuest(3);
@@ -11193,7 +11196,7 @@ var QuestTowerMaze = /*#__PURE__*/function () {function QuestTowerMaze() {QuestT
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit("+hot res +spooky res +stench res");
+      var outfit = new GreyOutfit("+hot res +spooky res +stench res -tie");
 
       return {
         location: null,
