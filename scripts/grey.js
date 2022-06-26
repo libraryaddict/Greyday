@@ -2585,80 +2585,6 @@ var PropertyManager = /*#__PURE__*/function () {function PropertyManager() {Prop
 
       this.properties.clear();
     } }]);return PropertyManager;}();
-;// CONCATENATED MODULE: ./src/quests/council/beanstalk/QuestL10GiantShip.ts
-function QuestL10GiantShip_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL10GiantShip_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL10GiantShip_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL10GiantShip_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL10GiantShip_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL10GiantShip_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
-
-
-
-
-
-
-var QuestL10GiantShip = /*#__PURE__*/function () {function QuestL10GiantShip() {QuestL10GiantShip_classCallCheck(this, QuestL10GiantShip);QuestL10GiantShip_defineProperty(this, "modelShip",
-    external_kolmafia_namespaceObject.Item.get("Model airship"));QuestL10GiantShip_defineProperty(this, "amulet",
-    external_kolmafia_namespaceObject.Item.get("Amulet of Extreme Plot Significance"));QuestL10GiantShip_defineProperty(this, "umbrella",
-    external_kolmafia_namespaceObject.Item.get("Titanium Assault Umbrella"));QuestL10GiantShip_defineProperty(this, "wig",
-    external_kolmafia_namespaceObject.Item.get("Mohawk Wig"));QuestL10GiantShip_defineProperty(this, "loc",
-    external_kolmafia_namespaceObject.Location.get("The Penultimate Fantasy Airship"));}QuestL10GiantShip_createClass(QuestL10GiantShip, [{ key: "run", value:
-
-    // TODO Once we've got the items and absorbs, try replace combats
-
-    function run() {
-      var outfit = new GreyOutfit().setNoCombat();
-      var wantDrops =
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.amulet) == 0 ||
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0 ||
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.wig) == 0;
-
-      if (wantDrops) {
-        outfit.setItemDrops();
-      }
-
-      return {
-        location: this.loc,
-        outfit: outfit,
-        run: () => {
-          var props = new PropertyManager();
-
-          try {
-            if ((0,external_kolmafia_namespaceObject.availableAmount)(this.modelShip) == 0) {
-              props.setChoice(182, 4);
-            } else {
-              props.setChoice(182, 1);
-            }
-
-            greyAdv(this.loc, outfit);
-          } finally {
-            props.resetAll();
-          }
-        } };
-
-    } }, { key: "getId", value:
-
-    function getId() {
-      return "Council / Beanstalk / Ship";
-    } }, { key: "level", value:
-
-    function level() {
-      return 8;
-    } }, { key: "status", value:
-
-    function status() {
-      var status = getQuestStatus("questL10Garbage");
-
-      if (status < 1) {
-        return QuestStatus.NOT_READY;
-      }
-
-      if (status > 6) {
-        return QuestStatus.COMPLETED;
-      }
-
-      return QuestStatus.READY;
-    } }, { key: "getLocations", value:
-
-    function getLocations() {
-      return [this.loc];
-    } }]);return QuestL10GiantShip;}();
 ;// CONCATENATED MODULE: ./src/iotms/delayburners/DelayBurningKramco.ts
 function DelayBurningKramco_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function DelayBurningKramco_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function DelayBurningKramco_createClass(Constructor, protoProps, staticProps) {if (protoProps) DelayBurningKramco_defineProperties(Constructor.prototype, protoProps);if (staticProps) DelayBurningKramco_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function DelayBurningKramco_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -2673,7 +2599,7 @@ var DelayBurningKramco = /*#__PURE__*/function () {function DelayBurningKramco()
     } }, { key: "isViableAsCombatReplacer", value:
 
     function isViableAsCombatReplacer() {
-      return this.getChanceOfFight() > 0.1;
+      return this.getChanceOfFight() > 0.1; // 10% chance
     } }, { key: "isViable", value:
 
     function isViable() {
@@ -3028,6 +2954,119 @@ var DelayBurners = /*#__PURE__*/function () {function DelayBurners() {DelayBurne
 
       return toReturn;
     } }]);return DelayBurners;}();DelayBurners_defineProperty(DelayBurners, "delays", void 0);
+;// CONCATENATED MODULE: ./src/quests/council/beanstalk/QuestL10GiantShip.ts
+function QuestL10GiantShip_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL10GiantShip_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL10GiantShip_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL10GiantShip_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL10GiantShip_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL10GiantShip_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+
+
+var QuestL10GiantShip = /*#__PURE__*/function () {function QuestL10GiantShip() {QuestL10GiantShip_classCallCheck(this, QuestL10GiantShip);QuestL10GiantShip_defineProperty(this, "modelShip",
+    external_kolmafia_namespaceObject.Item.get("Model airship"));QuestL10GiantShip_defineProperty(this, "amulet",
+    external_kolmafia_namespaceObject.Item.get("Amulet of Extreme Plot Significance"));QuestL10GiantShip_defineProperty(this, "umbrella",
+    external_kolmafia_namespaceObject.Item.get("Titanium Assault Umbrella"));QuestL10GiantShip_defineProperty(this, "wig",
+    external_kolmafia_namespaceObject.Item.get("Mohawk Wig"));QuestL10GiantShip_defineProperty(this, "loc",
+    external_kolmafia_namespaceObject.Location.get("The Penultimate Fantasy Airship"));QuestL10GiantShip_defineProperty(this, "wads",
+    [
+    "Tissue Paper Immateria",
+    "Tin Foil Immateria",
+    "Gauze Immateria",
+    "Plastic Wrap Immateria"].
+    map((s) => external_kolmafia_namespaceObject.Item.get(s)));}QuestL10GiantShip_createClass(QuestL10GiantShip, [{ key: "shouldRunNC", value:
+
+    function shouldRunNC() {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.modelShip) == 0 || this.loc.turnsSpent >= 25) {
+        return true;
+      }
+
+      if (this.loc.turnsSpent < 5) {
+        return false;
+      }
+
+      var wadExpected = this.wads[Math.floor(this.loc.turnsSpent - 5) / 5];
+
+      // If we have this wad already, then we need to wait for the next wad to be available
+      if (wadExpected != null && (0,external_kolmafia_namespaceObject.availableAmount)(wadExpected) > 0) {
+        return false;
+      }
+
+      return true;
+    } }, { key: "run", value:
+
+    function run() {
+      var outfit = new GreyOutfit();
+
+      if (this.shouldRunNC()) {
+        outfit.setNoCombat();
+      }
+
+      var wantDrops =
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.amulet) == 0 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.wig) == 0;
+
+      if (wantDrops) {
+        outfit.setItemDrops();
+      }
+
+      return {
+        location: this.loc,
+        outfit: outfit,
+        run: () => {
+          var props = new PropertyManager();
+
+          if (!this.shouldRunNC()) {
+            var ready = DelayBurners.getReadyDelayBurner();
+
+            if (ready != null) {
+              ready.doFightSetup();
+            } else {
+              DelayBurners.tryReplaceCombats();
+            }
+          }
+
+          try {
+            if ((0,external_kolmafia_namespaceObject.availableAmount)(this.modelShip) == 0) {
+              props.setChoice(182, 4);
+            } else {
+              props.setChoice(182, 1);
+            }
+
+            greyAdv(this.loc, outfit);
+          } finally {
+            props.resetAll();
+          }
+        } };
+
+    } }, { key: "getId", value:
+
+    function getId() {
+      return "Council / Beanstalk / Ship";
+    } }, { key: "level", value:
+
+    function level() {
+      return 8;
+    } }, { key: "status", value:
+
+    function status() {
+      var status = getQuestStatus("questL10Garbage");
+
+      if (status < 1) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (status > 6) {
+        return QuestStatus.COMPLETED;
+      }
+
+      return QuestStatus.READY;
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [this.loc];
+    } }]);return QuestL10GiantShip;}();
 ;// CONCATENATED MODULE: ./src/quests/council/beanstalk/QuestL10GiantGround.ts
 function QuestL10GiantGround_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL10GiantGround_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL10GiantGround_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL10GiantGround_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL10GiantGround_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL10GiantGround_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
