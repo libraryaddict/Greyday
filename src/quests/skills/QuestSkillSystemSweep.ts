@@ -41,7 +41,7 @@ export class QuestSkillSystemSweep implements QuestInfo {
 
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
-    outfit.setPlusCombat();
+    outfit.setPlusCombat().setItemDrops();
 
     return {
       location: this.park,
