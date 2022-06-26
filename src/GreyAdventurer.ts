@@ -385,7 +385,7 @@ export function hasNonCombatSkillsReady(wantBoth: boolean = true): boolean {
 export function hasCombatSkillReady(): boolean {
   return (
     hasCombatSkillActive() ||
-    (haveSkill(Skill.get("Piezoelectric Honk")) && myMp() >= 70)
+    (haveSkill(Skill.get("Piezoelectric Honk")) && myMp() >= 50)
   );
 }
 

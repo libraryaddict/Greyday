@@ -6,6 +6,8 @@ import {
   numericModifier,
   visitUrl,
   Item,
+  haveSkill,
+  Skill,
 } from "kolmafia";
 import { hasCombatSkillReady } from "../../../GreyAdventurer";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -44,6 +46,10 @@ export class QuestL8MountainNinja implements QuestInfo {
 
     // If we've reached snowman time but don't have the skill
     if (!hasCombatSkillReady()) {
+      if (haveSkill(Skill.get("Piezoelectric Honk"))) {
+        return QuestStatus.FASTER_LATER;
+      }
+
       return QuestStatus.NOT_READY;
     }
 

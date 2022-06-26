@@ -79,12 +79,15 @@ export class QuestManorKitchen implements QuestInfo {
     }
 
     // If we haven't purchased our vacation pass yet, don't even think about it.
-    if (
-      status < 0 ||
-      ((getQuestStatus("questL11Black") <= 2 || myMeat() < 1200) &&
-        !this.hasEnoughRes())
-    ) {
+    if (status < 0) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (
+      (getQuestStatus("questL11Black") <= 2 || myMeat() < 1200) &&
+      !this.hasEnoughRes()
+    ) {
+      return QuestStatus.FASTER_LATER;
     }
 
     if (
