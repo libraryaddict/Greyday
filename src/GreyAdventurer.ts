@@ -27,6 +27,7 @@ import {
 } from "kolmafia";
 import { AdventureFinder, FoundAdventure } from "./GreyChooser";
 import { QuestAdventure } from "./quests/Quests";
+import { TaskBoomboxSwitch } from "./tasks/TaskBoomboxSwitch";
 import { TaskCouncil } from "./tasks/TaskCouncil";
 import { TaskEater } from "./tasks/TaskEater";
 import { TaskFuelAsdon } from "./tasks/TaskFuelAsdon";
@@ -59,6 +60,7 @@ export class GreyAdventurer {
     new TaskMaintainStatus(),
     new TaskFuelAsdon(),
     new TaskJuneCleaver(),
+    new TaskBoomboxSwitch(),
   ];
 
   runTurn(goTime: boolean): boolean {

@@ -19,6 +19,7 @@ import {
   print,
   Skill,
   haveSkill,
+  getZapWand,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
@@ -35,15 +36,10 @@ import { QuestType } from "../QuestTypes";
 
 export class QuestMPRegen implements QuestInfo {
   realDung: Location = Location.get("The Dungeons of Doom");
-  wand: Item[] = [
-    "aluminum wand",
-    "ebony wand",
-    "hexagonal wand",
-    "marble wand",
-    "pine wand",
-  ].map((s) => Item.get(s));
+  none: Item = Item.get("None");
   deadMimic: Item = Item.get("dead mimic");
   skill: Skill = Skill.get("Hivemindedness");
+  plusSign: Item = Item.get("plus sign");
 
   getId(): QuestType {
     return "Skills / MPRegen";
@@ -61,9 +57,30 @@ export class QuestMPRegen implements QuestInfo {
     return toInt(getProperty("_zapCount"));
   }
 
+  isDoomUnlocked(): boolean {
+    return (
+      toInt(getProperty("lastPlusSignUnlock")) == myAscensions() &&
+      availableAmount(this.plusSign) == 0
+    );
+  }
+
+  getWand(): Item {
+    let wand = getZapWand();
+
+    if (wand == this.none) {
+      return null;
+    }
+
+    return wand;
+  }
+
   status(): QuestStatus {
     if (haveSkill(this.skill)) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (!this.isDoomUnlocked()) {
+      return QuestStatus.NOT_READY;
     }
 
     if (this.getWand() == null) {
@@ -77,10 +94,6 @@ export class QuestMPRegen implements QuestInfo {
     }
 
     return QuestStatus.READY;
-  }
-
-  getWand(): Item {
-    return this.wand.find((w) => availableAmount(w) > 0);
   }
 
   hasWandExploded() {

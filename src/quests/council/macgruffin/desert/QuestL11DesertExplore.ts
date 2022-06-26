@@ -45,6 +45,7 @@ export class QuestL11DesertExplore implements QuestInfo {
   ball: Item = Item.get("miniature crystal ball");
   page: Item = Item.get("worm-riding manual page");
   goose: Familiar = Familiar.get("Grey Goose");
+  rose: Item = Item.get("Stone Rose");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / Explore";
@@ -54,17 +55,34 @@ export class QuestL11DesertExplore implements QuestInfo {
     return 11;
   }
 
-  /*mustBeDone(): boolean {
-    if (haveEffect(this.hydrated) == 0) {
+  getGnome(): number {
+    return toInt(getProperty("gnasirProgress"));
+  }
+
+  wantsGnomeRose(): boolean {
+    return (this.getGnome() & 1) != 1;
+  }
+
+  mustBeDone(): boolean {
+    if (
+      haveEffect(this.hydrated) == 0 ||
+      this.toAbsorb.length == 0 ||
+      this.getExploredRemaining() <= 0
+    ) {
       return false;
     }
 
-    if (this.getExploredRemaining() <= 0 || this.toAbsorb.length == 0) {
+    if (
+      canAdv(this.oasis) &&
+      getProperty("_gnasirAvailable") == "true" &&
+      this.wantsGnomeRose() &&
+      availableAmount(this.rose) == 0
+    ) {
       return false;
     }
 
     return true;
-  }*/
+  }
 
   status(): QuestStatus {
     let status = getQuestStatus("questL11Desert");

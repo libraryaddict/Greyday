@@ -166,7 +166,9 @@ export function greyAdv(
       return;
     }
 
-    if (settings.choices != null) {
+    let juneCleaver = lastChoice() >= 1467 && lastChoice() <= 1475;
+
+    if (!juneCleaver && settings.choices != null) {
       if (settings.choices.callOutOfScopeChoiceBehavior(lastChoice())) {
         return;
       }

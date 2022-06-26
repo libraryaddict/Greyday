@@ -110,14 +110,6 @@ export class QuestL11MacGruffin implements QuestInfo {
         }
 
         use(this.diary);
-
-        // It should have been in meat mode all this time!
-        if (
-          availableAmount(Item.get("SongBoom&trade; BoomBox")) > 0 &&
-          getProperty("_boomBoxSongsLeft") == "10"
-        ) {
-          cliExecute("boombox food");
-        }
       },
     };
   }

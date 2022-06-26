@@ -71,7 +71,11 @@ export class QuestL12FratFax implements QuestInfo {
         }
 
         if (!canFaxbot(this.monster)) {
-          throw "Can't fax in " + this.monster.name;
+          throw (
+            "Can't fax in " +
+            this.monster.name +
+            ". Try fax it in manually, and yellow rocket it?"
+          );
         }
 
         faxbot(this.monster);
@@ -81,7 +85,8 @@ export class QuestL12FratFax implements QuestInfo {
             "Expected " +
             this.monster.name +
             " but mafia reports we have a faxed " +
-            getProperty("photocopyMonster")
+            getProperty("photocopyMonster") +
+            ". Try fax it in manually and yellow rocket it?"
           );
         }
 

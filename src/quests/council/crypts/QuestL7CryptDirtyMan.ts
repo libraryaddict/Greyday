@@ -11,6 +11,7 @@ import {
   toInt,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
+import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyKillingBlow } from "../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -33,6 +34,7 @@ export class CryptL7DirtyMan extends CryptL7Template {
     "Spray down Dirty Old Man",
     availableAmount(this.cape) > 0 ? 4 : 9
   );
+  advsAbsorb: Monster = Monster.get("basic lihc");
 
   getResourceClaims(): ResourceClaim[] {
     if (getProperty("fireExtinguisherCyrptUsed") == "true") {
@@ -66,11 +68,19 @@ export class CryptL7DirtyMan extends CryptL7Template {
 
         if (this.canSprayDown()) {
           // If its a dirty lich, don't spray down
-          killing = Macro.if_(
+          let avoid = Macro.if_(
             this.dirty,
             Macro.trySkill(Skill.get("Fire Extinguisher: Zone Specific")),
             true
-          ).step(killing);
+          );
+
+          if (
+            !AbsorbsProvider.getReabsorbedMonsters().includes(this.advsAbsorb)
+          ) {
+            avoid = Macro.if_(this.advsAbsorb, avoid, true);
+          }
+
+          killing = avoid.step(killing);
         }
 
         let start: Macro = null;

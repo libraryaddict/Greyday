@@ -30,10 +30,12 @@ export class QuestL10GiantGround implements QuestInfo {
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
 
-    if (availableAmount(this.boning) == 0) {
-      outfit.setNoCombat();
-    } else {
-      outfit.setPlusCombat();
+    if (this.loc.turnsSpent < 11) {
+      if (availableAmount(this.boning) == 0) {
+        outfit.setNoCombat();
+      } else {
+        outfit.setPlusCombat();
+      }
     }
 
     return {

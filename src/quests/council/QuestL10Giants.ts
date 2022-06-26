@@ -45,15 +45,11 @@ export class QuestL10Beanstalk implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (status > 0 && status < 10) {
-      return QuestStatus.NOT_READY;
-    }
-
-    if (status > 10) {
+    if (status != 0) {
       return QuestStatus.COMPLETED;
     }
 
-    if (status == 0 && availableAmount(this.bean) == 0) {
+    if (availableAmount(this.bean) == 0) {
       return QuestStatus.NOT_READY;
     }
 

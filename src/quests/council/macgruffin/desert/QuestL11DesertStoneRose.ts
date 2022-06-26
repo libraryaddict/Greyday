@@ -78,6 +78,10 @@ export class QuestL11DesertStoneRose implements QuestInfo {
     };
   }
 
+  getGnome(): number {
+    return toInt(getProperty("gnasirProgress"));
+  }
+
   wantsGnomeRose(): boolean {
     return (this.getGnome() & 1) != 1;
   }
@@ -88,9 +92,5 @@ export class QuestL11DesertStoneRose implements QuestInfo {
 
   mustBeDone(): boolean {
     return haveEffect(this.hydrated) > 0;
-  }
-
-  getGnome(): number {
-    return toInt(getProperty("gnasirProgress"));
   }
 }
