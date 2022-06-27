@@ -2144,13 +2144,25 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
         return null;
       }
 
+      var appearRates = (0,external_kolmafia_namespaceObject.appearanceRates)(location);
+
+      // Special workaround for screambat making appearance rates of non-screambats zero
+      if (appearRates["screambat"] == 100) {
+        for (var _i = 0, _Object$keys = Object.keys(appearRates); _i < _Object$keys.length; _i++) {var key = _Object$keys[_i];
+          if (key == "none") {
+            continue;
+          }
+
+          appearRates[key] = 20;
+        }
+      }
+
       var advsSpent = 0;
-      var entries = Object.entries((0,external_kolmafia_namespaceObject.appearanceRates)(location));
       var rates = [];
       var combatPercent =
       location == external_kolmafia_namespaceObject.Location.get("Twin Peak") ? 100 : location.combatPercent;
 
-      entries.forEach((v) => {
+      Object.entries(appearRates).forEach((v) => {
         var monster = external_kolmafia_namespaceObject.Monster.get(v[0]);
         var rate = v[1];
 
@@ -5232,11 +5244,11 @@ var QuestL11DesertWormRide = /*#__PURE__*/function () {function QuestL11DesertWo
     function status() {
       var status = getQuestStatus("questL11Desert");
 
-      if (status < 0 || !this.wantsToWormRide()) {
+      if (status < 0) {
         return QuestStatus.NOT_READY;
       }
 
-      if (status > 0) {
+      if (status > 0 || !this.wantsToWormRide()) {
         return QuestStatus.COMPLETED;
       }
 
@@ -7162,10 +7174,6 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Worship") != "step3") {
-        return QuestStatus.NOT_READY;
-      }
-
       var status = (0,external_kolmafia_namespaceObject.getProperty)("questL11Spare");
 
       if (status == "finished") {
@@ -7173,6 +7181,10 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
       }
 
       if (status == "unstarted") {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Worship") != "step3") {
         return QuestStatus.NOT_READY;
       }
 
@@ -7327,10 +7339,6 @@ var QuestL11Business = /*#__PURE__*/function () {function QuestL11Business() {Qu
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Worship") != "step3") {
-        return QuestStatus.NOT_READY;
-      }
-
       var status = (0,external_kolmafia_namespaceObject.getProperty)("questL11Business");
 
       if (status == "finished") {
@@ -7338,6 +7346,10 @@ var QuestL11Business = /*#__PURE__*/function () {function QuestL11Business() {Qu
       }
 
       if (status == "unstarted") {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Worship") != "step3") {
         return QuestStatus.NOT_READY;
       }
 
@@ -7479,10 +7491,6 @@ var QuestL11Curses = /*#__PURE__*/function () {function QuestL11Curses() {QuestL
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Worship") != "step3") {
-        return QuestStatus.NOT_READY;
-      }
-
       var status = (0,external_kolmafia_namespaceObject.getProperty)("questL11Curses");
 
       if (status == "finished") {
@@ -7490,6 +7498,10 @@ var QuestL11Curses = /*#__PURE__*/function () {function QuestL11Curses() {QuestL
       }
 
       if (status == "unstarted") {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Worship") != "step3") {
         return QuestStatus.NOT_READY;
       }
 
@@ -7579,10 +7591,6 @@ var QuestL11Doctor = /*#__PURE__*/function () {function QuestL11Doctor() {QuestL
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Worship") != "step3") {
-        return QuestStatus.NOT_READY;
-      }
-
       var status = (0,external_kolmafia_namespaceObject.getProperty)("questL11Doctor");
 
       if (status == "finished") {
@@ -7590,6 +7598,10 @@ var QuestL11Doctor = /*#__PURE__*/function () {function QuestL11Doctor() {QuestL
       }
 
       if (status == "unstarted") {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Worship") != "step3") {
         return QuestStatus.NOT_READY;
       }
 
@@ -7782,8 +7794,14 @@ var QuestL11HiddenPark = /*#__PURE__*/function () {function QuestL11HiddenPark()
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Worship") != "step3") {
+      var status = getQuestStatus("questL11Worship");
+
+      if (status < 3) {
         return QuestStatus.NOT_READY;
+      }
+
+      if (status > 3) {
+        return QuestStatus.COMPLETED;
       }
 
       if (this.needsSword() || !this.hasRelocatedJanitors()) {
@@ -12916,7 +12934,7 @@ var QuestL6FriarElbow = /*#__PURE__*/function () {function QuestL6FriarElbow() {
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().setNoCombat();
+      var outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
       if (this.shouldWearLatte()) {
         outfit.addItem(this.latte);
@@ -13049,7 +13067,7 @@ var QuestL6FriarHeart = /*#__PURE__*/function () {function QuestL6FriarHeart() {
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().setNoCombat();
+      var outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
       if (this.shouldWearLatte()) {
         outfit.addItem(this.latte);
@@ -13135,7 +13153,7 @@ var QuestL6FriarNeck = /*#__PURE__*/function () {function QuestL6FriarNeck() {Qu
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().setNoCombat();
+      var outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
       if (this.shouldWearLatte()) {
         outfit.addItem(this.latte);
@@ -13738,7 +13756,7 @@ var QuestL8MountainBoss = /*#__PURE__*/function () {function QuestL8MountainBoss
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().addBonus("+cold res 5 min 5 max");
+      var outfit = new GreyOutfit().addBonus("+100 cold res 500 min 500 max");
 
       return {
         location: this.peak,
@@ -14010,11 +14028,18 @@ var QuestL8MountainOreClover = /*#__PURE__*/function (_QuestL8MountainOre) {Ques
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.clover) < 2) {
+      if (this.getStatus() < MountainStatus.TRAPPER_DEMANDS) {
         return QuestStatus.NOT_READY;
       }
 
-      if (this.getStatus() < MountainStatus.TRAPPER_DEMANDS) {
+      if (
+      this.getOreRemaining() <= 0 ||
+      this.getStatus() > MountainStatus.TRAPPER_DEMANDS)
+      {
+        return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.clover) < 2) {
         return QuestStatus.NOT_READY;
       }
 
@@ -14025,13 +14050,6 @@ var QuestL8MountainOreClover = /*#__PURE__*/function (_QuestL8MountainOre) {Ques
       // User can locket instead, which according to their MPA is more profitable
       if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("valueOfAdventure")) >= 4000) {
         return QuestStatus.NOT_READY;
-      }
-
-      if (
-      this.getOreRemaining() <= 0 ||
-      this.getStatus() > MountainStatus.TRAPPER_DEMANDS)
-      {
-        return QuestStatus.COMPLETED;
       }
 
       return QuestStatus.READY;
@@ -20896,7 +20914,7 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
       var toReturn = this.goodAbsorbs.
       filter(
       (a) =>
-      a.expectedTurnsProfit >= 0 &&
+      a.turnsToGain > 0 &&
       (0,external_canadv_ash_namespaceObject.canAdv)(a.location) &&
       !this.questLocations.includes(a.location)).
 
