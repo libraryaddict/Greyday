@@ -33,11 +33,18 @@ export class QuestL8MountainOreClover extends QuestL8MountainOre {
       return QuestStatus.COMPLETED;
     }
 
-    if (availableAmount(this.clover) < 2) {
+    if (this.getStatus() < MountainStatus.TRAPPER_DEMANDS) {
       return QuestStatus.NOT_READY;
     }
 
-    if (this.getStatus() < MountainStatus.TRAPPER_DEMANDS) {
+    if (
+      this.getOreRemaining() <= 0 ||
+      this.getStatus() > MountainStatus.TRAPPER_DEMANDS
+    ) {
+      return QuestStatus.COMPLETED;
+    }
+
+    if (availableAmount(this.clover) < 2) {
       return QuestStatus.NOT_READY;
     }
 
@@ -48,13 +55,6 @@ export class QuestL8MountainOreClover extends QuestL8MountainOre {
     // User can locket instead, which according to their MPA is more profitable
     if (toInt(getProperty("valueOfAdventure")) >= 4000) {
       return QuestStatus.NOT_READY;
-    }
-
-    if (
-      this.getOreRemaining() <= 0 ||
-      this.getStatus() > MountainStatus.TRAPPER_DEMANDS
-    ) {
-      return QuestStatus.COMPLETED;
     }
 
     return QuestStatus.READY;

@@ -38,11 +38,11 @@ export class QuestL11DesertWormRide implements QuestInfo {
   status(): QuestStatus {
     let status = getQuestStatus("questL11Desert");
 
-    if (status < 0 || !this.wantsToWormRide()) {
+    if (status < 0) {
       return QuestStatus.NOT_READY;
     }
 
-    if (status > 0) {
+    if (status > 0 || !this.wantsToWormRide()) {
       return QuestStatus.COMPLETED;
     }
 

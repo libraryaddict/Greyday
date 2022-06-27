@@ -42,10 +42,6 @@ export class QuestL11Doctor implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (getProperty("questL11Worship") != "step3") {
-      return QuestStatus.NOT_READY;
-    }
-
     let status = getProperty("questL11Doctor");
 
     if (status == "finished") {
@@ -53,6 +49,10 @@ export class QuestL11Doctor implements QuestInfo {
     }
 
     if (status == "unstarted") {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (getProperty("questL11Worship") != "step3") {
       return QuestStatus.NOT_READY;
     }
 

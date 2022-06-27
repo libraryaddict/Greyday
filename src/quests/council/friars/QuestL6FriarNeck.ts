@@ -64,7 +64,7 @@ export class QuestL6FriarNeck implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    let outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
     if (this.shouldWearLatte()) {
       outfit.addItem(this.latte);

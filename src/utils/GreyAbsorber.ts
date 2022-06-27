@@ -258,13 +258,25 @@ export class AbsorbsProvider {
       return null;
     }
 
+    let appearRates = appearanceRates(location);
+
+    // Special workaround for screambat making appearance rates of non-screambats zero
+    if (appearRates["screambat"] == 100) {
+      for (let key of Object.keys(appearRates)) {
+        if (key == "none") {
+          continue;
+        }
+
+        appearRates[key] = 20;
+      }
+    }
+
     let advsSpent = 0;
-    let entries = Object.entries(appearanceRates(location));
     let rates: [Monster, number][] = [];
     const combatPercent =
       location == Location.get("Twin Peak") ? 100 : location.combatPercent;
 
-    entries.forEach((v) => {
+    Object.entries(appearRates).forEach((v) => {
       let monster = Monster.get(v[0]);
       let rate = v[1];
 

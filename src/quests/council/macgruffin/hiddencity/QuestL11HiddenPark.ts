@@ -10,7 +10,12 @@ import {
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
-import { QuestAdventure, QuestInfo, QuestStatus } from "../../../Quests";
+import {
+  getQuestStatus,
+  QuestAdventure,
+  QuestInfo,
+  QuestStatus,
+} from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
 export class QuestL11HiddenPark implements QuestInfo {
@@ -27,8 +32,14 @@ export class QuestL11HiddenPark implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (getProperty("questL11Worship") != "step3") {
+    let status = getQuestStatus("questL11Worship");
+
+    if (status < 3) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (status > 3) {
+      return QuestStatus.COMPLETED;
     }
 
     if (this.needsSword() || !this.hasRelocatedJanitors()) {

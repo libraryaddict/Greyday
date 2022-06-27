@@ -315,7 +315,7 @@ export class AdventureFinder {
     let toReturn: [AdventureLocation, number][] = this.goodAbsorbs
       .filter(
         (a) =>
-          a.expectedTurnsProfit >= 0 &&
+          a.turnsToGain > 0 &&
           canAdv(a.location) &&
           !this.questLocations.includes(a.location)
       )

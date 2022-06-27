@@ -62,7 +62,7 @@ export class QuestL6FriarHeart implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    let outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
     if (this.shouldWearLatte()) {
       outfit.addItem(this.latte);
