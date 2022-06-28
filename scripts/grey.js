@@ -4830,11 +4830,7 @@ var QuestL11DesertExplore = /*#__PURE__*/function () {function QuestL11DesertExp
     } }, { key: "mustBeDone", value:
 
     function mustBeDone() {
-      if (
-      (0,external_kolmafia_namespaceObject.haveEffect)(this.hydrated) == 0 ||
-      this.toAbsorb.length == 0 ||
-      this.getExploredRemaining() <= 0)
-      {
+      if ((0,external_kolmafia_namespaceObject.haveEffect)(this.hydrated) == 0 || this.getExploredRemaining() <= 0) {
         return false;
       }
 
@@ -6578,7 +6574,11 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
         return QuestStatus.NOT_READY;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.sleazeSkill2) && (0,external_kolmafia_namespaceObject.availableAmount)(this.starChart) == 0) {
+      if (
+      !(0,external_kolmafia_namespaceObject.haveSkill)(this.sleazeSkill2) &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.starChart) == 0 &&
+      !GreySettings.shouldAvoidTowerRequirements())
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -10697,7 +10697,7 @@ var QuestStarKey = /*#__PURE__*/function () {function QuestStarKey() {QuestStarK
       !this.hasEnoughMaterials() &&
       GreySettings.shouldAvoidTowerRequirements())
       {
-        return QuestStatus.NOT_READY;
+        return QuestStatus.COMPLETED;
       }
 
       return QuestStatus.READY;
@@ -13838,7 +13838,7 @@ var QuestL8MountainBoss = /*#__PURE__*/function () {function QuestL8MountainBoss
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().addBonus("+100 cold res 500 min 500 max");
+      var outfit = new GreyOutfit().addBonus("+1 cold res 5 min 5 max");
 
       return {
         location: this.peak,
