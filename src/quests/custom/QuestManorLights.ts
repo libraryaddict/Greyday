@@ -214,25 +214,7 @@ export class QuestManorLights implements QuestInfo {
           );
         }
 
-        if (this.isSteveReady()) {
-          print(
-            "Lights Out: Stephen rooms explored: " +
-              this.getSteveLeft() +
-              " / " +
-              this.stephen.length,
-            "blue"
-          );
-        }
-
-        if (this.isElizaReady()) {
-          print(
-            "Lights Out: Elizabeth rooms explored: " +
-              this.getElizaLeft() +
-              " / " +
-              this.elizibeth.length,
-            "blue"
-          );
-        }
+        this.printStatus();
 
         let both2 = this.getBoth();
 
@@ -241,6 +223,28 @@ export class QuestManorLights implements QuestInfo {
         }
       },
     };
+  }
+
+  printStatus() {
+    if (this.isSteveReady()) {
+      print(
+        "Lights Out: Stephen rooms explored: " +
+          this.getSteveLeft() +
+          " / " +
+          this.stephen.length,
+        "blue"
+      );
+    }
+
+    if (this.isElizaReady()) {
+      print(
+        "Lights Out: Elizabeth rooms explored: " +
+          this.getElizaLeft() +
+          " / " +
+          this.elizibeth.length,
+        "blue"
+      );
+    }
   }
 
   run(): QuestAdventure {
@@ -282,6 +286,8 @@ export class QuestManorLights implements QuestInfo {
         if (currentRound() != 0) {
           greyAdv(null);
         }
+
+        this.printStatus();
 
         let both2 = this.getBoth();
 
