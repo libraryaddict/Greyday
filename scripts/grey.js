@@ -8032,7 +8032,10 @@ var QuestL11TempleGrabWool = /*#__PURE__*/function () {function QuestL11TempleGr
 
     function run() {
       var outfit = new GreyOutfit().setItemDrops().setPlusCombat();
-      outfit.addItem(this.indus);
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.indus) > 0) {
+        outfit.addItem(this.indus);
+      }
 
       return {
         location: this.loc,
@@ -8041,9 +8044,14 @@ var QuestL11TempleGrabWool = /*#__PURE__*/function () {function QuestL11TempleGr
           var settings = new AdventureSettings();
           settings.addNoBanish(this.woolMonster);
 
-          settings.setStartOfFightMacro(
-          Macro.if_(this.woolMonster, Macro.skill(this.polar).skill(this.polar)));
+          if ((0,external_kolmafia_namespaceObject.equippedAmount)(this.indus) > 0) {
+            settings.setStartOfFightMacro(
+            Macro.if_(
+            this.woolMonster,
+            Macro.skill(this.polar).skill(this.polar)));
 
+
+          }
 
           var props = new PropertyManager();
           props.setChoice(580, 1); // Hidden heart of temple
@@ -10459,6 +10467,10 @@ var QuestDailyDungeon = /*#__PURE__*/function () {
     } }, { key: "hasFamiliarRecommendation", value:
 
     function hasFamiliarRecommendation() {
+      if (GreySettings.shouldAvoidTowerRequirements()) {
+        return null;
+      }
+
       if (
       (0,external_kolmafia_namespaceObject.availableAmount)(this.pole) > 0 &&
       (0,external_kolmafia_namespaceObject.availableAmount)(this.ring) > 0 &&
@@ -12814,6 +12826,7 @@ var QuestL5GoblinHarem = /*#__PURE__*/function () {function QuestL5GoblinHarem()
       var outfit = new GreyOutfit();
 
       if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.extingisher) > 0 &&
       (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_fireExtinguisherCharge")) >= 20 &&
       (0,external_kolmafia_namespaceObject.getProperty)("fireExtinguisherHaremUsed") != "true")
       {
@@ -13844,7 +13857,8 @@ var QuestL8MountainGoats = /*#__PURE__*/function () {function QuestL8MountainGoa
     external_kolmafia_namespaceObject.Item.get("Goat Cheese"));QuestL8MountainGoats_defineProperty(this, "dairy",
     external_kolmafia_namespaceObject.Monster.get("Dairy Goat"));QuestL8MountainGoats_defineProperty(this, "elementalSkill",
     external_kolmafia_namespaceObject.Skill.get("Secondary Fermentation"));QuestL8MountainGoats_defineProperty(this, "drunk",
-    external_kolmafia_namespaceObject.Monster.get("Drunk Goat"));}QuestL8MountainGoats_createClass(QuestL8MountainGoats, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Monster.get("Drunk Goat"));QuestL8MountainGoats_defineProperty(this, "sysSweep",
+    external_kolmafia_namespaceObject.Skill.get("System Sweep"));}QuestL8MountainGoats_createClass(QuestL8MountainGoats, [{ key: "getId", value:
 
     function getId() {
       return "Council / Ice / Goats";
@@ -13871,7 +13885,11 @@ var QuestL8MountainGoats = /*#__PURE__*/function () {function QuestL8MountainGoa
 
       // If we have our cheese but not the ores
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.cheese) >= 3 && this.getOreRemaining() > 0) {
-        return QuestStatus.NOT_READY;
+        return QuestStatus.COMPLETED;
+      }
+
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.sysSweep)) {
+        return QuestStatus.FASTER_LATER;
       }
 
       return QuestStatus.READY;
@@ -14290,7 +14308,7 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
       var outfit = new GreyOutfit();
       outfit.addBonus("+DA +DR -ML");
 
-      if (!this.doDuping()) {
+      if (!this.doDuping() && (0,external_kolmafia_namespaceObject.availableAmount)(this.indus) > 0) {
         outfit.addItem(this.indus);
       }
 
@@ -14318,7 +14336,7 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
 
           if (this.doDuping()) {
             macro = macro.skill(external_kolmafia_namespaceObject.Skill.get("Emit Matter Duplicating Drones"));
-          } else {
+          } else if ((0,external_kolmafia_namespaceObject.equippedAmount)(this.indus) > 0) {
             var tries = 2;
 
             while (tries > 0 && this.getOreRemaining() > 2) {
