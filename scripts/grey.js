@@ -16681,25 +16681,7 @@ var QuestManorLights = /*#__PURE__*/function () {
 
           }
 
-          if (this.isSteveReady()) {
-            (0,external_kolmafia_namespaceObject.print)(
-            "Lights Out: Stephen rooms explored: " +
-            this.getSteveLeft() +
-            " / " +
-            this.stephen.length,
-            "blue");
-
-          }
-
-          if (this.isElizaReady()) {
-            (0,external_kolmafia_namespaceObject.print)(
-            "Lights Out: Elizabeth rooms explored: " +
-            this.getElizaLeft() +
-            " / " +
-            this.elizibeth.length,
-            "blue");
-
-          }
+          this.printStatus();
 
           var both2 = this.getBoth();
 
@@ -16708,6 +16690,28 @@ var QuestManorLights = /*#__PURE__*/function () {
           }
         } };
 
+    } }, { key: "printStatus", value:
+
+    function printStatus() {
+      if (this.isSteveReady()) {
+        (0,external_kolmafia_namespaceObject.print)(
+        "Lights Out: Stephen rooms explored: " +
+        this.getSteveLeft() +
+        " / " +
+        this.stephen.length,
+        "blue");
+
+      }
+
+      if (this.isElizaReady()) {
+        (0,external_kolmafia_namespaceObject.print)(
+        "Lights Out: Elizabeth rooms explored: " +
+        this.getElizaLeft() +
+        " / " +
+        this.elizibeth.length,
+        "blue");
+
+      }
     } }, { key: "run", value:
 
     function run() {
@@ -16749,6 +16753,8 @@ var QuestManorLights = /*#__PURE__*/function () {
           if ((0,external_kolmafia_namespaceObject.currentRound)() != 0) {
             greyAdv(null);
           }
+
+          this.printStatus();
 
           var both2 = this.getBoth();
 
