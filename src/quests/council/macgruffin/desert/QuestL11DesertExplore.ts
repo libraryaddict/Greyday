@@ -64,11 +64,7 @@ export class QuestL11DesertExplore implements QuestInfo {
   }
 
   mustBeDone(): boolean {
-    if (
-      haveEffect(this.hydrated) == 0 ||
-      this.toAbsorb.length == 0 ||
-      this.getExploredRemaining() <= 0
-    ) {
+    if (haveEffect(this.hydrated) == 0 || this.getExploredRemaining() <= 0) {
       return false;
     }
 

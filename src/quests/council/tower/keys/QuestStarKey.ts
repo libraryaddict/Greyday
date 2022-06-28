@@ -68,7 +68,7 @@ export class QuestStarKey implements QuestInfo {
       !this.hasEnoughMaterials() &&
       GreySettings.shouldAvoidTowerRequirements()
     ) {
-      return QuestStatus.NOT_READY;
+      return QuestStatus.COMPLETED;
     }
 
     return QuestStatus.READY;

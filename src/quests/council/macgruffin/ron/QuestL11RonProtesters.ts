@@ -109,7 +109,11 @@ export class QuestL11RonProtesters implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (!haveSkill(this.sleazeSkill2) && availableAmount(this.starChart) == 0) {
+    if (
+      !haveSkill(this.sleazeSkill2) &&
+      availableAmount(this.starChart) == 0 &&
+      !GreySettings.shouldAvoidTowerRequirements()
+    ) {
       return QuestStatus.NOT_READY;
     }
 
