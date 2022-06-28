@@ -13,6 +13,8 @@ import {
   setProperty,
   familiarWeight,
   Skill,
+  indexOf,
+  print,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -86,6 +88,22 @@ export class QuestManorLights implements QuestInfo {
     return (
       getProperty("nextSpookyravenStephenRoom") == "The Haunted Laboratory"
     );
+  }
+
+  getSteveLeft(): number {
+    let loc = Location.get(getProperty("nextSpookyravenStephenRoom"));
+
+    const index = this.stephen.findIndex(([l]) => loc == l);
+
+    return index;
+  }
+
+  getElizaLeft(): number {
+    let loc = Location.get(getProperty("nextSpookyravenElizabethRoom"));
+
+    const index = this.elizibeth.findIndex(([l]) => loc == l);
+
+    return index;
   }
 
   hasFamiliarRecommendation(): Familiar {
@@ -193,6 +211,26 @@ export class QuestManorLights implements QuestInfo {
             new AdventureSettings().setStartOfFightMacro(
               Macro.skill(Skill.get("Emit Matter Duplicating Drones"))
             )
+          );
+        }
+
+        if (this.isSteveReady()) {
+          print(
+            "Lights Out: Stephen rooms explored: " +
+              this.getSteveLeft() +
+              " / " +
+              this.stephen.length,
+            "blue"
+          );
+        }
+
+        if (this.isElizaReady()) {
+          print(
+            "Lights Out: Elizabeth rooms explored: " +
+              this.getElizaLeft() +
+              " / " +
+              this.elizibeth.length,
+            "blue"
           );
         }
 

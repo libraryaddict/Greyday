@@ -1,4 +1,11 @@
-import { Location, Familiar, availableAmount, Item, Monster } from "kolmafia";
+import {
+  Location,
+  Familiar,
+  availableAmount,
+  Item,
+  Monster,
+  storageAmount,
+} from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -11,6 +18,7 @@ import {
 import { QuestType } from "../../QuestTypes";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
+import { GreySettings } from "../../../utils/GreySettings";
 
 export class QuestL10GiantGround implements QuestInfo {
   boning: Item = Item.get("electric boning knife");
@@ -18,20 +26,40 @@ export class QuestL10GiantGround implements QuestInfo {
     "The Castle in the Clouds in the Sky (Ground Floor)"
   );
   toAbsorb: Monster[];
+  drunkBell: Item = Item.get("Drunkula's bell");
+  rocket: Item = Item.get("Great Wolf's rocket launcher");
 
   isDelayBurning() {
     return (
-      availableAmount(this.boning) > 0 &&
+      this.isKnifeHunting() &&
       this.toAbsorb.length == 0 &&
       this.loc.turnsSpent < 11
     );
+  }
+
+  isKnifeHunting() {
+    if (availableAmount(this.boning) > 0) {
+      return false;
+    }
+
+    if (GreySettings.shouldAvoidTowerRequirements()) {
+      return (
+        availableAmount(this.drunkBell) +
+          availableAmount(this.rocket) +
+          storageAmount(this.drunkBell) +
+          storageAmount(this.rocket) ==
+        0
+      );
+    }
+
+    return true;
   }
 
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
 
     if (this.loc.turnsSpent < 11) {
-      if (availableAmount(this.boning) == 0) {
+      if (this.isKnifeHunting()) {
         outfit.setNoCombat();
       } else {
         outfit.setPlusCombat();
