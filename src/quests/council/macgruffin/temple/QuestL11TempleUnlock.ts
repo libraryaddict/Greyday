@@ -45,7 +45,7 @@ export class QuestL11TempleUnlock implements QuestInfo {
   }
 
   level(): number {
-    return 11;
+    return 6;
   }
 
   status(): QuestStatus {

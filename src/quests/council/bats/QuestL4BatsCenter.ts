@@ -32,7 +32,10 @@ export class QuestL4BatsCenter implements QuestInfo {
   );
 
   getResourceClaims(): ResourceClaim[] {
-    if (getProperty("fireExtinguisherBatHoleUsed") == "true") {
+    if (
+      availableAmount(this.fire) == 0 ||
+      getProperty("fireExtinguisherBatHoleUsed") == "true"
+    ) {
       return [];
     }
 
@@ -64,7 +67,7 @@ export class QuestL4BatsCenter implements QuestInfo {
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
 
-    if (!GreySettings.isHardcoreMode()) {
+    if (!GreySettings.isHardcoreMode() && availableAmount(this.fire) > 0) {
       outfit.addItem(this.fire);
     }
 
@@ -74,9 +77,13 @@ export class QuestL4BatsCenter implements QuestInfo {
       run: () => {
         let settings = new AdventureSettings();
 
-        settings.setStartOfFightMacro(
-          new Macro().trySkill(Skill.get("Fire Extinguisher: Zone Specific"))
-        );
+        if (availableAmount(this.fire) > 0 && !GreySettings.isHardcoreMode()) {
+          settings.setStartOfFightMacro(
+            new Macro()
+              .trySkill(Skill.get("Fire Extinguisher: Zone Specific"))
+              .attack()
+          );
+        }
 
         greyAdv(this.loc, outfit, settings);
         this.doSonars();
