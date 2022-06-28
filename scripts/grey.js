@@ -3098,26 +3098,47 @@ function QuestL10GiantGround_classCallCheck(instance, Constructor) {if (!(instan
 
 
 
+
 var QuestL10GiantGround = /*#__PURE__*/function () {function QuestL10GiantGround() {QuestL10GiantGround_classCallCheck(this, QuestL10GiantGround);QuestL10GiantGround_defineProperty(this, "boning",
     external_kolmafia_namespaceObject.Item.get("electric boning knife"));QuestL10GiantGround_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get(
-    "The Castle in the Clouds in the Sky (Ground Floor)"));QuestL10GiantGround_defineProperty(this, "toAbsorb", void 0);}QuestL10GiantGround_createClass(QuestL10GiantGround, [{ key: "isDelayBurning", value:
+    "The Castle in the Clouds in the Sky (Ground Floor)"));QuestL10GiantGround_defineProperty(this, "toAbsorb", void 0);QuestL10GiantGround_defineProperty(this, "drunkBell",
 
 
+    external_kolmafia_namespaceObject.Item.get("Drunkula's bell"));QuestL10GiantGround_defineProperty(this, "rocket",
+    external_kolmafia_namespaceObject.Item.get("Great Wolf's rocket launcher"));}QuestL10GiantGround_createClass(QuestL10GiantGround, [{ key: "isDelayBurning", value:
 
     function isDelayBurning() {
       return (
-        (0,external_kolmafia_namespaceObject.availableAmount)(this.boning) > 0 &&
+        this.isKnifeHunting() &&
         this.toAbsorb.length == 0 &&
         this.loc.turnsSpent < 11);
 
+    } }, { key: "isKnifeHunting", value:
+
+    function isKnifeHunting() {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.boning) > 0) {
+        return false;
+      }
+
+      if (GreySettings.shouldAvoidTowerRequirements()) {
+        return (
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.drunkBell) +
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.rocket) +
+          (0,external_kolmafia_namespaceObject.storageAmount)(this.drunkBell) +
+          (0,external_kolmafia_namespaceObject.storageAmount)(this.rocket) ==
+          0);
+
+      }
+
+      return true;
     } }, { key: "run", value:
 
     function run() {
       var outfit = new GreyOutfit();
 
       if (this.loc.turnsSpent < 11) {
-        if ((0,external_kolmafia_namespaceObject.availableAmount)(this.boning) == 0) {
+        if (this.isKnifeHunting()) {
           outfit.setNoCombat();
         } else {
           outfit.setPlusCombat();
@@ -16467,7 +16488,7 @@ var QuestCar = /*#__PURE__*/function () {function QuestCar() {QuestCar_classCall
       return [this.tinkersThingy];
     } }]);return QuestCar;}();
 ;// CONCATENATED MODULE: ./src/quests/custom/QuestManorLights.ts
-function QuestManorLights_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestManorLights_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestManorLights_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestManorLights_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestManorLights_arrayLikeToArray(o, minLen);}function QuestManorLights_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestManorLights_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestManorLights_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestManorLights_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestManorLights_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestManorLights_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestManorLights_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestManorLights_slicedToArray(arr, i) {return QuestManorLights_arrayWithHoles(arr) || QuestManorLights_iterableToArrayLimit(arr, i) || QuestManorLights_unsupportedIterableToArray(arr, i) || QuestManorLights_nonIterableRest();}function QuestManorLights_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestManorLights_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function QuestManorLights_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestManorLights_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestManorLights_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestManorLights_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestManorLights_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestManorLights_arrayLikeToArray(o, minLen);}function QuestManorLights_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestManorLights_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestManorLights_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestManorLights_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestManorLights_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestManorLights_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestManorLights_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -16541,6 +16562,22 @@ var QuestManorLights = /*#__PURE__*/function () {
       return (
         (0,external_kolmafia_namespaceObject.getProperty)("nextSpookyravenStephenRoom") == "The Haunted Laboratory");
 
+    } }, { key: "getSteveLeft", value:
+
+    function getSteveLeft() {
+      var loc = external_kolmafia_namespaceObject.Location.get((0,external_kolmafia_namespaceObject.getProperty)("nextSpookyravenStephenRoom"));
+
+      var index = this.stephen.findIndex((_ref) => {var _ref2 = QuestManorLights_slicedToArray(_ref, 1),l = _ref2[0];return loc == l;});
+
+      return index;
+    } }, { key: "getElizaLeft", value:
+
+    function getElizaLeft() {
+      var loc = external_kolmafia_namespaceObject.Location.get((0,external_kolmafia_namespaceObject.getProperty)("nextSpookyravenElizabethRoom"));
+
+      var index = this.elizibeth.findIndex((_ref3) => {var _ref4 = QuestManorLights_slicedToArray(_ref3, 1),l = _ref4[0];return loc == l;});
+
+      return index;
     } }, { key: "hasFamiliarRecommendation", value:
 
     function hasFamiliarRecommendation() {
@@ -16641,6 +16678,26 @@ var QuestManorLights = /*#__PURE__*/function () {
             new AdventureSettings().setStartOfFightMacro(
             Macro.skill(external_kolmafia_namespaceObject.Skill.get("Emit Matter Duplicating Drones"))));
 
+
+          }
+
+          if (this.isSteveReady()) {
+            (0,external_kolmafia_namespaceObject.print)(
+            "Lights Out: Stephen rooms explored: " +
+            this.getSteveLeft() +
+            " / " +
+            this.stephen.length,
+            "blue");
+
+          }
+
+          if (this.isElizaReady()) {
+            (0,external_kolmafia_namespaceObject.print)(
+            "Lights Out: Elizabeth rooms explored: " +
+            this.getElizaLeft() +
+            " / " +
+            this.elizibeth.length,
+            "blue");
 
           }
 
@@ -21412,7 +21469,7 @@ var TaskBoomboxSwitch = /*#__PURE__*/function () {function TaskBoomboxSwitch() {
       }
 
       var requiredMeat =
-      3000 + (
+      1000 + (
       this.isForgedRequired() ? 6000 : 0) + (
       this.isZapWandRequired() ? 5000 : 0);
 
