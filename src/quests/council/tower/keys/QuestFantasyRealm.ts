@@ -56,6 +56,10 @@ export class QuestFantasyRealm implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (GreySettings.shouldAvoidTowerRequirements()) {
+      return QuestStatus.NOT_READY;
+    }
+
     return QuestStatus.READY;
   }
 

@@ -23,6 +23,7 @@ import {
   ResourceClaim,
   ResourcePullClaim,
 } from "../../../../utils/GreyResources";
+import { GreySettings } from "../../../../utils/GreySettings";
 
 export class QuestDailyDungeon implements QuestInfo {
   pole: Item = Item.get("eleven-foot pole");
@@ -83,6 +84,10 @@ export class QuestDailyDungeon implements QuestInfo {
   status(): QuestStatus {
     if (getQuestStatus("questL13Final") > 5 || this.isDailyDoneToday()) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (GreySettings.shouldAvoidTowerRequirements()) {
+      return QuestStatus.NOT_READY;
     }
 
     if (this.hasFamiliarRecommendation() != null) {

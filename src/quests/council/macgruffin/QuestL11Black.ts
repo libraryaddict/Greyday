@@ -23,6 +23,7 @@ import { QuestType } from "../../QuestTypes";
 import { hasUnlockedLatteFlavor, LatteFlavor } from "../../../utils/LatteUtils";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { QuestTowerKillSkin } from "../tower/stages/QuestTowerWallSkin";
+import { GreySettings } from "../../../utils/GreySettings";
 
 export class QuestL11Black implements QuestInfo {
   boots: Item = Item.get("Blackberry Galoshes");
@@ -101,6 +102,7 @@ export class QuestL11Black implements QuestInfo {
           props.setChoice(923, 1);
 
           if (
+            !GreySettings.shouldAvoidTowerRequirements() &&
             availableAmount(this.beehive) == 0 &&
             !this.skinKiller.isPossible()
           ) {

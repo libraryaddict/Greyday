@@ -67,7 +67,7 @@ export class QuestL8MountainNinja implements QuestInfo {
         location: null,
         run: () => {
           if (numericModifier("Cold Resistance") < 5) {
-            maximize("cold res", false);
+            maximize("cold res -tie", false);
           }
 
           visitUrl("place.php?whichplace=mclargehuge&action=cloudypeak");

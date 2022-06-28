@@ -281,7 +281,7 @@ export class GreyAdventurer {
       outfit.famExpWeight = 1;
     }
 
-    maximize(
+    let maximizeResult = maximize(
       outfit.createString() +
         " " +
         (doOrb ? "+" : "-") +
@@ -289,23 +289,15 @@ export class GreyAdventurer {
       false
     );
 
+    if (!maximizeResult) {
+      throw "Failed to maximize. Either fix, or report to the script author";
+    }
+
     let closet = Item.get("Funky junk key");
 
     if (itemAmount(closet) > 0) {
       putCloset(closet, itemAmount(closet));
     }
-
-    /* if (
-      adventure.locationInfo != null &&
-      adventure.locationInfo.monsters.includes(Monster.get("Oil Baron"))
-    ) {
-      // Dumb code to try force an oil baron
-      maximize(
-        new GreyOutfit().addItem(Item.get("Backup Camera")).createString(),
-        false
-      );
-      cliExecute("backupcamera ml");
-    }*/
   }
 
   runAdventure(adventure: FoundAdventure) {

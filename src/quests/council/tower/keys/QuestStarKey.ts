@@ -19,6 +19,7 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
+import { GreySettings } from "../../../../utils/GreySettings";
 
 export class QuestStarKey implements QuestInfo {
   location: Location = Location.get("The Hole in the sky");
@@ -63,16 +64,27 @@ export class QuestStarKey implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (
+      !this.hasEnoughMaterials() &&
+      GreySettings.shouldAvoidTowerRequirements()
+    ) {
+      return QuestStatus.NOT_READY;
+    }
+
     return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
-    if (
+  hasEnoughMaterials() {
+    return (
       pullsRemaining() == -1 ||
       (availableAmount(this.map) > 0 &&
         availableAmount(this.line) >= 7 &&
         availableAmount(this.star) >= 8)
-    ) {
+    );
+  }
+
+  run(): QuestAdventure {
+    if (this.hasEnoughMaterials()) {
       return {
         location: null,
         run: () => {

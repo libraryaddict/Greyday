@@ -1,4 +1,4 @@
-import { inHardcore } from "kolmafia";
+import { getProperty, inHardcore, toBoolean } from "kolmafia";
 
 export class GreySettings {
   static hardcoreMode: boolean = false;
@@ -17,5 +17,12 @@ export class GreySettings {
    */
   static isHippyMode(): boolean {
     return this.isHardcoreMode();
+  }
+
+  static shouldAvoidTowerRequirements(): boolean {
+    return (
+      !GreySettings.isHardcoreMode() &&
+      toBoolean(getProperty("greyBreakAtTower"))
+    );
   }
 }

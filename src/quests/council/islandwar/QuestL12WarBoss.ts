@@ -7,12 +7,14 @@ import {
   Location,
   sell,
   Slot,
+  storageAmount,
   toInt,
   toSlot,
   visitUrl,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { GreySettings } from "../../../utils/GreySettings";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
@@ -90,8 +92,14 @@ export class QuestL12WarBoss implements QuestInfo {
     }
 
     let master = crap[0].buyer;
+    let garter = Item.get("gauze garter");
+    let gartersHave = itemAmount(garter);
 
-    let needHealers = 10 - itemAmount(Item.get("gauze garter"));
+    if (GreySettings.shouldAvoidTowerRequirements()) {
+      gartersHave += storageAmount(garter);
+    }
+
+    let needHealers = 10 - gartersHave;
     needHealers = Math.min(needHealers, Math.floor(master.availableTokens / 2));
 
     if (needHealers > 0) {

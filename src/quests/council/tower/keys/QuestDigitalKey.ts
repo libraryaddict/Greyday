@@ -24,6 +24,7 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
+import { GreySettings } from "../../../../utils/GreySettings";
 
 export class QuestDigitalKey implements QuestInfo {
   location: Location = Location.get("8-Bit Realm");
@@ -55,15 +56,19 @@ export class QuestDigitalKey implements QuestInfo {
       return QuestStatus.READY;
     }
 
+    let status = getQuestStatus("questL13Final");
+
+    // If we're not at the keys, don't farm yet. We can still hit it from powerful glove
+    if (status < 5) {
+      return QuestStatus.NOT_READY;
+    }
+
     // If we can make white pixels, or we have enough pixels
     if (this.needPixels() - this.canMakePixelCount() <= 0) {
       return QuestStatus.READY;
     }
 
-    let status = getQuestStatus("questL13Final");
-
-    // If we're not at the keys, don't farm yet. We can still hit it from powerful glove
-    if (status != 5) {
+    if (GreySettings.shouldAvoidTowerRequirements()) {
       return QuestStatus.NOT_READY;
     }
 

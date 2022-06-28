@@ -85,7 +85,10 @@ export class GreyPulls {
     }
 
     GreyPulls.tryPull(Item.get("Portable cassette player"));
-    GreyPulls.tryPull(Item.get("Daily dungeon malware"), 50000);
+
+    if (!GreySettings.shouldAvoidTowerRequirements()) {
+      GreyPulls.tryPull(Item.get("Daily dungeon malware"), 50000);
+    }
 
     let pantsgiving = Item.get("Pantsgiving");
 
