@@ -8211,7 +8211,7 @@ var QuestL11TempleUnlock = /*#__PURE__*/function () {function QuestL11TempleUnlo
     } }, { key: "level", value:
 
     function level() {
-      return 11;
+      return 6;
     } }, { key: "status", value:
 
     function status() {
@@ -12437,7 +12437,10 @@ var QuestL4BatsCenter = /*#__PURE__*/function () {function QuestL4BatsCenter() {
 
 
     function getResourceClaims() {
-      if ((0,external_kolmafia_namespaceObject.getProperty)("fireExtinguisherBatHoleUsed") == "true") {
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.fire) == 0 ||
+      (0,external_kolmafia_namespaceObject.getProperty)("fireExtinguisherBatHoleUsed") == "true")
+      {
         return [];
       }
 
@@ -12469,7 +12472,7 @@ var QuestL4BatsCenter = /*#__PURE__*/function () {function QuestL4BatsCenter() {
     function run() {
       var outfit = new GreyOutfit();
 
-      if (!GreySettings.isHardcoreMode()) {
+      if (!GreySettings.isHardcoreMode() && (0,external_kolmafia_namespaceObject.availableAmount)(this.fire) > 0) {
         outfit.addItem(this.fire);
       }
 
@@ -12479,9 +12482,13 @@ var QuestL4BatsCenter = /*#__PURE__*/function () {function QuestL4BatsCenter() {
         run: () => {
           var settings = new AdventureSettings();
 
-          settings.setStartOfFightMacro(
-          new Macro().trySkill(external_kolmafia_namespaceObject.Skill.get("Fire Extinguisher: Zone Specific")));
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(this.fire) > 0 && !GreySettings.isHardcoreMode()) {
+            settings.setStartOfFightMacro(
+            new Macro().
+            trySkill(external_kolmafia_namespaceObject.Skill.get("Fire Extinguisher: Zone Specific")).
+            attack());
 
+          }
 
           greyAdv(this.loc, outfit, settings);
           this.doSonars();
