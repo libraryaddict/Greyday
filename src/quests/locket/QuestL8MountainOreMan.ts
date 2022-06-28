@@ -19,6 +19,7 @@ import {
   visitUrl,
   myAdventures,
   haveSkill,
+  equippedAmount,
 } from "kolmafia";
 import { greyAdv, AdventureSettings } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -186,7 +187,7 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
     let outfit = new GreyOutfit();
     outfit.addBonus("+DA +DR -ML");
 
-    if (!this.doDuping()) {
+    if (!this.doDuping() && availableAmount(this.indus) > 0) {
       outfit.addItem(this.indus);
     }
 
@@ -214,7 +215,7 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
 
         if (this.doDuping()) {
           macro = macro.skill(Skill.get("Emit Matter Duplicating Drones"));
-        } else {
+        } else if (equippedAmount(this.indus) > 0) {
           let tries = 2;
 
           while (tries > 0 && this.getOreRemaining() > 2) {

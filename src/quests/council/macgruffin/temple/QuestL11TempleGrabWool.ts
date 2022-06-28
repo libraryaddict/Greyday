@@ -6,6 +6,8 @@ import {
   Monster,
   Skill,
   getProperty,
+  equippedItem,
+  equippedAmount,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -65,7 +67,10 @@ export class QuestL11TempleGrabWool implements QuestInfo {
 
   run(): QuestAdventure {
     let outfit = new GreyOutfit().setItemDrops().setPlusCombat();
-    outfit.addItem(this.indus);
+
+    if (availableAmount(this.indus) > 0) {
+      outfit.addItem(this.indus);
+    }
 
     return {
       location: this.loc,
@@ -74,9 +79,14 @@ export class QuestL11TempleGrabWool implements QuestInfo {
         let settings = new AdventureSettings();
         settings.addNoBanish(this.woolMonster);
 
-        settings.setStartOfFightMacro(
-          Macro.if_(this.woolMonster, Macro.skill(this.polar).skill(this.polar))
-        );
+        if (equippedAmount(this.indus) > 0) {
+          settings.setStartOfFightMacro(
+            Macro.if_(
+              this.woolMonster,
+              Macro.skill(this.polar).skill(this.polar)
+            )
+          );
+        }
 
         let props = new PropertyManager();
         props.setChoice(580, 1); // Hidden heart of temple

@@ -26,6 +26,7 @@ export class QuestL8MountainGoats implements QuestInfo {
   dairy: Monster = Monster.get("Dairy Goat");
   elementalSkill: Skill = Skill.get("Secondary Fermentation");
   drunk: Monster = Monster.get("Drunk Goat");
+  sysSweep: Skill = Skill.get("System Sweep");
 
   getId(): QuestType {
     return "Council / Ice / Goats";
@@ -52,7 +53,11 @@ export class QuestL8MountainGoats implements QuestInfo {
 
     // If we have our cheese but not the ores
     if (availableAmount(this.cheese) >= 3 && this.getOreRemaining() > 0) {
-      return QuestStatus.NOT_READY;
+      return QuestStatus.COMPLETED;
+    }
+
+    if (!haveSkill(this.sysSweep)) {
+      return QuestStatus.FASTER_LATER;
     }
 
     return QuestStatus.READY;

@@ -9,6 +9,7 @@ import {
   toInt,
   Monster,
   print,
+  availableAmount,
 } from "kolmafia";
 import { greyAdv, AdventureSettings } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -75,6 +76,7 @@ export class QuestL5GoblinHarem implements QuestInfo {
     let outfit = new GreyOutfit();
 
     if (
+      availableAmount(this.extingisher) > 0 &&
       toInt(getProperty("_fireExtinguisherCharge")) >= 20 &&
       getProperty("fireExtinguisherHaremUsed") != "true"
     ) {

@@ -66,6 +66,10 @@ export class QuestDailyDungeon implements QuestInfo {
   }
 
   hasFamiliarRecommendation(): Familiar {
+    if (GreySettings.shouldAvoidTowerRequirements()) {
+      return null;
+    }
+
     if (
       availableAmount(this.pole) > 0 &&
       availableAmount(this.ring) > 0 &&
