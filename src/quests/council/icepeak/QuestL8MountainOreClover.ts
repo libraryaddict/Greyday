@@ -48,7 +48,11 @@ export class QuestL8MountainOreClover extends QuestL8MountainOre {
       return QuestStatus.NOT_READY;
     }
 
-    if (haveEffect(Effect.get("A Girl Named Sue")) > 0) {
+    if (
+      haveEffect(Effect.get("Brother Corsican's Blessing")) +
+        haveEffect(Effect.get("A Girl Named Sue")) >
+      0
+    ) {
       return QuestStatus.NOT_READY;
     }
 

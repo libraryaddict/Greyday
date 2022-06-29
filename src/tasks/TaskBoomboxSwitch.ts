@@ -40,7 +40,7 @@ export class TaskBoomboxSwitch implements Task {
       return;
     }
 
-    if (this.getSongChangesLeft() < 10 || !this.isMeatSong()) {
+    if (this.getSongChangesLeft() < 11 && !this.isMeatSong()) {
       this.canSkip = true;
       return;
     }

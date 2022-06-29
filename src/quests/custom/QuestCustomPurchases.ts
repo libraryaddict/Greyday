@@ -9,6 +9,7 @@ import {
   retrieveItem,
   getProperty,
 } from "kolmafia";
+import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
@@ -48,6 +49,7 @@ export class QuestCustomPurchases implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: new GreyOutfit("-tie"),
       run: () => {
         for (let item of this.getMissing()) {
           print("Now trying to buy " + item);

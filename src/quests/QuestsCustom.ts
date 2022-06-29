@@ -27,6 +27,7 @@ import { QuestMoonSign } from "./custom/QuestMoonSign";
 import { QuestAbsorbCanadiaMonster } from "./absorbs/QuestAbsorbCanadiaMonster";
 import { QuestAbsorbStarMonster } from "./absorbs/QuestAbsorbStarMonster";
 import { QuestFantasyRealm } from "./council/tower/keys/QuestFantasyRealm";
+import { QuestBugbearAbsorb } from "./absorbs/QuestBugbearAbsorb";
 
 export class QuestsCustom implements QuestInfo {
   // This is a wrapper class around some of our custom routing goals. Like combat locket or so.
@@ -59,6 +60,7 @@ export class QuestsCustom implements QuestInfo {
     this.quests.push(new QuestMoonSign());
     this.quests.push(new QuestAbsorbCanadiaMonster());
     this.quests.push(new QuestAbsorbStarMonster());
+    this.quests.push(new QuestBugbearAbsorb());
     this.quests.push(new QuestFantasyRealm());
   }
 

@@ -71,6 +71,8 @@ export class QuestLocketInfiniteLoop implements QuestInfo {
     let outfit = new GreyOutfit();
     outfit.addBonus("+init");
     outfit.addBonus("-ml");
+    outfit.hpRegenWeight = 1;
+    outfit.mpRegenWeight = 1;
 
     return {
       location: null,

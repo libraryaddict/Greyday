@@ -38,7 +38,8 @@ export class QuestBugbearBakery implements QuestInfo {
   status(): QuestStatus {
     if (
       haveOutfit("Bugbear Costume") ||
-      (!knollAvailable() && getWorkshed() != this.asdon)
+      !knollAvailable() ||
+      getWorkshed() != this.asdon
     ) {
       return QuestStatus.COMPLETED;
     }
@@ -47,7 +48,7 @@ export class QuestBugbearBakery implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (!haveSkill(this.nanovision)) {
+    if (!knollAvailable() && !haveSkill(this.nanovision)) {
       return QuestStatus.FASTER_LATER;
     }
 

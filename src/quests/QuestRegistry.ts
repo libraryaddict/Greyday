@@ -111,6 +111,13 @@ export class QuestRegistry {
       { id: "Misc / FriarExp" },
       { id: "Misc / MonsterBait" },
       { id: "Misc / Moonsign" },
+      {
+        id: "Absorbs / Bugbear",
+        testValid: () =>
+          knollAvailable() &&
+          availableAmount(Item.get("hewn moon-rune spoon")) > 0,
+      },
+      { id: "Misc / MonsterBait" },
 
       {
         id: "Council / MacGruffin / Desert / StoneRose",

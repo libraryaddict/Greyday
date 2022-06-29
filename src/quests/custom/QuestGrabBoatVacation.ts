@@ -41,6 +41,7 @@ export class QuestGrabBoatVacation implements QuestInfo {
     "old clothesline pole",
     "antique cigar sign",
   ].map((s) => Item.get(s));
+  nanovision: Skill = Skill.get("Double Nanovision");
 
   getId(): QuestType {
     return "Boat / Vacation";
@@ -77,7 +78,9 @@ export class QuestGrabBoatVacation implements QuestInfo {
 
     if (
       !GreySettings.isHippyMode() &&
-      haveEffect(Effect.get("A Girl Named Sue")) > 0
+      haveEffect(Effect.get("Brother Corsican's Blessing")) +
+        haveEffect(Effect.get("A Girl Named Sue")) >
+        0
     ) {
       return QuestStatus.NOT_READY;
     }

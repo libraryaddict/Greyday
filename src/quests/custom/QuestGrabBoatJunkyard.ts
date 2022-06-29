@@ -42,6 +42,7 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
   ].map((s) => Item.get(s));
   magazine: Item = Item.get("Worse Homes and Gardens");
   toAbsorb: Monster[];
+  nanovision: Skill = Skill.get("Double Nanovision");
 
   getId(): QuestType {
     return "Boat / Junkyard";
@@ -64,7 +65,10 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (myLevel() < 11) {
+    if (
+      myLevel() < 11 ||
+      (!GreySettings.isHardcoreMode() && !haveSkill(this.nanovision))
+    ) {
       return QuestStatus.FASTER_LATER;
     }
 
