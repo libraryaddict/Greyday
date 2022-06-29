@@ -111,6 +111,7 @@ export class QuestRegistry {
       { id: "Misc / FriarExp" },
       { id: "Misc / MonsterBait" },
       { id: "Misc / Moonsign" },
+      { id: "Misc / Teacher's Pen" },
       {
         id: "Absorbs / Bugbear",
         testValid: () =>

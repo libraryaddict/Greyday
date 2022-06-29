@@ -159,6 +159,10 @@ export class GreyPulls {
     this.tryPull(this.getPullableKey());
   }
 
+  static pullTeachersPen() {
+    GreyPulls.tryPull(Item.get("Teacher's Pen"));
+  }
+
   static pullRatTangles() {
     GreyPulls.tryPull(Item.get("tangle of rats tails"));
   }

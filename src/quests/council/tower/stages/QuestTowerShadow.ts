@@ -17,6 +17,9 @@ import {
   weaponHands,
   haveSkill,
   Skill,
+  itemAmount,
+  pullsRemaining,
+  storageAmount,
 } from "kolmafia";
 import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -185,6 +188,20 @@ export class QuestTowerShadow implements QuestInfo {
       run: () => {
         if (equippedAmount(this.cape) > 0) {
           cliExecute("retrocape heck hold"); // Make sure we stun the shadow
+        }
+
+        if (itemAmount(this.guaze) < 6) {
+          if (pullsRemaining() == -1 && storageAmount(this.guaze) > 6) {
+            cliExecute(
+              "pull " + storageAmount(this.guaze) + " " + this.guaze.name
+            );
+          } else {
+            throw (
+              "We don't have enough " +
+              this.guaze.name +
+              " to take on the shadow!"
+            );
+          }
         }
 
         if (myMaxhp() - myHp() > 100) {

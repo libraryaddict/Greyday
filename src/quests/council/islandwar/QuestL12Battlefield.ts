@@ -8,6 +8,7 @@ import {
 } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { GreySettings } from "../../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -69,9 +70,10 @@ export class QuestL12Battlefield implements QuestInfo {
     let fam: Familiar = null;
 
     if (
-      availableAmount(this.pole) == 0 ||
-      availableAmount(this.ring) == 0 ||
-      availableAmount(this.picklocks) == 0
+      !GreySettings.shouldAvoidTowerRequirements() &&
+      (availableAmount(this.pole) == 0 ||
+        availableAmount(this.ring) == 0 ||
+        availableAmount(this.picklocks) == 0)
     ) {
       fam = this.fam;
     }

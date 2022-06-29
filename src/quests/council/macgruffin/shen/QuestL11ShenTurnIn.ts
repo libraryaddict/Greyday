@@ -15,6 +15,8 @@ import {
   isBanished,
   print,
   equip,
+  equippedAmount,
+  Slot,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -112,6 +114,8 @@ export class QuestL11ShenTurnIn implements QuestInfo {
             currentPredictions().get(this.shenClub) == this.penguin
           ) {
             equip(this.ball);
+          } else if (equippedAmount(this.ball) > 0) {
+            equip(Slot.get("Familiar"), Item.get("None"));
           }
         }
 
