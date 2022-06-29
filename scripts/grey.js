@@ -14130,7 +14130,11 @@ var QuestL8MountainOreClover = /*#__PURE__*/function (_QuestL8MountainOre) {Ques
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("A Girl Named Sue")) > 0) {
+      if (
+      (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Brother Corsican's Blessing")) +
+      (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("A Girl Named Sue")) >
+      0)
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -17783,6 +17787,7 @@ function QuestCustomPurchases_createForOfIteratorHelper(o, allowArrayLike) {var 
 
 
 
+
 var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchases() {QuestCustomPurchases_classCallCheck(this, QuestCustomPurchases);QuestCustomPurchases_defineProperty(this, "toPurchase",
     ["Porkpie-mounted popper"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));}QuestCustomPurchases_createClass(QuestCustomPurchases, [{ key: "getId", value:
 
@@ -17819,6 +17824,7 @@ var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchas
     function run() {
       return {
         location: null,
+        outfit: new GreyOutfit("-tie"),
         run: () => {var _iterator = QuestCustomPurchases_createForOfIteratorHelper(
           this.getMissing()),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var item = _step.value;
               (0,external_kolmafia_namespaceObject.print)("Now trying to buy " + item);
@@ -17977,6 +17983,8 @@ var QuestLocketInfiniteLoop = /*#__PURE__*/function () {function QuestLocketInfi
       var outfit = new GreyOutfit();
       outfit.addBonus("+init");
       outfit.addBonus("-ml");
+      outfit.hpRegenWeight = 1;
+      outfit.mpRegenWeight = 1;
 
       return {
         location: null,
@@ -18751,8 +18759,9 @@ var QuestGrabBoatJunkyard = /*#__PURE__*/function () {function QuestGrabBoatJunk
     "old clothesline pole",
     "antique cigar sign"].
     map((s) => external_kolmafia_namespaceObject.Item.get(s)));QuestGrabBoatJunkyard_defineProperty(this, "magazine",
-    external_kolmafia_namespaceObject.Item.get("Worse Homes and Gardens"));QuestGrabBoatJunkyard_defineProperty(this, "toAbsorb", void 0);}QuestGrabBoatJunkyard_createClass(QuestGrabBoatJunkyard, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Worse Homes and Gardens"));QuestGrabBoatJunkyard_defineProperty(this, "toAbsorb", void 0);QuestGrabBoatJunkyard_defineProperty(this, "nanovision",
 
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));}QuestGrabBoatJunkyard_createClass(QuestGrabBoatJunkyard, [{ key: "getId", value:
 
     function getId() {
       return "Boat / Junkyard";
@@ -18775,7 +18784,10 @@ var QuestGrabBoatJunkyard = /*#__PURE__*/function () {function QuestGrabBoatJunk
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.myLevel)() < 11) {
+      if (
+      (0,external_kolmafia_namespaceObject.myLevel)() < 11 ||
+      !GreySettings.isHardcoreMode() && !(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision))
+      {
         return QuestStatus.FASTER_LATER;
       }
 
@@ -18929,7 +18941,8 @@ var QuestGrabBoatVacation = /*#__PURE__*/function () {function QuestGrabBoatVaca
     "old claw-foot bathtub",
     "old clothesline pole",
     "antique cigar sign"].
-    map((s) => external_kolmafia_namespaceObject.Item.get(s)));}QuestGrabBoatVacation_createClass(QuestGrabBoatVacation, [{ key: "getId", value:
+    map((s) => external_kolmafia_namespaceObject.Item.get(s)));QuestGrabBoatVacation_defineProperty(this, "nanovision",
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));}QuestGrabBoatVacation_createClass(QuestGrabBoatVacation, [{ key: "getId", value:
 
     function getId() {
       return "Boat / Vacation";
@@ -18966,7 +18979,9 @@ var QuestGrabBoatVacation = /*#__PURE__*/function () {function QuestGrabBoatVaca
 
       if (
       !GreySettings.isHippyMode() &&
-      (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("A Girl Named Sue")) > 0)
+      (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Brother Corsican's Blessing")) +
+      (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("A Girl Named Sue")) >
+      0)
       {
         return QuestStatus.NOT_READY;
       }
@@ -19804,7 +19819,8 @@ var QuestBugbearBakery = /*#__PURE__*/function () {function QuestBugbearBakery()
     function status() {
       if (
       (0,external_kolmafia_namespaceObject.haveOutfit)("Bugbear Costume") ||
-      !(0,external_kolmafia_namespaceObject.knollAvailable)() && (0,external_kolmafia_namespaceObject.getWorkshed)() != this.asdon)
+      !(0,external_kolmafia_namespaceObject.knollAvailable)() ||
+      (0,external_kolmafia_namespaceObject.getWorkshed)() != this.asdon)
       {
         return QuestStatus.COMPLETED;
       }
@@ -19813,7 +19829,7 @@ var QuestBugbearBakery = /*#__PURE__*/function () {function QuestBugbearBakery()
         return QuestStatus.NOT_READY;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
+      if (!(0,external_kolmafia_namespaceObject.knollAvailable)() && !(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
         return QuestStatus.FASTER_LATER;
       }
 
@@ -20251,8 +20267,53 @@ var QuestFantasyRealm = /*#__PURE__*/function () {function QuestFantasyRealm() {
 
       return (0,external_kolmafia_namespaceObject.toInt)(setting);
     } }]);return QuestFantasyRealm;}();
+;// CONCATENATED MODULE: ./src/quests/absorbs/QuestBugbearAbsorb.ts
+function QuestBugbearAbsorb_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestBugbearAbsorb_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestBugbearAbsorb_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestBugbearAbsorb_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestBugbearAbsorb_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestBugbearAbsorb_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+var QuestBugbearAbsorb = /*#__PURE__*/function () {function QuestBugbearAbsorb() {QuestBugbearAbsorb_classCallCheck(this, QuestBugbearAbsorb);QuestBugbearAbsorb_defineProperty(this, "toAbsorb", void 0);QuestBugbearAbsorb_defineProperty(this, "location",
+
+    external_kolmafia_namespaceObject.Location.get("The Bugbear Pen"));QuestBugbearAbsorb_defineProperty(this, "goose",
+    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));}QuestBugbearAbsorb_createClass(QuestBugbearAbsorb, [{ key: "getId", value:
+
+    function getId() {
+      return "Absorbs / Bugbear";
+    } }, { key: "level", value:
+
+    function level() {
+      return 5;
+    } }, { key: "status", value:
+
+    function status() {
+      if (this.toAbsorb.length == 0 || !(0,external_kolmafia_namespaceObject.knollAvailable)()) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) < 6) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.READY;
+    } }, { key: "run", value:
+
+    function run() {
+      return {
+        location: this.location,
+        run: () => {
+          greyAdv(this.location);
+        } };
+
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [this.location];
+    } }]);return QuestBugbearAbsorb;}();
 ;// CONCATENATED MODULE: ./src/quests/QuestsCustom.ts
 function QuestsCustom_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestsCustom_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestsCustom_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestsCustom_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestsCustom_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestsCustom_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -20313,6 +20374,7 @@ var QuestsCustom = /*#__PURE__*/function () {
     this.quests.push(new QuestMoonSign());
     this.quests.push(new QuestAbsorbCanadiaMonster());
     this.quests.push(new QuestAbsorbStarMonster());
+    this.quests.push(new QuestBugbearAbsorb());
     this.quests.push(new QuestFantasyRealm());
   }QuestsCustom_createClass(QuestsCustom, [{ key: "level", value:
 
@@ -20443,6 +20505,13 @@ var QuestRegistry = /*#__PURE__*/function () {
       { id: "Misc / FriarExp" },
       { id: "Misc / MonsterBait" },
       { id: "Misc / Moonsign" },
+      {
+        id: "Absorbs / Bugbear",
+        testValid: () =>
+        (0,external_kolmafia_namespaceObject.knollAvailable)() &&
+        (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon")) > 0 },
+
+      { id: "Misc / MonsterBait" },
 
       {
         id: "Council / MacGruffin / Desert / StoneRose",
@@ -21462,7 +21531,7 @@ var TaskBoomboxSwitch = /*#__PURE__*/function () {function TaskBoomboxSwitch() {
         return;
       }
 
-      if (this.getSongChangesLeft() < 10 || !this.isMeatSong()) {
+      if (this.getSongChangesLeft() < 11 && !this.isMeatSong()) {
         this.canSkip = true;
         return;
       }
