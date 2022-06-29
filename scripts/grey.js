@@ -4353,6 +4353,10 @@ var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_cl
 
     function pullZappableKey() {
       this.tryPull(this.getPullableKey());
+    } }, { key: "pullTeachersPen", value:
+
+    function pullTeachersPen() {
+      GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Teacher's Pen"));
     } }, { key: "pullRatTangles", value:
 
     function pullRatTangles() {
@@ -7006,6 +7010,8 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
             currentPredictions().get(this.shenClub) == this.penguin)
             {
               (0,external_kolmafia_namespaceObject.equip)(this.ball);
+            } else if ((0,external_kolmafia_namespaceObject.equippedAmount)(this.ball) > 0) {
+              (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Slot.get("Familiar"), external_kolmafia_namespaceObject.Item.get("None"));
             }
           }
 
@@ -8776,6 +8782,7 @@ function QuestL12Battlefield_classCallCheck(instance, Constructor) {if (!(instan
 
 
 
+
 var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield() {QuestL12Battlefield_classCallCheck(this, QuestL12Battlefield);QuestL12Battlefield_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("The Battlefield (Frat Uniform)"));QuestL12Battlefield_defineProperty(this, "pole",
     external_kolmafia_namespaceObject.Item.get("eleven-foot pole"));QuestL12Battlefield_defineProperty(this, "ring",
@@ -8834,9 +8841,10 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
       var fam = null;
 
       if (
+      !GreySettings.shouldAvoidTowerRequirements() && (
       (0,external_kolmafia_namespaceObject.availableAmount)(this.pole) == 0 ||
       (0,external_kolmafia_namespaceObject.availableAmount)(this.ring) == 0 ||
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.picklocks) == 0)
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.picklocks) == 0))
       {
         fam = this.fam;
       }
@@ -11783,6 +11791,20 @@ var QuestTowerShadow = /*#__PURE__*/function () {function QuestTowerShadow() {Qu
         run: () => {
           if ((0,external_kolmafia_namespaceObject.equippedAmount)(this.cape) > 0) {
             (0,external_kolmafia_namespaceObject.cliExecute)("retrocape heck hold"); // Make sure we stun the shadow
+          }
+
+          if ((0,external_kolmafia_namespaceObject.itemAmount)(this.guaze) < 6) {
+            if ((0,external_kolmafia_namespaceObject.pullsRemaining)() == -1 && (0,external_kolmafia_namespaceObject.storageAmount)(this.guaze) > 6) {
+              (0,external_kolmafia_namespaceObject.cliExecute)(
+              "pull " + (0,external_kolmafia_namespaceObject.storageAmount)(this.guaze) + " " + this.guaze.name);
+
+            } else {
+              throw (
+                "We don't have enough " +
+                this.guaze.name +
+                " to take on the shadow!");
+
+            }
           }
 
           if ((0,external_kolmafia_namespaceObject.myMaxhp)() - (0,external_kolmafia_namespaceObject.myHp)() > 100) {
@@ -20311,8 +20333,67 @@ var QuestBugbearAbsorb = /*#__PURE__*/function () {function QuestBugbearAbsorb()
     function getLocations() {
       return [this.location];
     } }]);return QuestBugbearAbsorb;}();
+;// CONCATENATED MODULE: ./src/quests/custom/QuestTeachersPen.ts
+function QuestTeachersPen_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTeachersPen_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTeachersPen_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTeachersPen_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTeachersPen_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTeachersPen_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+
+var QuestTeachersPen = /*#__PURE__*/function () {function QuestTeachersPen() {QuestTeachersPen_classCallCheck(this, QuestTeachersPen);QuestTeachersPen_defineProperty(this, "pen",
+    external_kolmafia_namespaceObject.Item.get("Teacher's Pen"));QuestTeachersPen_defineProperty(this, "cleaver",
+    external_kolmafia_namespaceObject.Item.get("June Cleaver"));QuestTeachersPen_defineProperty(this, "resource",
+    new ResourcePullClaim(
+    this.pen,
+    "Familiar Exp",
+    30));}QuestTeachersPen_createClass(QuestTeachersPen, [{ key: "getResourceClaims", value:
+
+
+    function getResourceClaims() {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.pen) > 0) {
+        return [];
+      }
+
+      return [this.resource];
+    } }, { key: "getId", value:
+
+    function getId() {
+      return "Misc / Teacher's Pen";
+    } }, { key: "level", value:
+
+    function level() {
+      return 5;
+    } }, { key: "status", value:
+
+    function status() {
+      if (GreySettings.isHardcoreMode() || (0,external_kolmafia_namespaceObject.availableAmount)(this.pen) > 0) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.cleaver) > 0 && (0,external_kolmafia_namespaceObject.turnsPlayed)() < 100) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.READY;
+    } }, { key: "run", value:
+
+    function run() {
+      return {
+        outfit: new GreyOutfit("-tie"),
+        location: null,
+        run: () => {
+          GreyPulls.pullTeachersPen();
+        } };
+
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [];
+    } }]);return QuestTeachersPen;}();
 ;// CONCATENATED MODULE: ./src/quests/QuestsCustom.ts
 function QuestsCustom_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestsCustom_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestsCustom_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestsCustom_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestsCustom_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestsCustom_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -20376,6 +20457,7 @@ var QuestsCustom = /*#__PURE__*/function () {
     this.quests.push(new QuestAbsorbStarMonster());
     this.quests.push(new QuestBugbearAbsorb());
     this.quests.push(new QuestFantasyRealm());
+    this.quests.push(new QuestTeachersPen());
   }QuestsCustom_createClass(QuestsCustom, [{ key: "level", value:
 
     function level() {
@@ -20505,6 +20587,7 @@ var QuestRegistry = /*#__PURE__*/function () {
       { id: "Misc / FriarExp" },
       { id: "Misc / MonsterBait" },
       { id: "Misc / Moonsign" },
+      { id: "Misc / Teacher's Pen" },
       {
         id: "Absorbs / Bugbear",
         testValid: () =>
