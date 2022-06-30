@@ -5499,6 +5499,7 @@ function QuestL11ManorBoss_classCallCheck(instance, Constructor) {if (!(instance
 
 
 
+
 var QuestL11ManorBoss = /*#__PURE__*/function () {function QuestL11ManorBoss() {QuestL11ManorBoss_classCallCheck(this, QuestL11ManorBoss);QuestL11ManorBoss_defineProperty(this, "summoning",
     external_kolmafia_namespaceObject.Location.get("Summoning Chamber"));}QuestL11ManorBoss_createClass(QuestL11ManorBoss, [{ key: "getId", value:
 
@@ -5525,10 +5526,16 @@ var QuestL11ManorBoss = /*#__PURE__*/function () {function QuestL11ManorBoss() {
     } }, { key: "run", value:
 
     function run() {
+      var outfit = new GreyOutfit("+5 init");
+
       return {
         location: this.summoning,
+        outfit: outfit,
         run: () => {
-          greyAdv("place.php?whichplace=manor4&action=manor4_chamberboss");
+          greyAdv(
+          "place.php?whichplace=manor4&action=manor4_chamberboss",
+          outfit);
+
         } };
 
     } }, { key: "getLocations", value:
