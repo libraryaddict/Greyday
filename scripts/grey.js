@@ -14881,7 +14881,17 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestL9SmutOrcs_defineProperty(this, "driveSafe",
     external_kolmafia_namespaceObject.Effect.get("Driving Safely"));QuestL9SmutOrcs_defineProperty(this, "lastColdCheck",
     0);QuestL9SmutOrcs_defineProperty(this, "hasEnoughCold",
-    false);}QuestL9SmutOrcs_createClass(SmutOrcs, [{ key: "level", value:
+    false);QuestL9SmutOrcs_defineProperty(this, "lastColdMaximize", void 0);QuestL9SmutOrcs_defineProperty(this, "damagingEquips",
+
+    [
+    "Muscle band",
+    "Ant Hoe",
+    "Ant Pick",
+    "Ant Pitchfork",
+    "Ant Rake",
+    "Ant Sickle",
+    "Tiny bowler"].
+    map((s) => external_kolmafia_namespaceObject.Item.get(s)));}QuestL9SmutOrcs_createClass(SmutOrcs, [{ key: "level", value:
 
     function level() {
       return 7;
@@ -14915,13 +14925,14 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         if (this.lastColdCheck < (0,external_kolmafia_namespaceObject.turnsPlayed)() - 5) {
           this.lastColdCheck = (0,external_kolmafia_namespaceObject.turnsPlayed)();
 
-          (0,external_kolmafia_namespaceObject.maximize)("cold dmg 5 min", true);
+          (0,external_kolmafia_namespaceObject.maximize)("cold dmg 10 min", true);
           var melee = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Cold Damage");
 
-          (0,external_kolmafia_namespaceObject.maximize)("+cold spell dmg 5 min", true);
+          (0,external_kolmafia_namespaceObject.maximize)("cold spell dmg 10 min", true);
           var spell = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Cold Spell Damage");
 
-          this.hasEnoughCold = Math.max(melee, spell) > 5;
+          this.hasEnoughCold = Math.max(melee, spell) >= 5;
+          this.lastColdMaximize = spell > melee ? "cold spell dmg" : "cold dmg";
         }
 
         if (!this.hasEnoughCold) {
@@ -15011,19 +15022,7 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         }
       }
 
-      var str = outfit.createString();
-      //"+5 cold dmg +5 cold spell dmg"
-      (0,external_kolmafia_namespaceObject.maximize)(str + " +cold dmg 5 min", true);
-      var melee = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Cold Damage");
-
-      (0,external_kolmafia_namespaceObject.maximize)(str + " +cold spell dmg 5 min", true);
-      var spell = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Cold Spell Damage");
-
-      if (melee > spell) {
-        outfit.addBonus("+cold dmg 5 min");
-      } else {
-        outfit.addBonus("+cold spell dmg 5 min");
-      }
+      outfit.addBonus("+" + this.lastColdMaximize + " 5 min");
 
       return {
         location: this.loc,
@@ -15042,12 +15041,18 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
             attack = Macro.attack();
           } else {
             attack = Macro.skill("Grey Noise");
-          }
+          }var _iterator = QuestL9SmutOrcs_createForOfIteratorHelper(
+
+          this.damagingEquips),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var i = _step.value;
+              if ((0,external_kolmafia_namespaceObject.equippedAmount)(i) > 0) {
+                (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Slot.get("Familiar"), external_kolmafia_namespaceObject.Item.get("None"));
+              }
+            }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
 
           greyAdv(
           this.loc,
           outfit,
-          new AdventureSettings().setFinishingBlowMacro(attack.repeat()));
+          new AdventureSettings().setStartOfFightMacro(attack.repeat()));
 
           this.tryBuild();
         } };
@@ -15165,11 +15170,11 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
   }, { key: "simMax", value:
     function simMax(ma) {
       var sim = (0,external_kolmafia_namespaceObject.maximize)(ma, 0, 0, true, true);
-      var score = 0;var _iterator = QuestL9SmutOrcs_createForOfIteratorHelper(
+      var score = 0;var _iterator2 = QuestL9SmutOrcs_createForOfIteratorHelper(
 
-      sim),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var e = _step.value;
+      sim),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var e = _step2.value;
           score += e.score;
-        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
 
       return score;
     } }, { key: "getBestBlechOutfit", value:
