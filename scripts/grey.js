@@ -22154,8 +22154,7 @@ function TaskJuneCleaver_classCallCheck(instance, Constructor) {if (!(instance i
 
 var TaskJuneCleaver = /*#__PURE__*/function () {function TaskJuneCleaver() {TaskJuneCleaver_classCallCheck(this, TaskJuneCleaver);TaskJuneCleaver_defineProperty(this, "hasSet",
     false);TaskJuneCleaver_defineProperty(this, "hasSet2",
-    false);TaskJuneCleaver_defineProperty(this, "wasPoor", void 0);}TaskJuneCleaver_createClass(TaskJuneCleaver, [{ key: "run", value:
-
+    false);}TaskJuneCleaver_createClass(TaskJuneCleaver, [{ key: "run", value:
 
     function run() {
       if (!this.hasSet) {
@@ -22169,14 +22168,14 @@ var TaskJuneCleaver = /*#__PURE__*/function () {function TaskJuneCleaver() {Task
         // Teachers
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1470", "2"); // Teachers pen
         // Sprouts
-        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1474", "4"); // Get food. No. Skip instead.
+        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1474", "4"); // Skip
         // Hypnotic
-        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1475", "4"); // Moms necklace. No. Skip instead.
+        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1475", "4"); // Skip
 
         // Lost and found
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1471", "1"); // Meat potion
         // Summer days
-        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1472", "4"); // Food fish. No. Skip instead.
+        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1472", "4"); // Skip
 
         // Aunts
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1468", "4"); // Skip
@@ -22191,8 +22190,17 @@ var TaskJuneCleaver = /*#__PURE__*/function () {function TaskJuneCleaver() {Task
         // Aunts
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1468", "1"); // Mus substats
 
+        // Summer days
+        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1472", "2"); // Food fish.
+
         // Bath time
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1473", "2"); // 2 res to spooky, stench, sleaze, DR 15
+
+        // Sprouts
+        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1474", "2"); // Get food.
+
+        // Hypnotic
+        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1475", "1"); // Moms necklace.
       }
     } }]);return TaskJuneCleaver;}();
 ;// CONCATENATED MODULE: ./src/tasks/TaskLatteFiller.ts
