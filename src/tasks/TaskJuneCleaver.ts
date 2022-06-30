@@ -4,7 +4,6 @@ import { Task } from "./Tasks";
 export class TaskJuneCleaver implements Task {
   hasSet: boolean = false;
   hasSet2: boolean = false;
-  wasPoor: boolean;
 
   run(): void {
     if (!this.hasSet) {
@@ -18,14 +17,14 @@ export class TaskJuneCleaver implements Task {
       // Teachers
       setProperty("choiceAdventure1470", "2"); // Teachers pen
       // Sprouts
-      setProperty("choiceAdventure1474", "4"); // Get food. No. Skip instead.
+      setProperty("choiceAdventure1474", "4"); // Skip
       // Hypnotic
-      setProperty("choiceAdventure1475", "4"); // Moms necklace. No. Skip instead.
+      setProperty("choiceAdventure1475", "4"); // Skip
 
       // Lost and found
       setProperty("choiceAdventure1471", "1"); // Meat potion
       // Summer days
-      setProperty("choiceAdventure1472", "4"); // Food fish. No. Skip instead.
+      setProperty("choiceAdventure1472", "4"); // Skip
 
       // Aunts
       setProperty("choiceAdventure1468", "4"); // Skip
@@ -40,8 +39,17 @@ export class TaskJuneCleaver implements Task {
       // Aunts
       setProperty("choiceAdventure1468", "1"); // Mus substats
 
+      // Summer days
+      setProperty("choiceAdventure1472", "2"); // Food fish.
+
       // Bath time
       setProperty("choiceAdventure1473", "2"); // 2 res to spooky, stench, sleaze, DR 15
+
+      // Sprouts
+      setProperty("choiceAdventure1474", "2"); // Get food.
+
+      // Hypnotic
+      setProperty("choiceAdventure1475", "1"); // Moms necklace.
     }
   }
 }
