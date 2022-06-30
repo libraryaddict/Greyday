@@ -23,6 +23,9 @@ import {
   getWorkshed,
   getFuel,
   turnsPlayed,
+  equippedAmount,
+  equip,
+  Slot,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
@@ -49,6 +52,16 @@ export class SmutOrcs implements QuestInfo {
   driveSafe: Effect = Effect.get("Driving Safely");
   lastColdCheck: number = 0;
   hasEnoughCold: boolean = false;
+  lastColdMaximize: string;
+  damagingEquips: Item[] = [
+    "Muscle band",
+    "Ant Hoe",
+    "Ant Pick",
+    "Ant Pitchfork",
+    "Ant Rake",
+    "Ant Sickle",
+    "Tiny bowler",
+  ].map((s) => Item.get(s));
 
   level(): number {
     return 7;
@@ -82,13 +95,14 @@ export class SmutOrcs implements QuestInfo {
       if (this.lastColdCheck < turnsPlayed() - 5) {
         this.lastColdCheck = turnsPlayed();
 
-        maximize("cold dmg 5 min", true);
+        maximize("cold dmg 10 min", true);
         let melee = numericModifier("Generated:_spec", "Cold Damage");
 
-        maximize("+cold spell dmg 5 min", true);
+        maximize("cold spell dmg 10 min", true);
         let spell = numericModifier("Generated:_spec", "Cold Spell Damage");
 
-        this.hasEnoughCold = Math.max(melee, spell) > 5;
+        this.hasEnoughCold = Math.max(melee, spell) >= 5;
+        this.lastColdMaximize = spell > melee ? "cold spell dmg" : "cold dmg";
       }
 
       if (!this.hasEnoughCold) {
@@ -178,19 +192,7 @@ export class SmutOrcs implements QuestInfo {
       }
     }
 
-    let str = outfit.createString();
-    //"+5 cold dmg +5 cold spell dmg"
-    maximize(str + " +cold dmg 5 min", true);
-    let melee = numericModifier("Generated:_spec", "Cold Damage");
-
-    maximize(str + " +cold spell dmg 5 min", true);
-    let spell = numericModifier("Generated:_spec", "Cold Spell Damage");
-
-    if (melee > spell) {
-      outfit.addBonus("+cold dmg 5 min");
-    } else {
-      outfit.addBonus("+cold spell dmg 5 min");
-    }
+    outfit.addBonus("+" + this.lastColdMaximize + " 5 min");
 
     return {
       location: this.loc,
@@ -211,10 +213,16 @@ export class SmutOrcs implements QuestInfo {
           attack = Macro.skill("Grey Noise");
         }
 
+        for (let i of this.damagingEquips) {
+          if (equippedAmount(i) > 0) {
+            equip(Slot.get("Familiar"), Item.get("None"));
+          }
+        }
+
         greyAdv(
           this.loc,
           outfit,
-          new AdventureSettings().setFinishingBlowMacro(attack.repeat())
+          new AdventureSettings().setStartOfFightMacro(attack.repeat())
         );
         this.tryBuild();
       },
