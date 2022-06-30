@@ -20,6 +20,7 @@ import {
   myAdventures,
   haveSkill,
   equippedAmount,
+  myMeat,
 } from "kolmafia";
 import { greyAdv, AdventureSettings } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -110,6 +111,10 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
       if (familiarWeight(this.goose) < 6) {
         return QuestStatus.NOT_READY;
       }
+    }
+
+    if (myMeat() < 500) {
+      return QuestStatus.NOT_READY;
     }
 
     // User can sell their clovers, which will profit more according to their MPA
@@ -222,6 +227,10 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
             tries--;
             print("Drop my ore dammit!", "red");
             Macro.skill(this.polar).submit();
+          }
+
+          if (this.getOreRemaining() > 2) {
+            print("Drat. We're going to have to do a backup.", "red");
           }
         }
 

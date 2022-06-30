@@ -14,6 +14,7 @@ import {
   getProperty,
   canadiaAvailable,
 } from "kolmafia";
+import { TaskEstimatedTurns, TaskInfo } from "../../typings/TaskInfo";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { ResourceClaim, ResourceType } from "../../utils/GreyResources";
 import { canCombatLocket } from "../../utils/GreyUtils";
@@ -21,10 +22,22 @@ import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
-export class QuestAbsorbCanadiaMonster implements QuestInfo {
+export class QuestAbsorbCanadiaMonster extends TaskInfo implements QuestInfo {
   monster: Monster = Monster.get("cloud of disembodied whiskers");
   familiar: Familiar = Familiar.get("Grey Goose");
   spoon: Item = Item.get("hewn moon-rune spoon");
+  wishResource: ResourceClaim = new ResourceClaim(
+    ResourceType.GENIE_WISH,
+    1,
+    "Wish " + this.monster.name,
+    AbsorbsProvider.getAbsorb(this.monster).adventures
+  );
+  locketResource: ResourceClaim = new ResourceClaim(
+    ResourceType.COMBAT_LOCKET,
+    1,
+    "Locket " + this.monster.name,
+    AbsorbsProvider.getAbsorb(this.monster).adventures
+  );
 
   getId(): QuestType {
     return "Absorbs / Canadia";
@@ -86,14 +99,10 @@ export class QuestAbsorbCanadiaMonster implements QuestInfo {
     };
   }
 
-  getResourceClaims?(): ResourceClaim[] {
+  getEstimatedTurns(): TaskEstimatedTurns[] {
     return [
-      new ResourceClaim(
-        ResourceType.COMBAT_LOCKET,
-        1,
-        "Locket Canadia Monster",
-        19
-      ),
+      new TaskEstimatedTurns(1, 1, [this.locketResource]),
+      new TaskEstimatedTurns(1, 1, [this.wishResource]),
     ];
   }
 

@@ -228,10 +228,6 @@ export class GreyAdventurer {
       outfit.addBonus(`+${bonus} bonus cursed magnifying glass`);
     }
 
-    if (doOrb) {
-      outfit.addBonus("+10 bonus june cleaver");
-    }
-
     if (
       toRun.familiar != null &&
       (toRun.disableFamOverride == true || !wantToAbsorb)
@@ -263,6 +259,10 @@ export class GreyAdventurer {
       replaceWith.push(familiar);
 
       familiar = replaceWith.filter((f) => haveFamiliar(f))[0];
+    }
+
+    if (doOrb || (toRun.familiar == null && gooseReplaceable)) {
+      outfit.addBonus("+10 bonus june cleaver");
     }
 
     let locationToSet = toRun.location;

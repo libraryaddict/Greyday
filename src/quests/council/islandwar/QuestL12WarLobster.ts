@@ -199,15 +199,22 @@ export class QuestL12Lobster implements QuestInfo {
   }
 
   mustBeDone(): boolean {
+    if (itemAmount(this.item) >= 5) {
+      if (
+        getProperty("sidequestLighthouseCompleted") == "none" &&
+        getProperty("warProgress") == "started"
+      ) {
+        return true;
+      }
+
+      return false;
+    }
+
     if (this.lastMonster() != this.monster) {
       return false;
     }
 
     if (this.hasBackups() <= 0) {
-      return false;
-    }
-
-    if (itemAmount(this.item) >= 5) {
       return false;
     }
 

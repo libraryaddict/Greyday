@@ -29,6 +29,7 @@ import { QuestAbsorbStarMonster } from "./absorbs/QuestAbsorbStarMonster";
 import { QuestFantasyRealm } from "./council/tower/keys/QuestFantasyRealm";
 import { QuestBugbearAbsorb } from "./absorbs/QuestBugbearAbsorb";
 import { QuestTeachersPen } from "./custom/QuestTeachersPen";
+import { QuestJuneCleaver } from "./custom/QuestJuneCleaver";
 
 export class QuestsCustom implements QuestInfo {
   // This is a wrapper class around some of our custom routing goals. Like combat locket or so.
@@ -64,6 +65,7 @@ export class QuestsCustom implements QuestInfo {
     this.quests.push(new QuestBugbearAbsorb());
     this.quests.push(new QuestFantasyRealm());
     this.quests.push(new QuestTeachersPen());
+    this.quests.push(new QuestJuneCleaver());
   }
 
   level(): number {

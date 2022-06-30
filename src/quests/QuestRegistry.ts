@@ -98,6 +98,7 @@ export class QuestRegistry {
       { id: "CombatLocket / SystemSweep" },
       { id: "CombatLocket / InfiniteLoop" },
       { id: "Misc / FamEquip" },
+      { id: "Misc / JuneCleaver" },
 
       { id: "NPC / Meatsmith" },
       { id: "NPC / GnomeSkills" },

@@ -1,9 +1,11 @@
 import {
   availableAmount,
   Familiar,
+  getProperty,
   Item,
   Location,
   Monster,
+  toInt,
   turnsPlayed,
 } from "kolmafia";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -46,7 +48,11 @@ export class QuestTeachersPen implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (availableAmount(this.cleaver) > 0 && turnsPlayed() < 100) {
+    if (
+      availableAmount(this.cleaver) > 0 &&
+      turnsPlayed() < 50 &&
+      toInt(getProperty("_juneCleaverFightsLeft")) < 3
+    ) {
       return QuestStatus.NOT_READY;
     }
 

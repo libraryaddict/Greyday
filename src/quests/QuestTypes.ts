@@ -183,7 +183,8 @@ export type QuestMisc =
   | "Misc / BugbearBakery"
   | "Misc / Moonsign"
   | "Misc / Witchess Queen Crown"
-  | "Misc / Teacher's Pen";
+  | "Misc / Teacher's Pen"
+  | "Misc / JuneCleaver";
 export type QuestCombatLocket =
   | "CombatLocket / SystemSweep"
   | "CombatLocket / InfiniteLoop";

@@ -22,6 +22,7 @@ import {
   cliExecute,
   getWorkshed,
   getFuel,
+  turnsPlayed,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
@@ -46,6 +47,8 @@ export class SmutOrcs implements QuestInfo {
   paintRes: Effect = effectModifier(this.canOfPaint, "Effect");
   asdonMartin: Item = Item.get("Asdon Martin keyfob");
   driveSafe: Effect = Effect.get("Driving Safely");
+  lastColdCheck: number = 0;
+  hasEnoughCold: boolean = false;
 
   level(): number {
     return 7;
@@ -73,6 +76,24 @@ export class SmutOrcs implements QuestInfo {
 
     if (status > 0) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (!this.isNCTime()) {
+      if (this.lastColdCheck < turnsPlayed() - 5) {
+        this.lastColdCheck = turnsPlayed();
+
+        maximize("cold dmg 5 min", true);
+        let melee = numericModifier("Generated:_spec", "Cold Damage");
+
+        maximize("+cold spell dmg 5 min", true);
+        let spell = numericModifier("Generated:_spec", "Cold Spell Damage");
+
+        this.hasEnoughCold = Math.max(melee, spell) > 5;
+      }
+
+      if (!this.hasEnoughCold) {
+        return QuestStatus.NOT_READY;
+      }
     }
 
     if (getProperty("questL11Shen") != "finished") {
@@ -132,7 +153,6 @@ export class SmutOrcs implements QuestInfo {
     let outfit = new GreyOutfit();
     outfit.minusMonsterLevelWeight = 5;
     outfit.setItemDrops();
-    outfit.addBonus("+5 cold dmg +5 cold spell dmg");
 
     if (
       this.getLumberHave() <= this.getFastenersHave() &&
@@ -158,15 +178,34 @@ export class SmutOrcs implements QuestInfo {
       }
     }
 
+    let str = outfit.createString();
+    //"+5 cold dmg +5 cold spell dmg"
+    maximize(str + " +cold dmg 5 min", true);
+    let melee = numericModifier("Generated:_spec", "Cold Damage");
+
+    maximize(str + " +cold spell dmg 5 min", true);
+    let spell = numericModifier("Generated:_spec", "Cold Spell Damage");
+
+    if (melee > spell) {
+      outfit.addBonus("+cold dmg 5 min");
+    } else {
+      outfit.addBonus("+cold spell dmg 5 min");
+    }
+
     return {
       location: this.loc,
       outfit: outfit,
       run: () => {
         let attack: Macro;
 
-        if (
-          numericModifier("Cold Damage") > numericModifier("Cold Spell Damage")
-        ) {
+        let meleeDmg = numericModifier("Cold Damage");
+        let spellDmg = numericModifier("Cold Spell Damage");
+
+        if (meleeDmg <= 0 && spellDmg <= 0) {
+          throw "Not enough cold damage to do smut orcs!";
+        }
+
+        if (meleeDmg > spellDmg) {
           attack = Macro.attack();
         } else {
           attack = Macro.skill("Grey Noise");

@@ -10,6 +10,7 @@ import {
   toInt,
   visitUrl,
 } from "kolmafia";
+import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -47,6 +48,7 @@ export class QuestL12WarFlyers implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: new GreyOutfit("-tie"),
       run: () => {
         this.visitArena();
       },

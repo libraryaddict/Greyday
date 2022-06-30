@@ -13,6 +13,7 @@ import {
   availableAmount,
   haveSkill,
 } from "kolmafia";
+import { TaskEstimatedTurns, TaskInfo } from "../../typings/TaskInfo";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { ResourceClaim, ResourceType } from "../../utils/GreyResources";
 import { canCombatLocket, doPocketWishFight } from "../../utils/GreyUtils";
@@ -20,12 +21,31 @@ import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
-export class QuestAbsorbStarMonster implements QuestInfo {
+export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
   evenMonster: Monster = Monster.get("One-Eyed Willie");
   oddMonster: Monster = Monster.get("Little Man in the Canoe");
   familiar: Familiar = Familiar.get("Grey Goose");
   pocketWish: Item = Item.get("Pocket Wish");
   nanovision: Skill = Skill.get("Double Nanovision");
+  wishResource: ResourceClaim;
+  locketResource: ResourceClaim;
+
+  constructor() {
+    super();
+
+    this.wishResource = new ResourceClaim(
+      ResourceType.GENIE_WISH,
+      1,
+      "Wish " + this.getMonster().name,
+      AbsorbsProvider.getAbsorb(this.getMonster()).adventures
+    );
+    this.locketResource = new ResourceClaim(
+      ResourceType.COMBAT_LOCKET,
+      1,
+      "Locket " + this.getMonster().name,
+      AbsorbsProvider.getAbsorb(this.getMonster()).adventures
+    );
+  }
 
   getMonster(): Monster {
     return myAscensions() % 2 != 0 ? this.evenMonster : this.oddMonster;
@@ -97,14 +117,10 @@ export class QuestAbsorbStarMonster implements QuestInfo {
     };
   }
 
-  getResourceClaims?(): ResourceClaim[] {
+  getEstimatedTurns(): TaskEstimatedTurns[] {
     return [
-      new ResourceClaim(
-        ResourceType.COMBAT_LOCKET,
-        1,
-        "Locket Star Monster",
-        19
-      ),
+      new TaskEstimatedTurns(1, 1, [this.locketResource]),
+      new TaskEstimatedTurns(1, 1, [this.wishResource]),
     ];
   }
 

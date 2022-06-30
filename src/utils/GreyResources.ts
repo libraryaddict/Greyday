@@ -424,6 +424,7 @@ export class GreyRequirements {
  */
 export enum ResourceType {
   PULL,
+  GENIE_WISH,
   BACKUP_CAMERA,
   COMBAT_LOCKET,
   CARGO_SHORTS,
