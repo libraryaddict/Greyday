@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  equippedAmount,
   Familiar,
   getProperty,
   Item,
@@ -44,7 +45,11 @@ export class QuestTeachersPen implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (GreySettings.isHardcoreMode() || availableAmount(this.pen) > 0) {
+    if (
+      GreySettings.isHardcoreMode() ||
+      availableAmount(this.pen) > 0 ||
+      equippedAmount(this.pen) > 0
+    ) {
       return QuestStatus.COMPLETED;
     }
 

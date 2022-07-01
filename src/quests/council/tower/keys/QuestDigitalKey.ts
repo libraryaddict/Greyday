@@ -13,6 +13,7 @@ import {
   Monster,
   turnsPlayed,
   pullsRemaining,
+  cliExecute,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -68,7 +69,7 @@ export class QuestDigitalKey implements QuestInfo {
       return QuestStatus.READY;
     }
 
-    if (GreySettings.shouldAvoidTowerRequirements()) {
+    if (GreySettings.shouldAvoidTowerRequirements() && pullsRemaining() != -1) {
       return QuestStatus.NOT_READY;
     }
 
@@ -128,7 +129,7 @@ export class QuestDigitalKey implements QuestInfo {
       return {
         location: null,
         run: () => {
-          retrieveItem(this.key);
+          cliExecute("acquire " + this.key);
         },
       };
     }

@@ -16,21 +16,24 @@ export class TaskJuneCleaver implements Task {
       setProperty("choiceAdventure1467", "3"); // Get adventures
       // Teachers
       setProperty("choiceAdventure1470", "2"); // Teachers pen
-      // Sprouts
-      setProperty("choiceAdventure1474", "4"); // Skip
-      // Hypnotic
-      setProperty("choiceAdventure1475", "4"); // Skip
-
       // Lost and found
       setProperty("choiceAdventure1471", "1"); // Meat potion
-      // Summer days
-      setProperty("choiceAdventure1472", "4"); // Skip
 
-      // Aunts
-      setProperty("choiceAdventure1468", "4"); // Skip
+      if (toInt(getProperty("_juneCleaverSkips")) < 5) {
+        // Sprouts
+        setProperty("choiceAdventure1474", "4"); // Skip
+        // Hypnotic
+        setProperty("choiceAdventure1475", "4"); // Skip
 
-      // Bath time
-      setProperty("choiceAdventure1473", "4"); // Skip
+        // Summer days
+        setProperty("choiceAdventure1472", "4"); // Skip
+
+        // Aunts
+        setProperty("choiceAdventure1468", "4"); // Skip
+
+        // Bath time
+        setProperty("choiceAdventure1473", "4"); // Skip
+      }
     }
 
     if (!this.hasSet2 && toInt(getProperty("_juneCleaverSkips")) >= 5) {

@@ -26,7 +26,7 @@ export class QuestJuneCleaver implements QuestInfo {
   }
 
   level(): number {
-    return 5;
+    return 3;
   }
 
   status(): QuestStatus {
