@@ -10366,7 +10366,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
         return QuestStatus.READY;
       }
 
-      if (GreySettings.shouldAvoidTowerRequirements()) {
+      if (GreySettings.shouldAvoidTowerRequirements() && (0,external_kolmafia_namespaceObject.pullsRemaining)() != -1) {
         return QuestStatus.NOT_READY;
       }
 
@@ -10426,7 +10426,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
         return {
           location: null,
           run: () => {
-            (0,external_kolmafia_namespaceObject.retrieveItem)(this.key);
+            (0,external_kolmafia_namespaceObject.cliExecute)("acquire " + this.key);
           } };
 
       }
@@ -11370,7 +11370,7 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
         location: null,
         run: () => {
           var result = (0,external_kolmafia_namespaceObject.maximize)(
-          "+5 meat +0.03 moxie +0.01 hp 300 min +switch hobo monkey +switch robortender",
+          "+5 meat +0.03 moxie +1 hp 300 min 300 max +switch hobo monkey +switch robortender",
           false);
 
 
@@ -20553,7 +20553,11 @@ var QuestTeachersPen = /*#__PURE__*/function () {function QuestTeachersPen() {Qu
     } }, { key: "status", value:
 
     function status() {
-      if (GreySettings.isHardcoreMode() || (0,external_kolmafia_namespaceObject.availableAmount)(this.pen) > 0) {
+      if (
+      GreySettings.isHardcoreMode() ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.pen) > 0 ||
+      (0,external_kolmafia_namespaceObject.equippedAmount)(this.pen) > 0)
+      {
         return QuestStatus.COMPLETED;
       }
 
@@ -20598,7 +20602,7 @@ var QuestJuneCleaver = /*#__PURE__*/function () {function QuestJuneCleaver() {Qu
     } }, { key: "level", value:
 
     function level() {
-      return 5;
+      return 3;
     } }, { key: "status", value:
 
     function status() {
@@ -22167,21 +22171,24 @@ var TaskJuneCleaver = /*#__PURE__*/function () {function TaskJuneCleaver() {Task
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1467", "3"); // Get adventures
         // Teachers
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1470", "2"); // Teachers pen
-        // Sprouts
-        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1474", "4"); // Skip
-        // Hypnotic
-        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1475", "4"); // Skip
-
         // Lost and found
         (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1471", "1"); // Meat potion
-        // Summer days
-        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1472", "4"); // Skip
 
-        // Aunts
-        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1468", "4"); // Skip
+        if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverSkips")) < 5) {
+          // Sprouts
+          (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1474", "4"); // Skip
+          // Hypnotic
+          (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1475", "4"); // Skip
 
-        // Bath time
-        (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1473", "4"); // Skip
+          // Summer days
+          (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1472", "4"); // Skip
+
+          // Aunts
+          (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1468", "4"); // Skip
+
+          // Bath time
+          (0,external_kolmafia_namespaceObject.setProperty)("choiceAdventure1473", "4"); // Skip
+        }
       }
 
       if (!this.hasSet2 && (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverSkips")) >= 5) {
