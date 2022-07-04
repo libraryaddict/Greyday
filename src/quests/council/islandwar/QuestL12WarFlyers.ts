@@ -72,7 +72,7 @@ export class QuestL12WarFlyers implements QuestInfo {
       availableAmount(this.flyers) > 0 &&
       toInt(getProperty("flyeredML")) >= 10000
     ) {
-      setProperty("flyeredML", "9999");
+      setProperty("flyeredML", "9970");
     }
   }
 }

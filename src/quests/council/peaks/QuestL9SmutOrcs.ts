@@ -222,7 +222,7 @@ export class SmutOrcs implements QuestInfo {
         greyAdv(
           this.loc,
           outfit,
-          new AdventureSettings().setStartOfFightMacro(attack.repeat())
+          new AdventureSettings().setFinishingBlowMacro(attack.repeat())
         );
         this.tryBuild();
       },

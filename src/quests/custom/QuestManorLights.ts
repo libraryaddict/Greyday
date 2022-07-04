@@ -15,6 +15,8 @@ import {
   Skill,
   indexOf,
   print,
+  equip,
+  Slot,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -180,7 +182,11 @@ export class QuestManorLights implements QuestInfo {
     }
 
     if (getProperty("_juneCleaverFightsLeft") == "0") {
-      outfit.addBonus("-equip june cleaver");
+      if (fight) {
+        outfit.addBonus("-equip june cleaver");
+      } else {
+        equip(Slot.get("Weapon"), Item.get("None"));
+      }
     }
 
     return {
@@ -277,7 +283,11 @@ export class QuestManorLights implements QuestInfo {
     let outfit = !fight ? new GreyOutfit("-tie") : new GreyOutfit();
 
     if (getProperty("_juneCleaverFightsLeft") == "0") {
-      outfit.addBonus("-equip june cleaver");
+      if (fight) {
+        outfit.addBonus("-equip june cleaver");
+      } else {
+        equip(Slot.get("Weapon"), Item.get("None"));
+      }
     }
 
     return {
