@@ -1393,7 +1393,8 @@ function greyDuringFightMacro(settings) {
 
   if (
   /*toInt(getProperty("flyeredML")) <= 10000 && */monster.baseHp < 300 &&
-  (0,external_kolmafia_namespaceObject.myHp)() > 120)
+  (0,external_kolmafia_namespaceObject.myHp)() > 120 &&
+  !monster.attributes.includes("FREE"))
   {
     macro.tryItem(external_kolmafia_namespaceObject.Item.get("rock band flyers"));
   }
@@ -1466,16 +1467,18 @@ function greyKillingBlow(outfit) {
       (0,external_kolmafia_namespaceObject.haveOutfit)("Filthy Hippy Disguise") ||
       (0,external_kolmafia_namespaceObject.haveOutfit)("Frat Warrior Fatigues")))
       {
+        macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Infinite Loop"));
         macro.while_(
         "!pastround 15 && !hppercentbelow 30 && hasskill Infinite Loop",
         Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Infinite Loop")));
 
+      } else {
+        macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));
+        macro.while_(
+        "!pastround 15 && !hppercentbelow 30 && hasskill Double Nanovision",
+        Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Double Nanovision")));
+
       }
-
-      macro.while_(
-      "!pastround 15 && !hppercentbelow 30 && hasskill Double Nanovision",
-      Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Double Nanovision")));
-
     }
   }
 
@@ -4816,7 +4819,8 @@ var QuestL11DesertExplore = /*#__PURE__*/function () {function QuestL11DesertExp
     external_kolmafia_namespaceObject.Item.get("miniature crystal ball"));QuestL11DesertExplore_defineProperty(this, "page",
     external_kolmafia_namespaceObject.Item.get("worm-riding manual page"));QuestL11DesertExplore_defineProperty(this, "goose",
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL11DesertExplore_defineProperty(this, "rose",
-    external_kolmafia_namespaceObject.Item.get("Stone Rose"));}QuestL11DesertExplore_createClass(QuestL11DesertExplore, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Stone Rose"));QuestL11DesertExplore_defineProperty(this, "nanovision",
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));}QuestL11DesertExplore_createClass(QuestL11DesertExplore, [{ key: "getId", value:
 
     function getId() {
       return "Council / MacGruffin / Desert / Explore";
@@ -4862,7 +4866,7 @@ var QuestL11DesertExplore = /*#__PURE__*/function () {function QuestL11DesertExp
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.compass) == 0) {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.compass) == 0 || !(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -5500,6 +5504,7 @@ function QuestL11ManorBoss_classCallCheck(instance, Constructor) {if (!(instance
 
 
 
+
 var QuestL11ManorBoss = /*#__PURE__*/function () {function QuestL11ManorBoss() {QuestL11ManorBoss_classCallCheck(this, QuestL11ManorBoss);QuestL11ManorBoss_defineProperty(this, "summoning",
     external_kolmafia_namespaceObject.Location.get("Summoning Chamber"));}QuestL11ManorBoss_createClass(QuestL11ManorBoss, [{ key: "getId", value:
 
@@ -5526,15 +5531,15 @@ var QuestL11ManorBoss = /*#__PURE__*/function () {function QuestL11ManorBoss() {
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit("+5 init");
-
       return {
         location: this.summoning,
-        outfit: outfit,
         run: () => {
           greyAdv(
           "place.php?whichplace=manor4&action=manor4_chamberboss",
-          outfit);
+          null,
+          new AdventureSettings().setStartOfFightMacro(
+          Macro.skill(external_kolmafia_namespaceObject.Skill.get("Infinite Loop"))));
+
 
         } };
 
@@ -9101,12 +9106,16 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
       return (0,external_kolmafia_namespaceObject.getProperty)("_roboDrinks").includes("drive-by shooting");
     } }, { key: "getFamiliarToUse", value:
 
-    function getFamiliarToUse() {
+    function getFamiliarToUse(allownNull) {
       if (
       (0,external_kolmafia_namespaceObject.haveFamiliar)(this.robor) && (
       this.hasMeatBooze() || this.hasDrunkMeat()))
       {
         return this.robor;
+      }
+
+      if (allownNull) {
+        return null;
       }
 
       return (0,external_kolmafia_namespaceObject.haveFamiliar)(this.hobo) ?
@@ -9117,9 +9126,9 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
     } }, { key: "hasFamiliarRecommendation", value:
 
     function hasFamiliarRecommendation() {
-      var toLevel = this.getFamiliarToUse();
+      var toLevel = this.getFamiliarToUse(true);
 
-      if ((0,external_kolmafia_namespaceObject.familiarWeight)(toLevel) < 20) {
+      if (toLevel != null && (0,external_kolmafia_namespaceObject.familiarWeight)(toLevel) < 20) {
         return toLevel;
       }
 
@@ -9207,10 +9216,10 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
       this.doRoboDrinks();
 
       return {
-        familiar: this.getFamiliarToUse(),
+        familiar: this.getFamiliarToUse(false),
         location: this.loc,
         outfit: outfit,
-        disableFamOverride: this.getFamiliarToUse() != null,
+        disableFamOverride: this.getFamiliarToUse(false) != null,
         run: () => {
           if (this.getMeat() == 0) {
             this.visitNuns();
@@ -11369,15 +11378,10 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
         outfit: new GreyOutfit("-tie"),
         location: null,
         run: () => {
-          var result = (0,external_kolmafia_namespaceObject.maximize)(
-          "+5 meat +0.03 moxie +1 hp 300 min 300 max +switch hobo monkey +switch robortender",
-          false);
+          (0,external_kolmafia_namespaceObject.cliExecute)(
+          "maximize " +
+          "+5 meat +0.03 moxie +1 hp 300 min 300 max +switch hobo monkey +switch robortender");
 
-
-          if (!result) {
-            (0,external_kolmafia_namespaceObject.print)("Failed maximizer? Weird.", "red");
-            throw "Failed maximizer..";
-          }
 
           restoreHPTo(Math.min((0,external_kolmafia_namespaceObject.myMaxhp)(), 600));
 
@@ -11555,6 +11559,8 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
       (0,external_kolmafia_namespaceObject.print)(
       "Using rocket, we predict " +
       Math.round(damage) +
+      " / " +
+      this.health +
       " damage (Worst scenario)",
       "blue");
 
@@ -11569,6 +11575,15 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
         return false;
       }
 
+      if (
+      (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Mysticality")) <
+      (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Muscle")) &&
+      !(0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Phairly Balanced")) &&
+      (0,external_kolmafia_namespaceObject.mallPrice)(external_kolmafia_namespaceObject.Item.get("PH Balancer")) < 1000)
+      {
+        (0,external_kolmafia_namespaceObject.use)(external_kolmafia_namespaceObject.Item.get("PH Balancer"));
+      }
+
       (0,external_kolmafia_namespaceObject.maximize)("mys", true);
 
       var mys = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Buffed Mysticality");
@@ -11579,6 +11594,8 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
       this.drunkBell.name +
       ", we predict " +
       Math.round(damage) +
+      " / " +
+      this.health +
       " damage (Worst scenario)",
       "blue");
 
@@ -16747,6 +16764,10 @@ var QuestManorLights = /*#__PURE__*/function () {
         outfit.meatDropWeight = 2;
       }
 
+      if ((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverFightsLeft") == "0") {
+        outfit.addBonus("-equip june cleaver");
+      }
+
       return {
         location: null,
         familiar: fight ? this.goose : null,
@@ -16831,10 +16852,15 @@ var QuestManorLights = /*#__PURE__*/function () {
     function doEliza() {
       var eliza = this.getEliza();
       var fight = this.isElizaFight();
+      var outfit = !fight ? new GreyOutfit("-tie") : new GreyOutfit();
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverFightsLeft") == "0") {
+        outfit.addBonus("-equip june cleaver");
+      }
 
       return {
         location: null,
-        outfit: !fight ? new GreyOutfit("-tie") : null,
+        outfit: outfit,
         run: () => {
           var both = this.getBoth();
           (0,external_kolmafia_namespaceObject.visitUrl)("adventure.php?snarfblat=" + (0,external_kolmafia_namespaceObject.toInt)(eliza[0]));
@@ -18258,7 +18284,7 @@ var QuestMPRegen = /*#__PURE__*/function () {function QuestMPRegen() {QuestMPReg
       }
 
       if (this.getWand() == null) {
-        if ((0,external_kolmafia_namespaceObject.myMeat)() < 5000 || getQuestStatus("questL11Black") < 3) {
+        if ((0,external_kolmafia_namespaceObject.myMeat)() < 6000 || getQuestStatus("questL11Black") < 3) {
           return QuestStatus.NOT_READY;
         }
 
@@ -18547,7 +18573,9 @@ function QuestSkillSystemSweep_classCallCheck(instance, Constructor) {if (!(inst
 var QuestSkillSystemSweep = /*#__PURE__*/function () {function QuestSkillSystemSweep() {QuestSkillSystemSweep_classCallCheck(this, QuestSkillSystemSweep);QuestSkillSystemSweep_defineProperty(this, "park",
     external_kolmafia_namespaceObject.Location.get("The Hidden Park"));QuestSkillSystemSweep_defineProperty(this, "skill",
     external_kolmafia_namespaceObject.Skill.get("System Sweep"));QuestSkillSystemSweep_defineProperty(this, "sword",
-    external_kolmafia_namespaceObject.Item.get("Antique Machete"));}QuestSkillSystemSweep_createClass(QuestSkillSystemSweep, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Antique Machete"));QuestSkillSystemSweep_defineProperty(this, "nanovision",
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestSkillSystemSweep_defineProperty(this, "book",
+    external_kolmafia_namespaceObject.Item.get("Book of matches"));}QuestSkillSystemSweep_createClass(QuestSkillSystemSweep, [{ key: "getId", value:
 
     function getId() {
       return "Skills / System Sweep";
@@ -18564,6 +18592,10 @@ var QuestSkillSystemSweep = /*#__PURE__*/function () {function QuestSkillSystemS
 
       if (!this.hasRelocated() || (0,external_kolmafia_namespaceObject.availableAmount)(this.sword) == 0) {
         return QuestStatus.NOT_READY;
+      }
+
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision) && this.wantBook()) {
+        return QuestStatus.FASTER_LATER;
       }
 
       return QuestStatus.READY;
@@ -18588,6 +18620,18 @@ var QuestSkillSystemSweep = /*#__PURE__*/function () {function QuestSkillSystemS
 
     function getLocations() {
       return [];
+    } }, { key: "wantBook", value:
+
+    function wantBook() {
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.book) > 0 ||
+      (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("hiddenTavernUnlock")) == (0,external_kolmafia_namespaceObject.myAscensions)() ||
+      (0,external_kolmafia_namespaceObject.getProperty)("questL11Spare") == "finished")
+      {
+        return false;
+      }
+
+      return true;
     } }]);return QuestSkillSystemSweep;}();
 ;// CONCATENATED MODULE: ./src/quests/skills/QuestSkillRegistry.ts
 function QuestSkillRegistry_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestSkillRegistry_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestSkillRegistry_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestSkillRegistry_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestSkillRegistry_arrayLikeToArray(o, minLen);}function QuestSkillRegistry_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestSkillRegistry_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestSkillRegistry_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestSkillRegistry_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestSkillRegistry_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestSkillRegistry_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestSkillRegistry_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
@@ -22606,7 +22650,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
         var replaceWith = this.adventureFinder.getRecommendedFamiliars();
 
         if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("camelSpit")) < 100) {
-          replaceWith.push(external_kolmafia_namespaceObject.Familiar.get("Melodramedary"));
+          //   replaceWith.push(Familiar.get("Melodramedary"));
         }
 
         if ((0,external_kolmafia_namespaceObject.getProperty)("_roboDrinks").includes("drive-by shooting")) {
@@ -22614,6 +22658,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
         }var _iterator2 = GreyAdventurer_createForOfIteratorHelper(
 
         [
+        "Grey Goose",
         "Pocket Professor",
         "Hobomonkey",
         "Jumpsuited Hound Dog"].
