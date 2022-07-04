@@ -21,6 +21,10 @@ import {
   getProperty,
   print,
   itemAmount,
+  haveEffect,
+  Effect,
+  use,
+  mallPrice,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -181,6 +185,8 @@ export class QuestTowerKillBones {
     print(
       "Using rocket, we predict " +
         Math.round(damage) +
+        " / " +
+        this.health +
         " damage (Worst scenario)",
       "blue"
     );
@@ -195,6 +201,15 @@ export class QuestTowerKillBones {
       return false;
     }
 
+    if (
+      myBuffedstat(Stat.get("Mysticality")) <
+        myBuffedstat(Stat.get("Muscle")) &&
+      !haveEffect(Effect.get("Phairly Balanced")) &&
+      mallPrice(Item.get("PH Balancer")) < 1000
+    ) {
+      use(Item.get("PH Balancer"));
+    }
+
     maximize("mys", true);
 
     let mys = numericModifier("Generated:_spec", "Buffed Mysticality");
@@ -205,6 +220,8 @@ export class QuestTowerKillBones {
         this.drunkBell.name +
         ", we predict " +
         Math.round(damage) +
+        " / " +
+        this.health +
         " damage (Worst scenario)",
       "blue"
     );

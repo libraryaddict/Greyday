@@ -8,6 +8,7 @@ import {
   maximize,
   myMaxhp,
   print,
+  cliExecute,
 } from "kolmafia";
 import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -49,15 +50,10 @@ export class QuestTowerWallMeat implements QuestInfo {
       outfit: new GreyOutfit("-tie"),
       location: null,
       run: () => {
-        let result = maximize(
-          "+5 meat +0.03 moxie +1 hp 300 min 300 max +switch hobo monkey +switch robortender",
-          false
+        cliExecute(
+          "maximize " +
+            "+5 meat +0.03 moxie +1 hp 300 min 300 max +switch hobo monkey +switch robortender"
         );
-
-        if (!result) {
-          print("Failed maximizer? Weird.", "red");
-          throw "Failed maximizer..";
-        }
 
         restoreHPTo(Math.min(myMaxhp(), 600));
 

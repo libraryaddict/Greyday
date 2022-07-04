@@ -148,7 +148,8 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
 
   if (
     /*toInt(getProperty("flyeredML")) <= 10000 && */ monster.baseHp < 300 &&
-    myHp() > 120
+    myHp() > 120 &&
+    !monster.attributes.includes("FREE")
   ) {
     macro.tryItem(Item.get("rock band flyers"));
   }
@@ -221,16 +222,18 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
             haveOutfit("Filthy Hippy Disguise") ||
             haveOutfit("Frat Warrior Fatigues")))
       ) {
+        macro.trySkill(Skill.get("Infinite Loop"));
         macro.while_(
           "!pastround 15 && !hppercentbelow 30 && hasskill Infinite Loop",
           Macro.trySkill(Skill.get("Infinite Loop"))
         );
+      } else {
+        macro.trySkill(Skill.get("Double Nanovision"));
+        macro.while_(
+          "!pastround 15 && !hppercentbelow 30 && hasskill Double Nanovision",
+          Macro.trySkill(Skill.get("Double Nanovision"))
+        );
       }
-
-      macro.while_(
-        "!pastround 15 && !hppercentbelow 30 && hasskill Double Nanovision",
-        Macro.trySkill(Skill.get("Double Nanovision"))
-      );
     }
   }
 

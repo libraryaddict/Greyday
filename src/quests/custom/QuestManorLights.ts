@@ -179,6 +179,10 @@ export class QuestManorLights implements QuestInfo {
       outfit.meatDropWeight = 2;
     }
 
+    if (getProperty("_juneCleaverFightsLeft") == "0") {
+      outfit.addBonus("-equip june cleaver");
+    }
+
     return {
       location: null,
       familiar: fight ? this.goose : null,
@@ -270,10 +274,15 @@ export class QuestManorLights implements QuestInfo {
   doEliza(): QuestAdventure {
     let eliza = this.getEliza();
     let fight = this.isElizaFight();
+    let outfit = !fight ? new GreyOutfit("-tie") : new GreyOutfit();
+
+    if (getProperty("_juneCleaverFightsLeft") == "0") {
+      outfit.addBonus("-equip june cleaver");
+    }
 
     return {
       location: null,
-      outfit: !fight ? new GreyOutfit("-tie") : null,
+      outfit: outfit,
       run: () => {
         let both = this.getBoth();
         visitUrl("adventure.php?snarfblat=" + toInt(eliza[0]));

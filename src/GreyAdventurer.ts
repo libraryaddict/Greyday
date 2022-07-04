@@ -237,7 +237,7 @@ export class GreyAdventurer {
       let replaceWith = this.adventureFinder.getRecommendedFamiliars();
 
       if (toInt(getProperty("camelSpit")) < 100) {
-        replaceWith.push(Familiar.get("Melodramedary"));
+        //   replaceWith.push(Familiar.get("Melodramedary"));
       }
 
       if (getProperty("_roboDrinks").includes("drive-by shooting")) {
@@ -245,6 +245,7 @@ export class GreyAdventurer {
       }
 
       for (let fam of [
+        "Grey Goose",
         "Pocket Professor",
         "Hobomonkey",
         "Jumpsuited Hound Dog",

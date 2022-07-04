@@ -20,6 +20,8 @@ import {
   useFamiliar,
   equip,
   familiarWeight,
+  Skill,
+  haveSkill,
 } from "kolmafia";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -46,6 +48,7 @@ export class QuestL11DesertExplore implements QuestInfo {
   page: Item = Item.get("worm-riding manual page");
   goose: Familiar = Familiar.get("Grey Goose");
   rose: Item = Item.get("Stone Rose");
+  nanovision: Skill = Skill.get("Double Nanovision");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / Explore";
@@ -91,7 +94,7 @@ export class QuestL11DesertExplore implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (availableAmount(this.compass) == 0) {
+    if (availableAmount(this.compass) == 0 || !haveSkill(this.nanovision)) {
       return QuestStatus.NOT_READY;
     }
 

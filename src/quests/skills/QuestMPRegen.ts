@@ -84,7 +84,7 @@ export class QuestMPRegen implements QuestInfo {
     }
 
     if (this.getWand() == null) {
-      if (myMeat() < 5000 || getQuestStatus("questL11Black") < 3) {
+      if (myMeat() < 6000 || getQuestStatus("questL11Black") < 3) {
         return QuestStatus.NOT_READY;
       }
 

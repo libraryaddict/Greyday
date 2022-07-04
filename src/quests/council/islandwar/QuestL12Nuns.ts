@@ -82,12 +82,16 @@ export class Quest12WarNuns implements QuestInfo {
     return getProperty("_roboDrinks").includes("drive-by shooting");
   }
 
-  getFamiliarToUse(): Familiar {
+  getFamiliarToUse(allownNull: boolean): Familiar {
     if (
       haveFamiliar(this.robor) &&
       (this.hasMeatBooze() || this.hasDrunkMeat())
     ) {
       return this.robor;
+    }
+
+    if (allownNull) {
+      return null;
     }
 
     return haveFamiliar(this.hobo)
@@ -98,9 +102,9 @@ export class Quest12WarNuns implements QuestInfo {
   }
 
   hasFamiliarRecommendation(): Familiar {
-    let toLevel: Familiar = this.getFamiliarToUse();
+    let toLevel: Familiar = this.getFamiliarToUse(true);
 
-    if (familiarWeight(toLevel) < 20) {
+    if (toLevel != null && familiarWeight(toLevel) < 20) {
       return toLevel;
     }
 
@@ -188,10 +192,10 @@ export class Quest12WarNuns implements QuestInfo {
     this.doRoboDrinks();
 
     return {
-      familiar: this.getFamiliarToUse(),
+      familiar: this.getFamiliarToUse(false),
       location: this.loc,
       outfit: outfit,
-      disableFamOverride: this.getFamiliarToUse() != null,
+      disableFamOverride: this.getFamiliarToUse(false) != null,
       run: () => {
         if (this.getMeat() == 0) {
           this.visitNuns();

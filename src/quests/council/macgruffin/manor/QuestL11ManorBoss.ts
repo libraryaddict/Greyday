@@ -1,6 +1,7 @@
-import { Location, Familiar, visitUrl } from "kolmafia";
-import { greyAdv } from "../../../../utils/GreyLocations";
+import { Location, Familiar, visitUrl, Skill } from "kolmafia";
+import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { Macro } from "../../../../utils/MacroBuilder";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -35,15 +36,15 @@ export class QuestL11ManorBoss implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit("+5 init");
-
     return {
       location: this.summoning,
-      outfit: outfit,
       run: () => {
         greyAdv(
           "place.php?whichplace=manor4&action=manor4_chamberboss",
-          outfit
+          null,
+          new AdventureSettings().setStartOfFightMacro(
+            Macro.skill(Skill.get("Infinite Loop"))
+          )
         );
       },
     };
