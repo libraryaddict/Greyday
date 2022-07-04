@@ -10108,7 +10108,7 @@ var QuestL12WarFlyers = /*#__PURE__*/function () {function QuestL12WarFlyers() {
       (0,external_kolmafia_namespaceObject.availableAmount)(this.flyers) > 0 &&
       (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("flyeredML")) >= 10000)
       {
-        (0,external_kolmafia_namespaceObject.setProperty)("flyeredML", "9999");
+        (0,external_kolmafia_namespaceObject.setProperty)("flyeredML", "9970");
       }
     } }]);return QuestL12WarFlyers;}();
 ;// CONCATENATED MODULE: ./src/quests/council/islandwar/QuestL12FratCargoShorts.ts
@@ -15069,7 +15069,7 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
           greyAdv(
           this.loc,
           outfit,
-          new AdventureSettings().setStartOfFightMacro(attack.repeat()));
+          new AdventureSettings().setFinishingBlowMacro(attack.repeat()));
 
           this.tryBuild();
         } };
@@ -16765,7 +16765,11 @@ var QuestManorLights = /*#__PURE__*/function () {
       }
 
       if ((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverFightsLeft") == "0") {
-        outfit.addBonus("-equip june cleaver");
+        if (fight) {
+          outfit.addBonus("-equip june cleaver");
+        } else {
+          (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Slot.get("Weapon"), external_kolmafia_namespaceObject.Item.get("None"));
+        }
       }
 
       return {
@@ -16855,7 +16859,11 @@ var QuestManorLights = /*#__PURE__*/function () {
       var outfit = !fight ? new GreyOutfit("-tie") : new GreyOutfit();
 
       if ((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverFightsLeft") == "0") {
-        outfit.addBonus("-equip june cleaver");
+        if (fight) {
+          outfit.addBonus("-equip june cleaver");
+        } else {
+          (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Slot.get("Weapon"), external_kolmafia_namespaceObject.Item.get("None"));
+        }
       }
 
       return {
