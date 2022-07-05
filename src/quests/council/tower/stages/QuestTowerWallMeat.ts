@@ -52,7 +52,7 @@ export class QuestTowerWallMeat implements QuestInfo {
       run: () => {
         cliExecute(
           "maximize " +
-            "+5 meat +0.03 moxie +1 hp 300 min 300 max +switch hobo monkey +switch robortender"
+            "+5 meat +0.03 moxie +100 hp 300 min 300 max +switch hobo monkey +switch robortender"
         );
 
         restoreHPTo(Math.min(myMaxhp(), 600));

@@ -54,10 +54,22 @@ export class QuestL11ShenTurnIn implements QuestInfo {
     return 11;
   }
 
+  mustBeDone(): boolean {
+    return this.haveEffect();
+  }
+
+  needAdventures(): number {
+    return this.haveEffect() ? 0 : 1;
+  }
+
   status(): QuestStatus {
     let status = getQuestStatus("questL11Shen");
 
     if (status > 6) {
+      if (this.haveEffect()) {
+        return QuestStatus.READY;
+      }
+
       return QuestStatus.COMPLETED;
     }
 

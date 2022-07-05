@@ -190,7 +190,7 @@ export class QuestTowerKillBones {
         " damage (Worst scenario)",
       "blue"
     );
-    return damage > this.health * 1.05;
+    return damage > this.health;
   }
 
   isBellPossible(): boolean {
@@ -226,7 +226,7 @@ export class QuestTowerKillBones {
       "blue"
     );
 
-    return damage > this.health * 1.05;
+    return damage > this.health;
   }
 
   isPossible(): boolean {

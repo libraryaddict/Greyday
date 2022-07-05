@@ -68,16 +68,15 @@ export class CryptL7DirtyMan extends CryptL7Template {
 
         if (this.canSprayDown()) {
           // If its a dirty lich, don't spray down
-          let avoid = Macro.if_(
+          let avoid = Macro.ifNot_(
             this.dirty,
-            Macro.trySkill(Skill.get("Fire Extinguisher: Zone Specific")),
-            true
+            Macro.trySkill(Skill.get("Fire Extinguisher: Zone Specific"))
           );
 
           if (
             !AbsorbsProvider.getReabsorbedMonsters().includes(this.advsAbsorb)
           ) {
-            avoid = Macro.if_(this.advsAbsorb, avoid, true);
+            avoid = Macro.ifNot_(this.advsAbsorb, avoid);
           }
 
           killing = avoid.step(killing);

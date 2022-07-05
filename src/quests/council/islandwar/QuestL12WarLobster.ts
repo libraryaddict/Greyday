@@ -182,10 +182,9 @@ export class QuestL12Lobster implements QuestInfo {
         let macro: Macro;
 
         if (this.hasVoidAndGlove() && this.isVoidReady()) {
-          macro = Macro.if_(
+          macro = Macro.ifNot_(
             this.monster,
-            Macro.skill("CHEAT CODE: Replace Enemy"),
-            true
+            Macro.skill("CHEAT CODE: Replace Enemy")
           );
         }
 

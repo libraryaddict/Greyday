@@ -29,6 +29,14 @@ export class QuestJuneCleaver implements QuestInfo {
     return 3;
   }
 
+  mustBeDone(): boolean {
+    return true;
+  }
+
+  needAdventures(): number {
+    return 0;
+  }
+
   status(): QuestStatus {
     if (availableAmount(this.cleaver) == 0) {
       return QuestStatus.COMPLETED;

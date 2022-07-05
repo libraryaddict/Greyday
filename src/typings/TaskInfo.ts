@@ -53,16 +53,18 @@ function getCombatRate(location: Location): number {
   return combatPercents.get(location);
 }
 
+export type MinMax = [number, number];
+
 export function getEstimatedTurnsToHitMonster(
   location: Location,
   monster: Monster
-): [number, number] {
+): MinMax {
   // TODO Calculate crystal ball, banishes, +combat.
   // Something to account for when we're not allowed to run +combat effect
   // Account for banishes
   return [0, 0];
 }
 
-export function getEstimatedTurnsToHitNC(location: Location): [number, number] {
+export function getEstimatedTurnsToHitNC(location: Location): MinMax {
   return [0, 0];
 }

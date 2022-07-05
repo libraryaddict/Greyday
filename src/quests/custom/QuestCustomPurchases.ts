@@ -14,7 +14,9 @@ import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
 export class QuestCustomPurchases implements QuestInfo {
-  toPurchase: Item[] = ["Porkpie-mounted popper"].map((s) => Item.get(s));
+  popper: Item = Item.get("Porkpie-mounted popper");
+  silent: Item = Item.get("Silent Beret");
+  stealth: Item = Item.get("Xiblaxian stealth cowl");
 
   getId(): QuestType {
     return "Misc / Purchases";
@@ -24,14 +26,12 @@ export class QuestCustomPurchases implements QuestInfo {
     return 8;
   }
 
-  getMissing(): Item[] {
-    return this.toPurchase.filter((i) => availableAmount(i) == 0);
-  }
-
   status(): QuestStatus {
-    let missing = this.getMissing();
-
-    if (missing.length == 0) {
+    if (
+      availableAmount(this.silent) > 0 ||
+      availableAmount(this.stealth) > 0 ||
+      availableAmount(this.popper) > 0
+    ) {
       return QuestStatus.COMPLETED;
     }
 
@@ -39,7 +39,7 @@ export class QuestCustomPurchases implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (myMeat() <= missing.length * 3000) {
+    if (myMeat() <= 3000) {
       return QuestStatus.NOT_READY;
     }
 
@@ -51,11 +51,9 @@ export class QuestCustomPurchases implements QuestInfo {
       location: null,
       outfit: new GreyOutfit("-tie"),
       run: () => {
-        for (let item of this.getMissing()) {
-          print("Now trying to buy " + item);
-          retrieveItem(item);
-          //          buy(item);
-        }
+        print("Now trying to buy " + this.popper);
+        retrieveItem(this.popper);
+        //          buy(item);
       },
     };
   }

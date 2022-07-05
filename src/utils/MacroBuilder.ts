@@ -304,9 +304,46 @@ export class Macro {
       | Location
       | Class
       | Stat,
-    ifTrue: string | Macro,
-    doFalse?: boolean
+    ifTrue: string | Macro
   ): this {
+    return this.step(`if ${this.createBalls(condition)}`)
+      .step(ifTrue)
+      .step("endif");
+  }
+  /**
+   * Add an "if not" statement to this macro.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifFalse Continuation if the condition is true.
+   * @returns {Macro} This object itself.
+   */
+  ifNot_(
+    condition:
+      | string
+      | Monster
+      | Effect
+      | Skill
+      | Item
+      | Location
+      | Class
+      | Stat,
+    ifFalse: string | Macro
+  ): this {
+    return this.step(`if !${this.createBalls(condition)}`)
+      .step(ifFalse)
+      .step("endif");
+  }
+
+  private createBalls(
+    condition:
+      | string
+      | Monster
+      | Effect
+      | Skill
+      | Item
+      | Location
+      | Class
+      | Stat
+  ) {
     let ballsCondition = "";
     if (condition instanceof Monster) {
       ballsCondition = `monsterid ${condition.id}`;
@@ -346,11 +383,7 @@ export class Macro {
       ballsCondition = condition;
     }
 
-    if (doFalse == true) {
-      ballsCondition = "!" + ballsCondition;
-    }
-
-    return this.step(`if ${ballsCondition}`).step(ifTrue).step("endif");
+    return ballsCondition;
   }
 
   /**
@@ -362,10 +395,23 @@ export class Macro {
   static if_<T extends Macro>(
     this: Constructor<T>,
     condition: Parameters<T["if_"]>[0],
-    ifTrue: string | Macro,
-    doFalseInstead?: boolean
+    ifTrue: string | Macro
   ): T {
-    return new this().if_(condition, ifTrue, doFalseInstead);
+    return new this().if_(condition, ifTrue);
+  }
+
+  /**
+   * Create a new macro with an "if" statement.
+   * @param condition The BALLS condition for the if statement.
+   * @param ifTrue Continuation if the condition is true.
+   * @returns {Macro} This object itself.
+   */
+  static ifNot_<T extends Macro>(
+    this: Constructor<T>,
+    condition: Parameters<T["ifNot_"]>[0],
+    ifTrue: string | Macro
+  ): T {
+    return new this().ifNot_(condition, ifTrue);
   }
 
   /**
