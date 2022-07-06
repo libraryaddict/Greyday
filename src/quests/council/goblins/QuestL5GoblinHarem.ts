@@ -96,7 +96,7 @@ export class QuestL5GoblinHarem implements QuestInfo {
 
         // If its a monster we want to absorb, don't blast it down
         for (let absorb of this.toAbsorb) {
-          macro = Macro.if_(absorb as Monster, macro, true);
+          macro = Macro.ifNot_(absorb as Monster, macro);
         }
 
         greyAdv(
