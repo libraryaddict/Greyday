@@ -229,7 +229,7 @@ export class GreyAdventurer {
     }
 
     if (toInt(getProperty("sweat")) < 100 && outfit.itemDropWeight < 1) {
-      outfit.addBonus(`+5 bonus designer sweatpants`);
+      outfit.addBonus(`+8 bonus designer sweatpants`);
     }
 
     if (

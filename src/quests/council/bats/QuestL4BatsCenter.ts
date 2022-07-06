@@ -81,6 +81,7 @@ export class QuestL4BatsCenter implements QuestInfo {
           settings.setStartOfFightMacro(
             new Macro()
               .trySkill(Skill.get("Fire Extinguisher: Zone Specific"))
+              .trySkill(Skill.get("Infinite Loop"))
               .attack()
           );
         }
