@@ -790,8 +790,45 @@ var Macro = /*#__PURE__*/function () {function Macro() {MacroBuilder_classCallCh
 
 
 
-    ifTrue,
-    doFalse)
+    ifTrue)
+    {
+      return this.step("if ".concat(this.createBalls(condition))).
+      step(ifTrue).
+      step("endif");
+    }
+    /**
+     * Add an "if not" statement to this macro.
+     * @param condition The BALLS condition for the if statement.
+     * @param ifFalse Continuation if the condition is true.
+     * @returns {Macro} This object itself.
+     */ }, { key: "ifNot_", value:
+    function ifNot_(
+    condition,
+
+
+
+
+
+
+
+
+    ifFalse)
+    {
+      return this.step("if !".concat(this.createBalls(condition))).
+      step(ifFalse).
+      step("endif");
+    } }, { key: "createBalls", value:
+
+    function createBalls(
+    condition)
+
+
+
+
+
+
+
+
     {
       var ballsCondition = "";
       if (condition instanceof external_kolmafia_namespaceObject.Monster) {
@@ -832,11 +869,7 @@ var Macro = /*#__PURE__*/function () {function Macro() {MacroBuilder_classCallCh
         ballsCondition = condition;
       }
 
-      if (doFalse == true) {
-        ballsCondition = "!" + ballsCondition;
-      }
-
-      return this.step("if ".concat(ballsCondition)).step(ifTrue).step("endif");
+      return ballsCondition;
     }
 
     /**
@@ -845,6 +878,19 @@ var Macro = /*#__PURE__*/function () {function Macro() {MacroBuilder_classCallCh
      * @param ifTrue Continuation if the condition is true.
      * @returns {Macro} This object itself.
      */ }, { key: "while_", value:
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1111,12 +1157,12 @@ var Macro = /*#__PURE__*/function () {function Macro() {MacroBuilder_classCallCh
      * @param macro The macro to place inside the if_ statement
      */ }], [{ key: "load", value: function load() {var _this;return (_this = new this()).step.apply(_this, _toConsumableArray((0,external_kolmafia_namespaceObject.getProperty)(Macro.SAVED_MACRO_PROPERTY).split(";")));} /**
      * Clear the saved macro in the Mafia property.
-     */ }, { key: "clearSaved", value: function clearSaved() {(0,external_kolmafia_namespaceObject.removeProperty)(Macro.SAVED_MACRO_PROPERTY);} }, { key: "step", value: function step() {var _this2;return (_this2 = new this()).step.apply(_this2, arguments);} }, { key: "clearAutoAttackMacros", value: function clearAutoAttackMacros() {var _iterator = MacroBuilder_createForOfIteratorHelper(Macro.cachedAutoAttacks.keys()),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _Macro$cachedMacroIds;var name = _step.value;var id = (_Macro$cachedMacroIds = Macro.cachedMacroIds.get(name)) !== null && _Macro$cachedMacroIds !== void 0 ? _Macro$cachedMacroIds : getMacroId(name);(0,external_kolmafia_namespaceObject.visitUrl)("account_combatmacros.php?macroid=".concat(id, "&action=edit&what=Delete&confirm=1"));Macro.cachedAutoAttacks.delete(name);}} catch (err) {_iterator.e(err);} finally {_iterator.f();}} }, { key: "abort", value: function abort() {return new this().abort();} }, { key: "runaway", value: function runaway() {return new this().runaway();} }, { key: "if_", value: function if_(condition, ifTrue, doFalseInstead) {return new this().if_(condition, ifTrue, doFalseInstead);} }, { key: "while_", value: function while_(condition, contents) {return new this().while_(condition, contents);} }, { key: "externalIf", value: function externalIf(condition, ifTrue, ifFalse) {return new this().externalIf(condition, ifTrue, ifFalse);} }, { key: "skill", value: function skill() {var _this3;return (_this3 = new this()).skill.apply(_this3, arguments);} }, { key: "trySkill", value: function trySkill() {var _this4;return (_this4 = new this()).trySkill.apply(_this4, arguments);} }, { key: "trySkillRepeat", value: function trySkillRepeat() {var _this5;return (_this5 = new this()).trySkillRepeat.apply(_this5, arguments);} }, { key: "item", value: function item() {var _this6;return (_this6 = new this()).item.apply(_this6, arguments);} }, { key: "tryItem", value: function tryItem() {var _this7;return (_this7 = new this()).tryItem.apply(_this7, arguments);} }, { key: "attack", value: function attack() {return new this().attack();} }, { key: "ifHolidayWanderer", value: function ifHolidayWanderer(macro) {return new this().ifHolidayWanderer(macro);} }, { key: "ifNotHolidayWanderer", value: function ifNotHolidayWanderer(
-    macro)
-    {
-      return new this().ifNotHolidayWanderer(macro);
-    } }]);return Macro;}();
-
+     */ }, { key: "clearSaved", value: function clearSaved() {(0,external_kolmafia_namespaceObject.removeProperty)(Macro.SAVED_MACRO_PROPERTY);} }, { key: "step", value: function step() {var _this2;return (_this2 = new this()).step.apply(_this2, arguments);} }, { key: "clearAutoAttackMacros", value: function clearAutoAttackMacros() {var _iterator = MacroBuilder_createForOfIteratorHelper(Macro.cachedAutoAttacks.keys()),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _Macro$cachedMacroIds;var name = _step.value;var id = (_Macro$cachedMacroIds = Macro.cachedMacroIds.get(name)) !== null && _Macro$cachedMacroIds !== void 0 ? _Macro$cachedMacroIds : getMacroId(name);(0,external_kolmafia_namespaceObject.visitUrl)("account_combatmacros.php?macroid=".concat(id, "&action=edit&what=Delete&confirm=1"));Macro.cachedAutoAttacks.delete(name);}} catch (err) {_iterator.e(err);} finally {_iterator.f();}} }, { key: "abort", value: function abort() {return new this().abort();} }, { key: "runaway", value: function runaway() {return new this().runaway();} }, { key: "if_", value: function if_(condition, ifTrue) {return new this().if_(condition, ifTrue);} /**
+     * Create a new macro with an "if" statement.
+     * @param condition The BALLS condition for the if statement.
+     * @param ifTrue Continuation if the condition is true.
+     * @returns {Macro} This object itself.
+     */ }, { key: "ifNot_", value: function ifNot_(condition, ifTrue) {return new this().ifNot_(condition, ifTrue);} }, { key: "while_", value: function while_(condition, contents) {return new this().while_(condition, contents);} }, { key: "externalIf", value: function externalIf(condition, ifTrue, ifFalse) {return new this().externalIf(condition, ifTrue, ifFalse);} }, { key: "skill", value: function skill() {var _this3;return (_this3 = new this()).skill.apply(_this3, arguments);} }, { key: "trySkill", value: function trySkill() {var _this4;return (_this4 = new this()).trySkill.apply(_this4, arguments);} }, { key: "trySkillRepeat", value: function trySkillRepeat() {var _this5;return (_this5 = new this()).trySkillRepeat.apply(_this5, arguments);} }, { key: "item", value: function item() {var _this6;return (_this6 = new this()).item.apply(_this6, arguments);} }, { key: "tryItem", value: function tryItem() {var _this7;return (_this7 = new this()).tryItem.apply(_this7, arguments);} }, { key: "attack", value: function attack() {return new this().attack();} }, { key: "ifHolidayWanderer", value: function ifHolidayWanderer(macro) {return new this().ifHolidayWanderer(macro);} }, { key: "ifNotHolidayWanderer", value: function ifNotHolidayWanderer(macro) {return new this().ifNotHolidayWanderer(macro);} }]);return Macro;}();
 
 /**
  * Adventure in a location and handle all combats with a given macro.
@@ -6532,7 +6578,8 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
     external_kolmafia_namespaceObject.Skill.get("Torso Awareness"));QuestL11RonProtesters_defineProperty(this, "sleazeSkill",
     external_kolmafia_namespaceObject.Skill.get("Procgen Ribaldry"));QuestL11RonProtesters_defineProperty(this, "sleazeSkill2",
     external_kolmafia_namespaceObject.Skill.get("Innuendo Circuitry"));QuestL11RonProtesters_defineProperty(this, "starChart",
-    external_kolmafia_namespaceObject.Item.get("Star Chart"));}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "isReady", value:
+    external_kolmafia_namespaceObject.Item.get("Star Chart"));QuestL11RonProtesters_defineProperty(this, "sweatpants",
+    external_kolmafia_namespaceObject.Item.get("designer sweatpants"));}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "isReady", value:
     // TODO Once we've got the absorbs, try replace combats if it won't hurt our NCs
 
     function isReady() {
@@ -6579,6 +6626,13 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
       }
 
       if (status < 0) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.sweatpants) + (0,external_kolmafia_namespaceObject.equippedAmount)(this.sweatpants) > 0 &&
+      (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("sweat")) < 100)
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -6961,12 +7015,24 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
 
     function level() {
       return 11;
+    } }, { key: "mustBeDone", value:
+
+    function mustBeDone() {
+      return this.haveEffect();
+    } }, { key: "needAdventures", value:
+
+    function needAdventures() {
+      return this.haveEffect() ? 0 : 1;
     } }, { key: "status", value:
 
     function status() {
       var status = getQuestStatus("questL11Shen");
 
       if (status > 6) {
+        if (this.haveEffect()) {
+          return QuestStatus.READY;
+        }
+
         return QuestStatus.COMPLETED;
       }
 
@@ -9868,10 +9934,9 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
           var macro;
 
           if (this.hasVoidAndGlove() && this.isVoidReady()) {
-            macro = Macro.if_(
+            macro = Macro.ifNot_(
             this.monster,
-            Macro.skill("CHEAT CODE: Replace Enemy"),
-            true);
+            Macro.skill("CHEAT CODE: Replace Enemy"));
 
           }
 
@@ -11380,7 +11445,7 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
         run: () => {
           (0,external_kolmafia_namespaceObject.cliExecute)(
           "maximize " +
-          "+5 meat +0.03 moxie +1 hp 300 min 300 max +switch hobo monkey +switch robortender");
+          "+5 meat +0.03 moxie +100 hp 300 min 300 max +switch hobo monkey +switch robortender");
 
 
           restoreHPTo(Math.min((0,external_kolmafia_namespaceObject.myMaxhp)(), 600));
@@ -11564,7 +11629,7 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
       " damage (Worst scenario)",
       "blue");
 
-      return damage > this.health * 1.05;
+      return damage > this.health;
     } }, { key: "isBellPossible", value:
 
     function isBellPossible() {
@@ -11600,7 +11665,7 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
       "blue");
 
 
-      return damage > this.health * 1.05;
+      return damage > this.health;
     } }, { key: "isPossible", value:
 
     function isPossible() {
@@ -12575,6 +12640,7 @@ var QuestL4BatsCenter = /*#__PURE__*/function () {function QuestL4BatsCenter() {
             settings.setStartOfFightMacro(
             new Macro().
             trySkill(external_kolmafia_namespaceObject.Skill.get("Fire Extinguisher: Zone Specific")).
+            trySkill(external_kolmafia_namespaceObject.Skill.get("Infinite Loop")).
             attack());
 
           }
@@ -12923,7 +12989,7 @@ var QuestL5GoblinHarem = /*#__PURE__*/function () {function QuestL5GoblinHarem()
 
           // If its a monster we want to absorb, don't blast it down
           var _iterator = QuestL5GoblinHarem_createForOfIteratorHelper(this.toAbsorb),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var absorb = _step.value;
-              macro = Macro.if_(absorb, macro, true);
+              macro = Macro.ifNot_(absorb, macro);
             }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
 
           greyAdv(
@@ -13564,16 +13630,15 @@ var CryptL7DirtyMan = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptDirt
 
           if (this.canSprayDown()) {
             // If its a dirty lich, don't spray down
-            var avoid = Macro.if_(
+            var avoid = Macro.ifNot_(
             this.dirty,
-            Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Fire Extinguisher: Zone Specific")),
-            true);
+            Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Fire Extinguisher: Zone Specific")));
 
 
             if (
             !AbsorbsProvider.getReabsorbedMonsters().includes(this.advsAbsorb))
             {
-              avoid = Macro.if_(this.advsAbsorb, avoid, true);
+              avoid = Macro.ifNot_(this.advsAbsorb, avoid);
             }
 
             killing = avoid.step(killing);
@@ -13691,7 +13756,11 @@ function QuestL7CryptRattling_classCallCheck(instance, Constructor) {if (!(insta
 
 
 var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRattling_inherits(CryptL7Rattling, _CryptL7Template);var _super = QuestL7CryptRattling_createSuper(CryptL7Rattling);function CryptL7Rattling() {var _this;QuestL7CryptRattling_classCallCheck(this, CryptL7Rattling);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "loc",
-    external_kolmafia_namespaceObject.Location.get("The Defiled Cranny"));return _this;}QuestL7CryptRattling_createClass(CryptL7Rattling, [{ key: "run", value:
+    external_kolmafia_namespaceObject.Location.get("The Defiled Cranny"));return _this;}QuestL7CryptRattling_createClass(CryptL7Rattling, [{ key: "level", value:
+
+    function level() {
+      return (0,external_kolmafia_namespaceObject.availableAmount)(this.cape) > 0 ? 7 : 16;
+    } }, { key: "run", value:
 
     function run() {
       var outfit = new GreyOutfit();
@@ -13894,7 +13963,7 @@ var QuestL8MountainBoss = /*#__PURE__*/function () {function QuestL8MountainBoss
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().addBonus("+1 cold res 5 min 5 max");
+      var outfit = new GreyOutfit().addBonus("+10 cold res 5 min 5 max");
 
       return {
         location: this.peak,
@@ -15039,7 +15108,7 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         }
       }
 
-      outfit.addBonus("+" + this.lastColdMaximize + " 5 min");
+      outfit.addBonus("+100 " + this.lastColdMaximize + " 5 min 5 max");
 
       return {
         location: this.loc,
@@ -16031,7 +16100,7 @@ var QuestManorBillards = /*#__PURE__*/function () {function QuestManorBillards()
       }
 
       outfit.addItem(this.cue);
-      outfit.addBonus("+elemental dmg 1 min 1 max");
+      outfit.addBonus("+10 elemental dmg 1 min 1 max");
 
       return {
         outfit: outfit,
@@ -17907,13 +17976,15 @@ QuestMeatSmith = /*#__PURE__*/function () {function QuestMeatSmith() {QuestNpcSt
       return QuestStatus.READY;
     } }]);return QuestMeatSmith;}();
 ;// CONCATENATED MODULE: ./src/quests/custom/QuestCustomPurchases.ts
-function QuestCustomPurchases_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestCustomPurchases_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestCustomPurchases_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestCustomPurchases_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestCustomPurchases_arrayLikeToArray(o, minLen);}function QuestCustomPurchases_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestCustomPurchases_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestCustomPurchases_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestCustomPurchases_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestCustomPurchases_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestCustomPurchases_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestCustomPurchases_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestCustomPurchases_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestCustomPurchases_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestCustomPurchases_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestCustomPurchases_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestCustomPurchases_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestCustomPurchases_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
 
-var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchases() {QuestCustomPurchases_classCallCheck(this, QuestCustomPurchases);QuestCustomPurchases_defineProperty(this, "toPurchase",
-    ["Porkpie-mounted popper"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));}QuestCustomPurchases_createClass(QuestCustomPurchases, [{ key: "getId", value:
+var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchases() {QuestCustomPurchases_classCallCheck(this, QuestCustomPurchases);QuestCustomPurchases_defineProperty(this, "popper",
+    external_kolmafia_namespaceObject.Item.get("Porkpie-mounted popper"));QuestCustomPurchases_defineProperty(this, "silent",
+    external_kolmafia_namespaceObject.Item.get("Silent Beret"));QuestCustomPurchases_defineProperty(this, "stealth",
+    external_kolmafia_namespaceObject.Item.get("Xiblaxian stealth cowl"));}QuestCustomPurchases_createClass(QuestCustomPurchases, [{ key: "getId", value:
 
     function getId() {
       return "Misc / Purchases";
@@ -17921,16 +17992,14 @@ var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchas
 
     function level() {
       return 8;
-    } }, { key: "getMissing", value:
-
-    function getMissing() {
-      return this.toPurchase.filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0);
     } }, { key: "status", value:
 
     function status() {
-      var missing = this.getMissing();
-
-      if (missing.length == 0) {
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.silent) > 0 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.stealth) > 0 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.popper) > 0)
+      {
         return QuestStatus.COMPLETED;
       }
 
@@ -17938,7 +18007,7 @@ var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchas
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.myMeat)() <= missing.length * 3000) {
+      if ((0,external_kolmafia_namespaceObject.myMeat)() <= 3000) {
         return QuestStatus.NOT_READY;
       }
 
@@ -17949,12 +18018,10 @@ var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchas
       return {
         location: null,
         outfit: new GreyOutfit("-tie"),
-        run: () => {var _iterator = QuestCustomPurchases_createForOfIteratorHelper(
-          this.getMissing()),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var item = _step.value;
-              (0,external_kolmafia_namespaceObject.print)("Now trying to buy " + item);
-              (0,external_kolmafia_namespaceObject.retrieveItem)(item);
-              //          buy(item);
-            }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+        run: () => {
+          (0,external_kolmafia_namespaceObject.print)("Now trying to buy " + this.popper);
+          (0,external_kolmafia_namespaceObject.retrieveItem)(this.popper);
+          //          buy(item);
         } };
 
     } }, { key: "getLocations", value:
@@ -20188,6 +20255,8 @@ function getCombatRate(location) {
   return combatPercents.get(location);
 }
 
+
+
 function getEstimatedTurnsToHitMonster(
 location,
 monster)
@@ -20655,6 +20724,14 @@ var QuestJuneCleaver = /*#__PURE__*/function () {function QuestJuneCleaver() {Qu
 
     function level() {
       return 3;
+    } }, { key: "mustBeDone", value:
+
+    function mustBeDone() {
+      return true;
+    } }, { key: "needAdventures", value:
+
+    function needAdventures() {
+      return 0;
     } }, { key: "status", value:
 
     function status() {
@@ -22649,6 +22726,10 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
         outfit.addBonus("+".concat(bonus, " bonus cursed magnifying glass"));
       }
 
+      if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("sweat")) < 100 && outfit.itemDropWeight < 1) {
+        outfit.addBonus("+8 bonus designer sweatpants");
+      }
+
       if (
       toRun.familiar != null && (
       toRun.disableFamOverride == true || !wantToAbsorb))
@@ -22830,9 +22911,9 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
 
 
     function handleCommand(command) {
-      if ((0,external_kolmafia_namespaceObject.getRevision)() < 26499) {
+      if ((0,external_kolmafia_namespaceObject.getRevision)() < 26535) {
         (0,external_kolmafia_namespaceObject.print)("Please update your mafia. You are using ".concat(
-        (0,external_kolmafia_namespaceObject.getRevision)(), " but we need at least r26499"),
+        (0,external_kolmafia_namespaceObject.getRevision)(), " but we need at least r26535"),
         "red");
 
         return;
