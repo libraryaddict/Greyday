@@ -83,7 +83,10 @@ export class GreyOutfit {
       this.meatDropWeight = 0.01;
     }
 
-    if (!haveSkill(Skill.get("Hivemindedness")) && myMp() < 150) {
+    if (
+      !haveSkill(Skill.get("Hivemindedness")) &&
+      myMp() < Math.min(125, myMaxmp())
+    ) {
       this.mpRegenWeight += 1;
 
       /*if (myMp() < 42) {

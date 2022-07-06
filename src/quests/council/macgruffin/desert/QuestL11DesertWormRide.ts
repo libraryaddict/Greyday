@@ -75,6 +75,10 @@ export class QuestL11DesertWormRide implements QuestInfo {
     return true;
   }
 
+  needAdventures(): number {
+    return 0;
+  }
+
   wantsToWormRide(): boolean {
     return (this.getGnome() & 16) != 16;
   }
