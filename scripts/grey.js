@@ -1607,7 +1607,10 @@ var GreyOutfit = /*#__PURE__*/function () {
         this.meatDropWeight = 0.01;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Hivemindedness")) && (0,external_kolmafia_namespaceObject.myMp)() < 150) {
+      if (
+      !(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Hivemindedness")) &&
+      (0,external_kolmafia_namespaceObject.myMp)() < Math.min(125, (0,external_kolmafia_namespaceObject.myMaxmp)()))
+      {
         this.mpRegenWeight += 1;
 
         /*if (myMp() < 42) {
@@ -5363,6 +5366,10 @@ var QuestL11DesertWormRide = /*#__PURE__*/function () {function QuestL11DesertWo
 
     function mustBeDone() {
       return true;
+    } }, { key: "needAdventures", value:
+
+    function needAdventures() {
+      return 0;
     } }, { key: "wantsToWormRide", value:
 
     function wantsToWormRide() {
