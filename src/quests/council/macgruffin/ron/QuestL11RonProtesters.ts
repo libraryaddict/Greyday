@@ -13,6 +13,7 @@ import {
   Skill,
   gnomadsAvailable,
   haveSkill,
+  equippedAmount,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
@@ -51,6 +52,7 @@ export class QuestL11RonProtesters implements QuestInfo {
   sleazeSkill: Skill = Skill.get("Procgen Ribaldry");
   sleazeSkill2: Skill = Skill.get("Innuendo Circuitry");
   starChart: Item = Item.get("Star Chart");
+  sweatpants: Item = Item.get("designer sweatpants");
   // TODO Once we've got the absorbs, try replace combats if it won't hurt our NCs
 
   isReady(): boolean {
@@ -97,6 +99,13 @@ export class QuestL11RonProtesters implements QuestInfo {
     }
 
     if (status < 0) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (
+      availableAmount(this.sweatpants) + equippedAmount(this.sweatpants) > 0 &&
+      toInt(getProperty("sweat")) < 100
+    ) {
       return QuestStatus.NOT_READY;
     }
 

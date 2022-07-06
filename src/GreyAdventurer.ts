@@ -228,6 +228,10 @@ export class GreyAdventurer {
       outfit.addBonus(`+${bonus} bonus cursed magnifying glass`);
     }
 
+    if (toInt(getProperty("sweat")) < 100 && outfit.itemDropWeight < 1) {
+      outfit.addBonus(`+5 bonus designer sweatpants`);
+    }
+
     if (
       toRun.familiar != null &&
       (toRun.disableFamOverride == true || !wantToAbsorb)
