@@ -5071,6 +5071,11 @@ var QuestL11DesertExplore = /*#__PURE__*/function () {function QuestL11DesertExp
             {
               (0,external_kolmafia_namespaceObject.useFamiliar)(this.camel);
               (0,external_kolmafia_namespaceObject.equip)(this.ball);
+            } else if (
+            (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= 6 &&
+            (0,external_kolmafia_namespaceObject.equippedAmount)(this.ball) == 0)
+            {
+              (0,external_kolmafia_namespaceObject.equip)(this.ball);
             }
           }
 
@@ -7211,6 +7216,10 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
             }
 
             greyAdv(this.shenClub, outfit, settings);
+
+            if (this.haveEffect()) {
+              (0,external_kolmafia_namespaceObject.refreshStatus)();
+            }
           } finally {
             props.resetAll();
           }
@@ -10284,7 +10293,7 @@ var QuestL12WarFlyers = /*#__PURE__*/function () {function QuestL12WarFlyers() {
       (0,external_kolmafia_namespaceObject.availableAmount)(this.flyers) > 0 &&
       (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("flyeredML")) >= 10000)
       {
-        (0,external_kolmafia_namespaceObject.setProperty)("flyeredML", "9970");
+        (0,external_kolmafia_namespaceObject.setProperty)("flyeredML", "9900");
       }
     } }]);return QuestL12WarFlyers;}();
 ;// CONCATENATED MODULE: ./src/quests/council/islandwar/QuestL12FratCargoShorts.ts
