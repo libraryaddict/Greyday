@@ -16343,6 +16343,7 @@ function QuestManorKitchen_classCallCheck(instance, Constructor) {if (!(instance
 
 
 
+
 var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {QuestManorKitchen_classCallCheck(this, QuestManorKitchen);QuestManorKitchen_defineProperty(this, "kitchen",
     external_kolmafia_namespaceObject.Location.get("The Haunted Kitchen"));QuestManorKitchen_defineProperty(this, "stenchResist",
     external_kolmafia_namespaceObject.Skill.get("Conifer Polymers"));QuestManorKitchen_defineProperty(this, "albinoBat",
@@ -16351,7 +16352,10 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
     0);QuestManorKitchen_defineProperty(this, "canOfPaint",
     external_kolmafia_namespaceObject.Item.get("Can of black paint"));QuestManorKitchen_defineProperty(this, "asdonMartin",
     external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestManorKitchen_defineProperty(this, "driveSafe",
-    external_kolmafia_namespaceObject.Effect.get("Driving Safely"));}QuestManorKitchen_createClass(QuestManorKitchen, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Effect.get("Driving Safely"));QuestManorKitchen_defineProperty(this, "torso",
+    external_kolmafia_namespaceObject.Skill.get("Torso Awareness"));QuestManorKitchen_defineProperty(this, "spoon",
+    external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"));QuestManorKitchen_defineProperty(this, "scaleShirt",
+    external_kolmafia_namespaceObject.Item.get("blessed rustproof +2 gray dragon scale mail"));}QuestManorKitchen_createClass(QuestManorKitchen, [{ key: "getId", value:
 
     function getId() {
       return "Manor / Kitchen";
@@ -16396,6 +16400,17 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
       }
 
       if (
+      !(0,external_kolmafia_namespaceObject.haveSkill)(this.torso) &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.scaleShirt) > 0 && (
+      (0,external_kolmafia_namespaceObject.gnomadsAvailable)() ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.spoon) > 0 &&
+      GreySettings.greyTuneMoonSpoon != "" &&
+      (0,external_kolmafia_namespaceObject.getProperty)("moonTuned") != "true"))
+      {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (
       (getQuestStatus("questL11Black") <= 2 || (0,external_kolmafia_namespaceObject.myMeat)() < 1200) &&
       !this.hasEnoughRes())
       {
@@ -16416,7 +16431,7 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
       var outfit = new GreyOutfit();
 
       if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("manorDrawerCount")) < 20) {
-        outfit.addBonus("+10 hot res").addBonus("+10 stench res");
+        outfit.addBonus("+10 hot res 9 max").addBonus("+10 stench res 9 max");
       }
 
       return {
@@ -17806,6 +17821,7 @@ QuestGnomeTrainer = /*#__PURE__*/function () {function QuestGnomeTrainer() {Ques
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.letter) > 0) {
         return {
           location: null,
+          outfit: new GreyOutfit("-tie"),
           run: () => {
             (0,external_kolmafia_namespaceObject.use)(this.letter);
           } };
@@ -17814,6 +17830,7 @@ QuestGnomeTrainer = /*#__PURE__*/function () {function QuestGnomeTrainer() {Ques
 
       return {
         location: null,
+        outfit: new GreyOutfit("-tie"),
         run: () => {
           var skill = this.getSkillLacking();
 
@@ -18908,7 +18925,7 @@ var QuestSkillRegistry = /*#__PURE__*/function () {
 
       }
 
-      var level = Math.max(5, Math.sqrt(location.recommendedStat) * 1.5);
+      var level = Math.max(5, Math.sqrt(location.recommendedStat) * 1.35);
 
       this.children.push(
       new QuestSkillAbstract(level, location, monster, skill, questType));
