@@ -39,7 +39,8 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "main": () => (/* binding */ GreyYouMain_main)
+  "main": () => (/* binding */ GreyYouMain_main),
+  "printEndOfRun": () => (/* binding */ printEndOfRun)
 });
 
 ;// CONCATENATED MODULE: external "kolmafia"
@@ -359,6 +360,7 @@ function getGreySettings() {
     description:
     "Should the script halt when it reaches the tower? False by default. Useful as continuing after breaking ronin takes less turns. This will change the behavior of the script to skip some zones.",
     valid: (value) => value == "true" || value == "false" };
+
 
   var moonTune = {
     name: "greyTuneMoonSpoon",
@@ -4573,7 +4575,12 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
       } else {
         var monstersNeed = [
         "pygmy witch lawyer",
-        "mountain man"].
+        "mountain man",
+        "cloud of disembodied whiskers",
+        "one-eyed willie",
+        "little man in the canoe",
+        "fantasy bandit",
+        "pygmy janitor"].
         filter((m) => (0,external_kolmafia_namespaceObject.getLocketMonsters)()[m] != true);
 
         if (monstersNeed.length > 0) {
@@ -12152,6 +12159,7 @@ function QuestTowerKillWitch_classCallCheck(instance, Constructor) {if (!(instan
 
 
 
+
 var QuestTowerKillWitch = /*#__PURE__*/function () {function QuestTowerKillWitch() {QuestTowerKillWitch_classCallCheck(this, QuestTowerKillWitch);}QuestTowerKillWitch_createClass(QuestTowerKillWitch, [{ key: "getId", value:
     function getId() {
       return "Council / Tower / NaughtyBoss";
@@ -12203,31 +12211,8 @@ var QuestTowerKillWitch = /*#__PURE__*/function () {function QuestTowerKillWitch
           greyAdv("choice.php"); // Final fight
           (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=nstower");
           (0,external_kolmafia_namespaceObject.print)("Should be all done", "blue");
-          var pulls = (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls").
-          split(",").
-          map((s) => (0,external_kolmafia_namespaceObject.toItem)((0,external_kolmafia_namespaceObject.toInt)(s)));
 
-          if (!GreySettings.isHardcoreMode()) {
-            (0,external_kolmafia_namespaceObject.print)(
-            "Used " +
-            pulls.length +
-            " / 20 pulls. Could've done another " + (
-            20 - pulls.length) +
-            " pulls..",
-            "blue");
-
-          }
-
-          (0,external_kolmafia_namespaceObject.print)(
-          "Took " +
-          (0,external_kolmafia_namespaceObject.turnsPlayed)() +
-          " turns this run! " +
-          (0,external_kolmafia_namespaceObject.myAdventures)() +
-          " turns left to play with!",
-          "blue");
-
-          new AbsorbsProvider().printRemainingAbsorbs();
-          (0,external_kolmafia_namespaceObject.print)("Pulled: " + pulls.map((i) => i.name).join(", "), "gray");
+          printEndOfRun();
         } };
 
     } }]);return QuestTowerKillWitch;}();
@@ -18099,7 +18084,8 @@ function QuestCustomPurchases_classCallCheck(instance, Constructor) {if (!(insta
 var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchases() {QuestCustomPurchases_classCallCheck(this, QuestCustomPurchases);QuestCustomPurchases_defineProperty(this, "popper",
     external_kolmafia_namespaceObject.Item.get("Porkpie-mounted popper"));QuestCustomPurchases_defineProperty(this, "silent",
     external_kolmafia_namespaceObject.Item.get("Silent Beret"));QuestCustomPurchases_defineProperty(this, "stealth",
-    external_kolmafia_namespaceObject.Item.get("Xiblaxian stealth cowl"));}QuestCustomPurchases_createClass(QuestCustomPurchases, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Xiblaxian stealth cowl"));QuestCustomPurchases_defineProperty(this, "firePlusCombat",
+    external_kolmafia_namespaceObject.Item.get("sombrero-mounted sparkler"));}QuestCustomPurchases_createClass(QuestCustomPurchases, [{ key: "getId", value:
 
     function getId() {
       return "Misc / Purchases";
@@ -18110,14 +18096,6 @@ var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchas
     } }, { key: "status", value:
 
     function status() {
-      if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.silent) > 0 ||
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.stealth) > 0 ||
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.popper) > 0)
-      {
-        return QuestStatus.COMPLETED;
-      }
-
       if ((0,external_kolmafia_namespaceObject.getProperty)("_fireworksShopHatBought") == "true") {
         return QuestStatus.COMPLETED;
       }
@@ -18134,8 +18112,17 @@ var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchas
         location: null,
         outfit: new GreyOutfit("-tie"),
         run: () => {
-          (0,external_kolmafia_namespaceObject.print)("Now trying to buy " + this.popper);
-          (0,external_kolmafia_namespaceObject.retrieveItem)(this.popper);
+          var toBuy = this.popper;
+
+          if (
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.stealth) > 0 ||
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.silent) > 0)
+          {
+            toBuy = this.firePlusCombat;
+          }
+
+          (0,external_kolmafia_namespaceObject.print)("Now trying to buy " + toBuy);
+          (0,external_kolmafia_namespaceObject.retrieveItem)(toBuy);
           //          buy(item);
         } };
 
@@ -20802,9 +20789,8 @@ var QuestTeachersPen = /*#__PURE__*/function () {function QuestTeachersPen() {Qu
       }
 
       if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.cleaver) > 0 &&
-      (0,external_kolmafia_namespaceObject.turnsPlayed)() < 50 &&
-      (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverFightsLeft")) < 3)
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.cleaver) > 0 && (
+      (0,external_kolmafia_namespaceObject.turnsPlayed)() < 50 || (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverFightsLeft")) < 3))
       {
         return QuestStatus.NOT_READY;
       }
@@ -23033,6 +23019,7 @@ function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = type
 
 
 
+
 var
 
 GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_classCallCheck(this, GreyYouMain);GreyYouMain_defineProperty(this, "adventures", void 0);GreyYouMain_defineProperty(this, "reachedTower",
@@ -23227,11 +23214,15 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
           getQuestStatus("questL13Final") >= 0)
           {
             (0,external_kolmafia_namespaceObject.setProperty)(this.reachedTower, "true");
+            (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=nstower");
+
             (0,external_kolmafia_namespaceObject.print)(
             "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
             "blue");
 
             (0,external_kolmafia_namespaceObject.print)("The script will continue when you run the script again.");
+
+            printEndOfRun();
             return;
           }
 
@@ -23248,6 +23239,34 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
       }
     } }]);return GreyYouMain;}();
 
+
+function printEndOfRun() {
+  var pulls = (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls").
+  split(",").
+  map((s) => (0,external_kolmafia_namespaceObject.toItem)((0,external_kolmafia_namespaceObject.toInt)(s)));
+
+  if (!GreySettings.isHardcoreMode()) {
+    (0,external_kolmafia_namespaceObject.print)(
+    "Used " +
+    pulls.length +
+    " / 20 pulls. Could've done another " + (
+    20 - pulls.length) +
+    " pulls..",
+    "blue");
+
+  }
+
+  (0,external_kolmafia_namespaceObject.print)(
+  "Took " +
+  (0,external_kolmafia_namespaceObject.turnsPlayed)() +
+  " turns this run! " +
+  (0,external_kolmafia_namespaceObject.myAdventures)() +
+  " turns left to play with!",
+  "blue");
+
+  new AbsorbsProvider().printRemainingAbsorbs();
+  (0,external_kolmafia_namespaceObject.print)("Pulled: " + pulls.map((i) => i.name).join(", "), "gray");
+}
 
 function GreyYouMain_main() {var parameter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
   new GreyYouMain().handleCommand(parameter);
