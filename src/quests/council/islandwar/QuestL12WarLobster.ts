@@ -18,8 +18,14 @@ import { hasCombatSkillReady } from "../../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
+import { getBackupsRemaining } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
-import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
+import {
+  getQuestStatus,
+  QuestAdventure,
+  QuestInfo,
+  QuestStatus,
+} from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
 export class QuestL12Lobster implements QuestInfo {
@@ -55,6 +61,14 @@ export class QuestL12Lobster implements QuestInfo {
     }
 
     if (myAdventures() < 22) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (
+      availableAmount(this.backupCamera) > 0 &&
+      getBackupsRemaining() > 0 &&
+      this.shouldDelayForBats()
+    ) {
       return QuestStatus.NOT_READY;
     }
 
@@ -133,6 +147,16 @@ export class QuestL12Lobster implements QuestInfo {
     return this.hasBackups() > 0 && this.lastMonster() == this.monster;
   }
 
+  shouldDelayForBats() {
+    return getQuestStatus("questL04Bat") < 3;
+  }
+
+  isBatsAvailable() {
+    let status = getQuestStatus("questL04Bat");
+
+    return status >= 3 && status < 100;
+  }
+
   run(): QuestAdventure {
     // Try to turn in quest
     if (itemAmount(this.item) >= 5) {
@@ -143,9 +167,14 @@ export class QuestL12Lobster implements QuestInfo {
       let outfit = new GreyOutfit().addItem(Item.get("Backup Camera"));
       outfit.addBonus("-ML");
 
-      let loc = Location.get("The Dire Warren");
+      let loc: Location;
 
-      // TODO Backup and ruin other zones delay
+      if (this.isBatsAvailable()) {
+        loc = Location.get("The Boss Bat's Lair");
+      } else {
+        loc = Location.get("The Dire Warren");
+      }
+
       return {
         outfit: outfit,
         location: loc,

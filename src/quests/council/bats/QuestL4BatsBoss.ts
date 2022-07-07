@@ -1,6 +1,16 @@
-import { Location, Familiar, council, haveSkill, Skill } from "kolmafia";
+import {
+  Location,
+  Familiar,
+  council,
+  haveSkill,
+  Skill,
+  Item,
+  getProperty,
+  availableAmount,
+} from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { getBackupsRemaining } from "../../../utils/GreyUtils";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -11,6 +21,7 @@ import { QuestType } from "../../QuestTypes";
 
 export class QuestL4BatsBoss implements QuestInfo {
   loc: Location = Location.get("The Boss Bat's Lair");
+  camera: Item = Item.get("Backup Camera");
 
   getId(): QuestType {
     return "Council / Bats / Boss";
@@ -20,16 +31,26 @@ export class QuestL4BatsBoss implements QuestInfo {
     return 4;
   }
 
+  shouldWaitForLobsters(): boolean {
+    return (
+      getProperty("sidequestLighthouseCompleted") == "none" &&
+      availableAmount(this.camera) > 0 &&
+      getBackupsRemaining() > 0
+    );
+  }
+
   status(): QuestStatus {
     let status = getQuestStatus("questL04Bat");
 
-    if (status < 3) {
+    if (status < 3 || this.shouldWaitForLobsters()) {
       return QuestStatus.NOT_READY;
     }
 
     if (status == 100) {
       return QuestStatus.COMPLETED;
     }
+
+    // TODO If lobster needs a backup
 
     return QuestStatus.READY;
   }
