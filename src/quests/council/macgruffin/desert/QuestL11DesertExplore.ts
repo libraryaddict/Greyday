@@ -22,6 +22,7 @@ import {
   familiarWeight,
   Skill,
   haveSkill,
+  abort,
 } from "kolmafia";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -169,6 +170,11 @@ export class QuestL11DesertExplore implements QuestInfo {
             !this.toAbsorb.includes(crystalBall.get(this.desert))
           ) {
             useFamiliar(this.camel);
+            equip(this.ball);
+          } else if (
+            familiarWeight(this.goose) >= 6 &&
+            equippedAmount(this.ball) == 0
+          ) {
             equip(this.ball);
           }
         }

@@ -17,6 +17,7 @@ import {
   equip,
   equippedAmount,
   Slot,
+  refreshStatus,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -161,6 +162,10 @@ export class QuestL11ShenTurnIn implements QuestInfo {
           }
 
           greyAdv(this.shenClub, outfit, settings);
+
+          if (this.haveEffect()) {
+            refreshStatus();
+          }
         } finally {
           props.resetAll();
         }
