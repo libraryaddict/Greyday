@@ -292,6 +292,11 @@ export class GreyRequirements {
       let monstersNeed: string[] = [
         "pygmy witch lawyer",
         "mountain man",
+        "cloud of disembodied whiskers",
+        "one-eyed willie",
+        "little man in the canoe",
+        "fantasy bandit",
+        "pygmy janitor",
       ].filter((m) => getLocketMonsters()[m] != true);
 
       if (monstersNeed.length > 0) {

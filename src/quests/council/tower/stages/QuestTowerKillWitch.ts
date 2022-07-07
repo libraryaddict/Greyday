@@ -10,6 +10,7 @@ import {
   toItem,
   toInt,
 } from "kolmafia";
+import { printEndOfRun } from "../../../../GreyYouMain";
 import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreySettings } from "../../../../utils/GreySettings";
@@ -73,31 +74,8 @@ export class QuestTowerKillWitch implements QuestInfo {
         greyAdv("choice.php"); // Final fight
         visitUrl("place.php?whichplace=nstower");
         print("Should be all done", "blue");
-        let pulls: Item[] = getProperty("_roninStoragePulls")
-          .split(",")
-          .map((s) => toItem(toInt(s)));
 
-        if (!GreySettings.isHardcoreMode()) {
-          print(
-            "Used " +
-              pulls.length +
-              " / 20 pulls. Could've done another " +
-              (20 - pulls.length) +
-              " pulls..",
-            "blue"
-          );
-        }
-
-        print(
-          "Took " +
-            turnsPlayed() +
-            " turns this run! " +
-            myAdventures() +
-            " turns left to play with!",
-          "blue"
-        );
-        new AbsorbsProvider().printRemainingAbsorbs();
-        print("Pulled: " + pulls.map((i) => i.name).join(", "), "gray");
+        printEndOfRun();
       },
     };
   }

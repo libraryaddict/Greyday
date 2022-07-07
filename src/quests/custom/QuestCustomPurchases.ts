@@ -17,6 +17,7 @@ export class QuestCustomPurchases implements QuestInfo {
   popper: Item = Item.get("Porkpie-mounted popper");
   silent: Item = Item.get("Silent Beret");
   stealth: Item = Item.get("Xiblaxian stealth cowl");
+  firePlusCombat: Item = Item.get("sombrero-mounted sparkler");
 
   getId(): QuestType {
     return "Misc / Purchases";
@@ -27,14 +28,6 @@ export class QuestCustomPurchases implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (
-      availableAmount(this.silent) > 0 ||
-      availableAmount(this.stealth) > 0 ||
-      availableAmount(this.popper) > 0
-    ) {
-      return QuestStatus.COMPLETED;
-    }
-
     if (getProperty("_fireworksShopHatBought") == "true") {
       return QuestStatus.COMPLETED;
     }
@@ -51,8 +44,17 @@ export class QuestCustomPurchases implements QuestInfo {
       location: null,
       outfit: new GreyOutfit("-tie"),
       run: () => {
-        print("Now trying to buy " + this.popper);
-        retrieveItem(this.popper);
+        let toBuy = this.popper;
+
+        if (
+          availableAmount(this.stealth) > 0 ||
+          availableAmount(this.silent) > 0
+        ) {
+          toBuy = this.firePlusCombat;
+        }
+
+        print("Now trying to buy " + toBuy);
+        retrieveItem(toBuy);
         //          buy(item);
       },
     };

@@ -55,8 +55,7 @@ export class QuestTeachersPen implements QuestInfo {
 
     if (
       availableAmount(this.cleaver) > 0 &&
-      turnsPlayed() < 50 &&
-      toInt(getProperty("_juneCleaverFightsLeft")) < 3
+      (turnsPlayed() < 50 || toInt(getProperty("_juneCleaverFightsLeft")) < 3)
     ) {
       return QuestStatus.NOT_READY;
     }

@@ -6,6 +6,7 @@ import {
   haveEffect,
   Item,
   lastChoice,
+  myAdventures,
   myHp,
   myLocation,
   myMaxhp,
@@ -16,12 +17,16 @@ import {
   printHtml,
   setProperty,
   toInt,
+  toItem,
+  turnsPlayed,
+  visitUrl,
   waitq,
 } from "kolmafia";
 import { GreyAdventurer } from "./GreyAdventurer";
 import { QuestRegistry } from "./quests/QuestRegistry";
 import { getQuestStatus } from "./quests/Quests";
 import { hasBanished, BanishType } from "./utils/Banishers";
+import { AbsorbsProvider } from "./utils/GreyAbsorber";
 import { GreyRequirements } from "./utils/GreyResources";
 import { getGreySettings, GreySettings } from "./utils/GreySettings";
 
@@ -217,11 +222,15 @@ class GreyYouMain {
           getQuestStatus("questL13Final") >= 0
         ) {
           setProperty(this.reachedTower, "true");
+          visitUrl("place.php?whichplace=nstower");
+
           print(
             "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
             "blue"
           );
           print("The script will continue when you run the script again.");
+
+          printEndOfRun();
           return;
         }
 
@@ -237,6 +246,34 @@ class GreyYouMain {
       return;
     }
   }
+}
+
+export function printEndOfRun() {
+  let pulls: Item[] = getProperty("_roninStoragePulls")
+    .split(",")
+    .map((s) => toItem(toInt(s)));
+
+  if (!GreySettings.isHardcoreMode()) {
+    print(
+      "Used " +
+        pulls.length +
+        " / 20 pulls. Could've done another " +
+        (20 - pulls.length) +
+        " pulls..",
+      "blue"
+    );
+  }
+
+  print(
+    "Took " +
+      turnsPlayed() +
+      " turns this run! " +
+      myAdventures() +
+      " turns left to play with!",
+    "blue"
+  );
+  new AbsorbsProvider().printRemainingAbsorbs();
+  print("Pulled: " + pulls.map((i) => i.name).join(", "), "gray");
 }
 
 export function main(parameter: string = "") {
