@@ -32,6 +32,7 @@ export class QuestL3Tavern implements QuestInfo {
   location: Location = Location.get("The Typical Tavern Cellar");
   tangle: Item = Item.get("tangle of rat tails");
   teleportis: Effect = Effect.get("Teleportitis");
+  umbrella: Item = Item.get("Unbreakable Umbrella");
 
   level(): number {
     return 3;
@@ -135,9 +136,12 @@ export class QuestL3Tavern implements QuestInfo {
         }
 
         try {
-          if (outfit.plusMonsterLevelWeight >= 10) {
+          if (
+            outfit.plusMonsterLevelWeight >= 10 &&
+            availableAmount(this.umbrella) > 0
+          ) {
             setUmbrella(UmbrellaState.MONSTER_LEVEL);
-            equip(Item.get("Unbreakable Umbrella"));
+            equip(this.umbrella);
           }
 
           changeMcd(10);

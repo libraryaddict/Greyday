@@ -24,6 +24,7 @@ import {
   toInt,
   useFamiliar,
   useSkill,
+  visitUrl,
 } from "kolmafia";
 import { AdventureFinder, FoundAdventure } from "./GreyChooser";
 import { QuestAdventure } from "./quests/Quests";
@@ -62,6 +63,7 @@ export class GreyAdventurer {
     new TaskJuneCleaver(),
     new TaskBoomboxSwitch(),
   ];
+  visitedFamiliar: Familiar[] = [];
 
   runTurn(goTime: boolean): boolean {
     this.goTime = goTime;
@@ -302,6 +304,12 @@ export class GreyAdventurer {
 
     if (itemAmount(closet) > 0) {
       putCloset(closet, itemAmount(closet));
+    }
+
+    // Temp workaround for a mafia bug
+    if (!this.visitedFamiliar.includes(familiar)) {
+      this.visitedFamiliar.push(familiar);
+      visitUrl("familiar.php");
     }
   }
 

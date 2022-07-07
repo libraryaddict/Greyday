@@ -20,12 +20,11 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
+import { GreySettings } from "../../../../utils/GreySettings";
 
 type ContestQuest = () => void;
 
 export class QuestTowerContestants implements QuestInfo {
-  private reachedTower: string = "_greyReachedTower";
-
   getId(): QuestType {
     return "Council / Tower / Contests";
   }
@@ -39,18 +38,6 @@ export class QuestTowerContestants implements QuestInfo {
 
     if (status < 0) {
       return QuestStatus.NOT_READY;
-    }
-
-    if (
-      toBoolean(getProperty("greyBreakAtTower")) &&
-      getProperty(this.reachedTower) != "true"
-    ) {
-      setProperty(this.reachedTower, "true");
-      print(
-        "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
-        "blue"
-      );
-      throw "User Requested: Reached tower";
     }
 
     if (status > 3) {

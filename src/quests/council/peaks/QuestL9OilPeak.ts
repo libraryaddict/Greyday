@@ -37,6 +37,7 @@ import { QuestType } from "../../QuestTypes";
 export class OilHandler implements QuestInfo {
   loc: Location = Location.get("Oil Peak");
   crude: Item = Item.get("Bubblin' Crude");
+  umbrella: Item = Item.get("Unbreakable Umbrella");
 
   getId(): QuestType {
     return "Council / Peaks / OilPeak";
@@ -151,8 +152,12 @@ export class OilHandler implements QuestInfo {
       outfit: outfit,
       run: () => {
         changeMcd(10);
-        setUmbrella(UmbrellaState.MONSTER_LEVEL);
-        equip(Item.get("Unbreakable Umbrella"));
+
+        if (availableAmount(this.umbrella) > 0) {
+          setUmbrella(UmbrellaState.MONSTER_LEVEL);
+          equip(Item.get("Unbreakable Umbrella"));
+        }
+
         greyAdv(this.loc, outfit);
         changeMcd(0);
       },

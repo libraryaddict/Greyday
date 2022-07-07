@@ -58,7 +58,7 @@ export class QuestStarKey implements QuestInfo {
 
     if (
       this.toAbsorb.length == 0 &&
-      getProperty("greyBreakAtTower") == "true" &&
+      GreySettings.greyBreakAtTower &&
       getProperty("_greyReachedTower") != "true"
     ) {
       return QuestStatus.NOT_READY;

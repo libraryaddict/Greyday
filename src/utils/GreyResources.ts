@@ -3,6 +3,7 @@ import {
   buyUsingStorage,
   cliExecute,
   Familiar,
+  getLocketMonsters,
   getProperty,
   getRelated,
   haveFamiliar,
@@ -10,6 +11,7 @@ import {
   mallPrice,
   outfitPieces,
   print,
+  printHtml,
   pullsRemaining,
   storageAmount,
   toInt,
@@ -287,55 +289,60 @@ export class GreyRequirements {
         Required.MUST,
       ]);
     } else {
-      dontHave.push([
-        "Combat Lovers Locket - Make sure you have 'Pygmy witch lawyer' & 'Fantasy Bandit' in it!",
-        Required.NOTE,
-      ]);
+      let monstersNeed: string[] = [
+        "pygmy witch lawyer",
+        "mountain man",
+      ].filter((m) => getLocketMonsters()[m] != true);
+
+      if (monstersNeed.length > 0) {
+        dontHave.push([
+          "Combat Lovers Locket - You are missing the locket monsters: " +
+            monstersNeed.map((m) => "'" + m + "'").join(" & "),
+          Required.MUST,
+        ]);
+      }
     }
 
     if (availableAmount(Item.get("industrial fire extinguisher")) == 0) {
       dontHave.push([
-        "industrial fire extinguisher, minor, but hardcoded so a must",
-        Required.MUST,
+        "industrial fire extinguisher, can speed up by 20 turns",
+        Required.USEFUL,
       ]);
     }
 
     if (availableAmount(Item.get("backup camera")) == 0) {
-      dontHave.push(["Backup Camera", Required.MUST]);
+      dontHave.push(["Backup Camera", Required.VERY_USEFUL]);
     }
 
     if (
       availableAmount(Item.get("unwrapped knock-off retro superhero cape")) == 0
     ) {
       dontHave.push([
-        "unwrapped knock-off retro superhero cape, currently hardcoded",
-        Required.MUST,
+        "unwrapped knock-off retro superhero cape, great for crypts",
+        Required.VERY_USEFUL,
       ]);
     }
 
-    if (getProperty("maydayContractOwned") == "true") {
+    if (getProperty("maydayContractOwned") != "true") {
       dontHave.push([
-        "Can't see if you own the mayday supply, but..",
+        "Mayday Contract, gives a nice +combat cape and 5k meat boost",
         Required.USEFUL,
       ]);
     }
 
     if (availableAmount(Item.get("Unbreakable Umbrella")) == 0) {
       dontHave.push([
-        "Unbreakable Umbrella - Current hardcoded, so a must",
-        Required.MUST,
+        "Unbreakable Umbrella - Great -combat and +ML",
+        Required.VERY_USEFUL,
       ]);
     }
 
-    if (
-      availableAmount(Item.get("Cosmic Bowling Ball")) == 0 &&
-      getProperty("cosmicBowlingBallReturnCombats") == "-1"
-    ) {
-      dontHave.push(["Cosmic Bowling Ball", Required.VERY_USEFUL]);
+    if (getProperty("hasCosmicBowlingBall") != "true") {
+      dontHave.push(["Cosmic Bowling Ball, banishes!", Required.VERY_USEFUL]);
     }
 
     if (availableAmount(Item.get("miniature crystal ball")) == 0) {
-      dontHave.push(["miniature crystal ball", Required.MUST]);
+      dontHave.push(["miniature crystal ball", Required.VERY_USEFUL]);
     }
 
     if (!haveFamiliar(Familiar.get("Short Order Cook"))) {
@@ -366,7 +373,7 @@ export class GreyRequirements {
 
     if (availableAmount(Item.get("Cargo Cultist Shorts")) == 0) {
       dontHave.push([
-        "Cargo Cultist Shorts, does save 5? turns",
+        "Cargo Cultist Shorts, does save 10? turns",
         Required.MINOR,
       ]);
     }
@@ -395,8 +402,34 @@ export class GreyRequirements {
     }
 
     if (availableAmount(Item.get("SongBoom&trade; BoomBox")) == 0) {
-      dontHave.push(["SongBoom&trade; BoomBox", Required.MINOR]);
+      dontHave.push([
+        "SongBoom&trade; BoomBox, great for startup meat and nuns",
+        Required.USEFUL,
+      ]);
     }
+
+    if (availableAmount(Item.get("latte lovers member's mug")) == 0) {
+      dontHave.push([
+        "Latte lovers club card, great for familiar exp",
+        Required.MINOR,
+      ]);
+    }
+
+    if (availableAmount(Item.get("Designer Sweatpants")) == 0) {
+      dontHave.push([
+        "Designer Sweatpants, great for ron protesters and sometimes stat tests",
+        Required.MINOR,
+      ]);
+    }
+
+    if (availableAmount(Item.get("June Cleaver")) == 0) {
+      dontHave.push([
+        "June Cleaver, great for the 1.5k meat, for smut orcs, and good chance of a teacher's pen without having to use a pull",
+        Required.VERY_USEFUL,
+      ]);
+    }
+
+    printHtml("<center>======= Grey Requirements =======</center>");
 
     for (let [name, required] of dontHave) {
       let color: string = "green";
@@ -414,7 +447,13 @@ export class GreyRequirements {
       print(name + (required.length > 0 ? " = " + required : ""), color);
     }
 
-    print("End Requirements.");
+    if (dontHave.length == 0) {
+      printHtml(
+        "<center color='green'>Wow! You have everything in here!</center>"
+      );
+    }
+
+    printHtml("<center>===============</center>");
     // TODO Camelcalf?
   }
 }

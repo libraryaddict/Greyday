@@ -20,6 +20,7 @@ import {
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { ResourceClaim } from "../../utils/GreyResources";
+import { GreySettings, moonSigns } from "../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
@@ -34,7 +35,6 @@ export class QuestMoonSign implements QuestInfo {
     "Torso Awareness",
     "Gnefarious Pickpocketing ",
   ].map((s) => Skill.get(s));
-  property: string = "greyTuneMoonSpoon";
 
   getId(): QuestType {
     return "Misc / Moonsign";
@@ -52,7 +52,11 @@ export class QuestMoonSign implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (getProperty(this.property) == "") {
+    if (
+      moonSigns.find(
+        (s) => s.toLowerCase() == GreySettings.greyTuneMoonSpoon.toLowerCase()
+      ) == null
+    ) {
       return QuestStatus.COMPLETED;
     }
 
@@ -82,7 +86,7 @@ export class QuestMoonSign implements QuestInfo {
           throw "User wasn't ready";
         }*/
 
-        cliExecute("spoon " + getProperty(this.property));
+        cliExecute("spoon " + GreySettings.greyTuneMoonSpoon);
 
         if (getProperty("moonTuned") != "true") {
           throw "Something went wrong when trying to moon spoon tune!";
