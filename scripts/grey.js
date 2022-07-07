@@ -6767,7 +6767,7 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
       outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");var _iterator2 = QuestL11RonProtesters_createForOfIteratorHelper(
 
       this.lyrndCostume),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var i = _step2.value;
-          outfit.addItem(i, 60);
+          outfit.addItem(i, 600);
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
 
       return {
