@@ -148,7 +148,7 @@ export class QuestL11RonProtesters implements QuestInfo {
     outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");
 
     for (let i of this.lyrndCostume) {
-      outfit.addItem(i, 60);
+      outfit.addItem(i, 600);
     }
 
     return {
