@@ -347,7 +347,46 @@ function getBanishers() {
 ;// CONCATENATED MODULE: ./src/utils/GreySettings.ts
 function GreySettings_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreySettings_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreySettings_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreySettings_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreySettings_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreySettings_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
+
+
+
+
+
+
+function getGreySettings() {
+  var towerBreak = {
+    name: "greyBreakAtTower",
+    description:
+    "Should the script halt when it reaches the tower? False by default. Useful as continuing after breaking ronin takes less turns. This will change the behavior of the script to skip some zones.",
+    valid: (value) => value == "true" || value == "false" };
+
+  var moonTune = {
+    name: "greyTuneMoonSpoon",
+    description:
+    "If set, will use the rune moon spoon (if owned) to change moon signs to the requested moon sign when done with tasks in the current moon sign.",
+    valid: (value) =>
+    moonSigns.find((s) => s.toLowerCase() == value.toLowerCase()) != null };
+
+
+  return [towerBreak, moonTune];
+}
+
+var moonSigns = [
+"Mongoose",
+"Wallaby",
+"Vole",
+"Platypus",
+"Opossum",
+"Marmot",
+"Blender",
+"Packrat"];
+
+
 var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettings_classCallCheck(this, GreySettings);}GreySettings_createClass(GreySettings, null, [{ key: "isHardcoreMode", value:
+
+
+
+
 
 
 
@@ -367,11 +406,8 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
     } }, { key: "shouldAvoidTowerRequirements", value:
 
     function shouldAvoidTowerRequirements() {
-      return (
-        !GreySettings.isHardcoreMode() &&
-        (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower")));
-
-    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);
+      return !GreySettings.isHardcoreMode() && this.greyBreakAtTower;
+    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") || "false"));GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", (0,external_kolmafia_namespaceObject.getProperty)("greyTuneMoonSpoon"));
 ;// CONCATENATED MODULE: ./src/utils/GreyUtils.ts
 function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || GreyUtils_unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyUtils_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyUtils_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyUtils_arrayLikeToArray(o, minLen);}function GreyUtils_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
 
@@ -4535,55 +4571,60 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
         Required.MUST]);
 
       } else {
-        dontHave.push([
-        "Combat Lovers Locket - Make sure you have 'Pygmy witch lawyer' & 'Fantasy Bandit' in it!",
-        Required.NOTE]);
+        var monstersNeed = [
+        "pygmy witch lawyer",
+        "mountain man"].
+        filter((m) => (0,external_kolmafia_namespaceObject.getLocketMonsters)()[m] != true);
 
+        if (monstersNeed.length > 0) {
+          dontHave.push([
+          "Combat Lovers Locket - You are missing the locket monsters: " +
+          monstersNeed.map((m) => "'" + m + "'").join(" & "),
+          Required.MUST]);
+
+        }
       }
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("industrial fire extinguisher")) == 0) {
         dontHave.push([
-        "industrial fire extinguisher, minor, but hardcoded so a must",
-        Required.MUST]);
+        "industrial fire extinguisher, can speed up by 20 turns",
+        Required.USEFUL]);
 
       }
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("backup camera")) == 0) {
-        dontHave.push(["Backup Camera", Required.MUST]);
+        dontHave.push(["Backup Camera", Required.VERY_USEFUL]);
       }
 
       if (
       (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("unwrapped knock-off retro superhero cape")) == 0)
       {
         dontHave.push([
-        "unwrapped knock-off retro superhero cape, currently hardcoded",
-        Required.MUST]);
+        "unwrapped knock-off retro superhero cape, great for crypts",
+        Required.VERY_USEFUL]);
 
       }
 
-      if ((0,external_kolmafia_namespaceObject.getProperty)("maydayContractOwned") == "true") {
+      if ((0,external_kolmafia_namespaceObject.getProperty)("maydayContractOwned") != "true") {
         dontHave.push([
-        "Can't see if you own the mayday supply, but..",
+        "Mayday Contract, gives a nice +combat cape and 5k meat boost",
         Required.USEFUL]);
 
       }
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella")) == 0) {
         dontHave.push([
-        "Unbreakable Umbrella - Current hardcoded, so a must",
-        Required.MUST]);
+        "Unbreakable Umbrella - Great -combat and +ML",
+        Required.VERY_USEFUL]);
 
       }
 
-      if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Cosmic Bowling Ball")) == 0 &&
-      (0,external_kolmafia_namespaceObject.getProperty)("cosmicBowlingBallReturnCombats") == "-1")
-      {
-        dontHave.push(["Cosmic Bowling Ball", Required.VERY_USEFUL]);
+      if ((0,external_kolmafia_namespaceObject.getProperty)("hasCosmicBowlingBall") != "true") {
+        dontHave.push(["Cosmic Bowling Ball, banishes!", Required.VERY_USEFUL]);
       }
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("miniature crystal ball")) == 0) {
-        dontHave.push(["miniature crystal ball", Required.MUST]);
+        dontHave.push(["miniature crystal ball", Required.VERY_USEFUL]);
       }
 
       if (!(0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Short Order Cook"))) {
@@ -4614,7 +4655,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Cargo Cultist Shorts")) == 0) {
         dontHave.push([
-        "Cargo Cultist Shorts, does save 5? turns",
+        "Cargo Cultist Shorts, does save 10? turns",
         Required.MINOR]);
 
       }
@@ -4643,8 +4684,34 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
       }
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("SongBoom&trade; BoomBox")) == 0) {
-        dontHave.push(["SongBoom&trade; BoomBox", Required.MINOR]);
+        dontHave.push([
+        "SongBoom&trade; BoomBox, great for startup meat and nuns",
+        Required.USEFUL]);
+
       }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("latte lovers member's mug")) == 0) {
+        dontHave.push([
+        "Latte lovers club card, great for familiar exp",
+        Required.MINOR]);
+
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Designer Sweatpants")) == 0) {
+        dontHave.push([
+        "Designer Sweatpants, great for ron protesters and sometimes stat tests",
+        Required.MINOR]);
+
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("June Cleaver")) == 0) {
+        dontHave.push([
+        "June Cleaver, great for the 1.5k meat, for smut orcs, and good chance of a teacher's pen without having to use a pull",
+        Required.VERY_USEFUL]);
+
+      }
+
+      (0,external_kolmafia_namespaceObject.printHtml)("<center>======= Grey Requirements =======</center>");
 
       for (var _i = 0, _dontHave = dontHave; _i < _dontHave.length; _i++) {var _dontHave$_i = GreyResources_slicedToArray(_dontHave[_i], 2),name = _dontHave$_i[0],required = _dontHave$_i[1];
         var color = "green";
@@ -4662,7 +4729,13 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
         (0,external_kolmafia_namespaceObject.print)(name + (required.length > 0 ? " = " + required : ""), color);
       }
 
-      (0,external_kolmafia_namespaceObject.print)("End Requirements.");
+      if (dontHave.length == 0) {
+        (0,external_kolmafia_namespaceObject.printHtml)(
+        "<center color='green'>Wow! You have everything in here!</center>");
+
+      }
+
+      (0,external_kolmafia_namespaceObject.printHtml)("<center>===============</center>");
       // TODO Camelcalf?
     } }]);return GreyRequirements;}();
 
@@ -10817,7 +10890,7 @@ var QuestStarKey = /*#__PURE__*/function () {function QuestStarKey() {QuestStarK
 
       if (
       this.toAbsorb.length == 0 &&
-      (0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") == "true" &&
+      GreySettings.greyBreakAtTower &&
       (0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower") != "true")
       {
         return QuestStatus.NOT_READY;
@@ -11175,7 +11248,7 @@ var QuestTowerKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestTowerKe
 
     } }]);return QuestTowerKeys;}(QuestKeyStuffAbstract);
 ;// CONCATENATED MODULE: ./src/quests/council/tower/stages/QuestTowerContestants.ts
-function QuestTowerContestants_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestTowerContestants_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestTowerContestants_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestTowerContestants_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestTowerContestants_arrayLikeToArray(o, minLen);}function QuestTowerContestants_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestTowerContestants_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerContestants_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerContestants_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerContestants_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerContestants_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerContestants_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestTowerContestants_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestTowerContestants_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestTowerContestants_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestTowerContestants_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestTowerContestants_arrayLikeToArray(o, minLen);}function QuestTowerContestants_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestTowerContestants_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerContestants_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerContestants_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerContestants_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerContestants_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}
 
 
 
@@ -11184,9 +11257,8 @@ function QuestTowerContestants_createForOfIteratorHelper(o, allowArrayLike) {var
 
 
 
-var QuestTowerContestants = /*#__PURE__*/function () {function QuestTowerContestants() {QuestTowerContestants_classCallCheck(this, QuestTowerContestants);QuestTowerContestants_defineProperty(this, "reachedTower",
-    "_greyReachedTower");}QuestTowerContestants_createClass(QuestTowerContestants, [{ key: "getId", value:
 
+var QuestTowerContestants = /*#__PURE__*/function () {function QuestTowerContestants() {QuestTowerContestants_classCallCheck(this, QuestTowerContestants);}QuestTowerContestants_createClass(QuestTowerContestants, [{ key: "getId", value:
     function getId() {
       return "Council / Tower / Contests";
     } }, { key: "level", value:
@@ -11200,18 +11272,6 @@ var QuestTowerContestants = /*#__PURE__*/function () {function QuestTowerContest
 
       if (status < 0) {
         return QuestStatus.NOT_READY;
-      }
-
-      if (
-      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower")) &&
-      (0,external_kolmafia_namespaceObject.getProperty)(this.reachedTower) != "true")
-      {
-        (0,external_kolmafia_namespaceObject.setProperty)(this.reachedTower, "true");
-        (0,external_kolmafia_namespaceObject.print)(
-        "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
-        "blue");
-
-        throw "User Requested: Reached tower";
       }
 
       if (status > 3) {
@@ -12413,7 +12473,8 @@ var QuestL3Tavern = /*#__PURE__*/function () {function QuestL3Tavern() {QuestL3T
     new TavernLayout());QuestL3Tavern_defineProperty(this, "location",
     external_kolmafia_namespaceObject.Location.get("The Typical Tavern Cellar"));QuestL3Tavern_defineProperty(this, "tangle",
     external_kolmafia_namespaceObject.Item.get("tangle of rat tails"));QuestL3Tavern_defineProperty(this, "teleportis",
-    external_kolmafia_namespaceObject.Effect.get("Teleportitis"));}QuestL3Tavern_createClass(QuestL3Tavern, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Effect.get("Teleportitis"));QuestL3Tavern_defineProperty(this, "umbrella",
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));}QuestL3Tavern_createClass(QuestL3Tavern, [{ key: "level", value:
 
     function level() {
       return 3;
@@ -12517,9 +12578,12 @@ var QuestL3Tavern = /*#__PURE__*/function () {function QuestL3Tavern() {QuestL3T
           }
 
           try {
-            if (outfit.plusMonsterLevelWeight >= 10) {
+            if (
+            outfit.plusMonsterLevelWeight >= 10 &&
+            (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) > 0)
+            {
               setUmbrella(UmbrellaState.MONSTER_LEVEL);
-              (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));
+              (0,external_kolmafia_namespaceObject.equip)(this.umbrella);
             }
 
             (0,external_kolmafia_namespaceObject.changeMcd)(10);
@@ -15587,7 +15651,8 @@ function QuestL9OilPeak_classCallCheck(instance, Constructor) {if (!(instance in
 
 var OilHandler = /*#__PURE__*/function () {function OilHandler() {QuestL9OilPeak_classCallCheck(this, OilHandler);QuestL9OilPeak_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("Oil Peak"));QuestL9OilPeak_defineProperty(this, "crude",
-    external_kolmafia_namespaceObject.Item.get("Bubblin' Crude"));}QuestL9OilPeak_createClass(OilHandler, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("Bubblin' Crude"));QuestL9OilPeak_defineProperty(this, "umbrella",
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));}QuestL9OilPeak_createClass(OilHandler, [{ key: "getId", value:
 
     function getId() {
       return "Council / Peaks / OilPeak";
@@ -15702,8 +15767,12 @@ var OilHandler = /*#__PURE__*/function () {function OilHandler() {QuestL9OilPeak
         outfit: outfit,
         run: () => {
           (0,external_kolmafia_namespaceObject.changeMcd)(10);
-          setUmbrella(UmbrellaState.MONSTER_LEVEL);
-          (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));
+
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) > 0) {
+            setUmbrella(UmbrellaState.MONSTER_LEVEL);
+            (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));
+          }
+
           greyAdv(this.loc, outfit);
           (0,external_kolmafia_namespaceObject.changeMcd)(0);
         } };
@@ -20130,6 +20199,7 @@ function QuestMoonSign_classCallCheck(instance, Constructor) {if (!(instance ins
 
 
 
+
 var QuestMoonSign = /*#__PURE__*/function () {function QuestMoonSign() {QuestMoonSign_classCallCheck(this, QuestMoonSign);QuestMoonSign_defineProperty(this, "spoon",
     external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"));QuestMoonSign_defineProperty(this, "asdon",
     external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestMoonSign_defineProperty(this, "knollAbsorb",
@@ -20140,8 +20210,7 @@ var QuestMoonSign = /*#__PURE__*/function () {function QuestMoonSign() {QuestMoo
     "Powers of Observatiogn",
     "Torso Awareness",
     "Gnefarious Pickpocketing "].
-    map((s) => external_kolmafia_namespaceObject.Skill.get(s)));QuestMoonSign_defineProperty(this, "property",
-    "greyTuneMoonSpoon");}QuestMoonSign_createClass(QuestMoonSign, [{ key: "getId", value:
+    map((s) => external_kolmafia_namespaceObject.Skill.get(s)));}QuestMoonSign_createClass(QuestMoonSign, [{ key: "getId", value:
 
     function getId() {
       return "Misc / Moonsign";
@@ -20159,7 +20228,11 @@ var QuestMoonSign = /*#__PURE__*/function () {function QuestMoonSign() {QuestMoo
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.getProperty)(this.property) == "") {
+      if (
+      moonSigns.find(
+      (s) => s.toLowerCase() == GreySettings.greyTuneMoonSpoon.toLowerCase()) ==
+      null)
+      {
         return QuestStatus.COMPLETED;
       }
 
@@ -20189,7 +20262,7 @@ var QuestMoonSign = /*#__PURE__*/function () {function QuestMoonSign() {QuestMoo
           }*/
 
 
-          (0,external_kolmafia_namespaceObject.cliExecute)("spoon " + (0,external_kolmafia_namespaceObject.getProperty)(this.property));
+          (0,external_kolmafia_namespaceObject.cliExecute)("spoon " + GreySettings.greyTuneMoonSpoon);
 
           if ((0,external_kolmafia_namespaceObject.getProperty)("moonTuned") != "true") {
             throw "Something went wrong when trying to moon spoon tune!";
@@ -22604,8 +22677,9 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
     new TaskMaintainStatus(),
     new TaskFuelAsdon(),
     new TaskJuneCleaver(),
-    new TaskBoomboxSwitch()]);}GreyAdventurer_createClass(GreyAdventurer, [{ key: "runTurn", value:
+    new TaskBoomboxSwitch()]);GreyAdventurer_defineProperty(this, "visitedFamiliar",
 
+    []);}GreyAdventurer_createClass(GreyAdventurer, [{ key: "runTurn", value:
 
     function runTurn(goTime) {
       this.goTime = goTime;
@@ -22847,6 +22921,12 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       if ((0,external_kolmafia_namespaceObject.itemAmount)(closet) > 0) {
         (0,external_kolmafia_namespaceObject.putCloset)(closet, (0,external_kolmafia_namespaceObject.itemAmount)(closet));
       }
+
+      // Temp workaround for a mafia bug
+      if (!this.visitedFamiliar.includes(familiar)) {
+        this.visitedFamiliar.push(familiar);
+        (0,external_kolmafia_namespaceObject.visitUrl)("familiar.php");
+      }
     } }, { key: "runAdventure", value:
 
     function runAdventure(adventure) {
@@ -22947,43 +23027,126 @@ function hasNonCombatSkillActive() {
 
 }
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
-function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
 
 
 
 var
 
-GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_classCallCheck(this, GreyYouMain);GreyYouMain_defineProperty(this, "adventures", void 0);}GreyYouMain_createClass(GreyYouMain, [{ key: "handleCommand", value:
+GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_classCallCheck(this, GreyYouMain);GreyYouMain_defineProperty(this, "adventures", void 0);GreyYouMain_defineProperty(this, "reachedTower",
 
+    "_greyReachedTower");}GreyYouMain_createClass(GreyYouMain, [{ key: "isRevisionPass", value:
 
-    function handleCommand(command) {
-      if ((0,external_kolmafia_namespaceObject.getRevision)() < 26535) {
+    function isRevisionPass() {
+      var required = 26535;
+
+      if ((0,external_kolmafia_namespaceObject.getRevision)() < required) {
         (0,external_kolmafia_namespaceObject.print)("Please update your mafia. You are using ".concat(
-        (0,external_kolmafia_namespaceObject.getRevision)(), " but we need at least r26535"),
+        (0,external_kolmafia_namespaceObject.getRevision)(), " but we need at least ").concat(required),
         "red");
 
+        return false;
+      }
+
+      return true;
+    } }, { key: "getTick", value:
+
+    function getTick() {
+      return "<font color='green'>✔</font>";
+    } }, { key: "getCross", value:
+
+    function getCross() {
+      return "<font color='red'>✘</font>";
+    } }, { key: "doSettings", value:
+
+    function doSettings() {
+      var settings = getGreySettings();
+
+      (0,external_kolmafia_namespaceObject.printHtml)("<center color='blue'>====== Grey Settings ======");var _iterator = GreyYouMain_createForOfIteratorHelper(
+
+      settings),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var setting = _step.value;
+          (0,external_kolmafia_namespaceObject.print)("");
+
+          var val = (0,external_kolmafia_namespaceObject.getProperty)(setting.name);
+          (0,external_kolmafia_namespaceObject.printHtml)("<font color='blue'>".concat(
+          setting.name, "</font> - <font color='gray'>").concat(setting.description, "</font>"));
+
+
+          if (setting.valid(val)) {
+            (0,external_kolmafia_namespaceObject.printHtml)("".concat(
+            this.getTick(), " <font color='green'>Setting '").concat(val, "' is valid</font>"));
+
+          } else if (val == "") {
+            (0,external_kolmafia_namespaceObject.printHtml)("".concat(
+            this.getCross(), " <font color='red'>Using default behavior</font>"));
+
+          } else {
+            (0,external_kolmafia_namespaceObject.printHtml)("".concat(
+            this.getCross(), " <font color='red'>Invalid setting '").concat(val, "'</font>"));
+
+          }
+        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+
+      (0,external_kolmafia_namespaceObject.print)("");
+      (0,external_kolmafia_namespaceObject.printHtml)(
+      "<center>You can change these settings by using the following in CLI:</center>");
+
+      (0,external_kolmafia_namespaceObject.printHtml)("<center color='purple'>set settingName = value</center>");
+
+      (0,external_kolmafia_namespaceObject.print)("");
+      (0,external_kolmafia_namespaceObject.printHtml)("<center color='blue'>======================</center>");
+    } }, { key: "doHelp", value:
+
+    function doHelp() {
+      (0,external_kolmafia_namespaceObject.printHtml)("======================================");
+      (0,external_kolmafia_namespaceObject.print)("help - Shows this message", "blue");
+      (0,external_kolmafia_namespaceObject.print)("settings - Show the settings", "blue");
+      (0,external_kolmafia_namespaceObject.print)(
+      "required - Prints off a series of requirements, which is both outdated and more severe than you need.",
+      "blue");
+
+
+      var color = (0,external_kolmafia_namespaceObject.myPath)() == "Grey You" ? "blue" : "red";
+
+      if (color == "red") {
+        (0,external_kolmafia_namespaceObject.print)("You are not in Grey You, and cannot use these commands.", "gray");
+      }
+
+      (0,external_kolmafia_namespaceObject.print)("resources - A debug command for resource usage information", color);
+      (0,external_kolmafia_namespaceObject.print)(
+      "run <Turns> - Run X amount of turns, or 1 if turns are not provided",
+      color);
+
+      (0,external_kolmafia_namespaceObject.print)(
+      "sim - Equips and gets ready to adventure, showing where it would go. But will not take the action.",
+      color);
+
+      (0,external_kolmafia_namespaceObject.print)(
+      "absorbs - Prints off what adventure absorbs have not yet been grabbed",
+      color);
+
+      (0,external_kolmafia_namespaceObject.printHtml)("======================================");
+    } }, { key: "handleCommand", value:
+
+    function handleCommand(command) {
+      if (!this.isRevisionPass()) {
         return;
       }
 
-      if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon")) > 0 &&
-      (0,external_kolmafia_namespaceObject.getProperty)("greyTuneMoonSpoon") == "")
-      {
-        (0,external_kolmafia_namespaceObject.print)(
-        "Did you know you can set 'greyTuneMoonSpoon' to a moon sign, and it'll auto tune when it's finished? Currently only tested with Knoll > Gnomes, tell Irrat if you wanted canadia and he'll get around to it.",
-        "red");
-
-      }
-
-      if ((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") == "") {
-        (0,external_kolmafia_namespaceObject.print)(
-        "'greyBreakAtTower' hasn't been set, setting it to true will mean when it hits the tower, the script will exit to be continued later.",
-        "gray");
-
+      if (command == "" || command == "help") {
+        this.doHelp();
+        return;
       }
 
       if (command == "required") {
         new GreyRequirements().hasRequired();
+        return;
+      }
+
+      if (command == "settings") {
+        this.doSettings();
         return;
       }
 
@@ -22995,9 +23158,42 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
         return;
       }
 
+      if (
+      command != "absorbs" &&
+      command != "run" &&
+      !command.startsWith("run ") &&
+      command != "sim")
+      {
+        (0,external_kolmafia_namespaceObject.print)("Unknown command.");
+        return;
+      }
+
+      var settings = getGreySettings();
+      var invalid = false;var _iterator2 = GreyYouMain_createForOfIteratorHelper(
+
+      settings),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var setting = _step2.value;
+          var val = (0,external_kolmafia_namespaceObject.getProperty)(setting.name);
+
+          if (val == "" || setting.valid(val)) {
+            continue;
+          }
+
+          (0,external_kolmafia_namespaceObject.printHtml)(
+          "<font color='red'>The setting '" +
+          setting.name +
+          "' is invalid, please correct this or set it to empty. To reset it, use the CLI command <font color='blue'>set " +
+          setting.name +
+          " =</font></font>");
+
+        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+
+      if (invalid) {
+        return;
+      }
+
       if ((0,external_kolmafia_namespaceObject.myPath)() != "Grey You") {
         (0,external_kolmafia_namespaceObject.print)(
-        "You're not in grey you. Use 'required' to get requirements.",
+        "You're not in grey you. Use 'help' to see what you can use.",
         "red");
 
         return;
@@ -23009,7 +23205,9 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
       if (command == "absorbs") {
         this.adventures.adventureFinder.absorbs.printRemainingAbsorbs();
         return;
-      } else if (command == "sim") {
+      }
+
+      if (command == "sim") {
         this.adventures.runTurn(false);
         return;
       } else if (s[0] == "go" || s[0] == "run") {
@@ -23023,6 +23221,20 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
         var lastBeaten = 0;
 
         for (var i = 0; i < turns && (0,external_kolmafia_namespaceObject.haveEffect)(effect) - lastBeaten != 3; i++) {
+          if (
+          GreySettings.greyBreakAtTower &&
+          (0,external_kolmafia_namespaceObject.getProperty)(this.reachedTower) != "true" &&
+          getQuestStatus("questL13Final") >= 0)
+          {
+            (0,external_kolmafia_namespaceObject.setProperty)(this.reachedTower, "true");
+            (0,external_kolmafia_namespaceObject.print)(
+            "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
+            "blue");
+
+            (0,external_kolmafia_namespaceObject.print)("The script will continue when you run the script again.");
+            return;
+          }
+
           lastBeaten = (0,external_kolmafia_namespaceObject.haveEffect)(effect);
           var run = this.adventures.runTurn(true);
 
@@ -23034,8 +23246,6 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
         (0,external_kolmafia_namespaceObject.print)("Done running", "blue");
         return;
       }
-
-      (0,external_kolmafia_namespaceObject.print)("Provide absorbs, go or sim");
     } }]);return GreyYouMain;}();
 
 
