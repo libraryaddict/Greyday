@@ -239,6 +239,7 @@ class QuestGnomeTrainer implements QuestInfo {
     if (availableAmount(this.letter) > 0) {
       return {
         location: null,
+        outfit: new GreyOutfit("-tie"),
         run: () => {
           use(this.letter);
         },
@@ -247,6 +248,7 @@ class QuestGnomeTrainer implements QuestInfo {
 
     return {
       location: null,
+      outfit: new GreyOutfit("-tie"),
       run: () => {
         let skill = this.getSkillLacking();
 

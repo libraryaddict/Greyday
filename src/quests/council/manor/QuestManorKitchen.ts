@@ -1,4 +1,5 @@
 import {
+  availableAmount,
   cliExecute,
   Effect,
   effectModifier,
@@ -6,9 +7,11 @@ import {
   getFuel,
   getProperty,
   getWorkshed,
+  gnomadsAvailable,
   haveEffect,
   haveSkill,
   Item,
+  knollAvailable,
   Location,
   maximize,
   Monster,
@@ -23,6 +26,7 @@ import {
 import { AbsorbsProvider, Reabsorbed } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { GreySettings } from "../../../utils/GreySettings";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -40,6 +44,9 @@ export class QuestManorKitchen implements QuestInfo {
   canOfPaint: Item = Item.get("Can of black paint");
   asdonMartin: Item = Item.get("Asdon Martin keyfob");
   driveSafe: Effect = Effect.get("Driving Safely");
+  torso: Skill = Skill.get("Torso Awareness");
+  spoon: Item = Item.get("hewn moon-rune spoon");
+  scaleShirt: Item = Item.get("blessed rustproof +2 gray dragon scale mail");
 
   getId(): QuestType {
     return "Manor / Kitchen";
@@ -84,6 +91,17 @@ export class QuestManorKitchen implements QuestInfo {
     }
 
     if (
+      !haveSkill(this.torso) &&
+      availableAmount(this.scaleShirt) > 0 &&
+      (gnomadsAvailable() ||
+        (availableAmount(this.spoon) > 0 &&
+          GreySettings.greyTuneMoonSpoon != "" &&
+          getProperty("moonTuned") != "true"))
+    ) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (
       (getQuestStatus("questL11Black") <= 2 || myMeat() < 1200) &&
       !this.hasEnoughRes()
     ) {
@@ -104,7 +122,7 @@ export class QuestManorKitchen implements QuestInfo {
     let outfit = new GreyOutfit();
 
     if (toInt(getProperty("manorDrawerCount")) < 20) {
-      outfit.addBonus("+10 hot res").addBonus("+10 stench res");
+      outfit.addBonus("+10 hot res 9 max").addBonus("+10 stench res 9 max");
     }
 
     return {
