@@ -9781,6 +9781,7 @@ function QuestL12WarLobster_classCallCheck(instance, Constructor) {if (!(instanc
 
 
 
+
 var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {QuestL12WarLobster_classCallCheck(this, QuestL12Lobster);QuestL12WarLobster_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("Sonofa Beach"));QuestL12WarLobster_defineProperty(this, "item",
     external_kolmafia_namespaceObject.Item.get("barrel of gunpowder"));QuestL12WarLobster_defineProperty(this, "monster",
@@ -9814,6 +9815,14 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
       }
 
       if ((0,external_kolmafia_namespaceObject.myAdventures)() < 22) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.backupCamera) > 0 &&
+      getBackupsRemaining() > 0 &&
+      this.shouldDelayForBats())
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -9890,6 +9899,16 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
 
     function isBackupReady() {
       return this.hasBackups() > 0 && this.lastMonster() == this.monster;
+    } }, { key: "shouldDelayForBats", value:
+
+    function shouldDelayForBats() {
+      return getQuestStatus("questL04Bat") < 3;
+    } }, { key: "isBatsAvailable", value:
+
+    function isBatsAvailable() {
+      var status = getQuestStatus("questL04Bat");
+
+      return status >= 3 && status < 100;
     } }, { key: "run", value:
 
     function run() {
@@ -9902,9 +9921,14 @@ var QuestL12Lobster = /*#__PURE__*/function () {function QuestL12Lobster() {Ques
         var _outfit = new GreyOutfit().addItem(external_kolmafia_namespaceObject.Item.get("Backup Camera"));
         _outfit.addBonus("-ML");
 
-        var loc = external_kolmafia_namespaceObject.Location.get("The Dire Warren");
+        var loc;
 
-        // TODO Backup and ruin other zones delay
+        if (this.isBatsAvailable()) {
+          loc = external_kolmafia_namespaceObject.Location.get("The Boss Bat's Lair");
+        } else {
+          loc = external_kolmafia_namespaceObject.Location.get("The Dire Warren");
+        }
+
         return {
           outfit: _outfit,
           location: loc,
@@ -11649,7 +11673,10 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
 
       if (
       (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Mysticality")) <
-      (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Muscle")) &&
+      Math.max(
+      (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Muscle")),
+      (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Moxie"))) &&
+
       !(0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Phairly Balanced")) &&
       (0,external_kolmafia_namespaceObject.mallPrice)(external_kolmafia_namespaceObject.Item.get("PH Balancer")) < 1000)
       {
@@ -12531,8 +12558,10 @@ function QuestL4BatsBoss_classCallCheck(instance, Constructor) {if (!(instance i
 
 
 
+
 var QuestL4BatsBoss = /*#__PURE__*/function () {function QuestL4BatsBoss() {QuestL4BatsBoss_classCallCheck(this, QuestL4BatsBoss);QuestL4BatsBoss_defineProperty(this, "loc",
-    external_kolmafia_namespaceObject.Location.get("The Boss Bat's Lair"));}QuestL4BatsBoss_createClass(QuestL4BatsBoss, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Location.get("The Boss Bat's Lair"));QuestL4BatsBoss_defineProperty(this, "camera",
+    external_kolmafia_namespaceObject.Item.get("Backup Camera"));}QuestL4BatsBoss_createClass(QuestL4BatsBoss, [{ key: "getId", value:
 
     function getId() {
       return "Council / Bats / Boss";
@@ -12540,18 +12569,28 @@ var QuestL4BatsBoss = /*#__PURE__*/function () {function QuestL4BatsBoss() {Ques
 
     function level() {
       return 4;
+    } }, { key: "shouldWaitForLobsters", value:
+
+    function shouldWaitForLobsters() {
+      return (
+        (0,external_kolmafia_namespaceObject.getProperty)("sidequestLighthouseCompleted") == "none" &&
+        (0,external_kolmafia_namespaceObject.availableAmount)(this.camera) > 0 &&
+        getBackupsRemaining() > 0);
+
     } }, { key: "status", value:
 
     function status() {
       var status = getQuestStatus("questL04Bat");
 
-      if (status < 3) {
+      if (status < 3 || this.shouldWaitForLobsters()) {
         return QuestStatus.NOT_READY;
       }
 
       if (status == 100) {
         return QuestStatus.COMPLETED;
       }
+
+      // TODO If lobster needs a backup
 
       return QuestStatus.READY;
     } }, { key: "run", value:
