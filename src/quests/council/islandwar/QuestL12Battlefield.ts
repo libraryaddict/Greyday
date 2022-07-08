@@ -4,6 +4,7 @@ import {
   getProperty,
   Item,
   Location,
+  print,
   toInt,
 } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -21,6 +22,36 @@ export class QuestL12Battlefield implements QuestInfo {
 
   level(): number {
     return 12;
+  }
+
+  getDefeatedEachTurn(): number {
+    let defeated = 1;
+
+    if (getProperty("sidequestArenaCompleted") == "fratboy") {
+      defeated *= 2;
+    }
+
+    if (getProperty("sidequestJunkyardCompleted") == "fratboy") {
+      defeated *= 2;
+    }
+
+    if (getProperty("sidequestJunkyardCompleted") == "fratboy") {
+      defeated *= 2;
+    }
+
+    if (getProperty("sidequestNunsCompleted") == "fratboy") {
+      defeated *= 2;
+    }
+
+    if (getProperty("sidequestOrchardCompleted") == "fratboy") {
+      defeated *= 2;
+    }
+
+    if (getProperty("sidequestFarmCompleted") == "fratboy") {
+      defeated *= 2;
+    }
+
+    return defeated;
   }
 
   status(): QuestStatus {
@@ -85,6 +116,24 @@ export class QuestL12Battlefield implements QuestInfo {
       disableFamOverride: fam != null,
       run: () => {
         greyAdv(this.loc, outfit);
+
+        let turns = Math.ceil(
+          (1000 - this.getHippiesDefeated()) / this.getDefeatedEachTurn()
+        );
+
+        if (turns > 0) {
+          print(
+            `${turns} turn${
+              turns == 1 ? "" : "s"
+            } until the battlefield is cleared.`,
+            "blue"
+          );
+        } else {
+          print(
+            "Battlefield has been cleared! Hipster boss spotted eating BBQ'd sushi before it's cool! This enrages you!",
+            "blue"
+          );
+        }
       },
     };
   }
