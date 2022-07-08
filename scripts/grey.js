@@ -6813,22 +6813,31 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
     } }, { key: "run", value:
 
     function run() {
+      // If we can get more than 6
+      var lynyrdScares =
+      3 + (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.musk) + (0,external_kolmafia_namespaceObject.haveEffect)(this.musky) > 0 ? 3 : 0) + (
+      GreySettings.isHardcoreMode() ? 0 : this.getPulls().length * 5);
+      var shouldLynrd = lynyrdScares > 8;
+
       if (!GreySettings.isHardcoreMode()) {
         if ((0,external_kolmafia_namespaceObject.availableAmount)(this.deck) == 0 && (0,external_kolmafia_namespaceObject.storageAmount)(this.deck) > 0) {
           GreyPulls.pullDeckOfLewdCards();
         }
 
-        if ((0,external_kolmafia_namespaceObject.availableAmount)(this.lyrndHat) == 0) {
+        if ((0,external_kolmafia_namespaceObject.availableAmount)(this.lyrndHat) == 0 && shouldLynrd) {
           GreyPulls.pullLynrdProtesters(this.getPulls());
         }
       }
 
       var outfit = new GreyOutfit().setNoCombat().setNoCombat().setItemDrops();
-      outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");var _iterator2 = QuestL11RonProtesters_createForOfIteratorHelper(
+      outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");
 
-      this.lyrndCostume),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var i = _step2.value;
-          outfit.addItem(i, 600);
-        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+      if (shouldLynrd) {var _iterator2 = QuestL11RonProtesters_createForOfIteratorHelper(
+        this.lyrndCostume),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var i = _step2.value;
+            outfit.addItem(i, 600);
+          }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+      }
 
       return {
         location: this.proLoc,
@@ -6837,11 +6846,15 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
           var props = new PropertyManager();
 
           try {
-            if ((0,external_kolmafia_namespaceObject.haveEffect)(this.musky) <= 0 && (0,external_kolmafia_namespaceObject.availableAmount)(this.musk) > 0) {
+            if (
+            shouldLynrd &&
+            (0,external_kolmafia_namespaceObject.haveEffect)(this.musky) <= 0 &&
+            (0,external_kolmafia_namespaceObject.availableAmount)(this.musk) > 0)
+            {
               (0,external_kolmafia_namespaceObject.use)(this.musk);
             }
 
-            props.setChoice(856, 1);
+            props.setChoice(856, shouldLynrd ? 1 : 2); // Lynrd
             props.setChoice(857, 1);
             // If we don't have any flaming, just skip cos 3 isn't that fast
             props.setChoice(858, (0,external_kolmafia_namespaceObject.availableAmount)(this.flaming) > 0 ? 1 : 2);
