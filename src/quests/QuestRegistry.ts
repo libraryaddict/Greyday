@@ -5,6 +5,7 @@ import {
   haveSkill,
   Item,
   knollAvailable,
+  myLevel,
   myMeat,
   print,
   Skill,
@@ -374,11 +375,15 @@ export class QuestRegistry {
         id: "Council / War / Filthworms",
         testValid: () => haveEffect(Effect.get("Everything Looks Yellow")) > 0,
       },
+
+      // Tavern needs Larva done
+      { id: "Council / Tavern", testValid: () => myLevel() >= 20 },
+
       { id: "Council / War / Battlefield" },
       { id: "Council / War / Boss" },
 
       // Tavern needs Larva done
-      { id: "Council / Tavern" },
+      { id: "Council / Tavern", testValid: () => myLevel() < 20 },
 
       // Alright, this run is just about over kids. Lets finish it.
       { id: "Council / Tower / Contests" },
