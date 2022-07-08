@@ -143,43 +143,9 @@ export class QuestTowerShadow implements QuestInfo {
       map.set(Slot.get("Back"), this.cape);
     }
 
-    if (!haveSkill(this.overclocking)) {
-      let init = this.getBestEquips("Initiative");
-      let total = 0;
-
-      for (let [slot, item] of init) {
-        if (map.has(slot)) {
-          continue;
-        }
-
-        let count = numericModifier(item, "Initiative");
-
-        total += count;
-        map.set(slot, item);
-
-        if (total > 150) {
-          break;
-        }
-      }
-    }
-
-    let hp = this.getBestEquips("Maximum HP");
-
-    for (let [slot, item] of hp) {
-      if (map.has(slot)) {
-        continue;
-      }
-
-      map.set(slot, item);
-    }
-
-    let maximize = "-tie";
-
-    for (let i of map.values()) {
-      maximize += " +equip " + i.name;
-    }
-
-    let outfit = new GreyOutfit(maximize);
+    let outfit = new GreyOutfit();
+    outfit.hpWeight = 1;
+    outfit.addBonus("+init 151 max");
 
     return {
       familiar: this.potato,

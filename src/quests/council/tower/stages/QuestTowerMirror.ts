@@ -80,7 +80,7 @@ export class QuestTowerMirror implements QuestInfo {
     }
 
     // Equip outfit early to try save some hp
-    let outfit = new GreyOutfit("hp +init");
+    let outfit = new GreyOutfit("-tie");
 
     return {
       location: null,

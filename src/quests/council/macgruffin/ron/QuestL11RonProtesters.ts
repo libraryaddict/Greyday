@@ -169,6 +169,7 @@ export class QuestL11RonProtesters implements QuestInfo {
       3 +
       (availableAmount(this.musk) + haveEffect(this.musky) > 0 ? 3 : 0) +
       (GreySettings.isHardcoreMode() ? 0 : this.getPulls().length * 5);
+    // We only do lynrds if we can hit at least 9 scares a NC
     const shouldLynrd = lynyrdScares > 8;
 
     if (!GreySettings.isHardcoreMode()) {
