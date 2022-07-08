@@ -66,9 +66,9 @@ export class Quest12WarNuns implements QuestInfo {
     );
   }
 
-  getResourceClaims(): ResourceClaim[] {
+  /*getResourceClaims(): ResourceClaim[] {
     return [new ResourcePullClaim(this.hotness, "+Meat Nuns", 10)];
-  }
+  }*/
 
   getLocations(): Location[] {
     return [this.loc];
@@ -246,11 +246,11 @@ export class Quest12WarNuns implements QuestInfo {
       cliExecute("asdonmartin drive Observantly");
     }
 
-    if (!this.hasAlreadyPulled()) {
+    /* if (!this.hasAlreadyPulled()) {
       GreyPulls.pullMeatBuffers();
 
       use(this.hotness);
-    }
+    }*/
 
     if (!toBoolean(getProperty("concertVisited"))) {
       cliExecute("concert 2"); // Feeling wrinkled
