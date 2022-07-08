@@ -6818,6 +6818,7 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
       3 + (
       (0,external_kolmafia_namespaceObject.availableAmount)(this.musk) + (0,external_kolmafia_namespaceObject.haveEffect)(this.musky) > 0 ? 3 : 0) + (
       GreySettings.isHardcoreMode() ? 0 : this.getPulls().length * 5);
+      // We only do lynrds if we can hit at least 9 scares a NC
       var shouldLynrd = lynyrdScares > 8;
 
       if (!GreySettings.isHardcoreMode()) {
@@ -9340,6 +9341,10 @@ function QuestL12Nuns_classCallCheck(instance, Constructor) {if (!(instance inst
 
 
 
+
+
+
+
 var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL12Nuns_classCallCheck(this, Quest12WarNuns);QuestL12Nuns_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("The Themthar Hills"));QuestL12Nuns_defineProperty(this, "lep",
     external_kolmafia_namespaceObject.Familiar.get("Leprechaun"));QuestL12Nuns_defineProperty(this, "hobo",
@@ -9371,11 +9376,11 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
         map((s) => (0,external_kolmafia_namespaceObject.toItem)((0,external_kolmafia_namespaceObject.toInt)(s))).
         includes(this.hotness));
 
-    } }, { key: "getResourceClaims", value:
+    }
 
-    function getResourceClaims() {
+    /*getResourceClaims(): ResourceClaim[] {
       return [new ResourcePullClaim(this.hotness, "+Meat Nuns", 10)];
-    } }, { key: "getLocations", value:
+    }*/ }, { key: "getLocations", value:
 
     function getLocations() {
       return [this.loc];
@@ -9553,11 +9558,11 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
         (0,external_kolmafia_namespaceObject.cliExecute)("asdonmartin drive Observantly");
       }
 
-      if (!this.hasAlreadyPulled()) {
+      /* if (!this.hasAlreadyPulled()) {
         GreyPulls.pullMeatBuffers();
+         use(this.hotness);
+      }*/
 
-        (0,external_kolmafia_namespaceObject.use)(this.hotness);
-      }
 
       if (!(0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("concertVisited"))) {
         (0,external_kolmafia_namespaceObject.cliExecute)("concert 2"); // Feeling wrinkled
@@ -11671,10 +11676,29 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
         outfit: new GreyOutfit("-tie"),
         location: null,
         run: () => {
-          (0,external_kolmafia_namespaceObject.cliExecute)(
-          "maximize " +
-          "+5 meat +0.03 moxie +100 hp 300 min 300 max +switch hobo monkey +switch robortender");
+          var s =
+          "+5 meat +0.03 moxie +100 hp 200 min 300 max +switch hobo monkey +switch robortender";
 
+          for (var attempt = 0; attempt < 3; attempt++) {
+            var result = (0,external_kolmafia_namespaceObject.maximize)(s, false);
+
+            if (!result) {
+              throw "Failed to maximize health enough!";
+            }
+
+            if ((0,external_kolmafia_namespaceObject.myMaxhp)() >= 200) {
+              break;
+            }
+
+            (0,external_kolmafia_namespaceObject.print)(
+            "Maximizer bug in effect.. Claims to be a success, but reduced our max health.. Lets try again.",
+            "red");
+
+          }
+
+          if ((0,external_kolmafia_namespaceObject.myMaxhp)() < 200) {
+            throw "Max HP too low! Likely a maximizer issue. Run +meat and kill the wall of meat yourself?";
+          }
 
           restoreHPTo(Math.min((0,external_kolmafia_namespaceObject.myMaxhp)(), 600));
 
@@ -11958,7 +11982,7 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
 
     } }]);return QuestTowerKillBones;}();
 ;// CONCATENATED MODULE: ./src/quests/council/tower/stages/QuestTowerShadow.ts
-function QuestTowerShadow_slicedToArray(arr, i) {return QuestTowerShadow_arrayWithHoles(arr) || QuestTowerShadow_iterableToArrayLimit(arr, i) || QuestTowerShadow_unsupportedIterableToArray(arr, i) || QuestTowerShadow_nonIterableRest();}function QuestTowerShadow_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestTowerShadow_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function QuestTowerShadow_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestTowerShadow_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestTowerShadow_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestTowerShadow_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestTowerShadow_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestTowerShadow_arrayLikeToArray(o, minLen);}function QuestTowerShadow_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestTowerShadow_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerShadow_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerShadow_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerShadow_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerShadow_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerShadow_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestTowerShadow_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestTowerShadow_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestTowerShadow_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestTowerShadow_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestTowerShadow_arrayLikeToArray(o, minLen);}function QuestTowerShadow_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestTowerShadow_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerShadow_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerShadow_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerShadow_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerShadow_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerShadow_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -12076,43 +12100,9 @@ var QuestTowerShadow = /*#__PURE__*/function () {function QuestTowerShadow() {Qu
         map.set(external_kolmafia_namespaceObject.Slot.get("Back"), this.cape);
       }
 
-      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.overclocking)) {
-        var init = this.getBestEquips("Initiative");
-        var total = 0;var _iterator3 = QuestTowerShadow_createForOfIteratorHelper(
-
-        init),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var _step3$value = QuestTowerShadow_slicedToArray(_step3.value, 2),slot = _step3$value[0],item = _step3$value[1];
-            if (map.has(slot)) {
-              continue;
-            }
-
-            var count = (0,external_kolmafia_namespaceObject.numericModifier)(item, "Initiative");
-
-            total += count;
-            map.set(slot, item);
-
-            if (total > 150) {
-              break;
-            }
-          }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
-      }
-
-      var hp = this.getBestEquips("Maximum HP");var _iterator4 = QuestTowerShadow_createForOfIteratorHelper(
-
-      hp),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var _step4$value = QuestTowerShadow_slicedToArray(_step4.value, 2),_slot = _step4$value[0],_item = _step4$value[1];
-          if (map.has(_slot)) {
-            continue;
-          }
-
-          map.set(_slot, _item);
-        }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
-
-      var maximize = "-tie";var _iterator5 = QuestTowerShadow_createForOfIteratorHelper(
-
-      map.values()),_step5;try {for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {var i = _step5.value;
-          maximize += " +equip " + i.name;
-        }} catch (err) {_iterator5.e(err);} finally {_iterator5.f();}
-
-      var outfit = new GreyOutfit(maximize);
+      var outfit = new GreyOutfit();
+      outfit.hpWeight = 1;
+      outfit.addBonus("+init 151 max");
 
       return {
         familiar: this.potato,
@@ -12228,7 +12218,7 @@ var QuestTowerMirror = /*#__PURE__*/function () {function QuestTowerMirror() {Qu
       }
 
       // Equip outfit early to try save some hp
-      var outfit = new GreyOutfit("hp +init");
+      var outfit = new GreyOutfit("-tie");
 
       return {
         location: null,
