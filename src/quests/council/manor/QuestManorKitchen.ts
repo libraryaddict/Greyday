@@ -26,7 +26,7 @@ import {
 import { AbsorbsProvider, Reabsorbed } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { GreySettings } from "../../../utils/GreySettings";
+import { getMoonZone, GreySettings } from "../../../utils/GreySettings";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -95,7 +95,7 @@ export class QuestManorKitchen implements QuestInfo {
       availableAmount(this.scaleShirt) > 0 &&
       (gnomadsAvailable() ||
         (availableAmount(this.spoon) > 0 &&
-          GreySettings.greyTuneMoonSpoon != "" &&
+          getMoonZone(GreySettings.greyTuneMoonSpoon) == "Gnomad" &&
           getProperty("moonTuned") != "true"))
     ) {
       return QuestStatus.NOT_READY;

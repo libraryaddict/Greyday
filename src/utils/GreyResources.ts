@@ -62,12 +62,8 @@ export class GreyPulls {
     GreyPulls.tryPull(Item.get("deck of lewd playing cards"));
   }
 
-  static pullLynrdProtesters() {
-    for (let i of [
-      "lynyrdskin breeches",
-      "lynyrdskin cap",
-      "lynyrdskin tunic",
-    ].map((s) => Item.get(s))) {
+  static pullLynrdProtesters(items: Item[]) {
+    for (let i of items) {
       GreyPulls.tryPull(i);
     }
   }

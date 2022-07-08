@@ -32,9 +32,37 @@ export const moonSigns: string[] = [
   "Platypus",
   "Opossum",
   "Marmot",
+  "Wombat",
   "Blender",
   "Packrat",
 ];
+
+export type MoonSign =
+  | "Mongoose"
+  | "Wallaby"
+  | "Vole"
+  | "Platypus"
+  | "Opossum"
+  | "Marmot"
+  | "Wombat"
+  | "Blender"
+  | "Packrat";
+
+export type MoonZone = "Knoll" | "Canadia" | "Gnomad";
+
+export function getMoonZone(sign: MoonSign): MoonZone {
+  let index = moonSigns.indexOf(sign);
+
+  if (index < 0) {
+    return null;
+  } else if (index <= 2) {
+    return "Knoll";
+  } else if (index <= 5) {
+    return "Canadia";
+  }
+
+  return "Gnomad";
+}
 
 export class GreySettings {
   static hardcoreMode: boolean = false;
@@ -46,7 +74,9 @@ export class GreySettings {
   static greyBreakAtTower: boolean = toBoolean(
     getProperty("greyBreakAtTower") || "false"
   );
-  static greyTuneMoonSpoon: string = getProperty("greyTuneMoonSpoon");
+  static greyTuneMoonSpoon: MoonSign = getProperty(
+    "greyTuneMoonSpoon"
+  ) as MoonSign;
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

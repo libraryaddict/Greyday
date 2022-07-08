@@ -24,7 +24,7 @@ import {
   ResourceClaim,
   ResourcePullClaim,
 } from "../../../../utils/GreyResources";
-import { GreySettings } from "../../../../utils/GreySettings";
+import { getMoonZone, GreySettings } from "../../../../utils/GreySettings";
 import { Macro } from "../../../../utils/MacroBuilder";
 import {
   getQuestStatus,
@@ -38,11 +38,10 @@ import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 export class QuestL11RonProtesters implements QuestInfo {
   proLoc: Location = Location.get("A Mob Of Zeppelin Protesters");
   deck: Item = Item.get("deck of lewd playing cards");
-  lyrndCostume: Item[] = [
-    "lynyrdskin breeches",
-    "lynyrdskin cap",
-    "lynyrdskin tunic",
-  ].map((s) => Item.get(s));
+  lyrndHat: Item = Item.get("lynyrdskin cap");
+  lyrndPants: Item = Item.get("lynyrdskin breeches");
+  lyrndShirt: Item = Item.get("lynyrdskin tunic");
+  lyrndCostume: Item[] = [this.lyrndHat, this.lyrndPants, this.lyrndShirt];
   musk: Item = Item.get("lynyrd musk");
   cig: Item = Item.get("cigarette lighter");
   flaming: Item = Item.get("Flamin' Whatshisname");
@@ -53,6 +52,7 @@ export class QuestL11RonProtesters implements QuestInfo {
   sleazeSkill2: Skill = Skill.get("Innuendo Circuitry");
   starChart: Item = Item.get("Star Chart");
   sweatpants: Item = Item.get("designer sweatpants");
+  spoon: Item = Item.get("hewn moon-rune spoon");
   // TODO Once we've got the absorbs, try replace combats if it won't hurt our NCs
 
   isReady(): boolean {
@@ -63,15 +63,41 @@ export class QuestL11RonProtesters implements QuestInfo {
     );
   }
 
+  getPulls(): Item[] {
+    const pulls: Item[] = [];
+
+    if (availableAmount(this.sweatpants) == 0) {
+      pulls.push(this.lyrndPants);
+    }
+
+    if (haveSkill(this.torsoAwareness) || this.waitingForShirt()) {
+      pulls.push(this.lyrndShirt);
+    }
+
+    pulls.push(this.lyrndHat);
+
+    return pulls;
+  }
+
+  waitingForShirt(): boolean {
+    return (
+      !haveSkill(this.torsoAwareness) &&
+      (gnomadsAvailable() ||
+        (availableAmount(this.spoon) > 0 &&
+          getMoonZone(GreySettings.greyTuneMoonSpoon) == "Gnomad" &&
+          getProperty("moonTuned") != "true"))
+    );
+  }
+
   getResourceClaims(): ResourceClaim[] {
     let claims: ResourceClaim[] = [];
 
-    for (let i of this.lyrndCostume) {
+    for (let i of this.getPulls()) {
       if (availableAmount(i) > 0) {
         continue;
       }
 
-      claims.push(new ResourcePullClaim(i, "Lynyrdskin Outfit", 20));
+      claims.push(new ResourcePullClaim(i, "Lynyrdskin Outfit", 6));
     }
 
     if (availableAmount(this.deck) == 0) {
@@ -99,6 +125,10 @@ export class QuestL11RonProtesters implements QuestInfo {
     }
 
     if (status < 0) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (!GreySettings.isHardcoreMode() && this.waitingForShirt()) {
       return QuestStatus.NOT_READY;
     }
 
@@ -139,8 +169,8 @@ export class QuestL11RonProtesters implements QuestInfo {
         GreyPulls.pullDeckOfLewdCards();
       }
 
-      if (availableAmount(this.lyrndCostume[0]) == 0) {
-        GreyPulls.pullLynrdProtesters();
+      if (availableAmount(this.lyrndHat) == 0) {
+        GreyPulls.pullLynrdProtesters(this.getPulls());
       }
     }
 
