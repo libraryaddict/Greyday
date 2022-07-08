@@ -1,6 +1,6 @@
-import { Location, Familiar, availableAmount, Item } from "kolmafia";
+import { Location, Familiar, availableAmount, Item, Monster } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
-import { greyAdv } from "../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
   getQuestStatus,
@@ -23,6 +23,7 @@ export class QuestL10GiantShip implements QuestInfo {
     "Gauze Immateria",
     "Plastic Wrap Immateria",
   ].map((s) => Item.get(s));
+  protag: Monster = Monster.get("Protagonist");
 
   shouldRunNC(): boolean {
     if (availableAmount(this.modelShip) == 0 || this.loc.turnsSpent >= 25) {
@@ -82,7 +83,10 @@ export class QuestL10GiantShip implements QuestInfo {
             props.setChoice(182, 1);
           }
 
-          greyAdv(this.loc, outfit);
+          let settings = new AdventureSettings();
+          settings.addBanish(this.protag);
+
+          greyAdv(this.loc, outfit, settings);
         } finally {
           props.resetAll();
         }
