@@ -2529,7 +2529,7 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
       a.monster.name +
       " <font color='gray'>(" +
       a.adventures +
-      " absorbs x " + (
+      " advs, Absorb x " + (
       defeated.has(a.monster) ? "1" : "2") +
       ")</font>").
 
@@ -3085,7 +3085,8 @@ var QuestL10GiantShip = /*#__PURE__*/function () {function QuestL10GiantShip() {
     "Tin Foil Immateria",
     "Gauze Immateria",
     "Plastic Wrap Immateria"].
-    map((s) => external_kolmafia_namespaceObject.Item.get(s)));}QuestL10GiantShip_createClass(QuestL10GiantShip, [{ key: "shouldRunNC", value:
+    map((s) => external_kolmafia_namespaceObject.Item.get(s)));QuestL10GiantShip_defineProperty(this, "protag",
+    external_kolmafia_namespaceObject.Monster.get("Protagonist"));}QuestL10GiantShip_createClass(QuestL10GiantShip, [{ key: "shouldRunNC", value:
 
     function shouldRunNC() {
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.modelShip) == 0 || this.loc.turnsSpent >= 25) {
@@ -3145,7 +3146,10 @@ var QuestL10GiantShip = /*#__PURE__*/function () {function QuestL10GiantShip() {
               props.setChoice(182, 1);
             }
 
-            greyAdv(this.loc, outfit);
+            var settings = new AdventureSettings();
+            settings.addBanish(this.protag);
+
+            greyAdv(this.loc, outfit, settings);
           } finally {
             props.resetAll();
           }
@@ -8967,6 +8971,36 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
 
     function level() {
       return 12;
+    } }, { key: "getDefeatedEachTurn", value:
+
+    function getDefeatedEachTurn() {
+      var defeated = 1;
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestArenaCompleted") == "fratboy") {
+        defeated *= 2;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestJunkyardCompleted") == "fratboy") {
+        defeated *= 2;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestJunkyardCompleted") == "fratboy") {
+        defeated *= 2;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestNunsCompleted") == "fratboy") {
+        defeated *= 2;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestOrchardCompleted") == "fratboy") {
+        defeated *= 2;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestFarmCompleted") == "fratboy") {
+        defeated *= 2;
+      }
+
+      return defeated;
     } }, { key: "status", value:
 
     function status() {
@@ -9031,6 +9065,24 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
         disableFamOverride: fam != null,
         run: () => {
           greyAdv(this.loc, outfit);
+
+          var turns = Math.ceil(
+          (1000 - this.getHippiesDefeated()) / this.getDefeatedEachTurn());
+
+
+          if (turns > 0) {
+            (0,external_kolmafia_namespaceObject.print)("".concat(
+            turns, " turn").concat(
+            turns == 1 ? "" : "s", " until the battlefield is cleared."),
+
+            "blue");
+
+          } else {
+            (0,external_kolmafia_namespaceObject.print)(
+            "Battlefield has been cleared! Hipster boss spotted eating BBQ'd sushi before it's cool! This enrages you!",
+            "blue");
+
+          }
         } };
 
     } }, { key: "getHippiesDefeated", value:
@@ -14425,7 +14477,8 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
     "Polar Vortex Ores",
     6));QuestL8MountainOreMan_defineProperty(QuestL8MountainOreMan_assertThisInitialized(_this), "nanovision",
 
-    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));return _this;}QuestL8MountainOreMan_createClass(QuestL8MountainOreMan, [{ key: "getResourceClaims", value:
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestL8MountainOreMan_defineProperty(QuestL8MountainOreMan_assertThisInitialized(_this), "wish",
+    external_kolmafia_namespaceObject.Item.get("Pocket Wish"));return _this;}QuestL8MountainOreMan_createClass(QuestL8MountainOreMan, [{ key: "getResourceClaims", value:
 
     function getResourceClaims() {
       return [
@@ -14468,6 +14521,10 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
       }
 
       if (!this.canBackup() && (0,external_kolmafia_namespaceObject.haveEffect)(this.effect) > 0) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (!canCombatLocket(this.mountainMan) && (0,external_kolmafia_namespaceObject.availableAmount)(this.wish) == 0) {
         return QuestStatus.NOT_READY;
       }
 
@@ -14583,12 +14640,16 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
 
           (0,external_kolmafia_namespaceObject.useFamiliar)(this.goose);
 
-          var page1 = (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?reminisce=1", false);
-          var url =
-          "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
-          (0,external_kolmafia_namespaceObject.toInt)(this.mountainMan);
+          if (canCombatLocket(this.mountainMan)) {
+            var page1 = (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?reminisce=1", false);
+            var url =
+            "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
+            (0,external_kolmafia_namespaceObject.toInt)(this.mountainMan);
 
-          (0,external_kolmafia_namespaceObject.visitUrl)(url);
+            (0,external_kolmafia_namespaceObject.visitUrl)(url);
+          } else {
+            doPocketWishFight(this.mountainMan);
+          }
 
           var macro = new Macro();
 
@@ -16162,6 +16223,7 @@ function QuestManorBillards_classCallCheck(instance, Constructor) {if (!(instanc
 
 
 
+
 var QuestManorBillards = /*#__PURE__*/function () {function QuestManorBillards() {QuestManorBillards_classCallCheck(this, QuestManorBillards);QuestManorBillards_defineProperty(this, "billards",
     external_kolmafia_namespaceObject.Location.get("The Haunted Billiards Room"));QuestManorBillards_defineProperty(this, "chalk",
     external_kolmafia_namespaceObject.Item.get("Handful of hand chalk"));QuestManorBillards_defineProperty(this, "chalkEffect",
@@ -16169,7 +16231,9 @@ var QuestManorBillards = /*#__PURE__*/function () {function QuestManorBillards()
     external_kolmafia_namespaceObject.Effect.get("Invisible Avatar"));QuestManorBillards_defineProperty(this, "invisSkill",
     external_kolmafia_namespaceObject.Skill.get("CHEAT CODE: Invisible Avatar"));QuestManorBillards_defineProperty(this, "key",
     external_kolmafia_namespaceObject.Item.get("[7302]Spookyraven library key"));QuestManorBillards_defineProperty(this, "cue",
-    external_kolmafia_namespaceObject.Item.get("pool cue"));}QuestManorBillards_createClass(QuestManorBillards, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("pool cue"));QuestManorBillards_defineProperty(this, "poolgeist",
+    external_kolmafia_namespaceObject.Monster.get("pooltergeist"));QuestManorBillards_defineProperty(this, "toAbsorb", void 0);}QuestManorBillards_createClass(QuestManorBillards, [{ key: "getId", value:
+
 
     function getId() {
       return "Manor / Billards";
@@ -16223,8 +16287,13 @@ var QuestManorBillards = /*#__PURE__*/function () {function QuestManorBillards()
             (0,external_kolmafia_namespaceObject.use)(this.chalk);
           }
 
-          if ((0,external_kolmafia_namespaceObject.haveEffect)(this.invis) == 0) {
-            //  useSkill(this.invisSkill);
+          var settings = new AdventureSettings();
+
+          if (
+          !(0,external_kolmafia_namespaceObject.haveEffect)(this.chalkEffect) &&
+          !this.toAbsorb.includes(this.poolgeist))
+          {
+            settings.addBanish(this.poolgeist);
           }
 
           var props = new PropertyManager();
@@ -16236,7 +16305,7 @@ var QuestManorBillards = /*#__PURE__*/function () {function QuestManorBillards()
             875,
             poolSkill >= 14 || (0,external_kolmafia_namespaceObject.haveEffect)(this.chalkEffect) == 0 ? 1 : 2);
             //Fight or train
-            greyAdv(this.billards, outfit);
+            greyAdv(this.billards, outfit, settings);
           } finally {
             props.resetAll();
           }
@@ -20450,7 +20519,10 @@ var QuestAbsorbCanadiaMonster = /*#__PURE__*/function (_TaskInfo) {QuestAbsorbCa
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.familiar) < 6) {
+      if (
+      (0,external_kolmafia_namespaceObject.familiarWeight)(this.familiar) < 6 ||
+      getQuestStatus("questL08Trapper") < 2)
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -20563,7 +20635,10 @@ var QuestAbsorbStarMonster = /*#__PURE__*/function (_TaskInfo) {QuestAbsorbStarM
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.familiar) < 6) {
+      if (
+      (0,external_kolmafia_namespaceObject.familiarWeight)(this.familiar) < 6 ||
+      getQuestStatus("questL08Trapper") < 2)
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -21365,11 +21440,15 @@ var QuestRegistry = /*#__PURE__*/function () {
         id: "Council / War / Filthworms",
         testValid: () => (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Everything Looks Yellow")) > 0 },
 
+
+      // Tavern needs Larva done
+      { id: "Council / Tavern", testValid: () => (0,external_kolmafia_namespaceObject.myLevel)() >= 20 },
+
       { id: "Council / War / Battlefield" },
       { id: "Council / War / Boss" },
 
       // Tavern needs Larva done
-      { id: "Council / Tavern" },
+      { id: "Council / Tavern", testValid: () => (0,external_kolmafia_namespaceObject.myLevel)() < 20 },
 
       // Alright, this run is just about over kids. Lets finish it.
       { id: "Council / Tower / Contests" },
