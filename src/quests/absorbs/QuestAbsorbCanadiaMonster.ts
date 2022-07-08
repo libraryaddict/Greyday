@@ -19,7 +19,12 @@ import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { ResourceClaim, ResourceType } from "../../utils/GreyResources";
 import { canCombatLocket } from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
-import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
+import {
+  getQuestStatus,
+  QuestAdventure,
+  QuestInfo,
+  QuestStatus,
+} from "../Quests";
 import { QuestType } from "../QuestTypes";
 
 export class QuestAbsorbCanadiaMonster extends TaskInfo implements QuestInfo {
@@ -60,7 +65,10 @@ export class QuestAbsorbCanadiaMonster extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (familiarWeight(this.familiar) < 6) {
+    if (
+      familiarWeight(this.familiar) < 6 ||
+      getQuestStatus("questL08Trapper") < 2
+    ) {
       return QuestStatus.NOT_READY;
     }
 

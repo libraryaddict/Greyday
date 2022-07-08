@@ -24,7 +24,11 @@ import {
 } from "kolmafia";
 import { greyAdv, AdventureSettings } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { getBackupsRemaining } from "../../utils/GreyUtils";
+import {
+  canCombatLocket,
+  doPocketWishFight,
+  getBackupsRemaining,
+} from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
 import {
   getQuestStatus,
@@ -52,6 +56,7 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
     6
   );
   nanovision: Skill = Skill.get("Double Nanovision");
+  wish: Item = Item.get("Pocket Wish");
 
   getResourceClaims(): ResourceClaim[] {
     return [
@@ -94,6 +99,10 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
     }
 
     if (!this.canBackup() && haveEffect(this.effect) > 0) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (!canCombatLocket(this.mountainMan) && availableAmount(this.wish) == 0) {
       return QuestStatus.NOT_READY;
     }
 
@@ -209,12 +218,16 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
 
         useFamiliar(this.goose);
 
-        let page1 = visitUrl("inventory.php?reminisce=1", false);
-        let url =
-          "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
-          toInt(this.mountainMan);
+        if (canCombatLocket(this.mountainMan)) {
+          let page1 = visitUrl("inventory.php?reminisce=1", false);
+          let url =
+            "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
+            toInt(this.mountainMan);
 
-        visitUrl(url);
+          visitUrl(url);
+        } else {
+          doPocketWishFight(this.mountainMan);
+        }
 
         let macro: Macro = new Macro();
 
