@@ -164,12 +164,19 @@ export class QuestL11RonProtesters implements QuestInfo {
   }
 
   run(): QuestAdventure {
+    // If we can get more than 6
+    let lynyrdScares =
+      3 +
+      (availableAmount(this.musk) + haveEffect(this.musky) > 0 ? 3 : 0) +
+      (GreySettings.isHardcoreMode() ? 0 : this.getPulls().length * 5);
+    const shouldLynrd = lynyrdScares > 8;
+
     if (!GreySettings.isHardcoreMode()) {
       if (availableAmount(this.deck) == 0 && storageAmount(this.deck) > 0) {
         GreyPulls.pullDeckOfLewdCards();
       }
 
-      if (availableAmount(this.lyrndHat) == 0) {
+      if (availableAmount(this.lyrndHat) == 0 && shouldLynrd) {
         GreyPulls.pullLynrdProtesters(this.getPulls());
       }
     }
@@ -177,8 +184,10 @@ export class QuestL11RonProtesters implements QuestInfo {
     let outfit = new GreyOutfit().setNoCombat().setNoCombat().setItemDrops();
     outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");
 
-    for (let i of this.lyrndCostume) {
-      outfit.addItem(i, 600);
+    if (shouldLynrd) {
+      for (let i of this.lyrndCostume) {
+        outfit.addItem(i, 600);
+      }
     }
 
     return {
@@ -188,11 +197,15 @@ export class QuestL11RonProtesters implements QuestInfo {
         let props = new PropertyManager();
 
         try {
-          if (haveEffect(this.musky) <= 0 && availableAmount(this.musk) > 0) {
+          if (
+            shouldLynrd &&
+            haveEffect(this.musky) <= 0 &&
+            availableAmount(this.musk) > 0
+          ) {
             use(this.musk);
           }
 
-          props.setChoice(856, 1);
+          props.setChoice(856, shouldLynrd ? 1 : 2); // Lynrd
           props.setChoice(857, 1);
           // If we don't have any flaming, just skip cos 3 isn't that fast
           props.setChoice(858, availableAmount(this.flaming) > 0 ? 1 : 2);
