@@ -546,7 +546,7 @@ export class AbsorbsProvider {
               a.monster.name +
               " <font color='gray'>(" +
               a.adventures +
-              " absorbs x " +
+              " advs, Absorb x " +
               (defeated.has(a.monster) ? "1" : "2") +
               ")</font>"
           )
