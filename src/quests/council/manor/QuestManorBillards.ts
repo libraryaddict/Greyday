@@ -6,6 +6,7 @@ import {
   haveEffect,
   Item,
   Location,
+  Monster,
   numericModifier,
   Skill,
   toInt,
@@ -15,7 +16,7 @@ import {
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
-import { greyAdv } from "../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
   getQuestStatus,
@@ -24,6 +25,7 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
+import { GreySettings } from "../../../utils/GreySettings";
 
 export class QuestManorBillards implements QuestInfo {
   billards: Location = Location.get("The Haunted Billiards Room");
@@ -33,6 +35,8 @@ export class QuestManorBillards implements QuestInfo {
   invisSkill: Skill = Skill.get("CHEAT CODE: Invisible Avatar");
   key: Item = Item.get("[7302]Spookyraven library key");
   cue: Item = Item.get("pool cue");
+  poolgeist: Monster = Monster.get("pooltergeist");
+  toAbsorb: Monster[];
 
   getId(): QuestType {
     return "Manor / Billards";
@@ -86,8 +90,13 @@ export class QuestManorBillards implements QuestInfo {
           use(this.chalk);
         }
 
-        if (haveEffect(this.invis) == 0) {
-          //  useSkill(this.invisSkill);
+        let settings = new AdventureSettings();
+
+        if (
+          !haveEffect(this.chalkEffect) &&
+          !this.toAbsorb.includes(this.poolgeist)
+        ) {
+          settings.addBanish(this.poolgeist);
         }
 
         let props = new PropertyManager();
@@ -99,7 +108,7 @@ export class QuestManorBillards implements QuestInfo {
             875,
             poolSkill >= 14 || haveEffect(this.chalkEffect) == 0 ? 1 : 2
           ); //Fight or train
-          greyAdv(this.billards, outfit);
+          greyAdv(this.billards, outfit, settings);
         } finally {
           props.resetAll();
         }
