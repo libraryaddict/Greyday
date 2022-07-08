@@ -380,11 +380,41 @@ var moonSigns = [
 "Platypus",
 "Opossum",
 "Marmot",
+"Wombat",
 "Blender",
 "Packrat"];
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getMoonZone(sign) {
+  var index = moonSigns.indexOf(sign);
+
+  if (index < 0) {
+    return null;
+  } else if (index <= 2) {
+    return "Knoll";
+  } else if (index <= 5) {
+    return "Canadia";
+  }
+
+  return "Gnomad";
+}
+
 var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettings_classCallCheck(this, GreySettings);}GreySettings_createClass(GreySettings, null, [{ key: "isHardcoreMode", value:
+
+
 
 
 
@@ -4350,12 +4380,8 @@ var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_cl
       GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("deck of lewd playing cards"));
     } }, { key: "pullLynrdProtesters", value:
 
-    function pullLynrdProtesters() {var _iterator2 = GreyResources_createForOfIteratorHelper(
-      [
-      "lynyrdskin breeches",
-      "lynyrdskin cap",
-      "lynyrdskin tunic"].
-      map((s) => external_kolmafia_namespaceObject.Item.get(s))),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var i = _step2.value;
+    function pullLynrdProtesters(items) {var _iterator2 = GreyResources_createForOfIteratorHelper(
+      items),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var i = _step2.value;
           GreyPulls.tryPull(i);
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
     } }, { key: "pullBoxOfMatches", value:
@@ -6660,12 +6686,11 @@ function QuestL11RonProtesters_createForOfIteratorHelper(o, allowArrayLike) {var
 
 var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtesters() {QuestL11RonProtesters_classCallCheck(this, QuestL11RonProtesters);QuestL11RonProtesters_defineProperty(this, "proLoc",
     external_kolmafia_namespaceObject.Location.get("A Mob Of Zeppelin Protesters"));QuestL11RonProtesters_defineProperty(this, "deck",
-    external_kolmafia_namespaceObject.Item.get("deck of lewd playing cards"));QuestL11RonProtesters_defineProperty(this, "lyrndCostume",
-    [
-    "lynyrdskin breeches",
-    "lynyrdskin cap",
-    "lynyrdskin tunic"].
-    map((s) => external_kolmafia_namespaceObject.Item.get(s)));QuestL11RonProtesters_defineProperty(this, "musk",
+    external_kolmafia_namespaceObject.Item.get("deck of lewd playing cards"));QuestL11RonProtesters_defineProperty(this, "lyrndHat",
+    external_kolmafia_namespaceObject.Item.get("lynyrdskin cap"));QuestL11RonProtesters_defineProperty(this, "lyrndPants",
+    external_kolmafia_namespaceObject.Item.get("lynyrdskin breeches"));QuestL11RonProtesters_defineProperty(this, "lyrndShirt",
+    external_kolmafia_namespaceObject.Item.get("lynyrdskin tunic"));QuestL11RonProtesters_defineProperty(this, "lyrndCostume",
+    [this.lyrndHat, this.lyrndPants, this.lyrndShirt]);QuestL11RonProtesters_defineProperty(this, "musk",
     external_kolmafia_namespaceObject.Item.get("lynyrd musk"));QuestL11RonProtesters_defineProperty(this, "cig",
     external_kolmafia_namespaceObject.Item.get("cigarette lighter"));QuestL11RonProtesters_defineProperty(this, "flaming",
     external_kolmafia_namespaceObject.Item.get("Flamin' Whatshisname"));QuestL11RonProtesters_defineProperty(this, "musky",
@@ -6675,7 +6700,8 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
     external_kolmafia_namespaceObject.Skill.get("Procgen Ribaldry"));QuestL11RonProtesters_defineProperty(this, "sleazeSkill2",
     external_kolmafia_namespaceObject.Skill.get("Innuendo Circuitry"));QuestL11RonProtesters_defineProperty(this, "starChart",
     external_kolmafia_namespaceObject.Item.get("Star Chart"));QuestL11RonProtesters_defineProperty(this, "sweatpants",
-    external_kolmafia_namespaceObject.Item.get("designer sweatpants"));}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "isReady", value:
+    external_kolmafia_namespaceObject.Item.get("designer sweatpants"));QuestL11RonProtesters_defineProperty(this, "spoon",
+    external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"));}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "isReady", value:
     // TODO Once we've got the absorbs, try replace combats if it won't hurt our NCs
 
     function isReady() {
@@ -6684,17 +6710,43 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
         (0,external_kolmafia_namespaceObject.getProperty)("questL11Ron") == "step1" ||
         (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("zeppelinProtestors")) <= 80);
 
+    } }, { key: "getPulls", value:
+
+    function getPulls() {
+      var pulls = [];
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.sweatpants) == 0) {
+        pulls.push(this.lyrndPants);
+      }
+
+      if ((0,external_kolmafia_namespaceObject.haveSkill)(this.torsoAwareness) || this.waitingForShirt()) {
+        pulls.push(this.lyrndShirt);
+      }
+
+      pulls.push(this.lyrndHat);
+
+      return pulls;
+    } }, { key: "waitingForShirt", value:
+
+    function waitingForShirt() {
+      return (
+        !(0,external_kolmafia_namespaceObject.haveSkill)(this.torsoAwareness) && (
+        (0,external_kolmafia_namespaceObject.gnomadsAvailable)() ||
+        (0,external_kolmafia_namespaceObject.availableAmount)(this.spoon) > 0 &&
+        getMoonZone(GreySettings.greyTuneMoonSpoon) == "Gnomad" &&
+        (0,external_kolmafia_namespaceObject.getProperty)("moonTuned") != "true"));
+
     } }, { key: "getResourceClaims", value:
 
     function getResourceClaims() {
       var claims = [];var _iterator = QuestL11RonProtesters_createForOfIteratorHelper(
 
-      this.lyrndCostume),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var i = _step.value;
+      this.getPulls()),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var i = _step.value;
           if ((0,external_kolmafia_namespaceObject.availableAmount)(i) > 0) {
             continue;
           }
 
-          claims.push(new ResourcePullClaim(i, "Lynyrdskin Outfit", 20));
+          claims.push(new ResourcePullClaim(i, "Lynyrdskin Outfit", 6));
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.deck) == 0) {
@@ -6722,6 +6774,10 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
       }
 
       if (status < 0) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (!GreySettings.isHardcoreMode() && this.waitingForShirt()) {
         return QuestStatus.NOT_READY;
       }
 
@@ -6762,8 +6818,8 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
           GreyPulls.pullDeckOfLewdCards();
         }
 
-        if ((0,external_kolmafia_namespaceObject.availableAmount)(this.lyrndCostume[0]) == 0) {
-          GreyPulls.pullLynrdProtesters();
+        if ((0,external_kolmafia_namespaceObject.availableAmount)(this.lyrndHat) == 0) {
+          GreyPulls.pullLynrdProtesters(this.getPulls());
         }
       }
 
@@ -16482,7 +16538,7 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
       (0,external_kolmafia_namespaceObject.availableAmount)(this.scaleShirt) > 0 && (
       (0,external_kolmafia_namespaceObject.gnomadsAvailable)() ||
       (0,external_kolmafia_namespaceObject.availableAmount)(this.spoon) > 0 &&
-      GreySettings.greyTuneMoonSpoon != "" &&
+      getMoonZone(GreySettings.greyTuneMoonSpoon) == "Gnomad" &&
       (0,external_kolmafia_namespaceObject.getProperty)("moonTuned") != "true"))
       {
         return QuestStatus.NOT_READY;
