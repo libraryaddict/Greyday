@@ -68,6 +68,10 @@ export class QuestDungeonsOfDoom implements QuestInfo {
       return QuestStatus.FASTER_LATER;
     }
 
+    if (!hasNonCombatSkillsReady(false)) {
+      return QuestStatus.NOT_READY;
+    }
+
     if (!hasNonCombatSkillsReady()) {
       return QuestStatus.FASTER_LATER;
     }

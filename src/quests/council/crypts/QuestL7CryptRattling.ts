@@ -43,6 +43,10 @@ export class CryptL7Rattling extends CryptL7Template {
   }
 
   cryptStatus(): QuestStatus {
+    if (!hasNonCombatSkillsReady(false)) {
+      return QuestStatus.NOT_READY;
+    }
+
     if (!hasNonCombatSkillsReady()) {
       return QuestStatus.FASTER_LATER;
     }

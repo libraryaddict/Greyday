@@ -38,8 +38,13 @@ import {
 } from "../Quests";
 import { QuestType } from "../QuestTypes";
 import { MountainStatus } from "../council/QuestL8IcePeak";
-import { QuestL8MountainOre } from "../council/icepeak/QuestL8MountainOre";
-import { ResourceClaim, ResourceType } from "../../utils/GreyResources";
+import { QuestL8MountainOre } from "../council/mountain/QuestL8MountainOre";
+import {
+  GreyPulls,
+  ResourceClaim,
+  ResourcePullClaim,
+  ResourceType,
+} from "../../utils/GreyResources";
 import { GreySettings } from "../../utils/GreySettings";
 
 export class QuestL8MountainOreMan extends QuestL8MountainOre {
@@ -62,6 +67,7 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
     return [
       this.resourceClaim,
       new ResourceClaim(ResourceType.YELLOW_RAY, 1, "YR Mountain Man", 10),
+      new ResourcePullClaim(Item.get("asbestos ore"), "Pull Ice Peak Ore", 10),
       new ResourceClaim(
         ResourceType.COMBAT_LOCKET,
         1,
@@ -98,12 +104,28 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
       return QuestStatus.COMPLETED;
     }
 
-    if (!this.canBackup() && haveEffect(this.effect) > 0) {
+    if (this.getOreRemaining() > 1 && haveEffect(this.effect)) {
       return QuestStatus.NOT_READY;
     }
 
-    if (!canCombatLocket(this.mountainMan) && availableAmount(this.wish) == 0) {
+    if (
+      !this.canBackup() &&
+      GreySettings.isHardcoreMode() &&
+      haveEffect(this.effect)
+    ) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (
+      this.getOreRemaining() > 1 &&
+      !canCombatLocket(this.mountainMan) &&
+      availableAmount(this.wish) == 0
+    ) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (this.getOreRemaining() == 1) {
+      return QuestStatus.READY;
     }
 
     // Delay this if we can't dupe, and don't have nanovision
@@ -165,6 +187,16 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
     return getBackupsRemaining() > 0;
   }
 
+  doPull(): QuestAdventure {
+    return {
+      location: null,
+      outfit: new GreyOutfit("-tie"),
+      run: () => {
+        GreyPulls.pullOre();
+      },
+    };
+  }
+
   doBackups(): QuestAdventure {
     let outfit = new GreyOutfit().setItemDrops();
     let loc = Location.get("The Dire Warren");
@@ -190,6 +222,10 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
   }
 
   run(): QuestAdventure {
+    if (!GreySettings.isHardcoreMode() && this.getOreRemaining() == 1) {
+      return this.doPull();
+    }
+
     if (this.canBackup()) {
       return this.doBackups();
     }
@@ -243,7 +279,11 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
           }
 
           if (this.getOreRemaining() > 2) {
-            print("Drat. We're going to have to do a backup.", "red");
+            if (GreySettings.isHardcoreMode()) {
+              print("Drat. We're going to have to do a backup.", "red");
+            } else {
+              print("Drat. We're going to have to pull the last ore.", "red");
+            }
           }
         }
 

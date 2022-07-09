@@ -218,11 +218,7 @@ export class QuestL11RonProtesters implements QuestInfo {
           settings.addNoBanish(Monster.get("Blue Oyster Cultist"));
           settings.addNoBanish(Monster.get("Lynyrd Skinner"));
 
-          greyAdv(
-            Location.get("A Mob Of Zeppelin Protesters"),
-            outfit,
-            settings
-          );
+          greyAdv(this.proLoc, outfit, settings);
         } finally {
           props.resetAll();
         }

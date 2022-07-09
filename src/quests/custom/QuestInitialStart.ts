@@ -108,8 +108,8 @@ export class QuestInitialStart implements QuestInfo {
     return {
       location: null,
       run: () => {
-        if (!hippyStoneBroken() && toBoolean(getProperty("auto_pvpEnable"))) {
-          print("Enabling pvp as it was set to true in autoscend", "blue");
+        if (!hippyStoneBroken() && toBoolean(getProperty("greyEnablePvP"))) {
+          print("Enabling pvp as defined by 'greyEnablePvP'", "blue");
           visitUrl("peevpee.php?action=smashstone&pwd&confirm=on", true);
           visitUrl("peevpee.php?place=fight");
         }

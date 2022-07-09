@@ -37,13 +37,13 @@ import { canCombatLocket, getBackupsRemaining } from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
 import { GreyClovers, GreyPulls } from "../../utils/GreyResources";
 import { QuestType } from "../QuestTypes";
-import { QuestL8MountainBoss } from "./icepeak/QuestL8MountainBoss";
-import { QuestL8MountainGoats } from "./icepeak/QuestL8MountainGoats";
-import { QuestL8MountainNinja } from "./icepeak/QuestL8MountainNinja";
-import { QuestL8MountainOreClover } from "./icepeak/QuestL8MountainOreClover";
+import { QuestL8MountainBoss } from "./mountain/QuestL8MountainBoss";
+import { QuestL8MountainGoats } from "./mountain/QuestL8MountainGoats";
+import { QuestL8MountainNinja } from "./mountain/QuestL8MountainNinja";
+import { QuestL8MountainOreClover } from "./mountain/QuestL8MountainOreClover";
 import { QuestL8MountainOreMan } from "../locket/QuestL8MountainOreMan";
-import { QuestL8MountainOreMiningOutfit } from "./icepeak/QuestL8MountainOreMiningOutfit";
-import { QuestL8MountainOreMining } from "./icepeak/QuestL8MountainOreMining";
+import { QuestL8MountainOreMiningOutfit } from "./mountain/QuestL8MountainOreMiningOutfit";
+import { QuestL8MountainOreMining } from "./mountain/QuestL8MountainOreMining";
 
 export class QuestL8IcePeak implements QuestInfo {
   children: QuestInfo[] = [];

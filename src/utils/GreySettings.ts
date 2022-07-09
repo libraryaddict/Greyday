@@ -22,7 +22,21 @@ export function getGreySettings(): GreySetting[] {
       moonSigns.find((s) => s.toLowerCase() == value.toLowerCase()) != null,
   };
 
-  return [towerBreak, moonTune];
+  let manorLights: GreySetting = {
+    name: "greyFinishManorLights",
+    description:
+      "The script will do the hidden manor lights quest, but should it fight Elizabeth & Stephen if the chance comes up? (Garbo does fight Stephen)",
+    valid: (value) => value == "true" || value == "false",
+  };
+
+  let pvpEnable: GreySetting = {
+    name: "greyEnablePvP",
+    description:
+      "Should the script enable PvP at the start of the run? This doesn't actually make much difference vs enabling it later as there's no pvp generation, unless you have robortender.",
+    valid: (value) => value == "true" || value == "false",
+  };
+
+  return [towerBreak, moonTune, manorLights, pvpEnable];
 }
 
 export const moonSigns: string[] = [

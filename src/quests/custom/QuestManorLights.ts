@@ -17,6 +17,7 @@ import {
   print,
   equip,
   Slot,
+  toBoolean,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -150,12 +151,19 @@ export class QuestManorLights implements QuestInfo {
   }
 
   status(): QuestStatus {
+    if (!this.isTime()) {
+      return QuestStatus.NOT_READY;
+    }
+
     if (!this.isElizaReady() && !this.shouldDoSteve()) {
       return QuestStatus.COMPLETED;
     }
 
-    if (!this.isTime()) {
-      return QuestStatus.NOT_READY;
+    if (
+      (this.isElizaFight() || this.isSteveFight()) &&
+      getProperty("greyFinishManorLights") != "true"
+    ) {
+      return QuestStatus.COMPLETED;
     }
 
     if (!this.mustBeDone()) {
@@ -258,7 +266,10 @@ export class QuestManorLights implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    if (this.shouldDoSteve()) {
+    if (
+      this.shouldDoSteve() &&
+      (!this.isSteveFight() || toBoolean(getProperty("greyFinishManorLights")))
+    ) {
       let steve = this.getSteve();
 
       if (canAdv(steve[0])) {
@@ -266,7 +277,10 @@ export class QuestManorLights implements QuestInfo {
       }
     }
 
-    if (this.isElizaReady()) {
+    if (
+      this.isElizaReady() &&
+      (!this.isElizaFight() || toBoolean(getProperty("greyFinishManorLights")))
+    ) {
       let eliza = this.getEliza();
 
       if (canAdv(eliza[0])) {

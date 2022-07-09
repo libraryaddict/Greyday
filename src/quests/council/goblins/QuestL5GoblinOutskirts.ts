@@ -19,7 +19,7 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
   }
 
   level(): number {
-    return 5;
+    return this.location.turnsSpent < 10 ? 4 : 5;
   }
 
   status(): QuestStatus {

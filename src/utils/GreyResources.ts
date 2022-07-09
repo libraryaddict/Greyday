@@ -285,6 +285,10 @@ export class GreyRequirements {
         Required.MUST,
       ]);
     } else {
+      let locket = Object.keys(getLocketMonsters()).map((s) =>
+        s.toLowerCase().trim()
+      );
+
       let monstersNeed: string[] = [
         "pygmy witch lawyer",
         "mountain man",
@@ -293,7 +297,7 @@ export class GreyRequirements {
         "little man in the canoe",
         "fantasy bandit",
         "pygmy janitor",
-      ].filter((m) => getLocketMonsters()[m] != true);
+      ].filter((m) => !locket.includes(m));
 
       if (monstersNeed.length > 0) {
         dontHave.push([

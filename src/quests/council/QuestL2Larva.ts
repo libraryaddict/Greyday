@@ -5,6 +5,7 @@ import {
   Item,
   Location,
   Monster,
+  myLevel,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
@@ -51,8 +52,12 @@ export class QuestL2SpookyLarva implements QuestInfo {
       if (DelayBurners.isDelayBurnerFeasible()) {
         return QuestStatus.FASTER_LATER;
       }
-    } else if (!hasNonCombatSkillsReady(false)) {
-      return QuestStatus.FASTER_LATER;
+    } else if (
+      this.location.turnsSpent < 5 &&
+      !hasNonCombatSkillsReady(false) &&
+      myLevel() >= 5
+    ) {
+      return QuestStatus.NOT_READY;
     }
 
     return QuestStatus.READY;
@@ -93,7 +98,7 @@ export class QuestL2SpookyLarva implements QuestInfo {
         }
 
         try {
-          greyAdv(this.location);
+          greyAdv(this.location, outfit);
         } finally {
           props.resetAll();
         }

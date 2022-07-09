@@ -7,6 +7,7 @@ import {
   itemAmount,
   Location,
   Monster,
+  myLevel,
   print,
   use,
 } from "kolmafia";
@@ -51,6 +52,10 @@ export class QuestL11TempleUnlock implements QuestInfo {
   status(): QuestStatus {
     if (this.templeFound()) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (!hasNonCombatSkillsReady(false) && myLevel() >= 5) {
+      return QuestStatus.NOT_READY;
     }
 
     if (!hasNonCombatSkillsReady(true)) {

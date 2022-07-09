@@ -73,6 +73,10 @@ export class QuestL11Manor implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (!hasNonCombatSkillsReady(false)) {
+      return QuestStatus.NOT_READY;
+    }
+
     if (!hasNonCombatSkillsReady()) {
       return QuestStatus.FASTER_LATER;
     }

@@ -16,6 +16,16 @@ export class PropertyManager {
   }
 
   setChoice(choice: number, value: number) {
+    let unhandled = getProperty("_greyDebugUnhandledChoices2")
+      .split(",")
+      .filter((s) => s != "");
+
+    if (!unhandled.includes(choice.toString())) {
+      unhandled.push(choice.toString());
+
+      setProperty("_greyDebugUnhandledChoices2", unhandled.join(","));
+    }
+
     this.setProperty("choiceAdventure" + choice, value.toString());
   }
 

@@ -13,6 +13,7 @@ import {
   print,
   runChoice,
   setAutoAttack,
+  setProperty,
   toInt,
   visitUrl,
 } from "kolmafia";
@@ -178,6 +179,22 @@ export function greyAdv(
 
     if (choiceToPick == null) {
       choiceToPick = toInt(getProperty("choiceAdventure" + lastChoice()));
+
+      let unhandled = getProperty("_greyDebugUnhandledChoices")
+        .split(",")
+        .filter((s) => s != "");
+      let unhandled2 = getProperty("_greyDebugUnhandledChoices2")
+        .split(",")
+        .filter((s) => s != "");
+
+      if (
+        !unhandled.includes(lastChoice().toString()) &&
+        !unhandled2.includes(lastChoice().toString())
+      ) {
+        unhandled.push(lastChoice().toString());
+
+        setProperty("_greyDebugUnhandledChoices", unhandled.join(","));
+      }
     }
 
     if (choiceToPick == 0) {

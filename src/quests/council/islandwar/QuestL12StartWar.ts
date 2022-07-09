@@ -47,6 +47,10 @@ export class QuestL12StartWar implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (!hasNonCombatSkillsReady(false)) {
+      return QuestStatus.NOT_READY;
+    }
+
     if (!hasNonCombatSkillsReady()) {
       return QuestStatus.FASTER_LATER;
     }
