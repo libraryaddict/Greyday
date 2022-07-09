@@ -4224,7 +4224,7 @@ var QuestTowerKillSkin = /*#__PURE__*/function () {function QuestTowerKillSkin()
           }
 
           if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_hotTubSoaks")) < 5 && (0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)()) {
-            if ((0,external_kolmafia_namespaceObject.myMaxhp)() - (0,external_kolmafia_namespaceObject.myHp)() > 100) {
+            if ((0,external_kolmafia_namespaceObject.myMaxhp)() - (0,external_kolmafia_namespaceObject.myHp)() > 500) {
               (0,external_kolmafia_namespaceObject.cliExecute)("hottub");
             } else {
               restoreHPTo((0,external_kolmafia_namespaceObject.myMaxhp)());
@@ -11728,28 +11728,12 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
         outfit: new GreyOutfit("-tie"),
         location: null,
         run: () => {
-          var s =
-          "+5 meat +0.03 moxie +100 hp 200 min 300 max +switch hobo monkey +switch robortender";
+          (0,external_kolmafia_namespaceObject.cliExecute)(
+          "maximize +5 meat +0.03 moxie +100 hp 200 min 300 max +switch hobo monkey +switch robortender");
 
-          for (var attempt = 0; attempt < 3; attempt++) {
-            var result = (0,external_kolmafia_namespaceObject.maximize)(s, false);
-
-            if (!result) {
-              throw "Failed to maximize health enough!";
-            }
-
-            if ((0,external_kolmafia_namespaceObject.myMaxhp)() >= 200) {
-              break;
-            }
-
-            (0,external_kolmafia_namespaceObject.print)(
-            "Maximizer bug in effect.. Claims to be a success, but reduced our max health.. Lets try again.",
-            "red");
-
-          }
 
           if ((0,external_kolmafia_namespaceObject.myMaxhp)() < 200) {
-            throw "Max HP too low! Likely a maximizer issue. Run +meat and kill the wall of meat yourself?";
+            throw "Max HP too low! Run +meat and kill the wall of meat yourself?";
           }
 
           restoreHPTo(Math.min((0,external_kolmafia_namespaceObject.myMaxhp)(), 600));
@@ -11998,6 +11982,10 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
           if (this.isRocketPossible()) {
             (0,external_kolmafia_namespaceObject.maximize)("moxie +equip " + this.rocket.name, false);
 
+            if ((0,external_kolmafia_namespaceObject.equippedAmount)(this.rocket) == 0) {
+              throw "We don't have the " + this.rocket.name + " on hand?";
+            }
+
             macro = Macro.skill("Fire Rocket");
           } else {
             if ((0,external_kolmafia_namespaceObject.itemAmount)(this.drunkBell) == 0) {
@@ -12011,10 +11999,6 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
             (0,external_kolmafia_namespaceObject.maximize)("mys", false);
 
             macro = Macro.item(this.drunkBell);
-          }
-
-          if ((0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)() * 0.5) {
-            (0,external_kolmafia_namespaceObject.cliExecute)("hottub");
           }
 
           (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=nstower&action=ns_07_monster3");
@@ -12153,8 +12137,8 @@ var QuestTowerShadow = /*#__PURE__*/function () {function QuestTowerShadow() {Qu
       }
 
       var outfit = new GreyOutfit();
-      outfit.hpWeight = 1;
-      outfit.addBonus("+init 151 max");
+      outfit.hpWeight = 0;
+      outfit.addBonus("+500 init 151 max +100 hp 500 max");
 
       return {
         familiar: this.potato,
@@ -12179,7 +12163,7 @@ var QuestTowerShadow = /*#__PURE__*/function () {function QuestTowerShadow() {Qu
             }
           }
 
-          if ((0,external_kolmafia_namespaceObject.myMaxhp)() - (0,external_kolmafia_namespaceObject.myHp)() > 100) {
+          if ((0,external_kolmafia_namespaceObject.myMaxhp)() - (0,external_kolmafia_namespaceObject.myHp)() > 500) {
             (0,external_kolmafia_namespaceObject.cliExecute)("hottub");
           } else if ((0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)()) {
             restoreHPTo((0,external_kolmafia_namespaceObject.myMaxhp)());
@@ -23319,7 +23303,7 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
     "_greyReachedTower");}GreyYouMain_createClass(GreyYouMain, [{ key: "isRevisionPass", value:
 
     function isRevisionPass() {
-      var required = 26535;
+      var required = 26545;
 
       if ((0,external_kolmafia_namespaceObject.getRevision)() < required) {
         (0,external_kolmafia_namespaceObject.print)("Please update your mafia. You are using ".concat(
