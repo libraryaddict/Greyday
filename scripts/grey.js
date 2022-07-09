@@ -370,7 +370,21 @@ function getGreySettings() {
     moonSigns.find((s) => s.toLowerCase() == value.toLowerCase()) != null };
 
 
-  return [towerBreak, moonTune];
+  var manorLights = {
+    name: "greyFinishManorLights",
+    description:
+    "The script will do the hidden manor lights quest, but should it fight Elizabeth & Stephen if the chance comes up? (Garbo does fight Stephen)",
+    valid: (value) => value == "true" || value == "false" };
+
+
+  var pvpEnable = {
+    name: "greyEnablePvP",
+    description:
+    "Should the script enable PvP at the start of the run? This doesn't actually make much difference vs enabling it later as there's no pvp generation, unless you have robortender.",
+    valid: (value) => value == "true" || value == "false" };
+
+
+  return [towerBreak, moonTune, manorLights, pvpEnable];
 }
 
 var moonSigns = [
@@ -1963,6 +1977,22 @@ settings)
 
     if (choiceToPick == null) {
       choiceToPick = (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("choiceAdventure" + (0,external_kolmafia_namespaceObject.lastChoice)()));
+
+      var unhandled = (0,external_kolmafia_namespaceObject.getProperty)("_greyDebugUnhandledChoices").
+      split(",").
+      filter((s) => s != "");
+      var unhandled2 = (0,external_kolmafia_namespaceObject.getProperty)("_greyDebugUnhandledChoices2").
+      split(",").
+      filter((s) => s != "");
+
+      if (
+      !unhandled.includes((0,external_kolmafia_namespaceObject.lastChoice)().toString()) &&
+      !unhandled2.includes((0,external_kolmafia_namespaceObject.lastChoice)().toString()))
+      {
+        unhandled.push((0,external_kolmafia_namespaceObject.lastChoice)().toString());
+
+        (0,external_kolmafia_namespaceObject.setProperty)("_greyDebugUnhandledChoices", unhandled.join(","));
+      }
     }
 
     if (choiceToPick == 0) {
@@ -2691,6 +2721,16 @@ var PropertyManager = /*#__PURE__*/function () {function PropertyManager() {Prop
     } }, { key: "setChoice", value:
 
     function setChoice(choice, value) {
+      var unhandled = (0,external_kolmafia_namespaceObject.getProperty)("_greyDebugUnhandledChoices2").
+      split(",").
+      filter((s) => s != "");
+
+      if (!unhandled.includes(choice.toString())) {
+        unhandled.push(choice.toString());
+
+        (0,external_kolmafia_namespaceObject.setProperty)("_greyDebugUnhandledChoices2", unhandled.join(","));
+      }
+
       this.setProperty("choiceAdventure" + choice, value.toString());
     } }, { key: "resetChoice", value:
 
@@ -4603,6 +4643,10 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
         Required.MUST]);
 
       } else {
+        var locket = Object.keys((0,external_kolmafia_namespaceObject.getLocketMonsters)()).map((s) =>
+        s.toLowerCase().trim());
+
+
         var monstersNeed = [
         "pygmy witch lawyer",
         "mountain man",
@@ -4611,7 +4655,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
         "little man in the canoe",
         "fantasy bandit",
         "pygmy janitor"].
-        filter((m) => (0,external_kolmafia_namespaceObject.getLocketMonsters)()[m] != true);
+        filter((m) => !locket.includes(m));
 
         if (monstersNeed.length > 0) {
           dontHave.push([
@@ -5934,6 +5978,10 @@ var QuestL11Manor = /*#__PURE__*/function () {
         return QuestStatus.COMPLETED;
       }
 
+      if (!hasNonCombatSkillsReady(false)) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (!hasNonCombatSkillsReady()) {
         return QuestStatus.FASTER_LATER;
       }
@@ -6867,11 +6915,7 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
             settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Blue Oyster Cultist"));
             settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Lynyrd Skinner"));
 
-            greyAdv(
-            external_kolmafia_namespaceObject.Location.get("A Mob Of Zeppelin Protesters"),
-            outfit,
-            settings);
-
+            greyAdv(this.proLoc, outfit, settings);
           } finally {
             props.resetAll();
           }
@@ -8503,6 +8547,10 @@ var QuestL11TempleUnlock = /*#__PURE__*/function () {function QuestL11TempleUnlo
         return QuestStatus.COMPLETED;
       }
 
+      if (!hasNonCombatSkillsReady(false) && (0,external_kolmafia_namespaceObject.myLevel)() >= 5) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (!hasNonCombatSkillsReady(true)) {
         return QuestStatus.FASTER_LATER;
       }
@@ -9818,6 +9866,10 @@ var QuestL12StartWar = /*#__PURE__*/function () {function QuestL12StartWar() {Qu
       }
 
       if (external_kolmafia_namespaceObject.Stat.all().find((s) => (0,external_kolmafia_namespaceObject.myBasestat)(s) < 70) != null) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (!hasNonCombatSkillsReady(false)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -12508,8 +12560,12 @@ var QuestL2SpookyLarva = /*#__PURE__*/function () {function QuestL2SpookyLarva()
         if (DelayBurners.isDelayBurnerFeasible()) {
           return QuestStatus.FASTER_LATER;
         }
-      } else if (!hasNonCombatSkillsReady(false)) {
-        return QuestStatus.FASTER_LATER;
+      } else if (
+      this.location.turnsSpent < 5 &&
+      !hasNonCombatSkillsReady(false) &&
+      (0,external_kolmafia_namespaceObject.myLevel)() >= 5)
+      {
+        return QuestStatus.NOT_READY;
       }
 
       return QuestStatus.READY;
@@ -12550,7 +12606,7 @@ var QuestL2SpookyLarva = /*#__PURE__*/function () {function QuestL2SpookyLarva()
           }
 
           try {
-            greyAdv(this.location);
+            greyAdv(this.location, outfit);
           } finally {
             props.resetAll();
           }
@@ -13070,7 +13126,7 @@ var QuestL5GoblinOutskirts = /*#__PURE__*/function () {function QuestL5GoblinOut
     } }, { key: "level", value:
 
     function level() {
-      return 5;
+      return this.location.turnsSpent < 10 ? 4 : 5;
     } }, { key: "status", value:
 
     function status() {
@@ -13345,6 +13401,10 @@ var QuestL6FriarElbow = /*#__PURE__*/function () {function QuestL6FriarElbow() {
         return QuestStatus.COMPLETED;
       }
 
+      if (!hasNonCombatSkillsReady(false)) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (!hasNonCombatSkillsReady()) {
         return QuestStatus.FASTER_LATER;
       }
@@ -13478,6 +13538,10 @@ var QuestL6FriarHeart = /*#__PURE__*/function () {function QuestL6FriarHeart() {
         return QuestStatus.COMPLETED;
       }
 
+      if (!hasNonCombatSkillsReady(false)) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (!hasNonCombatSkillsReady()) {
         return QuestStatus.FASTER_LATER;
       }
@@ -13562,6 +13626,10 @@ var QuestL6FriarNeck = /*#__PURE__*/function () {function QuestL6FriarNeck() {Qu
       (0,external_kolmafia_namespaceObject.availableAmount)(this.item) > 0)
       {
         return QuestStatus.COMPLETED;
+      }
+
+      if (!hasNonCombatSkillsReady(false)) {
+        return QuestStatus.NOT_READY;
       }
 
       if (!hasNonCombatSkillsReady()) {
@@ -14006,6 +14074,10 @@ var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRatt
     } }, { key: "cryptStatus", value:
 
     function cryptStatus() {
+      if (!hasNonCombatSkillsReady(false)) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (!hasNonCombatSkillsReady()) {
         return QuestStatus.FASTER_LATER;
       }
@@ -14144,7 +14216,7 @@ var QuestL7Crypt = /*#__PURE__*/function () {function QuestL7Crypt() {QuestL7Cry
 
 
 var CryptStatus;(function (CryptStatus) {CryptStatus[CryptStatus["FIGHT"] = 0] = "FIGHT";CryptStatus[CryptStatus["BOSS"] = 1] = "BOSS";CryptStatus[CryptStatus["FINISHED"] = 2] = "FINISHED";})(CryptStatus || (CryptStatus = {}));
-;// CONCATENATED MODULE: ./src/quests/council/icepeak/QuestL8MountainBoss.ts
+;// CONCATENATED MODULE: ./src/quests/council/mountain/QuestL8MountainBoss.ts
 function QuestL8MountainBoss_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainBoss_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainBoss_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainBoss_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainBoss_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainBoss_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
@@ -14205,7 +14277,7 @@ var QuestL8MountainBoss = /*#__PURE__*/function () {function QuestL8MountainBoss
     function getStatus() {
       return getQuestStatus("questL08Trapper");
     } }]);return QuestL8MountainBoss;}();
-;// CONCATENATED MODULE: ./src/quests/council/icepeak/QuestL8MountainGoats.ts
+;// CONCATENATED MODULE: ./src/quests/council/mountain/QuestL8MountainGoats.ts
 function QuestL8MountainGoats_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainGoats_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainGoats_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainGoats_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainGoats_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainGoats_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
@@ -14313,7 +14385,7 @@ var QuestL8MountainGoats = /*#__PURE__*/function () {function QuestL8MountainGoa
     function getStatus() {
       return getQuestStatus("questL08Trapper");
     } }]);return QuestL8MountainGoats;}();
-;// CONCATENATED MODULE: ./src/quests/council/icepeak/QuestL8MountainNinja.ts
+;// CONCATENATED MODULE: ./src/quests/council/mountain/QuestL8MountainNinja.ts
 function QuestL8MountainNinja_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainNinja_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainNinja_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainNinja_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainNinja_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainNinja_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
@@ -14396,7 +14468,7 @@ var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNin
       external_kolmafia_namespaceObject.Item.get(i));
 
     } }]);return QuestL8MountainNinja;}();
-;// CONCATENATED MODULE: ./src/quests/council/icepeak/QuestL8MountainOre.ts
+;// CONCATENATED MODULE: ./src/quests/council/mountain/QuestL8MountainOre.ts
 function QuestL8MountainOre_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOre_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOre_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOre_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOre_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOre_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
@@ -14433,7 +14505,7 @@ var QuestL8MountainOre = /*#__PURE__*/function () {function QuestL8MountainOre()
     function getStatus() {
       return getQuestStatus("questL08Trapper");
     } }]);return QuestL8MountainOre;}();
-;// CONCATENATED MODULE: ./src/quests/council/icepeak/QuestL8MountainOreClover.ts
+;// CONCATENATED MODULE: ./src/quests/council/mountain/QuestL8MountainOreClover.ts
 function QuestL8MountainOreClover_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOreClover_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOreClover_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOreClover_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOreClover_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOreClover_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOreClover_setPrototypeOf(subClass, superClass);}function QuestL8MountainOreClover_setPrototypeOf(o, p) {QuestL8MountainOreClover_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOreClover_setPrototypeOf(o, p);}function QuestL8MountainOreClover_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOreClover_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOreClover_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOreClover_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOreClover_possibleConstructorReturn(this, result);};}function QuestL8MountainOreClover_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOreClover_assertThisInitialized(self);}function QuestL8MountainOreClover_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOreClover_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOreClover_getPrototypeOf(o) {QuestL8MountainOreClover_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOreClover_getPrototypeOf(o);}function QuestL8MountainOreClover_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
@@ -14543,6 +14615,7 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
       return [
       this.resourceClaim,
       new ResourceClaim(ResourceType.YELLOW_RAY, 1, "YR Mountain Man", 10),
+      new ResourcePullClaim(external_kolmafia_namespaceObject.Item.get("asbestos ore"), "Pull Ice Peak Ore", 10),
       new ResourceClaim(
       ResourceType.COMBAT_LOCKET,
       1,
@@ -14579,12 +14652,28 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
         return QuestStatus.COMPLETED;
       }
 
-      if (!this.canBackup() && (0,external_kolmafia_namespaceObject.haveEffect)(this.effect) > 0) {
+      if (this.getOreRemaining() > 1 && (0,external_kolmafia_namespaceObject.haveEffect)(this.effect)) {
         return QuestStatus.NOT_READY;
       }
 
-      if (!canCombatLocket(this.mountainMan) && (0,external_kolmafia_namespaceObject.availableAmount)(this.wish) == 0) {
+      if (
+      !this.canBackup() &&
+      GreySettings.isHardcoreMode() &&
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.effect))
+      {
         return QuestStatus.NOT_READY;
+      }
+
+      if (
+      this.getOreRemaining() > 1 &&
+      !canCombatLocket(this.mountainMan) &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.wish) == 0)
+      {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (this.getOreRemaining() == 1) {
+        return QuestStatus.READY;
       }
 
       // Delay this if we can't dupe, and don't have nanovision
@@ -14644,6 +14733,16 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
 
     function hasBackups() {
       return getBackupsRemaining() > 0;
+    } }, { key: "doPull", value:
+
+    function doPull() {
+      return {
+        location: null,
+        outfit: new GreyOutfit("-tie"),
+        run: () => {
+          GreyPulls.pullOre();
+        } };
+
     } }, { key: "doBackups", value:
 
     function doBackups() {
@@ -14671,6 +14770,10 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
     } }, { key: "run", value:
 
     function run() {
+      if (!GreySettings.isHardcoreMode() && this.getOreRemaining() == 1) {
+        return this.doPull();
+      }
+
       if (this.canBackup()) {
         return this.doBackups();
       }
@@ -14724,7 +14827,11 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
             }
 
             if (this.getOreRemaining() > 2) {
-              (0,external_kolmafia_namespaceObject.print)("Drat. We're going to have to do a backup.", "red");
+              if (GreySettings.isHardcoreMode()) {
+                (0,external_kolmafia_namespaceObject.print)("Drat. We're going to have to do a backup.", "red");
+              } else {
+                (0,external_kolmafia_namespaceObject.print)("Drat. We're going to have to pull the last ore.", "red");
+              }
             }
           }
 
@@ -14745,7 +14852,7 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
     function needAdventures() {
       return 3;
     } }]);return QuestL8MountainOreMan;}(QuestL8MountainOre);
-;// CONCATENATED MODULE: ./src/quests/council/icepeak/QuestL8MountainOreMiningOutfit.ts
+;// CONCATENATED MODULE: ./src/quests/council/mountain/QuestL8MountainOreMiningOutfit.ts
 function QuestL8MountainOreMiningOutfit_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOreMiningOutfit_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOreMiningOutfit_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOreMiningOutfit_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOreMiningOutfit_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOreMiningOutfit_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOreMiningOutfit_setPrototypeOf(subClass, superClass);}function QuestL8MountainOreMiningOutfit_setPrototypeOf(o, p) {QuestL8MountainOreMiningOutfit_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOreMiningOutfit_setPrototypeOf(o, p);}function QuestL8MountainOreMiningOutfit_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOreMiningOutfit_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOreMiningOutfit_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOreMiningOutfit_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOreMiningOutfit_possibleConstructorReturn(this, result);};}function QuestL8MountainOreMiningOutfit_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOreMiningOutfit_assertThisInitialized(self);}function QuestL8MountainOreMiningOutfit_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOreMiningOutfit_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOreMiningOutfit_getPrototypeOf(o) {QuestL8MountainOreMiningOutfit_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOreMiningOutfit_getPrototypeOf(o);}function QuestL8MountainOreMiningOutfit_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
@@ -14795,7 +14902,7 @@ var QuestL8MountainOreMiningOutfit = /*#__PURE__*/function (_QuestL8MountainOre)
     function getLocations() {
       return [this.mines];
     } }]);return QuestL8MountainOreMiningOutfit;}(QuestL8MountainOre);
-;// CONCATENATED MODULE: ./src/quests/council/icepeak/QuestL8MountainOreMining.ts
+;// CONCATENATED MODULE: ./src/quests/council/mountain/QuestL8MountainOreMining.ts
 function QuestL8MountainOreMining_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOreMining_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOreMining_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOreMining_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOreMining_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOreMining_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOreMining_setPrototypeOf(subClass, superClass);}function QuestL8MountainOreMining_setPrototypeOf(o, p) {QuestL8MountainOreMining_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOreMining_setPrototypeOf(o, p);}function QuestL8MountainOreMining_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOreMining_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOreMining_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOreMining_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOreMining_possibleConstructorReturn(this, result);};}function QuestL8MountainOreMining_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOreMining_assertThisInitialized(self);}function QuestL8MountainOreMining_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOreMining_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOreMining_getPrototypeOf(o) {QuestL8MountainOreMining_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOreMining_getPrototypeOf(o);}function QuestL8MountainOreMining_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
@@ -16313,6 +16420,10 @@ var QuestManorBillards = /*#__PURE__*/function () {function QuestManorBillards()
         return QuestStatus.COMPLETED;
       }
 
+      if (!hasNonCombatSkillsReady(false)) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (!hasNonCombatSkillsReady()) {
         return QuestStatus.FASTER_LATER;
       }
@@ -17054,12 +17165,19 @@ var QuestManorLights = /*#__PURE__*/function () {
     } }, { key: "status", value:
 
     function status() {
+      if (!this.isTime()) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (!this.isElizaReady() && !this.shouldDoSteve()) {
         return QuestStatus.COMPLETED;
       }
 
-      if (!this.isTime()) {
-        return QuestStatus.NOT_READY;
+      if (
+      (this.isElizaFight() || this.isSteveFight()) &&
+      (0,external_kolmafia_namespaceObject.getProperty)("greyFinishManorLights") != "true")
+      {
+        return QuestStatus.COMPLETED;
       }
 
       if (!this.mustBeDone()) {
@@ -17155,7 +17273,10 @@ var QuestManorLights = /*#__PURE__*/function () {
     } }, { key: "run", value:
 
     function run() {
-      if (this.shouldDoSteve()) {
+      if (
+      this.shouldDoSteve() && (
+      !this.isSteveFight() || (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFinishManorLights"))))
+      {
         var steve = this.getSteve();
 
         if ((0,external_canadv_ash_namespaceObject.canAdv)(steve[0])) {
@@ -17163,7 +17284,10 @@ var QuestManorLights = /*#__PURE__*/function () {
         }
       }
 
-      if (this.isElizaReady()) {
+      if (
+      this.isElizaReady() && (
+      !this.isElizaFight() || (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFinishManorLights"))))
+      {
         var eliza = this.getEliza();
 
         if ((0,external_canadv_ash_namespaceObject.canAdv)(eliza[0])) {
@@ -17328,8 +17452,8 @@ var QuestInitialStart = /*#__PURE__*/function () {
       return {
         location: null,
         run: () => {
-          if (!(0,external_kolmafia_namespaceObject.hippyStoneBroken)() && (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("auto_pvpEnable"))) {
-            (0,external_kolmafia_namespaceObject.print)("Enabling pvp as it was set to true in autoscend", "blue");
+          if (!(0,external_kolmafia_namespaceObject.hippyStoneBroken)() && (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyEnablePvP"))) {
+            (0,external_kolmafia_namespaceObject.print)("Enabling pvp as defined by 'greyEnablePvP'", "blue");
             (0,external_kolmafia_namespaceObject.visitUrl)("peevpee.php?action=smashstone&pwd&confirm=on", true);
             (0,external_kolmafia_namespaceObject.visitUrl)("peevpee.php?place=fight");
           }
@@ -17442,6 +17566,10 @@ var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.plusSign) > 0 && (0,external_kolmafia_namespaceObject.myLevel)() < 16) {
         return QuestStatus.FASTER_LATER;
+      }
+
+      if (!hasNonCombatSkillsReady(false)) {
+        return QuestStatus.NOT_READY;
       }
 
       if (!hasNonCombatSkillsReady()) {
