@@ -50,28 +50,12 @@ export class QuestTowerWallMeat implements QuestInfo {
       outfit: new GreyOutfit("-tie"),
       location: null,
       run: () => {
-        let s =
-          "+5 meat +0.03 moxie +100 hp 200 min 300 max +switch hobo monkey +switch robortender";
-
-        for (let attempt = 0; attempt < 3; attempt++) {
-          let result = maximize(s, false);
-
-          if (!result) {
-            throw "Failed to maximize health enough!";
-          }
-
-          if (myMaxhp() >= 200) {
-            break;
-          }
-
-          print(
-            "Maximizer bug in effect.. Claims to be a success, but reduced our max health.. Lets try again.",
-            "red"
-          );
-        }
+        cliExecute(
+          "maximize +5 meat +0.03 moxie +100 hp 200 min 300 max +switch hobo monkey +switch robortender"
+        );
 
         if (myMaxhp() < 200) {
-          throw "Max HP too low! Likely a maximizer issue. Run +meat and kill the wall of meat yourself?";
+          throw "Max HP too low! Run +meat and kill the wall of meat yourself?";
         }
 
         restoreHPTo(Math.min(myMaxhp(), 600));

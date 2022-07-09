@@ -35,7 +35,7 @@ class GreyYouMain {
   private reachedTower: string = "_greyReachedTower";
 
   isRevisionPass(): boolean {
-    let required = 26535;
+    let required = 26545;
 
     if (getRevision() < required) {
       print(

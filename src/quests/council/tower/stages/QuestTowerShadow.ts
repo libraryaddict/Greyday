@@ -144,8 +144,8 @@ export class QuestTowerShadow implements QuestInfo {
     }
 
     let outfit = new GreyOutfit();
-    outfit.hpWeight = 1;
-    outfit.addBonus("+init 151 max");
+    outfit.hpWeight = 0;
+    outfit.addBonus("+500 init 151 max +100 hp 500 max");
 
     return {
       familiar: this.potato,
@@ -170,7 +170,7 @@ export class QuestTowerShadow implements QuestInfo {
           }
         }
 
-        if (myMaxhp() - myHp() > 100) {
+        if (myMaxhp() - myHp() > 500) {
           cliExecute("hottub");
         } else if (myHp() < myMaxhp()) {
           restoreHPTo(myMaxhp());

@@ -240,7 +240,7 @@ export class QuestTowerKillSkin {
         }
 
         if (toInt(getProperty("_hotTubSoaks")) < 5 && myHp() < myMaxhp()) {
-          if (myMaxhp() - myHp() > 100) {
+          if (myMaxhp() - myHp() > 500) {
             cliExecute("hottub");
           } else {
             restoreHPTo(myMaxhp());

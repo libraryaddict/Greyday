@@ -25,6 +25,7 @@ import {
   Effect,
   use,
   mallPrice,
+  equippedAmount,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -255,6 +256,10 @@ export class QuestTowerKillBones {
         if (this.isRocketPossible()) {
           maximize("moxie +equip " + this.rocket.name, false);
 
+          if (equippedAmount(this.rocket) == 0) {
+            throw "We don't have the " + this.rocket.name + " on hand?";
+          }
+
           macro = Macro.skill("Fire Rocket");
         } else {
           if (itemAmount(this.drunkBell) == 0) {
@@ -268,10 +273,6 @@ export class QuestTowerKillBones {
           maximize("mys", false);
 
           macro = Macro.item(this.drunkBell);
-        }
-
-        if (myHp() < myMaxhp() * 0.5) {
-          cliExecute("hottub");
         }
 
         visitUrl("place.php?whichplace=nstower&action=ns_07_monster3");
