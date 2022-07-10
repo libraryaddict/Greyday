@@ -3,8 +3,10 @@ import {
   cliExecute,
   getProperty,
   getZapWand,
+  haveSkill,
   Item,
   myMeat,
+  Skill,
   toInt,
 } from "kolmafia";
 import { Task } from "./Tasks";
@@ -13,6 +15,7 @@ export class TaskBoomboxSwitch implements Task {
   boombox: Item = Item.get("SongBoom&trade; BoomBox");
   canSkip: boolean = false;
   noneItem = Item.get("None");
+  skill: Skill = Skill.get("Hivemindedness");
 
   isForgedRequired(): boolean {
     return getProperty("questL11Black") != "finished";
@@ -31,7 +34,7 @@ export class TaskBoomboxSwitch implements Task {
   }
 
   run(): void {
-    if (this.canSkip) {
+    if (this.canSkip || !haveSkill(this.skill)) {
       return;
     }
 

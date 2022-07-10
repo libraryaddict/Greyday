@@ -222,7 +222,7 @@ class QuestGnomeTrainer implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    let meat = 10000;
+    let meat = 10000 + (haveSkill(this.skills[0]) ? 5000 : 0);
 
     if (myMeat() < meat) {
       return QuestStatus.NOT_READY;
