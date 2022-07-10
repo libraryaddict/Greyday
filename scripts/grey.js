@@ -17988,7 +17988,7 @@ var QuestLocketFantasyBandit = /*#__PURE__*/function () {function QuestLocketFan
     } }, { key: "status", value:
 
     function status() {
-      if (this.hasFoughtEnough()) {
+      if (this.hasFoughtEnough() || (0,external_kolmafia_namespaceObject.availableAmount)(this.camera) == 0) {
         return QuestStatus.COMPLETED;
       }
 
