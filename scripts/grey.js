@@ -391,7 +391,21 @@ function getGreySettings() {
     valid: (value) => value == "true" || value == "false" };
 
 
-  return [towerBreak, moonTune, manorLights, pvpEnable, dailyMalware];
+  var fantasyBandits = {
+    name: "greyFantasyBandits",
+    description:
+    "If this is set to true, script will do fantasy bandits regardless of tower break setting. Will use fantasyrealm if available, otherwise a fax source & Backup Camera",
+    valid: (value) => value == "true" || value == "false" };
+
+
+  return [
+  towerBreak,
+  moonTune,
+  manorLights,
+  pvpEnable,
+  dailyMalware,
+  fantasyBandits];
+
 }
 
 var moonSigns = [
@@ -450,6 +464,9 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
 
 
 
+
+
+
     function isHardcoreMode() {
       return this.hardcoreMode || (0,external_kolmafia_namespaceObject.inHardcore)();
     }
@@ -463,7 +480,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
 
     function shouldAvoidTowerRequirements() {
       return !GreySettings.isHardcoreMode() && this.greyBreakAtTower;
-    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") || "false"));GreySettings_defineProperty(GreySettings, "greyDailyMalware", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDailyMalware") || "false"));GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", (0,external_kolmafia_namespaceObject.getProperty)("greyTuneMoonSpoon"));
+    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") || "false"));GreySettings_defineProperty(GreySettings, "greyDailyMalware", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDailyMalware") || "false"));GreySettings_defineProperty(GreySettings, "greyFantasyBandits", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFantasyBandits") || "false"));GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", (0,external_kolmafia_namespaceObject.getProperty)("greyTuneMoonSpoon"));
 ;// CONCATENATED MODULE: ./src/utils/GreyUtils.ts
 function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || GreyUtils_unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyUtils_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyUtils_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyUtils_arrayLikeToArray(o, minLen);}function GreyUtils_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
 
@@ -17971,7 +17988,7 @@ var QuestLocketFantasyBandit = /*#__PURE__*/function () {function QuestLocketFan
     } }, { key: "status", value:
 
     function status() {
-      if (this.hasFoughtEnough() || !GreySettings.isHardcoreMode()) {
+      if (this.hasFoughtEnough()) {
         return QuestStatus.COMPLETED;
       }
 
@@ -17983,11 +18000,23 @@ var QuestLocketFantasyBandit = /*#__PURE__*/function () {function QuestLocketFan
         return QuestStatus.COMPLETED;
       }
 
-      if (getQuestStatus("questL08Trapper") <= 1) {
-        return QuestStatus.NOT_READY;
+      if (
+      this.getBackupUsesRemaining() <
+      5 - Math.max(1, this.getFoughtToday()))
+      {
+        return QuestStatus.COMPLETED;
       }
 
-      if (this.getBackupUsesRemaining() < 4) {
+      if (!GreySettings.greyFantasyBandits) {
+        if (
+        GreySettings.shouldAvoidTowerRequirements() ||
+        GreySettings.isHardcoreMode())
+        {
+          return QuestStatus.NOT_READY;
+        }
+      }
+
+      if (getQuestStatus("questL08Trapper") <= 1) {
         return QuestStatus.NOT_READY;
       }
 
@@ -21104,7 +21133,10 @@ var QuestFantasyRealm = /*#__PURE__*/function () {function QuestFantasyRealm() {
         return QuestStatus.NOT_READY;
       }
 
-      if (GreySettings.shouldAvoidTowerRequirements()) {
+      if (
+      GreySettings.shouldAvoidTowerRequirements() &&
+      !GreySettings.greyFantasyBandits)
+      {
         return QuestStatus.NOT_READY;
       }
 
