@@ -94,6 +94,7 @@ export class QuestL11Manor implements QuestInfo {
         let props = new PropertyManager();
 
         try {
+          props.setChoice(921, 1); // Play da music
           props.setChoice(106, 3);
           props.setChoice(90, 3);
           greyAdv(this.ballroom, outfit);

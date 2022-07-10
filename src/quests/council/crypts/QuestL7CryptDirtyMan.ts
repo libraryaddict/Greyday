@@ -17,6 +17,7 @@ import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
 import { Macro } from "../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { CryptL7Template } from "./CryptTemplate";
@@ -91,14 +92,21 @@ export class CryptL7DirtyMan extends CryptL7Template {
           start = Macro.step("if monsterid 1071;skill 7166;endif");
         }
 
-        greyAdv(
-          this.loc,
-          outfit,
-          new AdventureSettings()
-            .addNoBanish(this.dirty)
-            .setStartOfFightMacro(start)
-            .setFinishingBlowMacro(killing)
-        );
+        let props = new PropertyManager();
+        props.setChoice(157, 4);
+
+        try {
+          greyAdv(
+            this.loc,
+            outfit,
+            new AdventureSettings()
+              .addNoBanish(this.dirty)
+              .setStartOfFightMacro(start)
+              .setFinishingBlowMacro(killing)
+          );
+        } finally {
+          props.resetAll();
+        }
       },
     };
   }

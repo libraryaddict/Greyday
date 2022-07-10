@@ -20,6 +20,7 @@ import { CryptL7Eyes } from "./crypts/QuestL7CryptEyes";
 import { CryptL7Rattling } from "./crypts/QuestL7CryptRattling";
 import { CryptL7Sprinters } from "./crypts/QuestL7CryptSprinters";
 import { QuestType } from "../QuestTypes";
+import { PropertyManager } from "../../utils/Properties";
 
 export class QuestL7Crypt implements QuestInfo {
   children: QuestInfo[] = [
@@ -75,7 +76,15 @@ export class QuestL7Crypt implements QuestInfo {
     return {
       location: Location.get("Haert of the Cyrpt"),
       run: () => {
-        greyAdv("crypt.php?action=heart");
+        let props = new PropertyManager();
+        props.setChoice(527, 1);
+
+        try {
+          greyAdv("crypt.php?action=heart");
+        } finally {
+          props.resetAll();
+        }
+
         council();
 
         if (availableAmount(this.chest) > 0 && myMeat() < 6000) {

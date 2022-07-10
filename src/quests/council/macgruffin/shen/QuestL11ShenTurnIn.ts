@@ -151,6 +151,12 @@ export class QuestL11ShenTurnIn implements QuestInfo {
             }
           }
 
+          props.setChoice(1074, 1); // Approach table
+          props.setChoice(851, 1); // Sip poison
+          props.setChoice(852, 1); // Sip poison
+          props.setChoice(853, 1); // Sip poison
+          props.setChoice(854, 1); // Sip poison
+
           let settings = new AdventureSettings();
 
           for (let m of this.crappyDisguises) {

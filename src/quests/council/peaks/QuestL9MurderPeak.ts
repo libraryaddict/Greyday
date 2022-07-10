@@ -113,6 +113,14 @@ export class MurderHandler implements QuestInfo {
         //cliExecute("retrocape vampire hold");
         cliExecute("backupcamera init");
 
+        props.setChoice(1056, 1);
+        props.setChoice(604, 1);
+        props.setChoice(607, 1);
+        props.setChoice(608, 1);
+        props.setChoice(609, 1);
+        props.setChoice(610, 1);
+        props.setChoice(616, 1);
+
         try {
           if (this.needsInit() && numericModifier("initiative") >= 40) {
             props.setChoice(606, 4);

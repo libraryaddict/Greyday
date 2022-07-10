@@ -9,6 +9,7 @@ import {
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { PropertyManager } from "../../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { CryptL7Template } from "./CryptTemplate";
@@ -25,11 +26,19 @@ export class CryptL7Eyes extends CryptL7Template {
       outfit: outfit,
       run: () => {
         this.adjustRetroCape();
-        greyAdv(
-          this.loc,
-          outfit,
-          new AdventureSettings().addBanish(Monster.get("party skelteon"))
-        );
+
+        let props = new PropertyManager();
+        props.setChoice(155, 4);
+
+        try {
+          greyAdv(
+            this.loc,
+            outfit,
+            new AdventureSettings().addBanish(Monster.get("party skelteon"))
+          );
+        } finally {
+          props.resetAll();
+        }
 
         cliExecute("refresh inventory");
 

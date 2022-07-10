@@ -29,6 +29,7 @@ import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { currentPredictions } from "../../../../utils/GreyUtils";
 import { Macro } from "../../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -180,12 +181,17 @@ export class QuestL11DesertExplore implements QuestInfo {
         }
 
         let explored = this.getExplored();
-
-        greyAdv(
-          this.desert,
-          outfit,
-          new AdventureSettings().setFinishingBlowMacro(killing)
-        );
+        let props = new PropertyManager();
+        props.setChoice(805, 1);
+        try {
+          greyAdv(
+            this.desert,
+            outfit,
+            new AdventureSettings().setFinishingBlowMacro(killing)
+          );
+        } finally {
+          props.resetAll();
+        }
 
         if (explored == this.getExplored()) {
           print("Checking explored..", "blue");

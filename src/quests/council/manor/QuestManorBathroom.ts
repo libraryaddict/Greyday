@@ -70,6 +70,7 @@ export class ManorBathroom implements QuestInfo {
       run: () => {
         let props = new PropertyManager();
         props.setChoice(882, 1);
+        props.setChoice(881, 1);
 
         if (this.hasDelay()) {
           let delay = DelayBurners.getReadyDelayBurner();

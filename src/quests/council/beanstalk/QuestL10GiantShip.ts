@@ -65,6 +65,7 @@ export class QuestL10GiantShip implements QuestInfo {
       outfit: outfit,
       run: () => {
         let props = new PropertyManager();
+        props.setChoice(681, 1);
 
         if (!this.shouldRunNC()) {
           let ready = DelayBurners.getReadyDelayBurner();

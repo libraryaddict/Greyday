@@ -14,6 +14,7 @@ import { hasNonCombatSkillsReady } from "../../../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -138,7 +139,15 @@ export class QuestL11PalinBook implements QuestInfo {
         settings.addBanish(Monster.get("Taco Cat"));
         settings.addBanish(Monster.get("Tan Gnat"));
 
-        greyAdv(this.palindome, outfit, settings);
+        let props = new PropertyManager();
+        props.setChoice(129, 1);
+        props.setChoice(873, 1);
+
+        try {
+          greyAdv(this.palindome, outfit, settings);
+        } finally {
+          props.resetAll();
+        }
       },
     };
   }

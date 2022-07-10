@@ -135,6 +135,9 @@ export class QuestL3Tavern implements QuestInfo {
           props.setChoice(e[1], choice);
         }
 
+        props.setChoice(509, 1);
+        props.setChoice(510, 1);
+
         try {
           if (
             outfit.plusMonsterLevelWeight >= 10 &&

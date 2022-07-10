@@ -2,6 +2,7 @@ import { Location, toInt } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { PropertyManager } from "../../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { CryptStatus } from "../QuestL7Crypt";
@@ -25,7 +26,15 @@ export class CryptL7Sprinters extends CryptL7Template {
       outfit: outfit,
       run: () => {
         this.adjustRetroCape();
-        greyAdv(this.loc, outfit);
+
+        let props = new PropertyManager();
+        props.setChoice(153, 4);
+
+        try {
+          greyAdv(this.loc, outfit);
+        } finally {
+          props.resetAll();
+        }
       },
     };
   }

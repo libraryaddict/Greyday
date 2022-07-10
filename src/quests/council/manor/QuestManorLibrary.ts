@@ -15,6 +15,7 @@ import {
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { Macro } from "../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -92,7 +93,16 @@ export class QuestManorLibrary implements QuestInfo {
           settings.setFinishingBlowMacro(Macro.skill(this.nano));
         }
 
-        greyAdv(this.library, null, settings);
+        let props = new PropertyManager();
+        props.setChoice(163, 3); // Rare adv that gives an item with 2k autosell, and worth 4-5k in mall
+        props.setChoice(888, 4); // Skip
+        props.setChoice(889, 5); // Skip
+
+        try {
+          greyAdv(this.library, null, settings);
+        } finally {
+          props.resetAll();
+        }
       },
     };
   }

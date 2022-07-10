@@ -24,6 +24,7 @@ import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { GreyPulls } from "../../../utils/GreyResources";
+import { PropertyManager } from "../../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -47,12 +48,8 @@ export class QuestL12StartWar implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (!hasNonCombatSkillsReady(false)) {
+    if (!hasNonCombatSkillsReady(true)) {
       return QuestStatus.NOT_READY;
-    }
-
-    if (!hasNonCombatSkillsReady()) {
-      return QuestStatus.FASTER_LATER;
     }
 
     return QuestStatus.READY;
@@ -81,7 +78,17 @@ export class QuestL12StartWar implements QuestInfo {
           DelayBurners.tryReplaceCombats();
         }
 
-        greyAdv(this.loc, outfit);
+        let props = new PropertyManager();
+        props.setChoice(139, 3);
+        props.setChoice(140, 3);
+        props.setChoice(141, 4);
+        props.setChoice(142, 4);
+
+        try {
+          greyAdv(this.loc, outfit);
+        } finally {
+          props.resetAll();
+        }
 
         if (getProperty("warProgress") != "unstarted") {
           this.visitArena();
