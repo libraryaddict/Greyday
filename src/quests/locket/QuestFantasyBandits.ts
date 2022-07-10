@@ -12,6 +12,7 @@ import {
   Stat,
   bufferToFile,
   myAdventures,
+  availableAmount,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -74,7 +75,7 @@ export class QuestLocketFantasyBandit implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (this.hasFoughtEnough()) {
+    if (this.hasFoughtEnough() || availableAmount(this.camera) == 0) {
       return QuestStatus.COMPLETED;
     }
 
