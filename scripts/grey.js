@@ -9938,8 +9938,8 @@ var QuestL12StartWar = /*#__PURE__*/function () {function QuestL12StartWar() {Qu
           var props = new PropertyManager();
           props.setChoice(139, 3);
           props.setChoice(140, 3);
-          props.setChoice(141, 4);
-          props.setChoice(142, 4);
+          props.setChoice(141, 3);
+          props.setChoice(142, 3);
 
           try {
             greyAdv(this.loc, outfit);
