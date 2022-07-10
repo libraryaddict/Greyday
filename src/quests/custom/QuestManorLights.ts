@@ -18,6 +18,8 @@ import {
   equip,
   Slot,
   toBoolean,
+  haveEffect,
+  Effect,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -57,6 +59,7 @@ export class QuestManorLights implements QuestInfo {
     Item.get("Stephen's secret formula"),
   ];
   goose: Familiar = Familiar.get("Grey Goose");
+  teleportis: Effect = Effect.get("Teleportitis");
 
   constructor() {
     for (let choice of this.choices) {
@@ -151,7 +154,7 @@ export class QuestManorLights implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (!this.isTime()) {
+    if (!this.isTime() || haveEffect(this.teleportis) > 0) {
       return QuestStatus.NOT_READY;
     }
 

@@ -18,6 +18,7 @@ import {
   myDaycount,
   setProperty,
   print,
+  Monster,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
@@ -43,6 +44,7 @@ export class QuestGetZapWand implements QuestInfo {
   ].map((s) => Item.get(s));
   deadMimic: Item = Item.get("dead mimic");
   plusSign: Item = Item.get("plus sign");
+  toAbsorb: Monster[];
 
   getId(): QuestType {
     return "Misc / GrabZapWand";
@@ -82,7 +84,8 @@ export class QuestGetZapWand implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (!hasNonCombatSkillsReady(true)) {
+    // Only be very requirement if we have the MP regen skill
+    if (!hasNonCombatSkillsReady(this.toAbsorb.length == 0 ? true : false)) {
       return QuestStatus.NOT_READY;
     }
 
