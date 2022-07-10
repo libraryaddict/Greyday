@@ -18,7 +18,7 @@ import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { ResourceClaim, ResourceType } from "../../utils/GreyResources";
 import { GreySettings } from "../../utils/GreySettings";
-import { canCombatLocket } from "../../utils/GreyUtils";
+import { canCombatLocket, doPocketWishFight } from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
 import {
   getQuestStatus,
@@ -107,6 +107,17 @@ export class QuestLocketFantasyBandit implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (this.lastMonster() == this.monster) {
+      return QuestStatus.READY;
+    }
+
+    if (
+      !canCombatLocket(this.monster) &&
+      availableAmount(Item.get("Pocket Wish")) == 0
+    ) {
+      return QuestStatus.COMPLETED;
+    }
+
     if (myAdventures() < 30) {
       return QuestStatus.FASTER_LATER;
     }
@@ -115,18 +126,23 @@ export class QuestLocketFantasyBandit implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    if (canCombatLocket(this.monster)) {
+    if (this.lastMonster() != this.monster) {
       return {
         location: null,
         run: () => {
-          let page1 = visitUrl("inventory.php?reminisce=1", false);
-          let url =
-            "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
-            toInt(this.monster);
+          if (canCombatLocket(this.monster)) {
+            let page1 = visitUrl("inventory.php?reminisce=1", false);
+            let url =
+              "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
+              toInt(this.monster);
 
-          let page2 = visitUrl(url);
+            let page2 = visitUrl(url);
 
-          greyAdv(url);
+            greyAdv(url);
+          } else {
+            doPocketWishFight(this.monster);
+            greyAdv("main.php");
+          }
 
           this.addFought();
         },
