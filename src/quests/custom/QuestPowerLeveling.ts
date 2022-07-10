@@ -42,8 +42,6 @@ export class QuestPowerLeveling implements QuestInfo {
   weightRequired: number;
 
   constructor(desiredLevel: number) {
-    desiredLevel = 1;
-
     this.desiredLevel = desiredLevel;
 
     this.weightRequired = this.getWeightNeededToReachLevel(desiredLevel);
