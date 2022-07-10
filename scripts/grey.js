@@ -20389,8 +20389,6 @@ var QuestPowerLeveling = /*#__PURE__*/function () {
 
 
   function QuestPowerLeveling(desiredLevel) {QuestPowerLeveling_classCallCheck(this, QuestPowerLeveling);QuestPowerLeveling_defineProperty(this, "property", "greyYouLastPowerLeveled");QuestPowerLeveling_defineProperty(this, "familiar", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestPowerLeveling_defineProperty(this, "equip", external_kolmafia_namespaceObject.Item.get("Grey Down Vest"));QuestPowerLeveling_defineProperty(this, "desiredLevel", void 0);QuestPowerLeveling_defineProperty(this, "weightRequired", void 0);
-    desiredLevel = 1;
-
     this.desiredLevel = desiredLevel;
 
     this.weightRequired = this.getWeightNeededToReachLevel(desiredLevel);
