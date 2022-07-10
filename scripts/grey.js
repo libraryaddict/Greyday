@@ -22481,7 +22481,12 @@ var TaskBoomboxSwitch = /*#__PURE__*/function () {function TaskBoomboxSwitch() {
     } }, { key: "run", value:
 
     function run() {
-      if (this.canSkip || !(0,external_kolmafia_namespaceObject.haveSkill)(this.skill)) {
+      if (this.canSkip) {
+        return;
+      }
+
+      // If we don't have the mp regen skill and we might run out of meat..
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.skill) && (0,external_kolmafia_namespaceObject.myMeat)() < 15000) {
         return;
       }
 
