@@ -409,7 +409,7 @@ export class GreyRequirements {
     if (availableAmount(Item.get("SongBoom&trade; BoomBox")) == 0) {
       dontHave.push([
         "SongBoom&trade; BoomBox, great for startup meat and nuns",
-        Required.USEFUL,
+        Required.VERY_USEFUL,
       ]);
     }
 

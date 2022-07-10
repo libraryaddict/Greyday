@@ -155,6 +155,8 @@ export function greyAdv(
     }
   };
 
+  let choicesRun: number[] = [];
+
   let runChoice = function () {
     let choiceToPick: number;
 
@@ -201,6 +203,12 @@ export function greyAdv(
       print("Oh god", "red");
       throw "No idea what to do!";
     }
+
+    if (choicesRun.filter((c) => c == lastChoice()).length > 6) {
+      throw "Detected we're looping in a choice, you will need to manually resolve the choice and should report this issue.";
+    }
+
+    choicesRun.push(lastChoice());
 
     let url =
       "choice.php?pwd=&whichchoice=" + lastChoice() + "&option=" + choiceToPick;

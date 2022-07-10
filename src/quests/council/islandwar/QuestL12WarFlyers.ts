@@ -30,12 +30,12 @@ export class QuestL12WarFlyers implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (getProperty("questL12War") == "unstarted") {
+    if (getProperty("questL12War") != "started") {
       return QuestStatus.NOT_READY;
     }
 
     if (availableAmount(this.flyers) == 0) {
-      return QuestStatus.NOT_READY;
+      return QuestStatus.READY;
     }
 
     if (toInt(getProperty("flyeredML")) < 10000) {
@@ -53,6 +53,14 @@ export class QuestL12WarFlyers implements QuestInfo {
         this.visitArena();
       },
     };
+  }
+
+  needAdventures(): number {
+    return 0;
+  }
+
+  mustBeDone(): boolean {
+    return true;
   }
 
   getLocations(): Location[] {

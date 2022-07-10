@@ -72,7 +72,15 @@ export class QuestL3Tavern implements QuestInfo {
     return QuestStatus.FASTER_LATER;
   }
 
+  needAdventures(): number {
+    return getQuestStatus("questL03Rat") > 1 ? 0 : 1;
+  }
+
   mustBeDone(): boolean {
+    if (getQuestStatus("questL03Rat") > 1) {
+      return true;
+    }
+
     if (
       haveEffect(this.teleportis) == 0 ||
       toInt(getProperty("lastPlusSignUnlock")) != myAscensions()

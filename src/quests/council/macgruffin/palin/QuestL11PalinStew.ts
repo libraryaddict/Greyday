@@ -10,6 +10,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -64,7 +65,16 @@ export class QuestL11PalinStew implements QuestInfo {
         settings.addNoBanish(Monster.get("white lion"));
         settings.addNoBanish(Monster.get("whitesnake"));
 
-        greyAdv(this.grove, outfit, settings);
+        let props = new PropertyManager();
+        props.setChoice(73, 3);
+        props.setChoice(74, 2);
+        props.setChoice(75, 2);
+
+        try {
+          greyAdv(this.grove, outfit, settings);
+        } finally {
+          props.resetAll();
+        }
 
         if (
           availableAmount(this.rib) > 0 &&
