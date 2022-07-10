@@ -34,7 +34,12 @@ export class TaskBoomboxSwitch implements Task {
   }
 
   run(): void {
-    if (this.canSkip || !haveSkill(this.skill)) {
+    if (this.canSkip) {
+      return;
+    }
+
+    // If we don't have the mp regen skill and we might run out of meat..
+    if (!haveSkill(this.skill) && myMeat() < 15000) {
       return;
     }
 
