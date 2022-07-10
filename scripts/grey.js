@@ -17654,7 +17654,7 @@ var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.plusSign) > 0 && (0,external_kolmafia_namespaceObject.myLevel)() < 16) {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.plusSign) > 0) {
         return QuestStatus.FASTER_LATER;
       }
 
@@ -18159,7 +18159,7 @@ QuestGnomeTrainer = /*#__PURE__*/function () {function QuestGnomeTrainer() {Ques
         return QuestStatus.COMPLETED;
       }
 
-      var meat = 10000;
+      var meat = 10000 + ((0,external_kolmafia_namespaceObject.haveSkill)(this.skills[0]) ? 5000 : 0);
 
       if ((0,external_kolmafia_namespaceObject.myMeat)() < meat) {
         return QuestStatus.NOT_READY;
@@ -22458,7 +22458,8 @@ function TaskBoomboxSwitch_classCallCheck(instance, Constructor) {if (!(instance
 var TaskBoomboxSwitch = /*#__PURE__*/function () {function TaskBoomboxSwitch() {TaskBoomboxSwitch_classCallCheck(this, TaskBoomboxSwitch);TaskBoomboxSwitch_defineProperty(this, "boombox",
     external_kolmafia_namespaceObject.Item.get("SongBoom&trade; BoomBox"));TaskBoomboxSwitch_defineProperty(this, "canSkip",
     false);TaskBoomboxSwitch_defineProperty(this, "noneItem",
-    external_kolmafia_namespaceObject.Item.get("None"));}TaskBoomboxSwitch_createClass(TaskBoomboxSwitch, [{ key: "isForgedRequired", value:
+    external_kolmafia_namespaceObject.Item.get("None"));TaskBoomboxSwitch_defineProperty(this, "skill",
+    external_kolmafia_namespaceObject.Skill.get("Hivemindedness"));}TaskBoomboxSwitch_createClass(TaskBoomboxSwitch, [{ key: "isForgedRequired", value:
 
     function isForgedRequired() {
       return (0,external_kolmafia_namespaceObject.getProperty)("questL11Black") != "finished";
@@ -22477,7 +22478,7 @@ var TaskBoomboxSwitch = /*#__PURE__*/function () {function TaskBoomboxSwitch() {
     } }, { key: "run", value:
 
     function run() {
-      if (this.canSkip) {
+      if (this.canSkip || !(0,external_kolmafia_namespaceObject.haveSkill)(this.skill)) {
         return;
       }
 
