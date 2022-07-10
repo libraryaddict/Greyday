@@ -17654,16 +17654,12 @@ var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.plusSign) > 0) {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.plusSign) > 0 && (0,external_kolmafia_namespaceObject.myLevel)() < 16) {
         return QuestStatus.FASTER_LATER;
       }
 
       if (!hasNonCombatSkillsReady(false)) {
         return QuestStatus.NOT_READY;
-      }
-
-      if (!hasNonCombatSkillsReady()) {
-        return QuestStatus.FASTER_LATER;
       }
 
       return QuestStatus.READY;
