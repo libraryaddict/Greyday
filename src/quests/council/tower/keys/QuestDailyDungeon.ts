@@ -1,12 +1,16 @@
 import {
   availableAmount,
+  cliExecute,
   Familiar,
   getProperty,
   getRelated,
   Item,
   itemAmount,
   Location,
+  mallPrice,
+  pullsRemaining,
   retrieveItem,
+  wellStocked,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -36,6 +40,7 @@ export class QuestDailyDungeon implements QuestInfo {
   location: Location = Location.get("The Daily Dungeon");
   fam: Familiar = Familiar.get("Gelatinous Cubeling");
   malware: Item = Item.get("Daily dungeon malware");
+  private reachedTower: string = "_greyReachedTower";
 
   getLocations(): Location[] {
     return [this.location];
@@ -91,7 +96,15 @@ export class QuestDailyDungeon implements QuestInfo {
     }
 
     if (GreySettings.shouldAvoidTowerRequirements()) {
-      return QuestStatus.NOT_READY;
+      if (GreySettings.greyDailyMalware) {
+        if (getProperty(this.reachedTower) == "true") {
+          return QuestStatus.READY;
+        }
+
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.COMPLETED;
     }
 
     if (this.hasFamiliarRecommendation() != null) {
@@ -101,7 +114,37 @@ export class QuestDailyDungeon implements QuestInfo {
     return QuestStatus.READY;
   }
 
+  isMalwareUsed(): boolean {
+    return getProperty("_dailyDungeonMalwareUsed") != "true";
+  }
+
   run(): QuestAdventure {
+    if (
+      itemAmount(this.malware) == 0 &&
+      !this.isMalwareUsed() &&
+      GreySettings.shouldAvoidTowerRequirements() &&
+      GreySettings.greyDailyMalware
+    ) {
+      if (pullsRemaining() != -1) {
+        throw "You need to escape ronin first! Won't attempt to do daily dungeon without easy access to malware.";
+      }
+
+      // TODO Check if this makes malware if its cheaper
+      cliExecute("acquire " + this.malware);
+
+      if (itemAmount(this.malware) == 0) {
+        throw (
+          "Expected to have " +
+          this.malware +
+          " on hand, something went wrong obviously."
+        );
+      }
+
+      for (let i of [this.ring, this.picklocks, this.pole]) {
+        cliExecute("acquire " + i);
+      }
+    }
+
     let outfit = new GreyOutfit();
     outfit.addItem(this.ring);
 
@@ -113,10 +156,7 @@ export class QuestDailyDungeon implements QuestInfo {
         props.setChoice(692, 3);
         let settings = new AdventureSettings();
 
-        if (
-          itemAmount(this.malware) > 0 &&
-          getProperty("_dailyDungeonMalwareUsed") != "true"
-        ) {
+        if (itemAmount(this.malware) > 0 && this.isMalwareUsed()) {
           settings.setStartOfFightMacro(Macro.item(this.malware));
         }
 

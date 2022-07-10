@@ -36,7 +36,14 @@ export function getGreySettings(): GreySetting[] {
     valid: (value) => value == "true" || value == "false",
   };
 
-  return [towerBreak, moonTune, manorLights, pvpEnable];
+  let dailyMalware: GreySetting = {
+    name: "greyDailyMalware",
+    description:
+      "Intended for use with breaking at tower, this is run when the script resumes and you presummably have broken ronin. It will buy or create a daily malware, and do the daily dungeon. This doesn't take effect in hardcore, or if tower break is not enabled.",
+    valid: (value) => value == "true" || value == "false",
+  };
+
+  return [towerBreak, moonTune, manorLights, pvpEnable, dailyMalware];
 }
 
 export const moonSigns: string[] = [
@@ -87,6 +94,9 @@ export class GreySettings {
   static handySkillsWeight: number = 0.5;
   static greyBreakAtTower: boolean = toBoolean(
     getProperty("greyBreakAtTower") || "false"
+  );
+  static greyDailyMalware: boolean = toBoolean(
+    getProperty("greyDailyMalware") || "false"
   );
   static greyTuneMoonSpoon: MoonSign = getProperty(
     "greyTuneMoonSpoon"

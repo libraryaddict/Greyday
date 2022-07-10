@@ -43,6 +43,7 @@ export class Absorb {
 
 export class AbsorbsProvider {
   static allAbsorbs: Absorb[];
+  static remainingAdvAbsorbs: Monster[];
 
   getRolloverAdvs(): Map<Skill, string> {
     return new Map(
@@ -412,6 +413,10 @@ export class AbsorbsProvider {
 
       AbsorbsProvider.allAbsorbs.push(absorb);
     }
+
+    this.remainingAdvAbsorbs = AbsorbsProvider.allAbsorbs
+      .filter((a) => a.adventures > 0)
+      .map((a) => a.monster);
 
     return AbsorbsProvider.allAbsorbs;
   }

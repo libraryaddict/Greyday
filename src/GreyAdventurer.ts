@@ -46,6 +46,7 @@ import {
 } from "./utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "./utils/GreyLocations";
 import { GreyOutfit } from "./utils/GreyOutfitter";
+import { GreySettings } from "./utils/GreySettings";
 import { doColor, setUmbrella } from "./utils/GreyUtils";
 
 export class GreyAdventurer {
@@ -250,8 +251,20 @@ export class GreyAdventurer {
         replaceWith.push(Familiar.get("Robortender"));
       }
 
+      AbsorbsProvider.remainingAdvAbsorbs =
+        AbsorbsProvider.remainingAdvAbsorbs.filter(
+          (m) => !AbsorbsProvider.getReabsorbedMonsters().includes(m)
+        );
+
+      // If we don't expect to be doing absorbs in the future..
+      if (
+        familiarWeight(this.goose) < 20 &&
+        AbsorbsProvider.remainingAdvAbsorbs.length <= 1
+      ) {
+        replaceWith.push(this.goose);
+      }
+
       for (let fam of [
-        "Grey Goose",
         "Pocket Professor",
         "Hobomonkey",
         "Jumpsuited Hound Dog",

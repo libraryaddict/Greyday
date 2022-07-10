@@ -19,6 +19,8 @@ export class QuestL12Battlefield implements QuestInfo {
   ring: Item = Item.get("ring of Detect Boring Doors");
   picklocks: Item = Item.get("Pick-O-Matic lockpicks");
   fam: Familiar = Familiar.get("Gelatinous Cubeling");
+  orchadAt: number = 64;
+  nunsAt: number = 192;
 
   level(): number {
     return 12;
@@ -125,7 +127,7 @@ export class QuestL12Battlefield implements QuestInfo {
           print(
             `${turns} turn${
               turns == 1 ? "" : "s"
-            } until the battlefield is cleared.`,
+            } until the battlefield is cleared at current sidequest completion.`,
             "blue"
           );
         } else {
