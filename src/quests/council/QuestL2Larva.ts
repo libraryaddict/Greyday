@@ -53,7 +53,7 @@ export class QuestL2SpookyLarva implements QuestInfo {
         return QuestStatus.FASTER_LATER;
       }
     } else if (
-      this.location.turnsSpent < 5 &&
+      this.location.turnsSpent >= 5 &&
       !hasNonCombatSkillsReady(false) &&
       myLevel() >= 5
     ) {

@@ -28,7 +28,7 @@ export class CryptL7Eyes extends CryptL7Template {
         this.adjustRetroCape();
 
         let props = new PropertyManager();
-        props.setChoice(155, 4);
+        props.setChoice(155, 5);
 
         try {
           greyAdv(
