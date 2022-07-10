@@ -1697,9 +1697,13 @@ var GreyOutfit = /*#__PURE__*/function () {
 
       if (
       !(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Hivemindedness")) &&
-      (0,external_kolmafia_namespaceObject.myMp)() < Math.min(125, (0,external_kolmafia_namespaceObject.myMaxmp)()))
+      (0,external_kolmafia_namespaceObject.myMp)() < Math.min(125, Math.max((0,external_kolmafia_namespaceObject.myMaxmp)(), 70)))
       {
         this.mpRegenWeight += 1;
+
+        if ((0,external_kolmafia_namespaceObject.myMp)() <= 30) {
+          this.mpRegenWeight += 2;
+        }
 
         /*if (myMp() < 42) {
           this.mpRegenWeight += 2;
