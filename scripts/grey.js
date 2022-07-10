@@ -18020,6 +18020,17 @@ var QuestLocketFantasyBandit = /*#__PURE__*/function () {function QuestLocketFan
         return QuestStatus.NOT_READY;
       }
 
+      if (this.lastMonster() == this.monster) {
+        return QuestStatus.READY;
+      }
+
+      if (
+      !canCombatLocket(this.monster) &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Pocket Wish")) == 0)
+      {
+        return QuestStatus.COMPLETED;
+      }
+
       if ((0,external_kolmafia_namespaceObject.myAdventures)() < 30) {
         return QuestStatus.FASTER_LATER;
       }
@@ -18028,18 +18039,23 @@ var QuestLocketFantasyBandit = /*#__PURE__*/function () {function QuestLocketFan
     } }, { key: "run", value:
 
     function run() {
-      if (canCombatLocket(this.monster)) {
+      if (this.lastMonster() != this.monster) {
         return {
           location: null,
           run: () => {
-            var page1 = (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?reminisce=1", false);
-            var url =
-            "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
-            (0,external_kolmafia_namespaceObject.toInt)(this.monster);
+            if (canCombatLocket(this.monster)) {
+              var page1 = (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?reminisce=1", false);
+              var url =
+              "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
+              (0,external_kolmafia_namespaceObject.toInt)(this.monster);
 
-            var page2 = (0,external_kolmafia_namespaceObject.visitUrl)(url);
+              var page2 = (0,external_kolmafia_namespaceObject.visitUrl)(url);
 
-            greyAdv(url);
+              greyAdv(url);
+            } else {
+              doPocketWishFight(this.monster);
+              greyAdv("main.php");
+            }
 
             this.addFought();
           } };
