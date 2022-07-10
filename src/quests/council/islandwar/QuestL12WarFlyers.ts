@@ -30,7 +30,10 @@ export class QuestL12WarFlyers implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (getProperty("questL12War") != "started") {
+    if (
+      getProperty("questL12War") != "started" &&
+      getProperty("questL12War") != "step1"
+    ) {
       return QuestStatus.NOT_READY;
     }
 
