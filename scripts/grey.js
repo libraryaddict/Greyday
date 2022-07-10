@@ -12583,7 +12583,7 @@ var QuestL2SpookyLarva = /*#__PURE__*/function () {function QuestL2SpookyLarva()
           return QuestStatus.FASTER_LATER;
         }
       } else if (
-      this.location.turnsSpent < 5 &&
+      this.location.turnsSpent >= 5 &&
       !hasNonCombatSkillsReady(false) &&
       (0,external_kolmafia_namespaceObject.myLevel)() >= 5)
       {
@@ -14032,7 +14032,7 @@ var CryptL7Eyes = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptEyes_inh
           this.adjustRetroCape();
 
           var props = new PropertyManager();
-          props.setChoice(155, 4);
+          props.setChoice(155, 5);
 
           try {
             greyAdv(
