@@ -16539,7 +16539,8 @@ var QuestManorBillards = /*#__PURE__*/function () {function QuestManorBillards()
           var settings = new AdventureSettings();
 
           if (
-          !(0,external_kolmafia_namespaceObject.haveEffect)(this.chalkEffect) &&
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.chalk) == 0 &&
+          (0,external_kolmafia_namespaceObject.haveEffect)(this.chalkEffect) <= 1 &&
           !this.toAbsorb.includes(this.poolgeist))
           {
             settings.addBanish(this.poolgeist);
