@@ -81,8 +81,8 @@ export class QuestL12StartWar implements QuestInfo {
         let props = new PropertyManager();
         props.setChoice(139, 3);
         props.setChoice(140, 3);
-        props.setChoice(141, 4);
-        props.setChoice(142, 4);
+        props.setChoice(141, 3);
+        props.setChoice(142, 3);
 
         try {
           greyAdv(this.loc, outfit);
