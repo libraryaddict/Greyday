@@ -43,7 +43,21 @@ export function getGreySettings(): GreySetting[] {
     valid: (value) => value == "true" || value == "false",
   };
 
-  return [towerBreak, moonTune, manorLights, pvpEnable, dailyMalware];
+  let fantasyBandits: GreySetting = {
+    name: "greyFantasyBandits",
+    description:
+      "If this is set to true, script will do fantasy bandits regardless of tower break setting. Will use fantasyrealm if available, otherwise a fax source & Backup Camera",
+    valid: (value) => value == "true" || value == "false",
+  };
+
+  return [
+    towerBreak,
+    moonTune,
+    manorLights,
+    pvpEnable,
+    dailyMalware,
+    fantasyBandits,
+  ];
 }
 
 export const moonSigns: string[] = [
@@ -97,6 +111,9 @@ export class GreySettings {
   );
   static greyDailyMalware: boolean = toBoolean(
     getProperty("greyDailyMalware") || "false"
+  );
+  static greyFantasyBandits: boolean = toBoolean(
+    getProperty("greyFantasyBandits") || "false"
   );
   static greyTuneMoonSpoon: MoonSign = getProperty(
     "greyTuneMoonSpoon"

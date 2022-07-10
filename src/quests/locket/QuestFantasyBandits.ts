@@ -74,7 +74,7 @@ export class QuestLocketFantasyBandit implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (this.hasFoughtEnough() || !GreySettings.isHardcoreMode()) {
+    if (this.hasFoughtEnough()) {
       return QuestStatus.COMPLETED;
     }
 
@@ -86,11 +86,23 @@ export class QuestLocketFantasyBandit implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (getQuestStatus("questL08Trapper") <= 1) {
-      return QuestStatus.NOT_READY;
+    if (
+      this.getBackupUsesRemaining() <
+      5 - Math.max(1, this.getFoughtToday())
+    ) {
+      return QuestStatus.COMPLETED;
     }
 
-    if (this.getBackupUsesRemaining() < 4) {
+    if (!GreySettings.greyFantasyBandits) {
+      if (
+        GreySettings.shouldAvoidTowerRequirements() ||
+        GreySettings.isHardcoreMode()
+      ) {
+        return QuestStatus.NOT_READY;
+      }
+    }
+
+    if (getQuestStatus("questL08Trapper") <= 1) {
       return QuestStatus.NOT_READY;
     }
 
