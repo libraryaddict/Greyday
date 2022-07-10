@@ -29,6 +29,7 @@ import { hasBanished, BanishType } from "./utils/Banishers";
 import { AbsorbsProvider } from "./utils/GreyAbsorber";
 import { GreyRequirements } from "./utils/GreyResources";
 import { getGreySettings, GreySettings } from "./utils/GreySettings";
+import { centerText } from "./utils/GreyUtils";
 
 class GreyYouMain {
   adventures: GreyAdventurer;
@@ -59,43 +60,42 @@ class GreyYouMain {
   doSettings() {
     let settings = getGreySettings();
 
-    printHtml("<center color='blue'>====== Grey Settings ======");
+    printHtml(centerText("====== Grey Settings ======", "blue"));
+
+    let html = "";
 
     for (let setting of settings) {
-      print("");
+      html += "<br>";
 
       let val = getProperty(setting.name);
-      printHtml(
-        `<font color='blue'>${setting.name}</font> - <font color='gray'>${setting.description}</font>`
-      );
+
+      html += `<font color='blue'>${setting.name}</font> - <font color='gray'>${setting.description}</font>`;
+      html += "<br>";
 
       if (setting.valid(val)) {
-        printHtml(
-          `${this.getTick()} <font color='green'>Setting '${val}' is valid</font>`
-        );
+        html += `${this.getTick()} <font color='green'>Setting '${val}' is valid</font>`;
       } else if (val == "") {
-        printHtml(
-          `${this.getCross()} <font color='red'>Using default behavior</font>`
-        );
+        html += `${this.getCross()} <font color='red'>Using default behavior</font>`;
       } else {
-        printHtml(
-          `${this.getCross()} <font color='red'>Invalid setting '${val}'</font>`
-        );
+        html += `${this.getCross()} <font color='red'>Invalid setting '${val}'</font>`;
       }
+      html += "<br>";
     }
+
+    html += "<br>You can change these settings by using the following in CLI:";
+    html += "<br>";
+    html += "<font color='purple'>set settingName = value</font>";
+
+    printHtml(centerText(html));
 
     print("");
     printHtml(
-      "<center>You can change these settings by using the following in CLI:</center>"
+      "<div style=\"text-align: center;\" color='blue'>======================</div>"
     );
-    printHtml("<center color='purple'>set settingName = value</center>");
-
-    print("");
-    printHtml("<center color='blue'>======================</center>");
   }
 
   doHelp() {
-    printHtml("======================================");
+    printHtml(centerText("======================================"));
     print("help - Shows this message", "blue");
     print("settings - Show the settings", "blue");
     print(
@@ -122,7 +122,7 @@ class GreyYouMain {
       "absorbs - Prints off what adventure absorbs have not yet been grabbed",
       color
     );
-    printHtml("======================================");
+    printHtml(centerText("======================================"));
   }
 
   handleCommand(command: string) {

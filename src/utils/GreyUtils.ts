@@ -26,6 +26,12 @@ export enum UmbrellaState {
   MINUS_COMBAT = "cocoon",
 }
 
+export function centerText(text: string, color?: string): string {
+  return `<div style="text-align: center;"${
+    color ? " color='" + color + "'" : ""
+  }><p style="margin: 0; padding: 0;">${text}</p></div>`;
+}
+
 export function setUmbrella(setting: UmbrellaState) {
   if (getProperty("umbrellaState").includes(setting)) {
     return;

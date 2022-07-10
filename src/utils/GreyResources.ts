@@ -434,7 +434,9 @@ export class GreyRequirements {
       ]);
     }
 
-    printHtml("<center>======= Grey Requirements =======</center>");
+    printHtml(
+      '<div style="text-align: center;">======= Grey Requirements =======</div>'
+    );
 
     for (let [name, required] of dontHave) {
       let color: string = "green";
@@ -458,7 +460,7 @@ export class GreyRequirements {
       );
     }
 
-    printHtml("<center>===============</center>");
+    printHtml('<div style="text-align: center;">===============</div>');
     // TODO Camelcalf?
   }
 }
