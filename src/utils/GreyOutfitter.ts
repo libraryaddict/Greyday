@@ -85,9 +85,13 @@ export class GreyOutfit {
 
     if (
       !haveSkill(Skill.get("Hivemindedness")) &&
-      myMp() < Math.min(125, myMaxmp())
+      myMp() < Math.min(125, Math.max(myMaxmp(), 70))
     ) {
       this.mpRegenWeight += 1;
+
+      if (myMp() <= 30) {
+        this.mpRegenWeight += 2;
+      }
 
       /*if (myMp() < 42) {
         this.mpRegenWeight += 2;
