@@ -466,6 +466,12 @@ var UmbrellaState;(function (UmbrellaState) {UmbrellaState["MONSTER_LEVEL"] = "b
 
 
 
+function centerText(text, color) {
+  return "<div style=\"text-align: center;\"".concat(
+  color ? " color='" + color + "'" : "", "><p style=\"margin: 0; padding: 0;\">").concat(
+  text, "</p></div>");
+}
+
 function setUmbrella(setting) {
   if ((0,external_kolmafia_namespaceObject.getProperty)("umbrellaState").includes(setting)) {
     return;
@@ -3198,6 +3204,7 @@ var QuestL10GiantShip = /*#__PURE__*/function () {function QuestL10GiantShip() {
         outfit: outfit,
         run: () => {
           var props = new PropertyManager();
+          props.setChoice(681, 1);
 
           if (!this.shouldRunNC()) {
             var ready = DelayBurners.getReadyDelayBurner();
@@ -4792,7 +4799,9 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
       }
 
-      (0,external_kolmafia_namespaceObject.printHtml)("<center>======= Grey Requirements =======</center>");
+      (0,external_kolmafia_namespaceObject.printHtml)(
+      '<div style="text-align: center;">======= Grey Requirements =======</div>');
+
 
       for (var _i = 0, _dontHave = dontHave; _i < _dontHave.length; _i++) {var _dontHave$_i = GreyResources_slicedToArray(_dontHave[_i], 2),name = _dontHave$_i[0],required = _dontHave$_i[1];
         var color = "green";
@@ -4816,7 +4825,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
       }
 
-      (0,external_kolmafia_namespaceObject.printHtml)("<center>===============</center>");
+      (0,external_kolmafia_namespaceObject.printHtml)('<div style="text-align: center;">===============</div>');
       // TODO Camelcalf?
     } }]);return GreyRequirements;}();
 
@@ -5011,6 +5020,7 @@ function QuestL11DesertExplore_classCallCheck(instance, Constructor) {if (!(inst
 
 
 
+
 var QuestL11DesertExplore = /*#__PURE__*/function () {function QuestL11DesertExplore() {QuestL11DesertExplore_classCallCheck(this, QuestL11DesertExplore);QuestL11DesertExplore_defineProperty(this, "hydrated",
     external_kolmafia_namespaceObject.Effect.get("Ultrahydrated"));QuestL11DesertExplore_defineProperty(this, "oasis",
     external_kolmafia_namespaceObject.Location.get("Oasis"));QuestL11DesertExplore_defineProperty(this, "desert",
@@ -5154,12 +5164,17 @@ var QuestL11DesertExplore = /*#__PURE__*/function () {function QuestL11DesertExp
           }
 
           var explored = this.getExplored();
+          var props = new PropertyManager();
+          props.setChoice(805, 1);
+          try {
+            greyAdv(
+            this.desert,
+            outfit,
+            new AdventureSettings().setFinishingBlowMacro(killing));
 
-          greyAdv(
-          this.desert,
-          outfit,
-          new AdventureSettings().setFinishingBlowMacro(killing));
-
+          } finally {
+            props.resetAll();
+          }
 
           if (explored == this.getExplored()) {
             (0,external_kolmafia_namespaceObject.print)("Checking explored..", "blue");
@@ -5999,6 +6014,7 @@ var QuestL11Manor = /*#__PURE__*/function () {
           var props = new PropertyManager();
 
           try {
+            props.setChoice(921, 1); // Play da music
             props.setChoice(106, 3);
             props.setChoice(90, 3);
             greyAdv(this.ballroom, outfit);
@@ -6088,6 +6104,7 @@ var QuestL11PalinStew = /*#__PURE__*/function () {function QuestL11PalinStew() {
     } }]);return QuestL11PalinStew;}();
 ;// CONCATENATED MODULE: ./src/quests/council/macgruffin/palin/QuestL11PalinBook.ts
 function QuestL11PalinBook_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL11PalinBook_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL11PalinBook_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL11PalinBook_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL11PalinBook_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL11PalinBook_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -6211,7 +6228,15 @@ var QuestL11PalinBook = /*#__PURE__*/function () {function QuestL11PalinBook() {
           settings.addBanish(external_kolmafia_namespaceObject.Monster.get("Taco Cat"));
           settings.addBanish(external_kolmafia_namespaceObject.Monster.get("Tan Gnat"));
 
-          greyAdv(this.palindome, outfit, settings);
+          var props = new PropertyManager();
+          props.setChoice(129, 1);
+          props.setChoice(873, 1);
+
+          try {
+            greyAdv(this.palindome, outfit, settings);
+          } finally {
+            props.resetAll();
+          }
         } };
 
     } }, { key: "getLocations", value:
@@ -7322,6 +7347,12 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
                 }
               }
             }
+
+            props.setChoice(1074, 1); // Approach table
+            props.setChoice(851, 1); // Sip poison
+            props.setChoice(852, 1); // Sip poison
+            props.setChoice(853, 1); // Sip poison
+            props.setChoice(854, 1); // Sip poison
 
             var settings = new AdventureSettings();var _iterator = QuestL11ShenTurnIn_createForOfIteratorHelper(
 
@@ -9849,6 +9880,7 @@ function QuestL12StartWar_classCallCheck(instance, Constructor) {if (!(instance 
 
 
 
+
 var QuestL12StartWar = /*#__PURE__*/function () {function QuestL12StartWar() {QuestL12StartWar_classCallCheck(this, QuestL12StartWar);QuestL12StartWar_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("Hippy Camp"));}QuestL12StartWar_createClass(QuestL12StartWar, [{ key: "level", value:
 
@@ -9869,12 +9901,8 @@ var QuestL12StartWar = /*#__PURE__*/function () {function QuestL12StartWar() {Qu
         return QuestStatus.NOT_READY;
       }
 
-      if (!hasNonCombatSkillsReady(false)) {
+      if (!hasNonCombatSkillsReady(true)) {
         return QuestStatus.NOT_READY;
-      }
-
-      if (!hasNonCombatSkillsReady()) {
-        return QuestStatus.FASTER_LATER;
       }
 
       return QuestStatus.READY;
@@ -9903,7 +9931,17 @@ var QuestL12StartWar = /*#__PURE__*/function () {function QuestL12StartWar() {Qu
             DelayBurners.tryReplaceCombats();
           }
 
-          greyAdv(this.loc, outfit);
+          var props = new PropertyManager();
+          props.setChoice(139, 3);
+          props.setChoice(140, 3);
+          props.setChoice(141, 4);
+          props.setChoice(142, 4);
+
+          try {
+            greyAdv(this.loc, outfit);
+          } finally {
+            props.resetAll();
+          }
 
           if ((0,external_kolmafia_namespaceObject.getProperty)("warProgress") != "unstarted") {
             this.visitArena();
@@ -12722,6 +12760,9 @@ var QuestL3Tavern = /*#__PURE__*/function () {function QuestL3Tavern() {QuestL3T
             props.setChoice(e[1], choice);
           }
 
+          props.setChoice(509, 1);
+          props.setChoice(510, 1);
+
           try {
             if (
             outfit.plusMonsterLevelWeight >= 10 &&
@@ -13850,6 +13891,7 @@ function QuestL7CryptDirtyMan_classCallCheck(instance, Constructor) {if (!(insta
 
 
 
+
 var CryptL7DirtyMan = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptDirtyMan_inherits(CryptL7DirtyMan, _CryptL7Template);var _super = QuestL7CryptDirtyMan_createSuper(CryptL7DirtyMan);function CryptL7DirtyMan() {var _this;QuestL7CryptDirtyMan_classCallCheck(this, CryptL7DirtyMan);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL7CryptDirtyMan_defineProperty(QuestL7CryptDirtyMan_assertThisInitialized(_this), "loc",
     external_kolmafia_namespaceObject.Location.get("The Defiled Niche"));QuestL7CryptDirtyMan_defineProperty(QuestL7CryptDirtyMan_assertThisInitialized(_this), "sniffer",
     external_kolmafia_namespaceObject.Familiar.get("Nosy Nose"));QuestL7CryptDirtyMan_defineProperty(QuestL7CryptDirtyMan_assertThisInitialized(_this), "dirty",
@@ -13920,14 +13962,21 @@ var CryptL7DirtyMan = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptDirt
             start = Macro.step("if monsterid 1071;skill 7166;endif");
           }
 
-          greyAdv(
-          this.loc,
-          outfit,
-          new AdventureSettings().
-          addNoBanish(this.dirty).
-          setStartOfFightMacro(start).
-          setFinishingBlowMacro(killing));
+          var props = new PropertyManager();
+          props.setChoice(157, 4);
 
+          try {
+            greyAdv(
+            this.loc,
+            outfit,
+            new AdventureSettings().
+            addNoBanish(this.dirty).
+            setStartOfFightMacro(start).
+            setFinishingBlowMacro(killing));
+
+          } finally {
+            props.resetAll();
+          }
         } };
 
     } }, { key: "canSprayDown", value:
@@ -13968,6 +14017,7 @@ function QuestL7CryptEyes_classCallCheck(instance, Constructor) {if (!(instance 
 
 
 
+
 var CryptL7Eyes = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptEyes_inherits(CryptL7Eyes, _CryptL7Template);var _super = QuestL7CryptEyes_createSuper(CryptL7Eyes);function CryptL7Eyes() {var _this;QuestL7CryptEyes_classCallCheck(this, CryptL7Eyes);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL7CryptEyes_defineProperty(QuestL7CryptEyes_assertThisInitialized(_this), "loc",
     external_kolmafia_namespaceObject.Location.get("The Defiled Nook"));return _this;}QuestL7CryptEyes_createClass(CryptL7Eyes, [{ key: "run", value:
 
@@ -13980,11 +14030,19 @@ var CryptL7Eyes = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptEyes_inh
         outfit: outfit,
         run: () => {
           this.adjustRetroCape();
-          greyAdv(
-          this.loc,
-          outfit,
-          new AdventureSettings().addBanish(external_kolmafia_namespaceObject.Monster.get("party skelteon")));
 
+          var props = new PropertyManager();
+          props.setChoice(155, 4);
+
+          try {
+            greyAdv(
+            this.loc,
+            outfit,
+            new AdventureSettings().addBanish(external_kolmafia_namespaceObject.Monster.get("party skelteon")));
+
+          } finally {
+            props.resetAll();
+          }
 
           (0,external_kolmafia_namespaceObject.cliExecute)("refresh inventory");
 
@@ -14022,6 +14080,7 @@ function QuestL7CryptRattling_classCallCheck(instance, Constructor) {if (!(insta
 
 
 
+
 var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRattling_inherits(CryptL7Rattling, _CryptL7Template);var _super = QuestL7CryptRattling_createSuper(CryptL7Rattling);function CryptL7Rattling() {var _this;QuestL7CryptRattling_classCallCheck(this, CryptL7Rattling);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "loc",
     external_kolmafia_namespaceObject.Location.get("The Defiled Cranny"));return _this;}QuestL7CryptRattling_createClass(CryptL7Rattling, [{ key: "level", value:
 
@@ -14047,7 +14106,16 @@ var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRatt
         run: () => {
           this.adjustRetroCape();
           (0,external_kolmafia_namespaceObject.changeMcd)(10);
-          greyAdv(this.loc, outfit);
+
+          var props = new PropertyManager();
+          props.setChoice(523, 4);
+
+          try {
+            greyAdv(this.loc, outfit);
+          } finally {
+            props.resetAll();
+          }
+
           (0,external_kolmafia_namespaceObject.changeMcd)(0);
         } };
 
@@ -14086,6 +14154,7 @@ function QuestL7CryptSprinters_classCallCheck(instance, Constructor) {if (!(inst
 
 
 
+
 var CryptL7Sprinters = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptSprinters_inherits(CryptL7Sprinters, _CryptL7Template);var _super = QuestL7CryptSprinters_createSuper(CryptL7Sprinters);function CryptL7Sprinters() {var _this;QuestL7CryptSprinters_classCallCheck(this, CryptL7Sprinters);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL7CryptSprinters_defineProperty(QuestL7CryptSprinters_assertThisInitialized(_this), "loc",
     external_kolmafia_namespaceObject.Location.get("The Defiled Alcove"));return _this;}QuestL7CryptSprinters_createClass(CryptL7Sprinters, [{ key: "run", value:
 
@@ -14104,7 +14173,15 @@ var CryptL7Sprinters = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptSpr
         outfit: outfit,
         run: () => {
           this.adjustRetroCape();
-          greyAdv(this.loc, outfit);
+
+          var props = new PropertyManager();
+          props.setChoice(153, 4);
+
+          try {
+            greyAdv(this.loc, outfit);
+          } finally {
+            props.resetAll();
+          }
         } };
 
     } }, { key: "getProperty", value:
@@ -14126,6 +14203,7 @@ var CryptL7Sprinters = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptSpr
     } }]);return CryptL7Sprinters;}(CryptL7Template);
 ;// CONCATENATED MODULE: ./src/quests/council/QuestL7Crypt.ts
 function QuestL7Crypt_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL7Crypt_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL7Crypt_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL7Crypt_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL7Crypt_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL7Crypt_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -14188,7 +14266,15 @@ var QuestL7Crypt = /*#__PURE__*/function () {function QuestL7Crypt() {QuestL7Cry
       return {
         location: external_kolmafia_namespaceObject.Location.get("Haert of the Cyrpt"),
         run: () => {
-          greyAdv("crypt.php?action=heart");
+          var props = new PropertyManager();
+          props.setChoice(527, 1);
+
+          try {
+            greyAdv("crypt.php?action=heart");
+          } finally {
+            props.resetAll();
+          }
+
           (0,external_kolmafia_namespaceObject.council)();
 
           if ((0,external_kolmafia_namespaceObject.availableAmount)(this.chest) > 0 && (0,external_kolmafia_namespaceObject.myMeat)() < 6000) {
@@ -15109,6 +15195,14 @@ var MurderHandler = /*#__PURE__*/function () {function MurderHandler() {QuestL9M
           var props = new PropertyManager();
           //cliExecute("retrocape vampire hold");
           (0,external_kolmafia_namespaceObject.cliExecute)("backupcamera init");
+
+          props.setChoice(1056, 1);
+          props.setChoice(604, 1);
+          props.setChoice(607, 1);
+          props.setChoice(608, 1);
+          props.setChoice(609, 1);
+          props.setChoice(610, 1);
+          props.setChoice(616, 1);
 
           try {
             if (this.needsInit() && (0,external_kolmafia_namespaceObject.numericModifier)("initiative") >= 40) {
@@ -16188,6 +16282,7 @@ var ManorBathroom = /*#__PURE__*/function () {function ManorBathroom() {QuestMan
         run: () => {
           var props = new PropertyManager();
           props.setChoice(882, 1);
+          props.setChoice(881, 1);
 
           if (this.hasDelay()) {
             var delay = DelayBurners.getReadyDelayBurner();
@@ -16704,6 +16799,7 @@ function QuestManorLibrary_classCallCheck(instance, Constructor) {if (!(instance
 
 
 
+
 var QuestManorLibrary = /*#__PURE__*/function () {function QuestManorLibrary() {QuestManorLibrary_classCallCheck(this, QuestManorLibrary);QuestManorLibrary_defineProperty(this, "library",
     external_kolmafia_namespaceObject.Location.get("The Haunted Library"));QuestManorLibrary_defineProperty(this, "killingJar",
     external_kolmafia_namespaceObject.Item.get("Killing Jar"));QuestManorLibrary_defineProperty(this, "key",
@@ -16773,7 +16869,16 @@ var QuestManorLibrary = /*#__PURE__*/function () {function QuestManorLibrary() {
             settings.setFinishingBlowMacro(Macro.skill(this.nano));
           }
 
-          greyAdv(this.library, null, settings);
+          var props = new PropertyManager();
+          props.setChoice(163, 3); // Rare adv that gives an item with 2k autosell, and worth 4-5k in mall
+          props.setChoice(888, 4); // Skip
+          props.setChoice(889, 5); // Skip
+
+          try {
+            greyAdv(this.library, null, settings);
+          } finally {
+            props.resetAll();
+          }
         } };
 
     } }, { key: "getLocations", value:
@@ -23296,6 +23401,7 @@ function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = type
 
 
 
+
 var
 
 GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_classCallCheck(this, GreyYouMain);GreyYouMain_defineProperty(this, "adventures", void 0);GreyYouMain_defineProperty(this, "reachedTower",
@@ -23327,43 +23433,42 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
     function doSettings() {
       var settings = getGreySettings();
 
-      (0,external_kolmafia_namespaceObject.printHtml)("<center color='blue'>====== Grey Settings ======");var _iterator = GreyYouMain_createForOfIteratorHelper(
+      (0,external_kolmafia_namespaceObject.printHtml)(centerText("====== Grey Settings ======", "blue"));
+
+      var html = "";var _iterator = GreyYouMain_createForOfIteratorHelper(
 
       settings),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var setting = _step.value;
-          (0,external_kolmafia_namespaceObject.print)("");
+          html += "<br>";
 
           var val = (0,external_kolmafia_namespaceObject.getProperty)(setting.name);
-          (0,external_kolmafia_namespaceObject.printHtml)("<font color='blue'>".concat(
-          setting.name, "</font> - <font color='gray'>").concat(setting.description, "</font>"));
 
+          html += "<font color='blue'>".concat(setting.name, "</font> - <font color='gray'>").concat(setting.description, "</font>");
+          html += "<br>";
 
           if (setting.valid(val)) {
-            (0,external_kolmafia_namespaceObject.printHtml)("".concat(
-            this.getTick(), " <font color='green'>Setting '").concat(val, "' is valid</font>"));
-
+            html += "".concat(this.getTick(), " <font color='green'>Setting '").concat(val, "' is valid</font>");
           } else if (val == "") {
-            (0,external_kolmafia_namespaceObject.printHtml)("".concat(
-            this.getCross(), " <font color='red'>Using default behavior</font>"));
-
+            html += "".concat(this.getCross(), " <font color='red'>Using default behavior</font>");
           } else {
-            (0,external_kolmafia_namespaceObject.printHtml)("".concat(
-            this.getCross(), " <font color='red'>Invalid setting '").concat(val, "'</font>"));
-
+            html += "".concat(this.getCross(), " <font color='red'>Invalid setting '").concat(val, "'</font>");
           }
+          html += "<br>";
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+
+      html += "<br>You can change these settings by using the following in CLI:";
+      html += "<br>";
+      html += "<font color='purple'>set settingName = value</font>";
+
+      (0,external_kolmafia_namespaceObject.printHtml)(centerText(html));
 
       (0,external_kolmafia_namespaceObject.print)("");
       (0,external_kolmafia_namespaceObject.printHtml)(
-      "<center>You can change these settings by using the following in CLI:</center>");
+      "<div style=\"text-align: center;\" color='blue'>======================</div>");
 
-      (0,external_kolmafia_namespaceObject.printHtml)("<center color='purple'>set settingName = value</center>");
-
-      (0,external_kolmafia_namespaceObject.print)("");
-      (0,external_kolmafia_namespaceObject.printHtml)("<center color='blue'>======================</center>");
     } }, { key: "doHelp", value:
 
     function doHelp() {
-      (0,external_kolmafia_namespaceObject.printHtml)("======================================");
+      (0,external_kolmafia_namespaceObject.printHtml)(centerText("======================================"));
       (0,external_kolmafia_namespaceObject.print)("help - Shows this message", "blue");
       (0,external_kolmafia_namespaceObject.print)("settings - Show the settings", "blue");
       (0,external_kolmafia_namespaceObject.print)(
@@ -23390,7 +23495,7 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
       "absorbs - Prints off what adventure absorbs have not yet been grabbed",
       color);
 
-      (0,external_kolmafia_namespaceObject.printHtml)("======================================");
+      (0,external_kolmafia_namespaceObject.printHtml)(centerText("======================================"));
     } }, { key: "handleCommand", value:
 
     function handleCommand(command) {
