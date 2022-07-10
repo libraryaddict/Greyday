@@ -1963,6 +1963,8 @@ settings)
     }
   };
 
+  var choicesRun = [];
+
   var runChoice = function runChoice() {
     var choiceToPick;
 
@@ -2009,6 +2011,12 @@ settings)
       (0,external_kolmafia_namespaceObject.print)("Oh god", "red");
       throw "No idea what to do!";
     }
+
+    if (choicesRun.filter((c) => c == (0,external_kolmafia_namespaceObject.lastChoice)()).length > 6) {
+      throw "Detected we're looping in a choice, you will need to manually resolve the choice and should report this issue.";
+    }
+
+    choicesRun.push((0,external_kolmafia_namespaceObject.lastChoice)());
 
     var url =
     "choice.php?pwd=&whichchoice=" + (0,external_kolmafia_namespaceObject.lastChoice)() + "&option=" + choiceToPick;
@@ -4778,7 +4786,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
       if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("SongBoom&trade; BoomBox")) == 0) {
         dontHave.push([
         "SongBoom&trade; BoomBox, great for startup meat and nuns",
-        Required.USEFUL]);
+        Required.VERY_USEFUL]);
 
       }
 
@@ -6042,6 +6050,7 @@ function QuestL11PalinStew_classCallCheck(instance, Constructor) {if (!(instance
 
 
 
+
 var QuestL11PalinStew = /*#__PURE__*/function () {function QuestL11PalinStew() {QuestL11PalinStew_classCallCheck(this, QuestL11PalinStew);QuestL11PalinStew_defineProperty(this, "wetStew",
     external_kolmafia_namespaceObject.Item.get("Wet Stew"));QuestL11PalinStew_defineProperty(this, "stuntNuts",
     external_kolmafia_namespaceObject.Item.get("Stunt Nuts"));QuestL11PalinStew_defineProperty(this, "talisman",
@@ -6088,7 +6097,16 @@ var QuestL11PalinStew = /*#__PURE__*/function () {function QuestL11PalinStew() {
           settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("white lion"));
           settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("whitesnake"));
 
-          greyAdv(this.grove, outfit, settings);
+          var props = new PropertyManager();
+          props.setChoice(73, 3);
+          props.setChoice(74, 2);
+          props.setChoice(75, 2);
+
+          try {
+            greyAdv(this.grove, outfit, settings);
+          } finally {
+            props.resetAll();
+          }
 
           if (
           (0,external_kolmafia_namespaceObject.availableAmount)(this.rib) > 0 &&
@@ -10471,12 +10489,12 @@ var QuestL12WarFlyers = /*#__PURE__*/function () {function QuestL12WarFlyers() {
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questL12War") == "unstarted") {
+      if ((0,external_kolmafia_namespaceObject.getProperty)("questL12War") != "started") {
         return QuestStatus.NOT_READY;
       }
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.flyers) == 0) {
-        return QuestStatus.NOT_READY;
+        return QuestStatus.READY;
       }
 
       if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("flyeredML")) < 10000) {
@@ -10494,6 +10512,14 @@ var QuestL12WarFlyers = /*#__PURE__*/function () {function QuestL12WarFlyers() {
           this.visitArena();
         } };
 
+    } }, { key: "needAdventures", value:
+
+    function needAdventures() {
+      return 0;
+    } }, { key: "mustBeDone", value:
+
+    function mustBeDone() {
+      return true;
     } }, { key: "getLocations", value:
 
     function getLocations() {
@@ -12699,9 +12725,17 @@ var QuestL3Tavern = /*#__PURE__*/function () {function QuestL3Tavern() {QuestL3T
 
       // Always put this off as long as possible, aka until every quest wants to delay
       return QuestStatus.FASTER_LATER;
+    } }, { key: "needAdventures", value:
+
+    function needAdventures() {
+      return getQuestStatus("questL03Rat") > 1 ? 0 : 1;
     } }, { key: "mustBeDone", value:
 
     function mustBeDone() {
+      if (getQuestStatus("questL03Rat") > 1) {
+        return true;
+      }
+
       if (
       (0,external_kolmafia_namespaceObject.haveEffect)(this.teleportis) == 0 ||
       (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("lastPlusSignUnlock")) != (0,external_kolmafia_namespaceObject.myAscensions)())
