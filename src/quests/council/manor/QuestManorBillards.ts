@@ -97,7 +97,8 @@ export class QuestManorBillards implements QuestInfo {
         let settings = new AdventureSettings();
 
         if (
-          !haveEffect(this.chalkEffect) &&
+          availableAmount(this.chalk) == 0 &&
+          haveEffect(this.chalkEffect) <= 1 &&
           !this.toAbsorb.includes(this.poolgeist)
         ) {
           settings.addBanish(this.poolgeist);
