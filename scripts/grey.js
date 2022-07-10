@@ -17162,7 +17162,8 @@ var QuestManorLights = /*#__PURE__*/function () {
 
 
 
-  function QuestManorLights() {QuestManorLights_classCallCheck(this, QuestManorLights);QuestManorLights_defineProperty(this, "choices", [890, 891, 892, 893, 894, 895, 896, 897, 898, 899, 900, 901, 902, 903]);QuestManorLights_defineProperty(this, "elizibeth", [[external_kolmafia_namespaceObject.Location.get("The Haunted Storage Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Laundry Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Bathroom"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Kitchen"), 4], [external_kolmafia_namespaceObject.Location.get("The Haunted Library"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Ballroom"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Gallery"), 4]]);QuestManorLights_defineProperty(this, "stephen", [[external_kolmafia_namespaceObject.Location.get("The Haunted Bedroom"), [1, 3, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Nursery"), [1, 2, 2, 1, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Conservatory"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Billiards"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Wine Cellar"), [1, 2, 2, 3]], [external_kolmafia_namespaceObject.Location.get("The Haunted Boiler Room"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Laboratory"), [1, 1, 3, 1, 1]]]);QuestManorLights_defineProperty(this, "elizabethRewards", [external_kolmafia_namespaceObject.Item.get("Elizabeth's Dollie"), external_kolmafia_namespaceObject.Item.get("Elizabeth's paintbrush")]);QuestManorLights_defineProperty(this, "stephsRewards", [external_kolmafia_namespaceObject.Item.get("Stephen's lab coat"), external_kolmafia_namespaceObject.Item.get("Stephen's secret formula")]);QuestManorLights_defineProperty(this, "goose", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));var _iterator = QuestManorLights_createForOfIteratorHelper(
+
+  function QuestManorLights() {QuestManorLights_classCallCheck(this, QuestManorLights);QuestManorLights_defineProperty(this, "choices", [890, 891, 892, 893, 894, 895, 896, 897, 898, 899, 900, 901, 902, 903]);QuestManorLights_defineProperty(this, "elizibeth", [[external_kolmafia_namespaceObject.Location.get("The Haunted Storage Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Laundry Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Bathroom"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Kitchen"), 4], [external_kolmafia_namespaceObject.Location.get("The Haunted Library"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Ballroom"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Gallery"), 4]]);QuestManorLights_defineProperty(this, "stephen", [[external_kolmafia_namespaceObject.Location.get("The Haunted Bedroom"), [1, 3, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Nursery"), [1, 2, 2, 1, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Conservatory"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Billiards"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Wine Cellar"), [1, 2, 2, 3]], [external_kolmafia_namespaceObject.Location.get("The Haunted Boiler Room"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Laboratory"), [1, 1, 3, 1, 1]]]);QuestManorLights_defineProperty(this, "elizabethRewards", [external_kolmafia_namespaceObject.Item.get("Elizabeth's Dollie"), external_kolmafia_namespaceObject.Item.get("Elizabeth's paintbrush")]);QuestManorLights_defineProperty(this, "stephsRewards", [external_kolmafia_namespaceObject.Item.get("Stephen's lab coat"), external_kolmafia_namespaceObject.Item.get("Stephen's secret formula")]);QuestManorLights_defineProperty(this, "goose", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestManorLights_defineProperty(this, "teleportis", external_kolmafia_namespaceObject.Effect.get("Teleportitis"));var _iterator = QuestManorLights_createForOfIteratorHelper(
     this.choices),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var choice = _step.value;
         var prop = "choiceAdventure" + choice;
 
@@ -17255,7 +17256,7 @@ var QuestManorLights = /*#__PURE__*/function () {
     } }, { key: "status", value:
 
     function status() {
-      if (!this.isTime()) {
+      if (!this.isTime() || (0,external_kolmafia_namespaceObject.haveEffect)(this.teleportis) > 0) {
         return QuestStatus.NOT_READY;
       }
 
@@ -17728,7 +17729,8 @@ var QuestGetZapWand = /*#__PURE__*/function () {function QuestGetZapWand() {Ques
     "pine wand"].
     map((s) => external_kolmafia_namespaceObject.Item.get(s)));QuestGetZapWand_defineProperty(this, "deadMimic",
     external_kolmafia_namespaceObject.Item.get("dead mimic"));QuestGetZapWand_defineProperty(this, "plusSign",
-    external_kolmafia_namespaceObject.Item.get("plus sign"));}QuestGetZapWand_createClass(QuestGetZapWand, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("plus sign"));QuestGetZapWand_defineProperty(this, "toAbsorb", void 0);}QuestGetZapWand_createClass(QuestGetZapWand, [{ key: "getId", value:
+
 
     function getId() {
       return "Misc / GrabZapWand";
@@ -17768,7 +17770,8 @@ var QuestGetZapWand = /*#__PURE__*/function () {function QuestGetZapWand() {Ques
         return QuestStatus.NOT_READY;
       }
 
-      if (!hasNonCombatSkillsReady(true)) {
+      // Only be very requirement if we have the MP regen skill
+      if (!hasNonCombatSkillsReady(this.toAbsorb.length == 0 ? true : false)) {
         return QuestStatus.NOT_READY;
       }
 
