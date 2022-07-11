@@ -399,13 +399,14 @@ export function hasNonCombatSkillsReady(wantBoth: boolean = true): boolean {
     );
   }
 
-  return s1e || s2e || ((s1 || s2) && myMp() >= 60);
+  return s1e || s2e || ((s1 || s2) && myMp() + myMeat() / 200 >= 60);
 }
 
 export function hasCombatSkillReady(): boolean {
   return (
     hasCombatSkillActive() ||
-    (haveSkill(Skill.get("Piezoelectric Honk")) && myMp() >= 50)
+    (haveSkill(Skill.get("Piezoelectric Honk")) &&
+      myMp() + myMeat() / 200 >= 50)
   );
 }
 
