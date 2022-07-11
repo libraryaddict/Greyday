@@ -10529,10 +10529,7 @@ var QuestL12WarFlyers = /*#__PURE__*/function () {function QuestL12WarFlyers() {
         return QuestStatus.COMPLETED;
       }
 
-      if (
-      (0,external_kolmafia_namespaceObject.getProperty)("questL12War") != "started" &&
-      (0,external_kolmafia_namespaceObject.getProperty)("questL12War") != "step1")
-      {
+      if ((0,external_kolmafia_namespaceObject.getProperty)("warProgress") != "started") {
         return QuestStatus.NOT_READY;
       }
 
