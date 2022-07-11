@@ -23528,13 +23528,14 @@ function hasNonCombatSkillsReady() {var wantBoth = arguments.length > 0 && argum
 
   }
 
-  return s1e || s2e || (s1 || s2) && (0,external_kolmafia_namespaceObject.myMp)() >= 60;
+  return s1e || s2e || (s1 || s2) && (0,external_kolmafia_namespaceObject.myMp)() + (0,external_kolmafia_namespaceObject.myMeat)() / 200 >= 60;
 }
 
 function hasCombatSkillReady() {
   return (
     hasCombatSkillActive() ||
-    (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Piezoelectric Honk")) && (0,external_kolmafia_namespaceObject.myMp)() >= 50);
+    (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Piezoelectric Honk")) &&
+    (0,external_kolmafia_namespaceObject.myMp)() + (0,external_kolmafia_namespaceObject.myMeat)() / 200 >= 50);
 
 }
 
