@@ -35,7 +35,7 @@ export class QuestBugbearAbsorb extends TaskInfo implements QuestInfo {
   }
 
   level(): number {
-    return 5;
+    return 10;
   }
 
   status(): QuestStatus {
