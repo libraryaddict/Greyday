@@ -21310,7 +21310,7 @@ var QuestTeachersPen = /*#__PURE__*/function () {function QuestTeachersPen() {Qu
 
       if (
       (0,external_kolmafia_namespaceObject.availableAmount)(this.cleaver) > 0 && (
-      (0,external_kolmafia_namespaceObject.turnsPlayed)() < 50 || (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverFightsLeft")) < 3))
+      (0,external_kolmafia_namespaceObject.turnsPlayed)() < 20 || (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverFightsLeft")) < 3))
       {
         return QuestStatus.NOT_READY;
       }
