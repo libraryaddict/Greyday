@@ -4355,6 +4355,10 @@ var QuestL11Black = /*#__PURE__*/function () {function QuestL11Black() {QuestL11
         return QuestStatus.COMPLETED;
       }
 
+      if ((0,external_kolmafia_namespaceObject.myHp)() < 60) {
+        return QuestStatus.NOT_READY;
+      }
+
       return QuestStatus.READY;
     } }, { key: "run", value:
 
@@ -4371,6 +4375,8 @@ var QuestL11Black = /*#__PURE__*/function () {function QuestL11Black() {QuestL11
       if (this.shouldWearLatte()) {
         outfit.addItem(this.latte);
       }
+
+      outfit.addBonus("+moxie");
 
       var fam;
 
@@ -23773,6 +23779,10 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
           if (!run) {
             break;
           }
+        }
+
+        if ((0,external_kolmafia_namespaceObject.haveEffect)(effect) - lastBeaten == 3) {
+          (0,external_kolmafia_namespaceObject.print)("Oh no! We were beaten up..", "red");
         }
 
         (0,external_kolmafia_namespaceObject.print)("Done running", "blue");
