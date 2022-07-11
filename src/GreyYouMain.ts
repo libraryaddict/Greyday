@@ -242,6 +242,10 @@ class GreyYouMain {
         }
       }
 
+      if (haveEffect(effect) - lastBeaten == 3) {
+        print("Oh no! We were beaten up..", "red");
+      }
+
       print("Done running", "blue");
       return;
     }

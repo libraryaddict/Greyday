@@ -7,6 +7,7 @@ import {
   Item,
   Location,
   Monster,
+  myHp,
   myLevel,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
@@ -68,6 +69,10 @@ export class QuestL11Black implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (myHp() < 60) {
+      return QuestStatus.NOT_READY;
+    }
+
     return QuestStatus.READY;
   }
 
@@ -84,6 +89,8 @@ export class QuestL11Black implements QuestInfo {
     if (this.shouldWearLatte()) {
       outfit.addItem(this.latte);
     }
+
+    outfit.addBonus("+moxie");
 
     let fam: Familiar;
 
