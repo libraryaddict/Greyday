@@ -21227,7 +21227,7 @@ var QuestBugbearAbsorb = /*#__PURE__*/function (_TaskInfo) {QuestBugbearAbsorb_i
     } }, { key: "level", value:
 
     function level() {
-      return 5;
+      return 10;
     } }, { key: "status", value:
 
     function status() {
