@@ -72,7 +72,14 @@ export class QuestL11Shen implements QuestInfo {
     return {
       location: null,
       run: () => {
-        greyAdv(this.shenClub);
+        let props = new PropertyManager();
+        props.setChoice(851, 1);
+
+        try {
+          greyAdv(this.shenClub);
+        } finally {
+          props.resetAll();
+        }
       },
     };
   }

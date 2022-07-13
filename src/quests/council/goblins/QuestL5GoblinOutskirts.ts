@@ -1,6 +1,7 @@
 import { availableAmount, Familiar, Item, Location, use } from "kolmafia";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../utils/GreyLocations";
+import { PropertyManager } from "../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -61,7 +62,16 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
             DelayBurners.tryReplaceCombats();
           }
 
-          greyAdv(this.location);
+          let props = new PropertyManager();
+          props.setChoice(113, 2);
+          props.setChoice(111, 3);
+          props.setChoice(118, 2);
+
+          try {
+            greyAdv(this.location);
+          } finally {
+            props.resetAll();
+          }
         }
       },
     };
