@@ -6,9 +6,13 @@ https://github.com/Kasekopf/loop-casual/tree/gyou
 
 The following commands are supported.
 
-`grey requirements` - tells you what this script needs to run
+`grey help` - View the help
 
 `grey sim` - Prepares to run grey you, without running it
+
+`grey settings` - Prepares to run grey you, without running it
+
+`grey required` - Checks your stuff and tells you what you're lacking or not.
 
 `grey run` - Runs one turn, then exits
 
