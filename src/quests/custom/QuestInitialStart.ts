@@ -55,6 +55,10 @@ export class QuestInitialStart implements QuestInfo {
       "Extra monster level & +combat accessory",
       5
     ),
+    new ResourcePullClaim(
+      Item.get("Teacher's Pen"),
+      "Faster Familiar Leveling"
+    ),
   ];
 
   constructor() {

@@ -88,6 +88,8 @@ export class GreyPulls {
       GreyPulls.tryPull(Item.get("Daily dungeon malware"), 50000);
     }
 
+    GreyPulls.tryPull(Item.get("Teacher's Pen"));
+
     let pantsgiving = Item.get("Pantsgiving");
 
     if (availableAmount(pantsgiving) == 0 && storageAmount(pantsgiving) > 0) {

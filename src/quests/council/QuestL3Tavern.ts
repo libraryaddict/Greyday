@@ -11,8 +11,10 @@ import {
   myAscensions,
   myLevel,
   numericModifier,
+  print,
   setProperty,
   toInt,
+  turnsPlayed,
   visitUrl,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
@@ -155,9 +157,24 @@ export class QuestL3Tavern implements QuestInfo {
             equip(this.umbrella);
           }
 
+          let layout = getProperty("tavernLayout");
+          let turns = turnsPlayed();
+
           changeMcd(10);
           greyAdv(this.layout.getLocation(), outfit);
           changeMcd(0);
+
+          if (getQuestStatus("questL03Rat") != 1 && turnsPlayed() == turns) {
+            visitUrl("cellar.php");
+
+            if (layout == getProperty("tavernLayout")) {
+              print(
+                "Something went wrong with Tavern, resetting the layout. You may see a bunch of attempts to adventure that do nothing.",
+                "blue"
+              );
+              setProperty("tavernLayout", "0000000000000000000000000");
+            }
+          }
         } finally {
           props.resetAll();
         }

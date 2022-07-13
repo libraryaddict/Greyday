@@ -50,6 +50,13 @@ export function getGreySettings(): GreySetting[] {
     valid: (value) => value == "true" || value == "false",
   };
 
+  let levelingResources: GreySetting = {
+    name: "greyPrepareLevelingResources",
+    description:
+      "If this is set to true, script will attempt to prepare resources that are useful for power leveling. Namely familiar scrapbook and raise goose weight.",
+    valid: (value) => value == "true" || value == "false",
+  };
+
   return [
     towerBreak,
     moonTune,
@@ -57,6 +64,7 @@ export function getGreySettings(): GreySetting[] {
     pvpEnable,
     dailyMalware,
     fantasyBandits,
+    levelingResources,
   ];
 }
 
@@ -111,6 +119,9 @@ export class GreySettings {
   );
   static greyDailyMalware: boolean = toBoolean(
     getProperty("greyDailyMalware") || "false"
+  );
+  static greyPrepareLevelingResources: boolean = toBoolean(
+    getProperty("greyPrepareLevelingResources") || "false"
   );
   static greyFantasyBandits: boolean = toBoolean(
     getProperty("greyFantasyBandits") || "false"

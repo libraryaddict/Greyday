@@ -69,7 +69,10 @@ export class GreyOutfit {
       }
 
       if (toInt(getProperty("scrapbookCharges")) < 100) {
-        this.addBonus("+2 bonus familiar scrapbook");
+        this.addBonus(
+          (GreySettings.greyPrepareLevelingResources ? "+4" : "+2") +
+            " bonus familiar scrapbook"
+        );
       }
     }
 

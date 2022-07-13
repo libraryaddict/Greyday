@@ -24,6 +24,7 @@ export class QuestDungeonsOfDoom implements QuestInfo {
   bend: Location = Location.get("The Enormous Greater-Than Sign");
   plusSign: Item = Item.get("plus sign");
   teleportis: Effect = Effect.get("Teleportitis");
+  beatenUp: Effect = Effect.get("Beaten Up");
 
   // TODO Once we have the absorb, do replace combats
 
@@ -47,7 +48,8 @@ export class QuestDungeonsOfDoom implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (myMeat() < 1300) {
+    // Due to poison, we don't want to get into the rare state where we are double nerfed
+    if (myMeat() < 1300 || haveEffect(this.beatenUp) > 0) {
       return QuestStatus.NOT_READY;
     }
 

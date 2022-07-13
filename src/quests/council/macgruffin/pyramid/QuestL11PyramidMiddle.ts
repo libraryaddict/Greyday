@@ -28,7 +28,6 @@ export class QuestL11PyramidMiddle implements QuestInfo {
   middleLoc: Location = Location.get("The Middle Chamber");
   wheel: Item = Item.get("Crumbling Wooden Wheel");
   ratchet: Item = Item.get("Tomb Ratchet");
-  book: Item = Item.get("Familiar scrapbook");
   servant: Monster = Monster.get("Tomb Servant");
   toAbsorb: Monster[];
 
@@ -80,13 +79,6 @@ export class QuestL11PyramidMiddle implements QuestInfo {
 
   run(): QuestAdventure {
     let outfit = new GreyOutfit().setItemDrops();
-
-    if (
-      !isBanished(this.servant) &&
-      toInt(getProperty("scrapbookCharges")) >= 100
-    ) {
-      outfit.addItem(this.book);
-    }
 
     return {
       location: this.middleLoc,

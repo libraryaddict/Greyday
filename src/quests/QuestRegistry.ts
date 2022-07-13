@@ -113,7 +113,6 @@ export class QuestRegistry {
       { id: "Misc / FriarExp" },
       { id: "Misc / MonsterBait" },
       { id: "Misc / Moonsign" },
-      { id: "Misc / Teacher's Pen" },
       {
         id: "Absorbs / Bugbear",
         testValid: () =>
@@ -253,8 +252,6 @@ export class QuestRegistry {
       { id: "Council / MacGruffin / HiddenCity / BookOfMatches" },
       { id: "Council / MacGruffin / HiddenCity / Bowling" },
 
-      { id: "Council / War / Gremlins" },
-
       // Do library after we should have system sweep stuff
       { id: "Manor / Library" },
 
@@ -362,6 +359,9 @@ export class QuestRegistry {
       { id: "Skills / ColdDamage15" },
       { id: "Skills / ColdDamage10" },
 
+      // Tavern needs Larva done
+      { id: "Council / Tavern", testValid: () => myLevel() >= 20 },
+
       // Given that we earn nothing from peaks, just delay it until we should've hit our max +cold damage
       // { id: "Council / Peaks / CargoShortsSmut" },
       { id: "Council / Peaks / Orcs" },
@@ -375,9 +375,7 @@ export class QuestRegistry {
         id: "Council / War / Filthworms",
         testValid: () => haveEffect(Effect.get("Everything Looks Yellow")) > 0,
       },
-
-      // Tavern needs Larva done
-      { id: "Council / Tavern", testValid: () => myLevel() >= 20 },
+      { id: "Council / War / Gremlins" },
 
       { id: "Council / War / Battlefield" },
       { id: "Council / War / Boss" },

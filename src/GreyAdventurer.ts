@@ -235,6 +235,8 @@ export class GreyAdventurer {
       outfit.addBonus(`+8 bonus designer sweatpants`);
     }
 
+    let powerLevelGoose: boolean = false;
+
     if (
       toRun.familiar != null &&
       (toRun.disableFamOverride == true || !wantToAbsorb)
@@ -247,10 +249,6 @@ export class GreyAdventurer {
         //   replaceWith.push(Familiar.get("Melodramedary"));
       }
 
-      if (getProperty("_roboDrinks").includes("drive-by shooting")) {
-        replaceWith.push(Familiar.get("Robortender"));
-      }
-
       AbsorbsProvider.remainingAdvAbsorbs =
         AbsorbsProvider.remainingAdvAbsorbs.filter(
           (m) => !AbsorbsProvider.getReabsorbedMonsters().includes(m)
@@ -258,10 +256,16 @@ export class GreyAdventurer {
 
       // If we don't expect to be doing absorbs in the future..
       if (
+        GreySettings.greyPrepareLevelingResources &&
         familiarWeight(this.goose) < 20 &&
-        AbsorbsProvider.remainingAdvAbsorbs.length <= 1
+        AbsorbsProvider.remainingAdvAbsorbs.length <= 3
       ) {
         replaceWith.push(this.goose);
+        powerLevelGoose = true;
+      }
+
+      if (getProperty("_roboDrinks").includes("drive-by shooting")) {
+        replaceWith.push(Familiar.get("Robortender"));
       }
 
       for (let fam of [
@@ -297,7 +301,10 @@ export class GreyAdventurer {
 
     useFamiliar(familiar);
 
-    if (familiarWeight(this.goose) >= 6) {
+    if (
+      familiar != this.goose ||
+      (familiarWeight(this.goose) >= 6 && !powerLevelGoose)
+    ) {
       outfit.famExpWeight = 1;
     }
 

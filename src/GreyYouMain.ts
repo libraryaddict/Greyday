@@ -38,7 +38,7 @@ class GreyYouMain {
   isRevisionPass(): boolean {
     let required = 26545;
 
-    if (getRevision() < required) {
+    if (getRevision() > 0 && getRevision() < required) {
       print(
         `Please update your mafia. You are using ${getRevision()} but we need at least ${required}`,
         "red"

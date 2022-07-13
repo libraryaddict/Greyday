@@ -28,7 +28,6 @@ import { QuestAbsorbCanadiaMonster } from "./absorbs/QuestAbsorbCanadiaMonster";
 import { QuestAbsorbStarMonster } from "./absorbs/QuestAbsorbStarMonster";
 import { QuestFantasyRealm } from "./council/tower/keys/QuestFantasyRealm";
 import { QuestBugbearAbsorb } from "./absorbs/QuestBugbearAbsorb";
-import { QuestTeachersPen } from "./custom/QuestTeachersPen";
 import { QuestJuneCleaver } from "./custom/QuestJuneCleaver";
 
 export class QuestsCustom implements QuestInfo {
@@ -64,7 +63,6 @@ export class QuestsCustom implements QuestInfo {
     this.quests.push(new QuestAbsorbStarMonster());
     this.quests.push(new QuestBugbearAbsorb());
     this.quests.push(new QuestFantasyRealm());
-    this.quests.push(new QuestTeachersPen());
     this.quests.push(new QuestJuneCleaver());
   }
 

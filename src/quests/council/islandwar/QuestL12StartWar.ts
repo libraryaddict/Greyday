@@ -2,6 +2,7 @@ import {
   availableAmount,
   cliExecute,
   Effect,
+  equippedAmount,
   getProperty,
   haveEffect,
   haveOutfit,
@@ -30,6 +31,7 @@ import { QuestType } from "../../QuestTypes";
 
 export class QuestL12StartWar implements QuestInfo {
   loc: Location = Location.get("Hippy Camp");
+  umbrella: Item = Item.get("Unbreakable Umbrella");
 
   level(): number {
     return 12;
@@ -69,12 +71,22 @@ export class QuestL12StartWar implements QuestInfo {
     outfit.addItem(Item.get("distressed denim pants"));
     outfit.addItem(Item.get("bejeweled pledge pin"));
 
+    if (
+      availableAmount(this.umbrella) > 0 &&
+      !DelayBurners.isDelayBurnerReady()
+    ) {
+      outfit.addItem(this.umbrella);
+    }
+
     return {
       location: this.loc,
       outfit: outfit,
       run: () => {
         // If we can cast both NC skills
-        if (hasNonCombatSkillsReady(true)) {
+        if (
+          DelayBurners.isDelayBurnerReady() &&
+          equippedAmount(this.umbrella) == 0
+        ) {
           DelayBurners.tryReplaceCombats();
         }
 

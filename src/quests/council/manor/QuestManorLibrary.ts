@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  equippedAmount,
   Familiar,
   getProperty,
   haveSkill,
@@ -31,6 +32,7 @@ export class QuestManorLibrary implements QuestInfo {
   librarian: Monster = Monster.get("Banshee Librarian");
   sweep: Skill = Skill.get("System Sweep");
   nano: Skill = Skill.get("Double Nanovision");
+  cosplay: Item = Item.get("Fourth of May Cosplay Saber");
 
   getId(): QuestType {
     return "Manor / Library";
@@ -71,35 +73,45 @@ export class QuestManorLibrary implements QuestInfo {
 
   run(): QuestAdventure {
     let outfit = new GreyOutfit();
-    let banishLibrarian =
-      (!this.wantsGnomeKillingJar() || availableAmount(this.killingJar) > 0) &&
-      !isBanished(this.librarian);
+    let wantJar =
+      this.wantsGnomeKillingJar() && availableAmount(this.killingJar) == 0;
+    let banishLibrarian = !wantJar && !isBanished(this.librarian);
 
-    if (!banishLibrarian) {
-      outfit.setItemDrops();
+    if (wantJar) {
+      if (availableAmount(this.cosplay) > 0) {
+        outfit.addItem(this.cosplay);
+      } else {
+        outfit.setItemDrops();
+      }
     }
 
     return {
       location: this.library,
-      outfit,
+      outfit: outfit,
       run: () => {
         let settings = new AdventureSettings();
+        let props = new PropertyManager();
 
         settings.addBanish(Monster.get("bookbat"));
 
         if (banishLibrarian) {
           settings.addBanish(this.librarian);
-        } else if (haveSkill(this.nano)) {
-          settings.setFinishingBlowMacro(Macro.skill(this.nano));
+        } else if (wantJar && equippedAmount(this.cosplay) > 0) {
+          settings.setFinishingBlowMacro(
+            Macro.if_(this.librarian, Macro.skill("Use the Force")).skill(
+              Skill.get("Infinite Loop")
+            )
+          );
+
+          props.setChoice(1387, 3);
         }
 
-        let props = new PropertyManager();
         props.setChoice(163, 3); // Rare adv that gives an item with 2k autosell, and worth 4-5k in mall
         props.setChoice(888, 4); // Skip
         props.setChoice(889, 5); // Skip
 
         try {
-          greyAdv(this.library, null, settings);
+          greyAdv(this.library, outfit, settings);
         } finally {
           props.resetAll();
         }

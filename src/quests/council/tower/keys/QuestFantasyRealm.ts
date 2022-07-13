@@ -6,8 +6,12 @@ import {
   toInt,
   print,
   setProperty,
+  myFamiliar,
+  useFamiliar,
+  Item,
 } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
+import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { ResourceClaim } from "../../../../utils/GreyResources";
 import { GreySettings } from "../../../../utils/GreySettings";
 import { PropertyManager } from "../../../../utils/Properties";
@@ -22,6 +26,7 @@ import { QuestType } from "../../../QuestTypes";
 export class QuestFantasyRealm implements QuestInfo {
   fought: string = "_foughtFantasyRealm";
   location: Location = Location.get("The Bandit Crossroads");
+  equip: Item = Item.get("FantasyRealm G. E. M.");
 
   getId(): QuestType {
     return "Council / Tower / Keys / FantasyRealm";
@@ -67,14 +72,25 @@ export class QuestFantasyRealm implements QuestInfo {
   }
 
   run(): QuestAdventure {
+    let outfit = new GreyOutfit();
+    outfit.addBonus("-100 familiar exp");
+    outfit.addItem(this.equip);
+
     return {
       location: this.location,
+      familiar: Familiar.get("None"),
+      disableFamOverride: true,
+      outfit: outfit,
       run: () => {
         let props = new PropertyManager();
         props.setChoice(1281, 0); // Don't handle
 
+        if (myFamiliar() != Familiar.get("None")) {
+          useFamiliar(Familiar.get("None"));
+        }
+
         try {
-          greyAdv(this.location);
+          greyAdv(this.location, outfit);
           this.addFought();
         } catch (e) {
           print(

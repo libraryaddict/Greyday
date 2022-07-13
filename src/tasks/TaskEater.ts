@@ -85,6 +85,12 @@ export class TaskEater implements Task {
     }
   }
 
+  doTavern() {
+    if (getProperty("questL03Rat") != "finished" || myMeat() < 2000) {
+      return;
+    }
+  }
+
   doChez(eaten: string[]) {
     if (!canadiaAvailable() || myMeat() < 2000) {
       return;

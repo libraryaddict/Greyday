@@ -123,6 +123,7 @@ export class QuestTowerMirror implements QuestInfo {
 
     return {
       location: null,
+      outfit: new GreyOutfit("-tie"),
       run: () => {
         retrieveItem(this.wand);
       },
