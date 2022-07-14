@@ -1717,13 +1717,6 @@ var GreyOutfit = /*#__PURE__*/function () {
           this.addBonus("-4 bonus hewn moon-rune spoon");
           this.addBonus("+4.5 bonus powerful glove");
         }
-
-        if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("scrapbookCharges")) < 100) {
-          this.addBonus(
-          (GreySettings.greyPrepareLevelingResources ? "+4" : "+2") +
-          " bonus familiar scrapbook");
-
-        }
       }
 
       this.addBonus("-equip screwing pooch");
@@ -23380,6 +23373,20 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
         }
 
         outfit.addBonus("+".concat(bonus, " bonus cursed magnifying glass"));
+      }
+
+      if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("scrapbookCharges")) < 100) {
+        var _bonus = 2;
+
+        if (GreySettings.greyPrepareLevelingResources) {
+          _bonus = 4;
+
+          if (canDoMagGlass) {
+            _bonus = 11;
+          }
+        }
+
+        outfit.addBonus("+" + _bonus + " bonus familiar scrapbook");
       }
 
       if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("sweat")) < 100 && outfit.itemDropWeight < 1) {
