@@ -257,25 +257,28 @@ export class GreyAdventurer {
     ) {
       familiar = toRun.familiar;
     } else if (gooseReplaceable) {
-      let replaceWith = this.adventureFinder.getRecommendedFamiliars();
-
-      if (toInt(getProperty("camelSpit")) < 100) {
-        //   replaceWith.push(Familiar.get("Melodramedary"));
-      }
-
-      AbsorbsProvider.remainingAdvAbsorbs =
-        AbsorbsProvider.remainingAdvAbsorbs.filter(
-          (m) => !AbsorbsProvider.getReabsorbedMonsters().includes(m)
-        );
+      let replaceWith: Familiar[] = [];
 
       // If we don't expect to be doing absorbs in the future..
       if (
         GreySettings.greyPrepareLevelingResources &&
-        familiarWeight(this.goose) < 20 &&
-        AbsorbsProvider.remainingAdvAbsorbs.length <= 3
+        familiarWeight(this.goose) < 20
       ) {
-        replaceWith.push(this.goose);
-        powerLevelGoose = true;
+        AbsorbsProvider.remainingAdvAbsorbs =
+          AbsorbsProvider.remainingAdvAbsorbs.filter(
+            (m) => !AbsorbsProvider.getReabsorbedMonsters().includes(m)
+          );
+
+        if (AbsorbsProvider.remainingAdvAbsorbs.length <= 3) {
+          replaceWith.push(this.goose);
+          powerLevelGoose = true;
+        }
+      }
+
+      replaceWith.push(...this.adventureFinder.getRecommendedFamiliars());
+
+      if (toInt(getProperty("camelSpit")) < 100) {
+        //   replaceWith.push(Familiar.get("Melodramedary"));
       }
 
       if (getProperty("_roboDrinks").includes("drive-by shooting")) {

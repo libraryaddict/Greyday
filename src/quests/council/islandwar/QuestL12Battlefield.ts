@@ -1,12 +1,15 @@
 import {
   availableAmount,
   Familiar,
+  familiarWeight,
   getProperty,
   Item,
   Location,
   print,
   toInt,
+  useFamiliar,
 } from "kolmafia";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { GreySettings } from "../../../utils/GreySettings";
@@ -117,6 +120,14 @@ export class QuestL12Battlefield implements QuestInfo {
       familiar: fam,
       disableFamOverride: fam != null,
       run: () => {
+        let fam = Familiar.get("Grey Goose");
+
+        DelayBurners.tryReplaceCombats();
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(fam);
+        }
+
         greyAdv(this.loc, outfit);
 
         let turns = Math.ceil(

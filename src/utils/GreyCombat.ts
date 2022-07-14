@@ -4,6 +4,7 @@ import {
   Effect,
   equippedAmount,
   Familiar,
+  familiarWeight,
   getFuel,
   getMonsters,
   getProperty,
@@ -72,10 +73,12 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
   let absorb = AbsorbsProvider.getAbsorb(monster);
   let hasAbsorbed = AbsorbsProvider.getReabsorbedMonsters().includes(monster);
 
+  // If low weight fam, but not too high. Let them try to dupe.
   if (
     myLevel() >= 6 &&
     monster == Monster.get("Sausage Goblin") &&
-    !GreySettings.isHardcoreMode()
+    !GreySettings.isHardcoreMode() &&
+    familiarWeight(Familiar.get("Grey Goose")) < 9
   ) {
     macro = macro.trySkill(Skill.get("Emit Matter Duplicating Drones"));
   } else if (

@@ -23,7 +23,11 @@ import {
   Skill,
   haveSkill,
   abort,
+  Slot,
+  toSlot,
+  equippedItem,
 } from "kolmafia";
+import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -51,6 +55,7 @@ export class QuestL11DesertExplore implements QuestInfo {
   goose: Familiar = Familiar.get("Grey Goose");
   rose: Item = Item.get("Stone Rose");
   nanovision: Skill = Skill.get("Double Nanovision");
+  lefthand: Familiar = Familiar.get("Left-Hand Man");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / Explore";
@@ -143,7 +148,7 @@ export class QuestL11DesertExplore implements QuestInfo {
     }
 
     let outfit = new GreyOutfit();
-    outfit.addItem(Item.get("UV-resistant compass")); // Compass
+    outfit.addItem(this.compass); // Compass
     outfit.addItem(this.knife);
 
     return {
@@ -177,6 +182,22 @@ export class QuestL11DesertExplore implements QuestInfo {
             equippedAmount(this.ball) == 0
           ) {
             equip(this.ball);
+          }
+        } else if (
+          this.toAbsorb.length == 0 &&
+          DelayBurners.isDelayBurnerReady()
+        ) {
+          DelayBurners.tryReplaceCombats();
+
+          // If the compass is not equipped, and we don't own camel, but we do own left-hand man.
+          // Then it's worth it.
+          if (
+            equippedAmount(this.compass) == 0 &&
+            haveFamiliar(this.lefthand) &&
+            myFamiliar() != this.camel
+          ) {
+            useFamiliar(this.lefthand);
+            equip(this.compass, Slot.get("Familiar"));
           }
         }
 

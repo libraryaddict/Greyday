@@ -184,6 +184,18 @@ export class QuestTowerKillBones {
       return false;
     }
 
+    if (
+      myBuffedstat(Stat.get("Moxie")) <
+        Math.max(
+          myBuffedstat(Stat.get("Muscle")),
+          myBuffedstat(Stat.get("Mysticality"))
+        ) &&
+      !haveEffect(Effect.get("Phairly Balanced")) &&
+      mallPrice(Item.get("PH Balancer")) < 1000
+    ) {
+      use(Item.get("PH Balancer"));
+    }
+
     maximize("moxie +equip " + this.rocket.name, true);
 
     let moxie = numericModifier("Generated:_spec", "Buffed Moxie");
@@ -197,6 +209,7 @@ export class QuestTowerKillBones {
         " damage (Worst scenario)",
       "blue"
     );
+
     return damage > this.health;
   }
 

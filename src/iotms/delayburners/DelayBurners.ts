@@ -37,8 +37,10 @@ export class DelayBurners {
   }
 
   static isTryingForDupeableGoblin(): boolean {
+    let fam = Familiar.get("Grey Goose");
     return (
-      familiarWeight(Familiar.get("Grey Goose")) >= 6 &&
+      familiarWeight(fam) >= 6 &&
+      familiarWeight(fam) < 9 &&
       equippedAmount(Item.get("Kramco Sausage-o-Matic")) > 0
     );
   }
