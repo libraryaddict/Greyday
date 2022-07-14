@@ -34,6 +34,7 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
   nanovision: Skill = Skill.get("Double Nanovision");
   wishResource: ResourceClaim;
   locketResource: ResourceClaim;
+  bottle: Item = Item.get("genie bottle");
 
   constructor() {
     super();
@@ -75,7 +76,8 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
 
     if (
       !canCombatLocket(this.getMonster()) &&
-      availableAmount(this.pocketWish) == 0
+      (availableAmount(this.bottle) == 0 ||
+        availableAmount(this.pocketWish) == 0)
     ) {
       return QuestStatus.COMPLETED;
     }

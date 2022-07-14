@@ -113,7 +113,8 @@ export class QuestLocketFantasyBandit implements QuestInfo {
 
     if (
       !canCombatLocket(this.monster) &&
-      availableAmount(Item.get("Pocket Wish")) == 0
+      (availableAmount(Item.get("Genie Bottle")) == 0 ||
+        availableAmount(Item.get("Pocket Wish")) == 0)
     ) {
       return QuestStatus.COMPLETED;
     }
