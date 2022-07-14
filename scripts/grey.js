@@ -1490,6 +1490,12 @@ function greyDuringFightMacro(settings) {
   var hasAbsorbed = AbsorbsProvider.getReabsorbedMonsters().includes(monster);
 
   if (
+  (0,external_kolmafia_namespaceObject.myLevel)() >= 6 &&
+  monster == external_kolmafia_namespaceObject.Monster.get("Sausage Goblin") &&
+  !GreySettings.isHardcoreMode())
+  {
+    macro = macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Emit Matter Duplicating Drones"));
+  } else if (
   absorb != null && (
   (0,external_kolmafia_namespaceObject.myAdventures)() > 20 && absorb.mp > 0 || absorb.adventures > 0) &&
   !hasAbsorbed)
@@ -3139,6 +3145,13 @@ var DelayBurners = /*#__PURE__*/function () {function DelayBurners() {DelayBurne
 
     function getDelayBurners() {
       return this.getDelays().filter((d) => d.isViable());
+    } }, { key: "isTryingForDupeableGoblin", value:
+
+    function isTryingForDupeableGoblin() {
+      return (
+        (0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) >= 6 &&
+        (0,external_kolmafia_namespaceObject.equippedAmount)(external_kolmafia_namespaceObject.Item.get("Kramco Sausage-o-Matic")) > 0);
+
     } }, { key: "getReadyDelayBurner", value:
 
     function getReadyDelayBurner() {var freeOnly = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
@@ -3213,7 +3226,8 @@ var QuestL10GiantShip = /*#__PURE__*/function () {function QuestL10GiantShip() {
     "Gauze Immateria",
     "Plastic Wrap Immateria"].
     map((s) => external_kolmafia_namespaceObject.Item.get(s)));QuestL10GiantShip_defineProperty(this, "protag",
-    external_kolmafia_namespaceObject.Monster.get("Protagonist"));}QuestL10GiantShip_createClass(QuestL10GiantShip, [{ key: "shouldRunNC", value:
+    external_kolmafia_namespaceObject.Monster.get("Protagonist"));QuestL10GiantShip_defineProperty(this, "toAbsorb", void 0);}QuestL10GiantShip_createClass(QuestL10GiantShip, [{ key: "shouldRunNC", value:
+
 
     function shouldRunNC() {
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.modelShip) == 0 || this.loc.turnsSpent >= 25) {
@@ -3265,6 +3279,10 @@ var QuestL10GiantShip = /*#__PURE__*/function () {function QuestL10GiantShip() {
             } else {
               DelayBurners.tryReplaceCombats();
             }
+          }
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
           }
 
           try {
@@ -3384,6 +3402,10 @@ var QuestL10GiantGround = /*#__PURE__*/function () {function QuestL10GiantGround
             }
           } else if (this.toAbsorb.length == 0) {
             DelayBurners.tryReplaceCombats();
+          }
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
           }
 
           try {
@@ -4138,7 +4160,8 @@ var QuestTowerWallSkin = /*#__PURE__*/function () {function QuestTowerWallSkin()
 var QuestTowerBeeHive = /*#__PURE__*/function () {function QuestTowerBeeHive() {QuestTowerWallSkin_classCallCheck(this, QuestTowerBeeHive);QuestTowerWallSkin_defineProperty(this, "beehive",
     external_kolmafia_namespaceObject.Item.get("Beehive"));QuestTowerWallSkin_defineProperty(this, "blackForest",
     external_kolmafia_namespaceObject.Location.get("The Black Forest"));QuestTowerWallSkin_defineProperty(this, "killer",
-    new QuestTowerKillSkin());}QuestTowerWallSkin_createClass(QuestTowerBeeHive, [{ key: "getId", value:
+    new QuestTowerKillSkin());QuestTowerWallSkin_defineProperty(this, "toAbsorb", void 0);}QuestTowerWallSkin_createClass(QuestTowerBeeHive, [{ key: "getId", value:
+
 
     function getId() {
       return "Council / Tower / WallOfSkin / Beehive";
@@ -4175,6 +4198,10 @@ var QuestTowerBeeHive = /*#__PURE__*/function () {function QuestTowerBeeHive() {
         run: () => {
           var props = new PropertyManager();
           DelayBurners.tryReplaceCombats();
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
 
           try {
             props.setChoice(924, 3); // Beezzzz
@@ -6548,6 +6575,10 @@ var QuestL11PyramidMiddle = /*#__PURE__*/function () {function QuestL11PyramidMi
             }
           }
 
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
+
           settings.addNoBanish(this.tombRat);
 
           settings.setStartOfFightMacro(startMacro);
@@ -7388,6 +7419,11 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
             } else if ((0,external_kolmafia_namespaceObject.equippedAmount)(this.ball) > 0) {
               (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Slot.get("Familiar"), external_kolmafia_namespaceObject.Item.get("None"));
             }
+          } else if (
+          this.toAbsorb.length == 0 &&
+          DelayBurners.isTryingForDupeableGoblin())
+          {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
           }
 
           var props = new PropertyManager();
@@ -7742,7 +7778,8 @@ var QuestL11Business = /*#__PURE__*/function () {function QuestL11Business() {Qu
     external_kolmafia_namespaceObject.Item.get("McClusky file (complete)"));QuestL11TempleBusiness_defineProperty(this, "binderClip",
     external_kolmafia_namespaceObject.Item.get("Boring Binder Clip"));QuestL11TempleBusiness_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("the hidden office building"));QuestL11TempleBusiness_defineProperty(this, "apartment",
-    external_kolmafia_namespaceObject.Location.get("The Hidden Apartment Building"));}QuestL11TempleBusiness_createClass(QuestL11Business, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Location.get("The Hidden Apartment Building"));QuestL11TempleBusiness_defineProperty(this, "toAbsorb", void 0);}QuestL11TempleBusiness_createClass(QuestL11Business, [{ key: "getId", value:
+
 
     function getId() {
       return "Council / MacGruffin / HiddenCity / Accountants";
@@ -7853,6 +7890,10 @@ var QuestL11Business = /*#__PURE__*/function () {function QuestL11Business() {Qu
               }
             }
 
+            if (DelayBurners.isTryingForDupeableGoblin()) {
+              (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+            }
+
             var settings = new AdventureSettings().addBanish(
             external_kolmafia_namespaceObject.Monster.get("pygmy headhunter"));
 
@@ -7894,7 +7935,8 @@ var QuestL11Curses = /*#__PURE__*/function () {function QuestL11Curses() {QuestL
     external_kolmafia_namespaceObject.Effect.get("Once-Cursed"));QuestL11TempleCurses_defineProperty(this, "curse2",
     external_kolmafia_namespaceObject.Effect.get("Twice-Cursed"));QuestL11TempleCurses_defineProperty(this, "curse3",
     external_kolmafia_namespaceObject.Effect.get("Thrice-Cursed"));QuestL11TempleCurses_defineProperty(this, "apartment",
-    external_kolmafia_namespaceObject.Location.get("The Hidden Apartment Building"));}QuestL11TempleCurses_createClass(QuestL11Curses, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Location.get("The Hidden Apartment Building"));QuestL11TempleCurses_defineProperty(this, "toAbsorb", void 0);}QuestL11TempleCurses_createClass(QuestL11Curses, [{ key: "level", value:
+
 
     function level() {
       return 11;
@@ -7977,6 +8019,10 @@ var QuestL11Curses = /*#__PURE__*/function () {function QuestL11Curses() {QuestL
             }
           } else {
             props.setChoice(780, 2);
+          }
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
           }
 
           var settings = new AdventureSettings().addBanish(
@@ -8746,6 +8792,10 @@ var QuestL11TempleUnlock = /*#__PURE__*/function () {function QuestL11TempleUnlo
             } else if (hasNonCombatSkillsReady()) {
               DelayBurners.tryReplaceCombats();
             }
+          }
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
           }
 
           this.runSpookyChoices();
@@ -11932,7 +11982,8 @@ function QuestTowerWallBones_classCallCheck(instance, Constructor) {if (!(instan
 var QuestTowerWallBones = /*#__PURE__*/function () {function QuestTowerWallBones() {QuestTowerWallBones_classCallCheck(this, QuestTowerWallBones);QuestTowerWallBones_defineProperty(this, "knife",
     external_kolmafia_namespaceObject.Item.get("Electric Boning Knife"));QuestTowerWallBones_defineProperty(this, "boning",
     new QuestTowerBoningKnife());QuestTowerWallBones_defineProperty(this, "killer",
-    new QuestTowerKillBones());}QuestTowerWallBones_createClass(QuestTowerWallBones, [{ key: "getChildren", value:
+    new QuestTowerKillBones());QuestTowerWallBones_defineProperty(this, "toAbsorb", void 0);}QuestTowerWallBones_createClass(QuestTowerWallBones, [{ key: "getChildren", value:
+
 
     function getChildren() {
       return [this.boning];
@@ -12034,6 +12085,10 @@ var QuestTowerBoningKnife = /*#__PURE__*/function () {function QuestTowerBoningK
         run: () => {
           var props = new PropertyManager();
           DelayBurners.tryReplaceCombats();
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
 
           try {
             props.setChoice(672, 1);
@@ -12751,6 +12806,13 @@ var QuestL2SpookyLarva = /*#__PURE__*/function () {function QuestL2SpookyLarva()
             } else if (hasNonCombatSkillsReady()) {
               DelayBurners.tryReplaceCombats();
             }
+          }
+
+          if (
+          this.toAbsorb.length == 0 &&
+          DelayBurners.isTryingForDupeableGoblin())
+          {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
           }
 
           try {
@@ -13550,7 +13612,8 @@ var QuestL6FriarElbow = /*#__PURE__*/function () {function QuestL6FriarElbow() {
     external_kolmafia_namespaceObject.Location.get("Dark Elbow of the Woods"));QuestL6FriarElbow_defineProperty(this, "absorbs",
     [external_kolmafia_namespaceObject.Monster.get("G imp"), external_kolmafia_namespaceObject.Monster.get("L imp")]);QuestL6FriarElbow_defineProperty(this, "latte",
     external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));QuestL6FriarElbow_defineProperty(this, "umbrella",
-    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));}QuestL6FriarElbow_createClass(QuestL6FriarElbow, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL6FriarElbow_defineProperty(this, "toAbsorb", void 0);}QuestL6FriarElbow_createClass(QuestL6FriarElbow, [{ key: "level", value:
+
 
     function level() {
       return 6;
@@ -13613,6 +13676,10 @@ var QuestL6FriarElbow = /*#__PURE__*/function () {function QuestL6FriarElbow() {
           (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0)
           {
             DelayBurners.tryReplaceCombats();
+          }
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
           }
 
           greyAdv(this.location, outfit);
@@ -13687,7 +13754,8 @@ var QuestL6FriarHeart = /*#__PURE__*/function () {function QuestL6FriarHeart() {
     external_kolmafia_namespaceObject.Location.get("Dark Heart of the Woods"));QuestL6FriarHeart_defineProperty(this, "absorbs",
     [external_kolmafia_namespaceObject.Monster.get("G imp"), external_kolmafia_namespaceObject.Monster.get("P imp")]);QuestL6FriarHeart_defineProperty(this, "latte",
     external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));QuestL6FriarHeart_defineProperty(this, "umbrella",
-    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));}QuestL6FriarHeart_createClass(QuestL6FriarHeart, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL6FriarHeart_defineProperty(this, "toAbsorb", void 0);}QuestL6FriarHeart_createClass(QuestL6FriarHeart, [{ key: "level", value:
+
 
     function level() {
       return 6;
@@ -13752,6 +13820,10 @@ var QuestL6FriarHeart = /*#__PURE__*/function () {function QuestL6FriarHeart() {
             DelayBurners.tryReplaceCombats();
           }
 
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
+
           greyAdv(this.location, outfit);
         } };
 
@@ -13776,7 +13848,8 @@ var QuestL6FriarNeck = /*#__PURE__*/function () {function QuestL6FriarNeck() {Qu
     external_kolmafia_namespaceObject.Location.get("Dark Neck of the Woods"));QuestL6FriarNeck_defineProperty(this, "absorbs",
     [external_kolmafia_namespaceObject.Monster.get("P imp"), external_kolmafia_namespaceObject.Monster.get("W imp")]);QuestL6FriarNeck_defineProperty(this, "latte",
     external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));QuestL6FriarNeck_defineProperty(this, "umbrella",
-    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));}QuestL6FriarNeck_createClass(QuestL6FriarNeck, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL6FriarNeck_defineProperty(this, "toAbsorb", void 0);}QuestL6FriarNeck_createClass(QuestL6FriarNeck, [{ key: "level", value:
+
 
     function level() {
       return 6;
@@ -13840,6 +13913,10 @@ var QuestL6FriarNeck = /*#__PURE__*/function () {function QuestL6FriarNeck() {Qu
           (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0)
           {
             DelayBurners.tryReplaceCombats();
+          }
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
           }
 
           greyAdv(this.location, outfit);
@@ -14241,7 +14318,8 @@ function QuestL7CryptRattling_classCallCheck(instance, Constructor) {if (!(insta
 
 
 var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRattling_inherits(CryptL7Rattling, _CryptL7Template);var _super = QuestL7CryptRattling_createSuper(CryptL7Rattling);function CryptL7Rattling() {var _this;QuestL7CryptRattling_classCallCheck(this, CryptL7Rattling);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "loc",
-    external_kolmafia_namespaceObject.Location.get("The Defiled Cranny"));return _this;}QuestL7CryptRattling_createClass(CryptL7Rattling, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Location.get("The Defiled Cranny"));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "beatenUp",
+    external_kolmafia_namespaceObject.Effect.get("Beaten Up"));return _this;}QuestL7CryptRattling_createClass(CryptL7Rattling, [{ key: "level", value:
 
     function level() {
       return (0,external_kolmafia_namespaceObject.availableAmount)(this.cape) > 0 ? 7 : 16;
@@ -14286,6 +14364,10 @@ var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRatt
 
     function cryptStatus() {
       if (!hasNonCombatSkillsReady(false)) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.cape) == 0 && (0,external_kolmafia_namespaceObject.haveEffect)(this.beatenUp) > 0) {
         return QuestStatus.NOT_READY;
       }
 
@@ -16443,14 +16525,12 @@ var ManorBathroom = /*#__PURE__*/function () {function ManorBathroom() {QuestMan
           props.setChoice(882, 1);
           props.setChoice(881, 1);
 
-          if (this.hasDelay()) {
-            var delay = DelayBurners.getReadyDelayBurner();
-
-            if (delay != null) {
-              delay.doFightSetup();
-            }
-          } else if (this.toAbsorb.length == 0) {
+          if (this.toAbsorb.length == 0) {
             DelayBurners.tryReplaceCombats();
+          }
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
           }
 
           try {
@@ -18322,11 +18402,9 @@ QuestDruggie = /*#__PURE__*/function () {function QuestDruggie() {QuestNpcStuff_
 QuestGnomeTrainer = /*#__PURE__*/function () {function QuestGnomeTrainer() {QuestNpcStuff_classCallCheck(this, QuestGnomeTrainer);QuestNpcStuff_defineProperty(this, "skills",
     [
     "Torso Awareness",
-    //"Cosmic Ugnderstanding",
     "Powers of Observatiogn",
-    "Gnefarious Pickpocketing"
-    // "Gnomish Hardigness",
-    ].map((s) => external_kolmafia_namespaceObject.Skill.get(s)));QuestNpcStuff_defineProperty(this, "letter",
+    "Gnefarious Pickpocketing"].
+    map((s) => external_kolmafia_namespaceObject.Skill.get(s)));QuestNpcStuff_defineProperty(this, "letter",
     external_kolmafia_namespaceObject.Item.get("Letter for Melvign the Gnome"));QuestNpcStuff_defineProperty(this, "shirtPulls",
     [
     new ResourcePullClaim(
@@ -19711,6 +19789,10 @@ var QuestGrabBoatJunkyard = /*#__PURE__*/function () {function QuestGrabBoatJunk
             } else {
               // We immediately try to replace combats because the key drops the longer we spend
               DelayBurners.tryReplaceCombats();
+            }
+
+            if (DelayBurners.isTryingForDupeableGoblin()) {
+              (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
             }
 
             props.setChoice(795, 1);
