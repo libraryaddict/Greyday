@@ -156,7 +156,7 @@ export class QuestDailyDungeon implements QuestInfo {
         props.setChoice(692, 3);
         let settings = new AdventureSettings();
 
-        if (itemAmount(this.malware) > 0 && this.isMalwareUsed()) {
+        if (itemAmount(this.malware) > 0 && !this.isMalwareUsed()) {
           settings.setStartOfFightMacro(Macro.item(this.malware));
         }
 
