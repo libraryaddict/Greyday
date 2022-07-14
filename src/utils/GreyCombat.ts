@@ -73,6 +73,12 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
   let hasAbsorbed = AbsorbsProvider.getReabsorbedMonsters().includes(monster);
 
   if (
+    myLevel() >= 6 &&
+    monster == Monster.get("Sausage Goblin") &&
+    !GreySettings.isHardcoreMode()
+  ) {
+    macro = macro.trySkill(Skill.get("Emit Matter Duplicating Drones"));
+  } else if (
     absorb != null &&
     ((myAdventures() > 20 && absorb.mp > 0) || absorb.adventures > 0) &&
     !hasAbsorbed

@@ -5,6 +5,7 @@ import {
   Item,
   Monster,
   storageAmount,
+  useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -83,6 +84,10 @@ export class QuestL10GiantGround implements QuestInfo {
           }
         } else if (this.toAbsorb.length == 0) {
           DelayBurners.tryReplaceCombats();
+        }
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
         }
 
         try {

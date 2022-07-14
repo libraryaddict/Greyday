@@ -1,9 +1,11 @@
 import {
   availableAmount,
+  Familiar,
   getProperty,
   Item,
   Location,
   Monster,
+  useFamiliar,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
@@ -20,6 +22,7 @@ export class QuestL6FriarHeart implements QuestInfo {
   absorbs: Monster[] = [Monster.get("G imp"), Monster.get("P imp")];
   latte: Item = Item.get("Latte lovers member's mug");
   umbrella: Item = Item.get("Unbreakable Umbrella");
+  toAbsorb: Monster[];
 
   level(): number {
     return 6;
@@ -82,6 +85,10 @@ export class QuestL6FriarHeart implements QuestInfo {
           availableAmount(this.umbrella) == 0
         ) {
           DelayBurners.tryReplaceCombats();
+        }
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
         }
 
         greyAdv(this.location, outfit);

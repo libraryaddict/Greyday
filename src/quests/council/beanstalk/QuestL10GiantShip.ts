@@ -1,4 +1,11 @@
-import { Location, Familiar, availableAmount, Item, Monster } from "kolmafia";
+import {
+  Location,
+  Familiar,
+  availableAmount,
+  Item,
+  Monster,
+  useFamiliar,
+} from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -24,6 +31,7 @@ export class QuestL10GiantShip implements QuestInfo {
     "Plastic Wrap Immateria",
   ].map((s) => Item.get(s));
   protag: Monster = Monster.get("Protagonist");
+  toAbsorb: Monster[];
 
   shouldRunNC(): boolean {
     if (availableAmount(this.modelShip) == 0 || this.loc.turnsSpent >= 25) {
@@ -75,6 +83,10 @@ export class QuestL10GiantShip implements QuestInfo {
           } else {
             DelayBurners.tryReplaceCombats();
           }
+        }
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
         }
 
         try {

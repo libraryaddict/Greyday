@@ -19,6 +19,8 @@ import {
   turnsPlayed,
   haveEffect,
   Effect,
+  Monster,
+  useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -97,6 +99,7 @@ export class QuestTowerBeeHive implements QuestInfo {
   beehive: Item = Item.get("Beehive");
   blackForest: Location = Location.get("The Black Forest");
   killer: QuestTowerKillSkin = new QuestTowerKillSkin();
+  toAbsorb: Monster[];
 
   getId(): QuestType {
     return "Council / Tower / WallOfSkin / Beehive";
@@ -133,6 +136,10 @@ export class QuestTowerBeeHive implements QuestInfo {
       run: () => {
         let props = new PropertyManager();
         DelayBurners.tryReplaceCombats();
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
+        }
 
         try {
           props.setChoice(924, 3); // Beezzzz

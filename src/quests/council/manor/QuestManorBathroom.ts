@@ -1,4 +1,11 @@
-import { availableAmount, Item, Location, Monster } from "kolmafia";
+import {
+  availableAmount,
+  Familiar,
+  Item,
+  Location,
+  Monster,
+  useFamiliar,
+} from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import {
   hasNonCombatSkillActive,
@@ -72,14 +79,12 @@ export class ManorBathroom implements QuestInfo {
         props.setChoice(882, 1);
         props.setChoice(881, 1);
 
-        if (this.hasDelay()) {
-          let delay = DelayBurners.getReadyDelayBurner();
-
-          if (delay != null) {
-            delay.doFightSetup();
-          }
-        } else if (this.toAbsorb.length == 0) {
+        if (this.toAbsorb.length == 0) {
           DelayBurners.tryReplaceCombats();
+        }
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
         }
 
         try {

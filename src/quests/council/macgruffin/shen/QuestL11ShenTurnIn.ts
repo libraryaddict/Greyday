@@ -18,6 +18,7 @@ import {
   equippedAmount,
   Slot,
   refreshStatus,
+  useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -130,6 +131,11 @@ export class QuestL11ShenTurnIn implements QuestInfo {
           } else if (equippedAmount(this.ball) > 0) {
             equip(Slot.get("Familiar"), Item.get("None"));
           }
+        } else if (
+          this.toAbsorb.length == 0 &&
+          DelayBurners.isTryingForDupeableGoblin()
+        ) {
+          useFamiliar(Familiar.get("Grey Goose"));
         }
 
         let props = new PropertyManager();

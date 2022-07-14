@@ -26,6 +26,7 @@ import {
   use,
   mallPrice,
   equippedAmount,
+  Monster,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -44,6 +45,7 @@ export class QuestTowerWallBones implements QuestInfo {
   knife: Item = Item.get("Electric Boning Knife");
   boning: QuestInfo = new QuestTowerBoningKnife();
   killer = new QuestTowerKillBones();
+  toAbsorb: Monster[];
 
   getChildren(): QuestInfo[] {
     return [this.boning];
@@ -145,6 +147,10 @@ export class QuestTowerBoningKnife implements QuestInfo {
       run: () => {
         let props = new PropertyManager();
         DelayBurners.tryReplaceCombats();
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
+        }
 
         try {
           props.setChoice(672, 1);

@@ -2,6 +2,7 @@ import {
   adv1,
   availableAmount,
   council,
+  Familiar,
   getProperty,
   Item,
   Location,
@@ -9,6 +10,7 @@ import {
   myLevel,
   outfit,
   use,
+  useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
@@ -28,6 +30,7 @@ export class QuestL11Business implements QuestInfo {
   binderClip: Item = Item.get("Boring Binder Clip");
   loc: Location = Location.get("the hidden office building");
   apartment: Location = Location.get("The Hidden Apartment Building");
+  toAbsorb: Monster[];
 
   getId(): QuestType {
     return "Council / MacGruffin / HiddenCity / Accountants";
@@ -136,6 +139,10 @@ export class QuestL11Business implements QuestInfo {
             } else {
               DelayBurners.tryReplaceCombats();
             }
+          }
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            useFamiliar(Familiar.get("Grey Goose"));
           }
 
           let settings = new AdventureSettings().addBanish(

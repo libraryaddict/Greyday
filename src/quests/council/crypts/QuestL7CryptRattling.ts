@@ -1,4 +1,11 @@
-import { availableAmount, changeMcd, Location, toInt } from "kolmafia";
+import {
+  availableAmount,
+  changeMcd,
+  Effect,
+  haveEffect,
+  Location,
+  toInt,
+} from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -10,6 +17,7 @@ import { CryptL7Template } from "./CryptTemplate";
 
 export class CryptL7Rattling extends CryptL7Template {
   loc: Location = Location.get("The Defiled Cranny");
+  beatenUp: Effect = Effect.get("Beaten Up");
 
   level(): number {
     return availableAmount(this.cape) > 0 ? 7 : 16;
@@ -54,6 +62,10 @@ export class CryptL7Rattling extends CryptL7Template {
 
   cryptStatus(): QuestStatus {
     if (!hasNonCombatSkillsReady(false)) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (availableAmount(this.cape) == 0 && haveEffect(this.beatenUp) > 0) {
       return QuestStatus.NOT_READY;
     }
 

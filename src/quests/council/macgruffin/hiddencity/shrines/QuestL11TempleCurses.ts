@@ -2,12 +2,14 @@ import {
   adv1,
   council,
   Effect,
+  Familiar,
   getProperty,
   haveEffect,
   Location,
   Monster,
   myLevel,
   toInt,
+  useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
@@ -20,6 +22,7 @@ export class QuestL11Curses implements QuestInfo {
   curse2: Effect = Effect.get("Twice-Cursed");
   curse3: Effect = Effect.get("Thrice-Cursed");
   apartment: Location = Location.get("The Hidden Apartment Building");
+  toAbsorb: Monster[];
 
   level(): number {
     return 11;
@@ -102,6 +105,10 @@ export class QuestL11Curses implements QuestInfo {
           }
         } else {
           props.setChoice(780, 2);
+        }
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
         }
 
         let settings = new AdventureSettings().addBanish(

@@ -8,6 +8,7 @@ import {
   isBanished,
   toInt,
   Skill,
+  useFamiliar,
 } from "kolmafia";
 import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
@@ -98,6 +99,10 @@ export class QuestL11PyramidMiddle implements QuestInfo {
           } else {
             DelayBurners.tryReplaceCombats();
           }
+        }
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
         }
 
         settings.addNoBanish(this.tombRat);

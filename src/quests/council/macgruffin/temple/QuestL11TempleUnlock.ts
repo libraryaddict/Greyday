@@ -10,6 +10,7 @@ import {
   myLevel,
   print,
   use,
+  useFamiliar,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../../GreyAdventurer";
 import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
@@ -154,6 +155,10 @@ export class QuestL11TempleUnlock implements QuestInfo {
           } else if (hasNonCombatSkillsReady()) {
             DelayBurners.tryReplaceCombats();
           }
+        }
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
         }
 
         this.runSpookyChoices();

@@ -22,6 +22,7 @@ import {
   familiarWeight,
   Monster,
   itemAmount,
+  useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
@@ -106,6 +107,10 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
           } else {
             // We immediately try to replace combats because the key drops the longer we spend
             DelayBurners.tryReplaceCombats();
+          }
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            useFamiliar(Familiar.get("Grey Goose"));
           }
 
           props.setChoice(795, 1);

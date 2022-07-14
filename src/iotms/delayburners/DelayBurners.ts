@@ -1,4 +1,11 @@
-import { print, Slot } from "kolmafia";
+import {
+  equippedAmount,
+  Familiar,
+  familiarWeight,
+  Item,
+  print,
+  Slot,
+} from "kolmafia";
 import { DelayBurner } from "./DelayBurnerAbstract";
 import { DelayBurningKramco } from "./DelayBurningKramco";
 import { DelayBurningVoter } from "./DelayBurningVoter";
@@ -27,6 +34,13 @@ export class DelayBurners {
 
   private static getDelayBurners(): DelayBurner[] {
     return this.getDelays().filter((d) => d.isViable());
+  }
+
+  static isTryingForDupeableGoblin(): boolean {
+    return (
+      familiarWeight(Familiar.get("Grey Goose")) >= 6 &&
+      equippedAmount(Item.get("Kramco Sausage-o-Matic")) > 0
+    );
   }
 
   static getReadyDelayBurner(freeOnly: boolean = false): DelayBurner {

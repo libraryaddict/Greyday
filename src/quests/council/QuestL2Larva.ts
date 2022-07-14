@@ -1,11 +1,13 @@
 import {
   availableAmount,
   council,
+  Familiar,
   getProperty,
   Item,
   Location,
   Monster,
   myLevel,
+  useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
@@ -95,6 +97,13 @@ export class QuestL2SpookyLarva implements QuestInfo {
           } else if (hasNonCombatSkillsReady()) {
             DelayBurners.tryReplaceCombats();
           }
+        }
+
+        if (
+          this.toAbsorb.length == 0 &&
+          DelayBurners.isTryingForDupeableGoblin()
+        ) {
+          useFamiliar(Familiar.get("Grey Goose"));
         }
 
         try {

@@ -182,10 +182,8 @@ class QuestDruggie implements QuestInfo {
 class QuestGnomeTrainer implements QuestInfo {
   skills: Skill[] = [
     "Torso Awareness",
-    //"Cosmic Ugnderstanding",
     "Powers of Observatiogn",
     "Gnefarious Pickpocketing",
-    // "Gnomish Hardigness",
   ].map((s) => Skill.get(s));
   letter: Item = Item.get("Letter for Melvign the Gnome");
   shirtPulls: ResourceClaim[] = [
