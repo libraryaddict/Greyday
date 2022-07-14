@@ -18221,8 +18221,9 @@ var QuestLocketFantasyBandit = /*#__PURE__*/function () {function QuestLocketFan
       }
 
       if (
-      !canCombatLocket(this.monster) &&
-      (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Pocket Wish")) == 0)
+      !canCombatLocket(this.monster) && (
+      (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Genie Bottle")) == 0 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Pocket Wish")) == 0))
       {
         return QuestStatus.COMPLETED;
       }
@@ -21201,8 +21202,9 @@ var QuestAbsorbStarMonster = /*#__PURE__*/function (_TaskInfo) {QuestAbsorbStarM
 
 
 
+
   function QuestAbsorbStarMonster() {var _this;QuestAbsorbStarMonster_classCallCheck(this, QuestAbsorbStarMonster);
-    _this = _super.call(this);QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "evenMonster", external_kolmafia_namespaceObject.Monster.get("One-Eyed Willie"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "oddMonster", external_kolmafia_namespaceObject.Monster.get("Little Man in the Canoe"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "familiar", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "pocketWish", external_kolmafia_namespaceObject.Item.get("Pocket Wish"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "nanovision", external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "wishResource", void 0);QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "locketResource", void 0);
+    _this = _super.call(this);QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "evenMonster", external_kolmafia_namespaceObject.Monster.get("One-Eyed Willie"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "oddMonster", external_kolmafia_namespaceObject.Monster.get("Little Man in the Canoe"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "familiar", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "pocketWish", external_kolmafia_namespaceObject.Item.get("Pocket Wish"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "nanovision", external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "wishResource", void 0);QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "locketResource", void 0);QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "bottle", external_kolmafia_namespaceObject.Item.get("genie bottle"));
 
     _this.wishResource = new ResourceClaim(
     ResourceType.GENIE_WISH,
@@ -21240,8 +21242,9 @@ var QuestAbsorbStarMonster = /*#__PURE__*/function (_TaskInfo) {QuestAbsorbStarM
       }
 
       if (
-      !canCombatLocket(this.getMonster()) &&
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.pocketWish) == 0)
+      !canCombatLocket(this.getMonster()) && (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.bottle) == 0 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.pocketWish) == 0))
       {
         return QuestStatus.COMPLETED;
       }
