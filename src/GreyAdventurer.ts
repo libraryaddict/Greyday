@@ -231,6 +231,20 @@ export class GreyAdventurer {
       outfit.addBonus(`+${bonus} bonus cursed magnifying glass`);
     }
 
+    if (toInt(getProperty("scrapbookCharges")) < 100) {
+      let bonus = 2;
+
+      if (GreySettings.greyPrepareLevelingResources) {
+        bonus = 4;
+
+        if (canDoMagGlass) {
+          bonus = 11;
+        }
+      }
+
+      outfit.addBonus("+" + bonus + " bonus familiar scrapbook");
+    }
+
     if (toInt(getProperty("sweat")) < 100 && outfit.itemDropWeight < 1) {
       outfit.addBonus(`+8 bonus designer sweatpants`);
     }

@@ -67,13 +67,6 @@ export class GreyOutfit {
         this.addBonus("-4 bonus hewn moon-rune spoon");
         this.addBonus("+4.5 bonus powerful glove");
       }
-
-      if (toInt(getProperty("scrapbookCharges")) < 100) {
-        this.addBonus(
-          (GreySettings.greyPrepareLevelingResources ? "+4" : "+2") +
-            " bonus familiar scrapbook"
-        );
-      }
     }
 
     this.addBonus("-equip screwing pooch");
