@@ -405,6 +405,13 @@ function getGreySettings() {
     valid: (value) => value == "true" || value == "false" };
 
 
+  var skipPalindome = {
+    name: "greySkipPalindome",
+    description:
+    "If set to true, will not complete palindome. This is only useful if you intend to burn turns on UR farming, and you're recommended to save at least 80 turns minumum to resume the script.",
+    valid: (value) => value == "true" || value == "false" };
+
+
   return [
   towerBreak,
   moonTune,
@@ -11138,7 +11145,7 @@ var QuestDailyDungeon = /*#__PURE__*/function () {
     } }, { key: "isMalwareUsed", value:
 
     function isMalwareUsed() {
-      return (0,external_kolmafia_namespaceObject.getProperty)("_dailyDungeonMalwareUsed") != "true";
+      return (0,external_kolmafia_namespaceObject.getProperty)("_dailyDungeonMalwareUsed") == "true";
     } }, { key: "run", value:
 
     function run() {
@@ -23551,7 +23558,10 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
           //   replaceWith.push(Familiar.get("Melodramedary"));
         }
 
-        if ((0,external_kolmafia_namespaceObject.getProperty)("_roboDrinks").includes("drive-by shooting")) {
+        if (
+        (0,external_kolmafia_namespaceObject.getProperty)("_roboDrinks").includes("drive-by shooting") &&
+        (0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Robortender")) < 20)
+        {
           replaceWith.push(external_kolmafia_namespaceObject.Familiar.get("Robortender"));
         }var _iterator2 = GreyAdventurer_createForOfIteratorHelper(
 
