@@ -115,7 +115,7 @@ export class QuestDailyDungeon implements QuestInfo {
   }
 
   isMalwareUsed(): boolean {
-    return getProperty("_dailyDungeonMalwareUsed") != "true";
+    return getProperty("_dailyDungeonMalwareUsed") == "true";
   }
 
   run(): QuestAdventure {

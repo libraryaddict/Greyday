@@ -281,7 +281,10 @@ export class GreyAdventurer {
         //   replaceWith.push(Familiar.get("Melodramedary"));
       }
 
-      if (getProperty("_roboDrinks").includes("drive-by shooting")) {
+      if (
+        getProperty("_roboDrinks").includes("drive-by shooting") &&
+        familiarWeight(Familiar.get("Robortender")) < 20
+      ) {
         replaceWith.push(Familiar.get("Robortender"));
       }
 
