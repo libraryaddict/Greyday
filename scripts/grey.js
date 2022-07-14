@@ -11186,7 +11186,7 @@ var QuestDailyDungeon = /*#__PURE__*/function () {
           props.setChoice(692, 3);
           var settings = new AdventureSettings();
 
-          if ((0,external_kolmafia_namespaceObject.itemAmount)(this.malware) > 0 && this.isMalwareUsed()) {
+          if ((0,external_kolmafia_namespaceObject.itemAmount)(this.malware) > 0 && !this.isMalwareUsed()) {
             settings.setStartOfFightMacro(Macro.item(this.malware));
           }
 
@@ -11980,7 +11980,7 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
         location: null,
         run: () => {
           (0,external_kolmafia_namespaceObject.cliExecute)(
-          "maximize +5 meat +0.03 moxie +100 hp 200 min 300 max +switch hobo monkey +switch robortender");
+          "maximize +5 meat +0.03 moxie +100 hp 200 min 500 max +switch hobo monkey +switch robortender");
 
 
           if ((0,external_kolmafia_namespaceObject.myMaxhp)() < 200) {
