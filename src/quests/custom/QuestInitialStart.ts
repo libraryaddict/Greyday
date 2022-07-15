@@ -119,6 +119,14 @@ export class QuestInitialStart implements QuestInfo {
         }
 
         if (
+          getProperty("backupCameraReverserEnabled") != "true" &&
+          availableAmount(Item.get("Backup Camera")) > 0
+        ) {
+          print("Now reversing the backup camera..", "blue");
+          cliExecute("backupcamera reverser on");
+        }
+
+        if (
           availableAmount(this.saber) > 0 &&
           getProperty("_saberMod") == "0"
         ) {
