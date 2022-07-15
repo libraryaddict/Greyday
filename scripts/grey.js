@@ -13699,7 +13699,9 @@ var QuestL6FriarElbow = /*#__PURE__*/function () {function QuestL6FriarElbow() {
         return QuestStatus.COMPLETED;
       }
 
-      if (!hasNonCombatSkillsReady(false)) {
+      if (
+      !hasNonCombatSkillsReady((0,external_kolmafia_namespaceObject.myLevel)() >= 11 && !hasNonCombatSkillActive()))
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -13841,7 +13843,9 @@ var QuestL6FriarHeart = /*#__PURE__*/function () {function QuestL6FriarHeart() {
         return QuestStatus.COMPLETED;
       }
 
-      if (!hasNonCombatSkillsReady(false)) {
+      if (
+      !hasNonCombatSkillsReady((0,external_kolmafia_namespaceObject.myLevel)() >= 11 && !hasNonCombatSkillActive()))
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -13936,7 +13940,9 @@ var QuestL6FriarNeck = /*#__PURE__*/function () {function QuestL6FriarNeck() {Qu
         return QuestStatus.COMPLETED;
       }
 
-      if (!hasNonCombatSkillsReady(false)) {
+      if (
+      !hasNonCombatSkillsReady((0,external_kolmafia_namespaceObject.myLevel)() >= 11 && !hasNonCombatSkillActive()))
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -15712,10 +15718,10 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         if (this.lastColdCheck < (0,external_kolmafia_namespaceObject.turnsPlayed)() - 5) {
           this.lastColdCheck = (0,external_kolmafia_namespaceObject.turnsPlayed)();
 
-          (0,external_kolmafia_namespaceObject.maximize)("cold dmg 10 min", true);
+          (0,external_kolmafia_namespaceObject.maximize)("cold dmg 10 min -tie", true);
           var melee = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Cold Damage");
 
-          (0,external_kolmafia_namespaceObject.maximize)("cold spell dmg 10 min", true);
+          (0,external_kolmafia_namespaceObject.maximize)("cold spell dmg 10 min -tie", true);
           var spell = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Cold Spell Damage");
 
           this.hasEnoughCold = Math.max(melee, spell) >= 5;
@@ -17970,12 +17976,12 @@ var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.plusSign) > 0 && (0,external_kolmafia_namespaceObject.myLevel)() < 16) {
-        return QuestStatus.FASTER_LATER;
-      }
-
       if (!hasNonCombatSkillsReady(false)) {
         return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.plusSign) > 0 && (0,external_kolmafia_namespaceObject.myLevel)() < 16) {
+        return QuestStatus.FASTER_LATER;
       }
 
       return QuestStatus.READY;
