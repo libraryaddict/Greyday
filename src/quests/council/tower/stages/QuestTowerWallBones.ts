@@ -27,6 +27,7 @@ import {
   mallPrice,
   equippedAmount,
   Monster,
+  myPrimestat,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -185,6 +186,7 @@ export class QuestTowerKillBones {
     }
 
     if (
+      myPrimestat() != Stat.get("Moxie") &&
       !haveEffect(Effect.get("Phairly Balanced")) &&
       mallPrice(Item.get("PH Balancer")) < 1000
     ) {
@@ -217,6 +219,7 @@ export class QuestTowerKillBones {
     }
 
     if (
+      myPrimestat() != Stat.get("Mysticality") &&
       !haveEffect(Effect.get("Phairly Balanced")) &&
       mallPrice(Item.get("PH Balancer")) < 1000
     ) {
