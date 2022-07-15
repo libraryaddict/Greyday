@@ -95,10 +95,10 @@ export class SmutOrcs implements QuestInfo {
       if (this.lastColdCheck < turnsPlayed() - 5) {
         this.lastColdCheck = turnsPlayed();
 
-        maximize("cold dmg 10 min", true);
+        maximize("cold dmg 10 min -tie", true);
         let melee = numericModifier("Generated:_spec", "Cold Damage");
 
-        maximize("cold spell dmg 10 min", true);
+        maximize("cold spell dmg 10 min -tie", true);
         let spell = numericModifier("Generated:_spec", "Cold Spell Damage");
 
         this.hasEnoughCold = Math.max(melee, spell) >= 5;

@@ -6,9 +6,13 @@ import {
   Item,
   Location,
   Monster,
+  myLevel,
   useFamiliar,
 } from "kolmafia";
-import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
+import {
+  hasNonCombatSkillActive,
+  hasNonCombatSkillsReady,
+} from "../../../GreyAdventurer";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -59,7 +63,9 @@ export class QuestL6FriarNeck implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!hasNonCombatSkillsReady(false)) {
+    if (
+      !hasNonCombatSkillsReady(myLevel() >= 11 && !hasNonCombatSkillActive())
+    ) {
       return QuestStatus.NOT_READY;
     }
 

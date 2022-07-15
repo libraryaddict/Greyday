@@ -66,12 +66,12 @@ export class QuestDungeonsOfDoom implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (availableAmount(this.plusSign) > 0 && myLevel() < 16) {
-      return QuestStatus.FASTER_LATER;
-    }
-
     if (!hasNonCombatSkillsReady(false)) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (availableAmount(this.plusSign) > 0 && myLevel() < 16) {
+      return QuestStatus.FASTER_LATER;
     }
 
     return QuestStatus.READY;
