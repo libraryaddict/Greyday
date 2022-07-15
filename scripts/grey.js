@@ -17855,6 +17855,14 @@ var QuestInitialStart = /*#__PURE__*/function () {
           }
 
           if (
+          (0,external_kolmafia_namespaceObject.getProperty)("backupCameraReverserEnabled") != "true" &&
+          (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Backup Camera")) > 0)
+          {
+            (0,external_kolmafia_namespaceObject.print)("Now reversing the backup camera..", "blue");
+            (0,external_kolmafia_namespaceObject.cliExecute)("backupcamera reverser on");
+          }
+
+          if (
           (0,external_kolmafia_namespaceObject.availableAmount)(this.saber) > 0 &&
           (0,external_kolmafia_namespaceObject.getProperty)("_saberMod") == "0")
           {
