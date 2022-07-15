@@ -160,6 +160,10 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
   }
 
   mustBeDone(): boolean {
+    if (this.canBackup()) {
+      return true;
+    }
+
     if (myLevel() < 12) {
       return false;
     }
@@ -168,7 +172,7 @@ export class QuestL8MountainOreMan extends QuestL8MountainOre {
       return false;
     }
 
-    if (familiarWeight(this.goose) >= 6) {
+    if (this.doDuping() && familiarWeight(this.goose) >= 6) {
       return true;
     }
 
