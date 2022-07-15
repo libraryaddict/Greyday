@@ -12,6 +12,7 @@ import {
   familiarWeight,
 } from "kolmafia";
 import { GreyAdventurer } from "../../../../GreyAdventurer";
+import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreySettings } from "../../../../utils/GreySettings";
 import {
@@ -29,6 +30,7 @@ export class QuestL11DesertStoneRose implements QuestInfo {
   blur: Monster = Monster.get("Blur");
   toAbsorb: Monster[];
   fam: Familiar = Familiar.get("Grey Goose");
+  swarm: Monster = Monster.get("Swarm of fire ants");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / StoneRose";
@@ -46,6 +48,10 @@ export class QuestL11DesertStoneRose implements QuestInfo {
     }
 
     if (getProperty("_gnasirAvailable") != "true") {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (!AbsorbsProvider.getReabsorbedMonsters().includes(this.swarm)) {
       return QuestStatus.NOT_READY;
     }
 
