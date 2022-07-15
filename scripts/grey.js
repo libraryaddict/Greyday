@@ -12171,6 +12171,7 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
       }
 
       if (
+      (0,external_kolmafia_namespaceObject.myPrimestat)() != external_kolmafia_namespaceObject.Stat.get("Moxie") &&
       !(0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Phairly Balanced")) &&
       (0,external_kolmafia_namespaceObject.mallPrice)(external_kolmafia_namespaceObject.Item.get("PH Balancer")) < 1000)
       {
@@ -12203,6 +12204,7 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
       }
 
       if (
+      (0,external_kolmafia_namespaceObject.myPrimestat)() != external_kolmafia_namespaceObject.Stat.get("Mysticality") &&
       !(0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Phairly Balanced")) &&
       (0,external_kolmafia_namespaceObject.mallPrice)(external_kolmafia_namespaceObject.Item.get("PH Balancer")) < 1000)
       {
