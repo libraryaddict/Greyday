@@ -185,11 +185,6 @@ export class QuestTowerKillBones {
     }
 
     if (
-      myBuffedstat(Stat.get("Moxie")) <
-        Math.max(
-          myBuffedstat(Stat.get("Muscle")),
-          myBuffedstat(Stat.get("Mysticality"))
-        ) &&
       !haveEffect(Effect.get("Phairly Balanced")) &&
       mallPrice(Item.get("PH Balancer")) < 1000
     ) {
@@ -222,11 +217,6 @@ export class QuestTowerKillBones {
     }
 
     if (
-      myBuffedstat(Stat.get("Mysticality")) <
-        Math.max(
-          myBuffedstat(Stat.get("Muscle")),
-          myBuffedstat(Stat.get("Moxie"))
-        ) &&
       !haveEffect(Effect.get("Phairly Balanced")) &&
       mallPrice(Item.get("PH Balancer")) < 1000
     ) {
