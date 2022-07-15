@@ -5524,13 +5524,15 @@ function QuestL11DesertStoneRose_classCallCheck(instance, Constructor) {if (!(in
 
 
 
+
 var QuestL11DesertStoneRose = /*#__PURE__*/function () {function QuestL11DesertStoneRose() {QuestL11DesertStoneRose_classCallCheck(this, QuestL11DesertStoneRose);QuestL11DesertStoneRose_defineProperty(this, "hydrated",
     external_kolmafia_namespaceObject.Effect.get("Ultrahydrated"));QuestL11DesertStoneRose_defineProperty(this, "oasis",
     external_kolmafia_namespaceObject.Location.get("Oasis"));QuestL11DesertStoneRose_defineProperty(this, "rose",
     external_kolmafia_namespaceObject.Item.get("Stone Rose"));QuestL11DesertStoneRose_defineProperty(this, "blur",
     external_kolmafia_namespaceObject.Monster.get("Blur"));QuestL11DesertStoneRose_defineProperty(this, "toAbsorb", void 0);QuestL11DesertStoneRose_defineProperty(this, "fam",
 
-    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));}QuestL11DesertStoneRose_createClass(QuestL11DesertStoneRose, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL11DesertStoneRose_defineProperty(this, "swarm",
+    external_kolmafia_namespaceObject.Monster.get("Swarm of fire ants"));}QuestL11DesertStoneRose_createClass(QuestL11DesertStoneRose, [{ key: "getId", value:
 
     function getId() {
       return "Council / MacGruffin / Desert / StoneRose";
@@ -5548,6 +5550,10 @@ var QuestL11DesertStoneRose = /*#__PURE__*/function () {function QuestL11DesertS
       }
 
       if ((0,external_kolmafia_namespaceObject.getProperty)("_gnasirAvailable") != "true") {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (!AbsorbsProvider.getReabsorbedMonsters().includes(this.swarm)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -9365,7 +9371,11 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
         run: () => {
           var fam = external_kolmafia_namespaceObject.Familiar.get("Grey Goose");
 
-          DelayBurners.tryReplaceCombats();
+          var burner = DelayBurners.getReadyDelayBurner();
+
+          if (burner != null) {
+            burner.doFightSetup();
+          }
 
           if (DelayBurners.isTryingForDupeableGoblin()) {
             (0,external_kolmafia_namespaceObject.useFamiliar)(fam);
@@ -12161,11 +12171,6 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
       }
 
       if (
-      (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Moxie")) <
-      Math.max(
-      (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Muscle")),
-      (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Mysticality"))) &&
-
       !(0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Phairly Balanced")) &&
       (0,external_kolmafia_namespaceObject.mallPrice)(external_kolmafia_namespaceObject.Item.get("PH Balancer")) < 1000)
       {
@@ -12198,11 +12203,6 @@ var QuestTowerKillBones = /*#__PURE__*/function () {function QuestTowerKillBones
       }
 
       if (
-      (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Mysticality")) <
-      Math.max(
-      (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Muscle")),
-      (0,external_kolmafia_namespaceObject.myBuffedstat)(external_kolmafia_namespaceObject.Stat.get("Moxie"))) &&
-
       !(0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Phairly Balanced")) &&
       (0,external_kolmafia_namespaceObject.mallPrice)(external_kolmafia_namespaceObject.Item.get("PH Balancer")) < 1000)
       {
@@ -15076,6 +15076,10 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
     } }, { key: "mustBeDone", value:
 
     function mustBeDone() {
+      if (this.canBackup()) {
+        return true;
+      }
+
       if ((0,external_kolmafia_namespaceObject.myLevel)() < 12) {
         return false;
       }
@@ -15084,7 +15088,7 @@ var QuestL8MountainOreMan = /*#__PURE__*/function (_QuestL8MountainOre) {QuestL8
         return false;
       }
 
-      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= 6) {
+      if (this.doDuping() && (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= 6) {
         return true;
       }
 
@@ -22506,13 +22510,15 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
       }
 
       if (mustBeDone.length > 1) {
-        throw (
-          "Multiple quests demand to be done! " +
-          mustBeDone.map((q) => q.getId()).join(", "));
+        (0,external_kolmafia_namespaceObject.print)(
+        "Multiple quests demand to be done! " +
+        mustBeDone.map((q) => q.getId()).join(", "),
+        "red");
 
+        (0,external_kolmafia_namespaceObject.print)("This is not a real error, but not that great either.", "red");
       }
 
-      if (mustBeDone.length == 1) {
+      if (mustBeDone.length > 0) {
         return {
           quest: mustBeDone[0],
           locationInfo: this.absorbs.getAdventuresInLocation(
