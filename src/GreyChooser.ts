@@ -452,13 +452,15 @@ export class AdventureFinder {
     }
 
     if (mustBeDone.length > 1) {
-      throw (
+      print(
         "Multiple quests demand to be done! " +
-        mustBeDone.map((q) => q.getId()).join(", ")
+          mustBeDone.map((q) => q.getId()).join(", "),
+        "red"
       );
+      print("This is not a real error, but not that great either.", "red");
     }
 
-    if (mustBeDone.length == 1) {
+    if (mustBeDone.length > 0) {
       return {
         quest: mustBeDone[0],
         locationInfo: this.absorbs.getAdventuresInLocation(
