@@ -53,7 +53,12 @@ export class QuestFamiliarEquip implements QuestInfo {
           familiarWeight(this.familiar) < 6 &&
           myMeat() >= 100
         ) {
+          let exp = this.familiar.experience;
           cliExecute("train turns 1");
+
+          if (exp <= this.familiar.experience) {
+            throw "We attempted to train your familiar in the cake arena, but they gained no experience. Something is likely wrong. You may need to acquire a grey goose vest yourself.";
+          }
         }
       },
     };
