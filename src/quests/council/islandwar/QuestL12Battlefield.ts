@@ -122,7 +122,11 @@ export class QuestL12Battlefield implements QuestInfo {
       run: () => {
         let fam = Familiar.get("Grey Goose");
 
-        DelayBurners.tryReplaceCombats();
+        let burner = DelayBurners.getReadyDelayBurner();
+
+        if (burner != null) {
+          burner.doFightSetup();
+        }
 
         if (DelayBurners.isTryingForDupeableGoblin()) {
           useFamiliar(fam);
