@@ -16840,7 +16840,8 @@ var QuestManorBillards = /*#__PURE__*/function () {function QuestManorBillards()
       if (
       (0,external_kolmafia_namespaceObject.availableAmount)(this.cue) == 0 ||
       (0,external_kolmafia_namespaceObject.haveEffect)(this.chalkEffect) > 0 ||
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.chalk) > 0)
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.chalk) > 0 ||
+      (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("poolSkill")) < 2)
       {
         outfit.setNoCombat();
       }
@@ -18839,7 +18840,7 @@ var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchas
     } }, { key: "level", value:
 
     function level() {
-      return 8;
+      return 6;
     } }, { key: "status", value:
 
     function status() {
