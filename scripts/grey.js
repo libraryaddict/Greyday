@@ -7580,6 +7580,7 @@ var QuestL11Shen = /*#__PURE__*/function () {
         location: null,
         run: () => {
           var props = new PropertyManager();
+          props.setChoice(1074, 1); // Approach table
           props.setChoice(851, 1);
 
           try {
