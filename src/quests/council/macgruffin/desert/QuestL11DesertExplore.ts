@@ -187,7 +187,7 @@ export class QuestL11DesertExplore implements QuestInfo {
           this.toAbsorb.length == 0 &&
           DelayBurners.isDelayBurnerReady()
         ) {
-          DelayBurners.tryReplaceCombats();
+          DelayBurners.tryReplaceCombats(3);
 
           // If the compass is not equipped, and we don't own camel, but we do own left-hand man.
           // Then it's worth it.

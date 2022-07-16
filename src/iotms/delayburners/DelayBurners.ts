@@ -61,12 +61,14 @@ export class DelayBurners {
     return burner != null && burner.readyIn() <= 0;
   }
 
-  static tryReplaceCombats(): Slot[] {
+  static tryReplaceCombats(maxTurnsWasted: number = 10): Slot[] {
     let delays = this.getDelays()
       .filter((d) => d.isViable() && d.isViableAsCombatReplacer())
       .sort((d1, d2) => d1.readyIn() - d2.readyIn());
 
-    let toReturn = delays.find((d) => d.isFree());
+    let toReturn = delays.find(
+      (d) => d.isFree() && d.readyIn() <= maxTurnsWasted
+    );
 
     if (toReturn == null) {
       toReturn = delays[0];
