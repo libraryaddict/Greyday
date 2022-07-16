@@ -9,6 +9,9 @@ import {
   myFamiliar,
   useFamiliar,
   Item,
+  availableAmount,
+  visitUrl,
+  runChoice,
 } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -27,6 +30,7 @@ export class QuestFantasyRealm implements QuestInfo {
   fought: string = "_foughtFantasyRealm";
   location: Location = Location.get("The Bandit Crossroads");
   equip: Item = Item.get("FantasyRealm G. E. M.");
+  token: Item = Item.get("fat loot token");
 
   getId(): QuestType {
     return "Council / Tower / Keys / FantasyRealm";
@@ -82,12 +86,23 @@ export class QuestFantasyRealm implements QuestInfo {
       disableFamOverride: true,
       outfit: outfit,
       run: () => {
+        if (availableAmount(this.equip) == 0) {
+          visitUrl("place.php?whichplace=realm_fantasy&action=fr_initcenter");
+          runChoice(3);
+
+          if (availableAmount(this.equip) == 0) {
+            throw "I unexpectedly didn't acquire the fantasyrealm gem!";
+          }
+        }
+
         let props = new PropertyManager();
         props.setChoice(1281, 0); // Don't handle
 
         if (myFamiliar() != Familiar.get("None")) {
           useFamiliar(Familiar.get("None"));
         }
+
+        let tokens = availableAmount(this.token);
 
         try {
           greyAdv(this.location, outfit);
@@ -100,6 +115,10 @@ export class QuestFantasyRealm implements QuestInfo {
           throw e;
         } finally {
           props.resetAll();
+        }
+
+        if (this.hasFoughtEnough() && availableAmount(this.token) == tokens) {
+          throw "Expected to have a fat loot token from fantasyland, didn't!";
         }
       },
     };
