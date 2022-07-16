@@ -21,6 +21,7 @@ import { CryptL7Rattling } from "./crypts/QuestL7CryptRattling";
 import { CryptL7Sprinters } from "./crypts/QuestL7CryptSprinters";
 import { QuestType } from "../QuestTypes";
 import { PropertyManager } from "../../utils/Properties";
+import { GreySettings } from "../../utils/GreySettings";
 
 export class QuestL7Crypt implements QuestInfo {
   children: QuestInfo[] = [
@@ -87,7 +88,11 @@ export class QuestL7Crypt implements QuestInfo {
 
         council();
 
-        if (availableAmount(this.chest) > 0 && myMeat() < 6000) {
+        if (
+          !GreySettings.greyPrepareLevelingResources &&
+          availableAmount(this.chest) > 0 &&
+          myMeat() < 6000
+        ) {
           use(this.chest);
         }
       },

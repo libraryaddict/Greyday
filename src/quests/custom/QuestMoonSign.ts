@@ -41,7 +41,7 @@ export class QuestMoonSign implements QuestInfo {
   }
 
   level(): number {
-    return 12;
+    return 11;
   }
 
   status(): QuestStatus {
