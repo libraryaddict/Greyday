@@ -24,7 +24,7 @@ export class QuestCustomPurchases implements QuestInfo {
   }
 
   level(): number {
-    return 8;
+    return 6;
   }
 
   status(): QuestStatus {
