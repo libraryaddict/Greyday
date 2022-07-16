@@ -201,7 +201,7 @@ export function greyAdv(
 
     if (choiceToPick == 0) {
       print("Oh god", "red");
-      throw "No idea what to do!";
+      throw "No idea what to do! Handle the choice manually? This should generally only happen for teleportis or non-quest absorb attempts.";
     }
 
     if (choicesRun.filter((c) => c == lastChoice()).length > 6) {
