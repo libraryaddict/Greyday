@@ -8,6 +8,7 @@ import {
   itemAmount,
   Location,
   mallPrice,
+  print,
   pullsRemaining,
   retrieveItem,
   wellStocked,
@@ -152,13 +153,27 @@ export class QuestDailyDungeon implements QuestInfo {
       outfit: outfit,
       location: this.location,
       run: () => {
+        let dontHave: Item[] = [this.ring, this.picklocks, this.pole].filter(
+          (i) => availableAmount(i) == 0
+        );
+
+        if (dontHave.length > 0) {
+          print("Uh oh! Missing " + dontHave.join(", ") + "!", "red");
+          throw "Expected to have dungeon items, didn't.";
+        }
+
         let props = new PropertyManager();
-        props.setChoice(692, 3);
         let settings = new AdventureSettings();
 
         if (itemAmount(this.malware) > 0 && !this.isMalwareUsed()) {
           settings.setStartOfFightMacro(Macro.item(this.malware));
         }
+
+        props.setChoice(689, 1);
+        props.setChoice(690, 2);
+        props.setChoice(691, 2);
+        props.setChoice(692, 3);
+        props.setChoice(693, 2);
 
         try {
           greyAdv(this.location, outfit, settings);
