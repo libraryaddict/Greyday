@@ -74,7 +74,8 @@ export class QuestManorBillards implements QuestInfo {
     if (
       availableAmount(this.cue) == 0 ||
       haveEffect(this.chalkEffect) > 0 ||
-      availableAmount(this.chalk) > 0
+      availableAmount(this.chalk) > 0 ||
+      toInt(getProperty("poolSkill")) < 2
     ) {
       outfit.setNoCombat();
     }
