@@ -2058,7 +2058,7 @@ settings)
 
     if (choiceToPick == 0) {
       (0,external_kolmafia_namespaceObject.print)("Oh god", "red");
-      throw "No idea what to do!";
+      throw "No idea what to do! Handle the choice manually? This should generally only happen for teleportis or non-quest absorb attempts.";
     }
 
     if (choicesRun.filter((c) => c == (0,external_kolmafia_namespaceObject.lastChoice)()).length > 6) {
@@ -11193,13 +11193,27 @@ var QuestDailyDungeon = /*#__PURE__*/function () {
         outfit: outfit,
         location: this.location,
         run: () => {
+          var dontHave = [this.ring, this.picklocks, this.pole].filter(
+          (i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0);
+
+
+          if (dontHave.length > 0) {
+            (0,external_kolmafia_namespaceObject.print)("Uh oh! Missing " + dontHave.join(", ") + "!", "red");
+            throw "Expected to have dungeon items, didn't.";
+          }
+
           var props = new PropertyManager();
-          props.setChoice(692, 3);
           var settings = new AdventureSettings();
 
           if ((0,external_kolmafia_namespaceObject.itemAmount)(this.malware) > 0 && !this.isMalwareUsed()) {
             settings.setStartOfFightMacro(Macro.item(this.malware));
           }
+
+          props.setChoice(689, 1);
+          props.setChoice(690, 2);
+          props.setChoice(691, 2);
+          props.setChoice(692, 3);
+          props.setChoice(693, 2);
 
           try {
             greyAdv(this.location, outfit, settings);
