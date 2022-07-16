@@ -3181,12 +3181,14 @@ var DelayBurners = /*#__PURE__*/function () {function DelayBurners() {DelayBurne
       return burner != null && burner.readyIn() <= 0;
     } }, { key: "tryReplaceCombats", value:
 
-    function tryReplaceCombats() {
+    function tryReplaceCombats() {var maxTurnsWasted = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
       var delays = this.getDelays().
       filter((d) => d.isViable() && d.isViableAsCombatReplacer()).
       sort((d1, d2) => d1.readyIn() - d2.readyIn());
 
-      var toReturn = delays.find((d) => d.isFree());
+      var toReturn = delays.find(
+      (d) => d.isFree() && d.readyIn() <= maxTurnsWasted);
+
 
       if (toReturn == null) {
         toReturn = delays[0];
@@ -5264,7 +5266,7 @@ var QuestL11DesertExplore = /*#__PURE__*/function () {function QuestL11DesertExp
           this.toAbsorb.length == 0 &&
           DelayBurners.isDelayBurnerReady())
           {
-            DelayBurners.tryReplaceCombats();
+            DelayBurners.tryReplaceCombats(3);
 
             // If the compass is not equipped, and we don't own camel, but we do own left-hand man.
             // Then it's worth it.
