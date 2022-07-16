@@ -73,6 +73,7 @@ export class QuestL11Shen implements QuestInfo {
       location: null,
       run: () => {
         let props = new PropertyManager();
+        props.setChoice(1074, 1); // Approach table
         props.setChoice(851, 1);
 
         try {
