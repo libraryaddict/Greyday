@@ -21357,7 +21357,8 @@ function QuestFantasyRealm_classCallCheck(instance, Constructor) {if (!(instance
 var QuestFantasyRealm = /*#__PURE__*/function () {function QuestFantasyRealm() {QuestFantasyRealm_classCallCheck(this, QuestFantasyRealm);QuestFantasyRealm_defineProperty(this, "fought",
     "_foughtFantasyRealm");QuestFantasyRealm_defineProperty(this, "location",
     external_kolmafia_namespaceObject.Location.get("The Bandit Crossroads"));QuestFantasyRealm_defineProperty(this, "equip",
-    external_kolmafia_namespaceObject.Item.get("FantasyRealm G. E. M."));}QuestFantasyRealm_createClass(QuestFantasyRealm, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("FantasyRealm G. E. M."));QuestFantasyRealm_defineProperty(this, "token",
+    external_kolmafia_namespaceObject.Item.get("fat loot token"));}QuestFantasyRealm_createClass(QuestFantasyRealm, [{ key: "getId", value:
 
     function getId() {
       return "Council / Tower / Keys / FantasyRealm";
@@ -21413,12 +21414,23 @@ var QuestFantasyRealm = /*#__PURE__*/function () {function QuestFantasyRealm() {
         disableFamOverride: true,
         outfit: outfit,
         run: () => {
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(this.equip) == 0) {
+            (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=realm_fantasy&action=fr_initcenter");
+            (0,external_kolmafia_namespaceObject.runChoice)(3);
+
+            if ((0,external_kolmafia_namespaceObject.availableAmount)(this.equip) == 0) {
+              throw "I unexpectedly didn't acquire the fantasyrealm gem!";
+            }
+          }
+
           var props = new PropertyManager();
           props.setChoice(1281, 0); // Don't handle
 
           if ((0,external_kolmafia_namespaceObject.myFamiliar)() != external_kolmafia_namespaceObject.Familiar.get("None")) {
             (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("None"));
           }
+
+          var tokens = (0,external_kolmafia_namespaceObject.availableAmount)(this.token);
 
           try {
             greyAdv(this.location, outfit);
@@ -21431,6 +21443,10 @@ var QuestFantasyRealm = /*#__PURE__*/function () {function QuestFantasyRealm() {
             throw e;
           } finally {
             props.resetAll();
+          }
+
+          if (this.hasFoughtEnough() && (0,external_kolmafia_namespaceObject.availableAmount)(this.token) == tokens) {
+            throw "Expected to have a fat loot token from fantasyland, didn't!";
           }
         } };
 
