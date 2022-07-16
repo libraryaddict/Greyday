@@ -11214,7 +11214,7 @@ var QuestDailyDungeon = /*#__PURE__*/function () {
           props.setChoice(689, 1);
           props.setChoice(690, 2);
           props.setChoice(691, 2);
-          props.setChoice(692, 3);
+          props.setChoice(692, 11);
           props.setChoice(693, 2);
 
           try {
