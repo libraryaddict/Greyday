@@ -14527,6 +14527,7 @@ function QuestL7Crypt_classCallCheck(instance, Constructor) {if (!(instance inst
 
 
 
+
 var QuestL7Crypt = /*#__PURE__*/function () {function QuestL7Crypt() {QuestL7Crypt_classCallCheck(this, QuestL7Crypt);QuestL7Crypt_defineProperty(this, "children",
     [
     new CryptL7DirtyMan(),
@@ -14592,7 +14593,11 @@ var QuestL7Crypt = /*#__PURE__*/function () {function QuestL7Crypt() {QuestL7Cry
 
           (0,external_kolmafia_namespaceObject.council)();
 
-          if ((0,external_kolmafia_namespaceObject.availableAmount)(this.chest) > 0 && (0,external_kolmafia_namespaceObject.myMeat)() < 6000) {
+          if (
+          !GreySettings.greyPrepareLevelingResources &&
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.chest) > 0 &&
+          (0,external_kolmafia_namespaceObject.myMeat)() < 6000)
+          {
             (0,external_kolmafia_namespaceObject.use)(this.chest);
           }
         } };
@@ -20951,7 +20956,7 @@ var QuestMoonSign = /*#__PURE__*/function () {function QuestMoonSign() {QuestMoo
     } }, { key: "level", value:
 
     function level() {
-      return 12;
+      return 11;
     } }, { key: "status", value:
 
     function status() {
