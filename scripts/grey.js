@@ -485,6 +485,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
 
 
 
+
     function isHardcoreMode() {
       return this.hardcoreMode || (0,external_kolmafia_namespaceObject.inHardcore)();
     }
@@ -498,7 +499,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
 
     function shouldAvoidTowerRequirements() {
       return !GreySettings.isHardcoreMode() && this.greyBreakAtTower;
-    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") || "false"));GreySettings_defineProperty(GreySettings, "greyDailyMalware", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDailyMalware") || "false"));GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyPrepareLevelingResources") || "false"));GreySettings_defineProperty(GreySettings, "greyFantasyBandits", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFantasyBandits") || "false"));GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", (0,external_kolmafia_namespaceObject.getProperty)("greyTuneMoonSpoon"));
+    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") || "false"));GreySettings_defineProperty(GreySettings, "greyDailyMalware", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDailyMalware") || "false"));GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyPrepareLevelingResources") || "false"));GreySettings_defineProperty(GreySettings, "greyFantasyBandits", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFantasyBandits") || "false"));GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", (0,external_kolmafia_namespaceObject.getProperty)("greyTuneMoonSpoon"));GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));
 ;// CONCATENATED MODULE: ./src/utils/GreyUtils.ts
 function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || GreyUtils_unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyUtils_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyUtils_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyUtils_arrayLikeToArray(o, minLen);}function GreyUtils_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
 
@@ -6903,7 +6904,8 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
     external_kolmafia_namespaceObject.Skill.get("Innuendo Circuitry"));QuestL11RonProtesters_defineProperty(this, "starChart",
     external_kolmafia_namespaceObject.Item.get("Star Chart"));QuestL11RonProtesters_defineProperty(this, "sweatpants",
     external_kolmafia_namespaceObject.Item.get("designer sweatpants"));QuestL11RonProtesters_defineProperty(this, "spoon",
-    external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"));}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "isReady", value:
+    external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"));QuestL11RonProtesters_defineProperty(this, "umbrella",
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "isReady", value:
     // TODO Once we've got the absorbs, try replace combats if it won't hurt our NCs
 
     function isReady() {
@@ -6917,7 +6919,10 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
     function getPulls() {
       var pulls = [];
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.sweatpants) == 0) {
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.sweatpants) == 0 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) > 0)
+      {
         pulls.push(this.lyrndPants);
       }
 
@@ -7024,7 +7029,11 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
       var shouldLynrd = lynyrdScares > 8;
 
       if (!GreySettings.isHardcoreMode()) {
-        if ((0,external_kolmafia_namespaceObject.availableAmount)(this.deck) == 0 && (0,external_kolmafia_namespaceObject.storageAmount)(this.deck) > 0) {
+        if (
+        (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0 &&
+        (0,external_kolmafia_namespaceObject.availableAmount)(this.deck) == 0 &&
+        (0,external_kolmafia_namespaceObject.storageAmount)(this.deck) > 0)
+        {
           GreyPulls.pullDeckOfLewdCards();
         }
 
@@ -7040,6 +7049,10 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
         this.lyrndCostume),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var i = _step2.value;
             outfit.addItem(i, 600);
           }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) > 0) {
+        outfit.addItem(this.umbrella);
       }
 
       return {
@@ -7058,7 +7071,20 @@ var QuestL11RonProtesters = /*#__PURE__*/function () {function QuestL11RonProtes
             }
 
             props.setChoice(856, shouldLynrd ? 1 : 2); // Lynrd
-            props.setChoice(857, 1);
+
+            if (
+            !GreySettings.isHardcoreMode() &&
+            (0,external_kolmafia_namespaceObject.availableAmount)(this.deck) == 0 &&
+            shouldLynrd &&
+            (0,external_kolmafia_namespaceObject.numericModifier)("Sleaze Damage") +
+            (0,external_kolmafia_namespaceObject.numericModifier)("Sleaze Spell Damage") <
+            65 // Min of 8-9 protesters
+            ) {
+              props.setChoice(857, 2); // Bench warrent skip
+            } else {
+              props.setChoice(857, 1); // Bench warrent
+            }
+
             // If we don't have any flaming, just skip cos 3 isn't that fast
             props.setChoice(858, (0,external_kolmafia_namespaceObject.availableAmount)(this.flaming) > 0 ? 1 : 2);
 
@@ -13164,8 +13190,9 @@ var QuestL4BatsCenter = /*#__PURE__*/function () {function QuestL4BatsCenter() {
     ResourceType.FIRE_EXTINGUSHER,
     20,
     "Spray down bat cave",
-    5));}QuestL4BatsCenter_createClass(QuestL4BatsCenter, [{ key: "getResourceClaims", value:
+    5));QuestL4BatsCenter_defineProperty(this, "goose",
 
+    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));}QuestL4BatsCenter_createClass(QuestL4BatsCenter, [{ key: "getResourceClaims", value:
 
     function getResourceClaims() {
       if (
@@ -13195,6 +13222,10 @@ var QuestL4BatsCenter = /*#__PURE__*/function () {function QuestL4BatsCenter() {
 
       if (status > 0) {
         return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= 6) {
+        return QuestStatus.FASTER_LATER;
       }
 
       return QuestStatus.READY;
@@ -13682,8 +13713,10 @@ var QuestL6FriarElbow = /*#__PURE__*/function () {function QuestL6FriarElbow() {
     external_kolmafia_namespaceObject.Location.get("Dark Elbow of the Woods"));QuestL6FriarElbow_defineProperty(this, "absorbs",
     [external_kolmafia_namespaceObject.Monster.get("G imp"), external_kolmafia_namespaceObject.Monster.get("L imp")]);QuestL6FriarElbow_defineProperty(this, "latte",
     external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));QuestL6FriarElbow_defineProperty(this, "umbrella",
-    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL6FriarElbow_defineProperty(this, "toAbsorb", void 0);}QuestL6FriarElbow_createClass(QuestL6FriarElbow, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL6FriarElbow_defineProperty(this, "toAbsorb", void 0);QuestL6FriarElbow_defineProperty(this, "skill1",
 
+    external_kolmafia_namespaceObject.Skill.get("Phase Shift"));QuestL6FriarElbow_defineProperty(this, "skill2",
+    external_kolmafia_namespaceObject.Skill.get("Photonic Shroud"));}QuestL6FriarElbow_createClass(QuestL6FriarElbow, [{ key: "level", value:
 
     function level() {
       return 6;
@@ -13716,6 +13749,10 @@ var QuestL6FriarElbow = /*#__PURE__*/function () {function QuestL6FriarElbow() {
       (0,external_kolmafia_namespaceObject.availableAmount)(this.item) > 0)
       {
         return QuestStatus.COMPLETED;
+      }
+
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.skill1) || !(0,external_kolmafia_namespaceObject.haveSkill)(this.skill2)) {
+        return QuestStatus.NOT_READY;
       }
 
       if (
@@ -13826,8 +13863,10 @@ var QuestL6FriarHeart = /*#__PURE__*/function () {function QuestL6FriarHeart() {
     external_kolmafia_namespaceObject.Location.get("Dark Heart of the Woods"));QuestL6FriarHeart_defineProperty(this, "absorbs",
     [external_kolmafia_namespaceObject.Monster.get("G imp"), external_kolmafia_namespaceObject.Monster.get("P imp")]);QuestL6FriarHeart_defineProperty(this, "latte",
     external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));QuestL6FriarHeart_defineProperty(this, "umbrella",
-    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL6FriarHeart_defineProperty(this, "toAbsorb", void 0);}QuestL6FriarHeart_createClass(QuestL6FriarHeart, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL6FriarHeart_defineProperty(this, "toAbsorb", void 0);QuestL6FriarHeart_defineProperty(this, "skill1",
 
+    external_kolmafia_namespaceObject.Skill.get("Phase Shift"));QuestL6FriarHeart_defineProperty(this, "skill2",
+    external_kolmafia_namespaceObject.Skill.get("Photonic Shroud"));}QuestL6FriarHeart_createClass(QuestL6FriarHeart, [{ key: "level", value:
 
     function level() {
       return 6;
@@ -13865,6 +13904,10 @@ var QuestL6FriarHeart = /*#__PURE__*/function () {function QuestL6FriarHeart() {
       if (
       !hasNonCombatSkillsReady((0,external_kolmafia_namespaceObject.myLevel)() >= 11 && !hasNonCombatSkillActive()))
       {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.skill1) || !(0,external_kolmafia_namespaceObject.haveSkill)(this.skill2)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -13922,8 +13965,10 @@ var QuestL6FriarNeck = /*#__PURE__*/function () {function QuestL6FriarNeck() {Qu
     external_kolmafia_namespaceObject.Location.get("Dark Neck of the Woods"));QuestL6FriarNeck_defineProperty(this, "absorbs",
     [external_kolmafia_namespaceObject.Monster.get("P imp"), external_kolmafia_namespaceObject.Monster.get("W imp")]);QuestL6FriarNeck_defineProperty(this, "latte",
     external_kolmafia_namespaceObject.Item.get("Latte lovers member's mug"));QuestL6FriarNeck_defineProperty(this, "umbrella",
-    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL6FriarNeck_defineProperty(this, "toAbsorb", void 0);}QuestL6FriarNeck_createClass(QuestL6FriarNeck, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL6FriarNeck_defineProperty(this, "toAbsorb", void 0);QuestL6FriarNeck_defineProperty(this, "skill1",
 
+    external_kolmafia_namespaceObject.Skill.get("Phase Shift"));QuestL6FriarNeck_defineProperty(this, "skill2",
+    external_kolmafia_namespaceObject.Skill.get("Photonic Shroud"));}QuestL6FriarNeck_createClass(QuestL6FriarNeck, [{ key: "level", value:
 
     function level() {
       return 6;
@@ -13957,6 +14002,10 @@ var QuestL6FriarNeck = /*#__PURE__*/function () {function QuestL6FriarNeck() {Qu
       (0,external_kolmafia_namespaceObject.availableAmount)(this.item) > 0)
       {
         return QuestStatus.COMPLETED;
+      }
+
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.skill1) || !(0,external_kolmafia_namespaceObject.haveSkill)(this.skill2)) {
+        return QuestStatus.NOT_READY;
       }
 
       if (
@@ -14247,11 +14296,11 @@ var CryptL7DirtyMan = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptDirt
         run: () => {
           this.adjustRetroCape();
 
-          var killing = greyKillingBlow(outfit);
+          var avoid;
 
           if (this.canSprayDown()) {
             // If its a dirty lich, don't spray down
-            var avoid = Macro.ifNot_(
+            avoid = Macro.ifNot_(
             this.dirty,
             Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Fire Extinguisher: Zone Specific")));
 
@@ -14261,17 +14310,15 @@ var CryptL7DirtyMan = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptDirt
             {
               avoid = Macro.ifNot_(this.advsAbsorb, avoid);
             }
-
-            killing = avoid.step(killing);
           }
 
-          var start = null;
+          var start = Macro.step(avoid);
 
           if (
           (0,external_kolmafia_namespaceObject.myFamiliar)() == fam &&
           (0,external_kolmafia_namespaceObject.getProperty)("nosyNoseMonster") != "dirty old lihc")
           {
-            start = Macro.step("if monsterid 1071;skill 7166;endif");
+            start = Macro.step("if monsterid 1071;skill 7166;endif").step(start);
           }
 
           var props = new PropertyManager();
@@ -14283,8 +14330,7 @@ var CryptL7DirtyMan = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptDirt
             outfit,
             new AdventureSettings().
             addNoBanish(this.dirty).
-            setStartOfFightMacro(start).
-            setFinishingBlowMacro(killing));
+            setStartOfFightMacro(start));
 
           } finally {
             props.resetAll();
@@ -17465,6 +17511,7 @@ function QuestManorLights_slicedToArray(arr, i) {return QuestManorLights_arrayWi
 
 
 
+
 var QuestManorLights = /*#__PURE__*/function () {
 
 
@@ -17499,7 +17546,8 @@ var QuestManorLights = /*#__PURE__*/function () {
 
 
 
-  function QuestManorLights() {QuestManorLights_classCallCheck(this, QuestManorLights);QuestManorLights_defineProperty(this, "choices", [890, 891, 892, 893, 894, 895, 896, 897, 898, 899, 900, 901, 902, 903]);QuestManorLights_defineProperty(this, "elizibeth", [[external_kolmafia_namespaceObject.Location.get("The Haunted Storage Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Laundry Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Bathroom"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Kitchen"), 4], [external_kolmafia_namespaceObject.Location.get("The Haunted Library"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Ballroom"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Gallery"), 4]]);QuestManorLights_defineProperty(this, "stephen", [[external_kolmafia_namespaceObject.Location.get("The Haunted Bedroom"), [1, 3, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Nursery"), [1, 2, 2, 1, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Conservatory"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Billiards"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Wine Cellar"), [1, 2, 2, 3]], [external_kolmafia_namespaceObject.Location.get("The Haunted Boiler Room"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Laboratory"), [1, 1, 3, 1, 1]]]);QuestManorLights_defineProperty(this, "elizabethRewards", [external_kolmafia_namespaceObject.Item.get("Elizabeth's Dollie"), external_kolmafia_namespaceObject.Item.get("Elizabeth's paintbrush")]);QuestManorLights_defineProperty(this, "stephsRewards", [external_kolmafia_namespaceObject.Item.get("Stephen's lab coat"), external_kolmafia_namespaceObject.Item.get("Stephen's secret formula")]);QuestManorLights_defineProperty(this, "goose", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestManorLights_defineProperty(this, "teleportis", external_kolmafia_namespaceObject.Effect.get("Teleportitis"));var _iterator = QuestManorLights_createForOfIteratorHelper(
+
+  function QuestManorLights() {QuestManorLights_classCallCheck(this, QuestManorLights);QuestManorLights_defineProperty(this, "choices", [890, 891, 892, 893, 894, 895, 896, 897, 898, 899, 900, 901, 902, 903]);QuestManorLights_defineProperty(this, "elizibeth", [[external_kolmafia_namespaceObject.Location.get("The Haunted Storage Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Laundry Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Bathroom"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Kitchen"), 4], [external_kolmafia_namespaceObject.Location.get("The Haunted Library"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Ballroom"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Gallery"), 4]]);QuestManorLights_defineProperty(this, "stephen", [[external_kolmafia_namespaceObject.Location.get("The Haunted Bedroom"), [1, 3, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Nursery"), [1, 2, 2, 1, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Conservatory"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Billiards"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Wine Cellar"), [1, 2, 2, 3]], [external_kolmafia_namespaceObject.Location.get("The Haunted Boiler Room"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Laboratory"), [1, 1, 3, 1, 1]]]);QuestManorLights_defineProperty(this, "elizabethRewards", [external_kolmafia_namespaceObject.Item.get("Elizabeth's Dollie"), external_kolmafia_namespaceObject.Item.get("Elizabeth's paintbrush")]);QuestManorLights_defineProperty(this, "stephsRewards", [external_kolmafia_namespaceObject.Item.get("Stephen's lab coat"), external_kolmafia_namespaceObject.Item.get("Stephen's secret formula")]);QuestManorLights_defineProperty(this, "goose", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestManorLights_defineProperty(this, "teleportis", external_kolmafia_namespaceObject.Effect.get("Teleportitis"));QuestManorLights_defineProperty(this, "finishLights", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFinishManorLights")));var _iterator = QuestManorLights_createForOfIteratorHelper(
     this.choices),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var choice = _step.value;
         var prop = "choiceAdventure" + choice;
 
@@ -17551,7 +17599,11 @@ var QuestManorLights = /*#__PURE__*/function () {
     } }, { key: "hasFamiliarRecommendation", value:
 
     function hasFamiliarRecommendation() {
-      if (!this.isSteveFight() || (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= 7) {
+      if (
+      !this.isSteveFight() ||
+      (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= 7 ||
+      !this.finishLights)
+      {
         return null;
       }
 
@@ -17600,10 +17652,7 @@ var QuestManorLights = /*#__PURE__*/function () {
         return QuestStatus.COMPLETED;
       }
 
-      if (
-      (this.isElizaFight() || this.isSteveFight()) &&
-      (0,external_kolmafia_namespaceObject.getProperty)("greyFinishManorLights") != "true")
-      {
+      if ((this.isElizaFight() || this.isSteveFight()) && !this.finishLights) {
         return QuestStatus.COMPLETED;
       }
 
@@ -17700,10 +17749,7 @@ var QuestManorLights = /*#__PURE__*/function () {
     } }, { key: "run", value:
 
     function run() {
-      if (
-      this.shouldDoSteve() && (
-      !this.isSteveFight() || (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFinishManorLights"))))
-      {
+      if (this.shouldDoSteve() && (!this.isSteveFight() || this.finishLights)) {
         var steve = this.getSteve();
 
         if ((0,external_canadv_ash_namespaceObject.canAdv)(steve[0])) {
@@ -17711,10 +17757,7 @@ var QuestManorLights = /*#__PURE__*/function () {
         }
       }
 
-      if (
-      this.isElizaReady() && (
-      !this.isElizaFight() || (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFinishManorLights"))))
-      {
+      if (this.isElizaReady() && (!this.isElizaFight() || this.finishLights)) {
         var eliza = this.getEliza();
 
         if ((0,external_canadv_ash_namespaceObject.canAdv)(eliza[0])) {
@@ -22446,6 +22489,36 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
       });
 
       return toReturn.filter((a) => a[1] > 0);
+    } }, { key: "getModifiedStatus", value:
+
+    function getModifiedStatus(
+    status,
+    runned,
+    hasBlessing)
+    {
+      if (status != QuestStatus.READY) {
+        return status;
+      }
+
+      var outfit = runned.outfit;
+
+      if (outfit != null) {
+        if (outfit.minusCombatWeight > 0 && hasBlessing) {
+          status = QuestStatus.FASTER_LATER;
+        } else if ((0,external_kolmafia_namespaceObject.myMp)() < 50) {
+          if (outfit.minusCombatWeight > 0 && !hasNonCombatSkillActive()) {
+            status = QuestStatus.FASTER_LATER;
+          } else if (
+          outfit.plusCombatWeight > 0 &&
+          (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Piezoelectric Honk")) &&
+          !hasCombatSkillActive())
+          {
+            status = QuestStatus.FASTER_LATER;
+          }
+        }
+      }
+
+      return status;
     } }, { key: "generateWeights", value:
 
     function generateWeights(skills) {
@@ -22508,9 +22581,15 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
 
     } }, { key: "printStatus", value:
 
-    function printStatus() {var _iterator11 = GreyChooser_createForOfIteratorHelper(
+    function printStatus() {
+      var hasBlessing =
+      (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Brother Corsican's Blessing")) +
+      (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("A Girl Named Sue")) >
+      0;var _iterator11 = GreyChooser_createForOfIteratorHelper(
+
       this.viableQuests),_step11;try {for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {var quest = _step11.value;
           var status = quest.status();
+          status = this.getModifiedStatus(status, quest.run(), hasBlessing);
 
           var line =
           "<u>" +
@@ -22671,23 +22750,7 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
               runned = quest[0].run();
             }
 
-            var outfit = runned.outfit;
-
-            if (outfit != null) {
-              if (outfit.minusCombatWeight > 0 && hasBlessing) {
-                status = QuestStatus.FASTER_LATER;
-              } else if ((0,external_kolmafia_namespaceObject.myMp)() < 50) {
-                if (outfit.minusCombatWeight > 0 && !hasNonCombatSkillActive()) {
-                  status = QuestStatus.FASTER_LATER;
-                } else if (
-                outfit.plusCombatWeight > 0 &&
-                (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Piezoelectric Honk")) &&
-                !hasCombatSkillActive())
-                {
-                  status = QuestStatus.FASTER_LATER;
-                }
-              }
-            }
+            status = this.getModifiedStatus(status, runned, hasBlessing);
           }
 
           if (bestQuest != null) {
@@ -23651,7 +23714,11 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
         familiar = replaceWith.filter((f) => (0,external_kolmafia_namespaceObject.haveFamiliar)(f))[0];
       }
 
-      if (doOrb || toRun.familiar == null && gooseReplaceable) {
+      if (
+      doOrb ||
+      toRun.familiar == null && gooseReplaceable ||
+      familiar == external_kolmafia_namespaceObject.Familiar.get("Melodramedary"))
+      {
         outfit.addBonus("+10 bonus june cleaver");
       }
 
@@ -23667,7 +23734,9 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
 
       (0,external_kolmafia_namespaceObject.useFamiliar)(familiar);
 
-      if (
+      if (familiar == external_kolmafia_namespaceObject.Familiar.get("Melodramedary")) {
+        outfit.famExpWeight = 0;
+      } else if (
       familiar != this.goose ||
       (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= 6 && !powerLevelGoose)
       {
@@ -23710,7 +23779,27 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       this.doPrep(adventure);
 
       if (this.goTime) {
-        toRun.run();
+        var turn = (0,external_kolmafia_namespaceObject.turnsPlayed)();
+
+        try {
+          toRun.run();
+        } finally {
+          if (GreySettings.greyDebug) {
+            var name = "grey_turns_played_".concat((0,external_kolmafia_namespaceObject.myAscensions)(), ".txt");
+
+            var buffer = (0,external_kolmafia_namespaceObject.fileToBuffer)(name);
+
+            var id =
+            (adventure.quest ? adventure.quest.getId() : "Non-Quest") +
+            " @ " +
+            toRun.location;
+
+            buffer +=
+            "\n" + (0,external_kolmafia_namespaceObject.turnsPlayed)() + "\t" + id + "\t" + ((0,external_kolmafia_namespaceObject.turnsPlayed)() - turn);
+
+            (0,external_kolmafia_namespaceObject.bufferToFile)(buffer.toString(), name);
+          }
+        }
       } else {
         (0,external_kolmafia_namespaceObject.print)("Sim run()!");
       }
