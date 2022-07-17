@@ -2,10 +2,12 @@ import {
   availableAmount,
   Familiar,
   getProperty,
+  haveSkill,
   Item,
   Location,
   Monster,
   myLevel,
+  Skill,
   useFamiliar,
 } from "kolmafia";
 import {
@@ -27,6 +29,8 @@ export class QuestL6FriarElbow implements QuestInfo {
   latte: Item = Item.get("Latte lovers member's mug");
   umbrella: Item = Item.get("Unbreakable Umbrella");
   toAbsorb: Monster[];
+  skill1: Skill = Skill.get("Phase Shift");
+  skill2: Skill = Skill.get("Photonic Shroud");
 
   level(): number {
     return 6;
@@ -59,6 +63,10 @@ export class QuestL6FriarElbow implements QuestInfo {
       availableAmount(this.item) > 0
     ) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (!haveSkill(this.skill1) || !haveSkill(this.skill2)) {
+      return QuestStatus.NOT_READY;
     }
 
     if (

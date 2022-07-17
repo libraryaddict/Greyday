@@ -14,6 +14,7 @@ import {
   gnomadsAvailable,
   haveSkill,
   equippedAmount,
+  numericModifier,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
@@ -53,6 +54,7 @@ export class QuestL11RonProtesters implements QuestInfo {
   starChart: Item = Item.get("Star Chart");
   sweatpants: Item = Item.get("designer sweatpants");
   spoon: Item = Item.get("hewn moon-rune spoon");
+  umbrella: Item = Item.get("Unbreakable Umbrella");
   // TODO Once we've got the absorbs, try replace combats if it won't hurt our NCs
 
   isReady(): boolean {
@@ -66,7 +68,10 @@ export class QuestL11RonProtesters implements QuestInfo {
   getPulls(): Item[] {
     const pulls: Item[] = [];
 
-    if (availableAmount(this.sweatpants) == 0) {
+    if (
+      availableAmount(this.sweatpants) == 0 ||
+      availableAmount(this.umbrella) > 0
+    ) {
       pulls.push(this.lyrndPants);
     }
 
@@ -173,7 +178,11 @@ export class QuestL11RonProtesters implements QuestInfo {
     const shouldLynrd = lynyrdScares > 8;
 
     if (!GreySettings.isHardcoreMode()) {
-      if (availableAmount(this.deck) == 0 && storageAmount(this.deck) > 0) {
+      if (
+        availableAmount(this.umbrella) == 0 &&
+        availableAmount(this.deck) == 0 &&
+        storageAmount(this.deck) > 0
+      ) {
         GreyPulls.pullDeckOfLewdCards();
       }
 
@@ -189,6 +198,10 @@ export class QuestL11RonProtesters implements QuestInfo {
       for (let i of this.lyrndCostume) {
         outfit.addItem(i, 600);
       }
+    }
+
+    if (availableAmount(this.umbrella) > 0) {
+      outfit.addItem(this.umbrella);
     }
 
     return {
@@ -207,7 +220,20 @@ export class QuestL11RonProtesters implements QuestInfo {
           }
 
           props.setChoice(856, shouldLynrd ? 1 : 2); // Lynrd
-          props.setChoice(857, 1);
+
+          if (
+            !GreySettings.isHardcoreMode() &&
+            availableAmount(this.deck) == 0 &&
+            shouldLynrd &&
+            numericModifier("Sleaze Damage") +
+              numericModifier("Sleaze Spell Damage") <
+              65 // Min of 8-9 protesters
+          ) {
+            props.setChoice(857, 2); // Bench warrent skip
+          } else {
+            props.setChoice(857, 1); // Bench warrent
+          }
+
           // If we don't have any flaming, just skip cos 3 isn't that fast
           props.setChoice(858, availableAmount(this.flaming) > 0 ? 1 : 2);
 

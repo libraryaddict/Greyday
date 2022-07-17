@@ -344,6 +344,36 @@ export class AdventureFinder {
     return toReturn.filter((a) => a[1] > 0);
   }
 
+  getModifiedStatus(
+    status: QuestStatus,
+    runned: QuestAdventure,
+    hasBlessing: boolean
+  ) {
+    if (status != QuestStatus.READY) {
+      return status;
+    }
+
+    let outfit = runned.outfit;
+
+    if (outfit != null) {
+      if (outfit.minusCombatWeight > 0 && hasBlessing) {
+        status = QuestStatus.FASTER_LATER;
+      } else if (myMp() < 50) {
+        if (outfit.minusCombatWeight > 0 && !hasNonCombatSkillActive()) {
+          status = QuestStatus.FASTER_LATER;
+        } else if (
+          outfit.plusCombatWeight > 0 &&
+          haveSkill(Skill.get("Piezoelectric Honk")) &&
+          !hasCombatSkillActive()
+        ) {
+          status = QuestStatus.FASTER_LATER;
+        }
+      }
+    }
+
+    return status;
+  }
+
   generateWeights(skills: Map<Absorb, string>): number {
     let weight = 0;
     let handy = this.absorbs.getUsefulSkills();
@@ -405,8 +435,14 @@ export class AdventureFinder {
   }
 
   printStatus() {
+    let hasBlessing =
+      haveEffect(Effect.get("Brother Corsican's Blessing")) +
+        haveEffect(Effect.get("A Girl Named Sue")) >
+      0;
+
     for (let quest of this.viableQuests) {
       let status = quest.status();
+      status = this.getModifiedStatus(status, quest.run(), hasBlessing);
 
       let line =
         "<u>" +
@@ -567,23 +603,7 @@ export class AdventureFinder {
           runned = quest[0].run();
         }
 
-        let outfit = runned.outfit;
-
-        if (outfit != null) {
-          if (outfit.minusCombatWeight > 0 && hasBlessing) {
-            status = QuestStatus.FASTER_LATER;
-          } else if (myMp() < 50) {
-            if (outfit.minusCombatWeight > 0 && !hasNonCombatSkillActive()) {
-              status = QuestStatus.FASTER_LATER;
-            } else if (
-              outfit.plusCombatWeight > 0 &&
-              haveSkill(Skill.get("Piezoelectric Honk")) &&
-              !hasCombatSkillActive()
-            ) {
-              status = QuestStatus.FASTER_LATER;
-            }
-          }
-        }
+        status = this.getModifiedStatus(status, runned, hasBlessing);
       }
 
       if (bestQuest != null) {

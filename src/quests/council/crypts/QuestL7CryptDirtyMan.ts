@@ -65,11 +65,11 @@ export class CryptL7DirtyMan extends CryptL7Template {
       run: () => {
         this.adjustRetroCape();
 
-        let killing = greyKillingBlow(outfit);
+        let avoid: Macro;
 
         if (this.canSprayDown()) {
           // If its a dirty lich, don't spray down
-          let avoid = Macro.ifNot_(
+          avoid = Macro.ifNot_(
             this.dirty,
             Macro.trySkill(Skill.get("Fire Extinguisher: Zone Specific"))
           );
@@ -79,17 +79,15 @@ export class CryptL7DirtyMan extends CryptL7Template {
           ) {
             avoid = Macro.ifNot_(this.advsAbsorb, avoid);
           }
-
-          killing = avoid.step(killing);
         }
 
-        let start: Macro = null;
+        let start: Macro = Macro.step(avoid);
 
         if (
           myFamiliar() == fam &&
           getProperty("nosyNoseMonster") != "dirty old lihc"
         ) {
-          start = Macro.step("if monsterid 1071;skill 7166;endif");
+          start = Macro.step("if monsterid 1071;skill 7166;endif").step(start);
         }
 
         let props = new PropertyManager();
@@ -102,7 +100,6 @@ export class CryptL7DirtyMan extends CryptL7Template {
             new AdventureSettings()
               .addNoBanish(this.dirty)
               .setStartOfFightMacro(start)
-              .setFinishingBlowMacro(killing)
           );
         } finally {
           props.resetAll();

@@ -136,6 +136,7 @@ export class GreySettings {
   static greyTuneMoonSpoon: MoonSign = getProperty(
     "greyTuneMoonSpoon"
   ) as MoonSign;
+  static greyDebug: boolean = toBoolean(getProperty("greyDebug") || "false");
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

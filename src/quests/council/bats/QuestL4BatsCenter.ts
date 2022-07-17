@@ -6,6 +6,7 @@ import {
   use,
   Skill,
   getProperty,
+  familiarWeight,
 } from "kolmafia";
 import { greyAdv, AdventureSettings } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -30,6 +31,7 @@ export class QuestL4BatsCenter implements QuestInfo {
     "Spray down bat cave",
     5
   );
+  goose: Familiar = Familiar.get("Grey Goose");
 
   getResourceClaims(): ResourceClaim[] {
     if (
@@ -59,6 +61,10 @@ export class QuestL4BatsCenter implements QuestInfo {
 
     if (status > 0) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (familiarWeight(this.goose) >= 6) {
+      return QuestStatus.FASTER_LATER;
     }
 
     return QuestStatus.READY;

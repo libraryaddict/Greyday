@@ -1,9 +1,11 @@
 import {
   availableAmount,
+  bufferToFile,
   cliExecute,
   Effect,
   Familiar,
   familiarWeight,
+  fileToBuffer,
   getProperty,
   haveEffect,
   haveFamiliar,
@@ -13,6 +15,7 @@ import {
   Location,
   maximize,
   Monster,
+  myAscensions,
   myMeat,
   myMp,
   print,
@@ -22,6 +25,7 @@ import {
   setLocation,
   Skill,
   toInt,
+  turnsPlayed,
   useFamiliar,
   useSkill,
   visitUrl,
@@ -305,7 +309,11 @@ export class GreyAdventurer {
       familiar = replaceWith.filter((f) => haveFamiliar(f))[0];
     }
 
-    if (doOrb || (toRun.familiar == null && gooseReplaceable)) {
+    if (
+      doOrb ||
+      (toRun.familiar == null && gooseReplaceable) ||
+      familiar == Familiar.get("Melodramedary")
+    ) {
       outfit.addBonus("+10 bonus june cleaver");
     }
 
@@ -321,7 +329,9 @@ export class GreyAdventurer {
 
     useFamiliar(familiar);
 
-    if (
+    if (familiar == Familiar.get("Melodramedary")) {
+      outfit.famExpWeight = 0;
+    } else if (
       familiar != this.goose ||
       (familiarWeight(this.goose) >= 6 && !powerLevelGoose)
     ) {
@@ -364,7 +374,27 @@ export class GreyAdventurer {
     this.doPrep(adventure);
 
     if (this.goTime) {
-      toRun.run();
+      let turn = turnsPlayed();
+
+      try {
+        toRun.run();
+      } finally {
+        if (GreySettings.greyDebug) {
+          let name = `grey_turns_played_${myAscensions()}.txt`;
+
+          let buffer = fileToBuffer(name);
+
+          let id =
+            (adventure.quest ? adventure.quest.getId() : "Non-Quest") +
+            " @ " +
+            toRun.location;
+
+          buffer +=
+            "\n" + turnsPlayed() + "\t" + id + "\t" + (turnsPlayed() - turn);
+
+          bufferToFile(buffer.toString(), name);
+        }
+      }
     } else {
       print("Sim run()!");
     }

@@ -23,6 +23,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
+import { GreySettings } from "../../utils/GreySettings";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -60,6 +61,7 @@ export class QuestManorLights implements QuestInfo {
   ];
   goose: Familiar = Familiar.get("Grey Goose");
   teleportis: Effect = Effect.get("Teleportitis");
+  finishLights: boolean = toBoolean(getProperty("greyFinishManorLights"));
 
   constructor() {
     for (let choice of this.choices) {
@@ -113,7 +115,11 @@ export class QuestManorLights implements QuestInfo {
   }
 
   hasFamiliarRecommendation(): Familiar {
-    if (!this.isSteveFight() || familiarWeight(this.goose) >= 7) {
+    if (
+      !this.isSteveFight() ||
+      familiarWeight(this.goose) >= 7 ||
+      !this.finishLights
+    ) {
       return null;
     }
 
@@ -162,10 +168,7 @@ export class QuestManorLights implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (
-      (this.isElizaFight() || this.isSteveFight()) &&
-      getProperty("greyFinishManorLights") != "true"
-    ) {
+    if ((this.isElizaFight() || this.isSteveFight()) && !this.finishLights) {
       return QuestStatus.COMPLETED;
     }
 
@@ -269,10 +272,7 @@ export class QuestManorLights implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    if (
-      this.shouldDoSteve() &&
-      (!this.isSteveFight() || toBoolean(getProperty("greyFinishManorLights")))
-    ) {
+    if (this.shouldDoSteve() && (!this.isSteveFight() || this.finishLights)) {
       let steve = this.getSteve();
 
       if (canAdv(steve[0])) {
@@ -280,10 +280,7 @@ export class QuestManorLights implements QuestInfo {
       }
     }
 
-    if (
-      this.isElizaReady() &&
-      (!this.isElizaFight() || toBoolean(getProperty("greyFinishManorLights")))
-    ) {
+    if (this.isElizaReady() && (!this.isElizaFight() || this.finishLights)) {
       let eliza = this.getEliza();
 
       if (canAdv(eliza[0])) {
