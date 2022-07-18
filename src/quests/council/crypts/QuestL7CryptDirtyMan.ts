@@ -81,13 +81,19 @@ export class CryptL7DirtyMan extends CryptL7Template {
           }
         }
 
-        let start: Macro = Macro.step(avoid);
+        let start: Macro;
 
         if (
           myFamiliar() == fam &&
           getProperty("nosyNoseMonster") != "dirty old lihc"
         ) {
-          start = Macro.step("if monsterid 1071;skill 7166;endif").step(start);
+          start = Macro.step("if monsterid 1071;skill 7166;endif");
+
+          if (avoid != null) {
+            start = start.step(avoid);
+          }
+        } else if (avoid != null) {
+          start = avoid;
         }
 
         let props = new PropertyManager();
