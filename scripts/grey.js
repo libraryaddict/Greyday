@@ -15756,6 +15756,7 @@ function QuestL9SmutOrcs_createForOfIteratorHelper(o, allowArrayLike) {var it = 
 
 
 
+
 var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_classCallCheck(this, SmutOrcs);QuestL9SmutOrcs_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("The Smut Orc Logging Camp"));QuestL9SmutOrcs_defineProperty(this, "shorts",
     new QuestCargoShorts());QuestL9SmutOrcs_defineProperty(this, "hoaReg",
@@ -15776,7 +15777,8 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     "Ant Rake",
     "Ant Sickle",
     "Tiny bowler"].
-    map((s) => external_kolmafia_namespaceObject.Item.get(s)));}QuestL9SmutOrcs_createClass(SmutOrcs, [{ key: "level", value:
+    map((s) => external_kolmafia_namespaceObject.Item.get(s)));QuestL9SmutOrcs_defineProperty(this, "plastered",
+    external_kolmafia_namespaceObject.Monster.get("plastered frat orc"));}QuestL9SmutOrcs_createClass(SmutOrcs, [{ key: "level", value:
 
     function level() {
       return 7;
@@ -15798,7 +15800,12 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     function status() {
       var status = getQuestStatus("questL09Topping");
 
-      if (status < 0 || !(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Grey Noise")) || (0,external_kolmafia_namespaceObject.myMp)() < 15) {
+      if (
+      status < 0 ||
+      !(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Grey Noise")) ||
+      (0,external_kolmafia_namespaceObject.myMp)() < 15 ||
+      !AbsorbsProvider.getReabsorbedMonsters().includes(this.plastered))
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -21963,6 +21970,7 @@ var QuestRegistry = /*#__PURE__*/function () {
       { id: "Council / Goblins / King" },
 
       // Register this here cos I'm lazy
+      { id: "Council / Ice / MountainMan" },
       {
         id: "Council / War / Filthworms",
         testValid: () => (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Everything Looks Yellow")) == 0 },
@@ -22026,7 +22034,6 @@ var QuestRegistry = /*#__PURE__*/function () {
       { id: "Council / Ice / OreOutfit" },
       { id: "Council / Ice / OreMining" },
       { id: "Council / Ice / OreClover" },
-      { id: "Council / Ice / MountainMan" },
 
       // Ninja power!
       { id: "Council / MacGruffin / Shen / Ninjas" },
@@ -22102,7 +22109,6 @@ var QuestRegistry = /*#__PURE__*/function () {
       // Alright, unlock the control room and the undying man. And keep going until you have enough rats
       { id: "Council / MacGruffin / Pyramid / Middle" },
       { id: "Council / MacGruffin / Pyramid / Wheel" },
-      { id: "Council / MacGruffin / Pyramid / EdUndying" },
 
       // Given we earn nothing from crypt..
       { id: "Council / Crypt / Rattling" },
@@ -22135,6 +22141,7 @@ var QuestRegistry = /*#__PURE__*/function () {
 
       // Tavern needs Larva done
       { id: "Council / Tavern", testValid: () => (0,external_kolmafia_namespaceObject.myLevel)() < 20 },
+      { id: "Council / MacGruffin / Pyramid / EdUndying" },
 
       // Alright, this run is just about over kids. Lets finish it.
       { id: "Council / Tower / Contests" },
