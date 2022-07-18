@@ -93,12 +93,16 @@ export class QuestL6FriarElbow implements QuestInfo {
       location: this.location,
       outfit: outfit,
       run: () => {
-        if (
-          this.isAllAbsorbed() &&
-          !this.shouldWearLatte() &&
-          availableAmount(this.umbrella) == 0
-        ) {
-          DelayBurners.tryReplaceCombats();
+        if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
+          if (availableAmount(this.umbrella) == 0) {
+            DelayBurners.tryReplaceCombats();
+          } else {
+            let burner = DelayBurners.getReadyDelayBurner();
+
+            if (burner != null) {
+              burner.doFightSetup();
+            }
+          }
         }
 
         if (DelayBurners.isTryingForDupeableGoblin()) {
