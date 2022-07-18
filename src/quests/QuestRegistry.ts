@@ -210,6 +210,7 @@ export class QuestRegistry {
       { id: "Council / Goblins / King" },
 
       // Register this here cos I'm lazy
+      { id: "Council / Ice / MountainMan" },
       {
         id: "Council / War / Filthworms",
         testValid: () => haveEffect(Effect.get("Everything Looks Yellow")) == 0,
@@ -273,7 +274,6 @@ export class QuestRegistry {
       { id: "Council / Ice / OreOutfit" },
       { id: "Council / Ice / OreMining" },
       { id: "Council / Ice / OreClover" },
-      { id: "Council / Ice / MountainMan" },
 
       // Ninja power!
       { id: "Council / MacGruffin / Shen / Ninjas" },
@@ -349,7 +349,6 @@ export class QuestRegistry {
       // Alright, unlock the control room and the undying man. And keep going until you have enough rats
       { id: "Council / MacGruffin / Pyramid / Middle" },
       { id: "Council / MacGruffin / Pyramid / Wheel" },
-      { id: "Council / MacGruffin / Pyramid / EdUndying" },
 
       // Given we earn nothing from crypt..
       { id: "Council / Crypt / Rattling" },
@@ -382,6 +381,7 @@ export class QuestRegistry {
 
       // Tavern needs Larva done
       { id: "Council / Tavern", testValid: () => myLevel() < 20 },
+      { id: "Council / MacGruffin / Pyramid / EdUndying" },
 
       // Alright, this run is just about over kids. Lets finish it.
       { id: "Council / Tower / Contests" },

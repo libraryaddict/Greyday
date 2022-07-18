@@ -26,6 +26,7 @@ import {
   equippedAmount,
   equip,
   Slot,
+  Monster,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
@@ -40,6 +41,7 @@ import {
 import { QuestType } from "../../QuestTypes";
 import { QuestCargoShorts } from "./QuestSmutOrcsCargoShorts";
 import { ResourceClaim, ResourcePullClaim } from "../../../utils/GreyResources";
+import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 
 export class SmutOrcs implements QuestInfo {
   loc: Location = Location.get("The Smut Orc Logging Camp");
@@ -62,6 +64,7 @@ export class SmutOrcs implements QuestInfo {
     "Ant Sickle",
     "Tiny bowler",
   ].map((s) => Item.get(s));
+  plastered: Monster = Monster.get("plastered frat orc");
 
   level(): number {
     return 7;
@@ -83,7 +86,12 @@ export class SmutOrcs implements QuestInfo {
   status(): QuestStatus {
     let status = getQuestStatus("questL09Topping");
 
-    if (status < 0 || !haveSkill(Skill.get("Grey Noise")) || myMp() < 15) {
+    if (
+      status < 0 ||
+      !haveSkill(Skill.get("Grey Noise")) ||
+      myMp() < 15 ||
+      !AbsorbsProvider.getReabsorbedMonsters().includes(this.plastered)
+    ) {
       return QuestStatus.NOT_READY;
     }
 
