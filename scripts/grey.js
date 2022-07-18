@@ -13779,12 +13779,16 @@ var QuestL6FriarElbow = /*#__PURE__*/function () {function QuestL6FriarElbow() {
         location: this.location,
         outfit: outfit,
         run: () => {
-          if (
-          this.isAllAbsorbed() &&
-          !this.shouldWearLatte() &&
-          (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0)
-          {
-            DelayBurners.tryReplaceCombats();
+          if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
+            if ((0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0) {
+              DelayBurners.tryReplaceCombats();
+            } else {
+              var burner = DelayBurners.getReadyDelayBurner();
+
+              if (burner != null) {
+                burner.doFightSetup();
+              }
+            }
           }
 
           if (DelayBurners.isTryingForDupeableGoblin()) {
@@ -13929,12 +13933,16 @@ var QuestL6FriarHeart = /*#__PURE__*/function () {function QuestL6FriarHeart() {
         location: this.location,
         outfit: outfit,
         run: () => {
-          if (
-          this.isAllAbsorbed() &&
-          !this.shouldWearLatte() &&
-          (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0)
-          {
-            DelayBurners.tryReplaceCombats();
+          if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
+            if ((0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0) {
+              DelayBurners.tryReplaceCombats();
+            } else {
+              var burner = DelayBurners.getReadyDelayBurner();
+
+              if (burner != null) {
+                burner.doFightSetup();
+              }
+            }
           }
 
           if (DelayBurners.isTryingForDupeableGoblin()) {
@@ -14032,12 +14040,16 @@ var QuestL6FriarNeck = /*#__PURE__*/function () {function QuestL6FriarNeck() {Qu
         location: this.location,
         outfit: outfit,
         run: () => {
-          if (
-          this.isAllAbsorbed() &&
-          !this.shouldWearLatte() &&
-          (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0)
-          {
-            DelayBurners.tryReplaceCombats();
+          if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
+            if ((0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) == 0) {
+              DelayBurners.tryReplaceCombats();
+            } else {
+              var burner = DelayBurners.getReadyDelayBurner();
+
+              if (burner != null) {
+                burner.doFightSetup();
+              }
+            }
           }
 
           if (DelayBurners.isTryingForDupeableGoblin()) {
