@@ -29,6 +29,7 @@ import { hasBanished, BanishType } from "./utils/Banishers";
 import { AbsorbsProvider } from "./utils/GreyAbsorber";
 import { GreyRequirements } from "./utils/GreyResources";
 import { getGreySettings, GreySettings } from "./utils/GreySettings";
+import { GreyTimings } from "./utils/GreyTimings";
 import { centerText } from "./utils/GreyUtils";
 
 class GreyYouMain {
@@ -194,6 +195,13 @@ class GreyYouMain {
       return;
     }
 
+    if (getProperty("greyBreakAtTower") == "") {
+      print(
+        "The 'greyBreakAtTower' setting has not been set, the script will not break when it reaches the tower.",
+        "red"
+      );
+    }
+
     this.adventures = new GreyAdventurer();
     let s = command.split(" ");
 
@@ -206,40 +214,59 @@ class GreyYouMain {
       this.adventures.runTurn(false);
       return;
     } else if (s[0] == "go" || s[0] == "run") {
-      let turns = 1;
-
-      if (s[1] != null) {
-        turns = toInt(s[1]);
-      }
+      const turns = toInt(s[1] || "1");
 
       let effect: Effect = Effect.get("Beaten Up");
       let lastBeaten: number = 0;
 
-      for (let i = 0; i < turns && haveEffect(effect) - lastBeaten != 3; i++) {
-        if (
-          GreySettings.greyBreakAtTower &&
-          getProperty(this.reachedTower) != "true" &&
-          getQuestStatus("questL13Final") >= 0
+      let timings = new GreyTimings();
+      let turnsRunAsFar: number = 0;
+
+      if (turns > 0) {
+        timings.doStart();
+      }
+
+      try {
+        for (
+          ;
+          turnsRunAsFar < turns && haveEffect(effect) - lastBeaten != 3;
+          turnsRunAsFar++
         ) {
-          setProperty(this.reachedTower, "true");
-          visitUrl("place.php?whichplace=nstower");
+          if (
+            GreySettings.greyBreakAtTower &&
+            getProperty(this.reachedTower) != "true" &&
+            getQuestStatus("questL13Final") >= 0
+          ) {
+            setProperty(this.reachedTower, "true");
+            visitUrl("place.php?whichplace=nstower");
 
-          print(
-            "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
-            "blue"
-          );
-          print("The script will continue when you run the script again.");
+            print(
+              "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
+              "blue"
+            );
+            print("The script will continue when you run the script again.");
 
-          printEndOfRun();
-          return;
+            printEndOfRun();
+            return;
+          }
+
+          lastBeaten = haveEffect(effect);
+          let run = this.adventures.runTurn(true);
+
+          if (!run) {
+            break;
+          }
+        }
+      } finally {
+        if (turns > 0) {
+          timings.doEnd();
         }
 
-        lastBeaten = haveEffect(effect);
-        let run = this.adventures.runTurn(true);
-
-        if (!run) {
-          break;
-        }
+        print(
+          "Time to run this script as far today is: " +
+            timings.getTimeAsString(timings.getTotalSeconds()),
+          "blue"
+        );
       }
 
       if (haveEffect(effect) - lastBeaten == 3) {
