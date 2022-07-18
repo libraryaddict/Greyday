@@ -23892,8 +23892,92 @@ function hasNonCombatSkillActive() {
     (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Darkened Photons")) > 0);
 
 }
+;// CONCATENATED MODULE: ./src/utils/GreyTimings.ts
+function GreyTimings_slicedToArray(arr, i) {return GreyTimings_arrayWithHoles(arr) || GreyTimings_iterableToArrayLimit(arr, i) || GreyTimings_unsupportedIterableToArray(arr, i) || GreyTimings_nonIterableRest();}function GreyTimings_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyTimings_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function GreyTimings_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function GreyTimings_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyTimings_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyTimings_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyTimings_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyTimings_arrayLikeToArray(o, minLen);}function GreyTimings_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyTimings_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyTimings_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyTimings_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyTimings_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyTimings_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyTimings_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_classCallCheck(this, GreyTimings);GreyTimings_defineProperty(this, "prop",
+    "_greyScriptTimings");GreyTimings_defineProperty(this, "expectingStart",
+    true);}GreyTimings_createClass(GreyTimings, [{ key: "doStart", value:
+
+    function doStart() {
+      if (!this.expectingStart) {
+        throw "Expected a end, not a start";
+      }
+
+      this.expectingStart = false;
+
+      var times = (0,external_kolmafia_namespaceObject.getProperty)(this.prop).
+      split(",").
+      filter((s) => s.length > 0);
+
+      times.push(this.getTime().toString());
+      (0,external_kolmafia_namespaceObject.setProperty)(this.prop, times.join(","));
+    } }, { key: "doEnd", value:
+
+    function doEnd() {
+      if (this.expectingStart) {
+        throw "Expected a start, not a end";
+      }
+
+      this.expectingStart = true;
+      (0,external_kolmafia_namespaceObject.setProperty)(this.prop, (0,external_kolmafia_namespaceObject.getProperty)(this.prop) + ":" + this.getTime());
+    } }, { key: "getTimings", value:
+
+    function getTimings() {
+      var timings = [];var _iterator = GreyTimings_createForOfIteratorHelper(
+
+      (0,external_kolmafia_namespaceObject.getProperty)(this.prop).
+      split(",").
+      map((s) => s.split(":"))),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _step$value = GreyTimings_slicedToArray(_step.value, 2),t1 = _step$value[0],t2 = _step$value[1];
+          timings.push([(0,external_kolmafia_namespaceObject.toInt)(t1), t2 ? (0,external_kolmafia_namespaceObject.toInt)(t2) : null]);
+        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+
+      return timings;
+    } }, { key: "getTotalSeconds", value:
+
+    function getTotalSeconds() {
+      var timeTaken = 0;
+      var timings = this.getTimings();
+
+      for (var i = 0; i < timings.length; i++) {
+        var _timings$i = GreyTimings_slicedToArray(timings[i], 2),started = _timings$i[0],ended = _timings$i[1];
+
+        if (!ended) {
+          ended = i + 1 < timings.length ? timings[i + 1][1] : this.getTime();
+        }
+
+        timeTaken += ended - started;
+      }
+
+      return timeTaken;
+    } }, { key: "getTime", value:
+
+    function getTime() {
+      return Math.round(Date.now() / 1000);
+    } }, { key: "getTimeAsString", value:
+
+    function getTimeAsString(time) {
+      var hours = Math.floor(time / 3600).toString();
+      var minutes = Math.floor(time % 3600 / 60).toString();
+      var seconds = (time % 60).toString();
+
+      if (hours.length <= 1) {
+        hours = "0" + hours;
+      }
+
+      if (minutes.length <= 1) {
+        minutes = "0" + minutes;
+      }
+
+      if (seconds.length <= 1) {
+        seconds = "0" + seconds;
+      }
+
+      return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
+    } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -24066,6 +24150,13 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
         return;
       }
 
+      if ((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") == "") {
+        (0,external_kolmafia_namespaceObject.print)(
+        "The 'greyBreakAtTower' setting has not been set, the script will not break when it reaches the tower.",
+        "red");
+
+      }
+
       this.adventures = new GreyAdventurer();
       var s = command.split(" ");
 
@@ -24078,40 +24169,59 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
         this.adventures.runTurn(false);
         return;
       } else if (s[0] == "go" || s[0] == "run") {
-        var turns = 1;
-
-        if (s[1] != null) {
-          turns = (0,external_kolmafia_namespaceObject.toInt)(s[1]);
-        }
+        var turns = (0,external_kolmafia_namespaceObject.toInt)(s[1] || "1");
 
         var effect = external_kolmafia_namespaceObject.Effect.get("Beaten Up");
         var lastBeaten = 0;
 
-        for (var i = 0; i < turns && (0,external_kolmafia_namespaceObject.haveEffect)(effect) - lastBeaten != 3; i++) {
-          if (
-          GreySettings.greyBreakAtTower &&
-          (0,external_kolmafia_namespaceObject.getProperty)(this.reachedTower) != "true" &&
-          getQuestStatus("questL13Final") >= 0)
+        var timings = new GreyTimings();
+        var turnsRunAsFar = 0;
+
+        if (turns > 0) {
+          timings.doStart();
+        }
+
+        try {
+          for (;
+
+          turnsRunAsFar < turns && (0,external_kolmafia_namespaceObject.haveEffect)(effect) - lastBeaten != 3;
+          turnsRunAsFar++)
           {
-            (0,external_kolmafia_namespaceObject.setProperty)(this.reachedTower, "true");
-            (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=nstower");
+            if (
+            GreySettings.greyBreakAtTower &&
+            (0,external_kolmafia_namespaceObject.getProperty)(this.reachedTower) != "true" &&
+            getQuestStatus("questL13Final") >= 0)
+            {
+              (0,external_kolmafia_namespaceObject.setProperty)(this.reachedTower, "true");
+              (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=nstower");
 
-            (0,external_kolmafia_namespaceObject.print)(
-            "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
-            "blue");
+              (0,external_kolmafia_namespaceObject.print)(
+              "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
+              "blue");
 
-            (0,external_kolmafia_namespaceObject.print)("The script will continue when you run the script again.");
+              (0,external_kolmafia_namespaceObject.print)("The script will continue when you run the script again.");
 
-            printEndOfRun();
-            return;
+              printEndOfRun();
+              return;
+            }
+
+            lastBeaten = (0,external_kolmafia_namespaceObject.haveEffect)(effect);
+            var run = this.adventures.runTurn(true);
+
+            if (!run) {
+              break;
+            }
+          }
+        } finally {
+          if (turns > 0) {
+            timings.doEnd();
           }
 
-          lastBeaten = (0,external_kolmafia_namespaceObject.haveEffect)(effect);
-          var run = this.adventures.runTurn(true);
+          (0,external_kolmafia_namespaceObject.print)(
+          "Time to run this script as far today is: " +
+          timings.getTimeAsString(timings.getTotalSeconds()),
+          "blue");
 
-          if (!run) {
-            break;
-          }
         }
 
         if ((0,external_kolmafia_namespaceObject.haveEffect)(effect) - lastBeaten == 3) {
