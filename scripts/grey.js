@@ -14312,13 +14312,19 @@ var CryptL7DirtyMan = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptDirt
             }
           }
 
-          var start = Macro.step(avoid);
+          var start;
 
           if (
           (0,external_kolmafia_namespaceObject.myFamiliar)() == fam &&
           (0,external_kolmafia_namespaceObject.getProperty)("nosyNoseMonster") != "dirty old lihc")
           {
-            start = Macro.step("if monsterid 1071;skill 7166;endif").step(start);
+            start = Macro.step("if monsterid 1071;skill 7166;endif");
+
+            if (avoid != null) {
+              start = start.step(avoid);
+            }
+          } else if (avoid != null) {
+            start = avoid;
           }
 
           var props = new PropertyManager();
