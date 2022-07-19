@@ -408,7 +408,7 @@ function getGreySettings() {
   var skipPalindome = {
     name: "greySkipPalindome",
     description:
-    "If set to true, will not complete palindome. This is only useful if you intend to burn turns on UR farming, and you're recommended to save at least 80 turns minumum to resume the script.",
+    "If set to true, will not complete palindome. This is only useful if you intend to burn turns on UR farming, and you're recommended to save at least 80 turns minumum to resume the script. To resume, this will need to be set to false.",
     valid: (value) => value == "true" || value == "false" };
 
 
@@ -419,7 +419,8 @@ function getGreySettings() {
   pvpEnable,
   dailyMalware,
   fantasyBandits,
-  levelingResources];
+  levelingResources,
+  skipPalindome];
 
 }
 
@@ -486,6 +487,9 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
 
 
 
+
+
+
     function isHardcoreMode() {
       return this.hardcoreMode || (0,external_kolmafia_namespaceObject.inHardcore)();
     }
@@ -499,7 +503,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
 
     function shouldAvoidTowerRequirements() {
       return !GreySettings.isHardcoreMode() && this.greyBreakAtTower;
-    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") || "false"));GreySettings_defineProperty(GreySettings, "greyDailyMalware", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDailyMalware") || "false"));GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyPrepareLevelingResources") || "false"));GreySettings_defineProperty(GreySettings, "greyFantasyBandits", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFantasyBandits") || "false"));GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", (0,external_kolmafia_namespaceObject.getProperty)("greyTuneMoonSpoon"));GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));
+    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") || "false"));GreySettings_defineProperty(GreySettings, "greyDailyMalware", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDailyMalware") || "false"));GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyPrepareLevelingResources") || "false"));GreySettings_defineProperty(GreySettings, "greyFantasyBandits", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFantasyBandits") || "false"));GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", (0,external_kolmafia_namespaceObject.getProperty)("greyTuneMoonSpoon"));GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings, "greySkipPalindome", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greySkipPalindome") || "false"));
 ;// CONCATENATED MODULE: ./src/utils/GreyUtils.ts
 function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || GreyUtils_unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyUtils_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyUtils_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyUtils_arrayLikeToArray(o, minLen);}function GreyUtils_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
 
@@ -6248,6 +6252,7 @@ function QuestL11PalinBook_classCallCheck(instance, Constructor) {if (!(instance
 
 
 
+
 var QuestL11PalinBook = /*#__PURE__*/function () {function QuestL11PalinBook() {QuestL11PalinBook_classCallCheck(this, QuestL11PalinBook);QuestL11PalinBook_defineProperty(this, "camera",
     external_kolmafia_namespaceObject.Item.get("Disposable Instant Camera"));QuestL11PalinBook_defineProperty(this, "stuntNuts",
     external_kolmafia_namespaceObject.Item.get("Stunt Nuts"));QuestL11PalinBook_defineProperty(this, "talisman",
@@ -6288,6 +6293,10 @@ var QuestL11PalinBook = /*#__PURE__*/function () {function QuestL11PalinBook() {
         return QuestStatus.NOT_READY;
       }
 
+      if (GreySettings.greySkipPalindome && !this.isFarmDudes()) {
+        return QuestStatus.COMPLETED;
+      }
+
       if (!hasNonCombatSkillsReady()) {
         return QuestStatus.FASTER_LATER;
       }
@@ -6297,15 +6306,19 @@ var QuestL11PalinBook = /*#__PURE__*/function () {function QuestL11PalinBook() {
 
     function needDogPhoto() {
       return (0,external_kolmafia_namespaceObject.availableAmount)(this.dogPhoto) == 0;
+    } }, { key: "isFarmDudes", value:
+
+    function isFarmDudes() {
+      return (
+        (0,external_kolmafia_namespaceObject.availableAmount)(this.stuntNuts) == 0 ||
+        this.needDogPhoto() ||
+        this.ncPhotos.filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0).length > 0 ||
+        (0,external_kolmafia_namespaceObject.availableAmount)(this.loveBook1) == 0);
+
     } }, { key: "run", value:
 
     function run() {
-      if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.stuntNuts) == 0 ||
-      this.needDogPhoto() ||
-      this.ncPhotos.filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0).length > 0 ||
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.loveBook1) == 0)
-      {
+      if (this.isFarmDudes()) {
         return this.farmDudes();
       }
 
