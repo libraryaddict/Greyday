@@ -1501,6 +1501,13 @@ function greyDuringFightMacro(settings) {
   var absorb = AbsorbsProvider.getAbsorb(monster);
   var hasAbsorbed = AbsorbsProvider.getReabsorbedMonsters().includes(monster);
 
+  if (
+  (0,external_kolmafia_namespaceObject.myFamiliar)() == external_kolmafia_namespaceObject.Familiar.get("Space Jellyfish") &&
+  (0,external_kolmafia_namespaceObject.monsterElement)(monster) == external_kolmafia_namespaceObject.Element.get("Stench"))
+  {
+    macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Extract Jelly"));
+  }
+
   // If low weight fam, but not too high. Let them try to dupe.
   if (
   (0,external_kolmafia_namespaceObject.myLevel)() >= 6 &&
@@ -9309,12 +9316,16 @@ function QuestL12Battlefield_classCallCheck(instance, Constructor) {if (!(instan
 
 
 
+
+
 var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield() {QuestL12Battlefield_classCallCheck(this, QuestL12Battlefield);QuestL12Battlefield_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("The Battlefield (Frat Uniform)"));QuestL12Battlefield_defineProperty(this, "pole",
     external_kolmafia_namespaceObject.Item.get("eleven-foot pole"));QuestL12Battlefield_defineProperty(this, "ring",
     external_kolmafia_namespaceObject.Item.get("ring of Detect Boring Doors"));QuestL12Battlefield_defineProperty(this, "picklocks",
-    external_kolmafia_namespaceObject.Item.get("Pick-O-Matic lockpicks"));QuestL12Battlefield_defineProperty(this, "fam",
-    external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling"));QuestL12Battlefield_defineProperty(this, "orchadAt",
+    external_kolmafia_namespaceObject.Item.get("Pick-O-Matic lockpicks"));QuestL12Battlefield_defineProperty(this, "gelCube",
+    external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling"));QuestL12Battlefield_defineProperty(this, "jellyfish",
+    external_kolmafia_namespaceObject.Familiar.get("Space Jellyfish"));QuestL12Battlefield_defineProperty(this, "goose",
+    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL12Battlefield_defineProperty(this, "orchadAt",
     64);QuestL12Battlefield_defineProperty(this, "nunsAt",
     192);}QuestL12Battlefield_createClass(QuestL12Battlefield, [{ key: "level", value:
 
@@ -9404,17 +9415,23 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
       (0,external_kolmafia_namespaceObject.availableAmount)(this.ring) == 0 ||
       (0,external_kolmafia_namespaceObject.availableAmount)(this.picklocks) == 0))
       {
-        fam = this.fam;
+        fam = this.gelCube;
+      } else if (
+      (0,external_kolmafia_namespaceObject.haveFamiliar)(this.jellyfish) && (
+      !GreySettings.greyPrepareLevelingResources ||
+      (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= 20 ||
+      AbsorbsProvider.remainingAdvAbsorbs == null ||
+      AbsorbsProvider.remainingAdvAbsorbs.length > 3))
+      {
+        fam = this.jellyfish;
       }
 
       return {
         outfit: outfit,
         location: this.loc,
         familiar: fam,
-        disableFamOverride: fam != null,
+        disableFamOverride: fam == this.gelCube,
         run: () => {
-          var fam = external_kolmafia_namespaceObject.Familiar.get("Grey Goose");
-
           var burner = DelayBurners.getReadyDelayBurner();
 
           if (burner != null) {
