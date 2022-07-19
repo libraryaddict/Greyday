@@ -23763,24 +23763,25 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
           //   replaceWith.push(Familiar.get("Melodramedary"));
         }
 
-        if (
+        var robor = external_kolmafia_namespaceObject.Familiar.get("Robortender");
+        var doRobor =
         (0,external_kolmafia_namespaceObject.getProperty)("_roboDrinks").includes("drive-by shooting") &&
-        (0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Robortender")) < 20)
-        {
-          replaceWith.push(external_kolmafia_namespaceObject.Familiar.get("Robortender"));
-        }var _iterator2 = GreyAdventurer_createForOfIteratorHelper(
+        (0,external_kolmafia_namespaceObject.familiarWeight)(robor) < 20;
 
-        [
+        var toLevelUp = [
         "Pocket Professor",
-        "Hobomonkey",
+        (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Frumious Bandersnatch")) ?
+        "Frumious Bandersnatch" :
+        "Pair of Stomping Boots",
+        (0,external_kolmafia_namespaceObject.haveFamiliar)(robor) ? doRobor ? "Robortender" : "" : "Hobomonkey",
         "Jumpsuited Hound Dog"].
-        map((s) => external_kolmafia_namespaceObject.Familiar.get(s))),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var fam = _step2.value;
-            if ((0,external_kolmafia_namespaceObject.familiarWeight)(fam) >= 20) {
-              continue;
-            }
 
-            replaceWith.push(fam);
-          }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+        filter((f) => f.length > 0).
+        map((f) => external_kolmafia_namespaceObject.Familiar.get(f)).
+        filter((f) => (0,external_kolmafia_namespaceObject.haveFamiliar)(f) && (0,external_kolmafia_namespaceObject.familiarWeight)(f) < 20);
+
+        replaceWith.push.apply(replaceWith, GreyAdventurer_toConsumableArray(toLevelUp.filter((f) => (0,external_kolmafia_namespaceObject.familiarWeight)(f) <= 15)));
+        replaceWith.push.apply(replaceWith, GreyAdventurer_toConsumableArray(toLevelUp));
 
         replaceWith.push(familiar);
 
