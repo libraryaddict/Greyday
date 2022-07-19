@@ -2446,7 +2446,8 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
         shouldWait:
         absorbs.filter((a) => a.adventures > 0 && !defeated.has(a.monster)).
         length > 0,
-        shouldRunOrb: false };
+        shouldRunOrb: false,
+        ensuredOrb: false };
 
     } }, { key: "getOnlyUsefulAbsorbs", value:
 
@@ -2669,6 +2670,7 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
       join(", "));
 
     } }], [{ key: "getAbsorb", value: function getAbsorb(monster) {var _iterator9 = GreyAbsorber_createForOfIteratorHelper(AbsorbsProvider.loadAbsorbs()),_step9;try {for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {var absorb = _step9.value;if (absorb.monster != monster) {continue;}return absorb;}} catch (err) {_iterator9.e(err);} finally {_iterator9.f();}return null;} }, { key: "loadAbsorbs", value: function loadAbsorbs() {if (AbsorbsProvider.allAbsorbs != null) {return AbsorbsProvider.allAbsorbs;}AbsorbsProvider.allAbsorbs = [];var _iterator10 = GreyAbsorber_createForOfIteratorHelper((0,external_kolmafia_namespaceObject.fileToBuffer)("data/grey_you_data.txt").split("\n")),_step10;try {for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {var line = _step10.value;var spl = line.split("\t");if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {continue;}var mons = (0,external_kolmafia_namespaceObject.toMonster)(spl[0]);if (mons == external_kolmafia_namespaceObject.Monster.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown " + spl[0]);continue;}var absorb = new Absorb();absorb.monster = mons;if (spl[1].endsWith("adventures")) {absorb.adventures = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("muscle")) {absorb.mus = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("mysticality")) {absorb.mys = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("moxie")) {absorb.mox = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("maximum hp")) {absorb.hp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else if (spl[1].endsWith("maximum mp")) {absorb.mp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else {absorb.skill = (0,external_kolmafia_namespaceObject.toSkill)(spl[1]);if (absorb.skill == external_kolmafia_namespaceObject.Skill.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown thingy " + spl[1]);}}AbsorbsProvider.allAbsorbs.push(absorb);}} catch (err) {_iterator10.e(err);} finally {_iterator10.f();}this.remainingAdvAbsorbs = AbsorbsProvider.allAbsorbs.filter((a) => a.adventures > 0).map((a) => a.monster);return AbsorbsProvider.allAbsorbs;} }, { key: "getReabsorbedMonsters", value: function getReabsorbedMonsters() {return (0,external_kolmafia_namespaceObject.getProperty)("gooseReprocessed").split(",").filter((s) => s != "").map((m) => (0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.toInt)(m)));} }]);return AbsorbsProvider;}();GreyAbsorber_defineProperty(AbsorbsProvider, "allAbsorbs", void 0);GreyAbsorber_defineProperty(AbsorbsProvider, "remainingAdvAbsorbs", void 0);
+
 
 
 
@@ -12025,6 +12027,10 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
       }
 
       return QuestStatus.READY;
+    } }, { key: "hasDrunkMeat", value:
+
+    function hasDrunkMeat() {
+      return (0,external_kolmafia_namespaceObject.getProperty)("_roboDrinks").includes("drive-by shooting");
     } }, { key: "run", value:
 
     function run() {
@@ -12032,9 +12038,15 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
         outfit: new GreyOutfit("-tie"),
         location: null,
         run: () => {
-          (0,external_kolmafia_namespaceObject.cliExecute)(
-          "maximize +5 meat +0.03 moxie +100 hp 200 min 500 max +switch hobo monkey +switch robortender");
+          var robo = external_kolmafia_namespaceObject.Familiar.get("Grey Goose");
 
+          if ((0,external_kolmafia_namespaceObject.haveFamiliar)(robo) && this.hasDrunkMeat()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Robortender"));
+          } else if ((0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Hobo Monkey"))) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Hobo Monkey"));
+          }
+
+          (0,external_kolmafia_namespaceObject.cliExecute)("maximize +5 meat +0.03 moxie +100 hp 200 min 500 max");
 
           if ((0,external_kolmafia_namespaceObject.myMaxhp)() < 200) {
             throw "Max HP too low! Run +meat and kill the wall of meat yourself?";
@@ -22710,6 +22722,7 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
           var mon = getPredicts().get(loc.location);
 
           loc.shouldRunOrb = mon == null || loc.monsters.includes(mon);
+          loc.ensuredOrb = mon != null && loc.monsters.includes(mon);
 
           return loc.shouldRunOrb;
         });
@@ -22757,6 +22770,7 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
             if (current == null || a.monsters.includes(current)) {
               wantsToRunOrb = true;
               a.shouldRunOrb = true;
+              a.ensuredOrb = current != null && a.monsters.includes(current);
 
               if (
               current != null &&
@@ -23653,6 +23667,10 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
 
       if (adventure.locationInfo != null && adventure.locationInfo.shouldRunOrb) {
         doOrb = true;
+
+        if (!adventure.locationInfo.ensuredOrb) {
+          outfit.addBonus("+20 bonus Kramco Sausage-o-Matic&trade;");
+        }
       }
 
       if (canDoMagGlass) {
