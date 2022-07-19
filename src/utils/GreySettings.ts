@@ -60,7 +60,7 @@ export function getGreySettings(): GreySetting[] {
   let skipPalindome: GreySetting = {
     name: "greySkipPalindome",
     description:
-      "If set to true, will not complete palindome. This is only useful if you intend to burn turns on UR farming, and you're recommended to save at least 80 turns minumum to resume the script.",
+      "If set to true, will not complete palindome. This is only useful if you intend to burn turns on UR farming, and you're recommended to save at least 80 turns minumum to resume the script. To resume, this will need to be set to false.",
     valid: (value) => value == "true" || value == "false",
   };
 
@@ -72,6 +72,7 @@ export function getGreySettings(): GreySetting[] {
     dailyMalware,
     fantasyBandits,
     levelingResources,
+    skipPalindome,
   ];
 }
 
@@ -137,6 +138,9 @@ export class GreySettings {
     "greyTuneMoonSpoon"
   ) as MoonSign;
   static greyDebug: boolean = toBoolean(getProperty("greyDebug") || "false");
+  static greySkipPalindome: boolean = toBoolean(
+    getProperty("greySkipPalindome") || "false"
+  );
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

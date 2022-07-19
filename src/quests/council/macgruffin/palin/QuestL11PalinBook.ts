@@ -13,6 +13,7 @@ import {
 import { hasNonCombatSkillsReady } from "../../../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { GreySettings } from "../../../../utils/GreySettings";
 import { Macro } from "../../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../../utils/Properties";
 import {
@@ -63,6 +64,10 @@ export class QuestL11PalinBook implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (GreySettings.greySkipPalindome && !this.isFarmDudes()) {
+      return QuestStatus.COMPLETED;
+    }
+
     if (!hasNonCombatSkillsReady()) {
       return QuestStatus.FASTER_LATER;
     }
@@ -74,13 +79,17 @@ export class QuestL11PalinBook implements QuestInfo {
     return availableAmount(this.dogPhoto) == 0;
   }
 
-  run(): QuestAdventure {
-    if (
+  isFarmDudes(): boolean {
+    return (
       availableAmount(this.stuntNuts) == 0 ||
       this.needDogPhoto() ||
       this.ncPhotos.filter((i) => availableAmount(i) == 0).length > 0 ||
       availableAmount(this.loveBook1) == 0
-    ) {
+    );
+  }
+
+  run(): QuestAdventure {
+    if (this.isFarmDudes()) {
       return this.farmDudes();
     }
 
