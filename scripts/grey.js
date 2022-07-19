@@ -23845,13 +23845,17 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
 
             var buffer = (0,external_kolmafia_namespaceObject.fileToBuffer)(name);
 
-            var id =
-            (adventure.quest ? adventure.quest.getId() : "Non-Quest") +
-            " @ " +
+            if (buffer == "") {
+              buffer = "# Turns Played\tQuest ID\tLocation\tTurns Taken";
+            }
+
+            var id = adventure.quest ? adventure.quest.getId() : "Non-Quest";
+
             toRun.location;
 
-            buffer +=
-            "\n" + (0,external_kolmafia_namespaceObject.turnsPlayed)() + "\t" + id + "\t" + ((0,external_kolmafia_namespaceObject.turnsPlayed)() - turn);
+            buffer += "\n".concat((0,external_kolmafia_namespaceObject.turnsPlayed)(), "\t").concat(id, "\t").concat(toRun.location, "\t").concat(
+            (0,external_kolmafia_namespaceObject.turnsPlayed)() - turn);
+
 
             (0,external_kolmafia_namespaceObject.bufferToFile)(buffer.toString(), name);
           }
