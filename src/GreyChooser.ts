@@ -538,6 +538,7 @@ export class AdventureFinder {
         let mon = getPredicts().get(loc.location);
 
         loc.shouldRunOrb = mon == null || loc.monsters.includes(mon);
+        loc.ensuredOrb = mon != null && loc.monsters.includes(mon);
 
         return loc.shouldRunOrb;
       });
@@ -585,6 +586,7 @@ export class AdventureFinder {
         if (current == null || a.monsters.includes(current)) {
           wantsToRunOrb = true;
           a.shouldRunOrb = true;
+          a.ensuredOrb = current != null && a.monsters.includes(current);
 
           if (
             current != null &&

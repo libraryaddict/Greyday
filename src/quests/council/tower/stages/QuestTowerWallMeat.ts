@@ -9,6 +9,9 @@ import {
   myMaxhp,
   print,
   cliExecute,
+  haveFamiliar,
+  getProperty,
+  useFamiliar,
 } from "kolmafia";
 import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -45,14 +48,24 @@ export class QuestTowerWallMeat implements QuestInfo {
     return QuestStatus.READY;
   }
 
+  hasDrunkMeat(): boolean {
+    return getProperty("_roboDrinks").includes("drive-by shooting");
+  }
+
   run(): QuestAdventure {
     return {
       outfit: new GreyOutfit("-tie"),
       location: null,
       run: () => {
-        cliExecute(
-          "maximize +5 meat +0.03 moxie +100 hp 200 min 500 max +switch hobo monkey +switch robortender"
-        );
+        let robo = Familiar.get("Grey Goose");
+
+        if (haveFamiliar(robo) && this.hasDrunkMeat()) {
+          useFamiliar(Familiar.get("Robortender"));
+        } else if (haveFamiliar(Familiar.get("Hobo Monkey"))) {
+          useFamiliar(Familiar.get("Hobo Monkey"));
+        }
+
+        cliExecute("maximize +5 meat +0.03 moxie +100 hp 200 min 500 max");
 
         if (myMaxhp() < 200) {
           throw "Max HP too low! Run +meat and kill the wall of meat yourself?";

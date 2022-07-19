@@ -336,6 +336,7 @@ export class AbsorbsProvider {
         absorbs.filter((a) => a.adventures > 0 && !defeated.has(a.monster))
           .length > 0,
       shouldRunOrb: false,
+      ensuredOrb: false,
     };
   }
 
@@ -568,6 +569,7 @@ export interface AdventureLocation {
   skills: Map<Absorb, string>;
   shouldWait: boolean;
   shouldRunOrb: boolean;
+  ensuredOrb: boolean;
 }
 
 export enum Reabsorbed {

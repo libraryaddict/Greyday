@@ -223,6 +223,10 @@ export class GreyAdventurer {
 
     if (adventure.locationInfo != null && adventure.locationInfo.shouldRunOrb) {
       doOrb = true;
+
+      if (!adventure.locationInfo.ensuredOrb) {
+        outfit.addBonus("+20 bonus Kramco Sausage-o-Matic&trade;");
+      }
     }
 
     if (canDoMagGlass) {
