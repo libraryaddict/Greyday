@@ -388,13 +388,17 @@ export class GreyAdventurer {
 
           let buffer = fileToBuffer(name);
 
-          let id =
-            (adventure.quest ? adventure.quest.getId() : "Non-Quest") +
-            " @ " +
-            toRun.location;
+          if (buffer == "") {
+            buffer = "# Turns Played\tQuest ID\tLocation\tTurns Taken";
+          }
 
-          buffer +=
-            "\n" + turnsPlayed() + "\t" + id + "\t" + (turnsPlayed() - turn);
+          let id = adventure.quest ? adventure.quest.getId() : "Non-Quest";
+
+          toRun.location;
+
+          buffer += `\n${turnsPlayed()}\t${id}\t${toRun.location}\t${
+            turnsPlayed() - turn
+          }`;
 
           bufferToFile(buffer.toString(), name);
         }
