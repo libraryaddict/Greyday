@@ -289,24 +289,25 @@ export class GreyAdventurer {
         //   replaceWith.push(Familiar.get("Melodramedary"));
       }
 
-      if (
+      let robor: Familiar = Familiar.get("Robortender");
+      let doRobor =
         getProperty("_roboDrinks").includes("drive-by shooting") &&
-        familiarWeight(Familiar.get("Robortender")) < 20
-      ) {
-        replaceWith.push(Familiar.get("Robortender"));
-      }
+        familiarWeight(robor) < 20;
 
-      for (let fam of [
+      let toLevelUp = [
         "Pocket Professor",
-        "Hobomonkey",
+        haveFamiliar(Familiar.get("Frumious Bandersnatch"))
+          ? "Frumious Bandersnatch"
+          : "Pair of Stomping Boots",
+        haveFamiliar(robor) ? (doRobor ? "Robortender" : "") : "Hobomonkey",
         "Jumpsuited Hound Dog",
-      ].map((s) => Familiar.get(s))) {
-        if (familiarWeight(fam) >= 20) {
-          continue;
-        }
+      ]
+        .filter((f) => f.length > 0)
+        .map((f) => Familiar.get(f))
+        .filter((f) => haveFamiliar(f) && familiarWeight(f) < 20);
 
-        replaceWith.push(fam);
-      }
+      replaceWith.push(...toLevelUp.filter((f) => familiarWeight(f) <= 15));
+      replaceWith.push(...toLevelUp);
 
       replaceWith.push(familiar);
 
