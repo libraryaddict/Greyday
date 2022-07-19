@@ -3,16 +3,21 @@ import {
   Familiar,
   familiarWeight,
   getProperty,
+  haveFamiliar,
   Item,
   Location,
+  myFamiliar,
   print,
+  Skill,
   toInt,
   useFamiliar,
 } from "kolmafia";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
-import { greyAdv } from "../../../utils/GreyLocations";
+import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { GreySettings } from "../../../utils/GreySettings";
+import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -21,7 +26,9 @@ export class QuestL12Battlefield implements QuestInfo {
   pole: Item = Item.get("eleven-foot pole");
   ring: Item = Item.get("ring of Detect Boring Doors");
   picklocks: Item = Item.get("Pick-O-Matic lockpicks");
-  fam: Familiar = Familiar.get("Gelatinous Cubeling");
+  gelCube: Familiar = Familiar.get("Gelatinous Cubeling");
+  jellyfish: Familiar = Familiar.get("Space Jellyfish");
+  goose: Familiar = Familiar.get("Grey Goose");
   orchadAt: number = 64;
   nunsAt: number = 192;
 
@@ -111,17 +118,23 @@ export class QuestL12Battlefield implements QuestInfo {
         availableAmount(this.ring) == 0 ||
         availableAmount(this.picklocks) == 0)
     ) {
-      fam = this.fam;
+      fam = this.gelCube;
+    } else if (
+      haveFamiliar(this.jellyfish) &&
+      (!GreySettings.greyPrepareLevelingResources ||
+        familiarWeight(this.goose) >= 20 ||
+        AbsorbsProvider.remainingAdvAbsorbs == null ||
+        AbsorbsProvider.remainingAdvAbsorbs.length > 3)
+    ) {
+      fam = this.jellyfish;
     }
 
     return {
       outfit: outfit,
       location: this.loc,
       familiar: fam,
-      disableFamOverride: fam != null,
+      disableFamOverride: fam == this.gelCube,
       run: () => {
-        let fam = Familiar.get("Grey Goose");
-
         let burner = DelayBurners.getReadyDelayBurner();
 
         if (burner != null) {

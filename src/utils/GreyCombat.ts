@@ -2,6 +2,7 @@ import {
   appearanceRates,
   availableAmount,
   Effect,
+  Element,
   equippedAmount,
   Familiar,
   familiarWeight,
@@ -14,6 +15,7 @@ import {
   Item,
   lastMonster,
   Monster,
+  monsterElement,
   myAdventures,
   myAscensions,
   myBasestat,
@@ -72,6 +74,13 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
   let monster = lastMonster();
   let absorb = AbsorbsProvider.getAbsorb(monster);
   let hasAbsorbed = AbsorbsProvider.getReabsorbedMonsters().includes(monster);
+
+  if (
+    myFamiliar() == Familiar.get("Space Jellyfish") &&
+    monsterElement(monster) == Element.get("Stench")
+  ) {
+    macro.trySkill(Skill.get("Extract Jelly"));
+  }
 
   // If low weight fam, but not too high. Let them try to dupe.
   if (
