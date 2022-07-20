@@ -23760,7 +23760,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
         replaceWith.push.apply(replaceWith, GreyAdventurer_toConsumableArray(this.adventureFinder.getRecommendedFamiliars()));
 
         if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("camelSpit")) < 100) {
-          //   replaceWith.push(Familiar.get("Melodramedary"));
+          replaceWith.push(external_kolmafia_namespaceObject.Familiar.get("Melodramedary"));
         }
 
         var robor = external_kolmafia_namespaceObject.Familiar.get("Robortender");
