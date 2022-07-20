@@ -286,7 +286,7 @@ export class GreyAdventurer {
       replaceWith.push(...this.adventureFinder.getRecommendedFamiliars());
 
       if (toInt(getProperty("camelSpit")) < 100) {
-        //   replaceWith.push(Familiar.get("Melodramedary"));
+        replaceWith.push(Familiar.get("Melodramedary"));
       }
 
       let robor: Familiar = Familiar.get("Robortender");
