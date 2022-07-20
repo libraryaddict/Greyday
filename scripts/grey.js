@@ -18638,7 +18638,11 @@ QuestGnomeTrainer = /*#__PURE__*/function () {function QuestGnomeTrainer() {Ques
 
     function status() {
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.letter) > 0) {
-        return QuestStatus.READY;
+        //  return QuestStatus.READY;
+      }
+
+      if (getQuestStatus("questL13Final") >= 0) {
+        return QuestStatus.COMPLETED;
       }
 
       if (this.getSkillLacking() == null || !(0,external_kolmafia_namespaceObject.gnomadsAvailable)()) {
@@ -19545,6 +19549,68 @@ var QuestSkillColdDamage10 = /*#__PURE__*/function () {function QuestSkillColdDa
     function getLocations() {
       return [this.location];
     } }]);return QuestSkillColdDamage10;}();
+;// CONCATENATED MODULE: ./src/quests/skills/QuestSkillConiferPolymers.ts
+function QuestSkillConiferPolymers_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestSkillConiferPolymers_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestSkillConiferPolymers_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestSkillConiferPolymers_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestSkillConiferPolymers_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestSkillConiferPolymers_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+
+
+
+
+var QuestSkillConiferPolymers = /*#__PURE__*/function () {function QuestSkillConiferPolymers() {QuestSkillConiferPolymers_classCallCheck(this, QuestSkillConiferPolymers);QuestSkillConiferPolymers_defineProperty(this, "location",
+    external_kolmafia_namespaceObject.Location.get("The Bat Hole Entrance"));QuestSkillConiferPolymers_defineProperty(this, "monster",
+    external_kolmafia_namespaceObject.Monster.get("Pine Bat"));QuestSkillConiferPolymers_defineProperty(this, "skill",
+    external_kolmafia_namespaceObject.Skill.get("Conifer Polymers"));}QuestSkillConiferPolymers_createClass(QuestSkillConiferPolymers, [{ key: "getId", value:
+
+    function getId() {
+      return "Skills / Conifer Polymers";
+    } }, { key: "level", value:
+
+    function level() {
+      return 4;
+    } }, { key: "status", value:
+
+    function status() {
+      if ((0,external_kolmafia_namespaceObject.haveSkill)(this.skill)) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if (getQuestStatus("questM20Necklace") > 0) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if (!(0,external_canadv_ash_namespaceObject.canAdv)(this.location)) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.READY;
+    } }, { key: "run", value:
+
+    function run() {
+      var outfit = new GreyOutfit();
+
+      if (this.location.combatPercent < 100) {
+        outfit.setPlusCombat();
+      }
+
+      return {
+        location: this.location,
+        outfit: outfit,
+        run: () => {
+          var settings = new AdventureSettings();
+          settings.addNoBanish(this.monster);
+
+          greyAdv(this.location, outfit, settings);
+        } };
+
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [this.location];
+    } }]);return QuestSkillConiferPolymers;}();
 ;// CONCATENATED MODULE: ./src/quests/skills/QuestSkillDoubleNanovision.ts
 function QuestSkillDoubleNanovision_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestSkillDoubleNanovision_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestSkillDoubleNanovision_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestSkillDoubleNanovision_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestSkillDoubleNanovision_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestSkillDoubleNanovision_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -19680,6 +19746,7 @@ function QuestSkillRegistry_createForOfIteratorHelper(o, allowArrayLike) {var it
 
 
 
+
 var QuestSkillRegistry = /*#__PURE__*/function () {
 
 
@@ -19697,7 +19764,6 @@ var QuestSkillRegistry = /*#__PURE__*/function () {
     */
 
     this.addSkill("Skills / Phase Shift");
-    this.addSkill("Skills / Conifer Polymers");
     this.addSkill("Skills / Photonic Shroud");
     this.addSkill("Skills / Piezoelectric Honk");
     this.addSkill(
@@ -19722,6 +19788,7 @@ var QuestSkillRegistry = /*#__PURE__*/function () {
     this.children.push(new QuestSkillColdDamage15());
     this.children.push(new QuestSkillColdDamage10());
     this.children.push(new QuestSkillDoubleNanovision());
+    this.children.push(new QuestSkillConiferPolymers());
   }QuestSkillRegistry_createClass(QuestSkillRegistry, [{ key: "addSkill", value:
 
     function addSkill(questType, skill) {
