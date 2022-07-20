@@ -9,6 +9,7 @@ import {
   QuestSkillColdDamage10,
   QuestSkillColdDamage15,
 } from "./QuestSkillColdDamage";
+import { QuestSkillConiferPolymers } from "./QuestSkillConiferPolymers";
 import { QuestSkillDoubleNanovision } from "./QuestSkillDoubleNanovision";
 import { QuestSkillSystemSweep } from "./QuestSkillSystemSweep";
 
@@ -29,7 +30,6 @@ export class QuestSkillRegistry implements QuestInfo {
   */
 
     this.addSkill("Skills / Phase Shift");
-    this.addSkill("Skills / Conifer Polymers");
     this.addSkill("Skills / Photonic Shroud");
     this.addSkill("Skills / Piezoelectric Honk");
     this.addSkill(
@@ -54,6 +54,7 @@ export class QuestSkillRegistry implements QuestInfo {
     this.children.push(new QuestSkillColdDamage15());
     this.children.push(new QuestSkillColdDamage10());
     this.children.push(new QuestSkillDoubleNanovision());
+    this.children.push(new QuestSkillConiferPolymers());
   }
 
   addSkill(questType: QuestType, skill?: Skill) {

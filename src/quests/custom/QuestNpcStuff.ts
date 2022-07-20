@@ -213,7 +213,11 @@ class QuestGnomeTrainer implements QuestInfo {
 
   status(): QuestStatus {
     if (availableAmount(this.letter) > 0) {
-      return QuestStatus.READY;
+      //  return QuestStatus.READY;
+    }
+
+    if (getQuestStatus("questL13Final") >= 0) {
+      return QuestStatus.COMPLETED;
     }
 
     if (this.getSkillLacking() == null || !gnomadsAvailable()) {
