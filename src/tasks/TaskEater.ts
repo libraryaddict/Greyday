@@ -3,22 +3,18 @@ import {
   canadiaAvailable,
   chew,
   cliExecute,
-  Coinmaster,
-  drink,
   drinksilent,
-  eat,
   eatsilent,
   getInventory,
   getProperty,
   gnomadsAvailable,
-  hermit,
   historicalPrice,
-  isAccessible,
   Item,
+  itemAmount,
   myLevel,
   myMeat,
-  print,
   pullsRemaining,
+  putCloset,
   setProperty,
   toInt,
   visitUrl,
@@ -40,6 +36,7 @@ export class TaskEater implements Task {
     Item.get(s)
   );
   blackberry: Item = Item.get("Blackberry");
+  seasoning: Item = Item.get("Special Seasoning");
 
   constructor() {
     if (getProperty(this.prop) == "") {
@@ -162,6 +159,10 @@ export class TaskEater implements Task {
       }
 
       if (item.fullness > 0) {
+        if (itemAmount(this.seasoning) > 0) {
+          putCloset(itemAmount(this.seasoning), this.seasoning);
+        }
+
         eatsilent(item);
       } else if (item.inebriety > 0) {
         drinksilent(item);
