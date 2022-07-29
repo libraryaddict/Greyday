@@ -23107,7 +23107,8 @@ var TaskEater = /*#__PURE__*/function () {
 
 
 
-  function TaskEater() {TaskEater_classCallCheck(this, TaskEater);TaskEater_defineProperty(this, "prop", "_greyEatenToday");TaskEater_defineProperty(this, "npcFoods", ["Hot buttered roll", "Ketchup", "Catsup", "cup of lukewarm tea", "Fortune Cookie", "Pickled Egg"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));TaskEater_defineProperty(this, "keepOnHand", ["Bunch of square grapes", "Boxed Wine"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));TaskEater_defineProperty(this, "blackberry", external_kolmafia_namespaceObject.Item.get("Blackberry"));
+
+  function TaskEater() {TaskEater_classCallCheck(this, TaskEater);TaskEater_defineProperty(this, "prop", "_greyEatenToday");TaskEater_defineProperty(this, "npcFoods", ["Hot buttered roll", "Ketchup", "Catsup", "cup of lukewarm tea", "Fortune Cookie", "Pickled Egg"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));TaskEater_defineProperty(this, "keepOnHand", ["Bunch of square grapes", "Boxed Wine"].map((s) => external_kolmafia_namespaceObject.Item.get(s)));TaskEater_defineProperty(this, "blackberry", external_kolmafia_namespaceObject.Item.get("Blackberry"));TaskEater_defineProperty(this, "seasoning", external_kolmafia_namespaceObject.Item.get("Special Seasoning"));
     if ((0,external_kolmafia_namespaceObject.getProperty)(this.prop) == "") {
       var dontEat = [];
       // Goat cheese quest
@@ -23228,6 +23229,10 @@ var TaskEater = /*#__PURE__*/function () {
         }
 
         if (item.fullness > 0) {
+          if ((0,external_kolmafia_namespaceObject.itemAmount)(this.seasoning) > 0) {
+            (0,external_kolmafia_namespaceObject.putCloset)((0,external_kolmafia_namespaceObject.itemAmount)(this.seasoning), this.seasoning);
+          }
+
           (0,external_kolmafia_namespaceObject.eatsilent)(item);
         } else if (item.inebriety > 0) {
           (0,external_kolmafia_namespaceObject.drinksilent)(item);
