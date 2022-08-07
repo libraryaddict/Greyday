@@ -23876,6 +23876,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
 
       (0,external_kolmafia_namespaceObject.setLocation)(locationToSet);
 
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella")) > 0)
       setUmbrella(outfit.getUmbrella());
 
       (0,external_kolmafia_namespaceObject.useFamiliar)(familiar);
