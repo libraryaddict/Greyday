@@ -7,6 +7,7 @@ import {
   Familiar,
   familiarWeight,
   getProperty,
+  haveSkill,
   hippyStoneBroken,
   Item,
   Location,
@@ -38,6 +39,7 @@ export class QuestPowerLeveling implements QuestInfo {
   property: string = "greyYouLastPowerLeveled";
   familiar: Familiar = Familiar.get("Grey Goose");
   equip: Item = Item.get("Grey Down Vest");
+  skill: Skill = Skill.get("Infinite Loop");
   desiredLevel: number;
   weightRequired: number;
 
@@ -102,6 +104,10 @@ export class QuestPowerLeveling implements QuestInfo {
       toInt(getProperty(this.property)) == myAscensions()
     ) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (!haveSkill(this.skill)) {
+      return QuestStatus.NOT_READY;
     }
 
     return QuestStatus.READY;
