@@ -20910,7 +20910,8 @@ var QuestPowerLeveling = /*#__PURE__*/function () {
 
 
 
-  function QuestPowerLeveling(desiredLevel) {QuestPowerLeveling_classCallCheck(this, QuestPowerLeveling);QuestPowerLeveling_defineProperty(this, "property", "greyYouLastPowerLeveled");QuestPowerLeveling_defineProperty(this, "familiar", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestPowerLeveling_defineProperty(this, "equip", external_kolmafia_namespaceObject.Item.get("Grey Down Vest"));QuestPowerLeveling_defineProperty(this, "desiredLevel", void 0);QuestPowerLeveling_defineProperty(this, "weightRequired", void 0);
+
+  function QuestPowerLeveling(desiredLevel) {QuestPowerLeveling_classCallCheck(this, QuestPowerLeveling);QuestPowerLeveling_defineProperty(this, "property", "greyYouLastPowerLeveled");QuestPowerLeveling_defineProperty(this, "familiar", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestPowerLeveling_defineProperty(this, "equip", external_kolmafia_namespaceObject.Item.get("Grey Down Vest"));QuestPowerLeveling_defineProperty(this, "skill", external_kolmafia_namespaceObject.Skill.get("Infinite Loop"));QuestPowerLeveling_defineProperty(this, "desiredLevel", void 0);QuestPowerLeveling_defineProperty(this, "weightRequired", void 0);
     this.desiredLevel = desiredLevel;
 
     this.weightRequired = this.getWeightNeededToReachLevel(desiredLevel);
@@ -20971,6 +20972,10 @@ var QuestPowerLeveling = /*#__PURE__*/function () {
       (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)(this.property)) == (0,external_kolmafia_namespaceObject.myAscensions)())
       {
         return QuestStatus.COMPLETED;
+      }
+
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.skill)) {
+        return QuestStatus.NOT_READY;
       }
 
       return QuestStatus.READY;
