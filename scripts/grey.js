@@ -23898,8 +23898,8 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       var maximizeResult = (0,external_kolmafia_namespaceObject.maximize)(
       outfit.createString() +
       " " + (
-      doOrb ? "+" : "-") +
-      "equip miniature crystal ball",
+      doOrb ? "+99999 bonus" : "-equip") +
+      " miniature crystal ball",
       false);
 
 
