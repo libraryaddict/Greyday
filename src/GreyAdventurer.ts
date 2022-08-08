@@ -347,8 +347,8 @@ export class GreyAdventurer {
     let maximizeResult = maximize(
       outfit.createString() +
         " " +
-        (doOrb ? "+" : "-") +
-        "equip miniature crystal ball",
+        (doOrb ? "+99999 bonus" : "-equip") +
+        " miniature crystal ball",
       false
     );
 
