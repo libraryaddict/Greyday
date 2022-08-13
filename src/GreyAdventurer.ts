@@ -433,7 +433,9 @@ export class GreyAdventurer {
 
     setLocation(locationToSet);
 
-    setUmbrella(outfit.getUmbrella());
+    if (availableAmount(Item.get("Unbreakable Umbrella")) > 0) {
+      setUmbrella(outfit.getUmbrella());
+    }
 
     useFamiliar(familiar);
 
