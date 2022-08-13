@@ -100,10 +100,7 @@ class GreyYouMain {
     printHtml(centerText("======================================"));
     print("help - Shows this message", "blue");
     print("settings - Show the settings", "blue");
-    print(
-      "required - Prints off a series of requirements, which is both outdated and more severe than you need.",
-      "blue"
-    );
+    print("required - Prints off a series of requirements.", "blue");
     print(
       "resources - A debug command that predicts what resources it would try to use in Grey You using your current settings",
       "blue"
