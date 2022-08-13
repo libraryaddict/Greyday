@@ -9,8 +9,10 @@ import {
   Monster,
   myAdventures,
   myLevel,
+  toBoolean,
   toInt,
   toMonster,
+  totalTurnsPlayed,
   visitUrl,
 } from "kolmafia";
 import { hasCombatSkillReady } from "../../../GreyAdventurer";
@@ -18,6 +20,7 @@ import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { GreySettings } from "../../../utils/GreySettings";
 import { getBackupsRemaining } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
 import {
@@ -35,6 +38,7 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
   cursedMagnifyingGlass: Item = Item.get("Cursed Magnifying Glass");
   powerfulGlove: Item = Item.get("Powerful Glove");
   backupCamera: Item = Item.get("Backup Camera");
+  votedSticker: Item = Item.get("&quot;I Voted!&quot; sticker");
   gloveAndBackups: PossiblePath;
   backups: PossiblePath;
   manual: PossiblePath;
@@ -75,7 +79,10 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
   getPossiblePaths(): PossiblePath[] {
     const paths = [this.manual, this.backups];
 
-    if (availableAmount(this.cursedMagnifyingGlass) > 0) {
+    if (
+      availableAmount(this.cursedMagnifyingGlass) > 0 ||
+      (toBoolean(getProperty("voteAlways")) && GreySettings.greyVotingBooth)
+    ) {
       paths.push(this.gloveAndBackups);
     }
 
@@ -118,8 +125,8 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (this.hasVoidAndGlove()) {
-      if (!this.isVoidReady()) {
+    if (this.hasForcedMonsterAndGlove()) {
+      if (this.getMonsterReplacer() == null) {
         return QuestStatus.NOT_READY;
       }
     } else if (!hasCombatSkillReady()) {
@@ -135,6 +142,13 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
 
   isVoidReady(): boolean {
     return toInt(getProperty("cursedMagnifyingGlassCount")) == 13;
+  }
+
+  isVoterReady(): boolean {
+    return (
+      totalTurnsPlayed() % 11 == 1 &&
+      toInt(getProperty("lastVoteMonsterTurn")) < totalTurnsPlayed()
+    );
   }
 
   getId(): QuestType {
@@ -162,10 +176,23 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
     };
   }
 
-  hasVoidAndGlove(): boolean {
+  getMonsterReplacer(): Item {
+    if (availableAmount(this.votedSticker) > 0 && this.isVoterReady()) {
+      return this.votedSticker;
+    }
+
+    if (availableAmount(this.cursedMagnifyingGlass) && this.isVoidReady()) {
+      return this.cursedMagnifyingGlass;
+    }
+
+    return null;
+  }
+
+  hasForcedMonsterAndGlove(): boolean {
     return (
-      availableAmount(this.cursedMagnifyingGlass) > 0 &&
-      availableAmount(this.powerfulGlove) > 0
+      availableAmount(this.cursedMagnifyingGlass) +
+        availableAmount(this.votedSticker) >
+        0 && availableAmount(this.powerfulGlove) > 0
     );
   }
 
@@ -233,8 +260,13 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
 
     const gloveMacro = path.getResource(ResourceCategory.GLOVE_REPLACE);
 
-    if (gloveMacro != null && this.hasVoidAndGlove() && this.isVoidReady()) {
-      outfit.addBonus("+equip cursed magnifying glass");
+    if (
+      gloveMacro != null &&
+      this.hasForcedMonsterAndGlove() &&
+      this.getMonsterReplacer() != null
+    ) {
+      outfit.addItem(this.getMonsterReplacer());
+
       gloveMacro.prepare(outfit);
     } else {
       outfit.setPlusCombat();
@@ -250,8 +282,8 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
 
         if (
           gloveMacro != null &&
-          this.hasVoidAndGlove() &&
-          this.isVoidReady()
+          this.hasForcedMonsterAndGlove() &&
+          this.getMonsterReplacer() != null
         ) {
           macro = Macro.ifNot_(this.monster, gloveMacro.macro());
         }

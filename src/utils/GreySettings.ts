@@ -149,6 +149,14 @@ export function getGreySettings(): GreySetting[] {
     default: false,
   };
 
+  const greyVoteMonster: GreySetting = {
+    name: "greyVotingBooth",
+    description:
+      "If you own the voting booth, by default will not vote as aftercore voting can be better",
+    valid: (value) => value == "true" || value == "false",
+    default: false,
+  };
+
   return [
     towerBreak,
     moonTune,
@@ -162,6 +170,7 @@ export function getGreySettings(): GreySetting[] {
     grayAdventureValue,
     useMummery,
     greyPullValue,
+    greyVoteMonster,
   ];
 }
 
@@ -227,6 +236,7 @@ export class GreySettings {
   static greyPullsLimit: number;
   static greyValueOfAdventure: number;
   static greyUseMummery: boolean;
+  static greyVotingBooth: boolean;
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

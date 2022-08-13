@@ -13,7 +13,9 @@ import {
   Slot,
   Item,
   Monster,
+  turnsPlayed,
 } from "kolmafia";
+import { GreySettings } from "../../utils/GreySettings";
 import { DelayBurner } from "./DelayBurnerAbstract";
 
 export class DelayBurningVoter implements DelayBurner {
@@ -45,9 +47,15 @@ export class DelayBurningVoter implements DelayBurner {
   }
 
   doSetup(): void {
-    if (availableAmount(this.sticker) > 0) {
+    if (
+      availableAmount(this.sticker) > 0 ||
+      turnsPlayed() < 200 ||
+      !GreySettings.greyVotingBooth
+    ) {
       return;
     }
+
+    this.voterSetup();
   }
 
   isViable(): boolean {
@@ -107,60 +115,29 @@ export class DelayBurningVoter implements DelayBurner {
       .sort((a, b) => b.value - a.value)
       .map((element) => element.monster.name);
 
-    const initPriority = new Map<string, number>([
-      ["Meat Drop: +30", 10],
-      ["Familiar Experience: +2", 9],
-      ["Item Drop: +15", 8],
-      ["Adventures: +1", 7],
-      ["Monster Level: +10", 5],
-      [`${myPrimestat()} Percent: +25`, 3],
-      [`Experience (${myPrimestat()}): +4`, 2],
-      ["Meat Drop: -30", -2],
-      ["Item Drop: -15", -2],
-      ["Familiar Experience: -2", -2],
-    ]);
-
     const monsterVote =
       votingMonsterPriority.indexOf(getProperty("_voteMonster1")) <
       votingMonsterPriority.indexOf(getProperty("_voteMonster2"))
         ? 1
         : 2;
 
-    const voteLocalPriorityArr = [
-      [
-        0,
-        initPriority.get(getProperty("_voteLocal1")) ||
-          (getProperty("_voteLocal1").indexOf("-") === -1 ? 1 : -1),
-      ],
-      [
-        1,
-        initPriority.get(getProperty("_voteLocal2")) ||
-          (getProperty("_voteLocal2").indexOf("-") === -1 ? 1 : -1),
-      ],
-      [
-        2,
-        initPriority.get(getProperty("_voteLocal3")) ||
-          (getProperty("_voteLocal3").indexOf("-") === -1 ? 1 : -1),
-      ],
-      [
-        3,
-        initPriority.get(getProperty("_voteLocal4")) ||
-          (getProperty("_voteLocal4").indexOf("-") === -1 ? 1 : -1),
-      ],
-    ];
+    const firstInit: [number, string] = [2, "Moxie Percent"];
+    const secondInit: [number, string] = [3, "Hot Resistance: +3"];
+    const firstProp = getProperty("_voteLocal" + (firstInit[0] + 1));
+    const secondProp = getProperty("_voteLocal" + (secondInit[0] + 1));
 
-    const bestVotes = voteLocalPriorityArr.sort((a, b) => b[1] - a[1]);
-    const firstInit = bestVotes[0][0];
-    const secondInit = bestVotes[1][0];
+    if (firstInit[1] != firstProp || secondInit[1] != secondProp) {
+      throw `Expected voting booth to give us ${firstInit[1]} and ${secondInit[1]} but instead they give ${firstProp} and ${secondProp}`;
+    }
 
     print(
       "We're voting for " +
-        getProperty("_voteLocal" + (firstInit + 1)) +
+        getProperty("_voteLocal" + (firstInit[0] + 1)) +
         " (" +
         firstInit +
         ")" +
         " and " +
-        getProperty("_voteLocal" + (secondInit + 1)) +
+        getProperty("_voteLocal" + (secondInit[0] + 1)) +
         " (" +
         secondInit +
         ")",
@@ -168,7 +145,7 @@ export class DelayBurningVoter implements DelayBurner {
     );
 
     visitUrl(
-      `choice.php?option=1&whichchoice=1331&g=${monsterVote}&local[]=${firstInit}&local[]=${firstInit}`
+      `choice.php?option=1&whichchoice=1331&g=${monsterVote}&local[]=${firstInit[0]}&local[]=${secondInit[0]}`
     );
     waitq(1);
   }
