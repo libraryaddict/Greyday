@@ -6,17 +6,19 @@ https://github.com/Kasekopf/loop-casual/tree/gyou
 
 The following commands are supported.
 
-`grey help` - View the help
+`greyday help` - View the help
 
-`grey sim` - Prepares to run grey you, without running it
+`greyday sim` - Prepares to run grey you, without running it
 
-`grey settings` - Prepares to run grey you, without running it
+`greyday settings` - Prepares to run grey you, without running it
 
-`grey required` - Checks your stuff and tells you what you're lacking or not.
+`greyday required` - Checks your stuff and tells you what you're lacking or not.
 
-`grey run` - Runs one turn, then exits
+`greyday resources` - Can be run in path or aftercore, it will predict a path it'd take to complete your run. If it fails, then the script definitely can't do Grey You for you.
 
-`grey run <turns>` - Runs <turns> turns, then exits
+`greyday run` - Runs one turn, then exits
+
+`greyday run <turns>` - Runs <turns> turns, then exits
 
 **Installation**
 
@@ -51,10 +53,12 @@ Your Asdon Martin will be used, but notably the only ways it currently uses the 
 I myself like to use Asdon Martin for my runs, then when I break prism. Buff myself with a thousand turns of +meat for garbo, then switch to Cold Medicine Cabinet.
 The next day before I ascend into Grey You, I switch back to Asdon Martin.
 
-**Required IOTMs**
+**Requirements**
 
-This is non-negotiable. There are other iotms you should check out in the script, but the key iotms you must have are as follows.
-Please note that your experience may still be shit without the other iotms.
+You may be able to run the script with just Grey Goose, but you're very unlikely to make it far.
 
-- Grey Goose - Why even play this path without it
-- VIP Invitation - We use Fortune Teller, Hot Tub and the Fireworks Shop. I could make this optional, but this is an iotm I think you should grab.
+Using iotms such as vip invitation, and more will increase your game experience.
+
+Run this to get an idea of what we want.
+
+`greyday required`
