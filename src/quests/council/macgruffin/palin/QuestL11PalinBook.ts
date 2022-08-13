@@ -4,11 +4,15 @@ import {
   Item,
   Location,
   Monster,
+  myMaxhp,
   myMeat,
   use,
   visitUrl,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../../GreyAdventurer";
+import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
+import { ResourceCategory } from "../../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { GreySettings } from "../../../../utils/GreySettings";
@@ -22,7 +26,7 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
-export class QuestL11PalinBook implements QuestInfo {
+export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
   camera: Item = Item.get("Disposable Instant Camera");
   stuntNuts: Item = Item.get("Stunt Nuts");
   talisman: Item = Item.get("Talisman o' Namsilat");
@@ -37,6 +41,23 @@ export class QuestL11PalinBook implements QuestInfo {
   dogPhoto: Item = Item.get("photograph of a dog");
   bobRace = Monster.get("Bob Racecar");
   raceBob = Monster.get("Racecar Bob");
+  paths: PossiblePath[];
+
+  createPaths(assumeUnused: boolean) {
+    this.paths = [new PossiblePath(0)];
+
+    if (!assumeUnused && getQuestStatus("questL11Palindome") > 1) {
+      return;
+    }
+
+    this.paths.push(
+      new PossiblePath(0).addMeat(-1000).add(ResourceCategory.HOT_TUB)
+    );
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
 
   getId(): QuestType {
     return "Council / MacGruffin / Palin / Book";
@@ -47,9 +68,9 @@ export class QuestL11PalinBook implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Palindome");
+    const status = getQuestStatus("questL11Palindome");
 
-    if (status == 100 || status > 1) {
+    if (status > 1) {
       return QuestStatus.COMPLETED;
     }
 
@@ -86,15 +107,15 @@ export class QuestL11PalinBook implements QuestInfo {
     );
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     if (this.isFarmDudes()) {
       return this.farmDudes();
     }
 
-    return this.turnInStuff();
+    return this.turnInStuff(path);
   }
 
-  turnInStuff(): QuestAdventure {
+  turnInStuff(path: PossiblePath): QuestAdventure {
     return {
       location: null,
       outfit: new GreyOutfit().addItem(this.talisman),
@@ -104,7 +125,13 @@ export class QuestL11PalinBook implements QuestInfo {
         visitUrl(
           "choice.php?pwd=&whichchoice=872&option=1&photo1=2259&photo2=7264&photo3=7263&photo4=7265"
         );
-        cliExecute("hottub");
+
+        if (path.canUse(ResourceCategory.HOT_TUB)) {
+          cliExecute("hottub");
+          path.addUsed(ResourceCategory.HOT_TUB);
+        } else {
+          restoreHPTo(Math.min(myMaxhp(), 120));
+        }
 
         use(this.loveBook2);
         visitUrl("place.php?whichplace=palindome&action=pal_mroffice");
@@ -114,7 +141,7 @@ export class QuestL11PalinBook implements QuestInfo {
 
   farmDudes(): QuestAdventure {
     // Potential banisher
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (availableAmount(this.stuntNuts) == 0) {
       outfit.setItemDrops();
@@ -140,13 +167,13 @@ export class QuestL11PalinBook implements QuestInfo {
             .if_(this.raceBob, Macro.tryItem(this.camera));
         }
 
-        let settings = new AdventureSettings().setStartOfFightMacro(macro);
+        const settings = new AdventureSettings().setStartOfFightMacro(macro);
         settings.addBanish(Monster.get("Evil Olive"));
         settings.addBanish(Monster.get("Flock of Stab-bats"));
         settings.addBanish(Monster.get("Taco Cat"));
         settings.addBanish(Monster.get("Tan Gnat"));
 
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(129, 1);
         props.setChoice(873, 1);
 

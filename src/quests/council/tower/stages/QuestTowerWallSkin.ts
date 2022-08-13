@@ -19,6 +19,8 @@ import {
 } from "kolmafia";
 import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
+import { ResourceCategory } from "../../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
@@ -31,10 +33,22 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
-export class QuestTowerWallSkin implements QuestInfo {
+export class QuestTowerWallSkin extends TaskInfo implements QuestInfo {
   beehive: Item = Item.get("Beehive");
   killer: QuestTowerKillSkin = new QuestTowerKillSkin();
   blackForest: Location = Location.get("The Black Forest");
+  paths: PossiblePath[];
+
+  createPaths(assumeUnstarted: boolean) {
+    this.paths = [
+      new PossiblePath(0),
+      new PossiblePath(0).add(ResourceCategory.HOT_TUB).addMeat(-1000),
+    ];
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
 
   getId(): QuestType {
     return "Council / Tower / WallOfSkin";
@@ -58,10 +72,10 @@ export class QuestTowerWallSkin implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     if (availableAmount(this.beehive) == 0) {
       if (this.killer.isPossible()) {
-        return this.killer.run();
+        return this.killer.run(path);
       } else {
         return this.runBees();
       }
@@ -171,7 +185,7 @@ export class QuestTowerKillSkin {
     return (this.possible = damagePerRound >= 13);
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     let str = this.maximizeString;
 
     const fam = this.familiarEquips.find((i) => availableAmount(i) > 0);
@@ -196,9 +210,10 @@ export class QuestTowerKillSkin {
           throw "Expected to be using cook!";
         }
 
-        if (toInt(getProperty("_hotTubSoaks")) < 5 && myHp() < myMaxhp()) {
-          if (myMaxhp() - myHp() > 500) {
+        if (myHp() < myMaxhp()) {
+          if (path.canUse(ResourceCategory.HOT_TUB)) {
             cliExecute("hottub");
+            path.addUsed(ResourceCategory.HOT_TUB);
           } else {
             restoreHPTo(myMaxhp());
           }
@@ -215,10 +230,6 @@ export class QuestTowerKillSkin {
             Macro.skill("Grey Noise").repeat()
           )
         );
-
-        if (haveEffect(Effect.get("Beaten Up")) == 0) {
-          cliExecute("hottub");
-        }
       },
     };
   }

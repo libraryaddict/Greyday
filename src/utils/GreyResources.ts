@@ -383,12 +383,12 @@ export class GreyRequirements {
 
     add(
       Item.get("HOA regulation book"),
-      "Prefered over headphones for the +2 res, saves 20? turns, especially on smut orcs",
+      "Prefered over Space Trip safety headphones for the +2 res, saves 20? turns, especially on smut orcs",
       Required.VERY_USEFUL
     );
     add(
       Item.get("Space Trip safety headphones"),
-      "The book is prefered, but this still saves 20? turns, especially on smut orcs",
+      "HOA regulation book is used instead when available, but this still saves 20? turns, especially on smut orcs",
       Required.VERY_USEFUL
     );
 
@@ -448,13 +448,13 @@ export class GreyRequirements {
       add(
         "Pool Skill",
         `You can train this up using 11-Leaf Clovers to have a permanant +10 across ascensions. You currently have a pool skill of ${poolSkill}, we want 10. Try looking up "A Shark's Chum" in the kol wiki.`,
-        Required.VERY_USEFUL,
+        Required.MUST,
         false
       );
     } else {
       add(
         "Pool Skill",
-        "You have fully trained up your pool skill, which is great for the Billaird pool test!",
+        "You have fully trained up your pool skill, which is great for the Billards pool test!",
         Required.MUST,
         true
       );
@@ -495,16 +495,41 @@ export class GreyRequirements {
 
     add(
       "Gingerbread City",
-      "Currently doesn't support, but will be useful as another key source",
+      "Useful as another key source - CURRENTLY UNSUPPORTED",
       Required.MINOR,
       toBoolean(getProperty("gingerbreadCityAvailable"))
     );
 
     add(
       "Piraterealm",
-      "Currently doesn't support, but will be useful as another key source",
+      "Useful as another key source - CURRENTLY UNSUPPORTED",
       Required.MINOR,
       toBoolean(getProperty("prAlways"))
+    );
+
+    add(
+      Item.get("Kramco Sausage-o-Matic&trade;"),
+      "Useful as a delay burner, and for another 23 adventures a day",
+      Required.MINOR
+    );
+
+    add(
+      "Voting Booth",
+      "Iotm for voting, +3 hot res, +25% moxie buff, has interaction with powerful glove for lobsterfrogman, and gives 3 free delay burns",
+      Required.MINOR,
+      toBoolean(getProperty("voteAlways"))
+    );
+
+    add(
+      Item.get("Greatest American Pants"),
+      "Free runs - CURRENTLY UNSUPPORTED",
+      Required.USEFUL
+    );
+
+    add(
+      Item.get("Pantsgiving"),
+      "Gives +2 all res, 10 items which can help save turncount",
+      Required.USEFUL
     );
 
     required.sort((r1, r2) => r1[0].localeCompare(r2[0]));

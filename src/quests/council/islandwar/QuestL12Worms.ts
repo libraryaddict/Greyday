@@ -21,6 +21,7 @@ import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { getAllCombinations } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -214,18 +215,24 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
         }
 
         let killingBlow: Macro;
+        const props = new PropertyManager();
 
         if (resource != null) {
+          resource.prepare(null, props);
           killingBlow = resource.macro().skill(this.nanovision).repeat();
         } else {
           killingBlow = Macro.skill(this.nanovision).repeat();
         }
 
-        greyAdv(
-          chamber.location,
-          outfit,
-          new AdventureSettings().setFinishingBlowMacro(killingBlow)
-        );
+        try {
+          greyAdv(
+            chamber.location,
+            outfit,
+            new AdventureSettings().setFinishingBlowMacro(killingBlow)
+          );
+        } finally {
+          props.resetAll();
+        }
       },
     };
   }

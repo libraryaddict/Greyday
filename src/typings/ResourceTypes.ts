@@ -44,6 +44,7 @@ export enum ResourceCategory {
   DECK_OF_EVERY_CARD,
   DECK_OF_EVERY_CARD_CHEAT,
   CAT_HEIST,
+  HOT_TUB,
 }
 
 export const ResourceIds = [
@@ -58,11 +59,13 @@ export const ResourceIds = [
   "Powerful Glove",
   "Fire Extingusher",
   "Yellow Rocket",
+  "Retro Yellow Ray",
   "Pull",
   "Clover",
   "Deck of Every Card",
   "Zap Wand",
   "Cat Burglar Heist",
+  "Hot Tub",
 ] as const;
 
 export type ResourceId = typeof ResourceIds[number];
@@ -130,14 +133,42 @@ const pull: SomeResource = {
 };
 
 const rocket: Item = Item.get("Yellow Rocket");
+const vipInvitation: Item = Item.get("Clan VIP Lounge key");
 
 const yellowRocket: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
   id: "Yellow Rocket",
   worthInAftercore: 250, // Cost of a yellow rocket
-  prepare: () =>
-    itemAmount(rocket) == 0 ? cliExecute("acquire yellow rocket") : null,
+  prepare: () => {
+    if (itemAmount(rocket) == 0) {
+      cliExecute("acquire yellow rocket");
+    }
+
+    if (itemAmount(rocket) == 0) {
+      throw "Unable to acquire a yellow rocket";
+    }
+  },
   macro: () => Macro.item(Item.get("Yellow Rocket")),
+  ready: () =>
+    myMeat() > 300 && haveEffect(Effect.get("Everything Looks Yellow")) == 0,
+};
+
+const retrocape: Item = Item.get("unwrapped knock-off retro superhero cape");
+
+const retroRay: SomeResource = {
+  type: ResourceCategory.YELLOW_RAY,
+  id: "Retro Yellow Ray",
+  worthInAftercore: 0,
+  prepare: (outfit: GreyOutfit, props: PropertyManager) => {
+    if (outfit != null) {
+      outfit.addItem(retrocape);
+    }
+
+    if (props != null) {
+      cliExecute("retro heck kiss");
+    }
+  },
+  macro: () => Macro.skill(Skill.get("Unleash the Devil's Kiss")),
   ready: () =>
     myMeat() > 300 && haveEffect(Effect.get("Everything Looks Yellow")) == 0,
 };
@@ -354,6 +385,13 @@ const catHeist: SomeResource = {
   },
 };
 
+const hottub: SomeResource = {
+  type: ResourceCategory.HOT_TUB,
+  id: "Hot Tub",
+  worthInAftercore: 0,
+  prepare: () => {},
+};
+
 const allResources = [
   gloveReplace,
   clover,
@@ -375,6 +413,8 @@ const allResources = [
   deckOfEveryCardCheat,
   zappable,
   catHeist,
+  hottub,
+  retroRay,
 ].sort((r1, r2) => r1.worthInAftercore - r2.worthInAftercore);
 
 export function getResources(): SomeResource[] {
@@ -389,14 +429,37 @@ export function getResourcesLeft(
     case "Asdon":
       return 0;
     case "Yellow Rocket":
-      const turnsRemaining =
-        650 -
-        (assumeUnused
-          ? 0
-          : turnsPlayed() + haveEffect(Effect.get("Everything Looks Yellow")));
+      if (availableAmount(vipInvitation) == 0) {
+        return 0;
+      }
 
-      return Math.floor(turnsRemaining / 75);
+      {
+        const turnsRemaining =
+          650 -
+          (assumeUnused
+            ? 0
+            : turnsPlayed() +
+              haveEffect(Effect.get("Everything Looks Yellow")));
 
+        return Math.floor(turnsRemaining / 75);
+      }
+    case "Retro Yellow Ray":
+      if (
+        availableAmount(vipInvitation) > 0 ||
+        availableAmount(retrocape) == 0
+      ) {
+        return 0;
+      }
+      {
+        const turnsRemaining =
+          650 -
+          (assumeUnused
+            ? 0
+            : turnsPlayed() +
+              haveEffect(Effect.get("Everything Looks Yellow")));
+
+        return Math.floor(turnsRemaining / 100);
+      }
     case "Pull":
       if (GreySettings.isHardcoreMode()) {
         return 0;
@@ -488,7 +551,7 @@ export function getResourcesLeft(
 
       return Math.min(fightsRemaining, wishesAvailable);
     case "Fax Machine":
-      return availableAmount(Item.get("Clan VIP Lounge key")) > 0 &&
+      return availableAmount(vipInvitation) > 0 &&
         (assumeUnused || getProperty("_photocopyUsed") == "false")
         ? 1
         : 0;
@@ -498,6 +561,12 @@ export function getResourcesLeft(
           ? 1
           : 1 - toInt(getProperty("_catBurglarHeistsComplete"))
         : 0;
+    case "Hot Tub":
+      if (availableAmount(vipInvitation) == 0) {
+        return 0;
+      }
+
+      return 5 - (assumeUnused ? 0 : toInt(getProperty("_hotTubSoaks")));
     default:
       throw "No idea what the resource " + resourceType + " is.";
   }

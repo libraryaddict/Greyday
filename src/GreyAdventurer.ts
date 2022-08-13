@@ -145,7 +145,7 @@ export class GreyAdventurer {
         continue;
       }
 
-      if (id == "Yellow Rocket") {
+      if (id == "Yellow Rocket" || id == "Retro Yellow Ray") {
         continue;
       } else if (id == "Pull" && getResourcesLeft(id) > 50) {
         continue;

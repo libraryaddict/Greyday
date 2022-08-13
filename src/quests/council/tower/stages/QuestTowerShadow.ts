@@ -22,6 +22,8 @@ import {
   storageAmount,
 } from "kolmafia";
 import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
+import { ResourceCategory } from "../../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
@@ -33,12 +35,24 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
-export class QuestTowerShadow implements QuestInfo {
+export class QuestTowerShadow extends TaskInfo implements QuestInfo {
   badge: Item = Item.get("Attorney's badge");
   potato: Familiar = Familiar.get("Levitating Potato");
   guaze: Item = Item.get("Gauze garter");
   cape: Item = Item.get("Unwrapped knock-off retro superhero cape");
   overclocking: Skill = Skill.get("Overclocking");
+  paths: PossiblePath[];
+
+  createPaths(assumeUnstarted: boolean) {
+    this.paths = [
+      new PossiblePath(0),
+      new PossiblePath(0).add(ResourceCategory.HOT_TUB).addMeat(-1000),
+    ];
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
 
   getId(): QuestType {
     return "Council / Tower / Shadow";
@@ -132,7 +146,7 @@ export class QuestTowerShadow implements QuestInfo {
     return toReturn;
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     const map: Map<Slot, Item> = new Map();
 
     if (availableAmount(this.badge) > 0) {
@@ -170,10 +184,13 @@ export class QuestTowerShadow implements QuestInfo {
           }
         }
 
-        if (myMaxhp() - myHp() > 500) {
-          cliExecute("hottub");
-        } else if (myHp() < myMaxhp()) {
-          restoreHPTo(myMaxhp());
+        if (myHp() < myMaxhp()) {
+          if (path.canUse(ResourceCategory.HOT_TUB)) {
+            cliExecute("hottub");
+            path.addUsed(ResourceCategory.HOT_TUB);
+          } else {
+            restoreHPTo(myMaxhp());
+          }
         }
 
         if (myHp() < myMaxhp()) {

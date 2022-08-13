@@ -19,13 +19,13 @@ import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreyPulls } from "../../utils/GreyResources";
 import { Macro } from "../../utils/MacroBuilder";
+import { PropertyManager } from "../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
 export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   monster: Monster = Monster.get("Pygmy witch lawyer");
   skill: Skill = Skill.get("Infinite Loop");
-  rocket: Item = Item.get("Yellow Rocket");
   effect: Effect = Effect.get("Everything Looks Yellow");
   instantKill: Item = Item.get("Flame orb");
   wish: Item = Item.get("Pocket Wish");
@@ -86,16 +86,14 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
           throw "Initiative is 40 or less, aborting to be safe as we can't be sure you'd get the jump.";
         }
 
+        const props = new PropertyManager();
         let macro: Macro;
         let faxResource = path.getResource(ResourceCategory.FAXER);
         const yrResource = path.getResource(ResourceCategory.YELLOW_RAY);
 
         if (faxResource != null) {
+          yrResource.prepare(null, props);
           macro = yrResource.macro();
-
-          if (itemAmount(this.rocket) == 0) {
-            throw "Supposed to have a yellow rocket on hand!";
-          }
         } else {
           macro = Macro.item(this.instantKill);
         }
