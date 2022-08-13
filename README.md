@@ -24,7 +24,7 @@ Installation of this script is fairly easy.
 To try this script, use this command in Mafia's CLI
 
 ```text
-svn checkout https://github.com/libraryaddict/KolGreyYou/branches/release/
+svn checkout https://github.com/libraryaddict/Greyday/branches/release/
 ```
 
 **Moon Signs**
