@@ -3,7 +3,7 @@ import { Familiar, getProperty, haveFamiliar, toInt } from "kolmafia";
 // Class for exposing which familiars are worth running, this is not part of the grey you script as such and is more of an opportunity thing.
 export class FamiliarPicker {
   getFamiliars(): Familiar[] {
-    let fams: Familiar[] = [];
+    const fams: Familiar[] = [];
 
     const lessThan = (
       familiar: string,
@@ -14,7 +14,7 @@ export class FamiliarPicker {
         return;
       }
 
-      let fam = Familiar.get(familiar);
+      const fam = Familiar.get(familiar);
 
       if (!haveFamiliar(fam)) {
         return;
@@ -32,7 +32,7 @@ export class FamiliarPicker {
         return;
       }
 
-      let fam = Familiar.get(familiar);
+      const fam = Familiar.get(familiar);
 
       if (!haveFamiliar(fam)) {
         return;
@@ -65,5 +65,6 @@ export class FamiliarPicker {
     lessThan("XO Skeleton", "");
     lessThan("Frumious Bandersnatch", "");
     lessThan("Machine Elf", "");
+    return [];
   }
 }

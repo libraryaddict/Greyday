@@ -438,6 +438,8 @@ export function getEstimatedTurnsToDrop(
   }
 
   dropChancePerFight = dropChancePerFight / 100;
+
+  return null;
 }
 
 export function getEstimatedTurnsToHitMonster(

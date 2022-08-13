@@ -291,7 +291,7 @@ export class FigureOutPath {
             continue;
           }
 
-          print("Better check " + q.getId() + " for " + res);
+          print("Better check " + (q as QuestInfo).getId() + " for " + res);
         }
       }
 
