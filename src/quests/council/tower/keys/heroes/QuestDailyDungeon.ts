@@ -74,7 +74,7 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
 
     if (
       GreySettings.greyDailyMalware != "false" &&
-      !GreySettings.isHardcoreMode()
+      (assumeUnstarted || !GreySettings.isHardcoreMode())
     ) {
       this.paths.push(this.malwarePath);
     }

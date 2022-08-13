@@ -319,7 +319,7 @@ const deckOfEveryCard: SomeResource = {
 const deckOfEveryCardCheat: SomeResource = {
   type: ResourceCategory.DECK_OF_EVERY_CARD_CHEAT,
   id: "Deck of Every Card",
-  worthInAftercore: 10000,
+  worthInAftercore: 20000, // Worth 20k, 20k and 10k (Blue mana x2, then misc)
   resourcesUsed: 5,
   prepare: () => {},
   pickCard: (card: string) => cliExecute(`cheat ${card}`),

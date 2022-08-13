@@ -480,6 +480,33 @@ export class GreyRequirements {
       Required.VERY_USEFUL
     );
 
+    add(
+      "Fantasyrealm",
+      "This isn't worth buying as it devalues Lucky Gold Ring, but if you do have it; Then it's useful as another key source.",
+      Required.MINOR,
+      toBoolean(getProperty("frAlways"))
+    );
+
+    add(
+      Item.get("Deck of Every Card"),
+      "Used as a key source and as an initial meat source. Not worth buying as its very expensive",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      "Gingerbread City",
+      "Currently doesn't support, but will be useful as another key source",
+      Required.MINOR,
+      toBoolean(getProperty("gingerbreadCityAvailable"))
+    );
+
+    add(
+      "Piraterealm",
+      "Currently doesn't support, but will be useful as another key source",
+      Required.MINOR,
+      toBoolean(getProperty("prAlways"))
+    );
+
     required.sort((r1, r2) => r1[0].localeCompare(r2[0]));
 
     printHtml(

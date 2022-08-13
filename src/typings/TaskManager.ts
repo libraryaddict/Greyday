@@ -299,7 +299,10 @@ export class FigureOutPath {
         const resources: Map<ResourceId, number> = new Map();
 
         for (const resourceId of ResourceIds) {
-          resources.set(resourceId, getResourcesLeft(resourceId));
+          resources.set(
+            resourceId,
+            getResourcesLeft(resourceId, assumeUnstarted)
+          );
         }
 
         const resourcesToComplete = this.getResourcesToComplete(

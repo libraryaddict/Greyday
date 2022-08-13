@@ -87,8 +87,9 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
     const keysNeeded: number = assumeUnstarted ? 3 : this.getMissingKeys();
     const shouldDoDaily =
       GreySettings.greyDailyDungeon &&
-      getProperty("dailyDungeonDone") != "true" &&
+      (assumeUnstarted || getProperty("dailyDungeonDone") != "true") &&
       (GreySettings.greyDailyMalware != "true" ||
+        assumeUnstarted ||
         !GreySettings.isHardcoreMode());
 
     if (keysNeeded <= 0 && !shouldDoDaily) {

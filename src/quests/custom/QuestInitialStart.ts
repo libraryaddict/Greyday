@@ -8,6 +8,7 @@ import {
   inHardcore,
   Item,
   Location,
+  Monster,
   myFamiliar,
   print,
   setProperty,
@@ -16,11 +17,13 @@ import {
   useFamiliar,
   visitUrl,
 } from "kolmafia";
+import { ResourceCategory } from "../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { GreySettings } from "../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
-export class QuestInitialStart implements QuestInfo {
+export class QuestInitialStart extends TaskInfo implements QuestInfo {
   familiar: Familiar = Familiar.get("Grey Goose");
   equip: Item = Item.get("Grey Down Vest");
   desiredLevel: number;
@@ -31,6 +34,28 @@ export class QuestInitialStart implements QuestInfo {
   flimsyScraps: Item = Item.get("Flimsy hardwood scraps");
   birchBattery: Item = Item.get("Birch battery");
   mummingTrunk: Item = Item.get("mumming trunk");
+  mickyCard: Item = Item.get("1952 Mickey Mantle card");
+  paths: PossiblePath[];
+
+  createPaths(assumeUnstarted: boolean) {
+    this.paths = [];
+    this.paths.push(new PossiblePath(0));
+
+    if (!assumeUnstarted) {
+      if (getProperty("_deckCardsSeen").includes("Mickey")) {
+        return;
+      }
+    }
+
+    const cardPath = new PossiblePath(0);
+    cardPath.addMeat(-30000); // Say the initial meat is worth 20k of boombox profit with special seasoning, then 10k for the card worth,
+
+    this.paths.push(cardPath);
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
 
   getLocations(): Location[] {
     return [];
@@ -63,7 +88,7 @@ export class QuestInitialStart implements QuestInfo {
     return QuestStatus.COMPLETED;
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     return {
       location: null,
       run: () => {
@@ -141,6 +166,19 @@ export class QuestInitialStart implements QuestInfo {
           availableAmount(this.birchBattery) == 0
         ) {
           cliExecute("acquire " + this.birchBattery.name);
+        }
+
+        if (path.canUse(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT)) {
+          path
+            .getResource(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT)
+            .pickCard("Mickey");
+
+          if (availableAmount(this.mickyCard) > 0) {
+            path.addUsed(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT);
+            autosell(this.mickyCard, 1);
+          } else {
+            throw "Expected to have sold a " + this.mickyCard;
+          }
         }
 
         if (getProperty("breakfastCompleted") == "false") {
