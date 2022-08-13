@@ -9,6 +9,7 @@ import {
   use,
   retrieveItem,
   maximize,
+  pullsRemaining,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { greyAdv, AdventureSettings } from "../../../../utils/GreyLocations";
@@ -21,6 +22,7 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
+import { GreySettings } from "../../../../utils/GreySettings";
 
 export class QuestTowerMirror implements QuestInfo {
   wand: Item = Item.get(" Wand of Nagamar");
@@ -80,7 +82,7 @@ export class QuestTowerMirror implements QuestInfo {
     }
 
     // Equip outfit early to try save some hp
-    let outfit = new GreyOutfit("-tie");
+    let outfit = GreyOutfit.IGNORE_OUTFIT;
 
     return {
       location: null,
@@ -99,31 +101,35 @@ export class QuestTowerMirror implements QuestInfo {
   }
 
   createWand(): QuestAdventure {
-    for (let locs of this.locations) {
-      if (availableAmount(locs[0]) > 0) {
-        continue;
+    const toGrab = this.locations.filter(([i]) => availableAmount(i) == 0);
+
+    if (
+      toGrab.length > 0 &&
+      (GreySettings.isHardcoreMode() || pullsRemaining() != -1)
+    ) {
+      for (let [, monster, loc] of toGrab) {
+        if (availableAmount(this.clover) > 0) {
+          return this.tryClover();
+        }
+
+        let outfit = new GreyOutfit().setItemDrops();
+
+        return {
+          location: loc,
+          outfit: outfit,
+          run: () => {
+            let settings = new AdventureSettings();
+            settings.addNoBanish(monster);
+
+            greyAdv(loc, outfit, settings);
+          },
+        };
       }
-
-      if (availableAmount(this.clover) > 0) {
-        return this.tryClover();
-      }
-
-      let outfit = new GreyOutfit().setItemDrops();
-
-      return {
-        location: locs[2],
-        run: () => {
-          let settings = new AdventureSettings();
-          settings.addNoBanish(locs[1]);
-
-          greyAdv(locs[2], outfit, settings);
-        },
-      };
     }
 
     return {
       location: null,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         retrieveItem(this.wand);
       },

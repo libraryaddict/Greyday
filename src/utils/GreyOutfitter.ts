@@ -2,25 +2,21 @@ import {
   availableAmount,
   Familiar,
   familiarWeight,
-  getProperty,
   haveSkill,
   Item,
   myAdventures,
-  myHp,
   myLevel,
   myMaxmp,
   myMeat,
   myMp,
-  print,
   Skill,
-  toInt,
 } from "kolmafia";
-import { hasNonCombatSkillsReady } from "../GreyAdventurer";
 import { getQuestStatus } from "../quests/Quests";
 import { GreySettings } from "./GreySettings";
-import { setUmbrella, UmbrellaState } from "./GreyUtils";
+import { UmbrellaState } from "./GreyUtils";
 
 export class GreyOutfit {
+  static IGNORE_OUTFIT: any = "Ignore Outfit";
   famExpWeight: number = 30;
   itemDropWeight: number = 0.3;
   meatDropWeight: number = 0.1;
@@ -67,6 +63,9 @@ export class GreyOutfit {
         this.addBonus("-4 bonus hewn moon-rune spoon");
         this.addBonus("+4.5 bonus powerful glove");
       }
+    }
+    if (availableAmount(Item.get("Camp Scout Backpack")) > 0) {
+      this.addBonus("+1 bonus camp scout backpack");
     }
 
     this.addBonus("-equip screwing pooch");

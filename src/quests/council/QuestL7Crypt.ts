@@ -45,7 +45,7 @@ export class QuestL7Crypt implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getProperty("questL07Cyrptic");
+    const status = getProperty("questL07Cyrptic");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;
@@ -77,7 +77,7 @@ export class QuestL7Crypt implements QuestInfo {
     return {
       location: Location.get("Haert of the Cyrpt"),
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(527, 1);
 
         try {

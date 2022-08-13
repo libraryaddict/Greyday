@@ -1,599 +1,173 @@
-Boss Bat	Grey Noise
-gaunt ghuol	10 moxie
-plastered frat orc	5 adventures
-werecougar	Anti-Sleaze Recursion
-
-drunken 7-foot dwarf	
-skeleton with a mop	
-unemployed knob goblin	
-protector spectre	
-Battlie Knight Ghost	7 adventures
-Dusken Raider Ghost	
-Space Tourist Explorer Ghost	
-Whatsian Commando Ghost	
-batrat	5 adventures
-ratbat	Nanofur
-Batsnake	
-Beer Bongadier	
-Elite Beer Bongadier	
-Heavy Kegtank	
-Naughty Sorority Nurse	
-Panty Raider Frat Boy	
-Sorority Nurse	
-Sorority Operator	
-War Frat 110th Infantryman	
-War Frat 151st Captain	
-War Frat 151st Infantryman	
-War Frat 500th Infantrygentleman	
-War Frat Elite 110th Captain	
-War Frat Elite 500th Captain	
-War Frat Elite Wartender	
-War Frat Grill Sergeant	
-War Frat Kegrider	
-War frat mobile grill unit	
-War Frat Senior Grill Sergeant	
-War Frat Wartender	
-angry bugbear	10 muscle
-revolving bugbear	7 adventures
-annoying spooky gravy fairy	
-bugged bugbear	
-mad bugbears	
-revolting bugbear	
-decent lumberjack	
-lumberjack supervisor	
-lumberjill	
-lumberjuan	
-Renaissance Giant	10 adventures
-Possibility Giant	10 mysticality
-Foodie Giant	
-Procrastination Giant	
-swarm of Knob lice	5 adventures
-Knob Goblin Elite Guard	Advanced Exo-Alloy
-off-duty Knob Goblin Elite Guard	
-Knob Goblin Very Mad Scientist	7 adventures
-Knob Goblin Alchemist	Solid Fuel
-Knob Goblin Mad Scientist	
-Knob Goblin Bean Counter	5 adventures
-Knob Goblin MBA	Cryocurrency
-Knob Goblin Accountant	
-Knob Goblin Embezzler	
-Mob Penguin Capo	10 adventures
-fan dancer	Subatomic Tango
-Copperhead Club bartender	
-ninja dressed as a waiter	
-waiter dressed as a ninja	
-bog leech	
-bog skeleton	
-ghost of Phil Bunion	
-swamp hag	
-G imp	5 adventures
-demoninja	10 moxie
-L imp	5 adventures
-gargantulihc	
-senile lihc	10 mysticality
-basic lihc	7 adventures
-dirty old lihc	
-slick lihc	
-gnollish bodybuilder	
-Gnollish crossdresser	
-one-eyed Gnoll	
-fluffy bunny	5 maximum hp
-chatty pirate	
-cleanly pirate	
-Clingy pirate (female)	
-Clingy pirate (male)	
-creamy pirate	
-crusty pirate	
-curmudgeonly pirate	
-filthworm drone	
-tapdancing skeleton	7 adventures
-zombie waltzers	Autochrony
-floating platter of hors d’oeuvres	
-ghastly organist	
-toilet papergeist	7 adventures
-malevolent hair clog	Clammy Microcilia
-claw foot bathtub	
-cosmetics wraith	
-Guy made of Bees	
-skeletal hamster	7 adventures
-anglerbush	Ponzi Apparatus
-confused goth music student	
-man-eating plant	
-skeletal cat	
-skeletal monkey	
-fiendish can of asparagus	5 mysticality
-undead elbow macaroni	Temporal Bent
-overdone flame-broiled meat blob	
-possessed can of tomatoes	
-sheet ghost	7 adventures
-stuffed moose head	Nantlers
-ancestral Spookyraven portrait	
-Full-length mirror	
-mad wino	10 adventures
-possessed wine rack	Legacy Code
-skeletal sommelier	
-pygmy shaman	10 adventures
-ancient protector spirit	
-pygmy witch accountant	
-Pygmy Witch Lawyer	Infinite Loop
-drunk pygmy	Double Nanovision
-ancient protector spirit	
-pygmy bowler	
-pygmy orderlies	10 adventures
-ancient protector spirit	
-crusty hippy	
-Crusty hippy Vegan chef	
-dirty hippy jewelry maker	
-dirty hippy Vegan chef	
-Filthy Hippy	
-filthy hippy jewelry maker	
-caveman hippy	
-cavewomyn hippy	
-sabre-toothed ferret	
-War Hippy (space) cadet	
-War Hippy drill sergeant	
-One-Eyed Willie	10 adventures
-Astronomer	Innuendo Circuitry
-Axe Wound	
-Beaver	
-Box	
-Burrowing Bishop	
-Bush	
-Camel’s Toe	
-Family Jewels	
-Flange	
-Hooded Warrior	
-Junk	
-Muff	
-Pork Sword	
-Skinflute	
-Snake With Like Ten Heads	
-Trouser Snake	
-Twig and Berries	
-upgraded ram	7 adventures
-snow queen	Snow-Cooling System
-Knott Yeti	
-Bob Racecar	10 adventures
-Racecar Bob	10 adventures
-Flock of Stab-bats	AUTOEXEC.BAT
-Dr. Awkward	
-drab bard	
-evil olive	
-Taco Cat	
-tan gnat	
-batwinged gremlin	
-batwinged gremlin (tool)	
-vegetable gremlin	
-vegetable gremlin (tool)	
-A.M.C. gremlin	
-ghost miner	Spooky Veins
-Ninja Snowman Janitor	7 adventures
-Ninja Snowman Weaponmaster	Cooling Tubules
-Frozen Solid Snake	
-Ninja Snowman (hilt)	
-Ninja Snowman (mask)	
-Ninja Snowman (ricebowl)	
-ninja snowman assassin	
-CH imp	7 adventures
-Pr Imp	Temporal Hyperextension
-BL imp	
-Carbuncle Top	
-Larry of the Field of Signs	
-Victor the Insult Comic Hellhound	
-gingerbread murderer	5 adventures
-crêep	Telekinetic Murder
-baguette lady	
-Cake Lord	
-dinner troll	
-swamp duck	
-vampire duck	
-zombie duck	
-rotund duck	
-greasy duck	
-Booze Giant	7 adventures
-Spectral Jellyfish	Phase Shift
-Portly Abomination	
-tomb asp	10 adventures
-tomb servant	10 mysticality
-tomb rat	
-oasis monster	
-rolling stone	
-junksprite sharpener	7 adventures
-junksprite bender	Propagation Drive
-Doctor Oh, the Junksprite Boss	
-junksprite melter	
-Frat Warrior drill sergeant	
-conservationist hippy	
-swamp beaver lumberjack	
-swamp beaver shaman	
-swamp beaver warrior	
 1335 HaXx0r	10 adventures
-me4t begZ0r	Financial Spreadsheets
-Anime Smiley	
-Bad ASCII art	
-flaming troll	
-lamz0r n00b	
-rampaging adding machine	
-Spam Witch	
-xxx pr0n	
-Zol	5 maximum mp
-Bullet Bill	Reloading
-Blooper	
-Buzzy Beetle	
-Goomba	
-Keese	
-Koopa Troopa	
-Octorok	
-Tektite	
-dense liana	
-swarm of fire ants	10 adventures
-plaque of locusts	20 maximum mp
-cactuary	
-giant giant giant centipede	
-rock scorpion	
-tetchy pirate	
-tipsy pirate	
-toothy pirate	
-magical fruit bat	5 adventures
-gaudy pirate	
-grassy pirate	
-gritty pirate	
-groovy pirate	
-grungy pirate	
-beefy bodyguard bat	10 maximum hp
 Alphabet Giant	10 adventures
-Fitness Giant	10 muscle
-Furry Giant	
-Neckbeard Giant	
-Knob Goblin Madam	5 adventures
-Knob Goblin Harem Girl	Camp Subroutines
-Knob Goblin Harem Guard	
-apathetic lizardman	
-dairy ooze	
-dodecapede	
-giant giant moth	
-pencil golem	
-Sabre-toothed lime	
-tonic water elemental	
-vampire clam	
-smell-o-the-wisp	
-swamp entity	
-P imp	5 adventures
-Hellion	10 mysticality
-W imp	5 adventures
-grave rober zmobie	7 adventures
-big swarm of ghuol whelps	
-giant swarm of ghuol whelps	
-huge ghuol	
-swarm of ghuol whelps	
-gluttonous ghuol	7 adventures
-gnollish piebaker	
-Gnollish war chef	
-lowercase B	
-lowercase H	
-lowercase K	
-swarm of lowercase As	
-uppercase Q	
-filthworm queen	
-sabre-toothed goat	7 adventures
-drunk goat	Secondary Fermentation
-dairy goat	
-vampire bat	10 maximum hp
-baseball bat	Extra Innings
-briefcase bat	
-doughbat	
-perpendicular bat	
-skullbat	
-screambat	
-larval filthworm	
-chalkdust wraith	7 adventures
-pooltergeist	Subatomic Hardening
-hustled spectre	
-guy with a pitchfork, and his wife	7 adventures
-cubist bull	Localized Vacuum
-empty suit of armor	
-Knight (serpentine)	
-Knight (Wolf)	
-possessed silverware drawer	7 adventures
-demonic icebox	Infernal Automata
-paper towelgeist	
-skullery maid	
-zombie chef	
-cabinet of Dr. Limpieza	
-plaid ghost	
-possessed laundry press	
-possessed toy chest	7 adventures
-spooky music box	Audioclasm
-creepy doll	
-pygmy headhunter	10 adventures
-craven carven raven	3 moxie
-stone temple pirate	3 muscle
-baa-relief sheep	3 mysticality
-Baa'baa'bu'ran	
-clan of cave bars	
-erudite gremlin	
-erudite gremlin (tool)	
-spider gremlin	
-Fire-breathing duck	
-scorched duck	
-Grass Elemental	7 adventures
-Carnivorous Moxie Weed	Fluid Dynamics Simulation
-Weremoose	
-oil baron	7 adventures
-oil slick	Lubricant Layer
-oil tycoon	
-axe handle	
-poutine ooze	
-man with the red buttons	
-red butler	
-red fox	
-red herring	
-red skeleton	
-red snapper	
-Ron “The Weasel” Copperhead	
-swarm of skulls	5 adventures
-remaindered skeleton	Hardslab
-factory-irregular skeleton	
-novelty tropical skeleton	
-the former owner of the Skeleton Store	
-drunken half-orc hobo	5 moxie
-hung-over half-orc hobo	5 moxie
-rushing bum	Harried
-big creepy spider	
-completely different spider	
-smut orc pipelayer	7 adventures
-smut orc screwer	Procgen Ribaldry
-Frattlesnake	
-smut orc jacker	
-smut orc nailer	
-smut orc pervert	
-Lobsterfrogman	
-Gnefarious gnome	10 moxie
-vicious gnauga	7 adventures
-gnarly gnome	
-gnasty gnome	
-Gnomester Blomester	
-gnu jack gnome	
-Iiti Kitty	10 adventures
-tomb servant	10 muscle
-tomb bat	
-Skelter Butleton, the Butler Skeleton	
-whitesnake	7 adventures
-white lion	Piezoelectric Honk
-Knight in White Satin	
-white chocolate golem	
-white elephant	
-swamp beaver warrior	
-swamp gator	
-fleet woodsman	10 adventures
-eagle	
-Jefferson pilot	
-Blue Oyster cultist	10 mysticality
-lynyrd skinner	
-Eldritch Tentacle	
-Claybender Sorcerer Ghost	Ectogenesis
-huge barrel mimic	
-medium-sized barrel mimic	
-small barrel mimic	
-tiny barrel mimic	
-albino bat	5 adventures
-pine bat	Conifer Polymers
-
-regular old bat	
-Bailey’s Beetle	
-Green Ops Soldier	
-Mobile Armored Sweat Lodge	
-War Hippy Airborne Commander	
-War Hippy Baker	
-War Hippy Dread Squad	
-War Hippy Elder Shaman	
-War Hippy Elite Fire Spinner	
-War Hippy Elite Rigger	
-War Hippy F.R.O.G.	
-War Hippy Fire Spinner	
-War Hippy Green Gourmet	
-War Hippy Homeopath	
-War Hippy Infantryman	
-War Hippy Naturopathic Homeopath	
-War Hippy Rigger	
-War Hippy Shaman	
-War Hippy Sky Captain	
-War Hippy Windtalker	
-beanbat	Exhaust Tubules
-musical fruit bat	
-black magic woman	10 adventures
-black panther	Photonic Shroud
-black adder	
-black friar	
-black widow	
-blackberry bush	
-booty crab	
-creepy clown	
-Raver Giant	10 adventures
-Punk Rock Giant	10 moxie
-Burning Snake of Fire	
-Goth Giant	
-Steampunk Giant	
-Knob Goblin Elite Guard Captain	
-Knob Goblin Master Chef	5 adventures
-Cobb's Knob oven	Microburner
-Knob Goblin Sous Chef	
-Fallen Archfiend	10 muscle
-conjoined zmombie	
-modern zmobie	
-corpulent zobmie	20 maximum hp
-giant skeelton	
-spiny skelelton	
-toothy sklelton	10 muscle
-party skelteon	7 adventures
-Gnollish Gearhead	
-Gnollish Tirejuggler	
-Gnollish Flyslayer	
-Gnollish Plungermaster	
-Guard Bugbear	
-swarm of killer bees	7 adventures
-acid blob	
-large kobold	
-mimic	
-Quantum Mechanic	
-huge mosquito	
-mega frog	
-eXtreme Orcish snowboarder	7 adventures
-eXtreme cross-country hippy	Microweave
-sk8 gnome	
-Bonerdagon	
-amateur ninja	
-ancient insane monk	
-Ferocious bugbear	
-gelatinous cube	
-Knob Goblin poseur	
-animated rustic nightstand	7 adventures
-animated ornate nightstand	Ominous Substrate
-animated mahagony nightstand	
-elegant animated nightstand	
-remains of a jilted mistress	
-Wardröb nightstand	
-coaltergeist	10 adventures
-Steam Elemental	Steam Mycelia
-monstrous boiler	
-model skeleton	7 adventures
-jacob's adder	Nanoshock
-the gunk	
-bookbat	10 mysticality
-banshee librarian	Self-Actualized
-writing desk	
-ancient protector spirit	
-pygmy witch nurse	
-pygmy witch surgeon	
-pygmy blowgunner	10 adventures
-pygmy janitor	System Sweep
-boaraffe	
-pygmy assault squad	
-serialbus	7 adventures
-suckubus	Gravitational Compression
-inkubus	
-grumpy 7-Foot Dwarf	10 maximum mp
-dopey 7-Foot Dwarf	Seven Foot Feelings
-sleepy 7-Foot Dwarf	
-spider gremlin (tool)	
-Ed the Undying	
-generic duck	
-Figure-skating duck	
-frozen duck	
-drunk duck	
-mean drunk duck	
-Knob Goblin Mutant	5 muscle
-BASIC Elemental	Basic Improvements
-fruit golem	
-Groar	
-panicking Knott Yeti	
-Mob Penguin negotiator	
-tree hugging hippy protestor	
-Crate	
-blur	10 adventures
-swarm of scarab beatles	10 moxie
-sassy pirate	5 moxie
-Shifty pirate	Shifted About
-Shady pirate	
-smarmy pirate	
-swarthy pirate	
-oil cartel	
-Orcish Frat Boy	
-Orcish Frat Boy (Paddler)	
-sleeping Knob Goblin Guard	5 muscle
-Sub-Assistant Knob Mad Scientist	Provably Efficient
-Knob Goblin Barbecue Team	
-Knob Goblin Assistant Chef	
-dire pigeon	5 adventures
-sewer snake with a sewer snake in it	Snakesmack
-cooler wino	
-Lot's Wife	
-malt liquor golem	
-Irritating Series of Random Encounters	10 adventures
-spunky princess	5 moxie
-Burly Sidekick	5 muscle
-Quiet Healer	5 mysticality
-MagiMechTech MechaMech	
-Protagonist	
-wacky pirate	
-wacky pirate	
-warty pirate	
-wealthy pirate	
-whiny pirate	
-witty pirate	
-filthworm royal guard	
-bogart	
-haunted skullabra	
-Smell-o-the-wisp	
-angry piñata	
-handsome mariachi	
-mariachi calavera	
-warwelf	5 adventures
-spooky vampire	Autovampirism Routines
-bar	
-spooky mummy	
-triffid	
-wolfman	
-Lord Spookyraven	
-Baron von Ratsworth	
-drunken rat	
-dirty thieving brigand	
-amok putty	
-Thinknerd Moving Robot	
-Thinknerd Packing Robot	
-Thinknerd Sorting Robot	
-The Knob Goblin King	
-bubblemint twins	7 adventures
-Big Wheelin' Twins	Overclocking
-bearpig topiary animal	
-Creepy Ginger Twin	
-elephant (meatcar?) topiary animal	
-Mismatched Twins	
-spider (duck?) topiary animal	
-Troll Twins	
-grave rober	5 adventures
-lihc	Curses Library
-ghuol	
-skleleton	
-Smart Skelton	
-Snakeleton	
-zmobie	
-zobmie	
-Lynyrd	
-mud turtle	
-swamp owl	
-swamp skunk	
-piranha plant	
-Dyspepsi-Cola General	
-Dyspepsi-Cola Knight	
-Dyspepsi-Cola Soldier	
-Cloaca-Cola Catapult Engineer	
-Cloaca-Cola Footsoldier	
-Cloaca-Cola Soldier	
-mayonnaise wasp	
-mind flayer	Hivemindedness
-crusty hippy jewelry maker	
-dirty hippy	
-filthy hippy Vegan chef	
-Orcish Frat Boy spy	
-Little man in the canoe	10 adventures
-7-foot dwarf foreman	
-rattlin’ duck	
-Naughty Sorceress	
-wall of bones	
-wall of meat	
-wall of skin	
-Your Shadow	
-Orcish Frat Boy (Music)	
-caveman frat boy	
-caveman frat pledge	
-caveman sorority girl	
-War Hippy Spy	
-War Pledge	
-forest spirit	10 mysticality
+Battlie Knight Ghost	7 adventures
+Bob Racecar	10 adventures
+Booze Giant	7 adventures
+CH imp	7 adventures
 Cloud of disembodied whiskers	7 adventures
+G imp	5 adventures
+Grass Elemental	7 adventures
+Iiti Kitty	10 adventures
+Irritating Series of Random Encounters	10 adventures
+Knob Goblin Bean Counter	5 adventures
+Knob Goblin Madam	5 adventures
+Knob Goblin Master Chef	5 adventures
+Knob Goblin Very Mad Scientist	7 adventures
+L imp	5 adventures
+Little man in the canoe	10 adventures
+Mob Penguin Capo	10 adventures
+Ninja Snowman Janitor	7 adventures
+One-Eyed Willie	10 adventures
+P imp	5 adventures
+Racecar Bob	10 adventures
+Raver Giant	10 adventures
+Renaissance Giant	10 adventures
+W imp	5 adventures
+albino bat	5 adventures
+animated rustic nightstand	7 adventures
+basic lihc	7 adventures
+batrat	5 adventures
+black magic woman	10 adventures
+blur	10 adventures
+bubblemint twins	7 adventures
+chalkdust wraith	7 adventures
+coaltergeist	10 adventures
+dire pigeon	5 adventures
+eXtreme Orcish snowboarder	7 adventures
+fleet woodsman	10 adventures
+gingerbread murderer	5 adventures
+gluttonous ghuol	7 adventures
+grave rober	5 adventures
+grave rober zmobie	7 adventures
+guy with a pitchfork, and his wife	7 adventures
 irate mariachi	5 adventures
+junksprite sharpener	7 adventures
+mad wino	10 adventures
+magical fruit bat	5 adventures
+model skeleton	7 adventures
+oil baron	7 adventures
+party skelteon	7 adventures
+plastered frat orc	5 adventures
+possessed silverware drawer	7 adventures
+possessed toy chest	7 adventures
+pygmy blowgunner	10 adventures
+pygmy headhunter	10 adventures
+pygmy orderlies	10 adventures
+pygmy shaman	10 adventures
+revolving bugbear	7 adventures
+sabre-toothed goat	7 adventures
+serialbus	7 adventures
+sheet ghost	7 adventures
+skeletal hamster	7 adventures
+smut orc pipelayer	7 adventures
+swarm of Knob lice	5 adventures
+swarm of fire ants	10 adventures
+swarm of killer bees	7 adventures
+swarm of skulls	5 adventures
+tapdancing skeleton	7 adventures
+toilet papergeist	7 adventures
+tomb asp	10 adventures
+upgraded ram	7 adventures
+vicious gnauga	7 adventures
+warwelf	5 adventures
+whitesnake	7 adventures
+
+Astronomer	Innuendo Circuitry
+BASIC Elemental	Basic Improvements
+Big Wheelin' Twins	Overclocking
+Boss Bat	Grey Noise
+Bullet Bill	Reloading
+Claybender Sorcerer Ghost	Ectogenesis
+Cobb's Knob oven	Microburner
+Flock of Stab-bats	AUTOEXEC.BAT
+Knob Goblin Alchemist	Solid Fuel
+Knob Goblin Elite Guard	Advanced Exo-Alloy
+Knob Goblin Harem Girl	Camp Subroutines
+Knob Goblin MBA	Cryocurrency
+Ninja Snowman Weaponmaster	Cooling Tubules
+Pr Imp	Temporal Hyperextension
+Pygmy Witch Lawyer	Infinite Loop
+Shifty pirate	Shifted About
+Spectral Jellyfish	Phase Shift
+Steam Elemental	Steam Mycelia
+Sub-Assistant Knob Mad Scientist	Provably Efficient
+anglerbush	Ponzi Apparatus
+animated ornate nightstand	Ominous Substrate
+banshee librarian	Self-Actualized
+baseball bat	Extra Innings
+beanbat	Exhaust Tubules
+black panther	Photonic Shroud
+crêep	Telekinetic Murder
+cubist bull	Localized Vacuum
+demonic icebox	Infernal Automata
+dopey 7-Foot Dwarf	Seven Foot Feelings
+drunk goat	Secondary Fermentation
+drunk pygmy	Double Nanovision
+eXtreme cross-country hippy	Microweave
+fan dancer	Subatomic Tango
+ghost miner	Spooky Veins
+jacob's adder	Nanoshock
+junksprite bender	Propagation Drive
+lihc	Curses Library
+malevolent hair clog	Clammy Microcilia
+me4t begZ0r	Financial Spreadsheets
+mind flayer	Hivemindedness
+oil slick	Lubricant Layer
+pine bat	Conifer Polymers
+pooltergeist	Subatomic Hardening
+possessed wine rack	Legacy Code
+pygmy janitor	System Sweep
 raging bull	Ire Proof
-kid who is too old to be Trick-or-Treating	
-suburban security civilian	
-vandal kid	
+ratbat	Nanofur
+remaindered skeleton	Hardslab
+rushing bum	Harried
+sewer snake with a sewer snake in it	Snakesmack
+smut orc screwer	Procgen Ribaldry
+snow queen	Snow-Cooling System
+spooky music box	Audioclasm
+spooky vampire	Autovampirism Routines
+stuffed moose head	Nantlers
+suckubus	Gravitational Compression
+undead elbow macaroni	Temporal Bent
+werecougar	Anti-Sleaze Recursion
+white lion	Piezoelectric Honk
+zombie waltzers	Autochrony
+
+Blue Oyster cultist	10 mysticality
+Burly Sidekick	5 muscle
+Carnivorous Moxie Weed	Fluid Dynamics Simulation
+Fallen Archfiend	10 muscle
+Fitness Giant	10 muscle
+Gnefarious gnome	10 moxie
+Hellion	10 mysticality
+Knob Goblin Mutant	5 muscle
+Possibility Giant	10 mysticality
+Punk Rock Giant	10 moxie
+Quiet Healer	5 mysticality
+angry bugbear	10 muscle
+baa-relief sheep	3 mysticality
+bookbat	10 mysticality
+craven carven raven	3 moxie
+demoninja	10 moxie
+drunken half-orc hobo	5 moxie
+fiendish can of asparagus	5 mysticality
+forest spirit	10 mysticality
+gaunt ghuol	10 moxie
+hung-over half-orc hobo	5 moxie
+sassy pirate	5 moxie
+senile lihc	10 mysticality
+sleeping Knob Goblin Guard	5 muscle
+spunky princess	5 moxie
+stone temple pirate	3 muscle
+swarm of scarab beatles	10 moxie
+tomb servant	10 muscle
+tomb servant	10 mysticality
+toothy sklelton	10 muscle
+
+Zol	5 maximum mp
+fluffy bunny	5 maximum hp
+beefy bodyguard bat	10 maximum hp
+grumpy 7-Foot Dwarf	10 maximum mp
+vampire bat	10 maximum hp
+corpulent zobmie	20 maximum hp
+plaque of locusts	20 maximum mp

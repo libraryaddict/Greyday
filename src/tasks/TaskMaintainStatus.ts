@@ -4,6 +4,7 @@ import {
   cliExecute,
   dispensaryAvailable,
   Effect,
+  getProperty,
   haveEffect,
   Item,
   myHp,
@@ -12,7 +13,11 @@ import {
   myMeat,
   myMp,
   print,
+  Skill,
+  toInt,
+  useSkill,
 } from "kolmafia";
+import { getQuestStatus } from "../quests/Quests";
 import { Task } from "./Tasks";
 
 interface Restorer {
@@ -92,7 +97,7 @@ export class TaskMaintainStatus implements Task {
   }
 
   restoreHPTo(hp: number): boolean {
-    let desiredHp = Math.min(hp, myMaxhp());
+    const desiredHp = Math.min(hp, myMaxhp());
 
     while (myMeat() > 100 && myHp() < desiredHp) {
       let restorer = this.restorers.find(
@@ -109,7 +114,7 @@ export class TaskMaintainStatus implements Task {
         return false;
       }
 
-      let toUse = Math.ceil(desiredHp / restorer.hpRestored);
+      let toUse = Math.ceil((desiredHp - myHp()) / restorer.hpRestored);
 
       if (availableAmount(restorer.item) > 0) {
         toUse = Math.min(toUse, availableAmount(restorer.item));
@@ -126,7 +131,33 @@ export class TaskMaintainStatus implements Task {
   }
 
   restoreMPTo(mp: number): boolean {
-    let desiredMp = Math.min(mp, myMaxmp());
+    if (myMp() >= mp) {
+      return true;
+    }
+
+    const ronStatus = getQuestStatus("questL11Ron");
+
+    const desiredMp = Math.min(mp, myMaxmp());
+
+    if (
+      (ronStatus < 0 || ronStatus > 1 || getQuestStatus("questL11Shen") <= 6) &&
+      toInt(getProperty("sweat")) >=
+        (myMp() + 10 >= desiredMp && myMaxmp() - myMp() < 50 ? 95 : 80)
+    ) {
+      useSkill(Skill.get("Sip Some Sweat"));
+    } else {
+      print(
+        desiredMp +
+          " " +
+          myMp() +
+          " " +
+          ronStatus +
+          " " +
+          getQuestStatus("questL11Shen") +
+          " " +
+          toInt(getProperty("sweat"))
+      );
+    }
 
     while (myMeat() > 100 && myMp() < desiredMp) {
       let restorer = this.restorers.find(
@@ -143,7 +174,7 @@ export class TaskMaintainStatus implements Task {
         return false;
       }
 
-      let toUse = Math.ceil(desiredMp / restorer.mpRestored);
+      let toUse = Math.ceil((desiredMp - myMp()) / restorer.mpRestored);
 
       if (availableAmount(restorer.item) > 0) {
         toUse = Math.min(toUse, availableAmount(restorer.item));
@@ -160,7 +191,7 @@ export class TaskMaintainStatus implements Task {
   }
 
   run(): void {
-    for (let effect of this.toRemove) {
+    for (const effect of this.toRemove) {
       if (haveEffect(effect) == 0) {
         continue;
       }
@@ -176,7 +207,7 @@ export class TaskMaintainStatus implements Task {
       return;
     }
 
-    let desiredMp = 20; //myMaxmp() < 40 ? 20 : 40;
+    const desiredMp = 20; //myMaxmp() < 40 ? 20 : 40;
 
     this.restoreMPTo(desiredMp);
   }

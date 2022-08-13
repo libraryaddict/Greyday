@@ -1,18 +1,17 @@
 import {
-  Location,
-  Familiar,
-  Item,
   availableAmount,
-  use,
-  Skill,
-  getProperty,
+  Familiar,
   familiarWeight,
+  getProperty,
+  Item,
+  Location,
+  Skill,
+  use,
 } from "kolmafia";
-import { greyAdv, AdventureSettings } from "../../../utils/GreyLocations";
+import { ResourceCategory } from "../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
-import { GreySettings } from "../../../utils/GreySettings";
-import { Macro } from "../../../utils/MacroBuilder";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -21,27 +20,32 @@ import {
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
-export class QuestL4BatsCenter implements QuestInfo {
-  fire: Item = Item.get("industrial fire extinguisher");
+export class QuestL4BatsCenter extends TaskInfo implements QuestInfo {
   loc: Location = Location.get("Guano Junction");
   sonar: Item = Item.get("sonar-in-a-biscuit");
-  resourceClaim: ResourceClaim = new ResourceClaim(
-    ResourceType.FIRE_EXTINGUSHER,
-    20,
-    "Spray down bat cave",
-    5
+  task: PossiblePath = new PossiblePath(1).add(
+    ResourceCategory.FIRE_EXTINGUSHER_ZONE
   );
+  taskManual = new PossiblePath(3, 8);
   goose: Familiar = Familiar.get("Grey Goose");
+  paths: PossiblePath[] = [];
 
-  getResourceClaims(): ResourceClaim[] {
+  createPaths(assumeUnstarted: boolean) {
+    this.paths = [];
+    this.taskManual = new PossiblePath(3, Math.max(3, 8 - this.loc.turnsSpent));
+
+    this.paths.push(this.taskManual);
+
     if (
-      availableAmount(this.fire) == 0 ||
-      getProperty("fireExtinguisherBatHoleUsed") == "true"
+      assumeUnstarted ||
+      getProperty("fireExtinguisherBatHoleUsed") != "true"
     ) {
-      return [];
+      this.paths.push(this.task);
     }
+  }
 
-    return [this.resourceClaim];
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
   }
 
   getId(): QuestType {
@@ -53,7 +57,7 @@ export class QuestL4BatsCenter implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL04Bat");
+    const status = getQuestStatus("questL04Bat");
 
     if (status < 0) {
       return QuestStatus.NOT_READY;
@@ -70,29 +74,31 @@ export class QuestL4BatsCenter implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+  run(path: PossiblePath): QuestAdventure {
+    const outfit = new GreyOutfit();
 
-    if (!GreySettings.isHardcoreMode() && availableAmount(this.fire) > 0) {
-      outfit.addItem(this.fire);
+    const resource = path.getResource(ResourceCategory.FIRE_EXTINGUSHER_ZONE);
+
+    if (resource != null) {
+      resource.prepare(outfit);
+    } else {
+      outfit.setItemDrops();
     }
 
     return {
       outfit: outfit,
       location: this.loc,
       run: () => {
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
 
-        if (availableAmount(this.fire) > 0 && !GreySettings.isHardcoreMode()) {
+        if (resource != null) {
           settings.setStartOfFightMacro(
-            new Macro()
-              .trySkill(Skill.get("Fire Extinguisher: Zone Specific"))
-              .trySkill(Skill.get("Infinite Loop"))
-              .attack()
+            resource.macro().trySkill(Skill.get("Infinite Loop")).attack()
           );
         }
 
         greyAdv(this.loc, outfit, settings);
+
         this.doSonars();
       },
     };

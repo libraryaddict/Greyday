@@ -7,22 +7,13 @@ import {
   Location,
   Monster,
   myAscensions,
-  myLevel,
   myMeat,
-  outfit,
   retrieveItem,
   toInt,
   use,
 } from "kolmafia";
-import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { GreySettings } from "../../utils/GreySettings";
-import {
-  getQuestStatus,
-  QuestAdventure,
-  QuestInfo,
-  QuestStatus,
-} from "../Quests";
+import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
 export class QuestCar implements QuestInfo {
@@ -57,14 +48,11 @@ export class QuestCar implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (
-      toInt(getProperty("lastDesertUnlock")) == myAscensions() ||
-      !knollAvailable()
-    ) {
+    if (toInt(getProperty("lastDesertUnlock")) == myAscensions()) {
       return QuestStatus.COMPLETED;
     }
 
-    if (myMeat() < 700) {
+    if (myMeat() < 700 || !knollAvailable()) {
       return QuestStatus.NOT_READY;
     }
 
@@ -87,7 +75,7 @@ export class QuestCar implements QuestInfo {
     //if (knollAvailable()) {
     return {
       location: null,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         this.tryMakeBitchCar();
       },

@@ -1,13 +1,12 @@
 import {
-  Location,
-  Item,
-  Familiar,
   availableAmount,
   getProperty,
-  visitUrl,
+  haveSkill,
+  Item,
+  Location,
   Monster,
   Skill,
-  haveSkill,
+  visitUrl,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -43,17 +42,15 @@ export class QuestL8MountainGoats implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (!haveSkill(this.elementalSkill)) {
-      return QuestStatus.READY;
-    }
+    if (haveSkill(this.elementalSkill)) {
+      if (status > MountainStatus.TRAPPER_DEMANDS) {
+        return QuestStatus.COMPLETED;
+      }
 
-    if (status > MountainStatus.TRAPPER_DEMANDS) {
-      return QuestStatus.COMPLETED;
-    }
-
-    // If we have our cheese but not the ores
-    if (availableAmount(this.cheese) >= 3 && this.getOreRemaining() > 0) {
-      return QuestStatus.COMPLETED;
+      // If we have our cheese but not the ores
+      if (availableAmount(this.cheese) >= 3 && this.getOreRemaining() > 0) {
+        return QuestStatus.COMPLETED;
+      }
     }
 
     if (!haveSkill(this.sysSweep)) {
@@ -76,7 +73,7 @@ export class QuestL8MountainGoats implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    if (availableAmount(this.cheese) >= 3) {
+    if (availableAmount(this.cheese) >= 3 && haveSkill(this.elementalSkill)) {
       return {
         location: null,
         run: () => {

@@ -1,13 +1,12 @@
 import {
-  Location,
-  Familiar,
-  Item,
   availableAmount,
+  getProperty,
+  Item,
+  Location,
   myMeat,
-  buy,
   print,
   retrieveItem,
-  getProperty,
+  visitUrl,
 } from "kolmafia";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
@@ -18,6 +17,7 @@ export class QuestCustomPurchases implements QuestInfo {
   silent: Item = Item.get("Silent Beret");
   stealth: Item = Item.get("Xiblaxian stealth cowl");
   firePlusCombat: Item = Item.get("sombrero-mounted sparkler");
+  fireworksClan: boolean;
 
   getId(): QuestType {
     return "Misc / Purchases";
@@ -36,13 +36,24 @@ export class QuestCustomPurchases implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (this.fireworksClan == null) {
+      visitUrl("clan_viplounge.php");
+      const page = visitUrl("clan_viplounge.php?action=fwshop&whichfloor=2");
+
+      this.fireworksClan = page.includes("<b>A Furtive Fireworks Fellow</b>");
+    }
+
+    if (!this.fireworksClan) {
+      return QuestStatus.NOT_READY;
+    }
+
     return QuestStatus.READY;
   }
 
   run(): QuestAdventure {
     return {
       location: null,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         let toBuy = this.popper;
 

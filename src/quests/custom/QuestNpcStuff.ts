@@ -1,30 +1,26 @@
 import {
-  Location,
-  Familiar,
-  getProperty,
-  visitUrl,
-  visit,
-  lastChoice,
   availableAmount,
+  getProperty,
+  gnomadsAvailable,
+  haveSkill,
   Item,
+  knollAvailable,
+  lastChoice,
+  Location,
+  myAscensions,
+  myMeat,
+  runChoice,
+  setProperty,
   Skill,
   toInt,
-  haveSkill,
-  myMeat,
-  gnomadsAvailable,
-  setProperty,
   use,
-  myAscensions,
-  knollAvailable,
-  Monster,
-  runChoice,
+  visitUrl,
 } from "kolmafia";
+import { ResourceCategory } from "../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import {
-  GreyPulls,
-  ResourceClaim,
-  ResourcePullClaim,
-} from "../../utils/GreyResources";
+import { GreyPulls } from "../../utils/GreyResources";
+import { getMoonZone, GreySettings } from "../../utils/GreySettings";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -90,7 +86,7 @@ class QuestDoctor implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl("shop.php?whichshop=doc&action=talk");
         runChoice(1);
@@ -104,6 +100,8 @@ class QuestDoctor implements QuestInfo {
 }
 
 class QuestKnollMayor implements QuestInfo {
+  spoon: Item = Item.get("hewn moon-rune spoon");
+
   getLocations(): Location[] {
     return [];
   }
@@ -117,7 +115,19 @@ class QuestKnollMayor implements QuestInfo {
   }
 
   status(): QuestStatus {
+    if (getProperty("questM03Bugbear") != "unstarted") {
+      return QuestStatus.COMPLETED;
+    }
+
     if (!knollAvailable()) {
+      if (
+        availableAmount(this.spoon) > 0 &&
+        getProperty("moonTuned") == "false" &&
+        getMoonZone(GreySettings.greyTuneMoonSpoon) == "Knoll"
+      ) {
+        return QuestStatus.NOT_READY;
+      }
+
       return QuestStatus.COMPLETED;
     }
 
@@ -125,16 +135,12 @@ class QuestKnollMayor implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (getProperty("questM03Bugbear") != "unstarted") {
-      return QuestStatus.COMPLETED;
-    }
-
     return QuestStatus.READY;
   }
 
   run(): QuestAdventure {
     return {
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       location: null,
       run: () => {
         visitUrl("place.php?whichplace=knoll_friendly&action=dk_mayor");
@@ -179,24 +185,21 @@ class QuestDruggie implements QuestInfo {
   }
 }
 
-class QuestGnomeTrainer implements QuestInfo {
+class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
   skills: Skill[] = [
     "Torso Awareness",
     "Powers of Observatiogn",
     "Gnefarious Pickpocketing",
   ].map((s) => Skill.get(s));
   letter: Item = Item.get("Letter for Melvign the Gnome");
-  shirtPulls: ResourceClaim[] = [
-    new ResourcePullClaim(
-      Item.get('"Remember the Trees" Shirt'),
-      "+combat shirt",
-      30
-    ),
-  ];
+  shirt: Item = Item.get('"Remember the Trees" Shirt');
+  shirtPull = new PossiblePath(0).addPull(this.shirt);
+  shirtlessPull = new PossiblePath(10);
   torso: Skill = Skill.get("Torso Awareness");
+  spoon: Item = Item.get("hewn moon-rune spoon");
 
-  getResourceClaims() {
-    return this.shirtPulls;
+  getPossiblePaths(): PossiblePath[] {
+    return [this.shirtPull, this.shirtlessPull];
   }
 
   getId(): QuestType {
@@ -216,15 +219,25 @@ class QuestGnomeTrainer implements QuestInfo {
       //  return QuestStatus.READY;
     }
 
-    if (getQuestStatus("questL13Final") >= 0) {
+    if (
+      getQuestStatus("questL13Final") >= 0 ||
+      this.getSkillLacking() == null
+    ) {
       return QuestStatus.COMPLETED;
     }
 
-    if (this.getSkillLacking() == null || !gnomadsAvailable()) {
+    if (!gnomadsAvailable()) {
+      if (
+        getMoonZone(GreySettings.greyTuneMoonSpoon) == "Gnomad" &&
+        getProperty("moonTuned") != "true"
+      ) {
+        return QuestStatus.NOT_READY;
+      }
+
       return QuestStatus.COMPLETED;
     }
 
-    let meat = 10000 + (haveSkill(this.skills[0]) ? 5000 : 0);
+    const meat = 10000 + (haveSkill(this.skills[0]) ? 5000 : 0);
 
     if (myMeat() < meat) {
       return QuestStatus.NOT_READY;
@@ -237,11 +250,11 @@ class QuestGnomeTrainer implements QuestInfo {
     return this.skills.find((s) => !haveSkill(s));
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     if (availableAmount(this.letter) > 0) {
       return {
         location: null,
-        outfit: new GreyOutfit("-tie"),
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           use(this.letter);
         },
@@ -250,14 +263,19 @@ class QuestGnomeTrainer implements QuestInfo {
 
     return {
       location: null,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
-        let skill = this.getSkillLacking();
+        const skill = this.getSkillLacking();
 
         visitUrl("gnomes.php?action=trainskill&whichskill=" + toInt(skill));
 
-        if (haveSkill(skill) && skill == this.torso) {
-          GreyPulls.pullTorsoAwareness();
+        if (
+          path.canUse(ResourceCategory.PULL) &&
+          haveSkill(skill) &&
+          skill == this.torso
+        ) {
+          GreyPulls.tryPull(this.shirt);
+          path.addUsed(ResourceCategory.PULL);
         }
       },
     };
@@ -286,8 +304,10 @@ class QuestArtist implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    // Don't start it since it's not a free turn
+    // User has to start it.
     if (getProperty("questM02Artist") == "unstarted") {
-      return QuestStatus.READY;
+      return QuestStatus.COMPLETED;
     }
 
     if (this.hasAllItems()) {

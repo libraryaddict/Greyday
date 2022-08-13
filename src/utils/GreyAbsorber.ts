@@ -104,15 +104,15 @@ export class AbsorbsProvider {
   }
 
   getAbsorbsInLocation(location: Location): Absorb[] {
-    let absorbs: Absorb[] = [];
+    const absorbs: Absorb[] = [];
 
     if (location == null) {
       return absorbs;
     }
 
-    let monsters = getMonsters(location);
+    const monsters = getMonsters(location);
 
-    for (let absorb of AbsorbsProvider.loadAbsorbs()) {
+    for (const absorb of AbsorbsProvider.loadAbsorbs()) {
       if (!monsters.includes(absorb.monster)) {
         continue;
       }
@@ -144,11 +144,11 @@ export class AbsorbsProvider {
     defeated: Map<Monster, Reabsorbed>,
     monsters: Monster[],
     includeSkills: boolean = true
-  ) {
-    let skills = this.getMustHaveSkills();
+  ): AdventureLocation {
+    const skills = this.getMustHaveSkills();
 
     if (!GreySettings.speedRunMode) {
-      for (let entry of this.getUsefulSkills()) {
+      for (const entry of this.getUsefulSkills()) {
         skills.set(entry[0], entry[1]);
       }
     }
@@ -157,7 +157,7 @@ export class AbsorbsProvider {
     //   skills.set(entry[0], entry[1]);
     // }
 
-    let absorbs = monsters
+    const absorbs = monsters
       .map((m) => AbsorbsProvider.getAbsorb(m))
       .filter((a) => {
         if (
@@ -185,16 +185,16 @@ export class AbsorbsProvider {
       return null;
     }
 
-    let advsSpent = 1;
+    const advsSpent = 1;
 
-    let totalAdvs = absorbs.reduce(
+    const totalAdvs = absorbs.reduce(
       (p, a) =>
         Math.max(0, a.adventures) * this.getMultiplier(a.monster, defeated) + p,
       0
     );
-    let newSkills: Map<Absorb, string> = new Map();
+    const newSkills: Map<Absorb, string> = new Map();
 
-    for (let a of absorbs) {
+    for (const a of absorbs) {
       if (!skills.has(a.skill)) {
         continue;
       }
@@ -213,6 +213,7 @@ export class AbsorbsProvider {
         absorbs.filter((a) => a.adventures > 0 && !defeated.has(a.monster))
           .length > 0,
       shouldRunOrb: false,
+      ensuredOrb: null,
     };
   }
 
@@ -221,10 +222,10 @@ export class AbsorbsProvider {
     location: Location,
     includeSkills: boolean = true
   ): AdventureLocation {
-    let skills = this.getMustHaveSkills();
+    const skills = this.getMustHaveSkills();
 
     if (!GreySettings.speedRunMode) {
-      for (let entry of this.getUsefulSkills()) {
+      for (const entry of this.getUsefulSkills()) {
         skills.set(entry[0], entry[1]);
       }
     }
@@ -259,11 +260,11 @@ export class AbsorbsProvider {
       return null;
     }
 
-    let appearRates = appearanceRates(location);
+    const appearRates = appearanceRates(location);
 
     // Special workaround for screambat making appearance rates of non-screambats zero
     if (appearRates["screambat"] == 100) {
-      for (let key of Object.keys(appearRates)) {
+      for (const key of Object.keys(appearRates)) {
         if (key == "none") {
           continue;
         }
@@ -273,13 +274,13 @@ export class AbsorbsProvider {
     }
 
     let advsSpent = 0;
-    let rates: [Monster, number][] = [];
+    const rates: [Monster, number][] = [];
     const combatPercent =
       location == Location.get("Twin Peak") ? 100 : location.combatPercent;
 
     Object.entries(appearRates).forEach((v) => {
-      let monster = Monster.get(v[0]);
-      let rate = v[1];
+      const monster = Monster.get(v[0]);
+      const rate = v[1];
 
       if (rate <= 0 || combatPercent <= 0) {
         return;
@@ -310,14 +311,14 @@ export class AbsorbsProvider {
       advsSpent++;
     }
 
-    let totalAdvs = absorbs.reduce(
+    const totalAdvs = absorbs.reduce(
       (p, a) =>
         Math.max(0, a.adventures) * this.getMultiplier(a.monster, defeated) + p,
       0
     );
-    let newSkills: Map<Absorb, string> = new Map();
+    const newSkills: Map<Absorb, string> = new Map();
 
-    for (let a of absorbs) {
+    for (const a of absorbs) {
       if (!skills.has(a.skill)) {
         continue;
       }
@@ -341,7 +342,7 @@ export class AbsorbsProvider {
   }
 
   getOnlyUsefulAbsorbs(absorbs: Absorb[]) {
-    let usefulSkills: Skill[] = [...this.getMustHaveSkills().keys()];
+    const usefulSkills: Skill[] = [...this.getMustHaveSkills().keys()];
 
     if (!GreySettings.speedRunMode) {
       usefulSkills.push(...this.getUsefulSkills().keys());
@@ -357,7 +358,7 @@ export class AbsorbsProvider {
   }
 
   static getAbsorb(monster: Monster): Absorb {
-    for (let absorb of AbsorbsProvider.loadAbsorbs()) {
+    for (const absorb of AbsorbsProvider.loadAbsorbs()) {
       if (absorb.monster != monster) {
         continue;
       }
@@ -375,21 +376,21 @@ export class AbsorbsProvider {
 
     AbsorbsProvider.allAbsorbs = [];
 
-    for (let line of fileToBuffer("data/grey_you_data.txt").split("\n")) {
-      let spl = line.split("\t");
+    for (const line of fileToBuffer("data/grey_you_data.txt").split("\n")) {
+      const spl = line.split("\t");
 
       if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {
         continue;
       }
 
-      let mons = toMonster(spl[0]);
+      const mons = toMonster(spl[0]);
 
       if (mons == Monster.get("None")) {
         print("Unknown " + spl[0]);
         continue;
       }
 
-      let absorb = new Absorb();
+      const absorb = new Absorb();
       absorb.monster = mons;
 
       if (spl[1].endsWith("adventures")) {
@@ -425,9 +426,9 @@ export class AbsorbsProvider {
   getAbsorbedMonstersFromInstance(
     fresh: boolean = turnsPlayed() % 50 == 1
   ): Map<Monster, Reabsorbed> {
-    let monsters: Map<Monster, Reabsorbed> = new Map();
-    let reabsorbed: Monster[] = AbsorbsProvider.getReabsorbedMonsters();
-    let absorbedProp = "_monstersFoughtToday";
+    const monsters: Map<Monster, Reabsorbed> = new Map();
+    const reabsorbed: Monster[] = AbsorbsProvider.getReabsorbedMonsters();
+    const absorbedProp = "_monstersFoughtToday";
 
     if (getProperty(absorbedProp) == "" || fresh) {
       this.getAbsorbedMonstersFromUrl().forEach((m) =>
@@ -447,7 +448,7 @@ export class AbsorbsProvider {
         });
     }
 
-    for (let m of reabsorbed) {
+    for (const m of reabsorbed) {
       monsters.set(m, Reabsorbed.REABSORBED);
     }
 
@@ -460,7 +461,7 @@ export class AbsorbsProvider {
     }
 
     if (getProperty(absorbedProp).split(",").length != monsters.size) {
-      let prop = getProperty("logPreferenceChange");
+      const prop = getProperty("logPreferenceChange");
       setProperty("logPreferenceChange", "false");
       setProperty(
         absorbedProp,
@@ -477,10 +478,10 @@ export class AbsorbsProvider {
 
   getAbsorbedMonstersFromUrl(): Monster[] {
     let page = visitUrl("charsheet.php");
-    let regex = /Absorbed .+? from .+?<!-- (\d+) --><br \/>/s;
+    const regex = /Absorbed .+? from .+?<!-- (\d+) --><br \/>/s;
 
     let match: string[];
-    let monsters: Monster[] = [];
+    const monsters: Monster[] = [];
 
     while ((match = page.match(regex)) != null) {
       page = page.replace(match[0], "");
@@ -501,14 +502,14 @@ export class AbsorbsProvider {
     defeated: Map<Monster, Reabsorbed>,
     includeSkills: boolean = false
   ): AdventureLocation[] {
-    let map: Map<Location, AdventureLocation> = new Map();
+    const map: Map<Location, AdventureLocation> = new Map();
 
-    for (let absorb of AbsorbsProvider.loadAbsorbs().filter(
+    for (const absorb of AbsorbsProvider.loadAbsorbs().filter(
       (a) =>
         (includeSkills || a.adventures > 0) &&
         defeated.get(a.monster) != Reabsorbed.REABSORBED
     )) {
-      for (let l of getLocations(absorb.monster)) {
+      for (const l of getLocations(absorb.monster)) {
         if (map.has(l)) {
           continue;
         }
@@ -521,8 +522,8 @@ export class AbsorbsProvider {
   }
 
   printRemainingAbsorbs() {
-    let defeated = this.getAbsorbedMonstersFromInstance(true);
-    let absorbs = AbsorbsProvider.loadAbsorbs().filter(
+    const defeated = this.getAbsorbedMonstersFromInstance(true);
+    const absorbs = AbsorbsProvider.loadAbsorbs().filter(
       (a) =>
         a.adventures > 0 && defeated.get(a.monster) != Reabsorbed.REABSORBED
     );

@@ -96,7 +96,7 @@ export class QuestL11ShrineVines implements QuestInfo {
     if (adv[2]) {
       outfit = new GreyOutfit().addItem(this.machete);
     } else {
-      outfit = new GreyOutfit("-tie");
+      outfit = GreyOutfit.IGNORE_OUTFIT;
     }
 
     return {

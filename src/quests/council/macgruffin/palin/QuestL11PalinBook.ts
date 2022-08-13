@@ -1,12 +1,10 @@
 import {
-  Location,
-  Familiar,
-  Item,
   availableAmount,
+  cliExecute,
+  Item,
+  Location,
   Monster,
   myMeat,
-  cliExecute,
-  itemAmount,
   use,
   visitUrl,
 } from "kolmafia";
@@ -55,6 +53,10 @@ export class QuestL11PalinBook implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (GreySettings.greySkipPalindome && !this.isFarmDudes()) {
+      return QuestStatus.COMPLETED;
+    }
+
     if (
       myMeat() < 1000 ||
       availableAmount(this.talisman) == 0 ||
@@ -62,10 +64,6 @@ export class QuestL11PalinBook implements QuestInfo {
       (this.needDogPhoto() && availableAmount(this.camera) == 0)
     ) {
       return QuestStatus.NOT_READY;
-    }
-
-    if (GreySettings.greySkipPalindome && !this.isFarmDudes()) {
-      return QuestStatus.COMPLETED;
     }
 
     if (!hasNonCombatSkillsReady()) {

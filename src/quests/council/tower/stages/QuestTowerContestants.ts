@@ -1,18 +1,6 @@
-import {
-  Location,
-  Familiar,
-  getProperty,
-  maximize,
-  toInt,
-  visitUrl,
-  runChoice,
-  toBoolean,
-  setProperty,
-  print,
-} from "kolmafia";
-import { PropertyManager } from "../../../../utils/Properties";
+import { getProperty, Location, maximize, toInt, visitUrl } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
-import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -20,7 +8,6 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
-import { GreySettings } from "../../../../utils/GreySettings";
 
 type ContestQuest = () => void;
 
@@ -34,7 +21,7 @@ export class QuestTowerContestants implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL13Final");
+    const status = getQuestStatus("questL13Final");
 
     if (status < 0) {
       return QuestStatus.NOT_READY;
@@ -48,7 +35,7 @@ export class QuestTowerContestants implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let status = getQuestStatus("questL13Final");
+    const status = getQuestStatus("questL13Final");
 
     if (status == 0) {
       return this.learnAndSetMyPlace();
@@ -65,7 +52,7 @@ export class QuestTowerContestants implements QuestInfo {
     return {
       location: null,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         try {
           props.setChoice(1020, 1);
@@ -88,7 +75,7 @@ export class QuestTowerContestants implements QuestInfo {
 
   fightContests(): QuestAdventure {
     // place.php?whichplace=nstower&action=ns_01_crowd1
-    let match = visitUrl("place.php?whichplace=nstower").match(
+    const match = visitUrl("place.php?whichplace=nstower").match(
       /(place.php\?whichplace=nstower&action=ns_01_crowd\d)/
     );
 
@@ -104,7 +91,7 @@ export class QuestTowerContestants implements QuestInfo {
     return {
       location: null,
       run: () => {
-        for (let quest of this.getNeededQuests()) {
+        for (const quest of this.getNeededQuests()) {
           quest.call(this);
         }
 
@@ -118,9 +105,9 @@ export class QuestTowerContestants implements QuestInfo {
       return [];
     }
 
-    let locs: Location[] = [];
+    const locs: Location[] = [];
 
-    let page = visitUrl("place.php?whichplace=nstower");
+    const page = visitUrl("place.php?whichplace=nstower");
 
     if (page.includes("ns_01_crowd1")) {
       locs.push(Location.get("Fastest Adventurer Contest"));
@@ -177,7 +164,7 @@ export class QuestTowerContestants implements QuestInfo {
       visitUrl("place.php?whichplace=nstower&action=ns_01_contestbooth");
     }
 
-    let quests: ContestQuest[] = [];
+    const quests: ContestQuest[] = [];
 
     if (toInt(getProperty("nsContestants1")) == -1) {
       quests.push(this.doQuest1);
@@ -195,7 +182,10 @@ export class QuestTowerContestants implements QuestInfo {
   }
 
   doQuest1() {
-    maximize("init +switch left-hand man -tie", false);
+    maximize(
+      "init +switch left-hand man +switch Oily woim +switch Xiblaxian Holo-Companion -tie",
+      false
+    );
     this.turnInQuest(1);
   }
 
@@ -208,7 +198,7 @@ export class QuestTowerContestants implements QuestInfo {
   }
 
   doQuest3() {
-    let element = getProperty("nsChallenge2");
+    const element = getProperty("nsChallenge2");
 
     maximize(
       element + " dmg +" + element + " spell dmg +switch left-hand man -tie",

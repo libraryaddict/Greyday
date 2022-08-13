@@ -1,38 +1,34 @@
 import {
-  Location,
-  Familiar,
-  Item,
   availableAmount,
-  pullsRemaining,
-  storageAmount,
-  myBuffedstat,
-  Stat,
-  maximize,
-  numericModifier,
-  useFamiliar,
-  retrieveItem,
-  visit,
-  visitUrl,
   currentRound,
-  myHp,
-  myMaxhp,
-  cliExecute,
-  setProperty,
-  getProperty,
-  print,
-  itemAmount,
-  haveEffect,
   Effect,
-  use,
-  mallPrice,
   equippedAmount,
+  Familiar,
+  getProperty,
+  haveEffect,
+  Item,
+  itemAmount,
+  Location,
+  mallPrice,
+  maximize,
   Monster,
   myPrimestat,
+  numericModifier,
+  print,
+  pullsRemaining,
+  retrieveItem,
+  setProperty,
+  Stat,
+  storageAmount,
+  use,
+  useFamiliar,
+  visitUrl,
 } from "kolmafia";
-import { PropertyManager } from "../../../../utils/Properties";
+import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -40,17 +36,14 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
-import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 
 export class QuestTowerWallBones implements QuestInfo {
   knife: Item = Item.get("Electric Boning Knife");
-  boning: QuestInfo = new QuestTowerBoningKnife();
   killer = new QuestTowerKillBones();
   toAbsorb: Monster[];
-
-  getChildren(): QuestInfo[] {
-    return [this.boning];
-  }
+  groundFloor: Location = Location.get(
+    "The Castle in the Clouds in the Sky (Ground Floor)"
+  );
 
   getId(): QuestType {
     return "Council / Tower / WallOfBones";
@@ -71,16 +64,16 @@ export class QuestTowerWallBones implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (availableAmount(this.knife) == 0 && !this.killer.isPossible()) {
-      return QuestStatus.NOT_READY;
-    }
-
     return QuestStatus.READY;
   }
 
   run(): QuestAdventure {
-    if (availableAmount(this.knife) == 0 && this.killer.isPossible()) {
-      return this.killer.run();
+    if (availableAmount(this.knife) == 0) {
+      if (this.killer.isPossible()) {
+        return this.killer.run();
+      } else {
+        return this.runKnife();
+      }
     }
 
     return {
@@ -97,53 +90,11 @@ export class QuestTowerWallBones implements QuestInfo {
     };
   }
 
-  getLocations(): Location[] {
-    return [];
-  }
-}
-
-export class QuestTowerBoningKnife implements QuestInfo {
-  knife: Item = Item.get("Electric Boning Knife");
-  loc: Location = Location.get(
-    "The Castle in the Clouds in the Sky (Ground Floor)"
-  );
-  bossKiller = new QuestTowerKillBones();
-
-  getId(): QuestType {
-    return "Council / Tower / WallOfBones / BoningKnife";
-  }
-
-  level(): number {
-    return 13;
-  }
-
-  status(): QuestStatus {
-    let status = getQuestStatus("questL13Final");
-
-    if (status < 8) {
-      return QuestStatus.NOT_READY;
-    }
-
-    if (status > 8) {
-      return QuestStatus.COMPLETED;
-    }
-
-    if (availableAmount(this.knife) > 0) {
-      return QuestStatus.COMPLETED;
-    }
-
-    if (this.bossKiller.isPossible()) {
-      return QuestStatus.NOT_READY;
-    }
-
-    return QuestStatus.READY;
-  }
-
-  run(): QuestAdventure {
+  runKnife(): QuestAdventure {
     let outfit = new GreyOutfit().setNoCombat();
 
     return {
-      location: this.loc,
+      location: this.groundFloor,
       outfit: outfit,
       run: () => {
         let props = new PropertyManager();
@@ -159,7 +110,7 @@ export class QuestTowerBoningKnife implements QuestInfo {
           props.setChoice(674, 1);
           props.setChoice(1026, 2);
 
-          greyAdv(this.loc, outfit);
+          greyAdv(this.groundFloor, outfit);
         } finally {
           props.resetAll();
         }
@@ -260,7 +211,7 @@ export class QuestTowerKillBones {
   run(): QuestAdventure {
     return {
       location: null,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         let macro: Macro;
         useFamiliar(Familiar.get("None"));

@@ -65,7 +65,7 @@ export class QuestMPRegen implements QuestInfo {
   }
 
   getWand(): Item {
-    let wand = getZapWand();
+    const wand = getZapWand();
 
     if (wand == this.none) {
       return null;
@@ -101,8 +101,8 @@ export class QuestMPRegen implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
-    let seekingWand = this.getWand() == null && myMeat() >= 5000;
+    const outfit = new GreyOutfit();
+    const seekingWand = this.getWand() == null && myMeat() >= 5000;
 
     if (this.getWand() == null) {
       outfit.setNoCombat();
@@ -114,7 +114,7 @@ export class QuestMPRegen implements QuestInfo {
       outfit: outfit,
       location: this.realDung,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         props.setChoice(25, seekingWand ? 2 : 3);
 

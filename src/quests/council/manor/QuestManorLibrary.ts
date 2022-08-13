@@ -1,18 +1,16 @@
 import {
   availableAmount,
-  equippedAmount,
-  Familiar,
   getProperty,
   haveSkill,
   isBanished,
   Item,
   Location,
   Monster,
-  print,
   Skill,
   toInt,
-  toItem,
 } from "kolmafia";
+import { ResourceCategory } from "../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { Macro } from "../../../utils/MacroBuilder";
@@ -25,14 +23,39 @@ import {
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
-export class QuestManorLibrary implements QuestInfo {
+export class QuestManorLibrary extends TaskInfo implements QuestInfo {
   library: Location = Location.get("The Haunted Library");
   killingJar: Item = Item.get("Killing Jar");
   key: Item = Item.get("[7302]Spookyraven library key");
   librarian: Monster = Monster.get("Banshee Librarian");
   sweep: Skill = Skill.get("System Sweep");
   nano: Skill = Skill.get("Double Nanovision");
-  cosplay: Item = Item.get("Fourth of May Cosplay Saber");
+  pathYR: PossiblePath = new PossiblePath(10).add(ResourceCategory.YELLOW_RAY);
+  path: PossiblePath = new PossiblePath(10, 20);
+  paths: PossiblePath[] = [];
+
+  createPaths(assumeUnstarted: boolean) {
+    const wantJar =
+      this.wantsGnomeKillingJar() && availableAmount(this.killingJar) == 0;
+    const desksLeft =
+      5 - (assumeUnstarted ? 0 : toInt(getProperty("writingDesksDefeated")));
+
+    this.paths = [];
+    this.path = new PossiblePath(desksLeft * 3, desksLeft * 4);
+    this.pathYR = new PossiblePath(desksLeft * 2, desksLeft * 3).add(
+      ResourceCategory.YELLOW_RAY
+    );
+
+    if (wantJar) {
+      this.paths.push(this.pathYR);
+    }
+
+    this.paths.push(this.path);
+  }
+
+  getPossiblePaths() {
+    return this.paths;
+  }
 
   getId(): QuestType {
     return "Manor / Library";
@@ -41,6 +64,7 @@ export class QuestManorLibrary implements QuestInfo {
   level(): number {
     return 8;
   }
+
   getGnome(): number {
     return toInt(getProperty("gnasirProgress"));
   }
@@ -49,8 +73,8 @@ export class QuestManorLibrary implements QuestInfo {
     return (this.getGnome() & 4) != 4;
   }
 
-  status(): QuestStatus {
-    let status = getQuestStatus("questM20Necklace");
+  status(path: PossiblePath): QuestStatus {
+    const status = getQuestStatus("questM20Necklace");
 
     if (availableAmount(this.key) == 0) {
       return QuestStatus.NOT_READY;
@@ -64,6 +88,14 @@ export class QuestManorLibrary implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (
+      path != null &&
+      path.canUse(ResourceCategory.YELLOW_RAY) > 0 &&
+      !path.getResource(ResourceCategory.YELLOW_RAY).ready()
+    ) {
+      return QuestStatus.NOT_READY;
+    }
+
     if (!haveSkill(this.sweep) || !haveSkill(this.nano)) {
       return QuestStatus.FASTER_LATER;
     }
@@ -71,15 +103,18 @@ export class QuestManorLibrary implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
-    let outfit = new GreyOutfit();
-    let wantJar =
+  run(path: PossiblePath): QuestAdventure {
+    const outfit = new GreyOutfit();
+    const wantJar =
       this.wantsGnomeKillingJar() && availableAmount(this.killingJar) == 0;
-    let banishLibrarian = !wantJar && !isBanished(this.librarian);
+    const banishLibrarian = !wantJar && !isBanished(this.librarian);
+    const resource = wantJar
+      ? path.getResource(ResourceCategory.YELLOW_RAY)
+      : null;
 
     if (wantJar) {
-      if (availableAmount(this.cosplay) > 0) {
-        outfit.addItem(this.cosplay);
+      if (resource != null) {
+        resource.prepare(outfit);
       } else {
         outfit.setItemDrops();
       }
@@ -89,21 +124,21 @@ export class QuestManorLibrary implements QuestInfo {
       location: this.library,
       outfit: outfit,
       run: () => {
-        let settings = new AdventureSettings();
-        let props = new PropertyManager();
+        const settings = new AdventureSettings();
+        const props = new PropertyManager();
 
         settings.addBanish(Monster.get("bookbat"));
 
         if (banishLibrarian) {
           settings.addBanish(this.librarian);
-        } else if (wantJar && equippedAmount(this.cosplay) > 0) {
+        } else if (resource != null) {
+          resource.prepare(null, props);
+
           settings.setFinishingBlowMacro(
-            Macro.if_(this.librarian, Macro.skill("Use the Force")).skill(
+            Macro.if_(this.librarian, resource.macro()).skill(
               Skill.get("Infinite Loop")
             )
           );
-
-          props.setChoice(1387, 3);
         }
 
         props.setChoice(163, 3); // Rare adv that gives an item with 2k autosell, and worth 4-5k in mall

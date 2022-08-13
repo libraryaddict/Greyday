@@ -1,6 +1,5 @@
 import {
   availableAmount,
-  cliExecute,
   Effect,
   effectModifier,
   getProperty,
@@ -9,29 +8,31 @@ import {
   Item,
   itemAmount,
   Location,
-  Monster,
   myMeat,
+  print,
   Skill,
   toInt,
-  toMonster,
   use,
   visitUrl,
 } from "kolmafia";
+import { ResourceCategory } from "../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
+import { getAllCombinations } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
-export class QuestL12Worms implements QuestInfo {
+export class QuestL12Worms extends TaskInfo implements QuestInfo {
   nanovision: Skill = Skill.get("Double Nanovision");
   worms: WormProgress[] = [];
   heart: Item = Item.get("heart of the filthworm queen");
-  effect: Effect = Effect.get("Everything Looks Yellow");
-  rocket: Item = Item.get("Yellow Rocket");
+  paths: PossiblePath[] = [];
 
   constructor() {
+    super();
+
     this.worms.push(
       new WormProgress(
         Item.get("filthworm royal guard scent gland"),
@@ -55,6 +56,54 @@ export class QuestL12Worms implements QuestInfo {
     );
   }
 
+  createPaths(assumeUnstarted: boolean): void {
+    const wormsToKill = assumeUnstarted
+      ? 4
+      : this.worms.findIndex((w) => w.isDoable());
+
+    const mixup: [ResourceCategory, number][] = [];
+
+    // Skip first cos queen doesn't need special strats
+    for (let i = 0; i < wormsToKill; i++) {
+      // So we run 300% item drop lets assume
+      // That's 30 chance a fight. That's eh, 4 fights? Lets call it 6 cos we're bad luck.
+      mixup.push([null, 6]);
+      mixup.push([ResourceCategory.POLAR_VORTEX, 1]);
+      mixup.push([ResourceCategory.YELLOW_RAY, 1]);
+    }
+
+    this.paths = [];
+
+    // At queen!
+    if (wormsToKill == 0) {
+      this.paths.push(new PossiblePath(1));
+    }
+
+    for (const combo of getAllCombinations(mixup)) {
+      if (combo.length != wormsToKill) {
+        continue;
+      }
+
+      const path = new PossiblePath(
+        combo.map(([, turns]) => turns).reduce((p, n) => p + n, 1)
+      );
+
+      combo.forEach(([resource]) => {
+        if (resource == null) {
+          return;
+        }
+
+        path.add(resource);
+      });
+
+      this.paths.push(path);
+    }
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
+
   getId(): QuestType {
     return "Council / War / Filthworms";
   }
@@ -67,27 +116,7 @@ export class QuestL12Worms implements QuestInfo {
     return 12;
   }
 
-  getResourceClaims(): ResourceClaim[] {
-    let yrs: number = 0;
-
-    for (let worm of this.worms) {
-      if (worm.isDoable()) {
-        break;
-      }
-
-      yrs++;
-    }
-
-    if (yrs == 0) {
-      return [];
-    }
-
-    return [
-      new ResourceClaim(ResourceType.YELLOW_RAY, yrs, "Filthworms YR", yrs * 5),
-    ];
-  }
-
-  status(): QuestStatus {
+  status(path: PossiblePath): QuestStatus {
     if (getProperty("sidequestOrchardCompleted") != "none") {
       return QuestStatus.COMPLETED;
     }
@@ -106,20 +135,27 @@ export class QuestL12Worms implements QuestInfo {
     }
 
     if (this.isKillingQueen()) {
+      return QuestStatus.FASTER_LATER;
+    }
+
+    if (path == null) {
       return QuestStatus.READY;
     }
 
-    // If we're going to YR
-    if (haveEffect(this.effect) == 0) {
-      // If we can't afford to YR
-      if (myMeat() < 500) {
+    if (path.canUse(ResourceCategory.YELLOW_RAY)) {
+      // If we're going to YR
+      if (!path.getResource(ResourceCategory.YELLOW_RAY).ready()) {
+        // If we can't afford to YR
         return QuestStatus.NOT_READY;
       }
 
       return QuestStatus.READY;
     }
 
-    if (!haveSkill(this.nanovision)) {
+    if (
+      !path.canUse(ResourceCategory.POLAR_VORTEX) &&
+      !haveSkill(this.nanovision)
+    ) {
       return QuestStatus.NOT_READY;
     }
 
@@ -133,9 +169,9 @@ export class QuestL12Worms implements QuestInfo {
     );
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     if (itemAmount(this.heart) > 0) {
-      let outfit = new GreyOutfit();
+      const outfit = new GreyOutfit();
       outfit.addItem(Item.get("Beer Helmet"));
       outfit.addItem(Item.get("distressed denim pants"));
       outfit.addItem(Item.get("bejeweled pledge pin"));
@@ -151,15 +187,23 @@ export class QuestL12Worms implements QuestInfo {
       };
     }
 
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
+
+    let resource = path.getResource(ResourceCategory.YELLOW_RAY);
+
+    if (resource == null) {
+      resource = path.getResource(ResourceCategory.POLAR_VORTEX);
+    }
 
     if (this.isKillingQueen()) {
       outfit.meatDropWeight = 4;
-    } else if (haveEffect(this.effect) > 0) {
+    } else if (resource != null) {
+      resource.prepare(outfit);
+    } else {
       outfit.setItemDrops();
     }
 
-    let chamber = this.worms.find((worm) => worm.isDoable());
+    const chamber = this.worms.find((worm) => worm.isDoable());
 
     return {
       location: chamber.location,
@@ -171,9 +215,8 @@ export class QuestL12Worms implements QuestInfo {
 
         let killingBlow: Macro;
 
-        if (haveEffect(this.effect) == 0 && !this.isKillingQueen()) {
-          cliExecute("acquire yellow rocket");
-          killingBlow = Macro.item(this.rocket);
+        if (resource != null) {
+          killingBlow = resource.macro().skill(this.nanovision).repeat();
         } else {
           killingBlow = Macro.skill(this.nanovision).repeat();
         }
@@ -188,7 +231,7 @@ export class QuestL12Worms implements QuestInfo {
   }
 
   mustBeDone(): boolean {
-    for (let worm of this.worms) {
+    for (const worm of this.worms) {
       if (worm.effect == null) {
         continue;
       }

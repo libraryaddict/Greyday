@@ -1,5 +1,4 @@
 import {
-  autosell,
   availableAmount,
   cliExecute,
   equip,
@@ -7,7 +6,7 @@ import {
   Familiar,
   familiarWeight,
   getProperty,
-  hippyStoneBroken,
+  haveSkill,
   Item,
   Location,
   maximize,
@@ -19,17 +18,12 @@ import {
   setProperty,
   Skill,
   squareRoot,
-  toBoolean,
   toInt,
-  use,
   useFamiliar,
-  visitUrl,
 } from "kolmafia";
 import { greyKillingBlow } from "../../utils/GreyCombat";
 import { greyAdv, AdventureSettings } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { GreyPulls } from "../../utils/GreyResources";
-import { GreySettings } from "../../utils/GreySettings";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -38,6 +32,7 @@ export class QuestPowerLeveling implements QuestInfo {
   property: string = "greyYouLastPowerLeveled";
   familiar: Familiar = Familiar.get("Grey Goose");
   equip: Item = Item.get("Grey Down Vest");
+  skill: Skill = Skill.get("Infinite Loop");
   desiredLevel: number;
   weightRequired: number;
 
@@ -64,7 +59,7 @@ export class QuestPowerLeveling implements QuestInfo {
       expNeeded -= this.familiar.experience;
     }
 
-    let turns = expNeeded / 5; // Expect to gain 5 exp per arena fight
+    const turns = expNeeded / 5; // Expect to gain 5 exp per arena fight
 
     if (turns > 20) {
       throw (
@@ -79,7 +74,7 @@ export class QuestPowerLeveling implements QuestInfo {
   }
 
   getWeightNeededToReachLevel(level: number): number {
-    let statsNeeded = this.getStatsRequired(level);
+    const statsNeeded = this.getStatsRequired(level);
 
     return 5 + Math.ceil(squareRoot(statsNeeded));
   }
@@ -104,6 +99,10 @@ export class QuestPowerLeveling implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (!haveSkill(this.skill)) {
+      return QuestStatus.NOT_READY;
+    }
+
     return QuestStatus.READY;
   }
 
@@ -115,7 +114,9 @@ export class QuestPowerLeveling implements QuestInfo {
         useFamiliar(this.familiar);
         maximize("familiar experience", false);
 
-        let weightNeeded = this.getWeightNeededToReachLevel(this.desiredLevel);
+        const weightNeeded = this.getWeightNeededToReachLevel(
+          this.desiredLevel
+        );
 
         while (
           familiarWeight(this.familiar) < weightNeeded &&

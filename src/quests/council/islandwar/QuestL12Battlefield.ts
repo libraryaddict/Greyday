@@ -79,7 +79,7 @@ export class QuestL12Battlefield implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    let defeated = this.getHippiesDefeated();
+    const defeated = this.getHippiesDefeated();
 
     if (defeated >= 64 && !this.isFilthyDone()) {
       return QuestStatus.NOT_READY;
@@ -105,7 +105,7 @@ export class QuestL12Battlefield implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
     outfit.addItem(Item.get("Beer Helmet"));
     outfit.addItem(Item.get("distressed denim pants"));
     outfit.addItem(Item.get("bejeweled pledge pin"));
@@ -113,6 +113,7 @@ export class QuestL12Battlefield implements QuestInfo {
     let fam: Familiar = null;
 
     if (
+      haveFamiliar(this.gelCube) &&
       !GreySettings.shouldAvoidTowerRequirements() &&
       (availableAmount(this.pole) == 0 ||
         availableAmount(this.ring) == 0 ||
@@ -135,7 +136,7 @@ export class QuestL12Battlefield implements QuestInfo {
       familiar: fam,
       disableFamOverride: fam == this.gelCube,
       run: () => {
-        let burner = DelayBurners.getReadyDelayBurner();
+        const burner = DelayBurners.getReadyDelayBurner();
 
         if (burner != null) {
           burner.doFightSetup();
@@ -147,7 +148,7 @@ export class QuestL12Battlefield implements QuestInfo {
 
         greyAdv(this.loc, outfit);
 
-        let turns = Math.ceil(
+        const turns = Math.ceil(
           (1000 - this.getHippiesDefeated()) / this.getDefeatedEachTurn()
         );
 

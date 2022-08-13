@@ -17,22 +17,19 @@ import {
   Monster,
   monsterElement,
   myAdventures,
-  myAscensions,
   myBasestat,
-  myBuffedstat,
   myFamiliar,
   myHp,
   myLevel,
   myLocation,
-  myMaxmp,
+  myMaxhp,
   myMp,
   myTurncount,
   Skill,
   Stat,
-  toInt,
 } from "kolmafia";
-import { hasBanished, BanishType, getBanished } from "./Banishers";
-import { AbsorbsProvider, Reabsorbed } from "./GreyAbsorber";
+import { BanishType, getBanished, hasBanished } from "./Banishers";
+import { AbsorbsProvider } from "./GreyAbsorber";
 import { AdventureSettings } from "./GreyLocations";
 import { GreyOutfit } from "./GreyOutfitter";
 import { GreySettings } from "./GreySettings";
@@ -71,9 +68,9 @@ class MacroFiller {
 export function greyDuringFightMacro(settings: AdventureSettings): Macro {
   let macro = new Macro();
 
-  let monster = lastMonster();
-  let absorb = AbsorbsProvider.getAbsorb(monster);
-  let hasAbsorbed = AbsorbsProvider.getReabsorbedMonsters().includes(monster);
+  const monster = lastMonster();
+  const absorb = AbsorbsProvider.getAbsorb(monster);
+  const hasAbsorbed = AbsorbsProvider.getReabsorbedMonsters().includes(monster);
 
   if (
     myFamiliar() == Familiar.get("Space Jellyfish") &&
@@ -150,16 +147,17 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
           settings.dontBanishThese.length == 1
         ) {
           // If our next monster is a monster we're aiming to hit.
-          let nextMonster = currentPredictions().get(myLocation());
+          const nextMonster = currentPredictions().get(myLocation());
 
           // If our next predicted combat is against a monster we specifically don't want to banish.
           wastedBanish =
             nextMonster != null && !isBanishable(settings, nextMonster);
         }
 
-        if (!wastedBanish)
+        if (!wastedBanish) {
           // If we do want to banish something..
           macro.trySkill(Skill.get("System Sweep"));
+        }
       }
     }
   }
@@ -198,8 +196,8 @@ export function isBanishable(
   if (settings.banishThese != null) {
     return settings.banishThese.includes(monster);
   } else if (!settings.dontBanishThese.includes(monster) && !monster.boss) {
-    let loc = myLocation();
-    let rates = appearanceRates(loc);
+    const loc = myLocation();
+    const rates = appearanceRates(loc);
 
     if (rates[monster.name] > 5) {
       return true;
@@ -211,6 +209,7 @@ export function isBanishable(
 
 export function greyKillingBlow(outfit: GreyOutfit): Macro {
   let macro = new Macro();
+  const healthPerc = Math.min(Math.floor((myHp() / myMaxhp()) * 100) - 5, 30);
 
   if (haveEffect(Effect.get("Temporary Amnesia")) == 0) {
     if (myLevel() < 4 && myFamiliar() == Familiar.get("Grey Goose")) {
@@ -224,10 +223,13 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
       macro = macro.trySkillRepeat("Slay the dead");
     }
 
-    if (lastMonster().physicalResistance < 70 && myMp() >= 20) {
+    if (
+      (lastMonster().baseHp < 2 || lastMonster().physicalResistance < 70) &&
+      myMp() >= 20
+    ) {
       if (outfit.itemDropWeight >= 2 || myLevel() > 20) {
         macro.while_(
-          "!pastround 15 && !hppercentbelow 30 && hasskill Double Nanovision",
+          `!pastround 15 && !hppercentbelow ${healthPerc} && hasskill Double Nanovision`,
           Macro.trySkill(Skill.get("Double Nanovision"))
         );
       }
@@ -242,13 +244,13 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
       ) {
         macro.trySkill(Skill.get("Infinite Loop"));
         macro.while_(
-          "!pastround 15 && !hppercentbelow 30 && hasskill Infinite Loop",
+          `!pastround 15 && !hppercentbelow ${healthPerc} && hasskill Infinite Loop`,
           Macro.trySkill(Skill.get("Infinite Loop"))
         );
       } else {
         macro.trySkill(Skill.get("Double Nanovision"));
         macro.while_(
-          "!pastround 15 && !hppercentbelow 30 && hasskill Double Nanovision",
+          `!pastround 15 && !hppercentbelow ${healthPerc} && hasskill Double Nanovision`,
           Macro.trySkill(Skill.get("Double Nanovision"))
         );
       }
@@ -256,7 +258,7 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
   }
 
   macro.if_(
-    "!pastround 15 && !hppercentbelow 30",
+    `!pastround 15 && !hppercentbelow ${healthPerc}`,
     Macro.tryItem(Item.get("Beehive"))
   );
   macro.while_("!pastround 15 && !hppercentbelow 30", Macro.attack());

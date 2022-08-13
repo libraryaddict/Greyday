@@ -40,7 +40,7 @@ export class QuestL6Friar implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getProperty("questL06Friar");
+    const status = getProperty("questL06Friar");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;

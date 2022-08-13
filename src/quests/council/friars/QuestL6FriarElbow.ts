@@ -18,7 +18,11 @@ import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { hasUnlockedLatteFlavor, LatteFlavor } from "../../../utils/LatteUtils";
+import {
+  getCurrentLatteFlavors,
+  hasUnlockedLatteFlavor,
+  LatteFlavor,
+} from "../../../utils/LatteUtils";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -44,7 +48,7 @@ export class QuestL6FriarElbow implements QuestInfo {
   }
 
   isAllAbsorbed(): boolean {
-    let absorbed = AbsorbsProvider.getReabsorbedMonsters();
+    const absorbed = AbsorbsProvider.getReabsorbedMonsters();
 
     return this.absorbs.find((a) => !absorbed.includes(a)) == null;
   }
@@ -65,6 +69,13 @@ export class QuestL6FriarElbow implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (
+      this.shouldWearLatte() &&
+      getCurrentLatteFlavors().includes(LatteFlavor.MEAT_DROP)
+    ) {
+      return QuestStatus.READY;
+    }
+
     if (!haveSkill(this.skill1) || !haveSkill(this.skill2)) {
       return QuestStatus.NOT_READY;
     }
@@ -83,7 +94,7 @@ export class QuestL6FriarElbow implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
     if (this.shouldWearLatte()) {
       outfit.addItem(this.latte);
@@ -97,7 +108,7 @@ export class QuestL6FriarElbow implements QuestInfo {
           if (availableAmount(this.umbrella) == 0) {
             DelayBurners.tryReplaceCombats();
           } else {
-            let burner = DelayBurners.getReadyDelayBurner();
+            const burner = DelayBurners.getReadyDelayBurner();
 
             if (burner != null) {
               burner.doFightSetup();

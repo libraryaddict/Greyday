@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  buy,
   buyUsingStorage,
   cliExecute,
   Familiar,
@@ -8,14 +9,17 @@ import {
   getRelated,
   haveFamiliar,
   Item,
+  itemAmount,
   mallPrice,
+  myMeat,
+  myStorageMeat,
   outfitPieces,
   print,
   printHtml,
   pullsRemaining,
   storageAmount,
+  toBoolean,
   toInt,
-  turnsPlayed,
   use,
 } from "kolmafia";
 import { GreySettings } from "./GreySettings";
@@ -45,7 +49,7 @@ export function getCopiers() {
 
 export class GreyPulls {
   static pullFratWarOutfit() {
-    for (let i of outfitPieces("Frat Warrior Fatigues")) {
+    for (const i of outfitPieces("Frat Warrior Fatigues")) {
       if (availableAmount(i) > 0) {
         continue;
       }
@@ -58,69 +62,16 @@ export class GreyPulls {
     GreyPulls.tryPull(Item.get("Gravy Boat"));
   }
 
-  static pullDeckOfLewdCards() {
-    GreyPulls.tryPull(Item.get("deck of lewd playing cards"));
-  }
-
-  static pullLynrdProtesters(items: Item[]) {
-    for (let i of items) {
-      GreyPulls.tryPull(i);
-    }
-  }
-
   static pullBoxOfMatches() {
     GreyPulls.tryPull(Item.get("book of matches"));
-  }
-
-  static pullStartingGear() {
-    GreyPulls.tryPull(Item.get("yule hatchet"));
-    GreyPulls.tryPull(Item.get("mafia thumb ring"));
-
-    if (storageAmount(Item.get("HOA regulation book")) > 0) {
-      GreyPulls.tryPull(Item.get("HOA regulation book"));
-    } else {
-      GreyPulls.tryPull(Item.get("Space Trip safety headphones"));
-    }
-
-    GreyPulls.tryPull(Item.get("Portable cassette player"));
-
-    if (!GreySettings.shouldAvoidTowerRequirements()) {
-      GreyPulls.tryPull(Item.get("Daily dungeon malware"), 50000);
-    }
-
-    GreyPulls.tryPull(Item.get("Teacher's Pen"));
-
-    let pantsgiving = Item.get("Pantsgiving");
-
-    if (availableAmount(pantsgiving) == 0 && storageAmount(pantsgiving) > 0) {
-      GreyPulls.tryPull(pantsgiving);
-    }
-  }
-
-  static pullNinjaGear() {
-    GreyPulls.tryPull(Item.get("ninja rope"));
-    GreyPulls.tryPull(Item.get("ninja crampons"));
-    GreyPulls.tryPull(Item.get("ninja carabiner"));
   }
 
   static pullScrip() {
     GreyPulls.tryPull(Item.get("Shore Inc. Ship Trip Scrip"));
   }
 
-  static pullSmut() {
-    GreyPulls.tryPull(Item.get("smut orc keepsake box"));
-  }
-
-  static pullEnchantedBean() {
-    GreyPulls.tryPull(Item.get("enchanted bean"));
-  }
-
   static pullMeatBuffers() {
     GreyPulls.tryPull(Item.get("Mick's IcyVapoHotness Inhaler"));
-  }
-
-  static pullTorsoAwareness() {
-    GreyPulls.tryPull(Item.get('"Remember the Trees" Shirt'));
   }
 
   static pullOre() {
@@ -128,7 +79,7 @@ export class GreyPulls {
       return;
     }
 
-    let ore = Item.get(getProperty("trapperOre"));
+    const ore = Item.get(getProperty("trapperOre"));
 
     if (ore == Item.get("none") || availableAmount(ore) >= 3) {
       return;
@@ -137,38 +88,25 @@ export class GreyPulls {
     this.tryPull(ore);
   }
 
-  static getPullableKey(): Item {
-    let items = getZappables(Item.get("Jarlsberg's key")).filter(
+  static getPullableKeys(): Item[] {
+    const items = getZappables(Item.get("Jarlsberg's key")).filter(
       (i) => !i.quest
     );
 
-    for (let i of items) {
-      if (storageAmount(i) <= 0) {
-        continue;
+    items.sort((i1, i2) => {
+      // If an item is in storage, and the other item isn't. Prioritize the item in storage.
+      if (storageAmount(i1) > 0 != storageAmount(i2) > 0) {
+        return storageAmount(i2) - storageAmount(i1);
       }
 
-      return i;
-    }
+      return mallPrice(i1) - mallPrice(i2);
+    });
 
-    items.sort((i1, i2) => mallPrice(i1) - mallPrice(i2));
-
-    return items[0];
-  }
-
-  static pullZappableKey() {
-    this.tryPull(this.getPullableKey());
-  }
-
-  static pullTeachersPen() {
-    GreyPulls.tryPull(Item.get("Teacher's Pen"));
-  }
-
-  static pullRatTangles() {
-    GreyPulls.tryPull(Item.get("tangle of rats tails"));
+    return items;
   }
 
   static pullGiantsCastle() {
-    for (let s of ["Mohawk Wig", "Amulet of Extreme Plot Significance"].map(
+    for (const s of ["Mohawk Wig", "Amulet of Extreme Plot Significance"].map(
       (s) => Item.get(s)
     )) {
       if (availableAmount(s) > 0) {
@@ -185,6 +123,26 @@ export class GreyPulls {
 
   static pullStarChart() {
     GreyPulls.tryPull(Item.get("Star Chart"));
+  }
+
+  static tryRetrieve(item: Item, maxCost: number = 30_000) {
+    if (pullsRemaining() >= 0) {
+      return this.tryPull(item, maxCost);
+    }
+
+    if (itemAmount(item) > 0) {
+      return;
+    }
+
+    if (availableAmount(item) > 0) {
+      cliExecute("retrieve " + item);
+    } else {
+      if (myMeat() > myStorageMeat()) {
+        buy(item, 1, maxCost);
+      } else {
+        buyUsingStorage(item, 1, maxCost);
+      }
+    }
   }
 
   static tryPull(item: Item, maxCost: number = 30_000) {
@@ -247,10 +205,10 @@ export class GreyCombatLocket {
 }
 
 export function getZappables(item: Item): Item[] {
-  let items: Item[] = [];
+  const items: Item[] = [];
 
   Object.keys(getRelated(item, "zap")).forEach((s) => {
-    let i = Item.get(s);
+    const i = Item.get(s);
 
     if (items.includes(i)) {
       return;
@@ -263,35 +221,55 @@ export function getZappables(item: Item): Item[] {
 }
 
 enum Required {
-  MUST = "You must have this",
-  VERY_USEFUL = "I'd prefer if you had this",
-  USEFUL = "Very useful, but can skip",
+  MUST = "You really should have these",
+  VERY_USEFUL = "Optional, but very very useful",
+  USEFUL = "Useful, but not major",
   MINOR = "Minor, can skip",
-  NOTE = "",
 }
 
 export class GreyRequirements {
   hasRequired() {
-    let dontHave: [string, Required][] = [];
+    const required: [string, string, Required, boolean][] = [];
+    const add = (
+      name: string | Item,
+      desc: string,
+      e: Required,
+      owns?: boolean
+    ) => {
+      if (name instanceof Item) {
+        owns = availableAmount(name) > 0;
+        name = name.name;
+      }
 
-    if (!haveFamiliar(Familiar.get("Grey Goose"))) {
-      dontHave.push([
-        "Grey Goose, why even play this path without it",
-        Required.MUST,
-      ]);
-    }
+      required.push([name, desc, e, owns]);
+    };
 
-    if (availableAmount(Item.get("Combat Lover's Locket")) == 0) {
-      dontHave.push([
-        "Combat Lovers Locket, currently hardcoded",
-        Required.MUST,
-      ]);
-    } else {
-      let locket = Object.keys(getLocketMonsters()).map((s) =>
-        s.toLowerCase().trim()
-      );
+    add(
+      "Grey Goose",
+      "Without this, Grey You isn't really feasible",
+      Required.MUST,
+      haveFamiliar(Familiar.get("Grey Goose"))
+    );
 
-      let monstersNeed: string[] = [
+    add(
+      "Gelatinous Cubeling",
+      "Saves about 10 turns if you're not doing a tower break",
+      Required.VERY_USEFUL,
+      haveFamiliar(Familiar.get("Gelatinous Cubeling"))
+    );
+
+    add(
+      Item.get("Combat Lover's Locket"),
+      "Used as a fax source, with some helpful enchants",
+      Required.VERY_USEFUL
+    );
+
+    const locket = Object.keys(getLocketMonsters()).map((s) =>
+      s.toLowerCase().trim()
+    );
+
+    if (locket.length > 0) {
+      const monstersLocket: string[] = [
         "pygmy witch lawyer",
         "mountain man",
         "cloud of disembodied whiskers",
@@ -299,164 +277,247 @@ export class GreyRequirements {
         "little man in the canoe",
         "fantasy bandit",
         "pygmy janitor",
-      ].filter((m) => !locket.includes(m));
+      ];
+      const monstersNeed = monstersLocket.filter((m) => !locket.includes(m));
+      const monstersHave = monstersLocket.filter((m) => locket.includes(m));
 
       if (monstersNeed.length > 0) {
-        dontHave.push([
-          "Combat Lovers Locket - You are missing the locket monsters: " +
-            monstersNeed.map((m) => "'" + m + "'").join(" & "),
+        add(
+          "Combat Locket: " + monstersNeed.join(", "),
+          "The script uses these in run, you are missing these from your combat locket",
           Required.MUST,
-        ]);
+          false
+        );
+      }
+
+      if (monstersHave.length > 0) {
+        add(
+          "Combat Locket: " + monstersHave.join(", "),
+          "The script uses these in run, you have these",
+          Required.MUST,
+          true
+        );
       }
     }
 
-    if (availableAmount(Item.get("industrial fire extinguisher")) == 0) {
-      dontHave.push([
-        "industrial fire extinguisher, can speed up by 20 turns",
-        Required.USEFUL,
-      ]);
-    }
+    add(
+      Item.get("Industrial Fire Extinguisher"),
+      "Can speed up by up 15 to 25 turns",
+      Required.USEFUL
+    );
 
-    if (availableAmount(Item.get("backup camera")) == 0) {
-      dontHave.push(["Backup Camera", Required.VERY_USEFUL]);
-    }
+    add(
+      Item.get("Backup Camera"),
+      "Great for +ML, Init and sometimes Fantasy Bandits & Lobsters",
+      Required.VERY_USEFUL
+    );
 
-    if (
-      availableAmount(Item.get("unwrapped knock-off retro superhero cape")) == 0
-    ) {
-      dontHave.push([
-        "unwrapped knock-off retro superhero cape, great for crypts",
+    add(
+      Item.get("unwrapped knock-off retro superhero cape"),
+      "Great for crypts & tower",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      "Mayday Contract",
+      "Gives a nice +combat cape and starting 5k meat boost",
+      Required.USEFUL,
+      toBoolean(getProperty("maydayContractOwned"))
+    );
+
+    add(
+      Item.get("Unbreakable Umbrella"),
+      "Awesome -Combat and +ML for Oil Peak",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      "Cosmic Bowling Ball",
+      "Banishes for all!",
+      Required.USEFUL,
+      toBoolean(getProperty("hasCosmicBowlingBall"))
+    );
+
+    add(
+      Item.get("miniature crystal ball"),
+      "Great for speeding up predictions",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      "Short Order Cook",
+      "Great for tower killing and provides an absorb at the start of your run",
+      Required.USEFUL,
+      haveFamiliar(Familiar.get("Short Order Cook"))
+    );
+
+    add(
+      Item.get("Clan VIP Lounge key"),
+      "Used to remove Beaten Up, and the +familiar effect!",
+      Required.MUST
+    );
+
+    add(
+      Item.get("Familiar Scrapbook"),
+      "Great for power leveling after GYou ends, and the offhand +1 fam exp!",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Item.get("Powerful Glove"),
+      "If not tower breaking, great for white pixels. If you have cursed mag glass, saves 5 turns?",
+      Required.USEFUL
+    );
+
+    add(
+      Item.get("Cursed Magnifying Glass"),
+      "Only really used for minor delay burning, and lobsters + powerful glove",
+      Required.MINOR
+    );
+
+    add(
+      Item.get("Cargo Cultist Shorts"),
+      "Used to fight Smut Orc to save 6 turns, or for the frat outfit to save pulls or 12 turns",
+      Required.USEFUL
+    );
+
+    add(
+      Item.get("HOA regulation book"),
+      "Prefered over headphones for the +2 res, saves 20? turns, especially on smut orcs",
+      Required.VERY_USEFUL
+    );
+    add(
+      Item.get("Space Trip safety headphones"),
+      "The book is prefered, but this still saves 20? turns, especially on smut orcs",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Item.get("Mafia Thumb Ring"),
+      "Gives roughly 30 extra adventures over the course of your run",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Item.get("Yule Hatchet"),
+      "Gives +2 fam exp every fight, basically a must have",
+      Required.MUST
+    );
+
+    add(
+      Item.get("Deck of lewd playing cards"),
+      "Speeds up Ron Protesters",
+      Required.USEFUL
+    );
+
+    add(
+      Item.get("SongBoom&trade; BoomBox"),
+      "Awesome for startup meat & nuns, then passive Special Seasoning generation you can use/sell",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Item.get("latte lovers member's mug"),
+      "Gives +3 familiar exp roughly 100 turns into the run",
+      Required.USEFUL
+    );
+
+    add(
+      Item.get("Designer Sweatpants"),
+      "Great for Ron Protesters, and restoring MP!",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Item.get("June Cleaver"),
+      "Great for 1.5k meat, occasional 5 advs, smut orcs and the teachers pen which is +2 fam exp!",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Item.get("mumming trunk"),
+      "Absolutely great for early game MP regeneration. Especially when you're tough on meat.",
+      Required.VERY_USEFUL
+    );
+
+    const poolSkill = Math.floor(
+      2 * Math.sqrt(toInt(getProperty("poolSharkCount")))
+    );
+
+    if (poolSkill < 10) {
+      add(
+        "Pool Skill",
+        `You can train this up using 11-Leaf Clovers to have a permanant +10 across ascensions. You currently have a pool skill of ${poolSkill}, we want 10. Try looking up "A Shark's Chum" in the kol wiki.`,
         Required.VERY_USEFUL,
-      ]);
+        false
+      );
+    } else {
+      add(
+        "Pool Skill",
+        "You have fully trained up your pool skill, which is great for the Billaird pool test!",
+        Required.MUST,
+        true
+      );
     }
 
-    if (getProperty("maydayContractOwned") != "true") {
-      dontHave.push([
-        "Mayday Contract, gives a nice +combat cape and 5k meat boost",
-        Required.USEFUL,
-      ]);
-    }
+    add(
+      "Melodramedary",
+      "Saves 3 adventures for desert!",
+      Required.MINOR,
+      haveFamiliar(Familiar.get("Melodramedary"))
+    );
 
-    if (availableAmount(Item.get("Unbreakable Umbrella")) == 0) {
-      dontHave.push([
-        "Unbreakable Umbrella - Great -combat and +ML",
-        Required.VERY_USEFUL,
-      ]);
-    }
+    add(
+      "Cat Burglar",
+      "Only used rarely, generally not worth picking up but does sometimes save 20k of resources in meat!",
+      Required.MINOR,
+      haveFamiliar(Familiar.get("Cat Burglar"))
+    );
 
-    if (getProperty("hasCosmicBowlingBall") != "true") {
-      dontHave.push(["Cosmic Bowling Ball, banishes!", Required.VERY_USEFUL]);
-    }
+    add(
+      Item.get("hewn moon-rune spoon"),
+      "Great for starting as vole, then switching to Blender! Probably worth 20 turns! Don't forget to setup your Greyday settings!",
+      Required.VERY_USEFUL
+    );
 
-    if (availableAmount(Item.get("miniature crystal ball")) == 0) {
-      dontHave.push(["miniature crystal ball", Required.VERY_USEFUL]);
-    }
-
-    if (!haveFamiliar(Familiar.get("Short Order Cook"))) {
-      dontHave.push([
-        "Short Order Cook - Only useful for the first 10 or so turns though",
-        Required.USEFUL,
-      ]);
-    }
-
-    if (availableAmount(Item.get("Clan VIP Lounge key")) == 0) {
-      dontHave.push(["Clan VIP Invitation", Required.MUST]);
-    }
-
-    if (availableAmount(Item.get("Familiar Scrapbook")) == 0) {
-      dontHave.push(["Familiar Scrapbook", Required.USEFUL]);
-    }
-
-    if (availableAmount(Item.get("Powerful Glove")) == 0) {
-      dontHave.push(["Powerful Glove", Required.VERY_USEFUL]);
-    }
-
-    if (availableAmount(Item.get("Cursed Magnifying Glass")) == 0) {
-      dontHave.push([
-        "Cursed Magnifying Glass, only really used for lobsters currently",
-        Required.MINOR,
-      ]);
-    }
-
-    if (availableAmount(Item.get("Cargo Cultist Shorts")) == 0) {
-      dontHave.push([
-        "Cargo Cultist Shorts, does save 10? turns",
-        Required.MINOR,
-      ]);
-    }
-
-    if (
-      availableAmount(Item.get("HOA regulation book")) +
-        availableAmount(Item.get("Space Trip safety headphones")) ==
-      0
-    ) {
-      dontHave.push([
-        "Need one of: HOA regulation book || Space Trip safety headphones, they save you 10+ turns",
-        Required.VERY_USEFUL,
-      ]);
-    }
-
-    if (availableAmount(Item.get("Mafia Thumb Ring")) == 0) {
-      dontHave.push(["Mafia Thumb Ring", Required.MUST]);
-    }
-
-    if (availableAmount(Item.get("Yule Hatchet")) == 0) {
-      dontHave.push(["Yule Hatchet (Come on, its cheap)", Required.MUST]);
-    }
-
-    if (availableAmount(Item.get("Deck of lewd playing cards")) == 0) {
-      dontHave.push(["Deck of lewd playing cards", Required.USEFUL]);
-    }
-
-    if (availableAmount(Item.get("SongBoom&trade; BoomBox")) == 0) {
-      dontHave.push([
-        "SongBoom&trade; BoomBox, great for startup meat and nuns",
-        Required.VERY_USEFUL,
-      ]);
-    }
-
-    if (availableAmount(Item.get("latte lovers member's mug")) == 0) {
-      dontHave.push([
-        "Latte lovers club card, great for familiar exp",
-        Required.MINOR,
-      ]);
-    }
-
-    if (availableAmount(Item.get("Designer Sweatpants")) == 0) {
-      dontHave.push([
-        "Designer Sweatpants, great for ron protesters and sometimes stat tests",
-        Required.MINOR,
-      ]);
-    }
-
-    if (availableAmount(Item.get("June Cleaver")) == 0) {
-      dontHave.push([
-        "June Cleaver, great for the 1.5k meat, for smut orcs, and good chance of a teacher's pen without having to use a pull",
-        Required.VERY_USEFUL,
-      ]);
-    }
+    required.sort((r1, r2) => r1[0].localeCompare(r2[0]));
 
     printHtml(
       '<div style="text-align: center;">======= Grey Requirements =======</div>'
     );
 
-    for (let [name, required] of dontHave) {
+    const tick = "<font color='green'>✔</font>";
+    const cross = "<font color='red'>✘</font>";
+
+    for (const e of Object.values(Required) as Required[]) {
       let color: string = "green";
 
-      if (required == Required.MUST) {
+      if (e == Required.MUST) {
         color = "red";
-      } else if (required == Required.VERY_USEFUL) {
-        color = "orange";
-      } else if (required == Required.USEFUL) {
+      } else if (e == Required.VERY_USEFUL) {
+        color = "#BC3823";
+      } else if (e == Required.USEFUL) {
         color = "blue";
-      } else if (required == Required.MINOR) {
+      } else if (e == Required.MINOR) {
         color = "gray";
+      } else {
+        continue;
       }
 
-      print(name + (required.length > 0 ? " = " + required : ""), color);
+      print("");
+      printHtml(`<div style="text-align: center;"> ${e} </div>`);
+      const values = required.filter((r) => r[2] == e);
+
+      for (const [name, desc, , has] of values) {
+        printHtml(
+          `${has ? tick : cross} <font color='${
+            has ? "" : "red"
+          }'>${name}</font> <font color='gray'>=> ${desc}</font>`
+        );
+      }
     }
 
-    if (dontHave.length == 0) {
+    if (required.find((r) => r[3] == false) == null) {
       printHtml(
         "<center color='green'>Wow! You have everything in here!</center>"
       );
@@ -464,98 +525,5 @@ export class GreyRequirements {
 
     printHtml('<div style="text-align: center;">===============</div>');
     // TODO Camelcalf?
-  }
-}
-
-/**
- * Limited usage resources
- */
-export enum ResourceType {
-  PULL,
-  GENIE_WISH,
-  BACKUP_CAMERA,
-  COMBAT_LOCKET,
-  CARGO_SHORTS,
-  POWERFUL_GLOVE,
-  FIRE_EXTINGUSHER,
-  YELLOW_RAY,
-  CLOVER,
-}
-
-export class ResourceClaim {
-  amountDesired: number;
-  resource: ResourceType;
-  reason: string;
-  turnsSaved: number;
-
-  constructor(
-    resource: ResourceType,
-    amount: number,
-    reason: string,
-    turnsSaved: number = -1
-  ) {
-    this.amountDesired = amount;
-    this.resource = resource;
-    this.reason = reason;
-    this.turnsSaved = turnsSaved;
-  }
-
-  isRequired(): boolean {
-    return this.turnsSaved == -1;
-  }
-
-  static getResourcesLeft(resourceType: ResourceType): number {
-    switch (resourceType) {
-      case ResourceType.PULL:
-        return GreySettings.isHardcoreMode() ? 0 : pullsRemaining();
-      case ResourceType.BACKUP_CAMERA:
-        return availableAmount(Item.get("Backup Camera")) > 0
-          ? 11 - toInt(getProperty("_backUpUses"))
-          : 0;
-      case ResourceType.COMBAT_LOCKET:
-        return availableAmount(Item.get("Combat Lover's Locket")) > 0
-          ? 3 -
-              getProperty("_locketMonstersFought")
-                .split(",")
-                .filter((s) => s.length > 0).length
-          : 0;
-      case ResourceType.CARGO_SHORTS:
-        return availableAmount(Item.get("Cargo Cultist Shorts")) == 0 ||
-          getProperty("_cargoPocketEmptied") == "true"
-          ? 0
-          : 1;
-      case ResourceType.POWERFUL_GLOVE:
-        return availableAmount(Item.get("Powerful Glove")) > 0
-          ? 100 - toInt(getProperty("_powerfulGloveBatteryPowerUsed"))
-          : 0;
-      case ResourceType.FIRE_EXTINGUSHER:
-        return availableAmount(Item.get("industrial fire extinguisher")) > 0
-          ? toInt(getProperty("_fireExtinguisherCharge"))
-          : 0;
-      case ResourceType.YELLOW_RAY:
-        return Math.floor((700 - turnsPlayed()) / 75);
-      case ResourceType.CLOVER:
-        return availableAmount(Item.get("11-leaf clover"));
-      default:
-        throw (
-          "No idea what the resource " + ResourceType[resourceType] + " is."
-        );
-    }
-  }
-}
-
-export class ResourceYRClaim extends ResourceClaim {
-  constructor(reason: string, turnsSaved: number = -1) {
-    super(ResourceType.YELLOW_RAY, 1, reason, turnsSaved);
-  }
-}
-
-export class ResourcePullClaim extends ResourceClaim {
-  item: Item;
-
-  constructor(item: Item, reason: string, turnsSaved: number = -1) {
-    super(ResourceType.PULL, 1, reason, turnsSaved);
-
-    this.item = item;
   }
 }

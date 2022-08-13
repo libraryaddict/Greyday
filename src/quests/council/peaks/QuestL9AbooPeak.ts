@@ -1,36 +1,31 @@
 import {
-  Item,
-  myHp,
-  myMaxhp,
-  restoreHp,
-  use,
-  Location,
-  elementalResistance,
-  Element,
   availableAmount,
-  toInt,
-  getProperty,
-  print,
-  numericModifier,
-  haveEffect,
-  effectModifier,
   cliExecute,
-  myLevel,
   Effect,
+  effectModifier,
+  Element,
+  elementalResistance,
   getFuel,
+  getProperty,
   getWorkshed,
+  haveEffect,
+  Item,
+  Location,
+  myHp,
+  myLevel,
+  print,
+  toInt,
+  use,
 } from "kolmafia";
-import { PropertyManager } from "../../../utils/Properties";
-import { greyAdv } from "../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { PropertyManager } from "../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
   QuestInfo,
   QuestStatus,
 } from "../../Quests";
-import { AdventureSettings } from "../../../utils/GreyLocations";
-import { GreyChoices } from "../../../utils/GreyChoices";
 import { QuestType } from "../../QuestTypes";
 
 export class ABooHandler implements QuestInfo {
@@ -62,13 +57,13 @@ export class ABooHandler implements QuestInfo {
   }
 
   runClue(): QuestAdventure {
-    let outfit = this.createOutfit();
+    const outfit = this.createOutfit();
 
     return {
       location: null,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         if (haveEffect(effectModifier(this.canOfPaint, "Effect")) == 0) {
           cliExecute("acquire 1 " + this.canOfPaint.name);
@@ -87,7 +82,7 @@ export class ABooHandler implements QuestInfo {
           props.setChoice(611, 1);
           use(this.clue);
 
-          let settings = new AdventureSettings();
+          const settings = new AdventureSettings();
           let turn = 0;
 
           settings.setChoices({
@@ -96,7 +91,7 @@ export class ABooHandler implements QuestInfo {
             },
 
             handleChoice: (choice: number) => {
-              let dmgTaken = this.damageTaken(turn++);
+              const dmgTaken = this.damageTaken(turn++);
 
               if (dmgTaken >= myHp() || this.getProgress() <= 0) {
                 return 2;
@@ -117,10 +112,10 @@ export class ABooHandler implements QuestInfo {
   }
 
   damageTaken(turn: number): number {
-    let dmg = this.damageLevels[turn];
+    const dmg = this.damageLevels[turn];
 
-    let sDmg = this.damageTakenByElement(dmg, Element.get("Spooky"));
-    let cDmg = this.damageTakenByElement(dmg, Element.get("Cold"));
+    const sDmg = this.damageTakenByElement(dmg, Element.get("Spooky"));
+    const cDmg = this.damageTakenByElement(dmg, Element.get("Cold"));
 
     return sDmg + cDmg;
   }
@@ -147,7 +142,7 @@ export class ABooHandler implements QuestInfo {
   }
 
   wouldSurviveClue(): boolean {
-    let damageLevels: number[] = [13, 25, 50, 125, 250];
+    const damageLevels: number[] = [13, 25, 50, 125, 250];
     let totalDamage: number = 2;
     let reducedBy: number = 0;
 
@@ -156,10 +151,10 @@ export class ABooHandler implements QuestInfo {
         return true;
       }
 
-      let dmg = damageLevels[i];
+      const dmg = damageLevels[i];
 
-      let sDmg = this.damageTakenByElement(dmg, Element.get("Spooky"));
-      let cDmg = this.damageTakenByElement(dmg, Element.get("Cold"));
+      const sDmg = this.damageTakenByElement(dmg, Element.get("Spooky"));
+      const cDmg = this.damageTakenByElement(dmg, Element.get("Cold"));
 
       totalDamage += cDmg + sDmg;
 
@@ -178,11 +173,11 @@ export class ABooHandler implements QuestInfo {
       return 1;
     }
 
-    let resist = elementalResistance(element) / 100.0;
+    const resist = elementalResistance(element) / 100.0;
 
-    let effective_base_damage = Math.max(30, base_damage);
+    const effective_base_damage = Math.max(30, base_damage);
 
-    let damage = Math.max(
+    const damage = Math.max(
       1,
       Math.ceil(base_damage - effective_base_damage * resist)
     );
@@ -191,14 +186,16 @@ export class ABooHandler implements QuestInfo {
   }
 
   createOutfit(): GreyOutfit {
-    let outfit = new GreyOutfit().addBonus("+40 cold res +40 spooky res");
+    const outfit = new GreyOutfit().addBonus(
+      "+40 cold res +40 spooky res -10 ML"
+    );
     outfit.hpWeight = 2;
 
     return outfit;
   }
 
   runCombat(): QuestAdventure {
-    let outfit = this.createOutfit();
+    const outfit = this.createOutfit();
 
     return {
       location: this.loc,

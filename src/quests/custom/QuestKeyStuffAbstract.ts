@@ -8,22 +8,16 @@ import {
   Monster,
   toInt,
 } from "kolmafia";
+import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { GreySettings } from "../../utils/GreySettings";
 import { canCombatLocket } from "../../utils/GreyUtils";
 
-export class QuestKeyStuffAbstract {
+export abstract class QuestKeyStuffAbstract extends TaskInfo {
   keys: Item[] = ["Boris's key", "Sneaky Pete's key", "Jarlsberg's key"].map(
     (s) => Item.get(s)
   );
   zappables: Item[] = [];
   token: Item = Item.get("Fat loot token");
-  wand: Item[] = [
-    "aluminum wand",
-    "ebony wand",
-    "hexagonal wand",
-    "marble wand",
-    "pine wand",
-  ].map((s) => Item.get(s));
 
   getKeysUsed(): Item[] {
     return getProperty("nsTowerDoorKeysUsed")
@@ -33,14 +27,16 @@ export class QuestKeyStuffAbstract {
       .filter((k) => this.keys.includes(k));
   }
 
+  abstract getPossiblePaths?(): PossiblePath[];
+
   getUnusedKeys(): Item[] {
-    let used = this.getKeysUsed();
+    const used = this.getKeysUsed();
 
     return this.keys.filter((i) => !used.includes(i));
   }
 
   getKeysUnavailable(): Item[] {
-    let used = this.getKeysUsed();
+    const used = this.getKeysUsed();
 
     return this.keys.filter(
       (k) => !used.includes(k) && availableAmount(k) == 0
@@ -48,9 +44,9 @@ export class QuestKeyStuffAbstract {
   }
 
   getOwnedZappables(): Item[] {
-    let owned: Item[] = [];
+    const owned: Item[] = [];
 
-    for (let i of this.getZappableItems()) {
+    for (const i of this.getZappableItems()) {
       for (let a = 0; a < availableAmount(i); a++) {
         owned.push(i);
       }
@@ -101,9 +97,9 @@ export class QuestKeyStuffAbstract {
 
   getZappableItems(): Item[] {
     if (this.zappables.length == 0) {
-      for (let i of this.keys) {
+      for (const i of this.keys) {
         Object.keys(getRelated(i, "zap")).forEach((s) => {
-          let i = Item.get(s);
+          const i = Item.get(s);
 
           if (this.zappables.includes(i) || this.keys.includes(i)) {
             return;

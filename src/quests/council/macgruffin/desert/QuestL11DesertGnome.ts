@@ -1,22 +1,18 @@
 import {
-  Location,
-  Familiar,
   availableAmount,
-  equip,
   getProperty,
   Item,
   itemAmount,
+  Location,
+  myMeat,
   print,
   retrieveItem,
   setProperty,
   toInt,
   use,
   visitUrl,
-  myMeat,
 } from "kolmafia";
-import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
-import { GreyPulls } from "../../../../utils/GreyResources";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -45,7 +41,7 @@ export class QuestL11DesertGnome implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Desert");
+    const status = getQuestStatus("questL11Desert");
 
     if (status < 0) {
       return QuestStatus.NOT_READY;
@@ -76,15 +72,7 @@ export class QuestL11DesertGnome implements QuestInfo {
       return QuestStatus.READY;
     }
 
-    if (
-      this.wantsWormPages() ||
-      this.wantsGnomeRose() ||
-      this.wantsGnomePaint()
-    ) {
-      return QuestStatus.NOT_READY;
-    }
-
-    return QuestStatus.COMPLETED;
+    return QuestStatus.NOT_READY;
   }
 
   mustBeDone(): boolean {
@@ -99,7 +87,7 @@ export class QuestL11DesertGnome implements QuestInfo {
     if (this.wantsGnomePaint() && myMeat() >= 1000) {
       return {
         location: null,
-        outfit: new GreyOutfit("-tie"),
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           if (itemAmount(Item.get("Can of black paint")) == 0) {
             retrieveItem(Item.get("Can of black paint"));
@@ -114,7 +102,7 @@ export class QuestL11DesertGnome implements QuestInfo {
     if (this.wantsGnomeKillingJar() && availableAmount(this.killingJar) > 0) {
       return {
         location: null,
-        outfit: new GreyOutfit("-tie"),
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           print("Giving gnome their killing jar");
 
@@ -126,7 +114,7 @@ export class QuestL11DesertGnome implements QuestInfo {
     if (this.wantsWormPages() && !this.needsMorePages()) {
       return {
         location: null,
-        outfit: new GreyOutfit("-tie"),
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           print("Giving gnome their pages");
           this.turnInItem();
@@ -137,7 +125,7 @@ export class QuestL11DesertGnome implements QuestInfo {
     if (this.wantsGnomeRose() && availableAmount(this.rose) > 0) {
       return {
         location: null,
-        outfit: new GreyOutfit("-tie"),
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           print("Giving gnome their rose");
           this.turnInItem();
@@ -154,7 +142,7 @@ export class QuestL11DesertGnome implements QuestInfo {
     visitUrl("choice.php?whichchoice=805&option=2&pwd=");
     visitUrl("choice.php?whichchoice=805&option=1&pwd=");
 
-    let item = Item.get("desert sightseeing pamphlet");
+    const item = Item.get("desert sightseeing pamphlet");
 
     if (availableAmount(item) <= 0) {
       return;
@@ -184,7 +172,7 @@ export class QuestL11DesertGnome implements QuestInfo {
       return false;
     }
 
-    let page = visitUrl("place.php?whichplace=desertbeach");
+    const page = visitUrl("place.php?whichplace=desertbeach");
 
     if (!page.includes("place.php?whichplace=desertbeach&action=db_gnasir")) {
       return false;

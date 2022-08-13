@@ -1,30 +1,21 @@
-import { canAdv } from "canadv.ash";
 import {
   Location,
-  Familiar,
   Item,
-  Effect,
-  haveEffect,
   myMeat,
   getProperty,
   toInt,
   myAscensions,
   availableAmount,
   use,
-  visitUrl,
-  retrieveItem,
-  extractItems,
-  getRelated,
   myDaycount,
-  setProperty,
   print,
   Monster,
+  getZapWand,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
 import { greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { GreyPulls } from "../../utils/GreyResources";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -35,13 +26,6 @@ import { QuestType } from "../QuestTypes";
 
 export class QuestGetZapWand implements QuestInfo {
   realDung: Location = Location.get("The Dungeons of Doom");
-  wand: Item[] = [
-    "aluminum wand",
-    "ebony wand",
-    "hexagonal wand",
-    "marble wand",
-    "pine wand",
-  ].map((s) => Item.get(s));
   deadMimic: Item = Item.get("dead mimic");
   plusSign: Item = Item.get("plus sign");
   toAbsorb: Monster[];
@@ -93,7 +77,9 @@ export class QuestGetZapWand implements QuestInfo {
   }
 
   getWand(): Item {
-    return this.wand.find((w) => availableAmount(w) > 0);
+    const wand = getZapWand();
+
+    return wand == Item.get("None") ? null : wand;
   }
 
   hasWandExploded() {
@@ -101,13 +87,13 @@ export class QuestGetZapWand implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat();
 
     return {
       outfit: outfit,
       location: this.realDung,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         props.setChoice(25, 2);
 

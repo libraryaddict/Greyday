@@ -1,18 +1,17 @@
 import {
-  Location,
-  Familiar,
-  Item,
   availableAmount,
-  Monster,
-  Skill,
+  Familiar,
   getProperty,
-  equippedItem,
-  equippedAmount,
+  Item,
+  Location,
+  Monster,
 } from "kolmafia";
-import { PropertyManager } from "../../../../utils/Properties";
+import { ResourceCategory } from "../../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -20,23 +19,40 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
-import { ResourceClaim, ResourceType } from "../../../../utils/GreyResources";
 
-export class QuestL11TempleGrabWool implements QuestInfo {
+export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
   wool: Item = Item.get("Stone Wool");
   loc: Location = Location.get("The Hidden Temple");
-  indus: Item = Item.get("industrial fire extinguisher");
-  polar: Skill = Skill.get("Fire Extinguisher: Polar Vortex");
   woolMonster: Monster = Monster.get("Baa-relief sheep");
-  resourceClaim: ResourceClaim = new ResourceClaim(
-    ResourceType.FIRE_EXTINGUSHER,
-    20,
-    "Polar Vortex Stone Wool",
-    6
+  polarPath: PossiblePath = new PossiblePath(1, 3).add(
+    ResourceCategory.POLAR_VORTEX,
+    2
   );
+  manual: PossiblePath = new PossiblePath(2, 8);
+  clover: PossiblePath = new PossiblePath(1).add(ResourceCategory.CLOVER);
+  fax: PossiblePath = new PossiblePath(1).add(ResourceCategory.FAXER);
+  deck: PossiblePath = new PossiblePath(0).add(
+    ResourceCategory.DECK_OF_EVERY_CARD
+  );
+  paths: PossiblePath[] = [];
 
-  getResourceClaims(): ResourceClaim[] {
-    return [this.resourceClaim];
+  createPaths(assumeUnstarted: boolean) {
+    this.paths = []; //[this.clover, this.fax, this.deck];
+
+    const amountNeeded = 2 - (assumeUnstarted ? 0 : availableAmount(this.wool));
+
+    this.paths.push(new PossiblePath(2, 4 * amountNeeded));
+    this.paths.push(
+      new PossiblePath(1, 3).add(ResourceCategory.POLAR_VORTEX, amountNeeded)
+    );
+
+    //if (!canFaxbot(this.monster)) {
+    // this.fax.addIgnored("Fax Machine");
+    // }
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
   }
 
   getId(): QuestType {
@@ -48,7 +64,7 @@ export class QuestL11TempleGrabWool implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Worship");
+    const status = getQuestStatus("questL11Worship");
 
     if (status > 1 || availableAmount(this.wool) > 0) {
       return QuestStatus.COMPLETED;
@@ -65,30 +81,28 @@ export class QuestL11TempleGrabWool implements QuestInfo {
     return getProperty("questM16Temple") == "finished";
   }
 
-  run(): QuestAdventure {
-    let outfit = new GreyOutfit().setItemDrops().setPlusCombat();
+  run(path: PossiblePath): QuestAdventure {
+    const outfit = new GreyOutfit().setItemDrops().setPlusCombat();
+    const resource = path.getResource(ResourceCategory.POLAR_VORTEX);
 
-    if (availableAmount(this.indus) > 0) {
-      outfit.addItem(this.indus);
+    if (resource != null) {
+      resource.prepare(outfit);
     }
 
     return {
       location: this.loc,
       outfit: outfit,
       run: () => {
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
         settings.addNoBanish(this.woolMonster);
 
-        if (equippedAmount(this.indus) > 0) {
+        if (resource != null) {
           settings.setStartOfFightMacro(
-            Macro.if_(
-              this.woolMonster,
-              Macro.skill(this.polar).skill(this.polar)
-            )
+            Macro.if_(this.woolMonster, resource.macro().step(resource.macro()))
           );
         }
 
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(580, 1); // Hidden heart of temple
         props.setChoice(583, 1); // Such confusing buttons
         props.setChoice(581, 3); // Fight cave bears

@@ -49,7 +49,7 @@ export class QuestTowerShadow implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL13Final");
+    const status = getQuestStatus("questL13Final");
 
     if (status < 10) {
       return QuestStatus.NOT_READY;
@@ -63,16 +63,16 @@ export class QuestTowerShadow implements QuestInfo {
   }
 
   getBestEquips(modifier: string): [Slot, Item][] {
-    let equips: [Slot, Item, number][] = [];
-    let none = Slot.get("None");
-    let weapon = Slot.get("Weapon");
+    const equips: [Slot, Item, number][] = [];
+    const none = Slot.get("None");
+    const weapon = Slot.get("Weapon");
 
-    for (let i of Item.all()) {
+    for (const i of Item.all()) {
       if (availableAmount(i) == 0) {
         continue;
       }
 
-      let slot = toSlot(i);
+      const slot = toSlot(i);
 
       if (slot == none || !canEquip(i)) {
         continue;
@@ -82,7 +82,7 @@ export class QuestTowerShadow implements QuestInfo {
         continue;
       }
 
-      let mod = numericModifier(i, modifier);
+      const mod = numericModifier(i, modifier);
 
       if (mod <= 0) {
         continue;
@@ -92,10 +92,10 @@ export class QuestTowerShadow implements QuestInfo {
     }
 
     equips.sort((e1, e2) => e2[2] - e1[2]);
-    let items: Item[] = [];
-    let toReturn: [Slot, Item][] = [];
+    const items: Item[] = [];
+    const toReturn: [Slot, Item][] = [];
 
-    for (let slot of [
+    for (const slot of [
       "Hat",
       "Weapon",
       "Offhand",
@@ -111,7 +111,7 @@ export class QuestTowerShadow implements QuestInfo {
         lookFor = Slot.get("Acc1");
       }
 
-      let item = equips.reduce((p, i) => {
+      const item = equips.reduce((p, i) => {
         if (i[0] != lookFor || items.includes(i[1])) {
           return p;
         }
@@ -133,7 +133,7 @@ export class QuestTowerShadow implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let map: Map<Slot, Item> = new Map();
+    const map: Map<Slot, Item> = new Map();
 
     if (availableAmount(this.badge) > 0) {
       map.set(Slot.get("Acc3"), this.badge);
@@ -143,7 +143,7 @@ export class QuestTowerShadow implements QuestInfo {
       map.set(Slot.get("Back"), this.cape);
     }
 
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
     outfit.hpWeight = 0;
     outfit.addBonus("+500 init 151 max +100 hp 500 max");
 
@@ -180,7 +180,7 @@ export class QuestTowerShadow implements QuestInfo {
           throw "Expected full health";
         }
 
-        let macro = Macro.item(this.guaze).repeat();
+        const macro = Macro.item(this.guaze).repeat();
 
         greyAdv(
           "place.php?whichplace=nstower&action=ns_09_monster5",

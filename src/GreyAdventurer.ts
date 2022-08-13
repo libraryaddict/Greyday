@@ -1,7 +1,6 @@
 import {
   availableAmount,
   bufferToFile,
-  cliExecute,
   Effect,
   Familiar,
   familiarWeight,
@@ -14,21 +13,18 @@ import {
   itemAmount,
   Location,
   maximize,
-  Monster,
   myAscensions,
   myMeat,
   myMp,
   print,
   printHtml,
   putCloset,
-  replace,
   setLocation,
   Skill,
   toInt,
   turnsPlayed,
   useFamiliar,
   useSkill,
-  visitUrl,
 } from "kolmafia";
 import { AdventureFinder, FoundAdventure } from "./GreyChooser";
 import { QuestAdventure } from "./quests/Quests";
@@ -43,7 +39,16 @@ import { Task } from "./tasks/Tasks";
 import { TaskSellCrap } from "./tasks/TaskSellCrap";
 import { TaskWorkshed } from "./tasks/TaskWorkshed";
 import {
-  Absorb,
+  getResourcesLeft,
+  ResourceId,
+  ResourceIds,
+} from "./typings/ResourceTypes";
+import {
+  createResourcesSnapshot,
+  getResourcesChanged,
+  ResourcesSnapshot,
+} from "./typings/TaskInfo";
+import {
   AbsorbsProvider,
   AdventureLocation,
   Reabsorbed,
@@ -68,19 +73,18 @@ export class GreyAdventurer {
     new TaskJuneCleaver(),
     new TaskBoomboxSwitch(),
   ];
-  visitedFamiliar: Familiar[] = [];
 
   runTurn(goTime: boolean): boolean {
     this.goTime = goTime;
 
     if (goTime) {
-      for (let task of this.tasks) {
+      for (const task of this.tasks) {
         task.run();
       }
     }
 
     this.adventureFinder.start();
-    let goodAdventure: FoundAdventure = this.adventureFinder.findGoodVisit();
+    const goodAdventure: FoundAdventure = this.adventureFinder.findGoodVisit();
 
     this.adventureFinder.printStatus();
 
@@ -89,8 +93,105 @@ export class GreyAdventurer {
       return false;
     }
 
-    let adv: FoundAdventure;
-    let plan: string[] = [];
+    const snapshot = createResourcesSnapshot(goodAdventure.path);
+
+    this.printMessage(goodAdventure);
+    this.runAdventure(goodAdventure);
+
+    const changed =
+      goodAdventure.path == null
+        ? getResourcesChanged(snapshot)
+        : goodAdventure.path.detectResourceUsage(snapshot);
+
+    if (this.isMismatch(snapshot, changed)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  isMismatch(
+    snapshotBeforeRun: ResourcesSnapshot,
+    changedBy: ResourcesSnapshot
+  ): boolean {
+    const expected: Map<ResourceId, number> = new Map();
+
+    for (const resourceId of ResourceIds) {
+      expected.set(resourceId, snapshotBeforeRun.resourceMap.get(resourceId));
+    }
+
+    for (const resource of changedBy.resources) {
+      expected.set(
+        resource.id,
+        expected.get(resource.id) - (resource.resourcesUsed ?? 1)
+      );
+    }
+
+    // Resource ID
+    // What it was before we used resources
+    // How much the snapshot said changed
+    // What it should be after we used resources
+    // What it currently is
+    const mismatch: Map<ResourceId, [number, number, number, number]> =
+      new Map();
+
+    for (const id of ResourceIds) {
+      if (expected.get(id) == getResourcesLeft(id)) {
+        continue;
+      }
+
+      // If we actually gained resources, probs clovers..
+      if (snapshotBeforeRun.resourceMap.get(id) < getResourcesLeft(id)) {
+        continue;
+      }
+
+      if (id == "Yellow Rocket") {
+        continue;
+      } else if (id == "Pull" && getResourcesLeft(id) > 50) {
+        continue;
+      }
+
+      mismatch.set(id, [
+        snapshotBeforeRun.resourceMap.get(id),
+        changedBy.resourceMap.get(id),
+        expected.get(id),
+        getResourcesLeft(id),
+      ]);
+    }
+
+    if (mismatch.size == 0) {
+      return false;
+    }
+
+    print(`Mismatch in resources used, aborting to be safe.`, "red");
+
+    print(
+      `These resources were allowed to be used: ${snapshotBeforeRun.resources.map(
+        (r) => r.id + " (" + r.type + ", uses " + (r.resourcesUsed ?? 1) + ")"
+      )}`,
+      "red"
+    );
+    print(
+      `These resources were marked as used: ${changedBy.resources.map(
+        (r) => r.id + " (" + r.type + ", uses " + (r.resourcesUsed ?? 1) + ")"
+      )}`,
+      "red"
+    );
+
+    mismatch.forEach(
+      ([beforeUsage, changedBy, shouldBe, actualResource], resourceId) => {
+        print(
+          `${resourceId} was ${beforeUsage} and calculated to be ${shouldBe}, expected to have changed by ${changedBy}. Is now ${actualResource}`,
+          "red"
+        );
+      }
+    );
+
+    return true;
+  }
+
+  printMessage(goodAdventure: FoundAdventure) {
+    const plan: string[] = [];
 
     if (goodAdventure.quest != null) {
       plan.push("Quest");
@@ -108,7 +209,7 @@ export class GreyAdventurer {
       }
 
       if (goodAdventure.locationInfo.skills.size > 0) {
-        let skills: string[] = [];
+        const skills: string[] = [];
 
         goodAdventure.locationInfo.skills.forEach((v, k) => {
           skills.push(k.skill.name + " (" + v + ")");
@@ -118,13 +219,13 @@ export class GreyAdventurer {
       }
 
       if (goodAdventure.locationInfo.monsters != null) {
-        let monsters: string[] = [];
+        const monsters: string[] = [];
 
-        let absorbed = this.adventureFinder.defeated;
+        const absorbed = this.adventureFinder.defeated;
 
         goodAdventure.locationInfo.monsters
           .map((m) => {
-            let absorb = AbsorbsProvider.getAbsorb(m);
+            const absorb = AbsorbsProvider.getAbsorb(m);
 
             if (absorb == null) {
               return m.name;
@@ -152,17 +253,17 @@ export class GreyAdventurer {
       }
     }
 
-    adv = goodAdventure;
     let prefix: string;
 
     if (goodAdventure.quest != null) {
-      adv.adventure = adv.quest.run();
+      goodAdventure.adventure = goodAdventure.quest.run(goodAdventure.path);
 
-      prefix = goodAdventure.quest.getId() + " @ " + adv.adventure.location;
+      prefix =
+        goodAdventure.quest.getId() + " @ " + goodAdventure.adventure.location;
     } else {
-      adv.adventure = this.getNonQuest(goodAdventure.locationInfo);
+      goodAdventure.adventure = this.getNonQuest(goodAdventure.locationInfo);
 
-      prefix = "Non-Quest @ " + adv.adventure.location;
+      prefix = "Non-Quest @ " + goodAdventure.adventure.location;
     }
 
     printHtml(
@@ -171,19 +272,16 @@ export class GreyAdventurer {
         ", Goals:</u> " +
         doColor(plan.map((s) => "<u>" + s + "</u>").join(", "), "gray")
     );
-
-    this.runAdventure(adv);
-    return true;
   }
 
   getNonQuest(adv: AdventureLocation): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (adv.location.combatPercent < 100) {
       outfit.setPlusCombat();
     }
 
-    let settings = new AdventureSettings();
+    const settings = new AdventureSettings();
     settings.nonquest = true;
     adv.monsters.forEach((m) => settings.addNoBanish(m));
 
@@ -197,26 +295,29 @@ export class GreyAdventurer {
     };
   }
 
-  doPrep(adventure: FoundAdventure) {
-    let toRun: QuestAdventure = adventure.adventure;
-    let outfit = toRun.outfit;
+  doOutfitPrep(adventure: FoundAdventure) {
+    const toRun: QuestAdventure = adventure.adventure;
+    const outfit = toRun.outfit;
 
-    if (toRun.location == Location.get("Inside the Palindome")) {
+    if (
+      outfit != null &&
+      toRun.location == Location.get("Inside the Palindome")
+    ) {
       outfit.addItem(Item.get("Talisman o' Namsilat"));
     }
 
     let familiar: Familiar = this.goose;
-    let wantToAbsorb: boolean =
+    const wantToAbsorb: boolean =
       adventure.locationInfo != null && adventure.locationInfo.turnsToGain > 0;
-    let gooseReplaceable =
+    const gooseReplaceable =
       !wantToAbsorb && this.adventureFinder.hasEnoughGooseWeight();
-    let canDoMagGlass: boolean =
+    const canDoMagGlass: boolean =
       this.adventureFinder.hasEnoughGooseWeight() &&
       outfit.minusCombatWeight == 0 &&
       outfit.itemDropWeight < 1 &&
       toInt(getProperty("cursedMagnifyingGlassCount")) < 13 &&
       toInt(getProperty("_voidFreeFights")) < 5;
-    let reallyLovesMagGlass =
+    const reallyLovesMagGlass =
       getProperty("sidequestLighthouseCompleted") == "none" &&
       availableAmount(Item.get("barrel of gunpowder")) < 5;
     let doOrb: boolean = false;
@@ -253,6 +354,8 @@ export class GreyAdventurer {
       outfit.addBonus("+" + bonus + " bonus familiar scrapbook");
     }
 
+    outfit.addBonus("+2 bonus lucky gold ring");
+
     if (toInt(getProperty("sweat")) < 100 && outfit.itemDropWeight < 1) {
       outfit.addBonus(`+8 bonus designer sweatpants`);
     }
@@ -265,7 +368,7 @@ export class GreyAdventurer {
     ) {
       familiar = toRun.familiar;
     } else if (gooseReplaceable) {
-      let replaceWith: Familiar[] = [];
+      const replaceWith: Familiar[] = [];
 
       // If we don't expect to be doing absorbs in the future..
       if (
@@ -289,12 +392,12 @@ export class GreyAdventurer {
         replaceWith.push(Familiar.get("Melodramedary"));
       }
 
-      let robor: Familiar = Familiar.get("Robortender");
-      let doRobor =
+      const robor: Familiar = Familiar.get("Robortender");
+      const doRobor =
         getProperty("_roboDrinks").includes("drive-by shooting") &&
         familiarWeight(robor) < 20;
 
-      let toLevelUp = [
+      const toLevelUp = [
         "Pocket Professor",
         haveFamiliar(Familiar.get("Frumious Bandersnatch"))
           ? "Frumious Bandersnatch"
@@ -343,11 +446,11 @@ export class GreyAdventurer {
       outfit.famExpWeight = 1;
     }
 
-    let maximizeResult = maximize(
+    const maximizeResult = maximize(
       outfit.createString() +
         " " +
-        (doOrb ? "+" : "-") +
-        "equip miniature crystal ball",
+        (doOrb ? "+99999 bonus" : "-equip") +
+        " miniature crystal ball",
       false
     );
 
@@ -355,37 +458,34 @@ export class GreyAdventurer {
       throw "Failed to maximize. Either fix, or report to the script author";
     }
 
-    let closet = Item.get("Funky junk key");
+    const closet = Item.get("Funky junk key");
 
     if (itemAmount(closet) > 0) {
       putCloset(closet, itemAmount(closet));
     }
-
-    // Temp workaround for a mafia bug
-    if (!this.visitedFamiliar.includes(familiar)) {
-      this.visitedFamiliar.push(familiar);
-      visitUrl("familiar.php");
-    }
   }
 
   runAdventure(adventure: FoundAdventure) {
-    let toRun: QuestAdventure = adventure.adventure;
-    let outfit = toRun.outfit;
+    const toRun: QuestAdventure = adventure.adventure;
 
-    if (outfit == null) {
-      toRun.outfit = outfit = new GreyOutfit();
+    if (toRun.outfit != GreyOutfit.IGNORE_OUTFIT) {
+      if (toRun.outfit == null) {
+        toRun.outfit = new GreyOutfit();
+      }
+
+      this.doOutfitPrep(adventure);
+    } else if (toRun.outfit == null) {
+      toRun.outfit = new GreyOutfit();
     }
 
-    this.doPrep(adventure);
-
     if (this.goTime) {
-      let turn = turnsPlayed();
+      const turn = turnsPlayed();
 
       try {
         toRun.run();
       } finally {
         if (GreySettings.greyDebug) {
-          let name = `grey_turns_played_${myAscensions()}.txt`;
+          const name = `grey_turns_played_${myAscensions()}.txt`;
 
           let buffer = fileToBuffer(name);
 
@@ -393,7 +493,7 @@ export class GreyAdventurer {
             buffer = "# Turns Played\tQuest ID\tLocation\tTurns Taken";
           }
 
-          let id = adventure.quest ? adventure.quest.getId() : "Non-Quest";
+          const id = adventure.quest ? adventure.quest.getId() : "Non-Quest";
 
           toRun.location;
 
@@ -451,11 +551,11 @@ export function castCombatSkill() {
 }
 
 export function hasNonCombatSkillsReady(wantBoth: boolean = true): boolean {
-  let s1 = haveSkill(Skill.get("Phase Shift"));
-  let s2 = haveSkill(Skill.get("Photonic Shroud"));
+  const s1 = haveSkill(Skill.get("Phase Shift"));
+  const s2 = haveSkill(Skill.get("Photonic Shroud"));
 
-  let s1e = haveEffect(Effect.get("Shifted Phase")) > 0;
-  let s2e = haveEffect(Effect.get("Darkened Photons")) > 0;
+  const s1e = haveEffect(Effect.get("Shifted Phase")) > 0;
+  const s2e = haveEffect(Effect.get("Darkened Photons")) > 0;
 
   if (wantBoth) {
     return (

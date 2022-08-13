@@ -38,7 +38,7 @@ export class QuestL11RonAirship implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Ron");
+    const status = getQuestStatus("questL11Ron");
 
     if (status < 2) {
       return QuestStatus.NOT_READY;
@@ -56,7 +56,7 @@ export class QuestL11RonAirship implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops();
 
     return {
       location: this.airship,
@@ -74,7 +74,7 @@ export class QuestL11RonAirship implements QuestInfo {
             .step(macro);
         }
 
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
         settings.setFinishingBlowMacro(macro);
         settings.addNoBanish(Monster.get("Red Skeleton"));
         settings.addNoBanish(Monster.get("Red Butler"));

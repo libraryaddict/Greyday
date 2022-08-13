@@ -1,28 +1,26 @@
 import {
   Location,
-  Familiar,
   Item,
   availableAmount,
   getProperty,
-  getRelated,
   toInt,
-  print,
   visitUrl,
-  cliExecute,
   pullsRemaining,
+  getZapWand,
 } from "kolmafia";
+import { PossiblePath } from "../../../../../typings/TaskInfo";
+import { QuestKeyStuffAbstract } from "../../../../custom/QuestKeyStuffAbstract";
 import {
-  getQuestStatus,
-  QuestAdventure,
   QuestInfo,
   QuestStatus,
-} from "../Quests";
-import { QuestType } from "../QuestTypes";
-import { QuestKeyStuffAbstract } from "./QuestKeyStuffAbstract";
+  getQuestStatus,
+  QuestAdventure,
+} from "../../../../Quests";
+import { QuestType } from "../../../../QuestTypes";
 
 export class QuestZapKeys extends QuestKeyStuffAbstract implements QuestInfo {
   tryZap(wand: Item, target: Item): Item {
-    let original: [Item, number][] = this.keys.map((z) => [
+    const original: [Item, number][] = this.keys.map((z) => [
       z,
       availableAmount(z),
     ]);
@@ -35,21 +33,21 @@ export class QuestZapKeys extends QuestKeyStuffAbstract implements QuestInfo {
       true
     );
 
-    let acquired: Item = original.find((z) => availableAmount(z[0]) > z[1])[0];
+    const acquired: Item = original.find(
+      (z) => availableAmount(z[0]) > z[1]
+    )[0];
 
     return acquired;
   }
+
+  getPossiblePaths?(): PossiblePath[];
 
   getTimesZapped(): number {
     return toInt(getProperty("_zapCount"));
   }
 
-  getWand(): Item {
-    return this.wand.find((w) => availableAmount(w) > 0);
-  }
-
   getId(): QuestType {
-    return "Council / Tower / Keys / ZapKeys";
+    return "Council / Tower / Keys / Heroes / ZapKeys";
   }
 
   level(): number {
@@ -61,7 +59,7 @@ export class QuestZapKeys extends QuestKeyStuffAbstract implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    let status = getQuestStatus("questL13Final");
+    const status = getQuestStatus("questL13Final");
 
     if (status < 5) {
       return QuestStatus.NOT_READY;
@@ -75,7 +73,7 @@ export class QuestZapKeys extends QuestKeyStuffAbstract implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    let zappables = this.getOwnedZappables();
+    const zappables = this.getOwnedZappables();
 
     if (zappables.length == 0) {
       return QuestStatus.NOT_READY;
@@ -88,19 +86,19 @@ export class QuestZapKeys extends QuestKeyStuffAbstract implements QuestInfo {
     return {
       location: null,
       run: () => {
-        let wand = this.getWand();
+        const wand = getZapWand();
 
-        if (wand == null) {
+        if (wand == Item.get("None")) {
           throw "Expected a wand! What happened!";
         }
 
-        let toZap = this.getOwnedZappables();
+        const toZap = this.getOwnedZappables();
 
         if (toZap.length == 0) {
           throw "Expected something to zap! What happened!";
         }
 
-        let zapped = this.tryZap(wand, toZap[0]);
+        const zapped = this.tryZap(wand, toZap[0]);
 
         if (!this.keys.includes(zapped)) {
           throw (

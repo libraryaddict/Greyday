@@ -1,11 +1,4 @@
-import {
-  Location,
-  Familiar,
-  Item,
-  availableAmount,
-  Monster,
-  outfit,
-} from "kolmafia";
+import { Location, Item, availableAmount, Monster } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
@@ -31,7 +24,7 @@ export class QuestL11ManorSoda implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Manor");
+    const status = getQuestStatus("questL11Manor");
 
     if (status < 2) {
       return QuestStatus.NOT_READY;
@@ -50,13 +43,13 @@ export class QuestL11ManorSoda implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops();
 
     return {
       location: this.laundry,
       outfit: outfit,
       run: () => {
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
         settings.addNoBanish(Monster.get("cabinet of Dr. Limpieza"));
 
         greyAdv(this.laundry, outfit, settings);

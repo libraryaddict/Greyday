@@ -1,19 +1,15 @@
 import {
   availableAmount,
   cliExecute,
-  currentRound,
   getLocketMonsters,
   getProperty,
   Item,
   Location,
   Monster,
-  myTurncount,
-  print,
   toInt,
   toLocation,
   toMonster,
   turnsPlayed,
-  urlEncode,
   visitUrl,
 } from "kolmafia";
 
@@ -32,8 +28,13 @@ export function centerText(text: string, color?: string): string {
   }><p style="margin: 0; padding: 0;">${text}</p></div>`;
 }
 
+const umbrella: Item = Item.get("Unbreakable Umbrella");
+
 export function setUmbrella(setting: UmbrellaState) {
-  if (getProperty("umbrellaState").includes(setting)) {
+  if (
+    availableAmount(umbrella) == 0 ||
+    getProperty("umbrellaState").includes(setting)
+  ) {
     return;
   }
 
@@ -41,7 +42,7 @@ export function setUmbrella(setting: UmbrellaState) {
 }
 
 export function canCombatLocket(monster: Monster): boolean {
-  let foughtToday: Monster[] = getProperty("_locketMonstersFought")
+  const foughtToday: Monster[] = getProperty("_locketMonstersFought")
     .split(",")
     .map((s) => toMonster(toInt(s)));
 
@@ -49,7 +50,7 @@ export function canCombatLocket(monster: Monster): boolean {
     return false;
   }
 
-  let monsters: Monster[] = Object.keys(getLocketMonsters()).map((s) =>
+  const monsters: Monster[] = Object.keys(getLocketMonsters()).map((s) =>
     toMonster(s)
   );
 
@@ -58,32 +59,6 @@ export function canCombatLocket(monster: Monster): boolean {
   }
 
   return true;
-}
-
-export function doPocketWishFight(monster: Monster) {
-  if (availableAmount(Item.get("Pocket Wish")) == 0) {
-    throw "Not enough pocket wishes!";
-  }
-
-  visitUrl("inv_use.php?pwd=&which=99&whichitem=9537");
-  visitUrl("choice.php?forceoption=0");
-
-  try {
-    visitUrl(
-      "choice.php?pwd=&option=1&whichchoice=1267&wish=" +
-        urlEncode("to fight " + monster.name),
-      true,
-      true
-    );
-  } catch (e) {
-    print(e);
-  }
-
-  visitUrl("choice.php");
-
-  if (currentRound() == 0) {
-    throw "Failed to wish in a monster";
-  }
 }
 
 export function getBackupsRemaining() {
@@ -153,4 +128,31 @@ export function currentPredictions(
       )
       .map(([, location, monster]) => [location, monster])
   );*/
+}
+export function getAllCombinations<Type>(valuesArray: Type[]): Type[][] {
+  const combi: Type[][] = [];
+  let temp: Type[] = [];
+  const slent: number = Math.pow(2, valuesArray.length);
+
+  for (let i = 0; i < slent; i++) {
+    temp = [];
+    for (let j = 0; j < valuesArray.length; j++) {
+      if (i & Math.pow(2, j)) {
+        temp.push(valuesArray[j]);
+      }
+    }
+    if (temp.length > 0) {
+      combi.push(temp);
+    }
+  }
+
+  combi.sort((a, b) => a.length - b.length);
+
+  return combi;
+}
+
+export function hasPulled(item: Item): boolean {
+  return getProperty("_roninStoragePulls")
+    .split(",")
+    .includes(toInt(item).toString());
 }

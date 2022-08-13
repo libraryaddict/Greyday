@@ -1,6 +1,7 @@
 import { Location } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
+import { QuestL7CryptPull } from "./crypts/QuestL7CryptPull";
 import { QuestL10Beanstalk } from "./QuestL10Giants";
 import { QuestL11MacGruffin } from "./QuestL11MacGruffin";
 import { QuestL12War } from "./QuestL12War";
@@ -26,6 +27,7 @@ export class QuestCouncil implements QuestInfo {
     this.quests.push(new QuestL5Goblin());
     this.quests.push(new QuestL6Friar());
     this.quests.push(new QuestL7Crypt());
+    this.quests.push(new QuestL7CryptPull());
     this.quests.push(new QuestL8IcePeak());
     this.quests.push(new QuestL9Smut());
     this.quests.push(new QuestL10Beanstalk());

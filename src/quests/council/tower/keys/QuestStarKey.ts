@@ -1,17 +1,16 @@
-import { canAdv } from "canadv.ash";
 import {
-  Location,
-  Item,
   availableAmount,
   getProperty,
-  retrieveItem,
-  Familiar,
-  pullsRemaining,
+  Item,
+  Location,
   Monster,
+  pullsRemaining,
+  retrieveItem,
 } from "kolmafia";
-import { PropertyManager } from "../../../../utils/Properties";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { GreySettings } from "../../../../utils/GreySettings";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -19,7 +18,6 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
-import { GreySettings } from "../../../../utils/GreySettings";
 
 export class QuestStarKey implements QuestInfo {
   location: Location = Location.get("The Hole in the sky");
@@ -48,6 +46,13 @@ export class QuestStarKey implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (
+      !this.hasEnoughMaterials() &&
+      GreySettings.shouldAvoidTowerRequirements()
+    ) {
+      return QuestStatus.COMPLETED;
+    }
+
     if (availableAmount(this.rocket) == 0) {
       return QuestStatus.NOT_READY;
     }
@@ -62,13 +67,6 @@ export class QuestStarKey implements QuestInfo {
       getProperty("_greyReachedTower") != "true"
     ) {
       return QuestStatus.NOT_READY;
-    }
-
-    if (
-      !this.hasEnoughMaterials() &&
-      GreySettings.shouldAvoidTowerRequirements()
-    ) {
-      return QuestStatus.COMPLETED;
     }
 
     return QuestStatus.READY;

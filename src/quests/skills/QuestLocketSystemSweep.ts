@@ -1,31 +1,22 @@
 import {
-  Location,
-  Familiar,
-  Monster,
-  Skill,
-  myMeat,
-  myLevel,
-  retrieveItem,
-  Item,
-  itemAmount,
-  visitUrl,
-  handlingChoice,
+  canFaxbot,
   currentRound,
-  toInt,
   Effect,
+  handlingChoice,
   haveEffect,
   haveSkill,
-  print,
-  cliExecute,
+  Item,
+  itemAmount,
+  Location,
+  Monster,
+  myLevel,
+  myMeat,
+  retrieveItem,
+  Skill,
 } from "kolmafia";
+import { ResourceCategory, ResourceId } from "../../typings/ResourceTypes";
+import { PossiblePath } from "../../typings/TaskInfo";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import {
-  ResourceClaim,
-  ResourceType,
-  ResourceYRClaim,
-} from "../../utils/GreyResources";
-import { GreySettings } from "../../utils/GreySettings";
-import { canCombatLocket } from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -35,32 +26,39 @@ export class QuestLocketSystemSweep implements QuestInfo {
   skill: Skill = Skill.get("System Sweep");
   rocket: Item = Item.get("Yellow Rocket");
   effect: Effect = Effect.get("Everything Looks Yellow");
+  fax: PossiblePath = new PossiblePath(1)
+    .add(ResourceCategory.FAXER)
+    .add(ResourceCategory.YELLOW_RAY)
+    .addIgnored("Cosplay Saber");
+  noPath: PossiblePath = new PossiblePath(10);
+  completed: boolean = false;
 
   level(): number {
     return 1;
   }
 
-  getResourceClaims(): ResourceClaim[] {
-    return [
-      new ResourceClaim(
-        ResourceType.COMBAT_LOCKET,
-        1,
-        "Combat Locket for System Sweep",
-        10
-      ),
-    ];
+  createPaths() {
+    if (!canFaxbot(this.monster)) {
+      this.fax.addIgnored("Fax Machine");
+    }
   }
 
-  status(): QuestStatus {
-    if (
-      GreySettings.isHardcoreMode() ||
-      !canCombatLocket(this.monster) ||
-      haveSkill(this.skill)
-    ) {
+  getPossiblePaths(): PossiblePath | PossiblePath[] {
+    return null; // return [this.fax, this.noPath];
+  }
+
+  status(path: PossiblePath): QuestStatus {
+    if (this.completed || haveSkill(this.skill)) {
       return QuestStatus.COMPLETED;
     }
 
-    if (haveEffect(this.effect) > 0) {
+    if (path == this.noPath) {
+      this.completed = true;
+
+      return QuestStatus.COMPLETED;
+    }
+
+    if (path == null || haveEffect(this.effect) > 0) {
       return QuestStatus.NOT_READY;
     }
 
@@ -73,8 +71,8 @@ export class QuestLocketSystemSweep implements QuestInfo {
     // return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+  run(path: PossiblePath): QuestAdventure {
+    const outfit = new GreyOutfit();
     outfit.addBonus("+init");
     outfit.addBonus("-ml");
 
@@ -88,16 +86,16 @@ export class QuestLocketSystemSweep implements QuestInfo {
           throw "Supposed to have a yellow rocket on hand!";
         }
 
-        let page1 = visitUrl("inventory.php?reminisce=1", false);
-        let url =
-          "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
-          toInt(this.monster);
-        visitUrl(url);
+        path.getResource(ResourceCategory.FAXER).fax(this.monster);
 
         Macro.item(this.rocket).submit();
 
         if (handlingChoice() || currentRound() != 0) {
           throw "We're supposed to be done with this locket fight!";
+        }
+
+        if (!haveSkill(this.skill)) {
+          throw "Expected to have system sweep!";
         }
       },
     };

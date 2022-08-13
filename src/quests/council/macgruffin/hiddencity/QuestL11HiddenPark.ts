@@ -1,15 +1,15 @@
 import {
-  Item,
-  toInt,
-  getProperty,
-  myAscensions,
   availableAmount,
+  getProperty,
+  Item,
   Location,
   Monster,
+  myAscensions,
+  toInt,
 } from "kolmafia";
-import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -42,11 +42,11 @@ export class QuestL11HiddenPark implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (this.needsSword() || !this.hasRelocatedJanitors()) {
-      return QuestStatus.READY;
+    if (!this.needsSword() && this.hasRelocatedJanitors()) {
+      return QuestStatus.COMPLETED;
     }
 
-    return QuestStatus.COMPLETED;
+    return QuestStatus.READY;
   }
 
   getId(): QuestType {

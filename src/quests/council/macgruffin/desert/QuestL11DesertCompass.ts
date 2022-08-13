@@ -1,28 +1,29 @@
 import {
-  Location,
-  Familiar,
   availableAmount,
   cliExecute,
-  Item,
+  Familiar,
   getProperty,
+  haveFamiliar,
+  Item,
+  Location,
   myAdventures,
   storageAmount,
 } from "kolmafia";
-import { PropertyManager } from "../../../../utils/Properties";
+import { ResourceCategory } from "../../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
 import { greyAdv } from "../../../../utils/GreyLocations";
-import {
-  GreyPulls,
-  ResourceClaim,
-  ResourcePullClaim,
-} from "../../../../utils/GreyResources";
-import { GreySettings } from "../../../../utils/GreySettings";
+import { GreyPulls } from "../../../../utils/GreyResources";
+import { PropertyManager } from "../../../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
-export class QuestL11DesertCompass implements QuestInfo {
+export class QuestL11DesertCompass extends TaskInfo implements QuestInfo {
   compass: Item = Item.get("UV-resistant compass");
   script: Item = Item.get("Shore Inc. Ship Trip Scrip");
   dontPullScriptAt: number = 6;
+  pullScript: PossiblePath = new PossiblePath(0).addConsumablePull(this.script);
+  noPull: PossiblePath = new PossiblePath(3);
+  camel: Familiar = Familiar.get("Melodramedary");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / Compass";
@@ -32,24 +33,25 @@ export class QuestL11DesertCompass implements QuestInfo {
     return 11;
   }
 
-  getResourceClaims(): ResourceClaim[] {
+  getPossiblePaths(): PossiblePath[] {
     if (storageAmount(this.script) <= this.dontPullScriptAt) {
-      return [];
+      return [this.noPull];
     }
 
-    return [new ResourcePullClaim(this.script, "Script for Compass", 3)];
+    return [this.noPull, this.pullScript];
   }
 
-  status(): QuestStatus {
-    if (myAdventures() < 40) {
-      return QuestStatus.NOT_READY;
-    }
-
+  status(path: PossiblePath): QuestStatus {
     if (
+      haveFamiliar(this.camel) ||
       availableAmount(this.compass) > 0 ||
       getProperty("questL11Desert") == "finished"
     ) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (myAdventures() < 40 && path == this.pullScript) {
+      return QuestStatus.NOT_READY;
     }
 
     if (getProperty("questL11Desert") == "unstarted") {
@@ -59,14 +61,11 @@ export class QuestL11DesertCompass implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     return {
       location: null,
       run: () => {
-        if (
-          GreySettings.isHardcoreMode() ||
-          storageAmount(this.script) <= this.dontPullScriptAt
-        ) {
+        if (!path.canUse(ResourceCategory.PULL)) {
           let props = new PropertyManager();
 
           try {
@@ -78,6 +77,7 @@ export class QuestL11DesertCompass implements QuestInfo {
           }
         } else {
           GreyPulls.pullScrip();
+          path.addUsed(ResourceCategory.PULL);
         }
 
         cliExecute("make " + this.compass.name);

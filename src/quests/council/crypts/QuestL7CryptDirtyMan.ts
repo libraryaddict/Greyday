@@ -1,24 +1,20 @@
 import {
-  availableAmount,
   Familiar,
   getProperty,
   haveSkill,
-  Item,
   Location,
   Monster,
   myFamiliar,
   Skill,
   toInt,
 } from "kolmafia";
-import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
+import { ResourceCategory } from "../../../typings/ResourceTypes";
+import { PossiblePath } from "../../../typings/TaskInfo";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
-import { greyKillingBlow } from "../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
-import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
 import { Macro } from "../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../utils/Properties";
-import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
+import { QuestAdventure, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { CryptL7Template } from "./CryptTemplate";
 
@@ -28,31 +24,47 @@ export class CryptL7DirtyMan extends CryptL7Template {
   dirty: Monster = Monster.get("dirty old lihc");
   sniff: Skill = Skill.get("Get a Good Whiff of This Guy");
   banisher: Skill = Skill.get("System Sweep");
-  fire: Item = Item.get("industrial fire extinguisher");
-  resourceClaim: ResourceClaim = new ResourceClaim(
-    ResourceType.FIRE_EXTINGUSHER,
-    20,
-    "Spray down Dirty Old Man",
-    availableAmount(this.cape) > 0 ? 4 : 9
+  spray: PossiblePath = new PossiblePath(8).add(
+    ResourceCategory.FIRE_EXTINGUSHER_ZONE
   );
+  nonSpray: PossiblePath = new PossiblePath(16);
+  paths: PossiblePath[] = [];
   advsAbsorb: Monster = Monster.get("basic lihc");
 
-  getResourceClaims(): ResourceClaim[] {
-    if (getProperty("fireExtinguisherCyrptUsed") == "true") {
-      return [];
+  createPaths(assumeUnused: boolean) {
+    this.paths = [];
+
+    const evilRemaining =
+      (assumeUnused || getProperty("questL07Cyrptic") == "unstarted"
+        ? 50
+        : toInt(getProperty(this.getProperty()))) - 25;
+
+    // Need to do this better, with actual math for retro/gravy
+    this.nonSpray = new PossiblePath(Math.ceil(evilRemaining / 2));
+
+    if (assumeUnused || getProperty("fireExtinguisherCyrptUsed") != "true") {
+      this.spray = new PossiblePath(Math.ceil((evilRemaining - 10) / 2)).add(
+        ResourceCategory.FIRE_EXTINGUSHER_ZONE
+      );
+
+      this.paths.push(this.spray);
     }
 
-    return [this.resourceClaim];
+    this.paths.push(this.nonSpray);
   }
 
-  run(): QuestAdventure {
-    let outfit = this.addRetroSword();
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
 
-    if (this.canSprayDown()) {
-      outfit.addItem(this.fire);
+  run(path: PossiblePath): QuestAdventure {
+    const outfit = this.addRetroSword();
+
+    if (path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE)) {
+      path.getResource(ResourceCategory.FIRE_EXTINGUSHER_ZONE).prepare(outfit);
     }
 
-    let fam = null;
+    const fam = null;
     /*  toInt(getProperty(this.getProperty())) >
       (getProperty("nosyNoseMonster") != "dirty old lihc" ? 31 : 27)
         ? this.sniffer
@@ -67,11 +79,11 @@ export class CryptL7DirtyMan extends CryptL7Template {
 
         let avoid: Macro;
 
-        if (this.canSprayDown()) {
+        if (path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE)) {
           // If its a dirty lich, don't spray down
           avoid = Macro.ifNot_(
             this.dirty,
-            Macro.trySkill(Skill.get("Fire Extinguisher: Zone Specific"))
+            path.getResource(ResourceCategory.FIRE_EXTINGUSHER_ZONE).macro()
           );
 
           if (
@@ -96,7 +108,7 @@ export class CryptL7DirtyMan extends CryptL7Template {
           start = avoid;
         }
 
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(157, 4);
 
         try {
@@ -112,14 +124,6 @@ export class CryptL7DirtyMan extends CryptL7Template {
         }
       },
     };
-  }
-
-  canSprayDown(): boolean {
-    return (
-      availableAmount(this.fire) > 0 &&
-      getProperty("fireExtinguisherCyrptUsed") != "true" &&
-      toInt(getProperty("_fireExtinguisherCharge")) >= 20
-    );
   }
 
   getProperty(): string {

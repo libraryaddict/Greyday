@@ -40,7 +40,7 @@ export class QuestL2SpookyLarva implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getProperty("questL02Larva");
+    const status = getProperty("questL02Larva");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;
@@ -70,7 +70,7 @@ export class QuestL2SpookyLarva implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (this.shouldWearLatte()) {
       outfit.addItem(this.latte);
@@ -84,13 +84,13 @@ export class QuestL2SpookyLarva implements QuestInfo {
       location: this.location,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         props.setChoice(502, 2);
         props.setChoice(505, 1);
 
         if (!this.shouldWearLatte() && this.toAbsorb.length == 0) {
-          let delay = DelayBurners.getReadyDelayBurner();
+          const delay = DelayBurners.getReadyDelayBurner();
 
           if (delay != null) {
             delay.doFightSetup();

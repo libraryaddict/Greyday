@@ -1,133 +1,107 @@
+import { canAdv } from "canadv.ash";
 import {
-  Monster,
+  Effect,
   Familiar,
   familiarWeight,
-  myAdventures,
-  print,
-  myLevel,
-  haveSkill,
-  Skill,
-  myBasestat,
-  Stat,
-  myMp,
-  Location,
-  printHtml,
   haveEffect,
-  Effect,
-  toInt,
+  haveSkill,
+  Location,
+  Monster,
+  myAdventures,
+  myBasestat,
+  myLevel,
+  myMp,
+  print,
+  printHtml,
+  Skill,
+  Stat,
 } from "kolmafia";
 import {
   hasCombatSkillActive,
   hasNonCombatSkillActive,
 } from "./GreyAdventurer";
+import { QuestRegistry } from "./quests/QuestRegistry";
 import { QuestAdventure, QuestInfo, QuestStatus } from "./quests/Quests";
+import { PossiblePath } from "./typings/TaskInfo";
+import { SimmedPath } from "./typings/TaskManager";
 import {
-  AdventureLocation,
-  AbsorbsProvider,
   Absorb,
+  AbsorbsProvider,
+  AdventureLocation,
   Reabsorbed,
 } from "./utils/GreyAbsorber";
 import { GreySettings } from "./utils/GreySettings";
 import { currentPredictions, doColor } from "./utils/GreyUtils";
-import { QuestRegistry } from "./quests/QuestRegistry";
-import { ResourceClaim, ResourceType } from "./utils/GreyResources";
-import { canAdv } from "canadv.ash";
 
 export interface FoundAdventure {
-  quest?: QuestInfo;
+  path: PossiblePath;
+  quest: QuestInfo;
   locationInfo?: AdventureLocation;
   adventure?: QuestAdventure;
 }
 
 export class AdventureFinder {
+  registry: QuestRegistry = new QuestRegistry();
   defeated: Map<Monster, Reabsorbed>;
-  viableQuests: QuestInfo[];
-  quester: GreyQuester = new GreyQuester();
+  viableQuests: [QuestInfo, PossiblePath][];
   absorbs: AbsorbsProvider = new AbsorbsProvider();
   goose: Familiar = Familiar.get("Grey Goose");
   goodAbsorbs: AdventureLocation[];
   questLocations: Location[];
-  resources: ResourceClaim[];
+  path: SimmedPath;
+
+  getAllRawQuests(): QuestInfo[] {
+    return this.registry.getQuestsInOrder();
+  }
+
+  getDoableQuests(): [QuestInfo, PossiblePath][] {
+    const quests: [QuestInfo, PossiblePath][] = [];
+
+    const tryAdd = (q: QuestInfo, path: PossiblePath) => {
+      if (q.level() > myLevel() || q.level() < 0) {
+        return;
+      }
+
+      if (
+        q.level() * (haveSkill(Skill.get("Infinite Loop")) ? 1 : 6) >
+        myBasestat(Stat.get("Muscle"))
+      ) {
+        return;
+      }
+
+      const status = q.status(path);
+
+      if (status == QuestStatus.NOT_READY || status == QuestStatus.COMPLETED) {
+        return;
+      }
+
+      quests.push([q, path]);
+    };
+
+    this.path.thisPath.forEach(([quest, path]) => {
+      tryAdd(quest, path);
+    });
+
+    return quests;
+  }
 
   start() {
     this.setPreAbsorbs();
-    this.doResourceClaims();
-    this.viableQuests = this.quester.getDoableQuests();
+    this.viableQuests = this.getDoableQuests();
     this.setAbsorbs();
     this.defeated = this.absorbs.getAbsorbedMonstersFromInstance();
     this.goodAbsorbs = this.absorbs.getExtraAdventures(this.defeated, true);
     this.setQuestLocations();
   }
 
-  noteResourceClaims() {
-    for (let resourceType of Object.keys(ResourceType)
-      .filter((k) => k.length == 1)
-      .map((k) => toInt(k))) {
-      print("Now doing resource " + ResourceType[resourceType], "blue");
-      let totalDesired = 0;
-
-      for (let claim of this.resources) {
-        if (claim.resource != resourceType) {
-          continue;
-        }
-
-        print(
-          claim.reason +
-            " - Wants " +
-            claim.amountDesired +
-            " - saves " +
-            claim.turnsSaved
-        );
-
-        totalDesired += claim.amountDesired;
-      }
-
-      if (totalDesired > ResourceClaim.getResourcesLeft(resourceType)) {
-        print(
-          "We want to use " +
-            totalDesired +
-            " but we only have " +
-            ResourceClaim.getResourcesLeft(resourceType) +
-            " left on " +
-            ResourceType[resourceType],
-          "red"
-        );
-      } else {
-        print(
-          "We want to use " +
-            totalDesired +
-            " / " +
-            ResourceClaim.getResourcesLeft(resourceType),
-          "gray"
-        );
-      }
-    }
-  }
-
-  doResourceClaims() {
-    this.resources = [];
-
-    for (let quest of this.quester.getAllQuests()) {
-      if (quest.level() < 1 || quest.getResourceClaims == null) {
-        continue;
-      }
-
-      if (quest.status() == QuestStatus.COMPLETED) {
-        continue;
-      }
-
-      this.resources.push(...quest.getResourceClaims());
-    }
-  }
-
   setPreAbsorbs() {
-    let defeated = this.absorbs.getAbsorbedMonstersFromInstance();
+    const defeated = this.absorbs.getAbsorbedMonstersFromInstance();
 
-    for (let quest of this.quester.getAllQuests()) {
+    for (const [quest] of this.path.thisPath) {
       quest.toAbsorb = [];
 
-      for (let loc of quest.getLocations()) {
-        let result = this.absorbs.getAdventuresInLocation(defeated, loc);
+      for (const loc of quest.getLocations()) {
+        const result = this.absorbs.getAdventuresInLocation(defeated, loc);
 
         if (result == null) {
           continue;
@@ -139,23 +113,26 @@ export class AdventureFinder {
   }
 
   setAbsorbs() {
-    let defeated = this.absorbs.getAbsorbedMonstersFromInstance();
+    const defeated = this.absorbs.getAbsorbedMonstersFromInstance();
 
-    for (let quest of this.quester.getAllQuests()) {
+    for (const [quest, path] of this.path.thisPath) {
       if (
-        quest.status() == QuestStatus.NOT_READY ||
-        quest.status() == QuestStatus.COMPLETED
+        quest.status(path) == QuestStatus.NOT_READY ||
+        quest.status(path) == QuestStatus.COMPLETED
       ) {
         continue;
       }
 
-      let run = quest.run();
+      const run = quest.run(path);
 
       if (run.location == null) {
         continue;
       }
 
-      let result = this.absorbs.getAdventuresInLocation(defeated, run.location);
+      const result = this.absorbs.getAdventuresInLocation(
+        defeated,
+        run.location
+      );
 
       quest.toAbsorb = result == null ? [] : result.monsters;
     }
@@ -164,8 +141,8 @@ export class AdventureFinder {
   setQuestLocations() {
     this.questLocations = [];
 
-    for (let quest of this.quester.getAllQuests()) {
-      if (quest.status() == QuestStatus.COMPLETED) {
+    for (const [quest, path] of this.path.thisPath) {
+      if (quest.status(path) == QuestStatus.COMPLETED) {
         continue;
       }
 
@@ -180,13 +157,13 @@ export class AdventureFinder {
   getNumberOfQuestsWithAdventures(): number {
     let count = 0;
 
-    loop: for (let quest of this.quester.getAllQuests()) {
-      if (quest.level() < 1 || quest.status() == QuestStatus.COMPLETED) {
+    loop: for (const [quest, path] of this.path.thisPath) {
+      if (quest.level() < 1 || quest.status(path) == QuestStatus.COMPLETED) {
         continue;
       }
 
-      for (let loc of quest.getLocations()) {
-        let advs = this.absorbs.getAdventuresInLocation(this.defeated, loc);
+      for (const loc of quest.getLocations()) {
+        const advs = this.absorbs.getAdventuresInLocation(this.defeated, loc);
 
         if (advs == null || advs.turnsToGain == 0) {
           continue;
@@ -200,19 +177,19 @@ export class AdventureFinder {
     return count;
   }
 
-  getQuestsWithAdventures(): [QuestInfo, AdventureLocation][] {
+  getQuestsWithAdventures(): [QuestInfo, PossiblePath, AdventureLocation][] {
     // We want to generate our adventues
 
-    let toReturn: [QuestInfo, AdventureLocation][] = [];
+    const toReturn: [QuestInfo, PossiblePath, AdventureLocation][] = [];
 
-    this.viableQuests.forEach((q) => {
-      let run = q.run();
+    this.viableQuests.forEach(([q, path]) => {
+      const run = q.run(path);
 
       if (run.location == null && q.getAbsorbs == null) {
         return;
       }
 
-      let outfit = run.outfit;
+      const outfit = run.outfit;
 
       if (
         outfit != null &&
@@ -222,7 +199,7 @@ export class AdventureFinder {
         return;
       }
 
-      let advs;
+      let advs: AdventureLocation;
 
       if (q.getAbsorbs != null) {
         advs = this.absorbs.getAdventuresByAbsorbs(
@@ -240,29 +217,29 @@ export class AdventureFinder {
         return;
       }
 
-      toReturn.push([q, advs]);
+      toReturn.push([q, path, advs]);
     });
 
     toReturn.sort((q1, q2) => {
-      if (q1[0].status() != q2[0].status()) {
+      if (q1[0].status(q1[1]) != q2[0].status(q2[1])) {
         return 0;
       }
 
-      return q1[1].turnsToGain - q2[1].turnsToGain;
+      return q1[2].turnsToGain - q2[2].turnsToGain;
     });
 
     return toReturn;
   }
 
-  getQuestsWithoutAdventures(): [QuestInfo, AdventureLocation][] {
+  getQuestsWithoutAdventures(): [QuestInfo, PossiblePath, AdventureLocation][] {
     // We want to level up our goose here
 
-    let toReturn: [QuestInfo, AdventureLocation][] = [];
+    const toReturn: [QuestInfo, PossiblePath, AdventureLocation][] = [];
 
-    this.viableQuests.forEach((q) => {
-      let run = q.run();
+    this.viableQuests.forEach(([q, path]) => {
+      const run = q.run(path);
 
-      let outfit = run.outfit;
+      const outfit = run.outfit;
 
       if (
         outfit != null &&
@@ -273,11 +250,11 @@ export class AdventureFinder {
       }
 
       if (run.location == null) {
-        toReturn.push([q, null]);
+        toReturn.push([q, path, null]);
         return;
       }
 
-      let advs = this.absorbs.getAdventuresInLocation(
+      const advs = this.absorbs.getAdventuresInLocation(
         this.defeated,
         run.location,
         true
@@ -287,14 +264,14 @@ export class AdventureFinder {
         return;
       }
 
-      toReturn.push([q, advs]);
+      toReturn.push([q, path, advs]);
     });
 
     return toReturn;
   }
 
   getNonQuestsWithSkills(): [AdventureLocation, number][] {
-    let toReturn: [AdventureLocation, number][] = this.goodAbsorbs
+    const toReturn: [AdventureLocation, number][] = this.goodAbsorbs
       .filter(
         (a) =>
           a.skills.size > 0 &&
@@ -312,7 +289,7 @@ export class AdventureFinder {
     // We want to generate our adventues
     // Returns a location and the adventures generated, with helpful skills given a weight / 10
 
-    let toReturn: [AdventureLocation, number][] = this.goodAbsorbs
+    const toReturn: [AdventureLocation, number][] = this.goodAbsorbs
       .filter(
         (a) =>
           a.turnsToGain > 0 &&
@@ -330,7 +307,7 @@ export class AdventureFinder {
     // We want to level up our goose here, and grab w/e required skills
     // Returns locations and the weight, where helpful skills are weight of 1, required are weight of 2
 
-    let toReturn: [AdventureLocation, number][] = this.goodAbsorbs
+    const toReturn: [AdventureLocation, number][] = this.goodAbsorbs
       .filter(
         (a) =>
           a.turnsToGain == 0 &&
@@ -353,7 +330,7 @@ export class AdventureFinder {
       return status;
     }
 
-    let outfit = runned.outfit;
+    const outfit = runned.outfit;
 
     if (outfit != null) {
       if (outfit.minusCombatWeight > 0 && hasBlessing) {
@@ -376,10 +353,10 @@ export class AdventureFinder {
 
   generateWeights(skills: Map<Absorb, string>): number {
     let weight = 0;
-    let handy = this.absorbs.getUsefulSkills();
-    let mustHave = this.absorbs.getMustHaveSkills();
+    const handy = this.absorbs.getUsefulSkills();
+    const mustHave = this.absorbs.getMustHaveSkills();
 
-    for (let k of skills.keys()) {
+    for (const k of skills.keys()) {
       let w = 0;
 
       if (!GreySettings.speedRunMode && handy.has(k.skill)) {
@@ -397,20 +374,19 @@ export class AdventureFinder {
   }
 
   getRecommendedFamiliars(): Familiar[] {
-    return this.quester
-      .getAllQuests()
-      .map((q) => {
+    return this.path.thisPath
+      .map(([q, path]) => {
         if (q.hasFamiliarRecommendation == null) {
           return null;
         }
 
-        let fam = q.hasFamiliarRecommendation();
+        const fam = q.hasFamiliarRecommendation();
 
         if (fam == null) {
           return null;
         }
 
-        let status = q.status();
+        const status = q.status(path);
 
         if (status == QuestStatus.COMPLETED) {
           return null;
@@ -435,16 +411,16 @@ export class AdventureFinder {
   }
 
   printStatus() {
-    let hasBlessing =
+    const hasBlessing =
       haveEffect(Effect.get("Brother Corsican's Blessing")) +
         haveEffect(Effect.get("A Girl Named Sue")) >
       0;
 
-    for (let quest of this.viableQuests) {
-      let status = quest.status();
-      status = this.getModifiedStatus(status, quest.run(), hasBlessing);
+    for (const [quest, path] of this.viableQuests) {
+      let status = quest.status(path);
+      status = this.getModifiedStatus(status, quest.run(path), hasBlessing);
 
-      let line =
+      const line =
         "<u>" +
         quest.getId() +
         "</u>: " +
@@ -455,9 +431,9 @@ export class AdventureFinder {
   }
 
   findGoodVisit(): FoundAdventure {
-    let abortNotEnoughAdventures =
+    const abortNotEnoughAdventures =
       myAdventures() <= GreySettings.adventuresBeforeAbort;
-    let generateAdventuresOrAbort: boolean =
+    const generateAdventuresOrAbort: boolean =
       myAdventures() <= GreySettings.adventuresGenerateIfPossibleOrAbort;
 
     if (abortNotEnoughAdventures) {
@@ -469,17 +445,17 @@ export class AdventureFinder {
     }
 
     let mustBeDone = this.viableQuests.filter(
-      (q) => q.mustBeDone != null && q.mustBeDone()
+      ([q]) => q.mustBeDone != null && q.mustBeDone()
     );
 
     if (
       mustBeDone.length > 1 &&
       mustBeDone.filter(
-        (m) => m.needAdventures == null || m.needAdventures() > 0
+        ([m]) => m.needAdventures == null || m.needAdventures() > 0
       ).length <= 1
     ) {
       mustBeDone = mustBeDone.filter(
-        (m) => m.needAdventures != null && m.needAdventures() <= 0
+        ([m]) => m.needAdventures != null && m.needAdventures() <= 0
       );
 
       if (mustBeDone.length > 1) {
@@ -490,7 +466,7 @@ export class AdventureFinder {
     if (mustBeDone.length > 1) {
       print(
         "Multiple quests demand to be done! " +
-          mustBeDone.map((q) => q.getId()).join(", "),
+          mustBeDone.map(([q]) => q.getId()).join(", "),
         "red"
       );
       print("This is not a real error, but not that great either.", "red");
@@ -498,10 +474,11 @@ export class AdventureFinder {
 
     if (mustBeDone.length > 0) {
       return {
-        quest: mustBeDone[0],
+        quest: mustBeDone[0][0],
+        path: mustBeDone[0][1],
         locationInfo: this.absorbs.getAdventuresInLocation(
           this.defeated,
-          mustBeDone[0].run().location,
+          mustBeDone[0][0].run(mustBeDone[0][1]).location,
           true
         ),
       };
@@ -515,27 +492,27 @@ export class AdventureFinder {
       return;
     }
 
-    let getPredicts = () => {
+    const getPredicts = () => {
       if (predicts == null) {
         predicts = currentPredictions();
       }
 
       return predicts;
     };
-    let hasBlessing =
+    const hasBlessing =
       haveEffect(Effect.get("Brother Corsican's Blessing")) +
         haveEffect(Effect.get("A Girl Named Sue")) >
       0;
 
-    let quests: [QuestInfo, AdventureLocation][] = [];
+    let quests: [QuestInfo, PossiblePath, AdventureLocation][] = [];
     let nonQuests: [AdventureLocation, number][] = [];
 
     if (this.hasEnoughGooseWeight() && myLevel() >= 5) {
       quests = this.getQuestsWithAdventures();
       nonQuests = this.getNonQuestsWithAdventures();
 
-      nonQuests = nonQuests.filter(([loc, num]) => {
-        let mon = getPredicts().get(loc.location);
+      nonQuests = nonQuests.filter(([loc]) => {
+        const mon = getPredicts().get(loc.location);
 
         loc.shouldRunOrb = mon == null || loc.monsters.includes(mon);
         loc.ensuredOrb = mon != null && loc.monsters.includes(mon);
@@ -561,27 +538,29 @@ export class AdventureFinder {
     // If we can't, then we see if we can find quests that don't want to run
     // If we can't, then we abort.
 
-    let bestQuest: [QuestInfo, AdventureLocation];
+    let bestQuest: [QuestInfo, PossiblePath, AdventureLocation];
     let bestStatus: QuestStatus;
     let bestWantsResetOrb: boolean;
     let bestWantsToRunOrb: boolean;
     let predicts: Map<Location, Monster>;
 
-    for (let quest of quests) {
-      let status = quest[0].status();
+    for (const holder of quests) {
+      const [quest, path, adv] = holder;
+
+      let status = quest.status(path);
       let runned: QuestAdventure;
       let wantToResetOrb: boolean = false;
       let wantsToRunOrb: boolean = false;
 
       if (
         this.hasEnoughGooseWeight() &&
-        quest[1] != null &&
-        quest[1].monsters.length > 0
+        adv != null &&
+        adv.monsters.length > 0
       ) {
-        let a = quest[1];
-        runned = quest[0].run();
+        const a = adv;
+        runned = quest.run(path);
 
-        let current = getPredicts().get(a.location);
+        const current = getPredicts().get(a.location);
 
         if (current == null || a.monsters.includes(current)) {
           wantsToRunOrb = true;
@@ -602,7 +581,7 @@ export class AdventureFinder {
 
       if (status == QuestStatus.READY) {
         if (runned == null) {
-          runned = quest[0].run();
+          runned = quest.run(path);
         }
 
         status = this.getModifiedStatus(status, runned, hasBlessing);
@@ -622,8 +601,8 @@ export class AdventureFinder {
         }
       }
 
-      bestQuest = quest;
-      bestStatus = quest[0].status();
+      bestQuest = holder;
+      bestStatus = quest.status(path);
       bestWantsResetOrb = wantToResetOrb;
       bestWantsToRunOrb = wantsToRunOrb;
     }
@@ -631,7 +610,8 @@ export class AdventureFinder {
     if (bestQuest != null && bestWantsToRunOrb) {
       return {
         quest: bestQuest[0],
-        locationInfo: bestQuest[1],
+        path: bestQuest[1],
+        locationInfo: bestQuest[2],
       };
     }
 
@@ -640,19 +620,19 @@ export class AdventureFinder {
     if (nonQuests.length > 0) {
       let best: AdventureLocation;
 
-      for (let non of nonQuests) {
-        let mon = getPredicts().get(non[0].location);
+      for (const [adv] of nonQuests) {
+        const mon = getPredicts().get(adv.location);
 
-        non[0].shouldRunOrb =
+        adv.shouldRunOrb =
           this.hasEnoughGooseWeight() &&
-          (mon == null || non[0].monsters.includes(mon));
+          (mon == null || adv.monsters.includes(mon));
 
         // If we already have a best, and the would-be doesn't want to run orb
-        if (best != null && !non[0].shouldRunOrb) {
+        if (best != null && !adv.shouldRunOrb) {
           continue;
         }
 
-        best = non[0];
+        best = adv;
 
         if (best.shouldRunOrb) {
           break;
@@ -662,6 +642,7 @@ export class AdventureFinder {
       if (best != null && (bestQuest == null || best.shouldRunOrb)) {
         return {
           quest: null,
+          path: null,
           locationInfo: best,
         };
       }
@@ -670,7 +651,8 @@ export class AdventureFinder {
     if (bestQuest != null) {
       return {
         quest: bestQuest[0],
-        locationInfo: bestQuest[1],
+        path: bestQuest[1],
+        locationInfo: bestQuest[2],
       };
     }
 
@@ -679,44 +661,5 @@ export class AdventureFinder {
       "red"
     );
     return null;
-  }
-}
-
-class GreyQuester {
-  registry: QuestRegistry = new QuestRegistry();
-
-  getAllQuests(): QuestInfo[] {
-    return this.registry.getQuestsInOrder();
-  }
-
-  getDoableQuests(): QuestInfo[] {
-    let quests: QuestInfo[] = [];
-
-    let tryAdd = (q: QuestInfo) => {
-      if (q.level() > myLevel()) {
-        return;
-      }
-
-      if (
-        q.level() * (haveSkill(Skill.get("Infinite Loop")) ? 1 : 6) >
-        myBasestat(Stat.get("Muscle"))
-      ) {
-        return;
-      }
-
-      let status = q.status();
-
-      if (status == QuestStatus.NOT_READY || status == QuestStatus.COMPLETED) {
-        return;
-      }
-
-      quests.push(q);
-    };
-
-    this.getAllQuests().forEach((q) => {
-      tryAdd(q);
-    });
-
-    return quests;
   }
 }

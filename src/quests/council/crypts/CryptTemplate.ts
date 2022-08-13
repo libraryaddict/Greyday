@@ -1,22 +1,19 @@
 import {
-  Item,
   availableAmount,
-  retrieveItem,
-  getProperty,
   cliExecute,
-  myMeat,
-  Location,
-  toInt,
   equip,
+  getProperty,
+  Item,
+  Location,
+  myMeat,
+  retrieveItem,
+  toInt,
 } from "kolmafia";
+import { PossiblePath } from "../../../typings/TaskInfo";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import {
-  GreyPulls,
-  ResourceClaim,
-  ResourcePullClaim,
-} from "../../../utils/GreyResources";
+import { GreyPulls } from "../../../utils/GreyResources";
 import { GreySettings } from "../../../utils/GreySettings";
-import { QuestInfo, QuestStatus, QuestAdventure } from "../../Quests";
+import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { CryptStatus } from "../QuestL7Crypt";
 
@@ -39,18 +36,9 @@ export abstract class CryptL7Template implements QuestInfo {
   ].map((s) => Item.get(s));
   cape: Item = Item.get("Unwrapped knock-off retro superhero cape");
   gravyboat: Item = Item.get("Gravy Boat");
-  boatResource: ResourceClaim = new ResourcePullClaim(
-    this.gravyboat,
-    "Crypt Evil Supression",
-    10
-  );
-
-  getResourceClaims() {
-    return [this.boatResource];
-  }
 
   getSword(): Item {
-    let items = this.swords.filter((i) => availableAmount(i) > 0);
+    const items = this.swords.filter((i) => availableAmount(i) > 0);
 
     if (items.length == 0) {
       retrieveItem(Item.get("sweet ninja sword"));
@@ -73,13 +61,6 @@ export abstract class CryptL7Template implements QuestInfo {
     if (availableAmount(this.cape) > 0) {
       outfit.addItem(this.getSword(), 99999);
       outfit.addBonus("-back");
-    }
-
-    if (
-      availableAmount(this.gravyboat) == 0 &&
-      !GreySettings.isHardcoreMode()
-    ) {
-      GreyPulls.pullCrypts();
     }
 
     return outfit;
@@ -120,14 +101,14 @@ export abstract class CryptL7Template implements QuestInfo {
 
   abstract cryptStatus(): QuestStatus;
 
-  abstract run(): QuestAdventure;
+  abstract run(path?: PossiblePath): QuestAdventure;
 
   abstract getId(): QuestType;
 
   abstract getLocations(): Location[];
 
   getStatus(): CryptStatus {
-    let num = toInt(getProperty(this.getProperty()));
+    const num = toInt(getProperty(this.getProperty()));
 
     if (num > 25) {
       return CryptStatus.FIGHT;

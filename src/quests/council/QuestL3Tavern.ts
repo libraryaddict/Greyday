@@ -49,7 +49,7 @@ export class QuestL3Tavern implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getProperty("questL03Rat");
+    const status = getProperty("questL03Rat");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;
@@ -94,12 +94,12 @@ export class QuestL3Tavern implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let advTime = getQuestStatus("questL03Rat") == 1;
+    const advTime = getQuestStatus("questL03Rat") == 1;
 
     let outfit: GreyOutfit;
 
     if (!advTime) {
-      outfit = new GreyOutfit("-tie");
+      outfit = GreyOutfit.IGNORE_OUTFIT;
     } else {
       outfit = new GreyOutfit();
 
@@ -131,16 +131,16 @@ export class QuestL3Tavern implements QuestInfo {
           return;
         }
 
-        let props = new PropertyManager();
-        let eles: [string, number][] = [
+        const props = new PropertyManager();
+        const eles: [string, number][] = [
           ["Cold", 513],
           ["Hot", 496],
           ["Spooky", 515],
           ["Stench", 514],
         ];
 
-        for (let e of eles) {
-          let choice = numericModifier(e[0] + " Damage") >= 20 ? 2 : 1;
+        for (const e of eles) {
+          const choice = numericModifier(e[0] + " Damage") >= 20 ? 2 : 1;
 
           props.setChoice(e[1], choice);
         }
@@ -157,8 +157,8 @@ export class QuestL3Tavern implements QuestInfo {
             equip(this.umbrella);
           }
 
-          let layout = getProperty("tavernLayout");
-          let turns = turnsPlayed();
+          const layout = getProperty("tavernLayout");
+          const turns = turnsPlayed();
 
           changeMcd(10);
           greyAdv(this.layout.getLocation(), outfit);
@@ -187,13 +187,13 @@ class TavernLayout {
   locations: number[] = [3, 2, 1, 0, 5, 10, 15, 20, 16, 21];
 
   getLocation(): string {
-    let prop = getProperty("tavernLayout");
+    const prop = getProperty("tavernLayout");
 
     if (prop == "0000000000000000000000000") {
       visitUrl("cellar.php");
     }
 
-    for (let i of this.locations) {
+    for (const i of this.locations) {
       if (prop.charAt(i) != "0") {
         continue;
       }

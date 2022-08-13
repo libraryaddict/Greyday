@@ -57,7 +57,7 @@ export class QuestL5Goblin implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getProperty("questL05Goblin");
+    const status = getProperty("questL05Goblin");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;
@@ -71,7 +71,7 @@ export class QuestL5Goblin implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit()
+    const outfit = new GreyOutfit()
       .addItem(Item.get("Knob Goblin harem pants"))
       .addItem(Item.get("Knob Goblin harem veil"));
 

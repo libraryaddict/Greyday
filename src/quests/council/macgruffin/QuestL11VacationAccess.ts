@@ -1,14 +1,12 @@
 import {
-  Location,
-  Familiar,
-  myMeat,
-  gnomadsAvailable,
   buy,
   getProperty,
-  myAscensions,
-  toInt,
   Item,
   knollAvailable,
+  Location,
+  myAscensions,
+  myMeat,
+  toInt,
 } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
@@ -23,14 +21,11 @@ export class QuestL11ShoreAccess implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (
-      toInt(getProperty("lastDesertUnlock")) == myAscensions() ||
-      knollAvailable()
-    ) {
+    if (toInt(getProperty("lastDesertUnlock")) == myAscensions()) {
       return QuestStatus.COMPLETED;
     }
 
-    if (myMeat() < 6000) {
+    if (myMeat() < 6000 || knollAvailable()) {
       return QuestStatus.NOT_READY;
     }
 

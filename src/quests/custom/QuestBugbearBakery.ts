@@ -24,7 +24,6 @@ export class QuestBugbearBakery implements QuestInfo {
   asdon: Item = Item.get("Asdon Martin keyfob");
   garage: Location = Location.get("The Degrassi Knoll Garage");
   guard: Monster = Monster.get("Guard Bugbear");
-  effect: Effect = Effect.get("Everything Looks Yellow");
   nanovision: Skill = Skill.get("Double Nanovision");
 
   getId(): QuestType {
@@ -59,16 +58,16 @@ export class QuestBugbearBakery implements QuestInfo {
     if (knollAvailable()) {
       return {
         location: null,
-        outfit: new GreyOutfit("-tie"),
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
-          for (let item of outfitPieces("Bugbear Costume")) {
+          for (const item of outfitPieces("Bugbear Costume")) {
             cliExecute("acquire " + item.name);
           }
         },
       };
     }
 
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops();
 
     return {
       location: this.garage,

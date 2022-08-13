@@ -38,7 +38,7 @@ export class AdventureSettings {
   nonquest: boolean = false;
 
   addBanishes(monsters: Monster[]): AdventureSettings {
-    for (let monster of monsters) {
+    for (const monster of monsters) {
       this.addBanish(monster);
     }
 
@@ -60,7 +60,7 @@ export class AdventureSettings {
   }
 
   addNoBanishes(monsters: Monster[]): AdventureSettings {
-    for (let monster of monsters) {
+    for (const monster of monsters) {
       this.addNoBanish(monster);
     }
 
@@ -133,7 +133,7 @@ export function greyAdv(
 
   let macro: Macro;
 
-  let createMacro = function () {
+  const createMacro = function () {
     if (settings.startOfFightMacro == null) {
       macro = new Macro();
     } else {
@@ -155,9 +155,9 @@ export function greyAdv(
     }
   };
 
-  let choicesRun: number[] = [];
+  const choicesRun: number[] = [];
 
-  let runChoice = function () {
+  const runChoice = function () {
     let choiceToPick: number;
 
     if (Object.keys(availableChoiceOptions()).length == 0) {
@@ -169,7 +169,7 @@ export function greyAdv(
       return;
     }
 
-    let juneCleaver = lastChoice() >= 1467 && lastChoice() <= 1475;
+    const juneCleaver = lastChoice() >= 1467 && lastChoice() <= 1475;
 
     if (!juneCleaver && settings.choices != null) {
       if (settings.choices.callOutOfScopeChoiceBehavior(lastChoice())) {
@@ -182,10 +182,10 @@ export function greyAdv(
     if (choiceToPick == null) {
       choiceToPick = toInt(getProperty("choiceAdventure" + lastChoice()));
 
-      let unhandled = getProperty("_greyDebugUnhandledChoices")
+      const unhandled = getProperty("_greyDebugUnhandledChoices")
         .split(",")
         .filter((s) => s != "");
-      let unhandled2 = getProperty("_greyDebugUnhandledChoices2")
+      const unhandled2 = getProperty("_greyDebugUnhandledChoices2")
         .split(",")
         .filter((s) => s != "");
 
@@ -210,14 +210,14 @@ export function greyAdv(
 
     choicesRun.push(lastChoice());
 
-    let url =
+    const url =
       "choice.php?pwd=&whichchoice=" + lastChoice() + "&option=" + choiceToPick;
 
     visitUrl(url);
     print("Visited " + url);
   };
 
-  let runCombat = function () {
+  const runCombat = function () {
     if (macro == null) {
       createMacro();
     }
@@ -258,10 +258,10 @@ export function getLocations(monster: Monster): Location[] {
     return cachedLocations.get(monster);
   }
 
-  let locations: Location[] = [];
+  const locations: Location[] = [];
 
-  for (let l of Location.all()) {
-    let monsters: Monster[] = Object.keys(getLocationMonsters(l)).map((k) =>
+  for (const l of Location.all()) {
+    const monsters: Monster[] = Object.keys(getLocationMonsters(l)).map((k) =>
       Monster.get(k)
     );
 

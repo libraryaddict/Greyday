@@ -1,27 +1,28 @@
 import {
-  Location,
-  Familiar,
-  Effect,
-  haveEffect,
-  Item,
   availableAmount,
-  getProperty,
-  toInt,
-  use,
-  Monster,
-  Skill,
-  haveSkill,
-  haveFamiliar,
-  isBanished,
-  print,
+  Effect,
   equip,
   equippedAmount,
-  Slot,
+  Familiar,
+  getProperty,
+  haveEffect,
+  haveFamiliar,
+  haveSkill,
+  isBanished,
+  Item,
+  Location,
+  Monster,
   refreshStatus,
+  Skill,
+  Slot,
+  use,
   useFamiliar,
 } from "kolmafia";
-import { PropertyManager } from "../../../../utils/Properties";
+import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
+import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { currentPredictions } from "../../../../utils/GreyUtils";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -29,9 +30,6 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
-import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
-import { GreyOutfit } from "../../../../utils/GreyOutfitter";
-import { currentPredictions } from "../../../../utils/GreyUtils";
 
 export class QuestL11ShenTurnIn implements QuestInfo {
   disguise: Item = Item.get("Crappy Waiter Disguise");
@@ -68,10 +66,6 @@ export class QuestL11ShenTurnIn implements QuestInfo {
     let status = getQuestStatus("questL11Shen");
 
     if (status > 6) {
-      if (this.haveEffect()) {
-        return QuestStatus.READY;
-      }
-
       return QuestStatus.COMPLETED;
     }
 
@@ -177,6 +171,10 @@ export class QuestL11ShenTurnIn implements QuestInfo {
 
           if (this.haveEffect()) {
             refreshStatus();
+
+            if (this.haveEffect()) {
+              greyAdv(this.shenClub, outfit, settings);
+            }
           }
         } finally {
           props.resetAll();

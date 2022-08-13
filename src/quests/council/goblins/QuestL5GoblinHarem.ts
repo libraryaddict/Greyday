@@ -1,20 +1,11 @@
 import { canAdv } from "canadv.ash";
-import {
-  Location,
-  Familiar,
-  haveOutfit,
-  getProperty,
-  Item,
-  Skill,
-  toInt,
-  Monster,
-  print,
-  availableAmount,
-} from "kolmafia";
-import { greyAdv, AdventureSettings } from "../../../utils/GreyLocations";
+import { getProperty, haveOutfit, Location, Monster, print } from "kolmafia";
+import { ResourceCategory } from "../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
 import { Macro } from "../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -23,23 +14,20 @@ import {
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
-export class QuestL5GoblinHarem implements QuestInfo {
+export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
   harem: Location = Location.get("Cobb's Knob Harem");
-  extingisher: Item = Item.get("industrial fire extinguisher");
   toAbsorb: Monster[];
-  resourceClaim: ResourceClaim = new ResourceClaim(
-    ResourceType.FIRE_EXTINGUSHER,
-    20,
-    "Spray down thirsty goblin harem",
-    5
+  polarVortex: PossiblePath = new PossiblePath(0).add(
+    ResourceCategory.FIRE_EXTINGUSHER_ZONE
   );
+  taskYR: PossiblePath = new PossiblePath(2, 5).add(
+    ResourceCategory.YELLOW_RAY
+  );
+  taskManual = new PossiblePath(6, 10);
+  haremGirl: Monster = Monster.get("Knob Goblin Harem Girl");
 
-  getResourceClaims(): ResourceClaim[] {
-    if (getProperty("fireExtinguisherHaremUsed") == "true") {
-      return [];
-    }
-
-    return [this.resourceClaim];
+  getPossiblePaths(): PossiblePath[] {
+    return [this.taskManual, this.taskYR, this.polarVortex];
   }
 
   getId(): QuestType {
@@ -51,7 +39,11 @@ export class QuestL5GoblinHarem implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL05Goblin");
+    if (haveOutfit("knob Goblin Harem Girl Disguise")) {
+      return QuestStatus.COMPLETED;
+    }
+
+    const status = getQuestStatus("questL05Goblin");
 
     if (status < 1) {
       return QuestStatus.NOT_READY;
@@ -65,45 +57,57 @@ export class QuestL5GoblinHarem implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (haveOutfit("knob Goblin Harem Girl Disguise")) {
-      return QuestStatus.COMPLETED;
-    }
-
     return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+  run(path: PossiblePath): QuestAdventure {
+    const outfit = new GreyOutfit();
+    let resource = path.getResource(ResourceCategory.FIRE_EXTINGUSHER_ZONE);
 
-    if (
-      availableAmount(this.extingisher) > 0 &&
-      toInt(getProperty("_fireExtinguisherCharge")) >= 20 &&
-      getProperty("fireExtinguisherHaremUsed") != "true"
-    ) {
-      outfit.addItem(this.extingisher);
+    if (resource == null) {
+      resource = path.getResource(ResourceCategory.YELLOW_RAY);
+    }
+
+    if (resource != null) {
+      resource.prepare(outfit);
     } else {
       outfit.setItemDrops();
     }
 
     return {
-      location: Location.get("Cobb's Knob Harem"),
+      location: this.harem,
       outfit: outfit,
       run: () => {
         // When we have access to the harem, blast it down
-        let macro: Macro = Macro.trySkill(
-          Skill.get("Fire Extinguisher: Zone Specific")
-        );
+        let macro: Macro = new Macro();
+        const props = new PropertyManager();
 
-        // If its a monster we want to absorb, don't blast it down
-        for (let absorb of this.toAbsorb) {
-          macro = Macro.ifNot_(absorb as Monster, macro);
+        try {
+          if (resource != null) {
+            resource.prepare(null, props);
+
+            if (resource.type == ResourceCategory.FIRE_EXTINGUSHER_ZONE) {
+              macro = resource.macro();
+
+              // If its a monster we want to absorb, don't blast it down
+              for (const absorb of this.toAbsorb) {
+                macro = Macro.ifNot_(absorb as Monster, macro);
+              }
+
+              macro = Macro.ifNot_(Monster.get("Sausage Goblin"), macro);
+            } else if (resource.type == ResourceCategory.YELLOW_RAY) {
+              macro = Macro.if_(this.haremGirl, resource.macro());
+            }
+          }
+
+          greyAdv(
+            this.harem,
+            outfit,
+            new AdventureSettings().setStartOfFightMacro(macro)
+          );
+        } finally {
+          props.resetAll();
         }
-
-        greyAdv(
-          Location.get("Cobb's Knob Harem"),
-          outfit,
-          new AdventureSettings().setStartOfFightMacro(macro)
-        );
       },
     };
   }

@@ -1,13 +1,4 @@
-import {
-  Location,
-  Familiar,
-  Item,
-  availableAmount,
-  use,
-  cliExecute,
-  print,
-  getProperty,
-} from "kolmafia";
+import { availableAmount, getProperty, Item, Location, use } from "kolmafia";
 import { GreyChoices } from "../../../../utils/GreyChoices";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import {
@@ -43,7 +34,7 @@ export class QuestL11TempleNostril implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (availableAmount(this.nostril) == 1) {
+    if (availableAmount(this.nostril) > 0) {
       return QuestStatus.COMPLETED;
     }
 

@@ -1,37 +1,37 @@
 import {
-  getProperty,
-  itemAmount,
-  Item,
-  toInt,
   availableAmount,
-  Location,
-  maximize,
-  use,
-  visitUrl,
   canadiaAvailable,
-  numericModifier,
-  print,
-  haveSkill,
-  myMp,
-  Skill,
-  storageAmount,
-  myMeat,
+  cliExecute,
   Effect,
   effectModifier,
-  haveEffect,
-  cliExecute,
-  getWorkshed,
-  getFuel,
-  turnsPlayed,
-  equippedAmount,
   equip,
-  Slot,
+  equippedAmount,
+  getFuel,
+  getProperty,
+  getWorkshed,
+  haveEffect,
+  haveSkill,
+  Item,
+  itemAmount,
+  Location,
+  maximize,
   Monster,
+  myMeat,
+  myMp,
+  numericModifier,
+  print,
+  Skill,
+  Slot,
+  toInt,
+  turnsPlayed,
+  use,
+  visitUrl,
 } from "kolmafia";
-import { PropertyManager } from "../../../utils/Properties";
+import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { Macro } from "../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -39,13 +39,11 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
-import { QuestCargoShorts } from "./QuestSmutOrcsCargoShorts";
-import { ResourceClaim, ResourcePullClaim } from "../../../utils/GreyResources";
-import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
+import { QuestL9SmutOrcsCargoShorts } from "./QuestSmutOrcsCargoShorts";
 
 export class SmutOrcs implements QuestInfo {
   loc: Location = Location.get("The Smut Orc Logging Camp");
-  shorts: QuestCargoShorts = new QuestCargoShorts();
+  shorts: QuestL9SmutOrcsCargoShorts = new QuestL9SmutOrcsCargoShorts();
   hoaReg: Item = Item.get("HOA regulation book");
   spaceTrip: Item = Item.get("Space Trip safety headphones");
   canOfPaint: Item = Item.get("Can of black paint");
@@ -70,21 +68,12 @@ export class SmutOrcs implements QuestInfo {
     return 7;
   }
 
-  getResourceClaims(): ResourceClaim[] {
-    if (availableAmount(this.hoaReg) + storageAmount(this.hoaReg) > 0) {
-      return [new ResourcePullClaim(this.hoaReg, "-ML for Smut Orcs", 25)];
-    } else if (
-      availableAmount(this.spaceTrip) + availableAmount(this.hoaReg) >
-      0
-    ) {
-      return [new ResourcePullClaim(this.spaceTrip, "-ML for Smut Orcs", 25)];
-    }
-
-    return [];
+  getChildren(): QuestInfo[] {
+    return [this.shorts];
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL09Topping");
+    const status = getQuestStatus("questL09Topping");
 
     if (
       status < 0 ||
@@ -104,10 +93,10 @@ export class SmutOrcs implements QuestInfo {
         this.lastColdCheck = turnsPlayed();
 
         maximize("cold dmg 10 min -tie", true);
-        let melee = numericModifier("Generated:_spec", "Cold Damage");
+        const melee = numericModifier("Generated:_spec", "Cold Damage");
 
         maximize("cold spell dmg 10 min -tie", true);
-        let spell = numericModifier("Generated:_spec", "Cold Spell Damage");
+        const spell = numericModifier("Generated:_spec", "Cold Spell Damage");
 
         this.hasEnoughCold = Math.max(melee, spell) >= 5;
         this.lastColdMaximize = spell > melee ? "cold spell dmg" : "cold dmg";
@@ -157,7 +146,7 @@ export class SmutOrcs implements QuestInfo {
   }
 
   getChasmRemaining() {
-    let remaining = 30 - this.getChasmBuilt();
+    const remaining = 30 - this.getChasmBuilt();
 
     return remaining - Math.min(this.getFastenersHave(), this.getLumberHave());
   }
@@ -172,7 +161,7 @@ export class SmutOrcs implements QuestInfo {
 
   tryCombat(): QuestAdventure {
     // max -ml, max cold dmg, raise item drop finally
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
     outfit.minusMonsterLevelWeight = 5;
     outfit.setItemDrops();
 
@@ -180,7 +169,7 @@ export class SmutOrcs implements QuestInfo {
       this.getLumberHave() <= this.getFastenersHave() &&
       this.getChasmRemaining() > this.getLumberHave()
     ) {
-      let quest = this.tryHatchet();
+      const quest = this.tryHatchet();
 
       if (quest != null) {
         return quest;
@@ -208,8 +197,8 @@ export class SmutOrcs implements QuestInfo {
       run: () => {
         let attack: Macro;
 
-        let meleeDmg = numericModifier("Cold Damage");
-        let spellDmg = numericModifier("Cold Spell Damage");
+        const meleeDmg = numericModifier("Cold Damage");
+        const spellDmg = numericModifier("Cold Spell Damage");
 
         if (meleeDmg <= 0 && spellDmg <= 0) {
           throw "Not enough cold damage to do smut orcs!";
@@ -221,7 +210,7 @@ export class SmutOrcs implements QuestInfo {
           attack = Macro.skill("Grey Noise");
         }
 
-        for (let i of this.damagingEquips) {
+        for (const i of this.damagingEquips) {
           if (equippedAmount(i) > 0) {
             equip(Slot.get("Familiar"), Item.get("None"));
           }
@@ -241,12 +230,12 @@ export class SmutOrcs implements QuestInfo {
     return {
       location: null,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         let outfits = this.getBestBlechOutfit();
 
         if (outfits[0][2] < 14) {
-          let mox = outfits.find((o) => o[0] == 3);
-          let extraRes =
+          const mox = outfits.find((o) => o[0] == 3);
+          const extraRes =
             (haveEffect(this.paintRes) == 0 ? 1 : 0) +
             (getWorkshed() == this.asdonMartin &&
             haveEffect(this.driveSafe) == 0 &&
@@ -275,7 +264,7 @@ export class SmutOrcs implements QuestInfo {
           }
         }
 
-        let best = outfits[0];
+        const best = outfits[0];
 
         maximize(best[1], false);
 
@@ -293,7 +282,7 @@ export class SmutOrcs implements QuestInfo {
   tryExtraRes() {}
 
   isNCTime(): boolean {
-    let progress = getProperty("smutOrcNoncombatProgress");
+    const progress = getProperty("smutOrcNoncombatProgress");
 
     if (progress == "") {
       return false;
@@ -303,7 +292,7 @@ export class SmutOrcs implements QuestInfo {
   }
 
   tryBuild() {
-    let box = Item.get("Smut Orc Keepsake Box");
+    const box = Item.get("Smut Orc Keepsake Box");
 
     if (itemAmount(box) > 0) {
       use(box, itemAmount(box));
@@ -324,7 +313,7 @@ export class SmutOrcs implements QuestInfo {
       return;
     }
 
-    let loc = Location.get("Camp Logging Camp");
+    const loc = Location.get("Camp Logging Camp");
 
     if (
       loc.turnsSpent > 0 ||
@@ -347,10 +336,10 @@ export class SmutOrcs implements QuestInfo {
   // }
 
   simMax(ma: string): number {
-    let sim = maximize(ma, 0, 0, true, true);
+    const sim = maximize(ma, 0, 0, true, true);
     let score: number = 0;
 
-    for (let e of sim) {
+    for (const e of sim) {
       score += e.score;
     }
 
@@ -360,40 +349,40 @@ export class SmutOrcs implements QuestInfo {
   getBestBlechOutfit(): [number, string, number][] {
     // Stolen from autoscend
     // floor(sqrt((mus+flat_weapon_damage)/15*(1+percent_weapon_damage/100)))
-    let musMaximizer =
+    const musMaximizer =
       "100muscle,100weapon damage,1000weapon damage percent +switch left-hand man";
-    let mysMaximizer =
+    const mysMaximizer =
       "100mysticality,100spell damage,1000 spell damage percent +switch left-hand man";
-    let moxMaximizer = "100moxie,1000sleaze resistance +switch left-hand man";
+    const moxMaximizer = "100moxie,1000sleaze resistance +switch left-hand man";
 
     this.simMax(musMaximizer);
-    let musmus = numericModifier("Generated:_spec", "Buffed Muscle");
-    let musflat = numericModifier("Generated:_spec", "Weapon Damage");
-    let musperc = numericModifier("Generated:_spec", "Weapon Damage Percent");
-    let muscleScore = Math.floor(
+    const musmus = numericModifier("Generated:_spec", "Buffed Muscle");
+    const musflat = numericModifier("Generated:_spec", "Weapon Damage");
+    const musperc = numericModifier("Generated:_spec", "Weapon Damage Percent");
+    const muscleScore = Math.floor(
       Math.sqrt(((musmus + musflat) / 15) * (1 + musperc / 100))
     );
 
     this.simMax(mysMaximizer);
-    let mysmys = numericModifier("Generated:_spec", "Buffed Mysticality");
-    let mysflat = numericModifier("Generated:_spec", "Spell Damage");
-    let mysperc = numericModifier("Generated:_spec", "Spell Damage Percent");
-    let mystScore = Math.floor(
+    const mysmys = numericModifier("Generated:_spec", "Buffed Mysticality");
+    const mysflat = numericModifier("Generated:_spec", "Spell Damage");
+    const mysperc = numericModifier("Generated:_spec", "Spell Damage Percent");
+    const mystScore = Math.floor(
       Math.sqrt(((mysmys + mysflat) / 15) * (1 + mysperc / 100))
     );
 
     this.simMax(moxMaximizer);
-    let moxmox = numericModifier("Generated:_spec", "Buffed Moxie");
-    let moxres = numericModifier("Generated:_spec", "Sleaze Resistance");
-    let moxScore = Math.floor(Math.sqrt((moxmox / 30) * (1 + moxres * 0.69)));
+    const moxmox = numericModifier("Generated:_spec", "Buffed Moxie");
+    const moxres = numericModifier("Generated:_spec", "Sleaze Resistance");
+    const moxScore = Math.floor(Math.sqrt((moxmox / 30) * (1 + moxres * 0.69)));
 
     print("Mus Score: " + muscleScore, "blue");
     print("Myst Score: " + mystScore, "blue");
     print("Moxie Score: " + moxScore, "blue");
 
-    let mus: [number, string, number] = [1, musMaximizer, muscleScore];
-    let mys: [number, string, number] = [2, mysMaximizer, mystScore];
-    let mox: [number, string, number] = [3, moxMaximizer, moxScore];
+    const mus: [number, string, number] = [1, musMaximizer, muscleScore];
+    const mys: [number, string, number] = [2, mysMaximizer, mystScore];
+    const mox: [number, string, number] = [3, moxMaximizer, moxScore];
 
     return [mus, mys, mox].sort((m1, m2) => m2[2] - m1[2]);
   }

@@ -45,7 +45,7 @@ export class QuestFortuneExp implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         cliExecute("fortune buff familiar");
       },

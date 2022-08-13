@@ -1,43 +1,38 @@
 import {
-  availableAmount,
   Effect,
   getProperty,
   getRevision,
   haveEffect,
   Item,
-  lastChoice,
   myAdventures,
-  myHp,
-  myLocation,
-  myMaxhp,
   myPath,
-  myTurncount,
-  pathIdToName,
   print,
   printHtml,
   setProperty,
+  svnAtHead,
+  svnExists,
   toInt,
   toItem,
   turnsPlayed,
   visitUrl,
-  waitq,
 } from "kolmafia";
 import { GreyAdventurer } from "./GreyAdventurer";
-import { QuestRegistry } from "./quests/QuestRegistry";
 import { getQuestStatus } from "./quests/Quests";
-import { hasBanished, BanishType } from "./utils/Banishers";
+import { FigureOutPath } from "./typings/TaskManager";
 import { AbsorbsProvider } from "./utils/GreyAbsorber";
 import { GreyRequirements } from "./utils/GreyResources";
 import { getGreySettings, GreySettings } from "./utils/GreySettings";
 import { GreyTimings } from "./utils/GreyTimings";
 import { centerText } from "./utils/GreyUtils";
+import { lastCommitHash } from "./_git_commit";
 
 class GreyYouMain {
   adventures: GreyAdventurer;
   private reachedTower: string = "_greyReachedTower";
+  svn_name = "Kasekopf-loop-casual-branches-release";
 
   isRevisionPass(): boolean {
-    let required = 26545;
+    const required = 26545;
 
     if (getRevision() > 0 && getRevision() < required) {
       print(
@@ -59,16 +54,20 @@ class GreyYouMain {
   }
 
   doSettings() {
-    let settings = getGreySettings();
+    const settings = getGreySettings();
 
     printHtml(centerText("====== Grey Settings ======", "blue"));
 
     let html = "";
 
-    for (let setting of settings) {
+    for (const setting of settings) {
+      if (setting.viable == false) {
+        continue;
+      }
+
       html += "<br>";
 
-      let val = getProperty(setting.name);
+      const val = getProperty(setting.name);
 
       html += `<font color='blue'>${setting.name}</font> - <font color='gray'>${setting.description}</font>`;
       html += "<br>";
@@ -76,7 +75,9 @@ class GreyYouMain {
       if (setting.valid(val)) {
         html += `${this.getTick()} <font color='green'>Setting '${val}' is valid</font>`;
       } else if (val == "") {
-        html += `${this.getCross()} <font color='red'>Using default behavior</font>`;
+        html += `${this.getTick()} <font color=>Using default${
+          setting.default != null ? ` '${setting.default}'` : ""
+        }</font>`;
       } else {
         html += `${this.getCross()} <font color='red'>Invalid setting '${val}'</font>`;
       }
@@ -103,14 +104,17 @@ class GreyYouMain {
       "required - Prints off a series of requirements, which is both outdated and more severe than you need.",
       "blue"
     );
+    print(
+      "resources - A debug command that predicts what resources it would try to use in Grey You using your current settings",
+      "blue"
+    );
 
-    let color = myPath() == "Grey You" ? "blue" : "red";
+    const color = myPath() == "Grey You" ? "blue" : "red";
 
     if (color == "red") {
       print("You are not in Grey You, and cannot use these commands.", "gray");
     }
 
-    print("resources - A debug command for resource usage information", color);
     print(
       "run <Turns> - Run X amount of turns, or 1 if turns are not provided",
       color
@@ -126,8 +130,49 @@ class GreyYouMain {
     printHtml(centerText("======================================"));
   }
 
+  checkVersion() {
+    // Copied from Kasekopf's loopgyou
+    print(
+      `Running Greyday version [${
+        lastCommitHash ?? "custom-built"
+      }] in KoLmafia r${getRevision()}`,
+      `grey`
+    );
+
+    if (lastCommitHash !== undefined && svnExists(this.svn_name)) {
+      if (!svnAtHead(this.svn_name)) {
+        print(
+          'A newer version of this script is available and can be obtained with "svn update".',
+          "red"
+        );
+      } else {
+        print("This script is up to date.", "blue");
+      }
+    }
+  }
+
   handleCommand(command: string) {
     if (!this.isRevisionPass()) {
+      return;
+    }
+
+    this.checkVersion();
+
+    GreySettings.loadSettings();
+
+    if (command == "resources") {
+      const adv = new GreyAdventurer();
+      const path = new FigureOutPath().getPaths(
+        adv.adventureFinder.getAllRawQuests(),
+        true
+      );
+
+      if (path == null) {
+        print("Oh no! Path not found");
+        return;
+      }
+
+      path.printInfo();
       return;
     }
 
@@ -146,14 +191,6 @@ class GreyYouMain {
       return;
     }
 
-    if (command == "resources") {
-      let finder = new GreyAdventurer().adventureFinder;
-
-      finder.doResourceClaims();
-      finder.noteResourceClaims();
-      return;
-    }
-
     if (
       command != "absorbs" &&
       command != "run" &&
@@ -164,11 +201,11 @@ class GreyYouMain {
       return;
     }
 
-    let settings = getGreySettings();
-    let invalid: boolean = false;
+    const settings = getGreySettings();
+    const invalid: boolean = false;
 
-    for (let setting of settings) {
-      let val = getProperty(setting.name);
+    for (const setting of settings) {
+      const val = getProperty(setting.name);
 
       if (val == "" || setting.valid(val)) {
         continue;
@@ -203,12 +240,26 @@ class GreyYouMain {
     }
 
     this.adventures = new GreyAdventurer();
-    let s = command.split(" ");
+    const s = command.split(" ");
 
     if (command == "absorbs") {
       this.adventures.adventureFinder.absorbs.printRemainingAbsorbs();
       return;
     }
+
+    const simmedPath = new FigureOutPath().getPaths(
+      this.adventures.adventureFinder.getAllRawQuests()
+    );
+
+    if (simmedPath == null) {
+      print("Failed to find a way to accomplish!", "red");
+      return;
+    }
+
+    this.adventures.adventureFinder.path = simmedPath;
+
+    print("Resources planning..");
+    simmedPath.printInfo();
 
     if (command == "sim") {
       this.adventures.runTurn(false);
@@ -216,10 +267,10 @@ class GreyYouMain {
     } else if (s[0] == "go" || s[0] == "run") {
       const turns = toInt(s[1] || "1");
 
-      let effect: Effect = Effect.get("Beaten Up");
+      const effect: Effect = Effect.get("Beaten Up");
       let lastBeaten: number = 0;
 
-      let timings = new GreyTimings();
+      const timings = new GreyTimings();
       let turnsRunAsFar: number = 0;
 
       if (turns > 0) {
@@ -232,26 +283,12 @@ class GreyYouMain {
           turnsRunAsFar < turns && haveEffect(effect) - lastBeaten != 3;
           turnsRunAsFar++
         ) {
-          if (
-            GreySettings.greyBreakAtTower &&
-            getProperty(this.reachedTower) != "true" &&
-            getQuestStatus("questL13Final") >= 0
-          ) {
-            setProperty(this.reachedTower, "true");
-            visitUrl("place.php?whichplace=nstower");
-
-            print(
-              "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
-              "blue"
-            );
-            print("The script will continue when you run the script again.");
-
-            printEndOfRun();
+          if (this.shouldReturn()) {
             return;
           }
 
           lastBeaten = haveEffect(effect);
-          let run = this.adventures.runTurn(true);
+          const run = this.adventures.runTurn(true);
 
           if (!run) {
             break;
@@ -277,10 +314,32 @@ class GreyYouMain {
       return;
     }
   }
+
+  shouldReturn(): boolean {
+    if (
+      GreySettings.greyBreakAtTower &&
+      getProperty(this.reachedTower) != "true" &&
+      getQuestStatus("questL13Final") >= 0
+    ) {
+      setProperty(this.reachedTower, "true");
+      visitUrl("place.php?whichplace=nstower");
+
+      print(
+        "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
+        "blue"
+      );
+      print("The script will continue when you run the script again.");
+
+      printEndOfRun();
+      return true;
+    }
+
+    return false;
+  }
 }
 
 export function printEndOfRun() {
-  let pulls: Item[] = getProperty("_roninStoragePulls")
+  const pulls: Item[] = getProperty("_roninStoragePulls")
     .split(",")
     .map((s) => toItem(toInt(s)));
 

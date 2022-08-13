@@ -102,7 +102,7 @@ export class QuestL11Bowling implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getProperty("questL11Spare");
+    const status = getProperty("questL11Spare");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;
@@ -152,7 +152,7 @@ export class QuestL11Bowling implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (this.getProgress() >= 5 && availableAmount(this.bowlingBall) > 0) {
       outfit.addBonus("+max 0.1 elemental dmg");
@@ -191,13 +191,13 @@ export class QuestL11Bowling implements QuestInfo {
           retrieveItem(this.bowl);
         }
 
-        let progressPrior = this.getProgress();
+        const progressPrior = this.getProgress();
 
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(788, 1);
 
         try {
-          let settings = new AdventureSettings();
+          const settings = new AdventureSettings();
           settings.setStartOfFightMacro(macro);
           settings.addNoBanish(Monster.get("Pygmy Bowler"));
 

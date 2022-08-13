@@ -18,7 +18,7 @@ export class CryptL7Eyes extends CryptL7Template {
   loc: Location = Location.get("The Defiled Nook");
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops();
     this.addRetroSword(outfit);
 
     return {
@@ -27,7 +27,7 @@ export class CryptL7Eyes extends CryptL7Template {
       run: () => {
         this.adjustRetroCape();
 
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(155, 5);
 
         try {
@@ -42,7 +42,7 @@ export class CryptL7Eyes extends CryptL7Template {
 
         cliExecute("refresh inventory");
 
-        let item = Item.get("Evil Eye");
+        const item = Item.get("Evil Eye");
 
         if (availableAmount(item) > 0) {
           use(item, availableAmount(item));

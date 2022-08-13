@@ -1,10 +1,9 @@
 import {
   availableAmount,
   cliExecute,
-  getProperty,
   Item,
+  itemAmount,
   Location,
-  print,
   pullsRemaining,
   retrieveItem,
   storageAmount,
@@ -18,10 +17,11 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 import { QuestDigitalKey } from "../keys/QuestDigitalKey";
-import { QuestDailyDungeon } from "../keys/QuestDailyDungeon";
 import { QuestSkeletonKey } from "../keys/QuestSkeletonKey";
 import { QuestStarKey } from "../keys/QuestStarKey";
 import { QuestKeyStuffAbstract } from "../../../custom/QuestKeyStuffAbstract";
+import { QuestHeroKeys } from "../keys/heroes/QuestHeroKeys";
+import { PossiblePath } from "../../../../typings/TaskInfo";
 
 export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
   keyItems: [string, Item][] = [
@@ -35,10 +35,12 @@ export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
   children: QuestInfo[] = [
     new QuestSkeletonKey(),
     new QuestStarKey(),
-    new QuestDailyDungeon(),
     new QuestDigitalKey(),
+    new QuestHeroKeys(),
   ];
   refreshedStorage: boolean = false;
+
+  getPossiblePaths?(): PossiblePath[];
 
   getTokensAvailable(): number {
     if (pullsRemaining() == -1 && !this.refreshedStorage) {
@@ -53,7 +55,9 @@ export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
   }
 
   isReadyToRedeemTokens(): boolean {
-    let keysAvailable = this.keys.filter((k) => availableAmount(k) > 0).length;
+    const keysAvailable = this.keys.filter(
+      (k) => availableAmount(k) > 0
+    ).length;
 
     if (keysAvailable >= 3) {
       return false;
@@ -63,12 +67,12 @@ export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
   }
 
   redeemKeys(): QuestAdventure {
-    let keys = this.keys.filter((k) => availableAmount(k) == 0);
+    const keys = this.keys.filter((k) => availableAmount(k) == 0);
 
     return {
       location: null,
       run: () => {
-        for (let k of keys) {
+        for (const k of keys) {
           retrieveItem(k);
         }
       },
@@ -92,13 +96,13 @@ export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
   }
 
   getNotDone(): [string, Item][] {
-    let used = this.getKeysUsed();
+    const used = this.getKeysUsed();
 
     return this.keyItems.filter((k) => !used.includes(k[1]));
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL13Final");
+    const status = getQuestStatus("questL13Final");
 
     if (status < 5) {
       return QuestStatus.NOT_READY;
@@ -112,16 +116,11 @@ export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
       return QuestStatus.READY;
     }
 
-    let notDone = this.getNotDone();
-
-    if (
-      notDone.length == 0 ||
-      notDone.filter((s) => availableAmount(s[1]) > 0).length > 0
-    ) {
-      return QuestStatus.READY;
+    if (this.getNotDone().find(([, item]) => itemAmount(item) == 0) != null) {
+      return QuestStatus.NOT_READY;
     }
 
-    return QuestStatus.NOT_READY;
+    return QuestStatus.READY;
   }
 
   run(): QuestAdventure {
@@ -132,9 +131,9 @@ export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
     return {
       location: null,
       run: () => {
-        let notDone = this.getNotDone();
+        const notDone = this.getNotDone();
 
-        for (let s of notDone) {
+        for (const s of notDone) {
           if (availableAmount(s[1]) == 0) {
             continue;
           }

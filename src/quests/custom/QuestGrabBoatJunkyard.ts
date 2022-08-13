@@ -92,14 +92,14 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
       return this.doHippyJunk();
     }
 
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
     outfit.setItemDrops();
 
     return {
       location: this.location,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         if (this.needParts()) {
           if (closetAmount(this.junkKey) > 0 && this.toAbsorb.length == 0) {
@@ -186,8 +186,8 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
 }
 
 export function isJunkYardBoatApproach() {
-  let junkKey: Item = Item.get("funky junk key");
-  let boatParts: Item[] = [
+  const junkKey: Item = Item.get("funky junk key");
+  const boatParts: Item[] = [
     "old claw-foot bathtub",
     "old clothesline pole",
     "antique cigar sign",
@@ -206,7 +206,7 @@ export function isJunkYardBoatApproach() {
   return (
     itemAmount(junkKey) +
       closetAmount(junkKey) +
-      boatParts.reduce((i, p) => availableAmount(p) + i, 0) >
-    1
+      boatParts.reduce((i, p) => availableAmount(p) + i, 0) >=
+    3
   );
 }

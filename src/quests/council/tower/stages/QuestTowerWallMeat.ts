@@ -54,7 +54,7 @@ export class QuestTowerWallMeat implements QuestInfo {
 
   run(): QuestAdventure {
     return {
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       location: null,
       run: () => {
         let robo = Familiar.get("Grey Goose");

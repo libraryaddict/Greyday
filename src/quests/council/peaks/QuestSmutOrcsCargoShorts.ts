@@ -1,22 +1,17 @@
 import {
-  Location,
-  Familiar,
-  getProperty,
-  familiarWeight,
-  Skill,
-  pickPocket,
-  Monster,
-  myAdventures,
-  cliExecute,
-  print,
-  visitUrl,
-  runChoice,
-  Item,
   availableAmount,
+  Familiar,
+  familiarWeight,
+  Item,
+  Location,
+  myAdventures,
+  print,
+  Skill,
 } from "kolmafia";
+import { ResourceCategory } from "../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { greyKillingBlow } from "../../../utils/GreyCombat";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
 import { Macro } from "../../../utils/MacroBuilder";
 import {
   getQuestStatus,
@@ -26,8 +21,26 @@ import {
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
-export class QuestCargoShorts implements QuestInfo {
+export class QuestL9SmutOrcsCargoShorts extends TaskInfo implements QuestInfo {
   shorts: Item = Item.get("Cargo Cultist Shorts");
+  pathShorts: PossiblePath = new PossiblePath(-5).add(
+    ResourceCategory.CARGO_SHORTS
+  );
+  pathNoShorts: PossiblePath = new PossiblePath(0);
+  paths: PossiblePath[];
+
+  createPaths(assumeUnstarted: boolean) {
+    if (availableAmount(this.shorts) == 0) {
+      this.paths = [this.pathNoShorts];
+      return;
+    }
+
+    this.paths = [this.pathNoShorts, this.pathShorts];
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return [this.pathShorts, this.pathNoShorts];
+  }
 
   getId(): QuestType {
     return "Council / Peaks / CargoShortsSmut";
@@ -37,15 +50,12 @@ export class QuestCargoShorts implements QuestInfo {
     return 8;
   }
 
-  status(): QuestStatus {
-    if (
-      getProperty("_cargoPocketEmptied") == "true" ||
-      availableAmount(this.shorts) == 0
-    ) {
+  status(path: PossiblePath): QuestStatus {
+    if (path != null && !path.canUse(ResourceCategory.CARGO_SHORTS)) {
       return QuestStatus.COMPLETED;
     }
 
-    let status = getQuestStatus("questL09Topping");
+    const status = getQuestStatus("questL09Topping");
 
     if (status > 0) {
       return QuestStatus.COMPLETED;
@@ -62,19 +72,19 @@ export class QuestCargoShorts implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     return {
       location: null,
       familiar: Familiar.get("Grey Goose"),
       disableFamOverride: true,
       run: () => {
-        visitUrl("inventory.php?action=pocket");
-        visitUrl("choice.php?whichchoice=1420&option=1&pocket=666&pwd=");
+        path.getResource(ResourceCategory.CARGO_SHORTS).pocket(666);
 
-        let macro = Macro.skill(
+        const macro = Macro.skill(
           Skill.get("Emit Matter Duplicating Drones")
         ).step(greyKillingBlow(new GreyOutfit()));
         print("Macro: " + macro.toString());
+
         macro.submit();
       },
     };
@@ -90,11 +100,5 @@ export class QuestCargoShorts implements QuestInfo {
     }
 
     return false;
-  }
-
-  getResourceClaims(): ResourceClaim[] {
-    return [
-      new ResourceClaim(ResourceType.CARGO_SHORTS, 1, "Smut Orc Pervert"),
-    ];
   }
 }

@@ -1,31 +1,28 @@
 import {
-  Location,
-  Familiar,
-  Item,
   availableAmount,
-  Skill,
-  haveSkill,
-  haveFamiliar,
-  maximize,
-  Element,
-  numericModifier,
-  equip,
-  myFamiliar,
-  myMaxhp,
-  myHp,
-  toInt,
-  getProperty,
   cliExecute,
-  turnsPlayed,
-  haveEffect,
   Effect,
-  Monster,
+  Familiar,
+  getProperty,
+  haveEffect,
+  haveFamiliar,
+  Item,
+  Location,
+  maximize,
+  myFamiliar,
+  myHp,
+  myMaxhp,
+  numericModifier,
+  toInt,
+  turnsPlayed,
   useFamiliar,
 } from "kolmafia";
-import { PropertyManager } from "../../../../utils/Properties";
+import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
+import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -33,17 +30,11 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
-import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
-import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
 
 export class QuestTowerWallSkin implements QuestInfo {
   beehive: Item = Item.get("Beehive");
-  forest: QuestInfo = new QuestTowerBeeHive();
   killer: QuestTowerKillSkin = new QuestTowerKillSkin();
-
-  getChildren(): QuestInfo[] {
-    return [this.forest];
-  }
+  blackForest: Location = Location.get("The Black Forest");
 
   getId(): QuestType {
     return "Council / Tower / WallOfSkin";
@@ -54,7 +45,7 @@ export class QuestTowerWallSkin implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL13Final");
+    const status = getQuestStatus("questL13Final");
 
     if (status < 6) {
       return QuestStatus.NOT_READY;
@@ -64,16 +55,16 @@ export class QuestTowerWallSkin implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!this.killer.isPossible() && availableAmount(this.beehive) == 0) {
-      return QuestStatus.NOT_READY;
-    }
-
     return QuestStatus.READY;
   }
 
   run(): QuestAdventure {
-    if (availableAmount(this.beehive) == 0 && this.killer.isPossible()) {
-      return this.killer.run();
+    if (availableAmount(this.beehive) == 0) {
+      if (this.killer.isPossible()) {
+        return this.killer.run();
+      } else {
+        return this.runBees();
+      }
     }
 
     return {
@@ -93,48 +84,15 @@ export class QuestTowerWallSkin implements QuestInfo {
   getLocations(): Location[] {
     return [];
   }
-}
 
-export class QuestTowerBeeHive implements QuestInfo {
-  beehive: Item = Item.get("Beehive");
-  blackForest: Location = Location.get("The Black Forest");
-  killer: QuestTowerKillSkin = new QuestTowerKillSkin();
-  toAbsorb: Monster[];
-
-  getId(): QuestType {
-    return "Council / Tower / WallOfSkin / Beehive";
-  }
-
-  level(): number {
-    return 13;
-  }
-
-  status(): QuestStatus {
-    let status = getQuestStatus("questL13Final");
-
-    if (status < 6) {
-      return QuestStatus.NOT_READY;
-    }
-
-    if (
-      status > 6 ||
-      this.killer.isPossible() ||
-      availableAmount(this.beehive) > 0
-    ) {
-      return QuestStatus.COMPLETED;
-    }
-
-    return QuestStatus.READY;
-  }
-
-  run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+  runBees(): QuestAdventure {
+    const outfit = new GreyOutfit().setNoCombat();
 
     return {
       outfit: outfit,
       location: this.blackForest,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         DelayBurners.tryReplaceCombats();
 
         if (DelayBurners.isTryingForDupeableGoblin()) {
@@ -152,14 +110,6 @@ export class QuestTowerBeeHive implements QuestInfo {
         }
       },
     };
-  }
-
-  getLocations(): Location[] {
-    return [];
-  }
-
-  needAdventures(): number {
-    return 3;
   }
 }
 
@@ -210,8 +160,8 @@ export class QuestTowerKillSkin {
 
     maximize(this.maximizeString + " -offhand -familiar", true);
 
-    for (let ele of ["Cold", "Hot", "Sleaze", "Spooky", "Stench"]) {
-      let mod = numericModifier("Generated:_spec", ele + " Damage");
+    for (const ele of ["Cold", "Hot", "Sleaze", "Spooky", "Stench"]) {
+      const mod = numericModifier("Generated:_spec", ele + " Damage");
 
       if (mod > 0) {
         damagePerRound += 1;
@@ -224,7 +174,7 @@ export class QuestTowerKillSkin {
   run(): QuestAdventure {
     let str = this.maximizeString;
 
-    let fam = this.familiarEquips.find((i) => availableAmount(i) > 0);
+    const fam = this.familiarEquips.find((i) => availableAmount(i) > 0);
 
     if (fam != null) {
       str += " +equip " + fam;
@@ -234,7 +184,7 @@ export class QuestTowerKillSkin {
       str += " +equip " + this.hotPlate;
     }
 
-    let outfit = new GreyOutfit(str);
+    const outfit = new GreyOutfit(str);
 
     return {
       location: null,

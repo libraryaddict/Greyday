@@ -34,7 +34,7 @@ export class QuestL10GiantTop implements QuestInfo {
   // TODO Once we've got the absorbs, try replace combats
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat();
 
     if (availableAmount(this.wig) > 0) {
       outfit.addItem(this.wig);
@@ -44,7 +44,7 @@ export class QuestL10GiantTop implements QuestInfo {
       location: this.loc,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         try {
           // Goth and steam love each other
@@ -103,7 +103,7 @@ export class QuestL10GiantTop implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL10Garbage");
+    const status = getQuestStatus("questL10Garbage");
 
     if (status < 9) {
       return QuestStatus.NOT_READY;

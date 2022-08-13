@@ -1,32 +1,34 @@
 import {
-  Location,
-  Familiar,
   availableAmount,
   Effect,
+  equippedAmount,
   getProperty,
+  gnomadsAvailable,
   haveEffect,
+  haveSkill,
   Item,
+  Location,
   Monster,
+  numericModifier,
+  print,
+  Skill,
   toInt,
   use,
-  storageAmount,
-  Skill,
-  gnomadsAvailable,
-  haveSkill,
-  equippedAmount,
-  numericModifier,
 } from "kolmafia";
-import { PropertyManager } from "../../../../utils/Properties";
+import { ResourceCategory } from "../../../../typings/ResourceTypes";
+import {
+  PossiblePath,
+  TaskInfo,
+  TaskRelation,
+} from "../../../../typings/TaskInfo";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
-import {
-  GreyPulls,
-  ResourceClaim,
-  ResourcePullClaim,
-} from "../../../../utils/GreyResources";
+import { GreyPulls } from "../../../../utils/GreyResources";
 import { getMoonZone, GreySettings } from "../../../../utils/GreySettings";
+import { getAllCombinations } from "../../../../utils/GreyUtils";
 import { Macro } from "../../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -34,9 +36,12 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
-import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 
-export class QuestL11RonProtesters implements QuestInfo {
+class PossiblePathExtra extends PossiblePath {
+  equips: Item[] = [];
+}
+
+export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
   proLoc: Location = Location.get("A Mob Of Zeppelin Protesters");
   deck: Item = Item.get("deck of lewd playing cards");
   lyrndHat: Item = Item.get("lynyrdskin cap");
@@ -49,13 +54,187 @@ export class QuestL11RonProtesters implements QuestInfo {
   musky: Effect = Effect.get("Musky");
   toAbsorb: Monster[];
   torsoAwareness: Skill = Skill.get("Torso Awareness");
-  sleazeSkill: Skill = Skill.get("Procgen Ribaldry");
+  smutSleazeSkill: Skill = Skill.get("Procgen Ribaldry");
   sleazeSkill2: Skill = Skill.get("Innuendo Circuitry");
   starChart: Item = Item.get("Star Chart");
   sweatpants: Item = Item.get("designer sweatpants");
   spoon: Item = Item.get("hewn moon-rune spoon");
   umbrella: Item = Item.get("Unbreakable Umbrella");
   // TODO Once we've got the absorbs, try replace combats if it won't hurt our NCs
+  vipInvitation: Item = Item.get("Clan VIP Lounge key");
+  transparentPants: Item = Item.get("Transparent pants");
+  clover: Item = Item.get("11-Leaf Clover");
+  lucky: Effect = Effect.get("Lucky!");
+  paths: PossiblePath[] = [];
+
+  // Possible paths.
+  // We have sleaze, lynard, clovers
+  sleazeEquips: Item[] = [
+    "deck of lewd playing cards",
+    availableAmount(this.sweatpants) > 0
+      ? this.sweatpants.name
+      : "Transparent pants",
+  ].map((s) => Item.get(s));
+
+  getRelation(id: QuestType): TaskRelation {
+    if (id == "Council / Peaks / Orcs" && !haveSkill(this.smutSleazeSkill)) {
+      return TaskRelation.WAIT_FOR;
+    }
+
+    if (
+      id == "Council / Tower / Keys / Star" &&
+      !GreySettings.shouldAvoidTowerRequirements() &&
+      !haveSkill(this.sleazeSkill2) &&
+      availableAmount(this.starChart) == 0
+    ) {
+      return TaskRelation.WAIT_FOR;
+    }
+
+    return TaskRelation.UNRELATED;
+  }
+
+  createPaths(assumeUnstarted: boolean) {
+    const paths: PossiblePath[] = [];
+
+    // Combinations of sleaze equips, clover, costume
+    let allPossible: (Item | string)[] = [
+      ...this.sleazeEquips,
+      ...this.lyrndCostume,
+      "Clover",
+      "Clover",
+      "Clover",
+    ];
+
+    if (availableAmount(this.spoon) == 0 && !gnomadsAvailable()) {
+      allPossible = allPossible.filter((i) => i != this.lyrndShirt);
+    }
+
+    for (const combination of getAllCombinations(allPossible)) {
+      if (
+        (combination.includes(this.sweatpants) ||
+          combination.includes(this.transparentPants)) &&
+        combination.includes(this.lyrndPants)
+      ) {
+        continue;
+      }
+
+      const items: Item[] = combination.filter(
+        (i) => i instanceof Item
+      ) as Item[];
+      const clovers: number = combination.filter((i) => i == "Clover").length;
+      const toPull: Item[] = items.filter(
+        (i) =>
+          this.lyrndCostume.includes(i) ||
+          i == this.deck ||
+          i == this.transparentPants
+      );
+
+      const turns = this.getEstimatedTurns(assumeUnstarted, clovers, items);
+
+      const path = new PossiblePathExtra(turns);
+
+      for (let clover = 0; clover < clovers; clover++) {
+        path.add(ResourceCategory.CLOVER);
+      }
+
+      for (const item of toPull) {
+        path.addPull(item);
+
+        if (!assumeUnstarted && availableAmount(item) > 0) {
+          path.addUsed(ResourceCategory.PULL);
+        }
+      }
+
+      for (const item of items) {
+        path.equips.push(item);
+      }
+
+      paths.push(path);
+    }
+
+    this.paths = paths;
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
+
+  getEstimatedTurns(
+    assumeUnstarted: boolean,
+    clovers: number,
+    item: Item[]
+  ): number {
+    let estimatedFires = 2;
+    const lynyrdScares =
+      3 + this.lyrndCostume.filter((i) => item.includes(i)).length * 5; // Do calcs without musk
+    let sleazeScares =
+      (availableAmount(this.sweatpants) > 0 ? 120 : 0) +
+      item
+        .map(
+          (i) =>
+            i != this.sweatpants &&
+            numericModifier(i, "Sleaze Damage") +
+              numericModifier(i, "Sleaze Spell Damage")
+        )
+        .reduce((p, n) => p + n, 0);
+
+    sleazeScares = Math.floor(Math.pow(sleazeScares, 0.5));
+    // Assume we're running -20 so 65% chance of a combat
+    let ncModifier = 0;
+    // Minus 20 for skills
+    ncModifier += 20;
+    // Minus 5 if we're not wearing lynrd cap and can wear -5 hat
+    if (
+      !item.includes(this.lyrndHat) &&
+      availableAmount(this.vipInvitation) > 0
+    ) {
+      ncModifier += 5;
+    }
+    // Minus 10 if we're not wearing sleaze deck and have umbrella
+    if (!item.includes(this.deck) && availableAmount(this.umbrella) > 0) {
+      ncModifier += 10;
+    }
+    // Cap it
+    if (ncModifier > 25) {
+      ncModifier = 25 + (ncModifier - 25) / 5;
+    }
+
+    let toScare = assumeUnstarted
+      ? 80
+      : Math.max(0, this.getProtestersRemaining());
+
+    const ncs: (() => number)[] = [
+      () => sleazeScares,
+      () => {
+        return estimatedFires-- > 0 ? 10 : 3;
+      },
+      () => lynyrdScares,
+    ];
+    // 1.5 instead of 1 for bad luck
+    const ncEveryXTurns = Math.ceil(1.5 / (1 - (85 - ncModifier) / 100));
+    let turnsTaken = 0;
+
+    for (let c = 0; c < clovers; c++) {
+      toScare -= Math.max(sleazeScares, lynyrdScares + 3); // 3 cos I assume we have musk
+      turnsTaken++;
+    }
+
+    let turnsToNC = ncEveryXTurns;
+    let nc = 0;
+    while (toScare > 0) {
+      turnsToNC--;
+      turnsTaken++;
+
+      if (turnsToNC <= 0) {
+        toScare -= ncs[nc++ % 3]();
+        turnsToNC = ncEveryXTurns;
+      } else {
+        toScare -= 1.1; // Assume cig lighter
+      }
+    }
+
+    return turnsTaken;
+  }
 
   isReady(): boolean {
     return (
@@ -63,25 +242,6 @@ export class QuestL11RonProtesters implements QuestInfo {
       getProperty("questL11Ron") == "step1" ||
       toInt(getProperty("zeppelinProtestors")) <= 80
     );
-  }
-
-  getPulls(): Item[] {
-    const pulls: Item[] = [];
-
-    if (
-      availableAmount(this.sweatpants) == 0 ||
-      availableAmount(this.umbrella) > 0
-    ) {
-      pulls.push(this.lyrndPants);
-    }
-
-    if (haveSkill(this.torsoAwareness) || this.waitingForShirt()) {
-      pulls.push(this.lyrndShirt);
-    }
-
-    pulls.push(this.lyrndHat);
-
-    return pulls;
   }
 
   waitingForShirt(): boolean {
@@ -94,26 +254,6 @@ export class QuestL11RonProtesters implements QuestInfo {
     );
   }
 
-  getResourceClaims(): ResourceClaim[] {
-    let claims: ResourceClaim[] = [];
-
-    for (let i of this.getPulls()) {
-      if (availableAmount(i) > 0) {
-        continue;
-      }
-
-      claims.push(new ResourcePullClaim(i, "Lynyrdskin Outfit", 6));
-    }
-
-    if (availableAmount(this.deck) == 0) {
-      claims.push(
-        new ResourcePullClaim(this.deck, "Sleaze for Ron Protestors", 20)
-      );
-    }
-
-    return claims;
-  }
-
   getId(): QuestType {
     return "Council / MacGruffin / Ron / Crowd";
   }
@@ -123,7 +263,7 @@ export class QuestL11RonProtesters implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Ron");
+    const status = getQuestStatus("questL11Ron");
 
     if (status > 1) {
       return QuestStatus.COMPLETED;
@@ -161,83 +301,164 @@ export class QuestL11RonProtesters implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (!haveSkill(this.sleazeSkill) && getQuestStatus("questL09Topping") < 1) {
+    if (
+      !haveSkill(this.smutSleazeSkill) &&
+      getQuestStatus("questL09Topping") < 1
+    ) {
       return QuestStatus.NOT_READY;
     }
 
     return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
-    // If we can get more than 6
-    let lynyrdScares =
+  getLynyrdScares(): number {
+    return (
       3 +
       (availableAmount(this.musk) + haveEffect(this.musky) > 0 ? 3 : 0) +
-      (GreySettings.isHardcoreMode() ? 0 : this.getPulls().length * 5);
-    // We only do lynrds if we can hit at least 9 scares a NC
-    const shouldLynrd = lynyrdScares > 8;
+      this.lyrndCostume.filter((i) => availableAmount(i) > 0).length * 5
+    );
+  }
 
-    if (!GreySettings.isHardcoreMode()) {
-      if (
-        availableAmount(this.umbrella) == 0 &&
-        availableAmount(this.deck) == 0 &&
-        storageAmount(this.deck) > 0
-      ) {
-        GreyPulls.pullDeckOfLewdCards();
-      }
+  getSleazeScares(): number {
+    return Math.floor(
+      Math.pow(
+        this.sleazeEquips
+          .map((i) =>
+            availableAmount(i) == 0 || equippedAmount(i) > 0
+              ? 0
+              : numericModifier(i, "Sleaze Damage") +
+                numericModifier(i, "Sleaze Spell Damage")
+          )
+          .reduce(
+            (p, n) => p + n,
+            numericModifier("Sleaze Damage") +
+              numericModifier("Sleaze Spell Damage")
+          ),
+        0.5
+      )
+    );
+  }
 
-      if (availableAmount(this.lyrndHat) == 0 && shouldLynrd) {
-        GreyPulls.pullLynrdProtesters(this.getPulls());
-      }
+  runClover(path: PossiblePathExtra): QuestAdventure {
+    const runSleaze = this.getSleazeScares() >= this.getLynyrdScares();
+    const str = runSleaze
+      ? "Sleaze Spell Damage +Sleaze Damage"
+      : this.lyrndCostume.map((i) => "+equip " + i).join(" ");
+    const outfit = new GreyOutfit(str + " -tie");
+
+    return {
+      location: null,
+      outfit: outfit,
+      run: () => {
+        while (
+          path.canUse(ResourceCategory.CLOVER) &&
+          this.getProtestersRemaining() > 1
+        ) {
+          const props = new PropertyManager();
+
+          if (runSleaze) {
+            props.setChoice(866, 2); // Clover
+            props.setChoice(857, 1); // Sleaze
+          } else {
+            if (!haveEffect(this.musky) && availableAmount(this.musk) > 0) {
+              use(this.musk);
+            }
+
+            props.setChoice(866, 1); // Clover
+            props.setChoice(856, 1); // Scare
+          }
+
+          use(this.clover);
+
+          if (!haveEffect(this.lucky)) {
+            throw "Expected lucky effect";
+          }
+
+          try {
+            greyAdv(this.proLoc, outfit);
+          } finally {
+            props.resetAll();
+          }
+
+          if (haveEffect(this.lucky)) {
+            throw "Expected not to have lucky effect";
+          }
+
+          path.addUsed(ResourceCategory.CLOVER);
+        }
+      },
+    };
+  }
+
+  run(path: PossiblePathExtra): QuestAdventure {
+    if (path.canUse(ResourceCategory.PULL)) {
+      return {
+        location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
+        run: () => {
+          for (const item of path.pulls.filter(
+            (i) => availableAmount(i) == 0
+          )) {
+            GreyPulls.tryPull(item);
+            path.addUsed(ResourceCategory.PULL);
+          }
+        },
+      };
     }
 
-    let outfit = new GreyOutfit().setNoCombat().setNoCombat().setItemDrops();
-    outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");
-
-    if (shouldLynrd) {
-      for (let i of this.lyrndCostume) {
-        outfit.addItem(i, 600);
-      }
+    if (path.canUse(ResourceCategory.CLOVER) && this.toAbsorb.length == 0) {
+      return this.runClover(path);
     }
 
-    if (availableAmount(this.umbrella) > 0) {
+    // If we can get more than 6
+    const lynyrdScares = this.getLynyrdScares();
+    // Calculate sleaze scares using our current sleaze stuff, skip equipped items so we can do our baseline
+    const sleazeScares = this.getSleazeScares();
+
+    const outfit = new GreyOutfit().setNoCombat().setNoCombat().setItemDrops();
+
+    print(path.equips.join(", "));
+    path.equips.forEach((i) => outfit.addItem(i));
+
+    if (sleazeScares * 2 >= lynyrdScares) {
+      outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");
+    }
+
+    if (
+      availableAmount(this.umbrella) > 0 &&
+      !path.equips.includes(this.deck)
+    ) {
       outfit.addItem(this.umbrella);
     }
+
+    // TODO Run left hand man?
 
     return {
       location: this.proLoc,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         try {
           if (
-            shouldLynrd &&
+            lynyrdScares > 3 &&
             haveEffect(this.musky) <= 0 &&
             availableAmount(this.musk) > 0
           ) {
             use(this.musk);
           }
 
-          props.setChoice(856, shouldLynrd ? 1 : 2); // Lynrd
+          const doLynrd = lynyrdScares > 3;
+          const doSleaze = sleazeScares >= 5;
+          const doFire =
+            availableAmount(this.flaming) > 0 ||
+            sleazeScares + lynyrdScares < 18;
 
-          if (
-            !GreySettings.isHardcoreMode() &&
-            availableAmount(this.deck) == 0 &&
-            shouldLynrd &&
-            numericModifier("Sleaze Damage") +
-              numericModifier("Sleaze Spell Damage") <
-              65 // Min of 8-9 protesters
-          ) {
-            props.setChoice(857, 2); // Bench warrent skip
-          } else {
-            props.setChoice(857, 1); // Bench warrent
-          }
+          props.setChoice(856, doLynrd ? 1 : 2); // Lynrd
+          props.setChoice(857, doSleaze ? 1 : 2); // Bench warrent
+          props.setChoice(858, doFire ? 1 : 2);
 
-          // If we don't have any flaming, just skip cos 3 isn't that fast
-          props.setChoice(858, availableAmount(this.flaming) > 0 ? 1 : 2);
-
-          let settings = new AdventureSettings();
+          const settings = new AdventureSettings();
           settings.setFinishingBlowMacro(
             new Macro().tryItem(this.cig).step(greyKillingBlow(outfit))
           );
@@ -250,6 +471,10 @@ export class QuestL11RonProtesters implements QuestInfo {
         }
       },
     };
+  }
+
+  getProtestersRemaining(): number {
+    return 80 - toInt(getProperty("zeppelinProtestors"));
   }
 
   getLocations(): Location[] {

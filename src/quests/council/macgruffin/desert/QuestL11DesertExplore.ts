@@ -1,33 +1,32 @@
 import { canAdv } from "canadv.ash";
 import {
-  Location,
-  Familiar,
-  Effect,
   availableAmount,
+  Effect,
+  equip,
+  equippedAmount,
+  Familiar,
+  familiarWeight,
   getProperty,
   haveEffect,
-  Item,
-  toInt,
-  toItem,
-  myAdventures,
-  print,
-  visitUrl,
-  Monster,
   haveFamiliar,
-  myFamiliar,
-  equippedAmount,
-  maximize,
-  useFamiliar,
-  equip,
-  familiarWeight,
-  Skill,
   haveSkill,
-  abort,
+  Item,
+  itemAmount,
+  Location,
+  Monster,
+  myAdventures,
+  myFamiliar,
+  print,
+  Skill,
   Slot,
-  toSlot,
-  equippedItem,
+  toBoolean,
+  toInt,
+  useFamiliar,
+  visitUrl,
 } from "kolmafia";
 import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
+import { ResourceCategory } from "../../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -42,7 +41,7 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
-export class QuestL11DesertExplore implements QuestInfo {
+export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
   hydrated: Effect = Effect.get("Ultrahydrated");
   oasis: Location = Location.get("Oasis");
   desert: Location = Location.get("The Arid, Extra-Dry Desert");
@@ -56,6 +55,30 @@ export class QuestL11DesertExplore implements QuestInfo {
   rose: Item = Item.get("Stone Rose");
   nanovision: Skill = Skill.get("Double Nanovision");
   lefthand: Familiar = Familiar.get("Left-Hand Man");
+  extingusherProp: string = "";
+  kramco: Item = Item.get("Kramco Sausage-o-Matic&trade;");
+  paths: PossiblePath[] = [];
+
+  createPaths(assumeUnstarted: boolean) {
+    this.paths = [];
+    // Shitty math
+    const turnsLeft = (assumeUnstarted ? 100 : this.getExploredRemaining()) / 5;
+
+    const withoutExtingusher = new PossiblePath(turnsLeft);
+    this.paths.push(withoutExtingusher);
+
+    if (assumeUnstarted || getProperty(this.extingusherProp) != "true") {
+      const withExtingusher = new PossiblePath(turnsLeft - 3).add(
+        ResourceCategory.FIRE_EXTINGUSHER_ZONE
+      );
+
+      this.paths.push(withExtingusher);
+    }
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / Explore";
@@ -91,7 +114,7 @@ export class QuestL11DesertExplore implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Desert");
+    const status = getQuestStatus("questL11Desert");
 
     if (status < 0) {
       return QuestStatus.NOT_READY;
@@ -101,7 +124,10 @@ export class QuestL11DesertExplore implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (availableAmount(this.compass) == 0 || !haveSkill(this.nanovision)) {
+    if (
+      (!haveFamiliar(this.camel) && availableAmount(this.compass) == 0) ||
+      !haveSkill(this.nanovision)
+    ) {
       return QuestStatus.NOT_READY;
     }
 
@@ -132,24 +158,40 @@ export class QuestL11DesertExplore implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
-    if (
-      canAdv(this.oasis) &&
-      haveEffect(this.hydrated) == 0 &&
-      this.getExploredRemaining() > 3
-    ) {
-      return {
-        location: this.desert,
-        outfit: new GreyOutfit("-tie"),
-        run: () => {
-          greyAdv(this.oasis);
-        },
-      };
+  run(path: PossiblePath): QuestAdventure {
+    const resource =
+      toBoolean(getProperty("_gnasirAvailable")) &&
+      familiarWeight(this.goose) >= 6
+        ? path.getResource(ResourceCategory.FIRE_EXTINGUSHER_ZONE)
+        : null;
+
+    if (resource == null) {
+      if (
+        canAdv(this.oasis) &&
+        haveEffect(this.hydrated) == 0 &&
+        this.getExploredRemaining() > 3
+      ) {
+        return {
+          location: this.desert,
+          outfit: GreyOutfit.IGNORE_OUTFIT,
+          run: () => {
+            greyAdv(this.oasis);
+          },
+        };
+      }
     }
 
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
     outfit.addItem(this.compass); // Compass
     outfit.addItem(this.knife);
+
+    if (resource != null) {
+      resource.prepare(outfit);
+    }
+
+    if (this.toAbsorb.length > 0) {
+      outfit.addBonus("-equip " + this.kramco.name);
+    }
 
     return {
       outfit: outfit,
@@ -183,6 +225,8 @@ export class QuestL11DesertExplore implements QuestInfo {
           ) {
             equip(this.ball);
           }
+        } else if (this.toAbsorb.length == 0 && resource != null) {
+          killing = resource.macro().step(killing);
         } else if (
           this.toAbsorb.length == 0 &&
           DelayBurners.isDelayBurnerReady()
@@ -192,6 +236,7 @@ export class QuestL11DesertExplore implements QuestInfo {
           // If the compass is not equipped, and we don't own camel, but we do own left-hand man.
           // Then it's worth it.
           if (
+            itemAmount(this.compass) > 0 &&
             equippedAmount(this.compass) == 0 &&
             haveFamiliar(this.lefthand) &&
             myFamiliar() != this.camel
@@ -201,9 +246,10 @@ export class QuestL11DesertExplore implements QuestInfo {
           }
         }
 
-        let explored = this.getExplored();
-        let props = new PropertyManager();
+        const explored = this.getExplored();
+        const props = new PropertyManager();
         props.setChoice(805, 1);
+
         try {
           greyAdv(
             this.desert,

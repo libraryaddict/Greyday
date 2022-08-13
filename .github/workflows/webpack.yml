@@ -2,9 +2,9 @@ name: NodeJS with Webpack
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
@@ -13,20 +13,22 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
-    
+
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Build
-      run: |
-        npm install
-        npx webpack
-    - run: |
+      - name: Build
+        run: |
+          npm install
+          echo "export const lastCommitHash: string | undefined = \"$(git rev-parse --short HEAD)\";" > src/_git_commit.ts
+          npx webpack
+          git checkout src/_git_commit.ts
+      - run: |
           git config user.name "Build Script"
           git config user.email "<>"
           git fetch --all

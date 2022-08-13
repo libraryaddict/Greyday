@@ -1,20 +1,18 @@
 import { canAdv } from "canadv.ash";
 import {
-  Location,
-  Familiar,
+  availableAmount,
   Effect,
+  Familiar,
+  familiarWeight,
+  getProperty,
   haveEffect,
   Item,
-  availableAmount,
-  getProperty,
-  toInt,
+  Location,
   Monster,
-  familiarWeight,
+  toInt,
 } from "kolmafia";
-import { GreyAdventurer } from "../../../../GreyAdventurer";
 import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
-import { GreySettings } from "../../../../utils/GreySettings";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -43,6 +41,14 @@ export class QuestL11DesertStoneRose implements QuestInfo {
   status(): QuestStatus {
     let status = getQuestStatus("questL11Desert");
 
+    if (status > 0) {
+      return QuestStatus.COMPLETED;
+    }
+
+    if (!this.wantsGnomeRose() || availableAmount(this.rose) > 0) {
+      return QuestStatus.COMPLETED;
+    }
+
     if (status < 0 || !canAdv(this.oasis)) {
       return QuestStatus.NOT_READY;
     }
@@ -53,14 +59,6 @@ export class QuestL11DesertStoneRose implements QuestInfo {
 
     if (!AbsorbsProvider.getReabsorbedMonsters().includes(this.swarm)) {
       return QuestStatus.NOT_READY;
-    }
-
-    if (status > 0) {
-      return QuestStatus.COMPLETED;
-    }
-
-    if (!this.wantsGnomeRose() || availableAmount(this.rose) > 0) {
-      return QuestStatus.COMPLETED;
     }
 
     if (this.toAbsorb.length > 0) {

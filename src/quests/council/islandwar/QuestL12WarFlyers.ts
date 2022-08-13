@@ -1,10 +1,8 @@
 import {
   Location,
-  Familiar,
   Item,
   availableAmount,
   getProperty,
-  itemAmount,
   outfit,
   setProperty,
   toInt,
@@ -48,7 +46,7 @@ export class QuestL12WarFlyers implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         this.visitArena();
       },

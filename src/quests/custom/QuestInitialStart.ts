@@ -2,37 +2,20 @@ import {
   autosell,
   availableAmount,
   cliExecute,
-  equip,
-  equippedAmount,
   Familiar,
-  familiarWeight,
   getProperty,
   hippyStoneBroken,
+  inHardcore,
   Item,
   Location,
-  maximize,
-  myAdventures,
-  myAscensions,
-  myLevel,
-  myLocation,
-  myMeat,
+  myFamiliar,
   print,
   setProperty,
-  squareRoot,
-  storageAmount,
   toBoolean,
-  toInt,
-  turnsPlayed,
   use,
   useFamiliar,
   visitUrl,
 } from "kolmafia";
-import { GreyOutfit } from "../../utils/GreyOutfitter";
-import {
-  GreyPulls,
-  ResourceClaim,
-  ResourcePullClaim,
-} from "../../utils/GreyResources";
 import { GreySettings } from "../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -47,31 +30,7 @@ export class QuestInitialStart implements QuestInfo {
   saber: Item = Item.get("Fourth of May Cosplay Saber");
   flimsyScraps: Item = Item.get("Flimsy hardwood scraps");
   birchBattery: Item = Item.get("Birch battery");
-  initialPulls: ResourcePullClaim[] = [
-    new ResourcePullClaim(Item.get("Yule Hatchet"), "Faster familiar leveling"),
-    new ResourcePullClaim(Item.get("Mafia Thumb Ring"), "Extra Adventures", 35),
-    new ResourcePullClaim(
-      Item.get(" Portable cassette player"),
-      "Extra monster level & +combat accessory",
-      5
-    ),
-    new ResourcePullClaim(
-      Item.get("Teacher's Pen"),
-      "Faster Familiar Leveling"
-    ),
-  ];
-
-  constructor() {
-    if (storageAmount(Item.get("Pantsgiving")) > 0) {
-      this.initialPulls.push(
-        new ResourcePullClaim(
-          Item.get("Pantsgiving"),
-          "Resist and useful items",
-          10
-        )
-      );
-    }
-  }
+  mummingTrunk: Item = Item.get("mumming trunk");
 
   getLocations(): Location[] {
     return [];
@@ -79,10 +38,6 @@ export class QuestInitialStart implements QuestInfo {
 
   level(): number {
     return 1;
-  }
-
-  getResourceClaims(): ResourceClaim[] {
-    return this.initialPulls;
   }
 
   status(): QuestStatus {
@@ -134,17 +89,24 @@ export class QuestInitialStart implements QuestInfo {
         }
 
         if (
+          GreySettings.greyUseMummery &&
+          getProperty("_mummeryUses") == "" &&
+          availableAmount(this.mummingTrunk) > 0
+        ) {
+          useFamiliar(this.familiar);
+
+          if (myFamiliar() == this.familiar) {
+            cliExecute("mummery mp");
+          } else {
+            print("Unable to apply mp regen on goose", "Red");
+          }
+        }
+
+        if (
           availableAmount(Item.get("SongBoom&trade; BoomBox")) > 0 &&
           getProperty("_boomBoxSongsLeft") == "11"
         ) {
           cliExecute("boombox meat");
-        }
-
-        if (
-          !GreySettings.isHardcoreMode() &&
-          availableAmount(Item.get("Mafia Thumb Ring")) == 0
-        ) {
-          GreyPulls.pullStartingGear();
         }
 
         if (availableAmount(this.mayday) > 0) {
@@ -157,12 +119,21 @@ export class QuestInitialStart implements QuestInfo {
 
         if (getProperty("breakfastCompleted") == "false") {
           let breakfastScript = getProperty("breakfastScript");
+          const cloverProp =
+            "grabClovers" + (inHardcore() ? "Hardcore" : "Softcore");
+          const propValue = getProperty(cloverProp);
 
-          if (breakfastScript == "") {
-            breakfastScript = "breakfast";
+          try {
+            setProperty(cloverProp, "true");
+
+            if (breakfastScript == "") {
+              breakfastScript = "breakfast";
+            }
+
+            cliExecute(breakfastScript);
+          } finally {
+            setProperty(cloverProp, propValue);
           }
-
-          cliExecute(breakfastScript);
         }
 
         if (
@@ -170,6 +141,10 @@ export class QuestInitialStart implements QuestInfo {
           availableAmount(this.birchBattery) == 0
         ) {
           cliExecute("acquire " + this.birchBattery.name);
+        }
+
+        if (getProperty("breakfastCompleted") == "false") {
+          throw "Failed to complete breakfast! Did you set something that doesn't call breakfast, to `breakfastScript`?";
         }
       },
     };

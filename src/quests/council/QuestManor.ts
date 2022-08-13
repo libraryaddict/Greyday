@@ -1,25 +1,5 @@
-import {
-  availableAmount,
-  council,
-  Effect,
-  getProperty,
-  haveEffect,
-  haveSkill,
-  Item,
-  Location,
-  Monster,
-  myLevel,
-  numericModifier,
-  print,
-  Skill,
-  toInt,
-  use,
-  visitUrl,
-} from "kolmafia";
-import { PropertyManager } from "../../utils/Properties";
-import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
-import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
-import { GreyOutfit } from "../../utils/GreyOutfitter";
+import { availableAmount, Item, Location, print, visitUrl } from "kolmafia";
+import { greyAdv } from "../../utils/GreyLocations";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -66,18 +46,18 @@ export class QuestManor implements QuestInfo {
   }
 
   status(): QuestStatus {
+    let danceStatus = this.getDanceStatus();
+
+    if (danceStatus == DanceStatus.finished) {
+      return QuestStatus.COMPLETED;
+    }
+
     if (getQuestStatus("questM20Necklace") < 4) {
       return QuestStatus.NOT_READY;
     }
 
     if (getQuestStatus("questM20Necklace") != 100) {
       return QuestStatus.READY;
-    }
-
-    let danceStatus = this.getDanceStatus();
-
-    if (danceStatus == DanceStatus.finished) {
-      return QuestStatus.COMPLETED;
     }
 
     if (danceStatus == DanceStatus.readyToDance) {

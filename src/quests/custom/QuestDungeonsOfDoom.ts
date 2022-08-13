@@ -11,6 +11,7 @@ import {
   availableAmount,
   use,
   myLevel,
+  cliExecute,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
@@ -78,13 +79,21 @@ export class QuestDungeonsOfDoom implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat();
 
     return {
       outfit: outfit,
       location: this.bend,
       run: () => {
-        let props = new PropertyManager();
+        if (
+          availableAmount(this.plusSign) > 0 &&
+          toInt(getProperty("lastPlusSignUnlock")) == myAscensions()
+        ) {
+          use(this.plusSign);
+          return;
+        }
+
+        const props = new PropertyManager();
 
         if (availableAmount(this.plusSign) > 0) {
           props.setChoice(451, 5);
@@ -100,6 +109,10 @@ export class QuestDungeonsOfDoom implements QuestInfo {
         }
 
         if (toInt(getProperty("lastPlusSignUnlock")) == myAscensions()) {
+          if (availableAmount(this.plusSign) == 0) {
+            cliExecute("refresh inventory");
+          }
+
           use(this.plusSign);
         }
       },

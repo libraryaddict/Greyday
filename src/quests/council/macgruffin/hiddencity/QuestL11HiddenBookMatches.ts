@@ -1,24 +1,21 @@
 import {
-  Location,
-  Familiar,
-  Item,
-  Monster,
   availableAmount,
   getProperty,
+  haveSkill,
+  Item,
+  Location,
+  Monster,
   myAscensions,
+  Skill,
   toInt,
   use,
-  Skill,
-  haveSkill,
 } from "kolmafia";
+import { ResourceCategory } from "../../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
-import {
-  GreyPulls,
-  ResourceClaim,
-  ResourcePullClaim,
-} from "../../../../utils/GreyResources";
-import { GreySettings } from "../../../../utils/GreySettings";
+import { GreyPulls } from "../../../../utils/GreyResources";
+
 import {
   getQuestStatus,
   QuestAdventure,
@@ -27,13 +24,14 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
-export class QuestL11HiddenBookMatches implements QuestInfo {
+export class QuestL11HiddenBookMatches extends TaskInfo implements QuestInfo {
   book: Item = Item.get("Book of matches");
   monster: Monster = Monster.get("pygmy janitor");
   location: Location = Location.get("The Hidden Park");
   nanovision: Skill = Skill.get("Double Nanovision");
   toAbsorb: Monster[];
-  doPull: boolean = false;
+  noPull: PossiblePath = new PossiblePath(5);
+  doPull: PossiblePath = new PossiblePath(0).addConsumablePull(this.book);
 
   getId(): QuestType {
     return "Council / MacGruffin / HiddenCity / BookOfMatches";
@@ -43,18 +41,8 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
     return 11;
   }
 
-  getResourceClaims(): ResourceClaim[] {
-    if (!this.doPull) {
-      return [];
-    }
-
-    return [
-      new ResourcePullClaim(
-        this.book,
-        "Book of Matches to unlock Bowling Bar",
-        5
-      ),
-    ];
+  getPossiblePaths(): PossiblePath[] {
+    return [this.noPull, this.doPull];
   }
 
   status(): QuestStatus {
@@ -91,17 +79,14 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
     return toInt(getProperty("hiddenTavernUnlock")) == myAscensions();
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     let outfit = new GreyOutfit();
-    let wantToPull =
-      this.doPull &&
-      availableAmount(this.book) == 0 &&
-      !GreySettings.isHardcoreMode() &&
-      this.toAbsorb.length == 0;
 
-    if (!wantToPull) {
+    if (!path.canUse(ResourceCategory.PULL)) {
       outfit.setItemDrops();
       outfit.setPlusCombat();
+    } else {
+      outfit = GreyOutfit.IGNORE_OUTFIT;
     }
 
     return {
@@ -109,12 +94,12 @@ export class QuestL11HiddenBookMatches implements QuestInfo {
       outfit: outfit,
       run: () => {
         if (availableAmount(this.book) == 0) {
-          if (!wantToPull) {
-            let settings = new AdventureSettings().addNoBanish(this.monster);
+          if (path.canUse(ResourceCategory.PULL)) {
+            GreyPulls.pullBoxOfMatches();
+          } else {
+            const settings = new AdventureSettings().addNoBanish(this.monster);
 
             greyAdv(this.location, outfit, settings);
-          } else {
-            GreyPulls.pullBoxOfMatches();
           }
         }
 

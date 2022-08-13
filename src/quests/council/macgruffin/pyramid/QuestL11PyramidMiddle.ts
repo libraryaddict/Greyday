@@ -1,26 +1,17 @@
 import {
-  Location,
-  Familiar,
   availableAmount,
-  Item,
-  Monster,
+  Familiar,
   getProperty,
-  isBanished,
-  toInt,
-  Skill,
+  Item,
+  Location,
+  Monster,
   useFamiliar,
 } from "kolmafia";
 import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
-import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
-import {
-  getQuestStatus,
-  QuestAdventure,
-  QuestInfo,
-  QuestStatus,
-} from "../../../Quests";
+import { QuestAdventure, QuestInfo, QuestStatus } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
 export class QuestL11PyramidMiddle implements QuestInfo {

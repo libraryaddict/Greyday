@@ -1,29 +1,21 @@
 import {
-  Location,
+  canFaxbot,
+  currentRound,
   Familiar,
+  familiarWeight,
+  handlingChoice,
+  haveSkill,
+  Item,
+  Location,
   Monster,
   myAscensions,
-  familiarWeight,
-  visitUrl,
-  toInt,
   Skill,
-  currentRound,
-  handlingChoice,
-  Item,
-  availableAmount,
-  haveSkill,
 } from "kolmafia";
-import { TaskEstimatedTurns, TaskInfo } from "../../typings/TaskInfo";
+import { ResourceCategory } from "../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
-import { ResourceClaim, ResourceType } from "../../utils/GreyResources";
-import { canCombatLocket, doPocketWishFight } from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
-import {
-  getQuestStatus,
-  QuestAdventure,
-  QuestInfo,
-  QuestStatus,
-} from "../Quests";
+import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
 export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
@@ -32,25 +24,17 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
   familiar: Familiar = Familiar.get("Grey Goose");
   pocketWish: Item = Item.get("Pocket Wish");
   nanovision: Skill = Skill.get("Double Nanovision");
-  wishResource: ResourceClaim;
-  locketResource: ResourceClaim;
-  bottle: Item = Item.get("genie bottle");
+  fax: PossiblePath = new PossiblePath(1).add(ResourceCategory.FAXER);
+  avoid: PossiblePath = new PossiblePath(20);
 
-  constructor() {
-    super();
+  createPaths() {
+    if (!canFaxbot(this.getMonster())) {
+      this.fax.addIgnored("Fax Machine");
+    }
+  }
 
-    this.wishResource = new ResourceClaim(
-      ResourceType.GENIE_WISH,
-      1,
-      "Wish " + this.getMonster().name,
-      AbsorbsProvider.getAbsorb(this.getMonster()).adventures
-    );
-    this.locketResource = new ResourceClaim(
-      ResourceType.COMBAT_LOCKET,
-      1,
-      "Locket " + this.getMonster().name,
-      AbsorbsProvider.getAbsorb(this.getMonster()).adventures
-    );
+  getPossiblePaths(): PossiblePath[] {
+    return [this.fax, this.avoid];
   }
 
   getMonster(): Monster {
@@ -69,48 +53,42 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
     return [];
   }
 
-  status(): QuestStatus {
+  status(path: PossiblePath): QuestStatus {
     if (AbsorbsProvider.getReabsorbedMonsters().includes(this.getMonster())) {
       return QuestStatus.COMPLETED;
     }
 
-    if (
-      !canCombatLocket(this.getMonster()) &&
-      (availableAmount(this.bottle) == 0 ||
-        availableAmount(this.pocketWish) == 0)
-    ) {
+    if (path == null) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (!path.canUse(ResourceCategory.FAXER)) {
       return QuestStatus.COMPLETED;
     }
 
-    if (
-      familiarWeight(this.familiar) < 6 ||
-      getQuestStatus("questL08Trapper") < 2
-    ) {
+    if (!haveSkill(this.nanovision)) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (familiarWeight(this.familiar) < 6) {
       return QuestStatus.NOT_READY;
     }
 
     return QuestStatus.FASTER_LATER;
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
+    const resource = path.getResource(ResourceCategory.FAXER);
+
     return {
       location: null,
       outfit: null,
       familiar: this.familiar,
       disableFamOverride: true,
       run: () => {
-        if (canCombatLocket(this.getMonster())) {
-          let page1 = visitUrl("inventory.php?reminisce=1", false);
-          let url =
-            "choice.php?pwd=&whichchoice=1463&option=1&mid=" +
-            toInt(this.getMonster());
+        resource.fax(this.getMonster());
 
-          visitUrl(url);
-        } else {
-          doPocketWishFight(this.getMonster());
-        }
-
-        let macro = Macro.trySkill(Skill.get("Re-Process Matter"));
+        const macro = Macro.trySkill(Skill.get("Re-Process Matter"));
 
         if (haveSkill(this.nanovision)) {
           macro.trySkillRepeat(this.nanovision);
@@ -125,13 +103,6 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
         }
       },
     };
-  }
-
-  getEstimatedTurns(): TaskEstimatedTurns[] {
-    return [
-      new TaskEstimatedTurns(1, 1, [this.locketResource]),
-      new TaskEstimatedTurns(1, 1, [this.wishResource]),
-    ];
   }
 
   getAbsorbs(): Monster[] {

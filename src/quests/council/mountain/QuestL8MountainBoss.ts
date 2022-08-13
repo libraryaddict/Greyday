@@ -22,7 +22,7 @@ export class QuestL8MountainBoss implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = this.getStatus();
+    const status = this.getStatus();
 
     if (status == MountainStatus.finished) {
       return QuestStatus.COMPLETED;
@@ -36,7 +36,7 @@ export class QuestL8MountainBoss implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().addBonus("+10 cold res 5 min 5 max");
+    const outfit = new GreyOutfit().addBonus("+10 cold res 5 min 5 max");
 
     return {
       location: this.peak,

@@ -13,7 +13,6 @@ import {
 } from "kolmafia";
 import { greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { ResourceClaim } from "../../utils/GreyResources";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
@@ -54,7 +53,7 @@ export class QuestJuneCleaver implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: this.warren,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         maximize("+equip " + this.cleaver.name + " -tie", false);
 

@@ -9,15 +9,15 @@ import {
   Monster,
   myAdventures,
   myLevel,
-  Skill,
   toInt,
   toMonster,
   visitUrl,
 } from "kolmafia";
 import { hasCombatSkillReady } from "../../../GreyAdventurer";
+import { ResourceCategory } from "../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { ResourceClaim, ResourceType } from "../../../utils/GreyResources";
 import { getBackupsRemaining } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
 import {
@@ -28,27 +28,58 @@ import {
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
-export class QuestL12Lobster implements QuestInfo {
+export class QuestL12Lobster extends TaskInfo implements QuestInfo {
   loc: Location = Location.get("Sonofa Beach");
   item: Item = Item.get("barrel of gunpowder");
   monster: Monster = Monster.get("Lobsterfrogman");
-  cursed: Item = Item.get("Cursed Magnifying Glass");
-  glove: Item = Item.get("Powerful Glove");
+  cursedMagnifyingGlass: Item = Item.get("Cursed Magnifying Glass");
+  powerfulGlove: Item = Item.get("Powerful Glove");
   backupCamera: Item = Item.get("Backup Camera");
+  gloveAndBackups: PossiblePath;
+  backups: PossiblePath;
+  manual: PossiblePath;
+
+  constructor() {
+    super();
+  }
 
   level(): number {
     return 15;
   }
 
-  getResourceClaims(): ResourceClaim[] {
-    return [
-      new ResourceClaim(
-        ResourceType.BACKUP_CAMERA,
-        4,
-        "Backup Lobsterfrogman",
-        5 * 4
-      ),
-    ];
+  createPaths(assumeUnstarted: boolean): void {
+    const barrelsNeeded =
+      5 - (assumeUnstarted ? 0 : availableAmount(this.item));
+    const turnsManual = 6;
+    const copyReady = this.lastMonster() == this.monster;
+    this.manual = new PossiblePath(turnsManual * barrelsNeeded);
+
+    const copiesNeeded = barrelsNeeded - (copyReady ? 0 : 1);
+
+    // 4 for the copies, 8 for the source
+    this.backups = new PossiblePath(
+      copiesNeeded + (copyReady ? 0 : turnsManual)
+    )
+      .add(ResourceCategory.COPIER, copiesNeeded)
+      .addIgnored("Cosplay Saber");
+
+    this.gloveAndBackups = new PossiblePath(barrelsNeeded)
+      .add(
+        ResourceCategory.GLOVE_REPLACE,
+        this.lastMonster() == this.monster ? 0 : 1
+      )
+      .add(ResourceCategory.COPIER, copiesNeeded)
+      .addIgnored("Cosplay Saber");
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    const paths = [this.manual, this.backups];
+
+    if (availableAmount(this.cursedMagnifyingGlass) > 0) {
+      paths.push(this.gloveAndBackups);
+    }
+
+    return paths;
   }
 
   status(): QuestStatus {
@@ -115,7 +146,7 @@ export class QuestL12Lobster implements QuestInfo {
   }
 
   turnInQuest(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
     outfit.addItem(Item.get("Beer Helmet"));
     outfit.addItem(Item.get("distressed denim pants"));
     outfit.addItem(Item.get("bejeweled pledge pin"));
@@ -132,7 +163,10 @@ export class QuestL12Lobster implements QuestInfo {
   }
 
   hasVoidAndGlove(): boolean {
-    return availableAmount(this.cursed) > 0 && availableAmount(this.glove) > 0;
+    return (
+      availableAmount(this.cursedMagnifyingGlass) > 0 &&
+      availableAmount(this.powerfulGlove) > 0
+    );
   }
 
   hasBackups(): number {
@@ -140,7 +174,9 @@ export class QuestL12Lobster implements QuestInfo {
   }
 
   lastMonster(): Monster {
-    return toMonster(getProperty("lastCopyableMonster"));
+    return getProperty("lastCopyableMonster") == ""
+      ? null
+      : toMonster(getProperty("lastCopyableMonster"));
   }
 
   isBackupReady(): boolean {
@@ -152,20 +188,23 @@ export class QuestL12Lobster implements QuestInfo {
   }
 
   isBatsAvailable() {
-    let status = getQuestStatus("questL04Bat");
+    const status = getQuestStatus("questL04Bat");
 
     return status >= 3 && status < 100;
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     // Try to turn in quest
     if (itemAmount(this.item) >= 5) {
       return this.turnInQuest();
     }
 
-    if (this.isBackupReady()) {
-      let outfit = new GreyOutfit().addItem(Item.get("Backup Camera"));
+    if (this.isBackupReady() && path.canUse(ResourceCategory.COPIER)) {
+      const outfit = new GreyOutfit();
       outfit.addBonus("-ML");
+
+      const copierResource = path.getResource(ResourceCategory.COPIER);
+      copierResource.prepare(outfit);
 
       let loc: Location;
 
@@ -183,21 +222,20 @@ export class QuestL12Lobster implements QuestInfo {
             loc,
             outfit,
             new AdventureSettings().setStartOfFightMacro(
-              new Macro().externalIf(
-                Monster.get("Fluffy Bunny"),
-                Macro.skill(Skill.get("Back-Up to your Last Enemy"))
-              )
+              new Macro().ifNot_(this.monster, copierResource.macro())
             )
           );
         },
       };
     }
 
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
-    if (this.hasVoidAndGlove() && this.isVoidReady()) {
+    const gloveMacro = path.getResource(ResourceCategory.GLOVE_REPLACE);
+
+    if (gloveMacro != null && this.hasVoidAndGlove() && this.isVoidReady()) {
       outfit.addBonus("+equip cursed magnifying glass");
-      outfit.addBonus("+equip Powerful Glove");
+      gloveMacro.prepare(outfit);
     } else {
       outfit.setPlusCombat();
     }
@@ -210,11 +248,12 @@ export class QuestL12Lobster implements QuestInfo {
       run: () => {
         let macro: Macro;
 
-        if (this.hasVoidAndGlove() && this.isVoidReady()) {
-          macro = Macro.ifNot_(
-            this.monster,
-            Macro.skill("CHEAT CODE: Replace Enemy")
-          );
+        if (
+          gloveMacro != null &&
+          this.hasVoidAndGlove() &&
+          this.isVoidReady()
+        ) {
+          macro = Macro.ifNot_(this.monster, gloveMacro.macro());
         }
 
         greyAdv(

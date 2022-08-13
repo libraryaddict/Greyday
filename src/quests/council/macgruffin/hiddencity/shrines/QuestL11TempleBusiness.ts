@@ -1,14 +1,10 @@
 import {
-  adv1,
   availableAmount,
-  council,
   Familiar,
   getProperty,
   Item,
   Location,
   Monster,
-  myLevel,
-  outfit,
   use,
   useFamiliar,
 } from "kolmafia";
@@ -45,7 +41,7 @@ export class QuestL11Business implements QuestInfo {
   }
 
   delayUntilNextNC(): number {
-    let totalTurns = this.loc.turnsSpent;
+    const totalTurns = this.loc.turnsSpent;
 
     return 4 - ((totalTurns - 1) % 5);
   }
@@ -58,7 +54,7 @@ export class QuestL11Business implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getProperty("questL11Business");
+    const status = getProperty("questL11Business");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;
@@ -96,10 +92,10 @@ export class QuestL11Business implements QuestInfo {
       return {
         location: this.apartment,
         run: () => {
-          let props = new PropertyManager();
+          const props = new PropertyManager();
 
           props.setChoice(780, 6); // Skip
-          let settings = new AdventureSettings().addBanish(
+          const settings = new AdventureSettings().addBanish(
             Monster.get("pygmy witch lawyer")
           );
 
@@ -117,7 +113,7 @@ export class QuestL11Business implements QuestInfo {
     return {
       location: this.loc,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         try {
           if (availableAmount(this.completeFile) > 0) {
@@ -132,7 +128,7 @@ export class QuestL11Business implements QuestInfo {
             availableAmount(this.completeFile) > 0 &&
             this.filesRemaining() == 0
           ) {
-            let ready = DelayBurners.getReadyDelayBurner();
+            const ready = DelayBurners.getReadyDelayBurner();
 
             if (ready != null) {
               ready.doFightSetup();
@@ -145,7 +141,7 @@ export class QuestL11Business implements QuestInfo {
             useFamiliar(Familiar.get("Grey Goose"));
           }
 
-          let settings = new AdventureSettings().addBanish(
+          const settings = new AdventureSettings().addBanish(
             Monster.get("pygmy headhunter")
           );
 

@@ -19,7 +19,6 @@ import {
 } from "kolmafia";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { ResourceClaim } from "../../utils/GreyResources";
 import { GreySettings, moonSigns } from "../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -78,7 +77,7 @@ export class QuestMoonSign implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         /*let confirm = userConfirm("Ready to change moon signs?");
 

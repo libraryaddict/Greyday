@@ -67,8 +67,8 @@ export class QuestManorKitchen implements QuestInfo {
     this.lastResistTurnCheck = totalTurnsPlayed();
 
     maximize("hot res 9 max, stench res 9 max -tie", true);
-    let hotRes = numericModifier("Generated:_spec", "Hot Resistance");
-    let stenchRes = numericModifier("Generated:_spec", "Stench Resistance");
+    const hotRes = numericModifier("Generated:_spec", "Hot Resistance");
+    const stenchRes = numericModifier("Generated:_spec", "Stench Resistance");
 
     this.enoughRes = hotRes >= 9 && stenchRes >= 9;
 
@@ -79,7 +79,7 @@ export class QuestManorKitchen implements QuestInfo {
     // Each 3 resist in each element is another drawer searched.
     // 21 drawers searched.
     // Max of 9 total res
-    let status = getQuestStatus("questM20Necklace");
+    const status = getQuestStatus("questM20Necklace");
 
     if (status > 0) {
       return QuestStatus.COMPLETED;
@@ -119,7 +119,7 @@ export class QuestManorKitchen implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (toInt(getProperty("manorDrawerCount")) < 20) {
       outfit.addBonus("+10 hot res 9 max").addBonus("+10 stench res 9 max");

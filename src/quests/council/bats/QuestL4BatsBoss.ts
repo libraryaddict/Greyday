@@ -40,7 +40,7 @@ export class QuestL4BatsBoss implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL04Bat");
+    const status = getQuestStatus("questL04Bat");
 
     if (status < 3 || this.shouldWaitForLobsters()) {
       return QuestStatus.NOT_READY;
@@ -56,12 +56,12 @@ export class QuestL4BatsBoss implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
     outfit.meatDropWeight = 2;
 
     return {
       location: this.loc,
-      outfit,
+      outfit: outfit,
       run: () => {
         greyAdv(this.loc, outfit);
 

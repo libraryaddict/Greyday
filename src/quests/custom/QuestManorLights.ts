@@ -64,8 +64,8 @@ export class QuestManorLights implements QuestInfo {
   finishLights: boolean = toBoolean(getProperty("greyFinishManorLights"));
 
   constructor() {
-    for (let choice of this.choices) {
-      let prop = "choiceAdventure" + choice;
+    for (const choice of this.choices) {
+      const prop = "choiceAdventure" + choice;
 
       if (getProperty(prop) != "") {
         continue;
@@ -99,7 +99,7 @@ export class QuestManorLights implements QuestInfo {
   }
 
   getSteveLeft(): number {
-    let loc = Location.get(getProperty("nextSpookyravenStephenRoom"));
+    const loc = Location.get(getProperty("nextSpookyravenStephenRoom"));
 
     const index = this.stephen.findIndex(([l]) => loc == l);
 
@@ -107,7 +107,7 @@ export class QuestManorLights implements QuestInfo {
   }
 
   getElizaLeft(): number {
-    let loc = Location.get(getProperty("nextSpookyravenElizabethRoom"));
+    const loc = Location.get(getProperty("nextSpookyravenElizabethRoom"));
 
     const index = this.elizibeth.findIndex(([l]) => loc == l);
 
@@ -134,19 +134,19 @@ export class QuestManorLights implements QuestInfo {
   }
 
   getSteve(): [Location, number[]] {
-    let loc = Location.get(getProperty("nextSpookyravenStephenRoom"));
+    const loc = Location.get(getProperty("nextSpookyravenStephenRoom"));
 
     return this.stephen.find((s) => s[0] == loc);
   }
 
   getEliza(): [Location, number] {
-    let loc = Location.get(getProperty("nextSpookyravenElizabethRoom"));
+    const loc = Location.get(getProperty("nextSpookyravenElizabethRoom"));
 
     return this.elizibeth.find((s) => s[0] == loc);
   }
 
   isTime(): boolean {
-    let last = this.getLastLightsOut();
+    const last = this.getLastLightsOut();
 
     if (last >= totalTurnsPlayed()) {
       return false;
@@ -168,7 +168,7 @@ export class QuestManorLights implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if ((this.isElizaFight() || this.isSteveFight()) && !this.finishLights) {
+    if (this.isElizaFight() && this.isSteveFight() && !this.finishLights) {
       return QuestStatus.COMPLETED;
     }
 
@@ -187,9 +187,11 @@ export class QuestManorLights implements QuestInfo {
   }
 
   doSteve(): QuestAdventure {
-    let steve = this.getSteve();
-    let fight = this.isSteveFight();
-    let outfit: GreyOutfit = fight ? new GreyOutfit() : new GreyOutfit("-tie");
+    const steve = this.getSteve();
+    const fight = this.isSteveFight();
+    const outfit: GreyOutfit = fight
+      ? new GreyOutfit()
+      : GreyOutfit.IGNORE_OUTFIT;
 
     if (this.isSteveFight()) {
       outfit.meatDropWeight = 2;
@@ -217,12 +219,12 @@ export class QuestManorLights implements QuestInfo {
           );
         }
 
-        let both = this.getBoth();
+        const both = this.getBoth();
 
         visitUrl("adventure.php?snarfblat=" + toInt(steve[0]));
 
-        for (let i of steve[1]) {
-          let url =
+        for (const i of steve[1]) {
+          const url =
             "choice.php?pwd=&whichchoice=" + lastChoice() + "&option=" + i;
 
           visitUrl(url);
@@ -240,7 +242,7 @@ export class QuestManorLights implements QuestInfo {
 
         this.printStatus();
 
-        let both2 = this.getBoth();
+        const both2 = this.getBoth();
 
         if (both == both2) {
           throw "No progress was made in steve..";
@@ -273,7 +275,7 @@ export class QuestManorLights implements QuestInfo {
 
   run(): QuestAdventure {
     if (this.shouldDoSteve() && (!this.isSteveFight() || this.finishLights)) {
-      let steve = this.getSteve();
+      const steve = this.getSteve();
 
       if (canAdv(steve[0])) {
         return this.doSteve();
@@ -281,7 +283,7 @@ export class QuestManorLights implements QuestInfo {
     }
 
     if (this.isElizaReady() && (!this.isElizaFight() || this.finishLights)) {
-      let eliza = this.getEliza();
+      const eliza = this.getEliza();
 
       if (canAdv(eliza[0])) {
         return this.doEliza();
@@ -292,9 +294,9 @@ export class QuestManorLights implements QuestInfo {
   }
 
   doEliza(): QuestAdventure {
-    let eliza = this.getEliza();
-    let fight = this.isElizaFight();
-    let outfit = !fight ? new GreyOutfit("-tie") : new GreyOutfit();
+    const eliza = this.getEliza();
+    const fight = this.isElizaFight();
+    const outfit = !fight ? GreyOutfit.IGNORE_OUTFIT : new GreyOutfit();
 
     if (getProperty("_juneCleaverFightsLeft") == "0") {
       if (fight) {
@@ -308,10 +310,10 @@ export class QuestManorLights implements QuestInfo {
       location: null,
       outfit: outfit,
       run: () => {
-        let both = this.getBoth();
+        const both = this.getBoth();
         visitUrl("adventure.php?snarfblat=" + toInt(eliza[0]));
 
-        let url =
+        const url =
           "choice.php?pwd=&whichchoice=" + lastChoice() + "&option=" + eliza[1];
 
         visitUrl(url);
@@ -322,7 +324,7 @@ export class QuestManorLights implements QuestInfo {
 
         this.printStatus();
 
-        let both2 = this.getBoth();
+        const both2 = this.getBoth();
 
         if (both == both2) {
           throw "No progress was made in eliza..";
@@ -345,7 +347,7 @@ export class QuestManorLights implements QuestInfo {
     }
 
     if (this.isElizaReady()) {
-      let eliza = this.getEliza();
+      const eliza = this.getEliza();
 
       if (canAdv(eliza[0])) {
         return true;
@@ -353,7 +355,7 @@ export class QuestManorLights implements QuestInfo {
     }
 
     if (this.shouldDoSteve()) {
-      let steve = this.getSteve();
+      const steve = this.getSteve();
 
       if (canAdv(steve[0])) {
         return true;

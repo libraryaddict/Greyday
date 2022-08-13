@@ -80,7 +80,7 @@ export class QuestL4Bats implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         while (
           availableAmount(this.sonar) > 0 &&

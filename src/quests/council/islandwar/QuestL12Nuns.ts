@@ -13,6 +13,7 @@ import {
   haveSkill,
   Item,
   Location,
+  print,
   Skill,
   toBoolean,
   toInt,
@@ -23,11 +24,6 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import {
-  GreyPulls,
-  ResourceClaim,
-  ResourcePullClaim,
-} from "../../../utils/GreyResources";
 import { GreySettings } from "../../../utils/GreySettings";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
@@ -66,10 +62,6 @@ export class Quest12WarNuns implements QuestInfo {
     );
   }
 
-  /*getResourceClaims(): ResourceClaim[] {
-    return [new ResourcePullClaim(this.hotness, "+Meat Nuns", 10)];
-  }*/
-
   getLocations(): Location[] {
     return [this.loc];
   }
@@ -102,7 +94,7 @@ export class Quest12WarNuns implements QuestInfo {
   }
 
   hasFamiliarRecommendation(): Familiar {
-    let toLevel: Familiar = this.getFamiliarToUse(true);
+    const toLevel: Familiar = this.getFamiliarToUse(true);
 
     if (toLevel != null && familiarWeight(toLevel) < 20) {
       return toLevel;
@@ -159,6 +151,8 @@ export class Quest12WarNuns implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    this.doRoboDrinks();
+
     if (
       getProperty("warProgress") != "started" ||
       toInt(getProperty("hippiesDefeated")) < 192
@@ -183,13 +177,11 @@ export class Quest12WarNuns implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
     outfit.addItem(Item.get("Beer Helmet"));
     outfit.addItem(Item.get("distressed denim pants"));
     outfit.addItem(Item.get("bejeweled pledge pin"));
     outfit.meatDropWeight = 10;
-
-    this.doRoboDrinks();
 
     return {
       familiar: this.getFamiliarToUse(false),
@@ -204,7 +196,7 @@ export class Quest12WarNuns implements QuestInfo {
 
         this.tryToBuff();
 
-        let meat = this.getMeat();
+        const meat = this.getMeat();
 
         greyAdv(
           this.loc,
@@ -221,6 +213,13 @@ export class Quest12WarNuns implements QuestInfo {
             cliExecute("boombox food");
           }
         }
+
+        print(
+          `Turns Taken: ${this.loc.turnsSpent}, that's approx ${Math.round(
+            this.getMeat() / this.loc.turnsSpent
+          )} meat per adventure!`,
+          "blue"
+        );
       },
     };
   }

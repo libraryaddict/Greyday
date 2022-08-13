@@ -1,38 +1,5 @@
-import {
-  adv1,
-  availableAmount,
-  canadiaAvailable,
-  cliExecute,
-  council,
-  create,
-  damageReduction,
-  Element,
-  elementalResistance,
-  getProperty,
-  haveSkill,
-  Item,
-  itemAmount,
-  Location,
-  maximize,
-  myHp,
-  myLevel,
-  myMaxhp,
-  outfit,
-  restoreHp,
-  Skill,
-  toFloat,
-  toInt,
-  use,
-  visitUrl,
-} from "kolmafia";
-import { PropertyManager } from "../../utils/Properties";
-import {
-  getQuestStatus,
-  OutfitImportance,
-  QuestAdventure,
-  QuestInfo,
-  QuestStatus,
-} from "../Quests";
+import { council, getProperty, Location, visitUrl } from "kolmafia";
+import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { MurderHandler } from "./peaks/QuestL9MurderPeak";
 import { SmutOrcs } from "./peaks/QuestL9SmutOrcs";
 import { ABooHandler } from "./peaks/QuestL9AbooPeak";
@@ -61,7 +28,7 @@ export class QuestL9Smut implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = this.getStatus();
+    const status = this.getStatus();
 
     if (status == PeakStatus.finished) {
       return QuestStatus.COMPLETED;
@@ -95,7 +62,7 @@ export class QuestL9Smut implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
-      outfit: new GreyOutfit("-tie"),
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         this.visitMiLord();
         council();
