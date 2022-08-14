@@ -41,8 +41,8 @@ export class QuestTowerWallSkin extends TaskInfo implements QuestInfo {
 
   createPaths(assumeUnstarted: boolean) {
     this.paths = [
-      new PossiblePath(0),
-      new PossiblePath(0).add(ResourceCategory.HOT_TUB).addMeat(-1000),
+      new PossiblePath(0).addMeat(1000),
+      new PossiblePath(0).add(ResourceCategory.HOT_TUB),
     ];
   }
 

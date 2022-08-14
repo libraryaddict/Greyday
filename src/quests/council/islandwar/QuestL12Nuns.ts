@@ -112,16 +112,29 @@ export class Quest12WarNuns implements QuestInfo {
       return;
     }
 
-    // Now check if we can make this
+    // If no driveby on hand
+    if (availableAmount(this.driveby) == 0) {
+      // If no way to get grapefruit
+      if (
+        availableAmount(this.grapefruit) == 0 &&
+        getProperty("sidequestOrchardCompleted") == "none"
+      ) {
+        return;
+      }
 
-    if (
-      availableAmount(this.driveby) == 0 &&
-      availableAmount(this.piscatini) == 0 &&
-      availableAmount(this.boxedWine) == 0 &&
-      availableAmount(this.grapes) == 0
-    ) {
-      return;
+      // If we need pisc
+      if (availableAmount(this.piscatini) == 0) {
+        // If we can't make pisc
+        if (
+          availableAmount(this.fishHead) == 0 ||
+          availableAmount(this.boxedWine) == 0
+        ) {
+          return;
+        }
+      }
     }
+
+    // Now check if we can make this
 
     if (availableAmount(this.driveby) == 0) {
       cliExecute("create " + this.driveby.name);

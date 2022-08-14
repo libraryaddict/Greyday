@@ -145,18 +145,6 @@ export class TaskMaintainStatus implements Task {
         (myMp() + 10 >= desiredMp && myMaxmp() - myMp() < 50 ? 95 : 80)
     ) {
       useSkill(Skill.get("Sip Some Sweat"));
-    } else {
-      print(
-        desiredMp +
-          " " +
-          myMp() +
-          " " +
-          ronStatus +
-          " " +
-          getQuestStatus("questL11Shen") +
-          " " +
-          toInt(getProperty("sweat"))
-      );
     }
 
     while (myMeat() > 100 && myMp() < desiredMp) {

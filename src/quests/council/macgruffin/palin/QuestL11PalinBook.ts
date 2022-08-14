@@ -44,15 +44,13 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
   paths: PossiblePath[];
 
   createPaths(assumeUnused: boolean) {
-    this.paths = [new PossiblePath(0)];
+    this.paths = [new PossiblePath(0).addMeat(1000)];
 
     if (!assumeUnused && getQuestStatus("questL11Palindome") > 1) {
       return;
     }
 
-    this.paths.push(
-      new PossiblePath(0).addMeat(-1000).add(ResourceCategory.HOT_TUB)
-    );
+    this.paths.push(new PossiblePath(0).add(ResourceCategory.HOT_TUB));
   }
 
   getPossiblePaths(): PossiblePath[] {

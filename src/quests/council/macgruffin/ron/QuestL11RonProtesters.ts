@@ -420,7 +420,6 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
 
     const outfit = new GreyOutfit().setNoCombat().setNoCombat().setItemDrops();
 
-    print(path.equips.join(", "));
     path.equips.forEach((i) => outfit.addItem(i));
 
     if (sleazeScares * 2 >= lynyrdScares) {

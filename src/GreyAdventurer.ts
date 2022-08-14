@@ -31,6 +31,7 @@ import { QuestAdventure } from "./quests/Quests";
 import { TaskBoomboxSwitch } from "./tasks/TaskBoomboxSwitch";
 import { TaskCouncil } from "./tasks/TaskCouncil";
 import { TaskEater } from "./tasks/TaskEater";
+import { TaskEquipDistillery } from "./tasks/TaskEquipDistillery";
 import { TaskFuelAsdon } from "./tasks/TaskFuelAsdon";
 import { TaskJuneCleaver } from "./tasks/TaskJuneCleaver";
 import { TaskLatteFiller } from "./tasks/TaskLatteFiller";
@@ -72,6 +73,7 @@ export class GreyAdventurer {
     new TaskFuelAsdon(),
     new TaskJuneCleaver(),
     new TaskBoomboxSwitch(),
+    new TaskEquipDistillery(),
   ];
 
   runTurn(goTime: boolean): boolean {
