@@ -201,7 +201,7 @@ export type MoonZone = "Knoll" | "Canadia" | "Gnomad";
 
 export function getMoonZone(sign: MoonSign): MoonZone {
   const index = moonSigns.findIndex(
-    (s) => s.toLowerCase() == sign.toLowerCase()
+    (s) => s.toLowerCase() == sign?.toLowerCase()
   );
 
   if (index < 0) {
@@ -230,7 +230,7 @@ export class GreySettings {
   static greyDailyMalware: "true" | "false" | null;
   static greyPrepareLevelingResources: boolean;
   static greyFantasyBandits: boolean;
-  static greyTuneMoonSpoon: MoonSign;
+  static greyTuneMoonSpoon?: MoonSign;
   static greyDebug: boolean = toBoolean(getProperty("greyDebug") || "false");
   static greySkipPalindome: boolean;
   static greyPullsLimit: number;

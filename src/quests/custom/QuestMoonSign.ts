@@ -53,7 +53,7 @@ export class QuestMoonSign implements QuestInfo {
 
     if (
       moonSigns.find(
-        (s) => s.toLowerCase() == GreySettings.greyTuneMoonSpoon.toLowerCase()
+        (s) => s.toLowerCase() == GreySettings.greyTuneMoonSpoon?.toLowerCase()
       ) == null
     ) {
       return QuestStatus.COMPLETED;
