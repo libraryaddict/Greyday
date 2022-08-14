@@ -12,6 +12,7 @@ import {
   numericModifier,
   print,
   Skill,
+  storageAmount,
   toInt,
   use,
 } from "kolmafia";
@@ -70,11 +71,11 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
   // Possible paths.
   // We have sleaze, lynard, clovers
   sleazeEquips: Item[] = [
-    "deck of lewd playing cards",
+    this.deck,
     availableAmount(this.sweatpants) > 0
-      ? this.sweatpants.name
-      : "Transparent pants",
-  ].map((s) => Item.get(s));
+      ? this.sweatpants
+      : Item.get("Transparent pants"),
+  ];
 
   getRelation(id: QuestType): TaskRelation {
     if (id == "Council / Peaks / Orcs" && !haveSkill(this.smutSleazeSkill)) {
@@ -98,7 +99,9 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
 
     // Combinations of sleaze equips, clover, costume
     let allPossible: (Item | string)[] = [
-      ...this.sleazeEquips,
+      ...this.sleazeEquips.filter(
+        (i) => storageAmount(i) > 0 || availableAmount(i) > 0
+      ),
       ...this.lyrndCostume,
       "Clover",
       "Clover",
