@@ -5862,18 +5862,6 @@ var TaskMaintainStatus = /*#__PURE__*/function () {
       (0,external_kolmafia_namespaceObject.myMp)() + 10 >= desiredMp && (0,external_kolmafia_namespaceObject.myMaxmp)() - (0,external_kolmafia_namespaceObject.myMp)() < 50 ? 95 : 80))
       {
         (0,external_kolmafia_namespaceObject.useSkill)(external_kolmafia_namespaceObject.Skill.get("Sip Some Sweat"));
-      } else {
-        (0,external_kolmafia_namespaceObject.print)(
-        desiredMp +
-        " " +
-        (0,external_kolmafia_namespaceObject.myMp)() +
-        " " +
-        ronStatus +
-        " " +
-        getQuestStatus("questL11Shen") +
-        " " +
-        (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("sweat")));
-
       }
 
       while ((0,external_kolmafia_namespaceObject.myMeat)() > 100 && (0,external_kolmafia_namespaceObject.myMp)() < desiredMp) {
@@ -5990,8 +5978,8 @@ var QuestTowerWallSkin = /*#__PURE__*/function (_TaskInfo) {QuestTowerWallSkin_i
 
     function createPaths(assumeUnstarted) {
       this.paths = [
-      new PossiblePath(0),
-      new PossiblePath(0).add(ResourceCategory.HOT_TUB).addMeat(-1000)];
+      new PossiblePath(0).addMeat(1000),
+      new PossiblePath(0).add(ResourceCategory.HOT_TUB)];
 
     } }, { key: "getPossiblePaths", value:
 
@@ -7598,15 +7586,13 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
 
 
     function createPaths(assumeUnused) {
-      this.paths = [new PossiblePath(0)];
+      this.paths = [new PossiblePath(0).addMeat(1000)];
 
       if (!assumeUnused && getQuestStatus("questL11Palindome") > 1) {
         return;
       }
 
-      this.paths.push(
-      new PossiblePath(0).addMeat(-1000).add(ResourceCategory.HOT_TUB));
-
+      this.paths.push(new PossiblePath(0).add(ResourceCategory.HOT_TUB));
     } }, { key: "getPossiblePaths", value:
 
     function getPossiblePaths() {
@@ -8635,7 +8621,6 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
 
       var outfit = new GreyOutfit().setNoCombat().setNoCombat().setItemDrops();
 
-      (0,external_kolmafia_namespaceObject.print)(path.equips.join(", "));
       path.equips.forEach((i) => outfit.addItem(i));
 
       if (sleazeScares * 2 >= lynyrdScares) {
@@ -11357,16 +11342,29 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
         return;
       }
 
-      // Now check if we can make this
+      // If no driveby on hand
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.driveby) == 0) {
+        // If no way to get grapefruit
+        if (
+        (0,external_kolmafia_namespaceObject.availableAmount)(this.grapefruit) == 0 &&
+        (0,external_kolmafia_namespaceObject.getProperty)("sidequestOrchardCompleted") == "none")
+        {
+          return;
+        }
 
-      if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.driveby) == 0 &&
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.piscatini) == 0 &&
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.boxedWine) == 0 &&
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.grapes) == 0)
-      {
-        return;
+        // If we need pisc
+        if ((0,external_kolmafia_namespaceObject.availableAmount)(this.piscatini) == 0) {
+          // If we can't make pisc
+          if (
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.fishHead) == 0 ||
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.boxedWine) == 0)
+          {
+            return;
+          }
+        }
       }
+
+      // Now check if we can make this
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.driveby) == 0) {
         (0,external_kolmafia_namespaceObject.cliExecute)("create " + this.driveby.name);
@@ -14774,8 +14772,8 @@ var QuestTowerShadow = /*#__PURE__*/function (_TaskInfo) {QuestTowerShadow_inher
 
     function createPaths(assumeUnstarted) {
       this.paths = [
-      new PossiblePath(0),
-      new PossiblePath(0).add(ResourceCategory.HOT_TUB).addMeat(-1000)];
+      new PossiblePath(0).addMeat(1000),
+      new PossiblePath(0).add(ResourceCategory.HOT_TUB)];
 
     } }, { key: "getPossiblePaths", value:
 
@@ -25146,6 +25144,44 @@ var TaskEater = /*#__PURE__*/function () {
     } }, { key: "tryMakeCraftables", value:
 
     function tryMakeCraftables() {} }]);return TaskEater;}();
+;// CONCATENATED MODULE: ./src/tasks/TaskEquipDistillery.ts
+function TaskEquipDistillery_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskEquipDistillery_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskEquipDistillery_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskEquipDistillery_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskEquipDistillery_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskEquipDistillery_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+var TaskEquipDistillery = /*#__PURE__*/function () {
+
+
+
+
+  function TaskEquipDistillery() {TaskEquipDistillery_classCallCheck(this, TaskEquipDistillery);TaskEquipDistillery_defineProperty(this, "gelcube", external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling"));TaskEquipDistillery_defineProperty(this, "distill", void 0);TaskEquipDistillery_defineProperty(this, "lastRun", 0);
+    if ((0,external_kolmafia_namespaceObject.getRevision)() < 26657) {
+      (0,external_kolmafia_namespaceObject.visitUrl)("desc_item.php?whichitem=957101431");
+    }
+
+    this.distill = external_kolmafia_namespaceObject.Item.get("tiny stillsuit");
+  }TaskEquipDistillery_createClass(TaskEquipDistillery, [{ key: "run", value:
+
+    function run() {
+      if ((0,external_kolmafia_namespaceObject.itemAmount)(this.distill) == 0) {
+        return;
+      }
+
+      if (!(0,external_kolmafia_namespaceObject.haveFamiliar)(this.gelcube) || (0,external_kolmafia_namespaceObject.myFamiliar)() == this.gelcube) {
+        return;
+      }
+
+      if (this.lastRun-- > 0) {
+        return;
+      }
+
+      this.lastRun = 5;
+
+      (0,external_kolmafia_namespaceObject.visitUrl)(
+      "familiar.php?action=equip&pwd=&whichfam=171&whichitem=10932",
+      true);
+
+    } }]);return TaskEquipDistillery;}();
 ;// CONCATENATED MODULE: ./src/tasks/TaskFuelAsdon.ts
 function TaskFuelAsdon_slicedToArray(arr, i) {return TaskFuelAsdon_arrayWithHoles(arr) || TaskFuelAsdon_iterableToArrayLimit(arr, i) || TaskFuelAsdon_unsupportedIterableToArray(arr, i) || TaskFuelAsdon_nonIterableRest();}function TaskFuelAsdon_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskFuelAsdon_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskFuelAsdon_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskFuelAsdon_arrayLikeToArray(o, minLen);}function TaskFuelAsdon_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskFuelAsdon_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function TaskFuelAsdon_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskFuelAsdon_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskFuelAsdon_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskFuelAsdon_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskFuelAsdon_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskFuelAsdon_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskFuelAsdon_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -25500,6 +25536,7 @@ function GreyAdventurer_toConsumableArray(arr) {return GreyAdventurer_arrayWitho
 
 
 
+
 var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAdventurer_classCallCheck(this, GreyAdventurer);GreyAdventurer_defineProperty(this, "goose",
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));GreyAdventurer_defineProperty(this, "adventureFinder",
     new AdventureFinder());GreyAdventurer_defineProperty(this, "goTime", void 0);GreyAdventurer_defineProperty(this, "tasks",
@@ -25513,7 +25550,8 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
     new TaskMaintainStatus(),
     new TaskFuelAsdon(),
     new TaskJuneCleaver(),
-    new TaskBoomboxSwitch()]);}GreyAdventurer_createClass(GreyAdventurer, [{ key: "runTurn", value:
+    new TaskBoomboxSwitch(),
+    new TaskEquipDistillery()]);}GreyAdventurer_createClass(GreyAdventurer, [{ key: "runTurn", value:
 
 
     function runTurn(goTime) {
@@ -26710,7 +26748,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "6b317e1";
+var lastCommitHash = "46472d2";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
