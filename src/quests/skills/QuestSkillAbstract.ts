@@ -1,5 +1,4 @@
-import { canAdv } from "canadv.ash";
-import { Location, Familiar, Monster, Skill, haveSkill, print } from "kolmafia";
+import { Location, Monster, Skill, haveSkill, canAdventure } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
@@ -39,7 +38,7 @@ export class QuestSkillAbstract implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!canAdv(this.location)) {
+    if (!canAdventure(this.location)) {
       return QuestStatus.NOT_READY;
     }
 
@@ -47,7 +46,7 @@ export class QuestSkillAbstract implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (this.location.combatPercent < 100) {
       outfit.setPlusCombat();
@@ -57,7 +56,7 @@ export class QuestSkillAbstract implements QuestInfo {
       location: this.location,
       outfit: outfit,
       run: () => {
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
         settings.addNoBanish(this.monster);
 
         greyAdv(this.location, outfit, settings);

@@ -1,25 +1,4 @@
-import { canAdv } from "canadv.ash";
-import {
-  adv1,
-  availableAmount,
-  cliExecute,
-  council,
-  Effect,
-  equip,
-  Familiar,
-  getProperty,
-  haveEffect,
-  Item,
-  itemAmount,
-  Location,
-  myLevel,
-  print,
-  retrieveItem,
-  setProperty,
-  toInt,
-  use,
-  visitUrl,
-} from "kolmafia";
+import { Location } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { QuestL11DesertCompass } from "./desert/QuestL11DesertCompass";

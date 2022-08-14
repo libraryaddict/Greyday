@@ -1,8 +1,6 @@
-import { canAdv } from "canadv.ash";
 import {
   appearanceRates,
   fileToBuffer,
-  getLocationMonsters,
   getMonsters,
   getProperty,
   haveSkill,
@@ -10,12 +8,10 @@ import {
   Monster,
   numericModifier,
   print,
-  printHtml,
   Skill,
   toInt,
   toMonster,
   toSkill,
-  toString,
   visitUrl,
 } from "kolmafia";
 import { GreySettings } from "./utils/GreySettings";
@@ -62,7 +58,7 @@ class GreyUtils {
   }
 
   getMustHaveSkills(): Map<Skill, string> {
-    let values: [Skill, string][] = [
+    const values: [Skill, string][] = [
       ["Infinite Loop", "Fast Leveling"],
       ["Gravitational Compression", "Scaling Item Drop"],
       ["Hivemindedness", "Scaling MP Regen"],
@@ -86,15 +82,15 @@ class GreyUtils {
   }
 
   getAbsorbsInLocation(location: Location): Absorb[] {
-    let absorbs = [];
+    const absorbs = [];
 
     if (location == null) {
       return absorbs;
     }
 
-    let monsters = getMonsters(location);
+    const monsters = getMonsters(location);
 
-    for (let absorb of this.absorbs) {
+    for (const absorb of this.absorbs) {
       if (!monsters.includes(absorb.monster)) {
         continue;
       }
@@ -110,7 +106,7 @@ class GreyUtils {
     location: Location,
     includeSkills: boolean
   ): AdventureLocation {
-    let skills = this.getMustHaveSkills();
+    const skills = this.getMustHaveSkills();
 
     if (location == null) {
       return null;
@@ -128,12 +124,12 @@ class GreyUtils {
     }
 
     let advsSpent = 0;
-    let entries = Object.entries(appearanceRates(location));
-    let rates: [Monster, number][] = [];
+    const entries = Object.entries(appearanceRates(location));
+    const rates: [Monster, number][] = [];
 
     entries.forEach((v) => {
-      let monster = Monster.get(v[0]);
-      let rate = v[1];
+      const monster = Monster.get(v[0]);
+      const rate = v[1];
 
       if (rate <= 0) {
         return;
@@ -160,10 +156,10 @@ class GreyUtils {
       advsSpent++;
     }
 
-    let totalAdvs = absorbs.reduce((p, a) => a.adventures + p, 0);
-    let newSkills: Map<Absorb, string> = new Map();
+    const totalAdvs = absorbs.reduce((p, a) => a.adventures + p, 0);
+    const newSkills: Map<Absorb, string> = new Map();
 
-    for (let a of absorbs) {
+    for (const a of absorbs) {
       if (!skills.has(a.skill)) {
         continue;
       }
@@ -181,7 +177,7 @@ class GreyUtils {
   }
 
   getOnlyUsefulAbsorbs(absorbs: Absorb[]) {
-    let usefulSkills: Skill[] = [
+    const usefulSkills: Skill[] = [
       ...this.getMustHaveSkills().keys(),
       ...this.getRolloverAdvs().keys(),
     ];
@@ -196,17 +192,17 @@ class GreyUtils {
   }
 
   getUnabsorbed(): Absorb[] {
-    let absorbed: Monster[] = this.getAbsorbedMonsters();
+    const absorbed: Monster[] = this.getAbsorbedMonsters();
 
     return this.getAbsorbs().filter((a) => !absorbed.includes(a.monster));
   }
 
   getAbsorbedMonsters(): Monster[] {
     let page = visitUrl("charsheet.php");
-    let regex = /Absorbed .+? from .+?<!-- (\d+) --><br \/>/s;
+    const regex = /Absorbed .+? from .+?<!-- (\d+) --><br \/>/s;
 
     let match: string[];
-    let monsters: Monster[] = [];
+    const monsters: Monster[] = [];
 
     while ((match = page.match(regex)) != null) {
       page = page.replace(match[0], "");
@@ -229,21 +225,21 @@ class GreyUtils {
 
     this.absorbs = [];
 
-    for (let line of fileToBuffer("data/grey_you_data.txt").split("\n")) {
-      let spl = line.split("\t");
+    for (const line of fileToBuffer("data/grey_you_data.txt").split("\n")) {
+      const spl = line.split("\t");
 
       if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {
         continue;
       }
 
-      let mons = toMonster(spl[0]);
+      const mons = toMonster(spl[0]);
 
       if (mons == Monster.get("None")) {
         print("Unknown " + spl[0]);
         continue;
       }
 
-      let absorb = new Absorb();
+      const absorb = new Absorb();
       absorb.monster = mons;
 
       if (spl[1].endsWith("adventures")) {

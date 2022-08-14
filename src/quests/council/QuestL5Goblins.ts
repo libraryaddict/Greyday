@@ -1,8 +1,5 @@
-import { canAdv } from "canadv.ash";
 import {
-  adv1,
   autosell,
-  availableAmount,
   council,
   Effect,
   getProperty,
@@ -11,20 +8,11 @@ import {
   Item,
   itemAmount,
   Location,
-  myLevel,
-  Skill,
-  toInt,
   use,
 } from "kolmafia";
-import {
-  OutfitImportance,
-  QuestAdventure,
-  QuestInfo,
-  QuestStatus,
-} from "../Quests";
+import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
-import { Macro } from "../../utils/MacroBuilder";
+import { greyAdv } from "../../utils/GreyLocations";
 import { QuestType } from "../QuestTypes";
 import { QuestL5GoblinOutskirts } from "./goblins/QuestL5GoblinOutskirts";
 import { QuestL5GoblinHarem } from "./goblins/QuestL5GoblinHarem";

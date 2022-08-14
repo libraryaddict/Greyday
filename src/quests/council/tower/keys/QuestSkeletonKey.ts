@@ -1,14 +1,12 @@
-import { canAdv } from "canadv.ash";
 import {
   Location,
-  Familiar,
   Item,
   retrieveItem,
   availableAmount,
   getProperty,
   myMeat,
-  use,
   pullsRemaining,
+  canAdventure,
 } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -52,7 +50,7 @@ export class QuestSkeletonKey implements QuestInfo {
       }
     }
 
-    if (!canAdv(this.location)) {
+    if (!canAdventure(this.location)) {
       return QuestStatus.NOT_READY;
     }
 
@@ -80,7 +78,7 @@ export class QuestSkeletonKey implements QuestInfo {
   }
 
   adventure(): QuestAdventure {
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops();
 
     return {
       location: this.location,

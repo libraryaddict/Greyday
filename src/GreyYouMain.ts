@@ -33,7 +33,7 @@ class GreyYouMain {
   svn_name = "Kasekopf-loop-casual-branches-release";
 
   isRevisionPass(): boolean {
-    const required = 26545;
+    const required = 26657;
 
     if (getRevision() > 0 && getRevision() < required) {
       print(

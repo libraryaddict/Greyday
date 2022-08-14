@@ -1,21 +1,17 @@
-import { canAdv } from "canadv.ash";
 import {
   Location,
   Item,
   availableAmount,
   getProperty,
-  retrieveItem,
   visitUrl,
   runChoice,
   handlingChoice,
   itemAmount,
   create,
   Monster,
-  turnsPlayed,
   pullsRemaining,
   cliExecute,
 } from "kolmafia";
-import { PropertyManager } from "../../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
@@ -57,7 +53,7 @@ export class QuestDigitalKey implements QuestInfo {
       return QuestStatus.READY;
     }
 
-    let status = getQuestStatus("questL13Final");
+    const status = getQuestStatus("questL13Final");
 
     // If we're not at the keys, don't farm yet. We can still hit it from powerful glove
     if (status < 5) {
@@ -113,7 +109,7 @@ export class QuestDigitalKey implements QuestInfo {
       return {
         location: null,
         run: () => {
-          let toMake = Math.min(
+          const toMake = Math.min(
             itemAmount(this.rPixel),
             itemAmount(this.gPixel),
             itemAmount(this.bPixel),
@@ -134,9 +130,9 @@ export class QuestDigitalKey implements QuestInfo {
       };
     }
 
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops();
     outfit.addItem(this.transfomer);
-    let settings = new AdventureSettings();
+    const settings = new AdventureSettings();
     settings.addNoBanish(Monster.get("Blooper"));
     settings.addNoBanish(Monster.get("Buzzy Beetle"));
     settings.addNoBanish(Monster.get("Goomba"));

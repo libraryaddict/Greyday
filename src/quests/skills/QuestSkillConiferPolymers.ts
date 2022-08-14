@@ -1,32 +1,6 @@
-import {
-  Location,
-  Familiar,
-  Item,
-  Effect,
-  haveEffect,
-  myMeat,
-  getProperty,
-  toInt,
-  myAscensions,
-  availableAmount,
-  use,
-  visitUrl,
-  retrieveItem,
-  extractItems,
-  getRelated,
-  myDaycount,
-  setProperty,
-  print,
-  Skill,
-  haveSkill,
-  getZapWand,
-  Monster,
-} from "kolmafia";
-import { PropertyManager } from "../../utils/Properties";
-import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
+import { Location, Skill, haveSkill, Monster, canAdventure } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { GreyPulls } from "../../utils/GreyResources";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -34,7 +8,6 @@ import {
   QuestStatus,
 } from "../Quests";
 import { QuestType } from "../QuestTypes";
-import { canAdv } from "canadv.ash";
 
 export class QuestSkillConiferPolymers implements QuestInfo {
   location: Location = Location.get("The Bat Hole Entrance");
@@ -58,7 +31,7 @@ export class QuestSkillConiferPolymers implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!canAdv(this.location)) {
+    if (!canAdventure(this.location)) {
       return QuestStatus.NOT_READY;
     }
 
@@ -66,7 +39,7 @@ export class QuestSkillConiferPolymers implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (this.location.combatPercent < 100) {
       outfit.setPlusCombat();
@@ -76,7 +49,7 @@ export class QuestSkillConiferPolymers implements QuestInfo {
       location: this.location,
       outfit: outfit,
       run: () => {
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
         settings.addNoBanish(this.monster);
 
         greyAdv(this.location, outfit, settings);

@@ -1,5 +1,11 @@
-import { canAdv } from "canadv.ash";
-import { getProperty, haveOutfit, Location, Monster, print } from "kolmafia";
+import {
+  canAdventure,
+  getProperty,
+  haveOutfit,
+  Location,
+  Monster,
+  print,
+} from "kolmafia";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
@@ -53,7 +59,7 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!canAdv(this.harem)) {
+    if (!canAdventure(this.harem)) {
       return QuestStatus.NOT_READY;
     }
 

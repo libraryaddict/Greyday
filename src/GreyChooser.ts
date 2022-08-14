@@ -1,5 +1,5 @@
-import { canAdv } from "canadv.ash";
 import {
+  canAdventure,
   Effect,
   Familiar,
   familiarWeight,
@@ -275,7 +275,7 @@ export class AdventureFinder {
       .filter(
         (a) =>
           a.skills.size > 0 &&
-          canAdv(a.location) &&
+          canAdventure(a.location) &&
           !this.questLocations.includes(a.location)
       )
       .map((a) => {
@@ -293,7 +293,7 @@ export class AdventureFinder {
       .filter(
         (a) =>
           a.turnsToGain > 0 &&
-          canAdv(a.location) &&
+          canAdventure(a.location) &&
           !this.questLocations.includes(a.location)
       )
       .map((a) => {
@@ -311,7 +311,7 @@ export class AdventureFinder {
       .filter(
         (a) =>
           a.turnsToGain == 0 &&
-          canAdv(a.location) &&
+          canAdventure(a.location) &&
           !this.questLocations.includes(a.location)
       )
       .map((a) => {

@@ -23,7 +23,6 @@ module.exports = {
     libraryTarget: "commonjs"
   },
   externals: {
-    "canadv.ash": "commonjs canadv.ash",
     kolmafia: "commonjs kolmafia"
   },
   optimization: {

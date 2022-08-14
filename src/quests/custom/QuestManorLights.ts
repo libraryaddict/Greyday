@@ -1,4 +1,3 @@
-import { canAdv } from "canadv.ash";
 import {
   Location,
   Familiar,
@@ -7,23 +6,21 @@ import {
   totalTurnsPlayed,
   Item,
   visitUrl,
-  handlingChoice,
   lastChoice,
   currentRound,
   setProperty,
   familiarWeight,
   Skill,
-  indexOf,
   print,
   equip,
   Slot,
   toBoolean,
   haveEffect,
   Effect,
+  canAdventure,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { GreySettings } from "../../utils/GreySettings";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -201,7 +198,7 @@ export class QuestManorLights implements QuestInfo {
       if (fight) {
         outfit.addBonus("-equip june cleaver");
       } else {
-        equip(Slot.get("Weapon"), Item.get("None"));
+        equip(Slot.get("weapon"), Item.get("None"));
       }
     }
 
@@ -277,7 +274,7 @@ export class QuestManorLights implements QuestInfo {
     if (this.shouldDoSteve() && (!this.isSteveFight() || this.finishLights)) {
       const steve = this.getSteve();
 
-      if (canAdv(steve[0])) {
+      if (canAdventure(steve[0])) {
         return this.doSteve();
       }
     }
@@ -285,7 +282,7 @@ export class QuestManorLights implements QuestInfo {
     if (this.isElizaReady() && (!this.isElizaFight() || this.finishLights)) {
       const eliza = this.getEliza();
 
-      if (canAdv(eliza[0])) {
+      if (canAdventure(eliza[0])) {
         return this.doEliza();
       }
     }
@@ -302,7 +299,7 @@ export class QuestManorLights implements QuestInfo {
       if (fight) {
         outfit.addBonus("-equip june cleaver");
       } else {
-        equip(Slot.get("Weapon"), Item.get("None"));
+        equip(Slot.get("weapon"), Item.get("None"));
       }
     }
 
@@ -349,7 +346,7 @@ export class QuestManorLights implements QuestInfo {
     if (this.isElizaReady()) {
       const eliza = this.getEliza();
 
-      if (canAdv(eliza[0])) {
+      if (canAdventure(eliza[0])) {
         return true;
       }
     }
@@ -357,7 +354,7 @@ export class QuestManorLights implements QuestInfo {
     if (this.shouldDoSteve()) {
       const steve = this.getSteve();
 
-      if (canAdv(steve[0])) {
+      if (canAdventure(steve[0])) {
         return true;
       }
     }

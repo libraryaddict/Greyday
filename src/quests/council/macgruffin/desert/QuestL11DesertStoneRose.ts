@@ -1,6 +1,6 @@
-import { canAdv } from "canadv.ash";
 import {
   availableAmount,
+  canAdventure,
   Effect,
   Familiar,
   familiarWeight,
@@ -39,7 +39,7 @@ export class QuestL11DesertStoneRose implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Desert");
+    const status = getQuestStatus("questL11Desert");
 
     if (status > 0) {
       return QuestStatus.COMPLETED;
@@ -49,7 +49,7 @@ export class QuestL11DesertStoneRose implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (status < 0 || !canAdv(this.oasis)) {
+    if (status < 0 || !canAdventure(this.oasis)) {
       return QuestStatus.NOT_READY;
     }
 
@@ -74,7 +74,7 @@ export class QuestL11DesertStoneRose implements QuestInfo {
     return {
       location: this.oasis,
       run: () => {
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
         settings.addNoBanish(this.blur);
 
         greyAdv(this.oasis, null, settings);

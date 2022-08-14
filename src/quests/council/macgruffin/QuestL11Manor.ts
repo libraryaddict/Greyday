@@ -1,28 +1,10 @@
-import { canAdv } from "canadv.ash";
-import {
-  adv1,
-  availableAmount,
-  cliExecute,
-  council,
-  create,
-  equip,
-  equippedAmount,
-  getProperty,
-  Item,
-  itemAmount,
-  Location,
-  Monster,
-  myLevel,
-  use,
-  visitUrl,
-} from "kolmafia";
+import { canAdventure, getProperty, Location } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
-import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
+import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
   getQuestStatus,
-  OutfitImportance,
   QuestAdventure,
   QuestInfo,
   QuestStatus,
@@ -63,9 +45,9 @@ export class QuestL11Manor implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Manor");
+    const status = getQuestStatus("questL11Manor");
 
-    if (status < 0 || !canAdv(this.ballroom)) {
+    if (status < 0 || !canAdventure(this.ballroom)) {
       return QuestStatus.NOT_READY;
     }
 
@@ -85,13 +67,13 @@ export class QuestL11Manor implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat();
 
     return {
       location: this.ballroom,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         try {
           props.setChoice(921, 1); // Play da music

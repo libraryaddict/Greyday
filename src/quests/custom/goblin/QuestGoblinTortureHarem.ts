@@ -1,5 +1,4 @@
-import { canAdv } from "canadv.ash";
-import { Location, Familiar, getProperty } from "kolmafia";
+import { Location, Familiar, getProperty, canAdventure } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
@@ -18,7 +17,7 @@ export class QuestGoblinTortureHarem implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (canAdv(this.lab)) {
+    if (canAdventure(this.lab)) {
       return QuestStatus.COMPLETED;
     }
 
@@ -30,7 +29,7 @@ export class QuestGoblinTortureHarem implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat();
 
     return {
       outfit: outfit,

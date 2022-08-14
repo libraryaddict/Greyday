@@ -1,5 +1,4 @@
-import { canAdv } from "canadv.ash";
-import { Location, Familiar } from "kolmafia";
+import { Location } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
@@ -22,7 +21,7 @@ export class QuestL11ShenBats implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Shen");
+    const status = getQuestStatus("questL11Shen");
 
     if (status > 1) {
       return QuestStatus.COMPLETED;
@@ -40,7 +39,7 @@ export class QuestL11ShenBats implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (getQuestStatus("questL04Bat") <= 3) {
       outfit.setItemDrops();

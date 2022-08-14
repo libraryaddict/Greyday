@@ -1,14 +1,4 @@
-import { canAdv } from "canadv.ash";
-import {
-  adv1,
-  availableAmount,
-  getProperty,
-  haveSkill,
-  Item,
-  itemAmount,
-  Location,
-  Skill,
-} from "kolmafia";
+import { canAdventure, getProperty, Location } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { QuestInfo, QuestStatus, QuestAdventure } from "../../Quests";
@@ -27,11 +17,14 @@ export class QuestGoblinTortureLab implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (canAdv(this.megL3)) {
+    if (canAdventure(this.megL3)) {
       return QuestStatus.COMPLETED;
     }
 
-    if (!canAdv(this.lab) || getProperty("questL05Goblin") != "finished") {
+    if (
+      !canAdventure(this.lab) ||
+      getProperty("questL05Goblin") != "finished"
+    ) {
       return QuestStatus.NOT_READY;
     }
 
@@ -39,7 +32,7 @@ export class QuestGoblinTortureLab implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops();
 
     return {
       outfit: outfit,

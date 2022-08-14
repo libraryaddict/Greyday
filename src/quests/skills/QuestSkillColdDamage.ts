@@ -1,4 +1,3 @@
-import { canAdv } from "canadv.ash";
 import {
   Location,
   Familiar,
@@ -6,6 +5,7 @@ import {
   Monster,
   haveSkill,
   getProperty,
+  canAdventure,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreySettings } from "../../utils/GreySettings";
@@ -41,7 +41,7 @@ export class QuestSkillColdDamage15 implements QuestInfo {
 
     if (
       getProperty("questL08Trapper") != "finished" ||
-      !canAdv(this.location)
+      !canAdventure(this.location)
     ) {
       return QuestStatus.NOT_READY;
     }
@@ -53,7 +53,7 @@ export class QuestSkillColdDamage15 implements QuestInfo {
     return {
       location: this.location,
       run: () => {
-        let settings = new AdventureSettings().addNoBanish(this.monster);
+        const settings = new AdventureSettings().addNoBanish(this.monster);
 
         greyAdv(this.location, null, settings);
       },
@@ -85,7 +85,7 @@ export class QuestSkillColdDamage10 implements QuestInfo {
 
     if (
       getQuestStatus("questL08Trapper") < 3 ||
-      !canAdv(this.location) ||
+      !canAdventure(this.location) ||
       !GreySettings.isHardcoreMode()
     ) {
       return QuestStatus.NOT_READY;
@@ -98,7 +98,7 @@ export class QuestSkillColdDamage10 implements QuestInfo {
     return {
       location: this.location,
       run: () => {
-        let settings = new AdventureSettings().addNoBanish(this.monster);
+        const settings = new AdventureSettings().addNoBanish(this.monster);
 
         greyAdv(this.location, null, settings);
       },

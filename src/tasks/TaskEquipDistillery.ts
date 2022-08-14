@@ -1,28 +1,17 @@
 import {
-  availableAmount,
   Familiar,
-  getRevision,
   haveFamiliar,
   Item,
   itemAmount,
   myFamiliar,
   visitUrl,
 } from "kolmafia";
-import { TaskInfo } from "../typings/TaskInfo";
 import { Task } from "./Tasks";
 
 export class TaskEquipDistillery implements Task {
   gelcube: Familiar = Familiar.get("Gelatinous Cubeling");
-  distill: Item;
+  distill: Item = Item.get("Tiny stillsuit");
   lastRun: number = 0;
-
-  constructor() {
-    if (getRevision() < 26657) {
-      visitUrl("desc_item.php?whichitem=957101431");
-    }
-
-    this.distill = Item.get("tiny stillsuit");
-  }
 
   run(): void {
     if (itemAmount(this.distill) == 0) {

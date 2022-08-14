@@ -1,6 +1,6 @@
-import { canAdv } from "canadv.ash";
 import {
   availableAmount,
+  canAdventure,
   Effect,
   equip,
   equippedAmount,
@@ -102,7 +102,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
     }
 
     if (
-      canAdv(this.oasis) &&
+      canAdventure(this.oasis) &&
       getProperty("_gnasirAvailable") == "true" &&
       this.wantsGnomeRose() &&
       availableAmount(this.rose) == 0
@@ -167,7 +167,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
 
     if (resource == null) {
       if (
-        canAdv(this.oasis) &&
+        canAdventure(this.oasis) &&
         haveEffect(this.hydrated) == 0 &&
         this.getExploredRemaining() > 3
       ) {
@@ -242,7 +242,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
             myFamiliar() != this.camel
           ) {
             useFamiliar(this.lefthand);
-            equip(this.compass, Slot.get("Familiar"));
+            equip(this.compass, Slot.get("familiar"));
           }
         }
 
