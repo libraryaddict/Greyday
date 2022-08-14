@@ -528,7 +528,7 @@ export class GreyRequirements {
 
     add(
       Item.get("Pantsgiving"),
-      "Gives +2 all res, 10 items which can help save turncount",
+      "Gives +2 all res, 10 items which can help save turncount and stacks up stomach size increasers",
       Required.USEFUL
     );
 

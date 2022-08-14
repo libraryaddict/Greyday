@@ -3,6 +3,7 @@ import {
   getProperty,
   inHardcore,
   Item,
+  mySign,
   toBoolean,
   toInt,
 } from "kolmafia";
@@ -215,6 +216,8 @@ export function getMoonZone(sign: MoonSign): MoonZone {
   return "Gnomad";
 }
 
+const spoon: Item = Item.get("hewn moon-rune spoon");
+
 export class GreySettings {
   static hardcoreMode: boolean = false;
   static speedRunMode: boolean = false;
@@ -240,6 +243,27 @@ export class GreySettings {
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();
+  }
+
+  static willBeAccessible(
+    moonzone: MoonZone,
+    assumeUnstarted: boolean = false
+  ): boolean {
+    return (
+      (assumeUnstarted || getProperty("moonTuned") != "true") &&
+      availableAmount(spoon) > 0 &&
+      this.greyTuneMoonSpoon != null &&
+      getMoonZone(this.greyTuneMoonSpoon) == moonzone
+    );
+  }
+
+  static canMoonSpoon() {
+    return (
+      getProperty("moonTuned") == "false" &&
+      availableAmount(spoon) > 0 &&
+      this.greyTuneMoonSpoon != null &&
+      this.greyTuneMoonSpoon.toLowerCase() != mySign().toLowerCase()
+    );
   }
 
   /**

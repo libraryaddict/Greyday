@@ -270,6 +270,7 @@ const combatLocket: SomeResource = {
 };
 
 const wish = Item.get("Pocket Wish");
+const genieBottle = Item.get("Genie Bottle");
 
 const wishFaxer: SomeResource = {
   type: ResourceCategory.FAXER,
@@ -277,11 +278,17 @@ const wishFaxer: SomeResource = {
   worthInAftercore: 50000, // Sell
   prepare: () => {},
   fax: (monster: Monster) => {
-    if (availableAmount(wish) == 0) {
+    if (
+      availableAmount(genieBottle) > 0 &&
+      toInt(getProperty("_genieWishesUsed")) < 3
+    ) {
+      visitUrl("inv_use.php?pwd=&which=99&whichitem=9529");
+    } else if (availableAmount(wish) == 0) {
       throw "Not enough pocket wishes!";
+    } else {
+      visitUrl("inv_use.php?pwd=&which=99&whichitem=9537");
     }
 
-    visitUrl("inv_use.php?pwd=&which=99&whichitem=9537");
     visitUrl("choice.php?forceoption=0");
 
     try {

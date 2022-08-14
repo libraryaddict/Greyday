@@ -24,23 +24,23 @@ export enum LatteFlavor {
 const latteAliases: Map<string, string> = new Map([["fortified", "vitamins"]]);
 
 function getFlavors(): string[] {
-  let page = visitUrl("main.php?latte=1", false);
-  let flavors: string[] = [];
+  const page = visitUrl("main.php?latte=1", false);
+  const flavors: string[] = [];
 
-  for (let spl of page.split(
+  for (const spl of page.split(
     '<td valign="top" style="border-bottom: 1px solid black"></td>'
   )) {
     let match = spl.match(
-      /<input  type="radio" name="l([123])" checked value="[a-zA-Z0-9\/+]+">[a-zA-z- ]+<\/td>/
+      /<input {2}type="radio" name="l([123])" checked value="[a-zA-Z0-9/+]+">[a-zA-z- ]+<\/td>/
     );
 
     if (match == null) {
       continue;
     }
 
-    let level = toInt(match[1]);
+    const level = toInt(match[1]);
     match = spl.match(
-      /<input  type="radio" name="l1" (?:checked)? value="[a-zA-Z0-9\/+]+"> *([a-zA-z- ]+?) *<\/td>/
+      /<input {2}type="radio" name="l1" (?:checked)? value="[a-zA-Z0-9/+]+"> *([a-zA-z- ]+?) *<\/td>/
     );
 
     flavors[level - 1] = match[1];
@@ -50,7 +50,7 @@ function getFlavors(): string[] {
 }
 
 export function getCurrentLatteFlavors(): LatteFlavor[] {
-  let knownFlavors = getProperty("_latteFlavors");
+  const knownFlavors = getProperty("_latteFlavors");
 
   if (knownFlavors.startsWith(getProperty("latteModifier") + "|")) {
     return knownFlavors
@@ -58,14 +58,14 @@ export function getCurrentLatteFlavors(): LatteFlavor[] {
       .split(",") as LatteFlavor[];
   }
 
-  let getEnum: (flavor: string) => LatteFlavor = (flavor: string) => {
+  const getEnum: (flavor: string) => LatteFlavor = (flavor: string) => {
     flavor = flavor.toLowerCase();
 
     if (latteAliases.has(flavor)) {
       flavor = latteAliases.get(flavor);
     }
 
-    for (let v of Object.values(LatteFlavor)) {
+    for (const v of Object.values(LatteFlavor)) {
       if (flavor != v) {
         continue;
       }
@@ -76,10 +76,10 @@ export function getCurrentLatteFlavors(): LatteFlavor[] {
     return LatteFlavor.UNKNOWN;
   };
 
-  let flavors = getFlavors();
+  const flavors = getFlavors();
 
   for (let i = 0; i < flavors.length; i++) {
-    let flav = getEnum(flavors[i]);
+    const flav = getEnum(flavors[i]);
 
     if (flav == LatteFlavor.UNKNOWN) {
       throw "Unknown Latte Flavor " + flavors[i] + "! Please add the alias.";
@@ -99,9 +99,3 @@ export function getCurrentLatteFlavors(): LatteFlavor[] {
 export function hasUnlockedLatteFlavor(drink: LatteFlavor): boolean {
   return getProperty("latteUnlocks").split(",").includes(drink);
 }
-
-export function setupLatte(
-  flavor1: LatteFlavor,
-  flavor2: LatteFlavor,
-  flavor3: LatteFlavor
-) {}

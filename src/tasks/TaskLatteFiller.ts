@@ -27,20 +27,20 @@ export class TaskLatteFiller implements Task {
       return;
     }
 
-    let flavors: LatteFlavor[] = [
+    const flavors: LatteFlavor[] = [
       LatteFlavor.FAMILIAR_WEIGHT,
       LatteFlavor.MEAT_DROP,
       LatteFlavor.FAM_EXP,
     ];
 
-    let currentFlavors = getCurrentLatteFlavors();
+    const currentFlavors = getCurrentLatteFlavors();
 
     if (flavors.filter((f) => !currentFlavors.includes(f)).length == 0) {
       this.skipLatte = true;
       return;
     }
 
-    let notUnlocked = flavors.filter((f) => !hasUnlockedLatteFlavor(f));
+    const notUnlocked = flavors.filter((f) => !hasUnlockedLatteFlavor(f));
 
     if (notUnlocked.length > 0) {
       return;
