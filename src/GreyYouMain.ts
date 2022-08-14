@@ -14,6 +14,7 @@ import {
   toInt,
   toItem,
   turnsPlayed,
+  userConfirm,
   visitUrl,
 } from "kolmafia";
 import { GreyAdventurer } from "./GreyAdventurer";
@@ -242,6 +243,19 @@ class GreyYouMain {
     if (command == "absorbs") {
       this.adventures.adventureFinder.absorbs.printRemainingAbsorbs();
       return;
+    }
+
+    if (getProperty("autoSatisfyWithNPCs") == "false") {
+      const prompt = userConfirm(
+        "Your 'Buy from NPC stores' is disabled. Enable?"
+      );
+
+      if (!prompt) {
+        print("Unable to continue, not allowed to buy from NPC stores.", "red");
+        return;
+      }
+
+      setProperty("autoSatisfyWithNPCs", "true");
     }
 
     const simmedPath = new FigureOutPath().getPaths(
