@@ -258,6 +258,8 @@ function getMoonZone(sign) {
   return "Gnomad";
 }
 
+var spoon = external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon");
+
 var GreySettings = /*#__PURE__*/function () {function GreySettings() {_classCallCheck(this, GreySettings);}_createClass(GreySettings, null, [{ key: "isHardcoreMode", value:
 
 
@@ -283,6 +285,27 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {_classCall
 
     function isHardcoreMode() {
       return this.hardcoreMode || (0,external_kolmafia_namespaceObject.inHardcore)();
+    } }, { key: "willBeAccessible", value:
+
+    function willBeAccessible(
+    moonzone)
+
+    {var assumeUnstarted = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      return (
+        (assumeUnstarted || (0,external_kolmafia_namespaceObject.getProperty)("moonTuned") != "true") &&
+        (0,external_kolmafia_namespaceObject.availableAmount)(spoon) > 0 &&
+        this.greyTuneMoonSpoon != null &&
+        getMoonZone(this.greyTuneMoonSpoon) == moonzone);
+
+    } }, { key: "canMoonSpoon", value:
+
+    function canMoonSpoon() {
+      return (
+        (0,external_kolmafia_namespaceObject.getProperty)("moonTuned") == "false" &&
+        (0,external_kolmafia_namespaceObject.availableAmount)(spoon) > 0 &&
+        this.greyTuneMoonSpoon != null &&
+        this.greyTuneMoonSpoon.toLowerCase() != (0,external_kolmafia_namespaceObject.mySign)().toLowerCase());
+
     }
 
     /**
@@ -1440,6 +1463,7 @@ var combatLocket = {
 
 
 var wish = external_kolmafia_namespaceObject.Item.get("Pocket Wish");
+var genieBottle = external_kolmafia_namespaceObject.Item.get("Genie Bottle");
 
 var wishFaxer = {
   type: ResourceCategory.FAXER,
@@ -1447,11 +1471,17 @@ var wishFaxer = {
   worthInAftercore: 50000, // Sell
   prepare: () => {},
   fax: (monster) => {
-    if ((0,external_kolmafia_namespaceObject.availableAmount)(wish) == 0) {
+    if (
+    (0,external_kolmafia_namespaceObject.availableAmount)(genieBottle) > 0 &&
+    (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_genieWishesUsed")) < 3)
+    {
+      (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?pwd=&which=99&whichitem=9529");
+    } else if ((0,external_kolmafia_namespaceObject.availableAmount)(wish) == 0) {
       throw "Not enough pocket wishes!";
+    } else {
+      (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?pwd=&which=99&whichitem=9537");
     }
 
-    (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?pwd=&which=99&whichitem=9537");
     (0,external_kolmafia_namespaceObject.visitUrl)("choice.php?forceoption=0");
 
     try {
@@ -3035,7 +3065,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
       add(
       external_kolmafia_namespaceObject.Item.get("Pantsgiving"),
-      "Gives +2 all res, 10 items which can help save turncount",
+      "Gives +2 all res, 10 items which can help save turncount and stacks up stomach size increasers",
       Required.USEFUL);
 
 
@@ -5634,7 +5664,7 @@ function getFlavors() {
   '<td valign="top" style="border-bottom: 1px solid black"></td>')),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;)
     {var spl = _step.value;
       var match = spl.match(
-      /<input  type="radio" name="l([123])" checked value="[a-zA-Z0-9\/+]+">[a-zA-z- ]+<\/td>/);
+      /<input {2}type="radio" name="l([123])" checked value="[a-zA-Z0-9/+]+">[a-zA-z- ]+<\/td>/);
 
 
       if (match == null) {
@@ -5643,7 +5673,7 @@ function getFlavors() {
 
       var level = (0,external_kolmafia_namespaceObject.toInt)(match[1]);
       match = spl.match(
-      /<input  type="radio" name="l1" (?:checked)? value="[a-zA-Z0-9\/+]+"> *([a-zA-z- ]+?) *<\/td>/);
+      /<input {2}type="radio" name="l1" (?:checked)? value="[a-zA-Z0-9/+]+"> *([a-zA-z- ]+?) *<\/td>/);
 
 
       flavors[level - 1] = match[1];
@@ -5702,12 +5732,6 @@ function getCurrentLatteFlavors() {
 function hasUnlockedLatteFlavor(drink) {
   return (0,external_kolmafia_namespaceObject.getProperty)("latteUnlocks").split(",").includes(drink);
 }
-
-function setupLatte(
-flavor1,
-flavor2,
-flavor3)
-{}
 ;// CONCATENATED MODULE: ./src/tasks/TaskMaintainStatus.ts
 function TaskMaintainStatus_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskMaintainStatus_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskMaintainStatus_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskMaintainStatus_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskMaintainStatus_arrayLikeToArray(o, minLen);}function TaskMaintainStatus_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskMaintainStatus_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskMaintainStatus_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskMaintainStatus_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskMaintainStatus_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskMaintainStatus_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskMaintainStatus_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -26684,7 +26708,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "848ec95";
+var lastCommitHash = "bac21cf";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
