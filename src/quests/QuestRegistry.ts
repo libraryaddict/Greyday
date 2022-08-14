@@ -410,6 +410,7 @@ export class QuestRegistry {
       { id: "Absorbs / Canadia" },
       { id: "Absorbs / Knoll" },
       { id: "Absorbs / Gnomads" },
+      { id: "Absorbs / Palin" },
       { id: "Council / Tower / Keys / Heroes" },
     ];
 

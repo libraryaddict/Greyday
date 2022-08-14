@@ -240,6 +240,7 @@ const QuestAbsorbs = [
   "Absorbs / Canadia",
   "Absorbs / Knoll",
   "Absorbs / Gnomads",
+  "Absorbs / Palin",
 ] as const;
 export const QuestTypeArray = [
   ...QuestCouncil,

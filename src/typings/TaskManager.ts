@@ -7,7 +7,7 @@
 // 6. Paths that are a one and done, but the quest can still be done
 // 7. Quests that are optional, but entirely depend on the path being picked. We can either provide a dummy path, or something else
 
-import { print, printHtml, toJson } from "kolmafia";
+import { print, printHtml } from "kolmafia";
 import { QuestInfo, QuestStatus } from "../quests/Quests";
 import { GreySettings } from "../utils/GreySettings";
 import {
@@ -19,57 +19,6 @@ import {
   SomeResource,
 } from "./ResourceTypes";
 import { PossibleMultiPath, PossiblePath, TaskInfo } from "./TaskInfo";
-
-// Key sources, daily dungeon is really the best example here. We don't have issues with the path, but with informing the selection that it counts as two.
-
-// Possible paths, an example would be frat outfit. We only need to pick one of them really. But we need to stick with it.
-
-// Resuming a path, really need to have each possible path implemention calculate how many it currently needs. We can skip over completed quests though.
-
-// So have questinfos with the same id as another, mean they are different ways to complete said quest.
-
-class ResourceHolder {
-  resourcesRemaining: Map<ResourceId, number> = new Map();
-
-  constructor(assumeUnused: boolean) {
-    for (const resource of getResources()) {
-      this.resourcesRemaining.set(
-        resource.id,
-        getResourcesLeft(resource.id, assumeUnused)
-      );
-    }
-  }
-
-  wouldUse(path: PossiblePath): SomeResource[] {
-    const resources: SomeResource[] = [];
-
-    for (const [res, amount] of path.resourcesNeeded) {
-      loop: while (amount > 0) {
-        for (const resource of getResources()) {
-          if (
-            resource.type != res ||
-            path.ignoreResources.includes(resource.id)
-          ) {
-            continue;
-          }
-
-          const uses = resource.resourcesUsed || 1;
-
-          if (this.resourcesRemaining.get(resource.id) - uses < 0) {
-            continue;
-          }
-
-          resources.push(resource);
-          continue loop;
-        }
-
-        return null;
-      }
-    }
-
-    return resources;
-  }
-}
 
 export class SimmedPath {
   resourcesRemaining: Map<ResourceId, number> = new Map();
@@ -395,21 +344,6 @@ export class FigureOutPath {
     }
 
     simmedPath.assignResources();
-
-    /* const subQuestPaths: [QuestInfo, PossibleMultiPath][] =
-      simmedPath.thisPath.filter(
-        ([, path]) => path instanceof PossibleMultiPath
-      ) as [QuestInfo, PossibleMultiPath][];
-
-    simmedPath.thisPath = simmedPath.thisPath.filter(
-      ([, path]) => !(path instanceof PossibleMultiPath)
-    );
-
-    for (const [, path] of subQuestPaths) {
-      path.subpaths.forEach((sub) => {
-        simmedPath.thisPath.push(sub);
-      });
-    }*/
 
     miscPaths.forEach((q) => {
       simmedPath.thisPath.push([q, null]);

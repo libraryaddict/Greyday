@@ -23,6 +23,7 @@ import { QuestType } from "./QuestTypes";
 import { QuestLocketInfiniteLoop } from "./skills/QuestLocketInfiniteLoop";
 import { QuestSkillRegistry } from "./skills/QuestSkillRegistry";
 import { QuestAbsorbGnomads } from "./absorbs/QuestAbsorbGnomads";
+import { QuestL11PalinAbsorbs } from "./absorbs/QuestL11PalinAbsorbs";
 
 export class QuestsCustom implements QuestInfo {
   // This is a wrapper class around some of our custom routing goals. Like combat locket or so.
@@ -52,6 +53,7 @@ export class QuestsCustom implements QuestInfo {
     this.quests.push(new QuestAbsorbCanadia());
     this.quests.push(new QuestAbsorbKnoll());
     this.quests.push(new QuestAbsorbGnomads());
+    this.quests.push(new QuestL11PalinAbsorbs());
     this.quests.push(new QuestJuneCleaver());
   }
 
