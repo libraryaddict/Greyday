@@ -36,7 +36,7 @@ export class QuestL8MountainGoats implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = this.getStatus();
+    const status = this.getStatus();
 
     if (status < MountainStatus.TRAPPER_DEMANDS) {
       return QuestStatus.NOT_READY;
@@ -60,6 +60,12 @@ export class QuestL8MountainGoats implements QuestInfo {
     return QuestStatus.READY;
   }
 
+  mustBeDone(): boolean {
+    return (
+      this.hasEverything() && this.getStatus() == MountainStatus.TRAPPER_DEMANDS
+    );
+  }
+
   getOreRemaining(): number {
     return 3 - availableAmount(this.neededOre());
   }
@@ -72,8 +78,12 @@ export class QuestL8MountainGoats implements QuestInfo {
     visitUrl("place.php?whichplace=mclargehuge&action=trappercabin");
   }
 
+  hasEverything(): boolean {
+    return availableAmount(this.cheese) >= 3 && this.getOreRemaining() <= 0;
+  }
+
   run(): QuestAdventure {
-    if (availableAmount(this.cheese) >= 3 && haveSkill(this.elementalSkill)) {
+    if (this.hasEverything()) {
       return {
         location: null,
         run: () => {
@@ -82,13 +92,13 @@ export class QuestL8MountainGoats implements QuestInfo {
       };
     }
 
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops();
 
     return {
       location: this.goats,
       outfit: outfit,
       run: () => {
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
 
         if (!haveSkill(this.elementalSkill)) {
           settings.addNoBanish(this.drunk);

@@ -47,6 +47,7 @@ export class QuestManorKitchen implements QuestInfo {
   torso: Skill = Skill.get("Torso Awareness");
   spoon: Item = Item.get("hewn moon-rune spoon");
   scaleShirt: Item = Item.get("blessed rustproof +2 gray dragon scale mail");
+  telegram: Item = Item.get("Telegram from Lady Spookyraven");
 
   getId(): QuestType {
     return "Manor / Kitchen";
@@ -76,6 +77,10 @@ export class QuestManorKitchen implements QuestInfo {
   }
 
   status(): QuestStatus {
+    if (availableAmount(this.telegram) > 0) {
+      use(this.telegram);
+    }
+
     // Each 3 resist in each element is another drawer searched.
     // 21 drawers searched.
     // Max of 9 total res

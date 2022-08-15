@@ -1,15 +1,20 @@
 import {
   availableAmount,
   cliExecute,
+  Familiar,
+  familiarEquippedEquipment,
   getLocketMonsters,
   getProperty,
   Item,
   Location,
   Monster,
+  myFamiliar,
+  retrieveItem,
   toInt,
   toLocation,
   toMonster,
   turnsPlayed,
+  useFamiliar,
   visitUrl,
 } from "kolmafia";
 
@@ -29,6 +34,7 @@ export function centerText(text: string, color?: string): string {
 }
 
 const umbrella: Item = Item.get("Unbreakable Umbrella");
+const lefthand: Familiar = Familiar.get("Left-Hand Man");
 
 export function setUmbrella(setting: UmbrellaState) {
   if (
@@ -36,6 +42,13 @@ export function setUmbrella(setting: UmbrellaState) {
     getProperty("umbrellaState").includes(setting)
   ) {
     return;
+  }
+
+  if (
+    familiarEquippedEquipment(lefthand) == umbrella &&
+    myFamiliar() != lefthand
+  ) {
+    retrieveItem(umbrella);
   }
 
   cliExecute("umbrella " + setting);

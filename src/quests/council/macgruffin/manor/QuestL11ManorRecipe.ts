@@ -27,7 +27,7 @@ export class QuestL11ManorRecipe implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Manor");
+    const status = getQuestStatus("questL11Manor");
 
     if (status < 1) {
       return QuestStatus.NOT_READY;

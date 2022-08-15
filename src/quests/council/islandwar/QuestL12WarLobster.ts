@@ -54,7 +54,7 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
   createPaths(assumeUnstarted: boolean): void {
     const barrelsNeeded =
       5 - (assumeUnstarted ? 0 : availableAmount(this.item));
-    const turnsManual = 6;
+    const turnsManual = 8;
     const copyReady = this.lastMonster() == this.monster;
     this.manual = new PossiblePath(turnsManual * barrelsNeeded);
 
@@ -62,7 +62,7 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
 
     // 4 for the copies, 8 for the source
     this.backups = new PossiblePath(
-      copiesNeeded + (copyReady ? 0 : turnsManual)
+      barrelsNeeded + (copyReady ? 0 : turnsManual)
     )
       .add(ResourceCategory.COPIER, copiesNeeded)
       .addIgnored("Cosplay Saber");

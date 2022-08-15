@@ -131,7 +131,7 @@ export class QuestL11TempleUnlock implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (this.spookyLoc.turnsSpent >= 5) {
       outfit.setNoCombat();
@@ -148,7 +148,7 @@ export class QuestL11TempleUnlock implements QuestInfo {
         }
 
         if (!this.shouldWearLatte() && this.toAbsorb.length == 0) {
-          let delay = DelayBurners.getReadyDelayBurner();
+          const delay = DelayBurners.getReadyDelayBurner();
 
           if (delay != null) {
             delay.doFightSetup();
@@ -163,7 +163,7 @@ export class QuestL11TempleUnlock implements QuestInfo {
 
         this.runSpookyChoices();
 
-        let settings = new AdventureSettings().setChoices(this.choices);
+        const settings = new AdventureSettings().setChoices(this.choices);
 
         greyAdv(this.spookyLoc, outfit, settings);
 
@@ -202,7 +202,7 @@ class TempleChoices implements GreyChoices {
       );
     }
 
-    let toReturn = this.choices[0][1];
+    const toReturn = this.choices[0][1];
     this.choices.splice(0, 1);
 
     return toReturn;

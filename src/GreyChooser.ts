@@ -64,14 +64,18 @@ export class AdventureFinder {
 
       if (
         q.level() * (haveSkill(Skill.get("Infinite Loop")) ? 1 : 6) >
-        myBasestat(Stat.get("Muscle"))
+        myBasestat(Stat.get("Moxie"))
       ) {
         return;
       }
 
       const status = q.status(path);
 
-      if (status == QuestStatus.NOT_READY || status == QuestStatus.COMPLETED) {
+      if (status == QuestStatus.COMPLETED) {
+        return;
+      }
+
+      if (status == QuestStatus.NOT_READY) {
         return;
       }
 
