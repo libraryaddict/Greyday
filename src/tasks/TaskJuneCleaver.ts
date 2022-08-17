@@ -1,9 +1,18 @@
-import { getProperty, myMeat, setProperty, toInt } from "kolmafia";
+import {
+  availableAmount,
+  getProperty,
+  Item,
+  myMeat,
+  setProperty,
+  toInt,
+} from "kolmafia";
 import { Task } from "./Tasks";
 
 export class TaskJuneCleaver implements Task {
   hasSet: boolean = false;
   hasSet2: boolean = false;
+  hasSet3: boolean = false;
+  teachersPen: Item = Item.get("Teacher's Pen");
 
   run(): void {
     if (!this.hasSet) {
@@ -53,6 +62,11 @@ export class TaskJuneCleaver implements Task {
 
       // Hypnotic
       setProperty("choiceAdventure1475", "1"); // Moms necklace.
+    }
+
+    if (!this.hasSet3 && availableAmount(this.teachersPen) > 1) {
+      // Teachers
+      setProperty("choiceAdventure1470", "1"); // Teachers Pet
     }
   }
 }

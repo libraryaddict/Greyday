@@ -74,7 +74,7 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
 
   if (
     myFamiliar() == Familiar.get("Space Jellyfish") &&
-    monsterElement(monster) == Element.get("Stench")
+    monsterElement(monster) == Element.get("stench")
   ) {
     macro.trySkill(Skill.get("Extract Jelly"));
   }

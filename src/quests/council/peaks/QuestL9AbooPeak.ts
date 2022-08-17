@@ -114,8 +114,8 @@ export class ABooHandler implements QuestInfo {
   damageTaken(turn: number): number {
     const dmg = this.damageLevels[turn];
 
-    const sDmg = this.damageTakenByElement(dmg, Element.get("Spooky"));
-    const cDmg = this.damageTakenByElement(dmg, Element.get("Cold"));
+    const sDmg = this.damageTakenByElement(dmg, Element.get("spooky"));
+    const cDmg = this.damageTakenByElement(dmg, Element.get("cold"));
 
     return sDmg + cDmg;
   }
@@ -153,8 +153,8 @@ export class ABooHandler implements QuestInfo {
 
       const dmg = damageLevels[i];
 
-      const sDmg = this.damageTakenByElement(dmg, Element.get("Spooky"));
-      const cDmg = this.damageTakenByElement(dmg, Element.get("Cold"));
+      const sDmg = this.damageTakenByElement(dmg, Element.get("spooky"));
+      const cDmg = this.damageTakenByElement(dmg, Element.get("cold"));
 
       totalDamage += cDmg + sDmg;
 

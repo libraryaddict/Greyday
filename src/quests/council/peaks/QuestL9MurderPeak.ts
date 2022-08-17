@@ -59,7 +59,7 @@ export class MurderHandler implements QuestInfo {
       return QuestStatus.FASTER_LATER;
     }
 
-    if (this.needsStench() && elementalResistance(Element.get("Stench")) >= 4) {
+    if (this.needsStench() && elementalResistance(Element.get("stench")) >= 4) {
       return QuestStatus.READY;
     }
 
@@ -83,7 +83,7 @@ export class MurderHandler implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (availableAmount(this.rusty) == 0) {
       outfit.setNoCombat();
@@ -109,7 +109,7 @@ export class MurderHandler implements QuestInfo {
       location: this.loc,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         //cliExecute("retrocape vampire hold");
         cliExecute("backupcamera init");
 
@@ -128,7 +128,7 @@ export class MurderHandler implements QuestInfo {
             props.setChoice(606, 2);
           } else if (
             this.needsStench() &&
-            elementalResistance(Element.get("Stench")) >= 4
+            elementalResistance(Element.get("stench")) >= 4
           ) {
             props.setChoice(606, 1);
           } else if (this.needsJar() && this.hasJar()) {
@@ -140,7 +140,7 @@ export class MurderHandler implements QuestInfo {
           if (availableAmount(this.rusty) > 0) {
             use(this.rusty);
           } else {
-            let settings = new AdventureSettings();
+            const settings = new AdventureSettings();
 
             settings.addNoBanish(Monster.get("bearpig topiary animal"));
             settings.addNoBanish(

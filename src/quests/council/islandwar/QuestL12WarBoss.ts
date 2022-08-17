@@ -45,7 +45,7 @@ export class QuestL12WarBoss implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
     outfit.addItem(Item.get("Beer Helmet"));
     outfit.addItem(Item.get("distressed denim pants"));
     outfit.addItem(Item.get("bejeweled pledge pin"));
@@ -71,7 +71,7 @@ export class QuestL12WarBoss implements QuestInfo {
   }
 
   sellBuyCrap() {
-    let crap: Item[] = [
+    const crap: Item[] = [
       "pink clay bead",
       "purple clay bead",
       "green clay bead",
@@ -81,8 +81,8 @@ export class QuestL12WarBoss implements QuestInfo {
       "reinforced beaded headband",
     ].map((s) => Item.get(s));
 
-    for (let s of crap) {
-      let keep = toSlot(s) == Slot.get("None") ? 1 : 0;
+    for (const s of crap) {
+      const keep = toSlot(s) == toSlot("none") ? 1 : 0;
 
       if (itemAmount(s) <= keep) {
         continue;
@@ -91,8 +91,8 @@ export class QuestL12WarBoss implements QuestInfo {
       sell(s.buyer, itemAmount(s) - keep, s);
     }
 
-    let master = crap[0].buyer;
-    let garter = Item.get("gauze garter");
+    const master = crap[0].buyer;
+    const garter = Item.get("gauze garter");
     let gartersHave = itemAmount(garter);
 
     if (GreySettings.shouldAvoidTowerRequirements()) {

@@ -14,9 +14,9 @@ export class DelayBurningKramco implements DelayBurner {
   kramco: Item = Item.get("Kramco Sausage-o-Matic");
 
   doFightSetup(): Slot[] {
-    equip(Slot.get("Off-Hand"), this.kramco);
+    equip(this.kramco, Slot.get("off-hand"));
 
-    return [Slot.get("Off-Hand")];
+    return [Slot.get("off-hand")];
   }
 
   isViableAsCombatReplacer(): boolean {
@@ -46,7 +46,7 @@ export class DelayBurningKramco implements DelayBurner {
   }
 
   getNextGuaranteedGoblin(): number {
-    let goblinsFought = this.getGoblinsFought();
+    const goblinsFought = this.getGoblinsFought();
     return (
       4 +
       goblinsFought * 3 +

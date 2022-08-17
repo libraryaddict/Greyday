@@ -78,7 +78,7 @@ export class OilHandler implements QuestInfo {
 
     if (this.needsAbsorb()) {
       if (familiarWeight(Familiar.get("Grey Goose")) < 6) {
-        let effects = Object.keys(myEffects())
+        const effects = Object.keys(myEffects())
           .map((e) => Effect.get(e))
           .reduce((p, e) => numericModifier(e, "Monster Level") + p, 0);
 
@@ -116,7 +116,7 @@ export class OilHandler implements QuestInfo {
   }
 
   doMonsterLevel() {
-    let level = numericModifier("Monster Level");
+    const level = numericModifier("Monster Level");
 
     if (level >= 100) {
       throw "Need to lower your monster level, TODO!";
@@ -125,10 +125,10 @@ export class OilHandler implements QuestInfo {
     if (level <= 50) {
       cliExecute("backupcamera ml");
 
-      let item = Item.get("Backup Camera");
+      const item = Item.get("Backup Camera");
 
       if (equippedAmount(item) == 0) {
-        equip(Slot.get("Acc3"), item);
+        equip(item, Slot.get("acc3"));
       }
 
       if (numericModifier("Monster Level") < 50) {
@@ -142,7 +142,7 @@ export class OilHandler implements QuestInfo {
       return this.doAbsorb();
     }
 
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops();
     outfit.plusMonsterLevelWeight = 2;
     //    outfit.addItem(Item.get("Unbreakable Umbrella"));
     outfit.addBonus("-offhand");

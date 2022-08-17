@@ -45,8 +45,8 @@ export class DelayBurningCursedMagnifyingGlass implements DelayBurner {
   doSetup(): void {}
 
   doFightSetup(): Slot[] {
-    equip(Slot.get("Off-Hand"), this.item);
+    equip(this.item, Slot.get("off-hand"));
 
-    return [Slot.get("Off-Hand")];
+    return [Slot.get("off-hand")];
   }
 }

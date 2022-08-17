@@ -63,7 +63,7 @@ export class QuestL11ShenTurnIn implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Shen");
+    const status = getQuestStatus("questL11Shen");
 
     if (status > 6) {
       return QuestStatus.COMPLETED;
@@ -85,13 +85,13 @@ export class QuestL11ShenTurnIn implements QuestInfo {
   }
 
   needToDeliver(): boolean {
-    let prop = getProperty("questL11Shen");
+    const prop = getProperty("questL11Shen");
 
     return prop == "step2" || prop == "step4" || prop == "step6";
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     /*  if (
       getProperty("copperheadClubHazard") != "lantern" ||
@@ -100,7 +100,7 @@ export class QuestL11ShenTurnIn implements QuestInfo {
       outfit.setItemDrops();
     }
 
-    let usingRobo =
+    const usingRobo =
       haveFamiliar(this.robor) &&
       !isBanished(this.penguin) &&
       this.toAbsorb.length == 0;
@@ -123,7 +123,7 @@ export class QuestL11ShenTurnIn implements QuestInfo {
           ) {
             equip(this.ball);
           } else if (equippedAmount(this.ball) > 0) {
-            equip(Slot.get("Familiar"), Item.get("None"));
+            equip(Slot.get("familiar"), Item.get("None"));
           }
         } else if (
           this.toAbsorb.length == 0 &&
@@ -132,7 +132,7 @@ export class QuestL11ShenTurnIn implements QuestInfo {
           useFamiliar(Familiar.get("Grey Goose"));
         }
 
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         try {
           if (getProperty("copperheadClubHazard") != "lantern") {
@@ -141,7 +141,7 @@ export class QuestL11ShenTurnIn implements QuestInfo {
             props.setChoice(855, 4); // Get unnamed cocktails
 
             if (this.toAbsorb.length == 0) {
-              let ready = DelayBurners.getReadyDelayBurner();
+              const ready = DelayBurners.getReadyDelayBurner();
 
               if (ready != null) {
                 ready.doFightSetup();
@@ -157,9 +157,9 @@ export class QuestL11ShenTurnIn implements QuestInfo {
           props.setChoice(853, 1); // Sip poison
           props.setChoice(854, 1); // Sip poison
 
-          let settings = new AdventureSettings();
+          const settings = new AdventureSettings();
 
-          for (let m of this.crappyDisguises) {
+          for (const m of this.crappyDisguises) {
             settings.addNoBanish(m);
           }
 
@@ -184,8 +184,8 @@ export class QuestL11ShenTurnIn implements QuestInfo {
   }
 
   hittingNC(): boolean {
-    let turnsSpent = this.shenClub.turnsSpent;
-    let nextMeeting = Math.floor(getQuestStatus("questL11Shen") / 2) * 5;
+    const turnsSpent = this.shenClub.turnsSpent;
+    const nextMeeting = Math.floor(getQuestStatus("questL11Shen") / 2) * 5;
 
     return turnsSpent > nextMeeting - 1;
   }

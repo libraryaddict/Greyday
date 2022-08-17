@@ -23,9 +23,9 @@ export class DelayBurningVoter implements DelayBurner {
   sticker: Item = Item.get('"I Voted!" sticker');
 
   doFightSetup(): Slot[] {
-    equip(Slot.get("Acc3"), this.sticker);
+    equip(this.sticker, Slot.get("acc3"));
 
-    return [Slot.get("Acc3")];
+    return [Slot.get("acc3")];
   }
 
   isViableAsCombatReplacer(): boolean {

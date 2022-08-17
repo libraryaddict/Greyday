@@ -20,6 +20,7 @@ import {
   itemAmount,
   pullsRemaining,
   storageAmount,
+  SlotType,
 } from "kolmafia";
 import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
 import { ResourceCategory } from "../../../../typings/ResourceTypes";
@@ -78,8 +79,8 @@ export class QuestTowerShadow extends TaskInfo implements QuestInfo {
 
   getBestEquips(modifier: string): [Slot, Item][] {
     const equips: [Slot, Item, number][] = [];
-    const none = Slot.get("None");
-    const weapon = Slot.get("Weapon");
+    const none = toSlot("none");
+    const weapon = Slot.get("weapon");
 
     for (const i of Item.all()) {
       if (availableAmount(i) == 0) {
@@ -118,11 +119,11 @@ export class QuestTowerShadow extends TaskInfo implements QuestInfo {
       "Acc1",
       "Acc2",
       "Acc3",
-    ].map((s) => Slot.get(s))) {
+    ].map((s) => Slot.get(s as SlotType))) {
       let lookFor = slot;
 
-      if (slot == Slot.get("Acc2") || slot == Slot.get("Acc3")) {
-        lookFor = Slot.get("Acc1");
+      if (slot == Slot.get("acc2") || slot == Slot.get("acc3")) {
+        lookFor = Slot.get("acc1");
       }
 
       const item = equips.reduce((p, i) => {
@@ -150,11 +151,11 @@ export class QuestTowerShadow extends TaskInfo implements QuestInfo {
     const map: Map<Slot, Item> = new Map();
 
     if (availableAmount(this.badge) > 0) {
-      map.set(Slot.get("Acc3"), this.badge);
+      map.set(Slot.get("acc3"), this.badge);
     }
 
     if (availableAmount(this.cape) > 0) {
-      map.set(Slot.get("Back"), this.cape);
+      map.set(Slot.get("back"), this.cape);
     }
 
     const outfit = new GreyOutfit();
