@@ -36,7 +36,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
   );
   hippiesTaskManual: PossiblePath = new PossiblePath(20);
   hippyCamp: Location = Location.get("Hippy Camp");
-  fratCamp: Location = Location.get("Orcish Frat House");
+  fratCamp: Location = Location.get("Wartime Frat House (Hippy Disguise)");
 
   constructor() {
     super();
