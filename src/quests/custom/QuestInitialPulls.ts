@@ -1,6 +1,7 @@
 import {
   availableAmount,
   getProperty,
+  historicalPrice,
   Item,
   itemAmount,
   Location,
@@ -50,7 +51,9 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
         ([i]) => availableAmount(i) == 0
       );
       this.possiblePulls = this.possiblePulls.filter(
-        ([i]) => availableAmount(i) == 0
+        ([i]) =>
+          availableAmount(i) == 0 &&
+          (historicalPrice(i) < 1_000_000 || storageAmount(i) > 0)
       );
     }
 
