@@ -91,11 +91,18 @@ export class SimmedPath {
       );
     });
 
+    const advs = this.getAdvs();
+
     print(
-      "Using estimated value " +
-        this.getTotalCost() +
-        " of resources, save adventures " +
-        JSON.stringify(this.getAdvs())
+      "With mpa of " +
+        GreySettings.greyValueOfAdventure +
+        " and using estimated " +
+        Math.floor(this.getTotalCost()) +
+        " meat of resources, save " +
+        advs[0] +
+        " to " +
+        advs[1] +
+        " adventures compared to the worst alternatives"
     );
   }
 
@@ -154,10 +161,10 @@ export class SimmedPath {
   getTotalCost() {
     this.totalCost = this.thisPath
       .map((p) => (p[1] != null ? p[1].miscMeat : 0))
-      .reduce((p, n) => n + p, 0);
+      .reduce((p, n) => p + n, 0);
 
     for (const resource of this.resourcesUsed) {
-      this.totalCost += resource[1].worthInAftercore * resource[2];
+      this.totalCost += resource[1].worthInAftercore * 1; //resource[2];
     }
 
     return this.totalCost;
@@ -189,7 +196,6 @@ export class FigureOutPath {
     const miscPaths: QuestInfo[] = [];
     const uncompleteable: QuestInfo[] = [];
 
-    let total = 0;
     // What we need to do is sort the paths by the most profitable. Ideally we want to eliminate the ones that are just not feasible asap.
     // If it wants 2 faxes but we only want 1, then we can immediately eliminate the least profitable.
     for (const quest of quests) {
@@ -274,12 +280,6 @@ export class FigureOutPath {
         continue;
       }
 
-      if (total == 0) {
-        total = paths.length;
-      } else {
-        total += paths.length;
-      }
-
       // Now we figure out how many advs each path would save compared to the other
       const mostAdvsCouldveUsed = paths
         .map((p) => [p.advsSavedMin, p.advsSavedMax])
@@ -294,6 +294,18 @@ export class FigureOutPath {
       });
 
       paths.sort((p1, p2) => p1.getCostPerAdv() - p2.getCostPerAdv());
+
+      const cheapestNoResource: PossiblePath = paths.find(
+        (p) => p.resourcesNeeded.length == 0
+      );
+
+      if (cheapestNoResource != null) {
+        const meatSavedOnPath =
+          cheapestNoResource.pathCost -
+          ((cheapestNoResource.advsSavedMin + cheapestNoResource.advsSavedMax) /
+            2) *
+            GreySettings.greyValueOfAdventure;
+      }
 
       allPaths.push([quest, paths]);
     }
@@ -321,16 +333,7 @@ export class FigureOutPath {
     }
 
     allPaths.sort(([, [p1]], [, [p2]]) => {
-      const c1 =
-        p1.getCostPerAdv() > GreySettings.greyValueOfAdventure
-          ? 0
-          : p1.getCostPerAdv();
-      const c2 =
-        p2.getCostPerAdv() > GreySettings.greyValueOfAdventure
-          ? 0
-          : p2.getCostPerAdv();
-
-      return c1 - c2;
+      return p1.getCostPerAdv() - p2.getCostPerAdv();
     });
 
     const simmedPath = this.doAttempt(

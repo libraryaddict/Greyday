@@ -15,6 +15,7 @@ import {
 } from "kolmafia";
 import { QuestInfo } from "../quests/Quests";
 import { QuestType } from "../quests/QuestTypes";
+import { GreySettings } from "../utils/GreySettings";
 import {
   getResourcesLeft,
   ResourceCategory,
@@ -77,6 +78,12 @@ export class PossiblePath {
 
   getAverageTurns(): number {
     return Math.ceil((this.advsSavedMin + this.advsSavedMax) / 2);
+  }
+
+  getCostOfPath(): number {
+    return (
+      this.pathCost + this.getAverageTurns() * GreySettings.greyValueOfAdventure
+    );
   }
 
   getCostPerAdv(): number {

@@ -279,7 +279,7 @@ class GreyYouMain {
       const turns = toInt(s[1] || "1");
 
       const effect: Effect = Effect.get("Beaten Up");
-      let lastBeaten: number = 0;
+      let lastBeaten: number = haveEffect(effect);
 
       const timings = new GreyTimings();
       let turnsRunAsFar: number = 0;

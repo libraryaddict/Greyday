@@ -220,7 +220,7 @@ const cosplayCopier: SomeResource = {
 const cargoShorts: SomeResource = {
   type: ResourceCategory.CARGO_SHORTS,
   id: "Cargo Shorts",
-  worthInAftercore: 15000, // Some sellable item
+  worthInAftercore: 30000, // Some sellable item
   prepare: () => {},
   pocket: (pocket: number) => {
     visitUrl("inventory.php?action=pocket");

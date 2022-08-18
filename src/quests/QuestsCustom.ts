@@ -24,6 +24,7 @@ import { QuestLocketInfiniteLoop } from "./skills/QuestLocketInfiniteLoop";
 import { QuestSkillRegistry } from "./skills/QuestSkillRegistry";
 import { QuestAbsorbGnomads } from "./absorbs/QuestAbsorbGnomads";
 import { QuestL11PalinAbsorbs } from "./absorbs/QuestL11PalinAbsorbs";
+import { QuestAbsorbIrateMariachi as QuestAbsorbIrateMariachi } from "./absorbs/QuestAbsorbIrateMariachi";
 
 export class QuestsCustom implements QuestInfo {
   // This is a wrapper class around some of our custom routing goals. Like combat locket or so.
@@ -54,6 +55,7 @@ export class QuestsCustom implements QuestInfo {
     this.quests.push(new QuestAbsorbKnoll());
     this.quests.push(new QuestAbsorbGnomads());
     this.quests.push(new QuestL11PalinAbsorbs());
+    this.quests.push(new QuestAbsorbIrateMariachi());
     this.quests.push(new QuestJuneCleaver());
   }
 

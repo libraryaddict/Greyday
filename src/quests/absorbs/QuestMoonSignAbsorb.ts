@@ -98,7 +98,7 @@ export abstract class QuestMoonSignAbsorb
   }
 
   createPaths(assumeUnstarted: boolean): void {
-    if (this.isInSign() || this.willMoonTune()) {
+    if (this.isInSign() || this.willMoonTune(assumeUnstarted)) {
       this.paths = null;
       return;
     }
@@ -136,12 +136,12 @@ export abstract class QuestMoonSignAbsorb
     return this.moonZone == "Canadia";
   }
 
-  willMoonTune(): boolean {
+  willMoonTune(assumeUnstarted: boolean): boolean {
     if (availableAmount(this.spoon) == 0) {
       return false;
     }
 
-    if (getProperty("moonTuned") == "true") {
+    if (getProperty("moonTuned") == "true" && !assumeUnstarted) {
       return false;
     }
 

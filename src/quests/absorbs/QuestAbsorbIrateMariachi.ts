@@ -1,33 +1,27 @@
 import {
-  canFaxbot,
-  currentRound,
-  Familiar,
-  familiarWeight,
-  handlingChoice,
-  haveSkill,
-  Item,
-  Location,
   Monster,
-  myAscensions,
-  Skill,
+  Location,
+  Familiar,
+  canFaxbot,
+  familiarWeight,
+  currentRound,
+  handlingChoice,
 } from "kolmafia";
 import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
-import { Macro } from "../../utils/MacroBuilder";
+import { greyAdv } from "../../utils/GreyLocations";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
-export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
-  evenMonster: Monster = Monster.get("One-Eyed Willie");
-  oddMonster: Monster = Monster.get("Little Man in the Canoe");
+export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
+  irateMariachi: Monster = Monster.get("Irate Mariachi");
   familiar: Familiar = Familiar.get("Grey Goose");
-  nanovision: Skill = Skill.get("Double Nanovision");
   fax: PossiblePath = new PossiblePath(1).add(ResourceCategory.FAXER);
-  avoid: PossiblePath = new PossiblePath(20);
+  avoid: PossiblePath = new PossiblePath(10);
 
   createPaths() {
-    if (!canFaxbot(this.getMonster())) {
+    if (!canFaxbot(this.irateMariachi)) {
       this.fax.addIgnored("Fax Machine");
     }
   }
@@ -36,16 +30,12 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
     return [this.fax, this.avoid];
   }
 
-  getMonster(): Monster {
-    return myAscensions() % 2 != 0 ? this.evenMonster : this.oddMonster;
-  }
-
   getId(): QuestType {
-    return "Absorbs / Hole in Sky";
+    return "Absorbs / Irate Mariachi";
   }
 
   level(): number {
-    return 18;
+    return 10;
   }
 
   getLocations(): Location[] {
@@ -53,7 +43,7 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
   }
 
   status(path: PossiblePath): QuestStatus {
-    if (AbsorbsProvider.getReabsorbedMonsters().includes(this.getMonster())) {
+    if (AbsorbsProvider.getReabsorbedMonsters().includes(this.irateMariachi)) {
       return QuestStatus.COMPLETED;
     }
 
@@ -63,10 +53,6 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
 
     if (!path.canUse(ResourceCategory.FAXER)) {
       return QuestStatus.COMPLETED;
-    }
-
-    if (!haveSkill(this.nanovision)) {
-      return QuestStatus.NOT_READY;
     }
 
     if (familiarWeight(this.familiar) < 6) {
@@ -85,17 +71,9 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
       familiar: this.familiar,
       disableFamOverride: true,
       run: () => {
-        resource.fax(this.getMonster());
+        resource.fax(this.irateMariachi);
 
-        const macro = Macro.trySkill(Skill.get("Re-Process Matter"));
-
-        if (haveSkill(this.nanovision)) {
-          macro.trySkillRepeat(this.nanovision);
-        } else {
-          macro.trySkillRepeat(Skill.get("Infinite Loop"));
-        }
-
-        macro.submit();
+        greyAdv(null);
 
         if (handlingChoice() || currentRound() != 0) {
           throw "We're supposed to be done with this fight!";
@@ -105,6 +83,6 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
   }
 
   getAbsorbs(): Monster[] {
-    return [this.getMonster()];
+    return [this.irateMariachi];
   }
 }

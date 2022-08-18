@@ -10,6 +10,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -34,7 +35,7 @@ export class QuestL11ManorBomb implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Manor");
+    const status = getQuestStatus("questL11Manor");
 
     if (status < 2) {
       return QuestStatus.NOT_READY;
@@ -59,19 +60,26 @@ export class QuestL11ManorBomb implements QuestInfo {
       return {
         location: null,
         run: () => {
-          cliExecute("create Unstable Fulminate");
+          const props = new PropertyManager();
+          props.setProperty("requireBoxServants", "false");
+
+          try {
+            cliExecute("create Unstable Fulminate");
+          } finally {
+            props.resetAll();
+          }
         },
       };
     }
 
-    let outfit = new GreyOutfit().addItem(this.unstable);
+    const outfit = new GreyOutfit().addItem(this.unstable);
     outfit.plusMonsterLevelWeight = 5;
 
     return {
       location: this.boiler,
       outfit: outfit,
       run: () => {
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
         settings.addNoBanish(Monster.get("monstrous boiler"));
 
         greyAdv(this.boiler, outfit, settings);

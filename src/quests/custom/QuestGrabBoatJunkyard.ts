@@ -79,6 +79,7 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
   doHippyJunk(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl("place.php?whichplace=woods&action=woods_smokesignals");
         runChoice(1);

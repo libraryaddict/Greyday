@@ -411,6 +411,7 @@ export class QuestRegistry {
       { id: "Absorbs / Knoll" },
       { id: "Absorbs / Gnomads" },
       { id: "Absorbs / Palin" },
+      { id: "Absorbs / Irate Mariachi" },
       { id: "Council / Tower / Keys / Heroes" },
     ];
 

@@ -241,6 +241,7 @@ const QuestAbsorbs = [
   "Absorbs / Knoll",
   "Absorbs / Gnomads",
   "Absorbs / Palin",
+  "Absorbs / Irate Mariachi",
 ] as const;
 export const QuestTypeArray = [
   ...QuestCouncil,

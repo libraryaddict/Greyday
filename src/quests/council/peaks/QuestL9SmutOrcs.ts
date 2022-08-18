@@ -75,6 +75,10 @@ export class SmutOrcs implements QuestInfo {
   status(): QuestStatus {
     const status = getQuestStatus("questL09Topping");
 
+    if (status > 0) {
+      return QuestStatus.COMPLETED;
+    }
+
     if (
       status < 0 ||
       !haveSkill(Skill.get("Grey Noise")) ||
@@ -84,18 +88,14 @@ export class SmutOrcs implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (status > 0) {
-      return QuestStatus.COMPLETED;
-    }
-
     if (!this.isNCTime()) {
       if (this.lastColdCheck < turnsPlayed() - 5) {
         this.lastColdCheck = turnsPlayed();
 
-        maximize("cold dmg 10 min -tie", true);
+        maximize("cold dmg 10 min -ML 70 min -tie", true);
         const melee = numericModifier("Generated:_spec", "Cold Damage");
 
-        maximize("cold spell dmg 10 min -tie", true);
+        maximize("cold spell dmg 10 min -ML 70 min -tie", true);
         const spell = numericModifier("Generated:_spec", "Cold Spell Damage");
 
         this.hasEnoughCold = Math.max(melee, spell) >= 5;

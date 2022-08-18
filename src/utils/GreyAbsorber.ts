@@ -1,4 +1,5 @@
 import {
+  absorbedMonsters,
   appearanceRates,
   Familiar,
   familiarWeight,
@@ -416,72 +417,28 @@ export class AbsorbsProvider {
     return AbsorbsProvider.allAbsorbs;
   }
 
-  getAbsorbedMonstersFromInstance(
-    fresh: boolean = turnsPlayed() % 50 == 1
-  ): Map<Monster, Reabsorbed> {
+  getAbsorbedMonstersFromInstance(): Map<Monster, Reabsorbed> {
     const monsters: Map<Monster, Reabsorbed> = new Map();
+    const absorbed: Monster[] = this.getAbsorbedMonsters();
     const reabsorbed: Monster[] = AbsorbsProvider.getReabsorbedMonsters();
-    const absorbedProp = "_monstersFoughtToday";
 
-    if (getProperty(absorbedProp) == "" || fresh) {
-      this.getAbsorbedMonstersFromUrl().forEach((m) =>
-        monsters.set(
-          m,
-          reabsorbed.includes(m)
-            ? Reabsorbed.REABSORBED
-            : Reabsorbed.NOT_REABSORBED
-        )
-      );
-    } else {
-      getProperty(absorbedProp)
-        .split(",")
-        .map((m) => toMonster(toInt(m)))
-        .forEach((m) => {
-          monsters.set(m, Reabsorbed.NOT_REABSORBED);
-        });
-    }
-
-    for (const m of reabsorbed) {
+    reabsorbed.forEach((m) => {
       monsters.set(m, Reabsorbed.REABSORBED);
-    }
+    });
 
-    if (
-      lastMonster() != null &&
-      !monsters.has(lastMonster()) &&
-      AbsorbsProvider.getAbsorb(lastMonster()) != null
-    ) {
-      monsters.set(lastMonster(), Reabsorbed.NOT_REABSORBED);
-    }
+    absorbed.forEach((m) => {
+      if (reabsorbed.includes(m)) {
+        return;
+      }
 
-    if (getProperty(absorbedProp).split(",").length != monsters.size) {
-      const prop = getProperty("logPreferenceChange");
-      setProperty("logPreferenceChange", "false");
-      setProperty(
-        absorbedProp,
-        Array.from(monsters.keys())
-          .map((m) => m.id)
-          .join(",")
-      );
-
-      setProperty("logPreferenceChange", prop);
-    }
+      monsters.set(m, Reabsorbed.NOT_REABSORBED);
+    });
 
     return monsters;
   }
 
-  getAbsorbedMonstersFromUrl(): Monster[] {
-    let page = visitUrl("charsheet.php");
-    const regex = /Absorbed .+? from .+?<!-- (\d+) --><br \/>/s;
-
-    let match: string[];
-    const monsters: Monster[] = [];
-
-    while ((match = page.match(regex)) != null) {
-      page = page.replace(match[0], "");
-      monsters.push(toMonster(toInt(match[1])));
-    }
-
-    return monsters;
+  getAbsorbedMonsters(): Monster[] {
+    return Object.keys(absorbedMonsters()).map((m) => Monster.get(m));
   }
 
   static getReabsorbedMonsters(): Monster[] {
@@ -515,7 +472,7 @@ export class AbsorbsProvider {
   }
 
   printRemainingAbsorbs() {
-    const defeated = this.getAbsorbedMonstersFromInstance(true);
+    const defeated = this.getAbsorbedMonstersFromInstance();
     const absorbs = AbsorbsProvider.loadAbsorbs().filter(
       (a) =>
         a.adventures > 0 && defeated.get(a.monster) != Reabsorbed.REABSORBED
