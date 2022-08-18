@@ -414,7 +414,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
           loc,
           outfit,
           new AdventureSettings().setStartOfFightMacro(
-            new Macro().externalIf(
+            new Macro().if_(
               Monster.get("Fluffy Bunny"),
               path.getResource(ResourceCategory.COPIER).macro()
             )
