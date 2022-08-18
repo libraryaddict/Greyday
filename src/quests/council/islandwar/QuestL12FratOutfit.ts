@@ -68,7 +68,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
   }
 
   getId(): QuestType {
-    return "Council / War / Frat";
+    return "Council / War / Frat Outfit";
   }
 
   level(): number {

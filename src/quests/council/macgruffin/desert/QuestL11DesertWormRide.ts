@@ -9,6 +9,8 @@ import {
   use,
   Monster,
   familiarWeight,
+  Effect,
+  haveEffect,
 } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -26,6 +28,8 @@ export class QuestL11DesertWormRide implements QuestInfo {
   oasis: Location = Location.get("Oasis");
   toAbsorb: Monster[];
   fam: Familiar = Familiar.get("Grey Goose");
+  curse3: Effect = Effect.get("Thrice-Cursed");
+  hydrated: Effect = Effect.get("Ultrahydrated");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / WormRide";
@@ -36,7 +40,7 @@ export class QuestL11DesertWormRide implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Desert");
+    const status = getQuestStatus("questL11Desert");
 
     if (status < 0) {
       return QuestStatus.NOT_READY;
@@ -60,8 +64,14 @@ export class QuestL11DesertWormRide implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (availableAmount(this.drum) == 0 && this.getExploredRemaining() < 6) {
-      return QuestStatus.NOT_READY;
+    if (availableAmount(this.drum) == 0) {
+      if (haveEffect(this.hydrated) == 0 && haveEffect(this.curse3) > 0) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (this.getExploredRemaining() < 6) {
+        return QuestStatus.NOT_READY;
+      }
     }
 
     return QuestStatus.READY;
@@ -85,7 +95,7 @@ export class QuestL11DesertWormRide implements QuestInfo {
 
   run(): QuestAdventure {
     if (availableAmount(this.drum) == 0) {
-      let outfit = new GreyOutfit();
+      const outfit = new GreyOutfit();
       outfit.setItemDrops();
 
       return {

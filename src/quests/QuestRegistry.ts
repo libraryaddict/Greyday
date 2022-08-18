@@ -227,7 +227,7 @@ export class QuestRegistry {
       { id: "Council / Friars / TurnIn" },
 
       // Get this done early so we can start flyering
-      { id: "Council / War / Frat" },
+      { id: "Council / War / Frat Outfit" },
       { id: "Council / War / Start" },
       { id: "Council / War / Flyers" },
 

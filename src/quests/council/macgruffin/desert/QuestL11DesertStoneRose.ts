@@ -29,6 +29,7 @@ export class QuestL11DesertStoneRose implements QuestInfo {
   toAbsorb: Monster[];
   fam: Familiar = Familiar.get("Grey Goose");
   swarm: Monster = Monster.get("Swarm of fire ants");
+  curse3: Effect = Effect.get("Thrice-Cursed");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / StoneRose";
@@ -47,6 +48,10 @@ export class QuestL11DesertStoneRose implements QuestInfo {
 
     if (!this.wantsGnomeRose() || availableAmount(this.rose) > 0) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (haveEffect(this.hydrated) == 0 && haveEffect(this.curse3) > 0) {
+      return QuestStatus.NOT_READY;
     }
 
     if (status < 0 || !canAdventure(this.oasis)) {

@@ -121,7 +121,7 @@ const QuestMacGruffin = [
 ] as const;
 const QuestIslandWar = [
   "Council / War / Parent",
-  "Council / War / Frat",
+  "Council / War / Frat Outfit",
   "Council / War / Start",
   "Council / War / Gremlins",
   "Council / War / Lobsters",

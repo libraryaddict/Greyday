@@ -58,6 +58,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
   extingusherProp: string = "";
   kramco: Item = Item.get("Kramco Sausage-o-Matic&trade;");
   paths: PossiblePath[] = [];
+  curse3: Effect = Effect.get("Thrice-Cursed");
 
   createPaths(assumeUnstarted: boolean) {
     this.paths = [];
@@ -135,6 +136,10 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
       haveEffect(Effect.get("Tenuous Grip on Reality")) ||
       haveEffect(Effect.get("Barking Dogs"))
     ) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (haveEffect(this.hydrated) == 0 && haveEffect(this.curse3) > 0) {
       return QuestStatus.NOT_READY;
     }
 

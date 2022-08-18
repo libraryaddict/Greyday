@@ -419,7 +419,7 @@ export class AbsorbsProvider {
 
   getAbsorbedMonstersFromInstance(): Map<Monster, Reabsorbed> {
     const monsters: Map<Monster, Reabsorbed> = new Map();
-    const absorbed: Monster[] = this.getAbsorbedMonsters();
+    const absorbed: Monster[] = AbsorbsProvider.getAbsorbedMonsters();
     const reabsorbed: Monster[] = AbsorbsProvider.getReabsorbedMonsters();
 
     reabsorbed.forEach((m) => {
@@ -437,7 +437,7 @@ export class AbsorbsProvider {
     return monsters;
   }
 
-  getAbsorbedMonsters(): Monster[] {
+  static getAbsorbedMonsters(): Monster[] {
     return Object.keys(absorbedMonsters()).map((m) => Monster.get(m));
   }
 

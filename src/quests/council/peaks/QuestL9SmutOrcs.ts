@@ -83,7 +83,7 @@ export class SmutOrcs implements QuestInfo {
       status < 0 ||
       !haveSkill(Skill.get("Grey Noise")) ||
       myMp() < 15 ||
-      !AbsorbsProvider.getReabsorbedMonsters().includes(this.plastered)
+      !AbsorbsProvider.getAbsorbedMonsters().includes(this.plastered)
     ) {
       return QuestStatus.NOT_READY;
     }
