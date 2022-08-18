@@ -82,7 +82,10 @@ export function getCurrentLatteFlavors(): LatteFlavor[] {
     const flav = getEnum(flavors[i]);
 
     if (flav == LatteFlavor.UNKNOWN) {
-      throw "Unknown Latte Flavor " + flavors[i] + "! Please add the alias.";
+      /* print(
+        "Unknown Latte Flavor " + flavors[i] + "! Cautiously continuing..",
+        "gray"
+      );*/
     }
 
     flavors[i] = flav;
