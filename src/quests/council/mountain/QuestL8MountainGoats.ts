@@ -71,7 +71,7 @@ export class QuestL8MountainGoats implements QuestInfo {
   }
 
   neededOre(): Item {
-    return Item.get(getProperty("trapperOre"));
+    return Item.get(getProperty("trapperOre") || "asbestos ore");
   }
 
   talkTrapper() {
