@@ -122,6 +122,7 @@ export class QuestRegistry {
       { id: "Misc / Purchases" },
       { id: "Misc / FriarExp" },
       { id: "Misc / Moonsign" },
+      // These just make the absorbs prioritized higher
       {
         id: "Absorbs / Knoll",
         testValid: () =>
@@ -136,15 +137,6 @@ export class QuestRegistry {
         id: "Absorbs / Gnomads",
         testValid: () =>
           gnomadsAvailable() && GreySettings.greyTuneMoonSpoon != null,
-      },
-
-      {
-        id: "Council / MacGruffin / Desert / StoneRose",
-        testValid: () => haveEffect(Effect.get("Ultrahydrated")) > 0,
-      },
-      {
-        id: "Council / MacGruffin / Desert / Explore",
-        testValid: () => haveEffect(Effect.get("Ultrahydrated")) > 0,
       },
 
       // We might want system sweep after all! This needs to be cleaned
@@ -189,12 +181,6 @@ export class QuestRegistry {
 
       { id: "Council / MacGruffin / Vacation" },
 
-      // If we don't have the -combat skill, then prioritize the black forest
-      {
-        id: "Council / MacGruffin / Black",
-        testValid: () => !haveSkill(Skill.get("Photonic Shroud")),
-      },
-
       { id: "Council / Larva" },
 
       // We get +3 hot resist from raging bull
@@ -209,12 +195,6 @@ export class QuestRegistry {
 
       // Do the king cos he's lonely, also has 2k meat
       { id: "Council / Goblins / King" },
-
-      // Register this here cos I'm lazy
-      {
-        id: "Council / War / Filthworms",
-        testValid: () => haveEffect(Effect.get("Everything Looks Yellow")) == 0,
-      },
 
       // Register these here, because we want to burn their backups in delay zones
       { id: "Council / Tower / Keys / Heroes / FantasyBandit" },
@@ -234,7 +214,6 @@ export class QuestRegistry {
       // If we have the skill, then this doesn't need prioritizing as such
       {
         id: "Council / MacGruffin / Black",
-        testValid: () => haveSkill(Skill.get("Photonic Shroud")),
       },
 
       { id: "Skills / Photonic Shroud" },
@@ -326,11 +305,9 @@ export class QuestRegistry {
       { id: "Council / MacGruffin / Desert / Gnome" },
       {
         id: "Council / MacGruffin / Desert / StoneRose",
-        testValid: () => haveEffect(Effect.get("Ultrahydrated")) == 0,
       },
       {
         id: "Council / MacGruffin / Desert / Explore",
-        testValid: () => haveEffect(Effect.get("Ultrahydrated")) == 0,
       },
 
       // Unlock cellar
@@ -356,9 +333,6 @@ export class QuestRegistry {
       { id: "Skills / ColdDamage15" },
       { id: "Skills / ColdDamage10" },
 
-      // Tavern needs Larva done
-      { id: "Council / Tavern", testValid: () => myLevel() >= 20 },
-
       // Given that we earn nothing from peaks, just delay it until we should've hit our max +cold damage
       { id: "Council / Peaks / CargoShortsSmut" },
       { id: "Council / Peaks / Orcs" },
@@ -370,7 +344,6 @@ export class QuestRegistry {
       // OMG who cares about your stupid war
       {
         id: "Council / War / Filthworms",
-        testValid: () => haveEffect(Effect.get("Everything Looks Yellow")) > 0,
       },
       { id: "Council / War / Gremlins" },
 
@@ -378,7 +351,7 @@ export class QuestRegistry {
       { id: "Council / War / Boss" },
 
       // Tavern needs Larva done
-      { id: "Council / Tavern", testValid: () => myLevel() < 20 },
+      { id: "Council / Tavern" },
       { id: "Council / MacGruffin / Pyramid / EdUndying" },
 
       // Alright, this run is just about over kids. Lets finish it.

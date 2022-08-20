@@ -1,5 +1,4 @@
 import {
-  canFaxbot,
   currentRound,
   Effect,
   handlingChoice,
@@ -27,7 +26,7 @@ export class QuestLocketSystemSweep implements QuestInfo {
   rocket: Item = Item.get("Yellow Rocket");
   effect: Effect = Effect.get("Everything Looks Yellow");
   fax: PossiblePath = new PossiblePath(1)
-    .add(ResourceCategory.FAXER)
+    .addFax(this.monster)
     .add(ResourceCategory.YELLOW_RAY)
     .addIgnored("Cosplay Saber");
   noPath: PossiblePath = new PossiblePath(10);
@@ -35,12 +34,6 @@ export class QuestLocketSystemSweep implements QuestInfo {
 
   level(): number {
     return 1;
-  }
-
-  createPaths() {
-    if (!canFaxbot(this.monster)) {
-      this.fax.addIgnored("Fax Machine");
-    }
   }
 
   getPossiblePaths(): PossiblePath | PossiblePath[] {

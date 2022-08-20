@@ -65,7 +65,7 @@ export class QuestGrabBoatVacation implements QuestInfo {
     }
 
     if (isJunkYardBoatApproach()) {
-      return QuestStatus.NOT_READY;
+      //    return QuestStatus.NOT_READY;
     }
 
     if (!this.hasDesertAccess()) {
@@ -111,11 +111,11 @@ export class QuestGrabBoatVacation implements QuestInfo {
     return {
       location: null,
       run: () => {
-        let scriptAvailable = availableAmount(
+        const scriptAvailable = availableAmount(
           Item.get("Shore Inc. Ship Trip Scrip")
         );
 
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(793, 1);
 
         try {
@@ -126,7 +126,7 @@ export class QuestGrabBoatVacation implements QuestInfo {
           props.resetAll();
         }
 
-        let planks = Item.get("Dingy Planks");
+        const planks = Item.get("Dingy Planks");
 
         if (availableAmount(planks) == 0) {
           retrieveItem(planks);

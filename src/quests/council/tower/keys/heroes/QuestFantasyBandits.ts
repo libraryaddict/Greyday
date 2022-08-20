@@ -1,6 +1,5 @@
 import {
   availableAmount,
-  canFaxbot,
   Familiar,
   getProperty,
   Item,
@@ -12,7 +11,6 @@ import {
   runChoice,
   setProperty,
   toInt,
-  toMonster,
   useFamiliar,
   visitUrl,
 } from "kolmafia";
@@ -52,13 +50,9 @@ export class QuestFantasyBandit extends TaskInfo implements QuestInfo {
       return;
     }
 
-    this.path.add(ResourceCategory.FAXER);
+    this.path.addFax(this.monster);
     this.path.add(ResourceCategory.COPIER, 4);
     this.path.addIgnored("Cosplay Saber");
-
-    if (!canFaxbot(this.monster)) {
-      this.path.addIgnored("Fax Machine");
-    }
 
     // If we're assuming we've unstarted, no need to add this stuff
     if (assumeUnstarted) {

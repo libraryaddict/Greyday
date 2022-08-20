@@ -1,5 +1,4 @@
 import {
-  adv1,
   availableChoiceOptions,
   choiceFollowsFight,
   cliExecute,
@@ -11,22 +10,16 @@ import {
   Location,
   Monster,
   print,
-  runChoice,
-  setAutoAttack,
-  setProperty,
   toInt,
   visitUrl,
 } from "kolmafia";
-import {
-  castCombatSkill,
-  castNoCombatSkills,
-  hasNonCombatSkillActive,
-} from "../GreyAdventurer";
-import { Absorb } from "./GreyAbsorber";
+import { castCombatSkill, castNoCombatSkills } from "../GreyAdventurer";
 import { GreyChoices } from "./GreyChoices";
 import { greyDuringFightMacro, greyKillingBlow } from "./GreyCombat";
 import { GreyOutfit } from "./GreyOutfitter";
-import { adventureMacro, Macro } from "./MacroBuilder";
+import { Macro } from "./MacroBuilder";
+import { handledChoices } from "./Properties";
+import { getBackupChoices } from "./RandomChoiceHandler";
 
 export class AdventureSettings {
   startOfFightMacro: Macro;
@@ -118,6 +111,8 @@ export class AdventureSettings {
   }
 }
 
+const backupChoices = getBackupChoices();
+
 export function greyAdv(
   location: Location | string,
   outfit?: GreyOutfit,
@@ -171,8 +166,10 @@ export function greyAdv(
 
     const juneCleaver = lastChoice() >= 1467 && lastChoice() <= 1475;
 
-    if (!juneCleaver && settings.choices != null) {
-      if (settings.choices.callOutOfScopeChoiceBehavior(lastChoice())) {
+    if (juneCleaver) {
+      choiceToPick = toInt(getProperty("choiceAdventure" + lastChoice()));
+    } else if (settings.choices != null) {
+      if (settings.choices.calledOutOfScopeChoiceBehavior(lastChoice())) {
         return;
       }
 
@@ -180,28 +177,25 @@ export function greyAdv(
     }
 
     if (choiceToPick == null) {
-      choiceToPick = toInt(getProperty("choiceAdventure" + lastChoice()));
+      loop: for (const choices of [handledChoices, backupChoices]) {
+        for (const [choiceNumber, choiceValue] of choices) {
+          if (choiceNumber != lastChoice()) {
+            continue;
+          }
 
-      const unhandled = getProperty("_greyDebugUnhandledChoices")
-        .split(",")
-        .filter((s) => s != "");
-      const unhandled2 = getProperty("_greyDebugUnhandledChoices2")
-        .split(",")
-        .filter((s) => s != "");
+          if (availableChoiceOptions()[choiceValue] == null) {
+            continue;
+          }
 
-      if (
-        !unhandled.includes(lastChoice().toString()) &&
-        !unhandled2.includes(lastChoice().toString())
-      ) {
-        unhandled.push(lastChoice().toString());
-
-        setProperty("_greyDebugUnhandledChoices", unhandled.join(","));
+          choiceToPick = choiceValue;
+          break loop;
+        }
       }
     }
 
-    if (choiceToPick == 0) {
+    if (choiceToPick == null) {
       print("Oh god", "red");
-      throw "No idea what to do! Handle the choice manually? This should generally only happen for teleportis or non-quest absorb attempts.";
+      throw "No idea what to do! Handle the choice manually? Report this issue!";
     }
 
     if (choicesRun.filter((c) => c == lastChoice()).length > 6) {

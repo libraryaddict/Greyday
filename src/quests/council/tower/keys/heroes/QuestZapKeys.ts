@@ -7,6 +7,7 @@ import {
   visitUrl,
   pullsRemaining,
   getZapWand,
+  zap,
 } from "kolmafia";
 import { PossiblePath } from "../../../../../typings/TaskInfo";
 import { QuestKeyStuffAbstract } from "../../../../custom/QuestKeyStuffAbstract";
@@ -19,27 +20,6 @@ import {
 import { QuestType } from "../../../../QuestTypes";
 
 export class QuestZapKeys extends QuestKeyStuffAbstract implements QuestInfo {
-  tryZap(wand: Item, target: Item): Item {
-    const original: [Item, number][] = this.keys.map((z) => [
-      z,
-      availableAmount(z),
-    ]);
-
-    visitUrl(
-      "wand.php?action=zap&whichwand=" +
-        toInt(wand) +
-        "&whichitem=" +
-        toInt(target),
-      true
-    );
-
-    const acquired: Item = original.find(
-      (z) => availableAmount(z[0]) > z[1]
-    )[0];
-
-    return acquired;
-  }
-
   getPossiblePaths?(): PossiblePath[];
 
   getTimesZapped(): number {
@@ -98,7 +78,7 @@ export class QuestZapKeys extends QuestKeyStuffAbstract implements QuestInfo {
           throw "Expected something to zap! What happened!";
         }
 
-        const zapped = this.tryZap(wand, toZap[0]);
+        const zapped = zap(toZap[0]);
 
         if (!this.keys.includes(zapped)) {
           throw (

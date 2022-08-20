@@ -16,7 +16,7 @@ import {
 import { GreySettings } from "../utils/GreySettings";
 import { Task } from "./Tasks";
 
-export class TaskWorkshed implements Task {
+export class TaskColdMedicineCabinet implements Task {
   lastChecked: string = "_lastCheckedCabinet";
   hat: Item = Item.get("Ice Crown");
   pants: Item = Item.get("frozen jeans");
@@ -34,6 +34,14 @@ export class TaskWorkshed implements Task {
     return this.hasConsults() && this.getNextConsult() <= 0;
   }
 
+  isIndoors(): boolean {
+    return (
+      getProperty("lastCombatEnvironments")
+        .split("")
+        .filter((s) => s == "i").length > 10
+    );
+  }
+
   getLastChecked(): number {
     return toInt(getProperty(this.lastChecked));
   }
@@ -43,7 +51,7 @@ export class TaskWorkshed implements Task {
   }
 
   check() {
-    let page = visitUrl("campground.php?action=workshed");
+    const page = visitUrl("campground.php?action=workshed");
 
     setProperty(this.lastChecked, totalTurnsPlayed().toString());
 
@@ -69,7 +77,12 @@ export class TaskWorkshed implements Task {
       return;
     }
 
-    if (!this.hasConsults() || !this.isConsultReady() || !this.shouldCheck()) {
+    if (
+      !this.hasConsults() ||
+      !this.isConsultReady() ||
+      !this.isIndoors() ||
+      !this.shouldCheck()
+    ) {
       return;
     }
 

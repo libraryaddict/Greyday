@@ -1,7 +1,10 @@
 import {
   appearanceRates,
+  canFaxbot,
   Effect,
   fileToBuffer,
+  getLocketMonsters,
+  getProperty,
   haveEffect,
   haveSkill,
   historicalPrice,
@@ -12,6 +15,8 @@ import {
   Monster,
   print,
   Skill,
+  toInt,
+  toMonster,
 } from "kolmafia";
 import { QuestInfo } from "../quests/Quests";
 import { QuestType } from "../quests/QuestTypes";
@@ -243,9 +248,39 @@ export class PossiblePath {
     return this.addMaybe(ResourceCategory.PULL, chance);
   }
 
+  addFax(monster: Monster, chance: number = 1): PossiblePath {
+    if (!canFaxbot(monster)) {
+      this.addIgnored("Fax Machine");
+    }
+
+    if (
+      getProperty("chateauMonster") != "" &&
+      toMonster(getProperty("chateauMonster")) != monster
+    ) {
+      this.addIgnored("Chateau Painting");
+    }
+
+    const foughtLocket = getProperty("_locketMonstersFought")
+      .split(",")
+      .map((s) => toInt(s));
+
+    if (
+      (foughtLocket.length < 3 && foughtLocket.includes(toInt(monster))) ||
+      !getLocketMonsters()[monster.name]
+    ) {
+      this.addIgnored("Combat Locket");
+    }
+
+    return this.addMaybe(ResourceCategory.FAXER, chance);
+  }
+
   add(resource: ResourceCategory, resources = 1): PossiblePath {
     if (resource == ResourceCategory.PULL) {
       throw "Please use addPull instead";
+    }
+
+    if (resource == ResourceCategory.FAXER) {
+      throw "Please use addFax instead";
     }
 
     this.addMaybe(resource, 1, resources);

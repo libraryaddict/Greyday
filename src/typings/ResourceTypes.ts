@@ -19,6 +19,7 @@ import {
   Skill,
   toBoolean,
   toInt,
+  toMonster,
   turnsPlayed,
   urlEncode,
   visitUrl,
@@ -66,6 +67,7 @@ export const ResourceIds = [
   "Zap Wand",
   "Cat Burglar Heist",
   "Hot Tub",
+  "Chateau Painting",
 ] as const;
 
 export type ResourceId = typeof ResourceIds[number];
@@ -392,6 +394,18 @@ const catHeist: SomeResource = {
   },
 };
 
+const chateauPainting: SomeResource = {
+  type: ResourceCategory.FAXER,
+  id: "Chateau Painting",
+  worthInAftercore: 5000,
+  prepare: () => {},
+  fax: (monster: Monster) => {
+    if (toMonster(getProperty("chateauMonster")) != monster) {
+      throw "Unexpected monster attempted to fax!";
+    }
+  },
+};
+
 const hottub: SomeResource = {
   type: ResourceCategory.HOT_TUB,
   id: "Hot Tub",
@@ -422,6 +436,7 @@ const allResources = [
   catHeist,
   hottub,
   retroRay,
+  chateauPainting,
 ].sort((r1, r2) => r1.worthInAftercore - r2.worthInAftercore);
 
 export function getResources(): SomeResource[] {
@@ -574,6 +589,14 @@ export function getResourcesLeft(
       }
 
       return 5 - (assumeUnused ? 0 : toInt(getProperty("_hotTubSoaks")));
+    case "Chateau Painting":
+      if (!toBoolean(getProperty("chateauAvailable"))) {
+        return 0;
+      }
+
+      return assumeUnused || !toBoolean(getProperty("_chateauMonsterFought"))
+        ? 1
+        : 0;
     default:
       throw "No idea what the resource " + resourceType + " is.";
   }

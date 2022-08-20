@@ -2,7 +2,6 @@ import {
   Monster,
   Location,
   Familiar,
-  canFaxbot,
   familiarWeight,
   currentRound,
   handlingChoice,
@@ -17,14 +16,8 @@ import { QuestType } from "../QuestTypes";
 export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
   irateMariachi: Monster = Monster.get("Irate Mariachi");
   familiar: Familiar = Familiar.get("Grey Goose");
-  fax: PossiblePath = new PossiblePath(1).add(ResourceCategory.FAXER);
+  fax: PossiblePath = new PossiblePath(1).addFax(this.irateMariachi);
   avoid: PossiblePath = new PossiblePath(10);
-
-  createPaths() {
-    if (!canFaxbot(this.irateMariachi)) {
-      this.fax.addIgnored("Fax Machine");
-    }
-  }
 
   getPossiblePaths(): PossiblePath[] {
     return [this.fax, this.avoid];
@@ -35,7 +28,7 @@ export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
   }
 
   level(): number {
-    return 10;
+    return 18;
   }
 
   getLocations(): Location[] {

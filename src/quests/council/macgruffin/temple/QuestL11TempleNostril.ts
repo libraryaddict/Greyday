@@ -85,7 +85,7 @@ export class QuestL11TempleNostril implements QuestInfo {
 class TempleChoices implements GreyChoices {
   choices: [number, number][] = [];
 
-  callOutOfScopeChoiceBehavior(choiceNo: number): boolean {
+  calledOutOfScopeChoiceBehavior(choiceNo: number): boolean {
     return false;
   }
 

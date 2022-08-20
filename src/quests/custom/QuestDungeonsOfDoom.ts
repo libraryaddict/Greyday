@@ -15,7 +15,7 @@ import {
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
-import { greyAdv } from "../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -93,20 +93,24 @@ export class QuestDungeonsOfDoom implements QuestInfo {
           return;
         }
 
-        const props = new PropertyManager();
+        const settings = new AdventureSettings();
+        settings.setChoices({
+          handleChoice: (choiceNo: number): number => {
+            if (choiceNo == 3) {
+              return 3;
+            } else if (choiceNo == 451) {
+              return availableAmount(this.plusSign) > 0 ? 5 : 3;
+            }
 
-        if (availableAmount(this.plusSign) > 0) {
-          props.setChoice(451, 5);
-          props.setChoice(3, 3);
-        } else {
-          props.setChoice(451, 3);
-        }
+            return null;
+          },
 
-        try {
-          greyAdv(this.bend, outfit);
-        } finally {
-          props.resetAll();
-        }
+          calledOutOfScopeChoiceBehavior: (choiceNo: number): boolean => {
+            return false;
+          },
+        });
+
+        greyAdv(this.bend, outfit, settings);
 
         if (toInt(getProperty("lastPlusSignUnlock")) == myAscensions()) {
           if (availableAmount(this.plusSign) == 0) {

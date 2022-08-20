@@ -86,7 +86,7 @@ export class ABooHandler implements QuestInfo {
           let turn = 0;
 
           settings.setChoices({
-            callOutOfScopeChoiceBehavior: (choice: number) => {
+            calledOutOfScopeChoiceBehavior: (choice: number) => {
               return false;
             },
 

@@ -6,6 +6,7 @@ import {
   getZapWand,
   toInt,
   visitUrl,
+  zap,
 } from "kolmafia";
 import { ResourceCategory } from "../../../../../typings/ResourceTypes";
 import { PossiblePath } from "../../../../../typings/TaskInfo";
@@ -129,7 +130,7 @@ export class QuestPullAndZapKeys
         }
 
         const toZap = this.getOwnedZappables();
-        const zapped = this.tryZap(wand, toZap[0]);
+        const zapped = zap(toZap[0]);
 
         if (!this.keys.includes(zapped)) {
           throw (
@@ -146,25 +147,5 @@ export class QuestPullAndZapKeys
 
   getLocations(): Location[] {
     return [];
-  }
-  tryZap(wand: Item, target: Item): Item {
-    const original: [Item, number][] = this.keys.map((z) => [
-      z,
-      availableAmount(z),
-    ]);
-
-    visitUrl(
-      "wand.php?action=zap&whichwand=" +
-        toInt(wand) +
-        "&whichitem=" +
-        toInt(target),
-      true
-    );
-
-    const acquired: Item = original.find(
-      (z) => availableAmount(z[0]) > z[1]
-    )[0];
-
-    return acquired;
   }
 }

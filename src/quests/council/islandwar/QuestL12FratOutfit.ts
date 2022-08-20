@@ -1,16 +1,11 @@
 import {
   availableAmount,
-  canFaxbot,
   currentRound,
-  Effect,
-  Familiar,
   handlingChoice,
-  haveEffect,
   haveOutfit,
   isWearingOutfit,
   Location,
   Monster,
-  myMeat,
   outfitPieces,
 } from "kolmafia";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
@@ -28,7 +23,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
   hippyDisguise: string = "Filthy Hippy Disguise";
   fratDisguise: string = "Frat Warrior Fatigues";
   taskFaxYR: PossiblePath = new PossiblePath(1)
-    .add(ResourceCategory.FAXER)
+    .addFax(this.fratBoySpy)
     .add(ResourceCategory.YELLOW_RAY);
   pullTask: PossiblePath = new PossiblePath(0);
   hippiesTask: PossiblePath = new PossiblePath(6, 14).add(
@@ -51,10 +46,6 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
       }
 
       this.pullTask.addPull(item);
-    }
-
-    if (!canFaxbot(this.fratBoySpy)) {
-      this.taskFaxYR.addIgnored("Fax Machine");
     }
   }
 

@@ -99,7 +99,7 @@ export class QuestL11TempleHiddenCity implements QuestInfo {
 class TempleChoices implements GreyChoices {
   choices: [number, number][] = [];
 
-  callOutOfScopeChoiceBehavior(choiceNo: number): boolean {
+  calledOutOfScopeChoiceBehavior(choiceNo: number): boolean {
     print("Temple now has choice: " + choiceNo);
     if (choiceNo != 0) {
       return false;

@@ -1,11 +1,9 @@
 import {
-  canFaxbot,
   currentRound,
   Familiar,
   familiarWeight,
   handlingChoice,
   haveSkill,
-  Item,
   Location,
   Monster,
   myAscensions,
@@ -23,13 +21,11 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
   oddMonster: Monster = Monster.get("Little Man in the Canoe");
   familiar: Familiar = Familiar.get("Grey Goose");
   nanovision: Skill = Skill.get("Double Nanovision");
-  fax: PossiblePath = new PossiblePath(1).add(ResourceCategory.FAXER);
+  fax: PossiblePath = new PossiblePath(1);
   avoid: PossiblePath = new PossiblePath(20);
 
   createPaths() {
-    if (!canFaxbot(this.getMonster())) {
-      this.fax.addIgnored("Fax Machine");
-    }
+    this.fax.addFax(this.getMonster());
   }
 
   getPossiblePaths(): PossiblePath[] {

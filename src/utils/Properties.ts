@@ -1,7 +1,10 @@
 import { getProperty, print, setProperty, toString } from "kolmafia";
 
+export const handledChoices: [number, number][] = [];
+
 export class PropertyManager {
   private properties = new Map<string, string>();
+  private choicesSet: [number, number][] = [];
 
   setProperty(property: string, value: string, quiet: boolean = true) {
     if (!this.properties.has(property)) {
@@ -16,38 +19,10 @@ export class PropertyManager {
   }
 
   setChoice(choice: number, value: number) {
-    let unhandled = getProperty("_greyDebugUnhandledChoices2")
-      .split(",")
-      .filter((s) => s != "");
+    const combo: [number, number] = [choice, value];
 
-    if (!unhandled.includes(choice.toString())) {
-      unhandled.push(choice.toString());
-
-      setProperty("_greyDebugUnhandledChoices2", unhandled.join(","));
-    }
-
-    this.setProperty("choiceAdventure" + choice, value.toString());
-  }
-
-  resetChoice(choice: number) {
-    this.reset("choiceAdventure" + choice);
-  }
-
-  reset(property: string, quiet: boolean = true) {
-    if (this.properties.has(property)) return;
-
-    setProperty(property, this.properties.get(property));
-
-    if (!quiet) {
-      print(
-        "Reset property " +
-          property +
-          " back to " +
-          this.properties.get(property)
-      );
-    }
-
-    this.properties.delete(property);
+    this.choicesSet.push(combo);
+    handledChoices.push(combo);
   }
 
   resetAll(quiet: boolean = true) {
@@ -60,5 +35,17 @@ export class PropertyManager {
     });
 
     this.properties.clear();
+
+    for (const combo of this.choicesSet) {
+      const index = handledChoices.lastIndexOf(combo);
+
+      if (index < 0) {
+        throw "Failed to reset a choice! Was missing!";
+      }
+
+      handledChoices.splice(index, 1);
+    }
+
+    this.choicesSet.splice(0, this.choicesSet.length);
   }
 }

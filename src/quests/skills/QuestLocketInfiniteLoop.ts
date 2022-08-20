@@ -1,5 +1,4 @@
 import {
-  canFaxbot,
   currentRound,
   Effect,
   handlingChoice,
@@ -30,7 +29,7 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   instantKill: Item = Item.get("Flame orb");
   wish: Item = Item.get("Pocket Wish");
   fax: PossiblePath = new PossiblePath(1)
-    .add(ResourceCategory.FAXER)
+    .addFax(this.monster)
     .add(ResourceCategory.YELLOW_RAY)
     .addIgnored("Cosplay Saber");
   pullWish: PossiblePath = new PossiblePath(1)
@@ -39,12 +38,6 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
 
   level(): number {
     return 1;
-  }
-
-  createPaths(): void {
-    if (!canFaxbot(this.monster)) {
-      this.fax.addIgnored("Fax Machine");
-    }
   }
 
   getPossiblePaths(): PossiblePath[] {

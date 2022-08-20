@@ -1,6 +1,5 @@
 import {
   availableAmount,
-  canFaxbot,
   currentRound,
   Familiar,
   familiarWeight,
@@ -39,7 +38,7 @@ export abstract class QuestMoonSignAbsorb
   abstract getId(): QuestType;
 
   level(): number {
-    return 10;
+    return this.isInSign() ? 10 : 18;
   }
 
   getAbsorbs(): Monster[] {
@@ -104,11 +103,7 @@ export abstract class QuestMoonSignAbsorb
     }
 
     this.paths = [];
-    this.faxing = new PossiblePath(1).add(ResourceCategory.FAXER);
-
-    if (!canFaxbot(this.monster)) {
-      this.faxing.addIgnored("Fax Machine");
-    }
+    this.faxing = new PossiblePath(1).addFax(this.monster);
 
     if (
       !assumeUnstarted &&

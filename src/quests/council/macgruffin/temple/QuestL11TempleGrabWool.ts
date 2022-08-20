@@ -24,13 +24,14 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
   wool: Item = Item.get("Stone Wool");
   loc: Location = Location.get("The Hidden Temple");
   woolMonster: Monster = Monster.get("Baa-relief sheep");
+  luckyWoolMonster: Monster = Monster.get("Baa'baa'bu'ran");
   polarPath: PossiblePath = new PossiblePath(1, 3).add(
     ResourceCategory.POLAR_VORTEX,
     2
   );
   manual: PossiblePath = new PossiblePath(2, 8);
   clover: PossiblePath = new PossiblePath(1).add(ResourceCategory.CLOVER);
-  fax: PossiblePath = new PossiblePath(1).add(ResourceCategory.FAXER);
+  fax: PossiblePath = new PossiblePath(1).addFax(this.luckyWoolMonster);
   deck: PossiblePath = new PossiblePath(0).add(
     ResourceCategory.DECK_OF_EVERY_CARD
   );
@@ -45,10 +46,6 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
     this.paths.push(
       new PossiblePath(1, 3).add(ResourceCategory.POLAR_VORTEX, amountNeeded)
     );
-
-    //if (!canFaxbot(this.monster)) {
-    // this.fax.addIgnored("Fax Machine");
-    // }
   }
 
   getPossiblePaths(): PossiblePath[] {

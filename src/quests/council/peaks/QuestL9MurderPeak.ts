@@ -15,6 +15,7 @@ import {
   itemDropModifier,
   print,
   Monster,
+  visitUrl,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
@@ -138,7 +139,11 @@ export class MurderHandler implements QuestInfo {
           }
 
           if (availableAmount(this.rusty) > 0) {
-            use(this.rusty);
+            greyAdv(
+              "inv_use.php?pwd=&which=3&whichitem=" +
+                toInt(this.rusty) +
+                "&ajax=1"
+            );
           } else {
             const settings = new AdventureSettings();
 

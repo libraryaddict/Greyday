@@ -1,6 +1,5 @@
 import {
   availableAmount,
-  canFaxbot,
   currentRound,
   Effect,
   Familiar,
@@ -16,7 +15,6 @@ import {
   Monster,
   myAdventures,
   myLevel,
-  myMeat,
   print,
   pullsRemaining,
   Skill,
@@ -52,15 +50,13 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   mines: Location = Location.get("Itznotyerzitz Mine");
   recreatedPath: boolean;
   burglar: Familiar = Familiar.get("Cat Burglar");
-  faxAndGooseDupe: PossiblePath = new PossiblePath(1).add(
-    ResourceCategory.FAXER
-  );
+  faxAndGooseDupe: PossiblePath = new PossiblePath(1).addFax(this.mountainMan);
   failsafeBackup: PossiblePath = new PossiblePath(1).add(
     ResourceCategory.COPIER
   );
   faxAndHeist: PossiblePath = new PossiblePath(1)
     .add(ResourceCategory.CAT_HEIST)
-    .add(ResourceCategory.FAXER);
+    .addFax(this.mountainMan);
   paths: PossiblePath[] = [];
   asbestos: Item = Item.get("asbestos ore");
   linoleum: Item = Item.get("linoleum ore");
@@ -186,6 +182,8 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
 
         if (res == ResourceCategory.PULL) {
           path.addConsumablePull(this.neededOre());
+        } else if (res == ResourceCategory.FAXER) {
+          path.addFax(this.mountainMan, doMaybe ? 0.33 : 1);
         } else {
           path.addMaybe(res, doMaybe ? 0.33 : 1);
           addedPolar = addedPolar || res == ResourceCategory.POLAR_VORTEX;
@@ -226,14 +224,6 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
       }
 
       path.addIgnored("Cosplay Saber");
-    }
-
-    if (!canFaxbot(this.mountainMan)) {
-      this.paths.forEach((p) => {
-        if (p.canUse(ResourceCategory.FAXER) > 0) {
-          p.addIgnored("Fax Machine");
-        }
-      });
     }
   }
 

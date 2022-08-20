@@ -89,7 +89,7 @@ export class QuestL11TempleExtraAdvs implements QuestInfo {
 class TempleChoices implements GreyChoices {
   choices: [number, number][] = [];
 
-  callOutOfScopeChoiceBehavior(choiceNo: number): boolean {
+  calledOutOfScopeChoiceBehavior(choiceNo: number): boolean {
     return false;
   }
 

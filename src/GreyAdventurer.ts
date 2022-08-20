@@ -38,7 +38,7 @@ import { TaskLatteFiller } from "./tasks/TaskLatteFiller";
 import { restoreMPTo, TaskMaintainStatus } from "./tasks/TaskMaintainStatus";
 import { Task } from "./tasks/Tasks";
 import { TaskSellCrap } from "./tasks/TaskSellCrap";
-import { TaskWorkshed } from "./tasks/TaskWorkshed";
+import { TaskColdMedicineCabinet } from "./tasks/TaskMedicineCabinet";
 import {
   getResourcesLeft,
   ResourceId,
@@ -66,7 +66,7 @@ export class GreyAdventurer {
   tasks: Task[] = [
     new TaskEater(),
     new TaskSellCrap(),
-    new TaskWorkshed(),
+    new TaskColdMedicineCabinet(),
     new TaskCouncil(),
     new TaskLatteFiller(),
     new TaskMaintainStatus(),

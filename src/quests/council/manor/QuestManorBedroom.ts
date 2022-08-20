@@ -58,7 +58,7 @@ export class ManorBedroom implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questM21Dance");
+    const status = getQuestStatus("questM21Dance");
 
     if (status < 1) {
       return QuestStatus.NOT_READY;
@@ -94,20 +94,20 @@ export class ManorBedroom implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     return {
       location: this.location,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         try {
           props.setChoice(876, 1);
           props.setChoice(877, 1);
-          props.setChoice(879, 5);
+          props.setChoice(879, 4); // Grab engorged sausages if we can
+          props.setChoice(879, 2); // Otherwise just grab an item which is 50/50 but better than others
           props.setChoice(876, 1);
-          props.setChoice(879, 2);
 
           if (this.needDress()) {
             props.setChoice(880, 1);
@@ -123,12 +123,12 @@ export class ManorBedroom implements QuestInfo {
             props.setChoice(878, 1);
           }
 
-          let settings = new AdventureSettings();
+          const settings = new AdventureSettings();
 
           this.dontLike.forEach((m) => settings.addBanish(m));
 
           if (this.hasDelay()) {
-            let delay = DelayBurners.getReadyDelayBurner();
+            const delay = DelayBurners.getReadyDelayBurner();
 
             if (delay != null) {
               delay.doFightSetup();
