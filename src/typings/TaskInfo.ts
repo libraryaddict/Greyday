@@ -265,8 +265,9 @@ export class PossiblePath {
       .map((s) => toInt(s));
 
     if (
-      (foughtLocket.length < 3 && foughtLocket.includes(toInt(monster))) ||
-      !getLocketMonsters()[monster.name]
+      foughtLocket.length < 3 &&
+      (foughtLocket.includes(toInt(monster)) ||
+        !getLocketMonsters()[monster.name])
     ) {
       this.addIgnored("Combat Locket");
     }
