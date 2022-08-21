@@ -53,7 +53,7 @@ export class SimmedPath {
   }
 
   printInfo() {
-    const used: Map<string, [string, number][]> = new Map();
+    const used: Map<string, [string, number, number][]> = new Map();
 
     for (const [quest, resource] of this.resourcesUsed) {
       const key = resource.id;
@@ -64,10 +64,12 @@ export class SimmedPath {
 
       const id = quest.getId();
 
-      let pair: [string, number] = used.get(key).find(([p]) => p == id);
+      let pair: [string, number, number] = used.get(key).find(([p]) => p == id);
 
       if (pair == null) {
-        used.get(key).push((pair = [id, 0]));
+        const path = this.thisPath.find(([qu, pa]) => qu.getId() === id)[1];
+
+        used.get(key).push((pair = [id, 0, path.getAverageTurns()]));
       }
 
       pair[1] = pair[1] + 1;
@@ -77,15 +79,16 @@ export class SimmedPath {
 
     used.forEach((details, k) => {
       index1++;
+
       printHtml(
         `<font color='blue'>${k} x ${details
           .map(([, amount]) => amount)
           .reduce((d1, d2) => d1 + d2, 0)}</font> => ${details
           .map(
-            ([quest, amount], index) =>
+            ([quest, amount, turns], index) =>
               `<font color='${
                 (index + index1) % 2 == 0 ? "gray" : ""
-              }'>${quest} x ${amount}</font>`
+              }'>${quest} x ${amount} (${turns} advs)</font>`
           )
           .join(", ")}`
       );
