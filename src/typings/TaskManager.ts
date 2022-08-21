@@ -438,14 +438,12 @@ export class FigureOutPath {
         best = simmed;
       }
 
-      if (tried >= 1) {
+      if (tried >= (path.pathCost <= 5000 ? 1 : 2)) {
         return best;
       }
     }
 
     return best;
-
-    return null;
   }
 
   /**
