@@ -26430,7 +26430,7 @@ var SimmedPath = /*#__PURE__*/function () {
       return true;
     } }, { key: "printInfo", value:
 
-    function printInfo() {
+    function printInfo() {var _this = this;
       var used = new Map();var _iterator2 = TaskManager_createForOfIteratorHelper(
 
       this.resourcesUsed),_step2;try {var _loop = function _loop() {var _step2$value = TaskManager_slicedToArray(_step2.value, 2),quest = _step2$value[0],resource = _step2$value[1];
@@ -26445,7 +26445,9 @@ var SimmedPath = /*#__PURE__*/function () {
           var pair = used.get(key).find((_ref5) => {var _ref6 = TaskManager_slicedToArray(_ref5, 1),p = _ref6[0];return p == id;});
 
           if (pair == null) {
-            used.get(key).push(pair = [id, 0]);
+            var path = _this.thisPath.find((_ref7) => {var _ref8 = TaskManager_slicedToArray(_ref7, 2),qu = _ref8[0],pa = _ref8[1];return qu.getId() === id;})[1];
+
+            used.get(key).push(pair = [id, 0, path.getAverageTurns()]);
           }
 
           pair[1] = pair[1] + 1;};for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {_loop();
@@ -26455,15 +26457,16 @@ var SimmedPath = /*#__PURE__*/function () {
 
       used.forEach((details, k) => {
         index1++;
+
         (0,external_kolmafia_namespaceObject.printHtml)("<font color='blue'>".concat(
         k, " x ").concat(details.
         map((_ref) => {var _ref2 = TaskManager_slicedToArray(_ref, 2),amount = _ref2[1];return amount;}).
         reduce((d1, d2) => d1 + d2, 0), "</font> => ").concat(details.
         map(
-        (_ref3, index) => {var _ref4 = TaskManager_slicedToArray(_ref3, 2),quest = _ref4[0],amount = _ref4[1];return "<font color='".concat(
+        (_ref3, index) => {var _ref4 = TaskManager_slicedToArray(_ref3, 3),quest = _ref4[0],amount = _ref4[1],turns = _ref4[2];return "<font color='".concat(
 
           (index + index1) % 2 == 0 ? "gray" : "", "'>").concat(
-          quest, " x ").concat(amount, "</font>");}).
+          quest, " x ").concat(amount, " (").concat(turns, " advs)</font>");}).
 
         join(", ")));
 
@@ -26488,9 +26491,9 @@ var SimmedPath = /*#__PURE__*/function () {
       this.thisPath = paths;
     } }, { key: "assignResources", value:
 
-    function assignResources() {var _this = this;var _iterator3 = TaskManager_createForOfIteratorHelper(
+    function assignResources() {var _this2 = this;var _iterator3 = TaskManager_createForOfIteratorHelper(
       this.resourcesUsed),_step3;try {var _loop2 = function _loop2() {var _step3$value = TaskManager_slicedToArray(_step3.value, 2),quest = _step3$value[0],resource = _step3$value[1];
-          var _this$thisPath$find = _this.thisPath.find((_ref7) => {var _ref8 = TaskManager_slicedToArray(_ref7, 1),q = _ref8[0];return q === quest;}),_this$thisPath$find2 = TaskManager_slicedToArray(_this$thisPath$find, 2),path = _this$thisPath$find2[1];
+          var _this2$thisPath$find = _this2.thisPath.find((_ref9) => {var _ref10 = TaskManager_slicedToArray(_ref9, 1),q = _ref10[0];return q === quest;}),_this2$thisPath$find2 = TaskManager_slicedToArray(_this2$thisPath$find, 2),path = _this2$thisPath$find2[1];
 
           path.resourcesAvailable.push(resource);};for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {_loop2();
         }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
@@ -26569,7 +26572,7 @@ var SimmedPath = /*#__PURE__*/function () {
 var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskManager_classCallCheck(this, FigureOutPath);TaskManager_defineProperty(this, "resources",
     getResources());}TaskManager_createClass(FigureOutPath, [{ key: "getPaths", value:
 
-    function getPaths(quests) {var _this2 = this;var assumeUnstarted = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    function getPaths(quests) {var _this3 = this;var assumeUnstarted = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       var allPaths = [];
       var miscPaths = [];
       var uncompleteable = [];
@@ -26638,7 +26641,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
 
               }} catch (err) {_iterator9.e(err);} finally {_iterator9.f();}
 
-            var resourcesToComplete = _this2.getResourcesToComplete(
+            var resourcesToComplete = _this3.getResourcesToComplete(
             resources,
             quest,
             p);
@@ -26700,7 +26703,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
             getPossiblePaths().
             map((p) =>
             p.resourcesNeeded.map(
-            (_ref9) => {var _ref10 = TaskManager_slicedToArray(_ref9, 2),r = _ref10[0],amount = _ref10[1];return ResourceCategory[r] + " x " + amount;}));
+            (_ref11) => {var _ref12 = TaskManager_slicedToArray(_ref11, 2),r = _ref12[0],amount = _ref12[1];return ResourceCategory[r] + " x " + amount;}));
 
 
 
@@ -26710,7 +26713,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
         return null;
       }
 
-      allPaths.sort((_ref11, _ref12) => {var _ref13 = TaskManager_slicedToArray(_ref11, 2),_ref13$ = TaskManager_slicedToArray(_ref13[1], 1),p1 = _ref13$[0];var _ref14 = TaskManager_slicedToArray(_ref12, 2),_ref14$ = TaskManager_slicedToArray(_ref14[1], 1),p2 = _ref14$[0];
+      allPaths.sort((_ref13, _ref14) => {var _ref15 = TaskManager_slicedToArray(_ref13, 2),_ref15$ = TaskManager_slicedToArray(_ref15[1], 1),p1 = _ref15$[0];var _ref16 = TaskManager_slicedToArray(_ref14, 2),_ref16$ = TaskManager_slicedToArray(_ref16[1], 1),p2 = _ref16$[0];
         return p1.getCostPerAdv() - p2.getCostPerAdv();
       });
 
@@ -26737,7 +26740,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
     currentPath,
     index,
     allPaths)
-    {var _this3 = this;
+    {var _this4 = this;
       var _allPaths$index = TaskManager_slicedToArray(allPaths[index++], 2),quest = _allPaths$index[0],paths = _allPaths$index[1];
 
       var possible =
@@ -26772,7 +26775,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
 
         }} catch (err) {_iterator11.e(err);} finally {_iterator11.f();}
 
-      possible.sort((_ref15, _ref16) => {var _ref17 = TaskManager_slicedToArray(_ref15, 3),meat1 = _ref17[2];var _ref18 = TaskManager_slicedToArray(_ref16, 3),meat2 = _ref18[2];return meat1 - meat2;});
+      possible.sort((_ref17, _ref18) => {var _ref19 = TaskManager_slicedToArray(_ref17, 3),meat1 = _ref19[2];var _ref20 = TaskManager_slicedToArray(_ref18, 3),meat2 = _ref20[2];return meat1 - meat2;});
 
       var tried = 0;
       var best;
@@ -26795,14 +26798,14 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
 
         addPath(simmed, quest, path);
 
-        resources.forEach((_ref19) => {var _ref20 = TaskManager_slicedToArray(_ref19, 3),quest = _ref20[0],resource = _ref20[1],amount = _ref20[2];
+        resources.forEach((_ref21) => {var _ref22 = TaskManager_slicedToArray(_ref21, 3),quest = _ref22[0],resource = _ref22[1],amount = _ref22[2];
           simmed.addUse(quest, resource, amount);
         });
 
         tried++;
 
         if (index < allPaths.length) {
-          simmed = _this3.doAttempt(simmed, index, allPaths);
+          simmed = _this4.doAttempt(simmed, index, allPaths);
 
           if (simmed == null) {
             return "continue";
@@ -26993,7 +26996,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "e92201a";
+var lastCommitHash = "669d371";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
