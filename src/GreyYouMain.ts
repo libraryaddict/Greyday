@@ -150,6 +150,8 @@ class GreyYouMain {
   }
 
   handleCommand(command: string) {
+    command = command.toLowerCase();
+
     if (!this.isRevisionPass()) {
       return;
     }
@@ -179,7 +181,7 @@ class GreyYouMain {
       return;
     }
 
-    if (command == "required") {
+    if (command.includes("require")) {
       new GreyRequirements().hasRequired();
       return;
     }
