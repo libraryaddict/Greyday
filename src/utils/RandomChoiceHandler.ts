@@ -1,4 +1,4 @@
-import { toInt, getProperty } from "kolmafia";
+import { toInt, getProperty, myMeat } from "kolmafia";
 
 export function getBackupChoices(): [number, number][] {
   const backupChoices: [number, number][] = [];
@@ -214,6 +214,11 @@ export function getBackupChoices(): [number, number][] {
   // Lil Doctor Bag, turn it off today if we have all upgrades. Otherwise accept.
   choices(1340, toInt(getProperty("doctorBagUpgrades")) >= 5 ? 3 : 1);
   choices(1341, 1);
+
+  // Haunted dog
+  choices(1108, 1); // Food
+  choices(1106, 3); //Dog chow
+  choices(1107, myMeat() < 6000 ? 3 : 1); // Meat or tennis ball
 
   return backupChoices;
 }
