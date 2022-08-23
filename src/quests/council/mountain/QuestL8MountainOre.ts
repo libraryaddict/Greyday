@@ -50,7 +50,9 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   mines: Location = Location.get("Itznotyerzitz Mine");
   recreatedPath: boolean;
   burglar: Familiar = Familiar.get("Cat Burglar");
-  faxAndGooseDupe: PossiblePath = new PossiblePath(1).addFax(this.mountainMan);
+  faxAndGooseDupe: PossiblePath = new PossiblePath(1)
+    .add(ResourceCategory.YELLOW_RAY)
+    .addFax(this.mountainMan);
   failsafeBackup: PossiblePath = new PossiblePath(1).add(
     ResourceCategory.COPIER
   );
@@ -85,7 +87,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   canPull(): boolean {
     return (
       pullsRemaining() != 0 &&
-      getProperty("_roninStoragePulls")
+      !getProperty("_roninStoragePulls")
         .split(",")
         .includes(toInt(this.neededOre()).toString())
     );
@@ -131,6 +133,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
     resourceTypes.push(ResourceCategory.COPIER);
     resourceTypes.push(ResourceCategory.CAT_HEIST);
     resourceTypes.push(ResourceCategory.PULL);
+
     resourceTypes.push(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT);
 
     const allCombinations = getAllCombinations(resourceTypes);
@@ -324,6 +327,10 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
 
   mustBeDone(): boolean {
     if (this.canBackup()) {
+      return true;
+    }
+
+    if (this.getOreRemaining() < 3) {
       return true;
     }
 
