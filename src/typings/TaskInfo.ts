@@ -395,12 +395,14 @@ export function getResourcesChanged(
     print("Removing " + resource.id + " x " + ResourceCategory[resource.type]);
   });
 
-  print(
-    "We manually used: " +
-      newSnapshot.resources
-        .map((r) => r.id + " x " + ResourceCategory[r.type])
-        .join(", ")
-  );
+  if (newSnapshot.resources.length > 0) {
+    print(
+      "We manually used: " +
+        newSnapshot.resources
+          .map((r) => r.id + " x " + ResourceCategory[r.type])
+          .join(", ")
+    );
+  }
 
   return newSnapshot;
 }
