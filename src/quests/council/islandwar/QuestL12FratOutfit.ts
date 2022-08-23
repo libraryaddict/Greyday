@@ -26,7 +26,10 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
     .addFax(this.fratBoySpy)
     .add(ResourceCategory.YELLOW_RAY);
   pullTask: PossiblePath = new PossiblePath(0);
-  hippiesTask: PossiblePath = new PossiblePath(6, 14).add(
+  hippiesTask: PossiblePath = new PossiblePath(6, 14)
+    .add(ResourceCategory.YELLOW_RAY)
+    .add(ResourceCategory.YELLOW_RAY);
+  hippiesFratTask: PossiblePath = new PossiblePath(12, 22).add(
     ResourceCategory.YELLOW_RAY
   );
   hippiesTaskManual: PossiblePath = new PossiblePath(20);
@@ -55,6 +58,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
       this.pullTask,
       this.hippiesTask,
       this.hippiesTaskManual,
+      this.hippiesFratTask,
     ];
   }
 
