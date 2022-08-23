@@ -12,6 +12,7 @@ import {
   heist,
   Item,
   itemAmount,
+  modifierEval,
   Monster,
   myMeat,
   print,
@@ -180,7 +181,8 @@ const cosplaySaber: Item = Item.get("Fourth of May Cosplay Saber");
 const cosplayYellowRay: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
   id: "Cosplay Saber",
-  worthInAftercore: 3000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
+  // At 4, it's worth 3k. 3 = 2k, 2 = 1k, 1/0 = 500 meat
+  worthInAftercore: Math.max(0.5, Math.min(3, modifierEval("G") - 1)) * 1000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addItem(cosplaySaber);

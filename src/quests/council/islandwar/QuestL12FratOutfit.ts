@@ -147,13 +147,21 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
         props.setChoice(146, 2); // Items
 
         try {
-          const yr = path.getResource(ResourceCategory.YELLOW_RAY);
           const settings = new AdventureSettings();
 
-          if (yr != null) {
-            yr.prepare(null, props);
+          if (yellowRay != null) {
+            yellowRay.prepare(null, props);
             settings.setStartOfFightMacro(
-              Macro.if_("monstername Hippy", yr.macro())
+              Macro.if_("monstername Hippy", yellowRay.macro())
+            );
+            settings.setStartOfFightMacro(
+              Macro.if_("monstername War Pledge", yellowRay.macro())
+            );
+            settings.setStartOfFightMacro(
+              Macro.if_(
+                "monstername Frat Warrior drill sergeant",
+                yellowRay.macro()
+              )
             );
           }
 

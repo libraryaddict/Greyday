@@ -53,7 +53,7 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
       this.possiblePulls = this.possiblePulls.filter(
         ([i]) =>
           availableAmount(i) == 0 &&
-          (historicalPrice(i) < 1_000_000 || storageAmount(i) > 0)
+          (historicalPrice(i) < 50_000 || storageAmount(i) > 0)
       );
     }
 
