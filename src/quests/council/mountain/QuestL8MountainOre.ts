@@ -139,6 +139,18 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
     const allCombinations = getAllCombinations(resourceTypes);
 
     for (const combo of allCombinations) {
+      const oresExpected = combo
+        .map((res) =>
+          res == ResourceCategory.YELLOW_RAY
+            ? 2
+            : res == ResourceCategory.PULL ||
+              res == ResourceCategory.COPIER ||
+              res == ResourceCategory.CLOVER
+            ? 1
+            : 0
+        )
+        .reduce((p, n) => p + n, 0);
+
       // If this doesn't use a fax
       if (!combo.includes(ResourceCategory.FAXER)) {
         // Remove combinations that require a mountain man
@@ -151,10 +163,6 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
           continue;
         }
       }
-
-      const oresExpected = combo.filter(
-        (res) => res != ResourceCategory.POLAR_VORTEX
-      ).length;
 
       // If this combination wouldn't give enough ores
       if (oresExpected < needOres || oresExpected > needOres) {
@@ -208,6 +216,10 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
             res[0] = ResourceCategory.CARGO_SHORTS;
           }
         });
+
+        if (!cargoShorts.ignoreResources.includes("Cosplay Saber")) {
+          cargoShorts.addIgnored("Cosplay Saber");
+        }
 
         this.paths.push(cargoShorts);
       }

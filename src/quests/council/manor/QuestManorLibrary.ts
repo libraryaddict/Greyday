@@ -46,7 +46,7 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
       ResourceCategory.YELLOW_RAY
     );
 
-    if (wantJar) {
+    if (wantJar || assumeUnstarted) {
       this.paths.push(this.pathYR);
     }
 
