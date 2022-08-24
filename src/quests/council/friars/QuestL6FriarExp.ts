@@ -8,6 +8,7 @@ import {
   myFamiliar,
   familiarWeight,
 } from "kolmafia";
+import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -45,6 +46,7 @@ export class QuestL6FriarExp implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         cliExecute("friars familiar");
       },

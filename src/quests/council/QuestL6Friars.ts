@@ -8,6 +8,7 @@ import {
   myLevel,
   visitUrl,
 } from "kolmafia";
+import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 import { QuestL6FriarElbow } from "./friars/QuestL6FriarElbow";
@@ -58,6 +59,7 @@ export class QuestL6Friar implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl("friars.php?action=ritual&pwd");
         visitUrl("pandamonium.php");

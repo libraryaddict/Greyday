@@ -88,6 +88,7 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
       const path = new PossiblePath(
         combo.map(([, turns]) => turns).reduce((p, n) => p + n, 1)
       );
+      path.addIgnored("Cosplay Saber");
 
       combo.forEach(([resource]) => {
         if (resource == null) {

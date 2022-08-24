@@ -16,7 +16,7 @@ The following commands are supported.
 
 `greyday resources` - Can be run in path or aftercore, it will predict a path it'd take to complete your run. If it fails, then the script definitely can't do Grey You for you.
 
-`greyday run` - Runs one turn, then exits
+`greyday run` - Runs 999 turns, then exits
 
 `greyday run <turns>` - Runs <turns> turns, then exits
 

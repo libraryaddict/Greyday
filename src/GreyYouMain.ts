@@ -114,7 +114,7 @@ class GreyYouMain {
     }
 
     print(
-      "run <Turns> - Run X amount of turns, or 1 if turns are not provided",
+      "run <Turns> - Run X amount of turns, or 999 if turns are not provided",
       color
     );
     print(
@@ -278,7 +278,7 @@ class GreyYouMain {
       this.adventures.runTurn(false);
       return;
     } else if (s[0] == "go" || s[0] == "run") {
-      const turns = toInt(s[1] || "1");
+      const turns = toInt(s[1] || "999");
 
       const effect: Effect = Effect.get("Beaten Up");
       let lastBeaten: number = haveEffect(effect);
