@@ -3,6 +3,7 @@ import {
   choiceFollowsFight,
   cliExecute,
   currentRound,
+  fightFollowsChoice,
   getLocationMonsters,
   getProperty,
   handlingChoice,
@@ -234,14 +235,14 @@ export function greyAdv(
     }
   }
 
-  while (currentRound() != 0 || handlingChoice()) {
+  while (currentRound() != 0 || handlingChoice() || fightFollowsChoice()) {
     if (currentRound() != 0) {
       runCombat();
 
       if (currentRound() != 0) {
         throw "Didn't expect to still be in combat! Maybe health is too low that we aborted to be safe?";
       }
-    } else if (handlingChoice()) {
+    } else if (handlingChoice() || fightFollowsChoice()) {
       runChoice();
     }
   }
