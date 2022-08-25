@@ -10,6 +10,7 @@ import { QuestL10GiantShip } from "./beanstalk/QuestL10GiantShip";
 import { QuestL10GiantGround } from "./beanstalk/QuestL10GiantGround";
 import { QuestL10GiantBasement } from "./beanstalk/QuestL10GiantBasement";
 import { QuestL10GiantTop } from "./beanstalk/QuestL10GiantTop";
+import { GreyOutfit } from "../../utils/GreyOutfitter";
 
 export class QuestL10Beanstalk implements QuestInfo {
   bean: Item = Item.get("Enchanted Bean");
@@ -39,14 +40,14 @@ export class QuestL10Beanstalk implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL10Garbage");
+    const status = getQuestStatus("questL10Garbage");
+
+    if (status > 0) {
+      return QuestStatus.COMPLETED;
+    }
 
     if (status < 0) {
       return QuestStatus.NOT_READY;
-    }
-
-    if (status != 0) {
-      return QuestStatus.COMPLETED;
     }
 
     if (availableAmount(this.bean) == 0) {
@@ -56,13 +57,18 @@ export class QuestL10Beanstalk implements QuestInfo {
     return QuestStatus.READY;
   }
 
+  mustBeDone(): boolean {
+    return true;
+  }
+
   run(): QuestAdventure {
     // Use bean if we need to
-    let status = getQuestStatus("questL10Garbage");
+    const status = getQuestStatus("questL10Garbage");
 
     if (status == 0) {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           use(Item.get("Enchanted Bean"));
         },
@@ -71,6 +77,7 @@ export class QuestL10Beanstalk implements QuestInfo {
 
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         council();
       },

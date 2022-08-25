@@ -40,7 +40,7 @@ export class TaskEater implements Task {
 
   constructor() {
     if (getProperty(this.prop) == "") {
-      let dontEat: Item[] = [];
+      const dontEat: Item[] = [];
       // Goat cheese quest
       dontEat.push(Item.get("Goat Cheese"));
 
@@ -62,6 +62,9 @@ export class TaskEater implements Task {
       dontEat.push(Item.get("Unnamed cocktail"));
       dontEat.push(Item.get("Flamin' Whatshisname"));
 
+      // Insufficient level
+      dontEat.push(Item.get("Pie man was not meant to eat"));
+
       setProperty(this.prop, dontEat.map((s) => toInt(s)).join(","));
     }
   }
@@ -71,8 +74,8 @@ export class TaskEater implements Task {
       return;
     }
 
-    for (let item of this.npcFoods) {
-      let id = toInt(item).toString();
+    for (const item of this.npcFoods) {
+      const id = toInt(item).toString();
 
       if (eaten.includes(id)) {
         continue;
@@ -93,7 +96,7 @@ export class TaskEater implements Task {
       return;
     }
 
-    let daily = toInt(Item.get(getProperty("_dailySpecial"))).toString();
+    const daily = toInt(Item.get(getProperty("_dailySpecial"))).toString();
 
     if (eaten.includes(daily)) {
       return;
@@ -101,7 +104,7 @@ export class TaskEater implements Task {
 
     eaten.push(daily);
 
-    for (let itemId of ["-1", "-2", "-3", daily]) {
+    for (const itemId of ["-1", "-2", "-3", daily]) {
       visitUrl("cafe.php?cafeid=1&pwd=&action=CONSUME!&whichitem=" + itemId);
     }
   }
@@ -111,7 +114,7 @@ export class TaskEater implements Task {
       return;
     }
 
-    let daily = toInt(Item.get(getProperty("_dailySpecial"))).toString();
+    const daily = toInt(Item.get(getProperty("_dailySpecial"))).toString();
 
     if (eaten.includes(daily)) {
       return;
@@ -119,7 +122,7 @@ export class TaskEater implements Task {
 
     eaten.push(daily);
 
-    for (let itemId of ["-1", "-2", "-3", daily]) {
+    for (const itemId of ["-1", "-2", "-3", daily]) {
       visitUrl("cafe.php?cafeid=2&pwd=&action=CONSUME!&whichitem=" + itemId);
     }
   }
@@ -129,14 +132,14 @@ export class TaskEater implements Task {
       return;
     }
 
-    let eaten: string[] = getProperty(this.prop).split(",");
+    const eaten: string[] = getProperty(this.prop).split(",");
 
     this.doAlwaysAvailable(eaten);
     this.doChez(eaten);
     this.doGnomes(eaten);
 
-    for (let i of Object.keys(getInventory())) {
-      let item = Item.get(i);
+    for (const i of Object.keys(getInventory())) {
+      const item = Item.get(i);
 
       if (item.fullness == 0 && item.inebriety == 0 && item.spleen == 0) {
         continue;

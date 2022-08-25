@@ -59,7 +59,7 @@ export class QuestL11Palin implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Palindome");
+    const status = getQuestStatus("questL11Palindome");
 
     if (status == 100) {
       return QuestStatus.COMPLETED;
@@ -73,14 +73,22 @@ export class QuestL11Palin implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().addItem(this.talisman).addItem(this.megagem);
+    const outfit = new GreyOutfit()
+      .addItem(this.talisman)
+      .addItem(this.megagem);
 
     return {
       outfit: outfit,
       location: null,
       run: () => {
-        visitUrl("place.php?whichplace=palindome&action=pal_drlabel");
-        greyAdv("choice.php?pwd=&whichchoice=131&option=1", outfit);
+        const props = new PropertyManager();
+        props.setChoice(131, 1);
+
+        try {
+          greyAdv("place.php?whichplace=palindome&action=pal_drlabel", outfit);
+        } finally {
+          props.resetAll();
+        }
       },
     };
   }
