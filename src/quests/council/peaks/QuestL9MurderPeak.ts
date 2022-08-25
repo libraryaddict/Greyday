@@ -112,7 +112,9 @@ export class MurderHandler implements QuestInfo {
       run: () => {
         const props = new PropertyManager();
         //cliExecute("retrocape vampire hold");
-        cliExecute("backupcamera init");
+        if (getProperty("backupCameraMode") != "init") {
+          cliExecute("backupcamera init");
+        }
 
         props.setChoice(1056, 1);
         props.setChoice(604, 1);

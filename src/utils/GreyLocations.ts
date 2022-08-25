@@ -196,12 +196,6 @@ export function greyAdv(
     }
 
     if (choiceToPick == null) {
-      visitUrl("main.php");
-
-      if (!handlingChoice()) {
-        return;
-      }
-
       print("Oh god", "red");
       throw `No idea what to do! Handle the choice manually? Report this issue! Reported to be in choice ${lastChoice()} with choice options ${toJson(
         availableChoiceOptions()

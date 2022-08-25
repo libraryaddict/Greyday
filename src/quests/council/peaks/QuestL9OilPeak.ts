@@ -123,7 +123,9 @@ export class OilHandler implements QuestInfo {
     }
 
     if (level <= 50) {
-      cliExecute("backupcamera ml");
+      if (getProperty("backupCameraMode") != "ml") {
+        cliExecute("backupcamera ml");
+      }
 
       const item = Item.get("Backup Camera");
 
