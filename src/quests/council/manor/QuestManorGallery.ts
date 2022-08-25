@@ -1,4 +1,11 @@
-import { availableAmount, Item, Location, Monster } from "kolmafia";
+import {
+  availableAmount,
+  getProperty,
+  Item,
+  Location,
+  Monster,
+  setProperty,
+} from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import {
   hasNonCombatSkillActive,
@@ -27,7 +34,7 @@ export class ManorGallery implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questM21Dance");
+    const status = getQuestStatus("questM21Dance");
 
     if (status < 1) {
       return QuestStatus.NOT_READY;
@@ -59,17 +66,17 @@ export class ManorGallery implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat();
 
     return {
       location: this.location,
       outfit: outfit,
       run: () => {
         // TODO Handle NCs
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         if (this.hasDelay()) {
-          let delay = DelayBurners.getReadyDelayBurner();
+          const delay = DelayBurners.getReadyDelayBurner();
 
           if (delay != null) {
             delay.doFightSetup();
@@ -85,6 +92,10 @@ export class ManorGallery implements QuestInfo {
         }
 
         props.setChoice(914, 1);
+
+        if (getProperty("louvreDesiredGoal") != "7") {
+          props.setProperty("louvreDesiredGoal", "7");
+        }
 
         try {
           greyAdv(this.location, outfit);

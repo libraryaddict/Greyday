@@ -9,6 +9,8 @@ import {
   Monster,
   myAdventures,
   myLevel,
+  print,
+  setProperty,
   toBoolean,
   toInt,
   toMonster,
@@ -21,8 +23,12 @@ import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { GreySettings } from "../../../utils/GreySettings";
-import { getBackupsRemaining } from "../../../utils/GreyUtils";
+import {
+  getAllCombinations,
+  getBackupsRemaining,
+} from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
+import { PropertyManager } from "../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -39,9 +45,7 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
   powerfulGlove: Item = Item.get("Powerful Glove");
   backupCamera: Item = Item.get("Backup Camera");
   votedSticker: Item = Item.get("&quot;I Voted!&quot; sticker");
-  gloveAndBackups: PossiblePath;
-  backups: PossiblePath;
-  manual: PossiblePath;
+  paths: PossiblePath[] = [];
 
   constructor() {
     super();
@@ -51,45 +55,134 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
     return 15;
   }
 
+  getFriendsRemaining(): number {
+    if (toMonster(getProperty("_saberForceMonster")) != this.monster) {
+      return 0;
+    }
+
+    return toInt(getProperty("_saberForceMonsterCount"));
+  }
+
   createPaths(assumeUnstarted: boolean): void {
     const barrelsNeeded =
       5 - (assumeUnstarted ? 0 : availableAmount(this.item));
     const turnsManual = 8;
-    const copyReady = this.lastMonster() == this.monster;
-    this.manual = new PossiblePath(turnsManual * barrelsNeeded);
+    const possibleCombo: (ResourceCategory | "Manual")[] = [];
 
-    const copiesNeeded = barrelsNeeded - (copyReady ? 0 : 1);
+    for (
+      let i = 0;
+      i < barrelsNeeded - (assumeUnstarted ? 0 : this.getFriendsRemaining());
+      i++
+    ) {
+      possibleCombo.push("Manual");
+      possibleCombo.push(ResourceCategory.COPIER);
+      possibleCombo.push(ResourceCategory.OLFACT_COPIER);
+    }
 
-    // 4 for the copies, 8 for the source
-    this.backups = new PossiblePath(
-      barrelsNeeded + (copyReady ? 0 : turnsManual)
-    )
-      .add(ResourceCategory.COPIER, copiesNeeded)
-      .addIgnored("Cosplay Saber");
+    // If we're doing voted, or mag class. Then we can do a replace
+    if (
+      availableAmount(this.votedSticker) +
+        availableAmount(this.cursedMagnifyingGlass) >
+        0 &&
+      (!this.isBackupReady() || this.getFriendsRemaining() == 0)
+    ) {
+      possibleCombo.push(ResourceCategory.GLOVE_REPLACE);
+    }
 
-    this.gloveAndBackups = new PossiblePath(barrelsNeeded)
-      .add(
-        ResourceCategory.GLOVE_REPLACE,
-        this.lastMonster() == this.monster ? 0 : 1
-      )
-      .add(ResourceCategory.COPIER, copiesNeeded)
-      .addIgnored("Cosplay Saber");
+    this.paths = [];
+
+    for (const combo of getAllCombinations(possibleCombo)) {
+      // If a combo would do something silly, like request a glove replace when its not needed
+      if (!assumeUnstarted && combo.includes(ResourceCategory.GLOVE_REPLACE)) {
+        // If we'd ask for a replace when we're doing friends.. Or have a void copier
+        if (this.getFriendsRemaining() > 0) {
+          continue;
+        }
+
+        // If we'd ask for a replace when we can do backups
+        if (
+          this.lastMonster() == this.monster &&
+          combo.includes(ResourceCategory.COPIER)
+        ) {
+          continue;
+        }
+      }
+
+      // If a combo would do something silly, like expect lobster without a source
+      if (
+        !combo.includes("Manual") &&
+        !combo.includes(ResourceCategory.GLOVE_REPLACE) &&
+        (assumeUnstarted ||
+          (this.getFriendsRemaining() == 0 &&
+            !(
+              combo.includes(ResourceCategory.COPIER) &&
+              this.lastMonster() == this.monster
+            )))
+      ) {
+        continue;
+      }
+
+      let turnsTaken = 0;
+      let barrelsGained = 0;
+
+      for (const type of combo) {
+        if (type == "Manual") {
+          turnsTaken += turnsManual;
+          barrelsGained++;
+        } else if (type == ResourceCategory.COPIER) {
+          // Skip turns taken as we're burning delay as a rule
+          // turnsTaken++;
+          barrelsGained++;
+        } else if (type == ResourceCategory.OLFACT_COPIER) {
+          // Each one of these gives us another 2 effectively
+          // Since the first fight we'd saber on won't give us a barrel and is pretty much moved to the last fight
+          turnsTaken += 2;
+          barrelsGained += 2;
+        } else if (type == ResourceCategory.GLOVE_REPLACE) {
+          turnsTaken++;
+          barrelsGained++;
+        } else {
+          throw "Lobster calcs didn't account for " + type;
+        }
+      }
+
+      if (barrelsGained < barrelsNeeded) {
+        continue;
+      }
+
+      // If we're doing olfact, then doing an extra copy when our saber would do it anyways is a waste
+      const extraTurns = combo.filter(
+        (c) => c == "Manual" || c == ResourceCategory.COPIER
+      ).length;
+      const extraBarrels = barrelsGained - barrelsNeeded;
+
+      if (extraBarrels > 0 && extraTurns > 1) {
+        continue;
+      }
+
+      const path = new PossiblePath(turnsTaken);
+
+      for (const type of combo) {
+        if (typeof type != "number") {
+          continue;
+        }
+
+        path.add(type);
+      }
+
+      this.paths.push(path);
+    }
+
+    if (barrelsNeeded <= 0) {
+      this.paths.push(new PossiblePath(0));
+    }
   }
 
   getPossiblePaths(): PossiblePath[] {
-    const paths = [this.manual, this.backups];
-
-    if (
-      availableAmount(this.cursedMagnifyingGlass) > 0 ||
-      (toBoolean(getProperty("voteAlways")) && GreySettings.greyVotingBooth)
-    ) {
-      paths.push(this.gloveAndBackups);
-    }
-
-    return paths;
+    return this.paths;
   }
 
-  status(): QuestStatus {
+  status(path: PossiblePath): QuestStatus {
     if (getProperty("sidequestLighthouseCompleted") != "none") {
       return QuestStatus.COMPLETED;
     }
@@ -98,23 +191,23 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (myAdventures() < 22) {
+    if (availableAmount(this.item) >= 5) {
+      return QuestStatus.READY;
+    }
+
+    if (myAdventures() < 22 || path == null) {
       return QuestStatus.NOT_READY;
     }
 
-    if (
-      availableAmount(this.backupCamera) > 0 &&
-      getBackupsRemaining() > 0 &&
-      this.shouldDelayForBats()
-    ) {
+    if (this.getFriendsRemaining() > 0) {
+      return QuestStatus.READY;
+    }
+
+    if (path.canUse(ResourceCategory.COPIER) && this.shouldDelayForBats()) {
       return QuestStatus.NOT_READY;
     }
 
     if (availableAmount(this.backupCamera) > 0 && this.isBackupReady()) {
-      return QuestStatus.READY;
-    }
-
-    if (availableAmount(this.item) >= 5) {
       return QuestStatus.READY;
     }
 
@@ -125,7 +218,10 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (this.hasForcedMonsterAndGlove()) {
+    if (
+      path.canUse(ResourceCategory.GLOVE_REPLACE) &&
+      this.hasForcedMonsterAndGlove()
+    ) {
       if (this.getMonsterReplacer() == null) {
         return QuestStatus.NOT_READY;
       }
@@ -220,52 +316,100 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
     return status >= 3 && status < 100;
   }
 
+  runBackup(path: PossiblePath): QuestAdventure {
+    const outfit = new GreyOutfit();
+    outfit.addBonus("-ML");
+
+    const copierResource = path.getResource(ResourceCategory.COPIER);
+    copierResource.prepare(outfit);
+
+    let loc: Location;
+
+    if (this.isBatsAvailable()) {
+      loc = Location.get("The Boss Bat's Lair");
+    } else {
+      loc = Location.get("The Dire Warren");
+    }
+
+    return {
+      outfit: outfit,
+      location: loc,
+      run: () => {
+        greyAdv(
+          loc,
+          outfit,
+          new AdventureSettings().setStartOfFightMacro(
+            new Macro().ifNot_(this.monster, copierResource.macro())
+          )
+        );
+      },
+    };
+  }
+
+  runFriends(path: PossiblePath): QuestAdventure {
+    const copier = path.getResource(ResourceCategory.OLFACT_COPIER);
+    const makeMoreFriends =
+      this.getFriendsRemaining() == 1 &&
+      availableAmount(this.item) < 4 &&
+      copier != null;
+
+    const outfit = new GreyOutfit();
+    outfit.addBonus("-ML");
+
+    if (makeMoreFriends) {
+      copier.prepare(outfit);
+    }
+
+    return {
+      outfit: outfit,
+      location: this.loc,
+      run: () => {
+        const props = new PropertyManager();
+        let macro: Macro;
+
+        if (makeMoreFriends) {
+          copier.prepare(null, props);
+          macro = Macro.if_(this.monster, copier.macro());
+        }
+
+        try {
+          greyAdv(
+            this.loc,
+            outfit,
+            new AdventureSettings().setStartOfFightMacro(macro)
+          );
+        } finally {
+          props.resetAll();
+        }
+      },
+    };
+  }
+
   run(path: PossiblePath): QuestAdventure {
     // Try to turn in quest
     if (itemAmount(this.item) >= 5) {
       return this.turnInQuest();
     }
 
+    if (this.getFriendsRemaining() > 0) {
+      return this.runFriends(path);
+    }
+
     if (this.isBackupReady() && path.canUse(ResourceCategory.COPIER)) {
-      const outfit = new GreyOutfit();
-      outfit.addBonus("-ML");
-
-      const copierResource = path.getResource(ResourceCategory.COPIER);
-      copierResource.prepare(outfit);
-
-      let loc: Location;
-
-      if (this.isBatsAvailable()) {
-        loc = Location.get("The Boss Bat's Lair");
-      } else {
-        loc = Location.get("The Dire Warren");
-      }
-
-      return {
-        outfit: outfit,
-        location: loc,
-        run: () => {
-          greyAdv(
-            loc,
-            outfit,
-            new AdventureSettings().setStartOfFightMacro(
-              new Macro().ifNot_(this.monster, copierResource.macro())
-            )
-          );
-        },
-      };
+      return this.runBackup(path);
     }
 
     const outfit = new GreyOutfit();
 
     const gloveMacro = path.getResource(ResourceCategory.GLOVE_REPLACE);
+    const monsterReplacerItem = this.getMonsterReplacer();
 
     if (
       gloveMacro != null &&
       this.hasForcedMonsterAndGlove() &&
-      this.getMonsterReplacer() != null
+      monsterReplacerItem != null
     ) {
-      outfit.addItem(this.getMonsterReplacer());
+      outfit.addItem(monsterReplacerItem);
 
       gloveMacro.prepare(outfit);
     } else {
@@ -274,25 +418,48 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
 
     outfit.addBonus("-ML");
 
+    const copier = path.getResource(ResourceCategory.OLFACT_COPIER);
+
+    if (copier != null) {
+      copier.prepare(outfit);
+    }
+
     return {
       location: this.loc,
       outfit: outfit,
       run: () => {
         let macro: Macro;
+        const props = new PropertyManager();
 
-        if (
-          gloveMacro != null &&
-          this.hasForcedMonsterAndGlove() &&
-          this.getMonsterReplacer() != null
-        ) {
-          macro = Macro.ifNot_(this.monster, gloveMacro.macro());
+        if (copier != null) {
+          copier.prepare(null, props);
+
+          if (macro == null) {
+            macro = new Macro();
+          }
+
+          macro.if_(this.monster, copier.macro());
         }
 
-        greyAdv(
-          this.loc,
-          outfit,
-          new AdventureSettings().setStartOfFightMacro(macro)
-        );
+        try {
+          if (
+            gloveMacro != null &&
+            this.hasForcedMonsterAndGlove() &&
+            monsterReplacerItem != null
+          ) {
+            visitUrl("adventure.php?snarfblat=" + toInt(this.loc));
+
+            Macro.ifNot_(this.monster, gloveMacro.macro()).submit();
+          }
+
+          greyAdv(
+            this.loc,
+            outfit,
+            new AdventureSettings().setStartOfFightMacro(macro)
+          );
+        } finally {
+          props.resetAll();
+        }
       },
     };
   }

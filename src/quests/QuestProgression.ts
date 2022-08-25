@@ -72,6 +72,7 @@ const HiddenCityProgression: (QuestType[] | QuestType)[] = [
 ];
 
 const FratWar: (QuestType[] | QuestType)[] = [
+  "Boat / Vacation",
   "Council / War / Start",
   [
     "Council / War / Lobsters",
@@ -90,4 +91,16 @@ const Palin: QuestType[] = [
   "Council / MacGruffin / Palin / Boss",
 ];
 
-const QuestProgression: QuestType[] = [];
+const TavernQuest: QuestType[] = ["Council / Larva", "Council / Tavern"];
+
+const QuestProgression: (QuestType | QuestType[])[][] = [
+  TavernQuest,
+  ManorProgression,
+  PyramidProgression,
+  ZeppProgression,
+  ShenProgression,
+  SmutProgression,
+  HiddenCityProgression,
+  FratWar,
+  Palin,
+];

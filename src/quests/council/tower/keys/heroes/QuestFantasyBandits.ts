@@ -52,7 +52,6 @@ export class QuestFantasyBandit extends TaskInfo implements QuestInfo {
 
     this.path.addFax(this.monster);
     this.path.add(ResourceCategory.COPIER, 4);
-    this.path.addIgnored("Cosplay Saber");
 
     // If we're assuming we've unstarted, no need to add this stuff
     if (assumeUnstarted) {

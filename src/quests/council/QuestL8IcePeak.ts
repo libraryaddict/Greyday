@@ -1,4 +1,5 @@
 import { Location, visitUrl } from "kolmafia";
+import { GreyOutfit } from "../../utils/GreyOutfitter";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -54,6 +55,7 @@ export class QuestL8IcePeak implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         this.talkTrapper();
       },

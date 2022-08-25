@@ -33,6 +33,7 @@ import { PropertyManager } from "../utils/Properties";
 // We should use the category only to determine if a quest is asking for a resource type, but doesn't tell us if it supports a certain resource or not. Aka not implemented.
 export enum ResourceCategory {
   COPIER,
+  OLFACT_COPIER,
   FAXER,
   CARGO_SHORTS,
   BANISHER,
@@ -212,7 +213,7 @@ const backupCopier: SomeResource = {
 };
 
 const cosplayCopier: SomeResource = {
-  type: ResourceCategory.COPIER,
+  type: ResourceCategory.OLFACT_COPIER,
   id: "Cosplay Saber",
   worthInAftercore: 3000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
@@ -220,7 +221,7 @@ const cosplayCopier: SomeResource = {
       outfit.addItem(cosplaySaber);
     }
     if (props != null) {
-      props.setChoice(1387, 3);
+      props.setChoice(1387, 2);
     }
   },
   macro: () => Macro.skill(Skill.get("Use The Force")),

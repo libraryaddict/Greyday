@@ -8,6 +8,7 @@ import {
   use,
   visitUrl,
 } from "kolmafia";
+import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
@@ -31,13 +32,14 @@ export class QuestL1Toot implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         council();
         visitUrl("tutorial.php?action=toot");
         use(Item.get("Letter from King Ralph XI"));
         use(Item.get("pork elf goodies sack"));
 
-        for (let i of this.toSell) {
+        for (const i of this.toSell) {
           if (availableAmount(i) > 0) {
             autosell(i, availableAmount(i));
           }

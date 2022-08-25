@@ -220,26 +220,28 @@ export function greyAdv(
     macro.submit();
   };
 
-  if (outfit.plusCombatWeight > 0) {
-    castCombatSkill();
-  } else if (outfit.minusCombatWeight > 0) {
-    castNoCombatSkills();
+  if (currentRound() == 0 && !handlingChoice()) {
+    if (outfit.plusCombatWeight > 0) {
+      castCombatSkill();
+    } else if (outfit.minusCombatWeight > 0) {
+      castNoCombatSkills();
+    }
+
+    if (typeof location == "string") {
+      visitUrl(<string>location);
+    } else if (location != null) {
+      visitUrl("adventure.php?snarfblat=" + toInt(location));
+    }
   }
 
-  if (typeof location == "string") {
-    visitUrl(<string>location);
-  } else if (location != null) {
-    visitUrl("adventure.php?snarfblat=" + toInt(location));
-  }
-
-  while (currentRound() != 0 || choiceFollowsFight() || handlingChoice()) {
+  while (currentRound() != 0 || handlingChoice()) {
     if (currentRound() != 0) {
       runCombat();
 
       if (currentRound() != 0) {
         throw "Didn't expect to still be in combat! Maybe health is too low that we aborted to be safe?";
       }
-    } else {
+    } else if (handlingChoice()) {
       runChoice();
     }
   }

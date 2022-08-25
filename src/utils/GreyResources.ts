@@ -237,7 +237,7 @@ export class GreyRequirements {
       owns?: boolean
     ) => {
       if (name instanceof Item) {
-        owns = availableAmount(name) > 0;
+        owns = availableAmount(name) + storageAmount(name) > 0;
         name = name.name;
       }
 

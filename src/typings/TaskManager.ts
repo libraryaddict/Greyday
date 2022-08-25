@@ -195,6 +195,7 @@ export class FigureOutPath {
   resources: SomeResource[] = getResources();
 
   getPaths(quests: QuestInfo[], assumeUnstarted: boolean = false): SimmedPath {
+    print("Now calculating resources..");
     const allPaths: [QuestInfo, PossiblePath[]][] = [];
     const miscPaths: QuestInfo[] = [];
     const uncompleteable: QuestInfo[] = [];

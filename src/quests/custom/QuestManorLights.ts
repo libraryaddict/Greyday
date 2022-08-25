@@ -18,6 +18,7 @@ import {
   haveEffect,
   Effect,
   canAdventure,
+  handlingChoice,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -207,18 +208,13 @@ export class QuestManorLights implements QuestInfo {
       familiar: fight ? this.goose : null,
       outfit: outfit,
       run: () => {
-        if (false) {
-          throw (
-            "Well, do this manually! It wants to go to " +
-            steve[0] +
-            ", prop says " +
-            getProperty("nextSpookyravenStephenRoom")
-          );
-        }
-
         const both = this.getBoth();
 
         visitUrl("adventure.php?snarfblat=" + toInt(steve[0]));
+
+        if (!handlingChoice() && currentRound() == 0) {
+          return;
+        }
 
         for (const i of steve[1]) {
           const url =
@@ -309,6 +305,10 @@ export class QuestManorLights implements QuestInfo {
       run: () => {
         const both = this.getBoth();
         visitUrl("adventure.php?snarfblat=" + toInt(eliza[0]));
+
+        if (!handlingChoice() && currentRound() == 0) {
+          return;
+        }
 
         const url =
           "choice.php?pwd=&whichchoice=" + lastChoice() + "&option=" + eliza[1];

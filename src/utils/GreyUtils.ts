@@ -142,21 +142,54 @@ export function currentPredictions(
       .map(([, location, monster]) => [location, monster])
   );*/
 }
-export function getAllCombinations<Type>(valuesArray: Type[]): Type[][] {
+export function getAllCombinations<Type>(
+  valuesArray: Type[],
+  uniquesOnly: boolean = true
+): Type[][] {
   const combi: Type[][] = [];
   let temp: Type[] = [];
   const slent: number = Math.pow(2, valuesArray.length);
+  const uniques: Type[] = [];
+  const added: string[] = [];
+
+  valuesArray.forEach((v, index) => {
+    if (valuesArray.indexOf(v) != index) {
+      return;
+    }
+
+    uniques.push(v);
+  });
 
   for (let i = 0; i < slent; i++) {
     temp = [];
+
     for (let j = 0; j < valuesArray.length; j++) {
-      if (i & Math.pow(2, j)) {
-        temp.push(valuesArray[j]);
+      if (!(i & Math.pow(2, j))) {
+        continue;
+      }
+
+      temp.push(valuesArray[j]);
+    }
+
+    if (temp.length == 0) {
+      continue;
+    }
+
+    // If we don't want the same arrays but in different orders
+    if (uniquesOnly) {
+      const id = temp
+        .map((t) => uniques.indexOf(t))
+        .sort()
+        .join(",");
+
+      if (added.includes(id)) {
+        continue;
+      } else {
+        added.push(id);
       }
     }
-    if (temp.length > 0) {
-      combi.push(temp);
-    }
+
+    combi.push(temp);
   }
 
   combi.sort((a, b) => a.length - b.length);

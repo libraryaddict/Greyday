@@ -26,11 +26,8 @@ export class TaskEquipDistillery implements Task {
       return;
     }
 
-    this.lastRun = 5;
+    this.lastRun = 2;
 
-    visitUrl(
-      "familiar.php?action=equip&pwd=&whichfam=171&whichitem=10932",
-      true
-    );
+    visitUrl("familiar.php?action=equip&pwd=&whichfam=171&whichitem=10932");
   }
 }
