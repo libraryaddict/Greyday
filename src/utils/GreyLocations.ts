@@ -12,6 +12,7 @@ import {
   Monster,
   print,
   toInt,
+  toJson,
   visitUrl,
 } from "kolmafia";
 import { castCombatSkill, castNoCombatSkills } from "../GreyAdventurer";
@@ -195,8 +196,16 @@ export function greyAdv(
     }
 
     if (choiceToPick == null) {
+      visitUrl("main.php");
+
+      if (!handlingChoice()) {
+        return;
+      }
+
       print("Oh god", "red");
-      throw "No idea what to do! Handle the choice manually? Report this issue!";
+      throw `No idea what to do! Handle the choice manually? Report this issue! Reported to be in choice ${lastChoice()} with choice options ${toJson(
+        availableChoiceOptions()
+      )}, handling choice: ${handlingChoice()}, fight follows: ${fightFollowsChoice()}`;
     }
 
     if (choicesRun.filter((c) => c == lastChoice()).length > 6) {
