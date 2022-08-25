@@ -1220,7 +1220,8 @@ var StrictMacro = /*#__PURE__*/(/* unused pure expression or super */ null && (f
 
 
 // We should use the category only to determine if a quest is asking for a resource type, but doesn't tell us if it supports a certain resource or not. Aka not implemented.
-var ResourceCategory;(function (ResourceCategory) {ResourceCategory[ResourceCategory["COPIER"] = 0] = "COPIER";ResourceCategory[ResourceCategory["FAXER"] = 1] = "FAXER";ResourceCategory[ResourceCategory["CARGO_SHORTS"] = 2] = "CARGO_SHORTS";ResourceCategory[ResourceCategory["BANISHER"] = 3] = "BANISHER";ResourceCategory[ResourceCategory["YELLOW_RAY"] = 4] = "YELLOW_RAY";ResourceCategory[ResourceCategory["PULL"] = 5] = "PULL";ResourceCategory[ResourceCategory["ZAP"] = 6] = "ZAP";ResourceCategory[ResourceCategory["CLOVER"] = 7] = "CLOVER";ResourceCategory[ResourceCategory["POLAR_VORTEX"] = 8] = "POLAR_VORTEX";ResourceCategory[ResourceCategory["FIRE_EXTINGUSHER_ZONE"] = 9] = "FIRE_EXTINGUSHER_ZONE";ResourceCategory[ResourceCategory["GLOVE_REPLACE"] = 10] = "GLOVE_REPLACE";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD"] = 11] = "DECK_OF_EVERY_CARD";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD_CHEAT"] = 12] = "DECK_OF_EVERY_CARD_CHEAT";ResourceCategory[ResourceCategory["CAT_HEIST"] = 13] = "CAT_HEIST";ResourceCategory[ResourceCategory["HOT_TUB"] = 14] = "HOT_TUB";})(ResourceCategory || (ResourceCategory = {}));
+var ResourceCategory;(function (ResourceCategory) {ResourceCategory[ResourceCategory["COPIER"] = 0] = "COPIER";ResourceCategory[ResourceCategory["OLFACT_COPIER"] = 1] = "OLFACT_COPIER";ResourceCategory[ResourceCategory["FAXER"] = 2] = "FAXER";ResourceCategory[ResourceCategory["CARGO_SHORTS"] = 3] = "CARGO_SHORTS";ResourceCategory[ResourceCategory["BANISHER"] = 4] = "BANISHER";ResourceCategory[ResourceCategory["YELLOW_RAY"] = 5] = "YELLOW_RAY";ResourceCategory[ResourceCategory["PULL"] = 6] = "PULL";ResourceCategory[ResourceCategory["ZAP"] = 7] = "ZAP";ResourceCategory[ResourceCategory["CLOVER"] = 8] = "CLOVER";ResourceCategory[ResourceCategory["POLAR_VORTEX"] = 9] = "POLAR_VORTEX";ResourceCategory[ResourceCategory["FIRE_EXTINGUSHER_ZONE"] = 10] = "FIRE_EXTINGUSHER_ZONE";ResourceCategory[ResourceCategory["GLOVE_REPLACE"] = 11] = "GLOVE_REPLACE";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD"] = 12] = "DECK_OF_EVERY_CARD";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD_CHEAT"] = 13] = "DECK_OF_EVERY_CARD_CHEAT";ResourceCategory[ResourceCategory["CAT_HEIST"] = 14] = "CAT_HEIST";ResourceCategory[ResourceCategory["HOT_TUB"] = 15] = "HOT_TUB";})(ResourceCategory || (ResourceCategory = {}));
+
 
 
 
@@ -1401,7 +1402,7 @@ var backupCopier = {
 
 
 var cosplayCopier = {
-  type: ResourceCategory.COPIER,
+  type: ResourceCategory.OLFACT_COPIER,
   id: "Cosplay Saber",
   worthInAftercore: 3000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit, props) => {
@@ -1409,7 +1410,7 @@ var cosplayCopier = {
       outfit.addItem(cosplaySaber);
     }
     if (props != null) {
-      props.setChoice(1387, 3);
+      props.setChoice(1387, 2);
     }
   },
   macro: () => Macro.skill(external_kolmafia_namespaceObject.Skill.get("Use The Force")) };
@@ -2403,21 +2404,54 @@ function currentPredictions()
 
 
 }
-function getAllCombinations(valuesArray) {
+function getAllCombinations(
+valuesArray)
+
+{var uniquesOnly = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
   var combi = [];
   var temp = [];
   var slent = Math.pow(2, valuesArray.length);
+  var uniques = [];
+  var added = [];
+
+  valuesArray.forEach((v, index) => {
+    if (valuesArray.indexOf(v) != index) {
+      return;
+    }
+
+    uniques.push(v);
+  });
 
   for (var i = 0; i < slent; i++) {
     temp = [];
+
     for (var j = 0; j < valuesArray.length; j++) {
-      if (i & Math.pow(2, j)) {
-        temp.push(valuesArray[j]);
+      if (!(i & Math.pow(2, j))) {
+        continue;
+      }
+
+      temp.push(valuesArray[j]);
+    }
+
+    if (temp.length == 0) {
+      continue;
+    }
+
+    // If we don't want the same arrays but in different orders
+    if (uniquesOnly) {
+      var id = temp.
+      map((t) => uniques.indexOf(t)).
+      sort().
+      join(",");
+
+      if (added.includes(id)) {
+        continue;
+      } else {
+        added.push(id);
       }
     }
-    if (temp.length > 0) {
-      combi.push(temp);
-    }
+
+    combi.push(temp);
   }
 
   combi.sort((a, b) => a.length - b.length);
@@ -2848,7 +2882,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
       owns) =>
       {
         if (name instanceof external_kolmafia_namespaceObject.Item) {
-          owns = (0,external_kolmafia_namespaceObject.availableAmount)(name) > 0;
+          owns = (0,external_kolmafia_namespaceObject.availableAmount)(name) + (0,external_kolmafia_namespaceObject.storageAmount)(name) > 0;
           name = name.name;
         }
 
@@ -4903,26 +4937,28 @@ settings)
     macro.submit();
   };
 
-  if (outfit.plusCombatWeight > 0) {
-    castCombatSkill();
-  } else if (outfit.minusCombatWeight > 0) {
-    castNoCombatSkills();
+  if ((0,external_kolmafia_namespaceObject.currentRound)() == 0 && !(0,external_kolmafia_namespaceObject.handlingChoice)()) {
+    if (outfit.plusCombatWeight > 0) {
+      castCombatSkill();
+    } else if (outfit.minusCombatWeight > 0) {
+      castNoCombatSkills();
+    }
+
+    if (typeof location == "string") {
+      (0,external_kolmafia_namespaceObject.visitUrl)(location);
+    } else if (location != null) {
+      (0,external_kolmafia_namespaceObject.visitUrl)("adventure.php?snarfblat=" + (0,external_kolmafia_namespaceObject.toInt)(location));
+    }
   }
 
-  if (typeof location == "string") {
-    (0,external_kolmafia_namespaceObject.visitUrl)(location);
-  } else if (location != null) {
-    (0,external_kolmafia_namespaceObject.visitUrl)("adventure.php?snarfblat=" + (0,external_kolmafia_namespaceObject.toInt)(location));
-  }
-
-  while ((0,external_kolmafia_namespaceObject.currentRound)() != 0 || (0,external_kolmafia_namespaceObject.choiceFollowsFight)() || (0,external_kolmafia_namespaceObject.handlingChoice)()) {
+  while ((0,external_kolmafia_namespaceObject.currentRound)() != 0 || (0,external_kolmafia_namespaceObject.handlingChoice)()) {
     if ((0,external_kolmafia_namespaceObject.currentRound)() != 0) {
       runCombat();
 
       if ((0,external_kolmafia_namespaceObject.currentRound)() != 0) {
         throw "Didn't expect to still be in combat! Maybe health is too low that we aborted to be safe?";
       }
-    } else {
+    } else if ((0,external_kolmafia_namespaceObject.handlingChoice)()) {
       runChoice();
     }
   }
@@ -12200,7 +12236,8 @@ var WarGremlins = /*#__PURE__*/function () {function WarGremlins() {QuestL12WarG
       map((g) => g[0]);
     } }]);return WarGremlins;}();
 ;// CONCATENATED MODULE: ./src/quests/council/islandwar/QuestL12WarLobster.ts
-function QuestL12WarLobster_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL12WarLobster_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL12WarLobster_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL12WarLobster_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL12WarLobster_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL12WarLobster_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL12WarLobster_setPrototypeOf(subClass, superClass);}function QuestL12WarLobster_setPrototypeOf(o, p) {QuestL12WarLobster_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL12WarLobster_setPrototypeOf(o, p);}function QuestL12WarLobster_createSuper(Derived) {var hasNativeReflectConstruct = QuestL12WarLobster_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL12WarLobster_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL12WarLobster_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL12WarLobster_possibleConstructorReturn(this, result);};}function QuestL12WarLobster_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL12WarLobster_assertThisInitialized(self);}function QuestL12WarLobster_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL12WarLobster_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL12WarLobster_getPrototypeOf(o) {QuestL12WarLobster_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL12WarLobster_getPrototypeOf(o);}function QuestL12WarLobster_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL12WarLobster_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL12WarLobster_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestL12WarLobster_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL12WarLobster_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL12WarLobster_arrayLikeToArray(o, minLen);}function QuestL12WarLobster_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL12WarLobster_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL12WarLobster_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL12WarLobster_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL12WarLobster_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL12WarLobster_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL12WarLobster_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL12WarLobster_setPrototypeOf(subClass, superClass);}function QuestL12WarLobster_setPrototypeOf(o, p) {QuestL12WarLobster_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL12WarLobster_setPrototypeOf(o, p);}function QuestL12WarLobster_createSuper(Derived) {var hasNativeReflectConstruct = QuestL12WarLobster_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL12WarLobster_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL12WarLobster_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL12WarLobster_possibleConstructorReturn(this, result);};}function QuestL12WarLobster_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL12WarLobster_assertThisInitialized(self);}function QuestL12WarLobster_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL12WarLobster_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL12WarLobster_getPrototypeOf(o) {QuestL12WarLobster_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL12WarLobster_getPrototypeOf(o);}function QuestL12WarLobster_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -12222,55 +12259,142 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
 
 
 
-
-
   function QuestL12Lobster() {var _this;QuestL12WarLobster_classCallCheck(this, QuestL12Lobster);
-    _this = _super.call(this);QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "loc", external_kolmafia_namespaceObject.Location.get("Sonofa Beach"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "item", external_kolmafia_namespaceObject.Item.get("barrel of gunpowder"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "monster", external_kolmafia_namespaceObject.Monster.get("Lobsterfrogman"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "cursedMagnifyingGlass", external_kolmafia_namespaceObject.Item.get("Cursed Magnifying Glass"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "powerfulGlove", external_kolmafia_namespaceObject.Item.get("Powerful Glove"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "backupCamera", external_kolmafia_namespaceObject.Item.get("Backup Camera"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "votedSticker", external_kolmafia_namespaceObject.Item.get("&quot;I Voted!&quot; sticker"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "gloveAndBackups", void 0);QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "backups", void 0);QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "manual", void 0);return _this;
+    _this = _super.call(this);QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "loc", external_kolmafia_namespaceObject.Location.get("Sonofa Beach"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "item", external_kolmafia_namespaceObject.Item.get("barrel of gunpowder"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "monster", external_kolmafia_namespaceObject.Monster.get("Lobsterfrogman"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "cursedMagnifyingGlass", external_kolmafia_namespaceObject.Item.get("Cursed Magnifying Glass"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "powerfulGlove", external_kolmafia_namespaceObject.Item.get("Powerful Glove"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "backupCamera", external_kolmafia_namespaceObject.Item.get("Backup Camera"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "votedSticker", external_kolmafia_namespaceObject.Item.get("&quot;I Voted!&quot; sticker"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "paths", []);return _this;
   }QuestL12WarLobster_createClass(QuestL12Lobster, [{ key: "level", value:
 
     function level() {
       return 15;
+    } }, { key: "getFriendsRemaining", value:
+
+    function getFriendsRemaining() {
+      if ((0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.getProperty)("_saberForceMonster")) != this.monster) {
+        return 0;
+      }
+
+      return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_saberForceMonsterCount"));
     } }, { key: "createPaths", value:
 
     function createPaths(assumeUnstarted) {
       var barrelsNeeded =
       5 - (assumeUnstarted ? 0 : (0,external_kolmafia_namespaceObject.availableAmount)(this.item));
       var turnsManual = 8;
-      var copyReady = this.lastMonster() == this.monster;
-      this.manual = new PossiblePath(turnsManual * barrelsNeeded);
+      var possibleCombo = [];
 
-      var copiesNeeded = barrelsNeeded - (copyReady ? 0 : 1);
+      for (
+      var i = 0;
+      i < barrelsNeeded - (assumeUnstarted ? 0 : this.getFriendsRemaining());
+      i++)
+      {
+        possibleCombo.push("Manual");
+        possibleCombo.push(ResourceCategory.COPIER);
+        possibleCombo.push(ResourceCategory.OLFACT_COPIER);
+      }
 
-      // 4 for the copies, 8 for the source
-      this.backups = new PossiblePath(
-      barrelsNeeded + (copyReady ? 0 : turnsManual)).
+      // If we're doing voted, or mag class. Then we can do a replace
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.votedSticker) +
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.cursedMagnifyingGlass) >
+      0 && (
+      !this.isBackupReady() || this.getFriendsRemaining() == 0))
+      {
+        possibleCombo.push(ResourceCategory.GLOVE_REPLACE);
+      }
 
-      add(ResourceCategory.COPIER, copiesNeeded).
-      addIgnored("Cosplay Saber");
+      this.paths = [];var _iterator = QuestL12WarLobster_createForOfIteratorHelper(
 
-      this.gloveAndBackups = new PossiblePath(barrelsNeeded).
-      add(
-      ResourceCategory.GLOVE_REPLACE,
-      this.lastMonster() == this.monster ? 0 : 1).
+      getAllCombinations(possibleCombo)),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var combo = _step.value;
+          // If a combo would do something silly, like request a glove replace when its not needed
+          if (!assumeUnstarted && combo.includes(ResourceCategory.GLOVE_REPLACE)) {
+            // If we'd ask for a replace when we're doing friends.. Or have a void copier
+            if (this.getFriendsRemaining() > 0) {
+              continue;
+            }
 
-      add(ResourceCategory.COPIER, copiesNeeded).
-      addIgnored("Cosplay Saber");
+            // If we'd ask for a replace when we can do backups
+            if (
+            this.lastMonster() == this.monster &&
+            combo.includes(ResourceCategory.COPIER))
+            {
+              continue;
+            }
+          }
+
+          // If a combo would do something silly, like expect lobster without a source
+          if (
+          !combo.includes("Manual") &&
+          !combo.includes(ResourceCategory.GLOVE_REPLACE) && (
+          assumeUnstarted ||
+          this.getFriendsRemaining() == 0 &&
+          !(
+          combo.includes(ResourceCategory.COPIER) &&
+          this.lastMonster() == this.monster)))
+
+          {
+            continue;
+          }
+
+          var turnsTaken = 0;
+          var barrelsGained = 0;var _iterator2 = QuestL12WarLobster_createForOfIteratorHelper(
+
+          combo),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var type = _step2.value;
+              if (type == "Manual") {
+                turnsTaken += turnsManual;
+                barrelsGained++;
+              } else if (type == ResourceCategory.COPIER) {
+                // Skip turns taken as we're burning delay as a rule
+                // turnsTaken++;
+                barrelsGained++;
+              } else if (type == ResourceCategory.OLFACT_COPIER) {
+                // Each one of these gives us another 2 effectively
+                // Since the first fight we'd saber on won't give us a barrel and is pretty much moved to the last fight
+                turnsTaken += 2;
+                barrelsGained += 2;
+              } else if (type == ResourceCategory.GLOVE_REPLACE) {
+                turnsTaken++;
+                barrelsGained++;
+              } else {
+                throw "Lobster calcs didn't account for " + type;
+              }
+            }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+
+          if (barrelsGained < barrelsNeeded) {
+            continue;
+          }
+
+          // If we're doing olfact, then doing an extra copy when our saber would do it anyways is a waste
+          var extraTurns = combo.filter(
+          (c) => c == "Manual" || c == ResourceCategory.COPIER).
+          length;
+          var extraBarrels = barrelsGained - barrelsNeeded;
+
+          if (extraBarrels > 0 && extraTurns > 1) {
+            continue;
+          }
+
+          var path = new PossiblePath(turnsTaken);var _iterator3 = QuestL12WarLobster_createForOfIteratorHelper(
+
+          combo),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var _type = _step3.value;
+              if (typeof _type != "number") {
+                continue;
+              }
+
+              path.add(_type);
+            }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+
+          this.paths.push(path);
+        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+
+      if (barrelsNeeded <= 0) {
+        this.paths.push(new PossiblePath(0));
+      }
     } }, { key: "getPossiblePaths", value:
 
     function getPossiblePaths() {
-      var paths = [this.manual, this.backups];
-
-      if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.cursedMagnifyingGlass) > 0 ||
-      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("voteAlways")) && GreySettings.greyVotingBooth)
-      {
-        paths.push(this.gloveAndBackups);
-      }
-
-      return paths;
+      return this.paths;
     } }, { key: "status", value:
 
-    function status() {
+    function status(path) {
       if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestLighthouseCompleted") != "none") {
         return QuestStatus.COMPLETED;
       }
@@ -12279,23 +12403,23 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.myAdventures)() < 22) {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.item) >= 5) {
+        return QuestStatus.READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.myAdventures)() < 22 || path == null) {
         return QuestStatus.NOT_READY;
       }
 
-      if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.backupCamera) > 0 &&
-      getBackupsRemaining() > 0 &&
-      this.shouldDelayForBats())
-      {
+      if (this.getFriendsRemaining() > 0) {
+        return QuestStatus.READY;
+      }
+
+      if (path.canUse(ResourceCategory.COPIER) && this.shouldDelayForBats()) {
         return QuestStatus.NOT_READY;
       }
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.backupCamera) > 0 && this.isBackupReady()) {
-        return QuestStatus.READY;
-      }
-
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.item) >= 5) {
         return QuestStatus.READY;
       }
 
@@ -12306,7 +12430,10 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
         return QuestStatus.NOT_READY;
       }
 
-      if (this.hasForcedMonsterAndGlove()) {
+      if (
+      path.canUse(ResourceCategory.GLOVE_REPLACE) &&
+      this.hasForcedMonsterAndGlove())
+      {
         if (this.getMonsterReplacer() == null) {
           return QuestStatus.NOT_READY;
         }
@@ -12399,6 +12526,75 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
       var status = getQuestStatus("questL04Bat");
 
       return status >= 3 && status < 100;
+    } }, { key: "runBackup", value:
+
+    function runBackup(path) {
+      var outfit = new GreyOutfit();
+      outfit.addBonus("-ML");
+
+      var copierResource = path.getResource(ResourceCategory.COPIER);
+      copierResource.prepare(outfit);
+
+      var loc;
+
+      if (this.isBatsAvailable()) {
+        loc = external_kolmafia_namespaceObject.Location.get("The Boss Bat's Lair");
+      } else {
+        loc = external_kolmafia_namespaceObject.Location.get("The Dire Warren");
+      }
+
+      return {
+        outfit: outfit,
+        location: loc,
+        run: () => {
+          greyAdv(
+          loc,
+          outfit,
+          new AdventureSettings().setStartOfFightMacro(
+          new Macro().ifNot_(this.monster, copierResource.macro())));
+
+
+        } };
+
+    } }, { key: "runFriends", value:
+
+    function runFriends(path) {
+      var copier = path.getResource(ResourceCategory.OLFACT_COPIER);
+      var makeMoreFriends =
+      this.getFriendsRemaining() == 1 &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.item) < 4 &&
+      copier != null;
+
+      var outfit = new GreyOutfit();
+      outfit.addBonus("-ML");
+
+      if (makeMoreFriends) {
+        copier.prepare(outfit);
+      }
+
+      return {
+        outfit: outfit,
+        location: this.loc,
+        run: () => {
+          var props = new PropertyManager();
+          var macro;
+
+          if (makeMoreFriends) {
+            copier.prepare(null, props);
+            macro = Macro.if_(this.monster, copier.macro());
+          }
+
+          try {
+            greyAdv(
+            this.loc,
+            outfit,
+            new AdventureSettings().setStartOfFightMacro(macro));
+
+          } finally {
+            props.resetAll();
+          }
+        } };
+
     } }, { key: "run", value:
 
     function run(path) {
@@ -12407,46 +12603,25 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
         return this.turnInQuest();
       }
 
+      if (this.getFriendsRemaining() > 0) {
+        return this.runFriends(path);
+      }
+
       if (this.isBackupReady() && path.canUse(ResourceCategory.COPIER)) {
-        var _outfit = new GreyOutfit();
-        _outfit.addBonus("-ML");
-
-        var copierResource = path.getResource(ResourceCategory.COPIER);
-        copierResource.prepare(_outfit);
-
-        var loc;
-
-        if (this.isBatsAvailable()) {
-          loc = external_kolmafia_namespaceObject.Location.get("The Boss Bat's Lair");
-        } else {
-          loc = external_kolmafia_namespaceObject.Location.get("The Dire Warren");
-        }
-
-        return {
-          outfit: _outfit,
-          location: loc,
-          run: () => {
-            greyAdv(
-            loc,
-            _outfit,
-            new AdventureSettings().setStartOfFightMacro(
-            new Macro().ifNot_(this.monster, copierResource.macro())));
-
-
-          } };
-
+        return this.runBackup(path);
       }
 
       var outfit = new GreyOutfit();
 
       var gloveMacro = path.getResource(ResourceCategory.GLOVE_REPLACE);
+      var monsterReplacerItem = this.getMonsterReplacer();
 
       if (
       gloveMacro != null &&
       this.hasForcedMonsterAndGlove() &&
-      this.getMonsterReplacer() != null)
+      monsterReplacerItem != null)
       {
-        outfit.addItem(this.getMonsterReplacer());
+        outfit.addItem(monsterReplacerItem);
 
         gloveMacro.prepare(outfit);
       } else {
@@ -12455,25 +12630,48 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
 
       outfit.addBonus("-ML");
 
+      var copier = path.getResource(ResourceCategory.OLFACT_COPIER);
+
+      if (copier != null) {
+        copier.prepare(outfit);
+      }
+
       return {
         location: this.loc,
         outfit: outfit,
         run: () => {
           var macro;
+          var props = new PropertyManager();
 
-          if (
-          gloveMacro != null &&
-          this.hasForcedMonsterAndGlove() &&
-          this.getMonsterReplacer() != null)
-          {
-            macro = Macro.ifNot_(this.monster, gloveMacro.macro());
+          if (copier != null) {
+            copier.prepare(null, props);
+
+            if (macro == null) {
+              macro = new Macro();
+            }
+
+            macro.if_(this.monster, copier.macro());
           }
 
-          greyAdv(
-          this.loc,
-          outfit,
-          new AdventureSettings().setStartOfFightMacro(macro));
+          try {
+            if (
+            gloveMacro != null &&
+            this.hasForcedMonsterAndGlove() &&
+            monsterReplacerItem != null)
+            {
+              (0,external_kolmafia_namespaceObject.visitUrl)("adventure.php?snarfblat=" + (0,external_kolmafia_namespaceObject.toInt)(this.loc));
 
+              Macro.ifNot_(this.monster, gloveMacro.macro()).submit();
+            }
+
+            greyAdv(
+            this.loc,
+            outfit,
+            new AdventureSettings().setStartOfFightMacro(macro));
+
+          } finally {
+            props.resetAll();
+          }
         } };
 
     } }, { key: "mustBeDone", value:
@@ -13568,7 +13766,6 @@ var QuestFantasyBandit = /*#__PURE__*/function (_TaskInfo) {QuestFantasyBandits_
 
       this.path.addFax(this.monster);
       this.path.add(ResourceCategory.COPIER, 4);
-      this.path.addIgnored("Cosplay Saber");
 
       // If we're assuming we've unstarted, no need to add this stuff
       if (assumeUnstarted) {
@@ -15415,6 +15612,7 @@ function QuestL1Toot_createForOfIteratorHelper(o, allowArrayLike) {var it = type
 
 
 
+
 var QuestL1Toot = /*#__PURE__*/function () {function QuestL1Toot() {QuestL1Toot_classCallCheck(this, QuestL1Toot);QuestL1Toot_defineProperty(this, "toSell",
     ["hamethyst", "baconstone", "porquoise"].map((s) =>
     external_kolmafia_namespaceObject.Item.get(s)));}QuestL1Toot_createClass(QuestL1Toot, [{ key: "level", value:
@@ -15435,6 +15633,7 @@ var QuestL1Toot = /*#__PURE__*/function () {function QuestL1Toot() {QuestL1Toot_
     function run() {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           (0,external_kolmafia_namespaceObject.council)();
           (0,external_kolmafia_namespaceObject.visitUrl)("tutorial.php?action=toot");
@@ -18179,6 +18378,7 @@ function QuestL8IcePeak_classCallCheck(instance, Constructor) {if (!(instance in
 
 
 
+
 var QuestL8IcePeak = /*#__PURE__*/function () {
 
 
@@ -18222,6 +18422,7 @@ var QuestL8IcePeak = /*#__PURE__*/function () {
     function run() {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           this.talkTrapper();
         } };
@@ -19794,6 +19995,10 @@ var ManorGallery = /*#__PURE__*/function () {function ManorGallery() {QuestManor
 
           props.setChoice(914, 1);
 
+          if ((0,external_kolmafia_namespaceObject.getProperty)("louvreDesiredGoal") != "7") {
+            props.setProperty("louvreDesiredGoal", "7");
+          }
+
           try {
             greyAdv(this.location, outfit);
           } finally {
@@ -20504,11 +20709,13 @@ var QuestManorLights = /*#__PURE__*/function () {
         familiar: fight ? this.goose : null,
         outfit: outfit,
         run: () => {
-          if (false) {}
-
           var both = this.getBoth();
 
-          (0,external_kolmafia_namespaceObject.visitUrl)("adventure.php?snarfblat=" + (0,external_kolmafia_namespaceObject.toInt)(steve[0]));var _iterator2 = QuestManorLights_createForOfIteratorHelper(
+          (0,external_kolmafia_namespaceObject.visitUrl)("adventure.php?snarfblat=" + (0,external_kolmafia_namespaceObject.toInt)(steve[0]));
+
+          if (!(0,external_kolmafia_namespaceObject.handlingChoice)() && (0,external_kolmafia_namespaceObject.currentRound)() == 0) {
+            return;
+          }var _iterator2 = QuestManorLights_createForOfIteratorHelper(
 
           steve[1]),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var i = _step2.value;
               var url =
@@ -20599,6 +20806,10 @@ var QuestManorLights = /*#__PURE__*/function () {
         run: () => {
           var both = this.getBoth();
           (0,external_kolmafia_namespaceObject.visitUrl)("adventure.php?snarfblat=" + (0,external_kolmafia_namespaceObject.toInt)(eliza[0]));
+
+          if (!(0,external_kolmafia_namespaceObject.handlingChoice)() && (0,external_kolmafia_namespaceObject.currentRound)() == 0) {
+            return;
+          }
 
           var url =
           "choice.php?pwd=&whichchoice=" + (0,external_kolmafia_namespaceObject.lastChoice)() + "&option=" + eliza[1];
@@ -25514,12 +25725,9 @@ var TaskEquipDistillery = /*#__PURE__*/function () {function TaskEquipDistillery
         return;
       }
 
-      this.lastRun = 5;
+      this.lastRun = 2;
 
-      (0,external_kolmafia_namespaceObject.visitUrl)(
-      "familiar.php?action=equip&pwd=&whichfam=171&whichitem=10932",
-      true);
-
+      (0,external_kolmafia_namespaceObject.visitUrl)("familiar.php?action=equip&pwd=&whichfam=171&whichitem=10932");
     } }]);return TaskEquipDistillery;}();
 ;// CONCATENATED MODULE: ./src/tasks/TaskFuelAsdon.ts
 function TaskFuelAsdon_slicedToArray(arr, i) {return TaskFuelAsdon_arrayWithHoles(arr) || TaskFuelAsdon_iterableToArrayLimit(arr, i) || TaskFuelAsdon_unsupportedIterableToArray(arr, i) || TaskFuelAsdon_nonIterableRest();}function TaskFuelAsdon_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskFuelAsdon_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskFuelAsdon_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskFuelAsdon_arrayLikeToArray(o, minLen);}function TaskFuelAsdon_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskFuelAsdon_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function TaskFuelAsdon_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskFuelAsdon_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskFuelAsdon_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskFuelAsdon_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskFuelAsdon_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskFuelAsdon_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskFuelAsdon_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
@@ -26622,6 +26830,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
     getResources());}TaskManager_createClass(FigureOutPath, [{ key: "getPaths", value:
 
     function getPaths(quests) {var _this3 = this;var assumeUnstarted = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      (0,external_kolmafia_namespaceObject.print)("Now calculating resources..");
       var allPaths = [];
       var miscPaths = [];
       var uncompleteable = [];
@@ -27045,7 +27254,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "4545b3b";
+var lastCommitHash = "95c5d6c";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
