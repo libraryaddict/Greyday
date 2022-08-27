@@ -506,12 +506,16 @@ export function getResourcesLeft(
         return pullsLimit;
       }
 
-      // 4 pulls used = 20 - 16 = 4
-      const pullsUsed = 20 - pullsRemaining();
-      // 14 pulls allowed, 4 pulls used. = 14 - 4 = 10
-      const pullsAllowed = pullsLimit - pullsUsed;
+      const greyPulled = getProperty("_greyPulls")
+        .split(",")
+        .filter((s) => s.length > 0);
 
-      return pullsAllowed;
+      const pullsAllowed = Math.min(
+        pullsRemaining(),
+        pullsLimit - greyPulled.length
+      );
+
+      return Math.max(0, pullsAllowed);
     case "Backup Camera":
       return availableAmount(backupCamera) > 0
         ? 11 - (assumeUnused ? 0 : toInt(getProperty("_backUpUses")))

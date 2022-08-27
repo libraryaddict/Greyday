@@ -14,6 +14,7 @@ import {
   Location,
   Monster,
   print,
+  setProperty,
   Skill,
   toInt,
   toMonster,

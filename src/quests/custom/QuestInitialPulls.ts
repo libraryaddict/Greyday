@@ -15,7 +15,7 @@ import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreyPulls } from "../../utils/GreyResources";
 import { GreySettings } from "../../utils/GreySettings";
-import { getAllCombinations } from "../../utils/GreyUtils";
+import { getAllCombinations, hasPulled } from "../../utils/GreyUtils";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
@@ -109,12 +109,6 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  hasPulled(item: Item): boolean {
-    return getProperty("_roninStoragePulls")
-      .split(",")
-      .includes(toInt(item).toString());
-  }
-
   run(path: PossiblePath): QuestAdventure {
     return {
       location: null,
@@ -123,7 +117,7 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
         this.donePulls = true;
 
         for (const item of path.pulls) {
-          if (this.hasPulled(item)) {
+          if (hasPulled(item)) {
             continue;
           }
 

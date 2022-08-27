@@ -3,6 +3,7 @@ import {
   changeMcd,
   Effect,
   haveEffect,
+  Item,
   Location,
   toInt,
 } from "kolmafia";
@@ -18,13 +19,14 @@ import { CryptL7Template } from "./CryptTemplate";
 export class CryptL7Rattling extends CryptL7Template {
   loc: Location = Location.get("The Defiled Cranny");
   beatenUp: Effect = Effect.get("Beaten Up");
+  kramco = Item.get("Kramco Sausage-o-Matic&trade;");
 
   level(): number {
     return availableAmount(this.cape) > 0 ? 7 : 16;
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     this.addRetroSword(outfit);
 
@@ -33,6 +35,7 @@ export class CryptL7Rattling extends CryptL7Template {
     } else {
       outfit.setNoCombat();
       outfit.plusMonsterLevelWeight = 4;
+      outfit.addBonus("-equip " + this.kramco.name);
     }
 
     return {
@@ -42,7 +45,7 @@ export class CryptL7Rattling extends CryptL7Template {
         this.adjustRetroCape();
         changeMcd(10);
 
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(523, 4);
 
         try {

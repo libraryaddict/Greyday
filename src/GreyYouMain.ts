@@ -8,6 +8,7 @@ import {
   myPath,
   print,
   printHtml,
+  pullsRemaining,
   setProperty,
   svnAtHead,
   svnExists,
@@ -290,6 +291,8 @@ class GreyYouMain {
         timings.doStart();
       }
 
+      const pullsBeforeStart = getProperty("_roninStoragePulls");
+
       try {
         for (
           ;
@@ -310,6 +313,28 @@ class GreyYouMain {
       } finally {
         if (turns > 0) {
           timings.doEnd();
+        }
+
+        const extraPulls = getProperty(
+          getProperty("_roninStoragePulls").replace(pullsBeforeStart, "")
+        )
+          .split(",")
+          .filter((s) => s.length > 0);
+
+        const greyPulls = getProperty("_greyPulls")
+          .split(",")
+          .filter((s) => s.length > 0);
+
+        for (const p of extraPulls) {
+          if (greyPulls.includes(p)) {
+            continue;
+          }
+
+          greyPulls.push(p);
+        }
+
+        if (greyPulls.length > 0) {
+          setProperty("_greyPulls", greyPulls.join(","));
         }
 
         print(
@@ -352,17 +377,17 @@ class GreyYouMain {
 }
 
 export function printEndOfRun() {
-  const pulls: Item[] = getProperty("_roninStoragePulls")
+  const pulls: Item[] = getProperty("_greyPulls")
     .split(",")
     .map((s) => toItem(toInt(s)));
 
   if (!GreySettings.isHardcoreMode()) {
     print(
-      "Used " +
-        pulls.length +
-        " / 20 pulls. Could've done another " +
-        (20 - pulls.length) +
-        " pulls..",
+      `Used ${pulls.length} / ${
+        GreySettings.greyPullsLimit
+      } pulls. ${pullsRemaining()} pull${
+        pullsRemaining() == 1 ? "" : "s"
+      } remain..`,
       "blue"
     );
   }

@@ -14,7 +14,7 @@ export interface QuestInfo {
   getChildren?(): QuestInfo[]; // For helpfully grouping quests together
   mustBeDone?(): boolean; // If there's some state that requires this to be done asap, like effects that'll run out
   hasFamiliarRecommendation?(): Familiar; // This quest would like this familiar leveled up as it'd be useful
-  getAdventuresRemaining?(): number; // The amount of adventures remaining and needed to finish this location. Used when seeking absorbs
+  getAdventuresToComplete?(): number; // The amount of adventures remaining and needed to finish this location. Used when seeking absorbs
   getAbsorbs?(): Monster[]; // Unexposed by Locations[], this is a backup for getting available absorbs
 }
 

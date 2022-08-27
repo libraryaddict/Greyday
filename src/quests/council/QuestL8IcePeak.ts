@@ -48,6 +48,14 @@ export class QuestL8IcePeak implements QuestInfo {
     return QuestStatus.READY;
   }
 
+  mustBeDone(): boolean {
+    return true;
+  }
+
+  getAdventuresToComplete(): number {
+    return 0;
+  }
+
   getId(): QuestType {
     return "Council / Ice / Trapper";
   }

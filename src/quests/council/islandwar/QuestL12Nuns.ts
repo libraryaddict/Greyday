@@ -52,16 +52,6 @@ export class Quest12WarNuns implements QuestInfo {
 
   roborDrinks: Item[] = [this.fishHead, this.piscatini, this.driveby];
 
-  hasAlreadyPulled(): boolean {
-    return (
-      GreySettings.isHardcoreMode() ||
-      getProperty("_roninStoragePulls")
-        .split(",")
-        .map((s) => toItem(toInt(s)))
-        .includes(this.hotness)
-    );
-  }
-
   getLocations(): Location[] {
     return [this.loc];
   }

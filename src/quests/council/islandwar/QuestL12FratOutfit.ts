@@ -96,7 +96,6 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           GreyPulls.pullFratWarOutfit();
-          path.addUsed(ResourceCategory.PULL, 3);
         },
       };
     }

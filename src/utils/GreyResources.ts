@@ -17,6 +17,7 @@ import {
   print,
   printHtml,
   pullsRemaining,
+  setProperty,
   storageAmount,
   toBoolean,
   toInt,
@@ -70,10 +71,6 @@ export class GreyPulls {
     GreyPulls.tryPull(Item.get("Shore Inc. Ship Trip Scrip"));
   }
 
-  static pullMeatBuffers() {
-    GreyPulls.tryPull(Item.get("Mick's IcyVapoHotness Inhaler"));
-  }
-
   static pullOre() {
     if (getProperty("questL08Trapper") != "step1") {
       return;
@@ -105,26 +102,6 @@ export class GreyPulls {
     return items;
   }
 
-  static pullGiantsCastle() {
-    for (const s of ["Mohawk Wig", "Amulet of Extreme Plot Significance"].map(
-      (s) => Item.get(s)
-    )) {
-      if (availableAmount(s) > 0) {
-        continue;
-      }
-
-      GreyPulls.tryPull(s);
-    }
-  }
-
-  static pullRusty() {
-    GreyPulls.tryPull(Item.get("rusty hedge trimmers"));
-  }
-
-  static pullStarChart() {
-    GreyPulls.tryPull(Item.get("Star Chart"));
-  }
-
   static tryRetrieve(item: Item, maxCost: number = 30_000) {
     if (pullsRemaining() >= 0) {
       return this.tryPull(item, maxCost);
@@ -154,7 +131,38 @@ export class GreyPulls {
       throw "Unable to pull " + item.name;
     }
 
+    const propPrior = getProperty("_roninStoragePulls");
+
     cliExecute("pull " + item.name);
+
+    if (getProperty("_roninStoragePulls") != propPrior) {
+      const pulled = getProperty("_roninStoragePulls").split(",");
+
+      const greyPulls = getProperty("_greyPulls")
+        .split(",")
+        .filter((s) => s.length > 0);
+      greyPulls.push(toInt(item).toString());
+      const pullsSorted = [];
+
+      for (const pull of pulled) {
+        if (!greyPulls.includes(pull)) {
+          continue;
+        }
+
+        pullsSorted.push(pull);
+      }
+
+      for (const remainder of greyPulls) {
+        if (pullsSorted.includes(remainder)) {
+          continue;
+        }
+
+        print("Somehow didn't detect " + remainder + " as a used pull", "red");
+        pullsSorted.push(remainder);
+      }
+
+      setProperty("_greyPulls", pullsSorted.join(","));
+    }
   }
 }
 
