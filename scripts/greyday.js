@@ -1695,12 +1695,16 @@ resourceType)
         return pullsLimit;
       }
 
-      // 4 pulls used = 20 - 16 = 4
-      var pullsUsed = 20 - (0,external_kolmafia_namespaceObject.pullsRemaining)();
-      // 14 pulls allowed, 4 pulls used. = 14 - 4 = 10
-      var pullsAllowed = pullsLimit - pullsUsed;
+      var greyPulled = (0,external_kolmafia_namespaceObject.getProperty)("_greyPulls").
+      split(",").
+      filter((s) => s.length > 0);
 
-      return pullsAllowed;
+      var pullsAllowed = Math.min(
+      (0,external_kolmafia_namespaceObject.pullsRemaining)(),
+      pullsLimit - greyPulled.length);
+
+
+      return Math.max(0, pullsAllowed);
     case "Backup Camera":
       return (0,external_kolmafia_namespaceObject.availableAmount)(backupCamera) > 0 ?
       11 - (assumeUnused ? 0 : (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_backUpUses"))) :
@@ -2713,10 +2717,6 @@ var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_cl
 
     function pullScrip() {
       GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Shore Inc. Ship Trip Scrip"));
-    } }, { key: "pullMeatBuffers", value:
-
-    function pullMeatBuffers() {
-      GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Mick's IcyVapoHotness Inhaler"));
     } }, { key: "pullOre", value:
 
     function pullOre() {
@@ -2748,26 +2748,6 @@ var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_cl
       });
 
       return items;
-    } }, { key: "pullGiantsCastle", value:
-
-    function pullGiantsCastle() {var _iterator2 = GreyResources_createForOfIteratorHelper(
-      ["Mohawk Wig", "Amulet of Extreme Plot Significance"].map(
-      (s) => external_kolmafia_namespaceObject.Item.get(s))),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;)
-        {var s = _step2.value;
-          if ((0,external_kolmafia_namespaceObject.availableAmount)(s) > 0) {
-            continue;
-          }
-
-          GreyPulls.tryPull(s);
-        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
-    } }, { key: "pullRusty", value:
-
-    function pullRusty() {
-      GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("rusty hedge trimmers"));
-    } }, { key: "pullStarChart", value:
-
-    function pullStarChart() {
-      GreyPulls.tryPull(external_kolmafia_namespaceObject.Item.get("Star Chart"));
     } }, { key: "tryRetrieve", value:
 
     function tryRetrieve(item) {var maxCost = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 30000;
@@ -2799,7 +2779,38 @@ var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_cl
         throw "Unable to pull " + item.name;
       }
 
+      var propPrior = (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls");
+
       (0,external_kolmafia_namespaceObject.cliExecute)("pull " + item.name);
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls") != propPrior) {
+        var pulled = (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls").split(",");
+
+        var greyPulls = (0,external_kolmafia_namespaceObject.getProperty)("_greyPulls").
+        split(",").
+        filter((s) => s.length > 0);
+        greyPulls.push((0,external_kolmafia_namespaceObject.toInt)(item).toString());
+        var pullsSorted = [];var _iterator2 = GreyResources_createForOfIteratorHelper(
+
+        pulled),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var pull = _step2.value;
+            if (!greyPulls.includes(pull)) {
+              continue;
+            }
+
+            pullsSorted.push(pull);
+          }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}var _iterator3 = GreyResources_createForOfIteratorHelper(
+
+        greyPulls),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var remainder = _step3.value;
+            if (pullsSorted.includes(remainder)) {
+              continue;
+            }
+
+            (0,external_kolmafia_namespaceObject.print)("Somehow didn't detect " + remainder + " as a used pull", "red");
+            pullsSorted.push(remainder);
+          }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+
+        (0,external_kolmafia_namespaceObject.setProperty)("_greyPulls", pullsSorted.join(","));
+      }
     } }]);return GreyPulls;}();
 
 
@@ -3203,15 +3214,15 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
         (0,external_kolmafia_namespaceObject.print)("");
         (0,external_kolmafia_namespaceObject.printHtml)("<div style=\"text-align: center;\"> ".concat(e, " </div>"));
-        var values = required.filter((r) => r[2] == e);var _iterator3 = GreyResources_createForOfIteratorHelper(
+        var values = required.filter((r) => r[2] == e);var _iterator4 = GreyResources_createForOfIteratorHelper(
 
-        values),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var _step3$value = GreyResources_slicedToArray(_step3.value, 4),name = _step3$value[0],desc = _step3$value[1],has = _step3$value[3];
+        values),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var _step4$value = GreyResources_slicedToArray(_step4.value, 4),name = _step4$value[0],desc = _step4$value[1],has = _step4$value[3];
             (0,external_kolmafia_namespaceObject.printHtml)("".concat(
             has ? tick : cross, " <font color='").concat(
             has ? "" : "red", "'>").concat(
             name, "</font> <font color='gray'>=> ").concat(desc, "</font>"));
 
-          }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}};for (var _i = 0, _arr = Object.values(Required); _i < _arr.length; _i++) {var _ret = _loop();if (_ret === "continue") continue;
+          }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}};for (var _i = 0, _arr = Object.values(Required); _i < _arr.length; _i++) {var _ret = _loop();if (_ret === "continue") continue;
       }
 
       if (required.find((r) => r[3] == false) == null) {
@@ -11435,7 +11446,6 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
           outfit: GreyOutfit.IGNORE_OUTFIT,
           run: () => {
             GreyPulls.pullFratWarOutfit();
-            path.addUsed(ResourceCategory.PULL, 3);
           } };
 
       }
@@ -11585,17 +11595,7 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
     external_kolmafia_namespaceObject.Item.get("Drive-by shooting"));QuestL12Nuns_defineProperty(this, "grapes",
     external_kolmafia_namespaceObject.Item.get("Bunch of square grapes"));QuestL12Nuns_defineProperty(this, "roborDrinks",
 
-    [this.fishHead, this.piscatini, this.driveby]);}QuestL12Nuns_createClass(Quest12WarNuns, [{ key: "hasAlreadyPulled", value:
-
-    function hasAlreadyPulled() {
-      return (
-        GreySettings.isHardcoreMode() ||
-        (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls").
-        split(",").
-        map((s) => (0,external_kolmafia_namespaceObject.toItem)((0,external_kolmafia_namespaceObject.toInt)(s))).
-        includes(this.hotness));
-
-    } }, { key: "getLocations", value:
+    [this.fishHead, this.piscatini, this.driveby]);}QuestL12Nuns_createClass(Quest12WarNuns, [{ key: "getLocations", value:
 
     function getLocations() {
       return [this.loc];
@@ -17342,7 +17342,8 @@ function QuestL7CryptRattling_classCallCheck(instance, Constructor) {if (!(insta
 
 var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRattling_inherits(CryptL7Rattling, _CryptL7Template);var _super = QuestL7CryptRattling_createSuper(CryptL7Rattling);function CryptL7Rattling() {var _this;QuestL7CryptRattling_classCallCheck(this, CryptL7Rattling);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "loc",
     external_kolmafia_namespaceObject.Location.get("The Defiled Cranny"));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "beatenUp",
-    external_kolmafia_namespaceObject.Effect.get("Beaten Up"));return _this;}QuestL7CryptRattling_createClass(CryptL7Rattling, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Effect.get("Beaten Up"));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "kramco",
+    external_kolmafia_namespaceObject.Item.get("Kramco Sausage-o-Matic&trade;"));return _this;}QuestL7CryptRattling_createClass(CryptL7Rattling, [{ key: "level", value:
 
     function level() {
       return (0,external_kolmafia_namespaceObject.availableAmount)(this.cape) > 0 ? 7 : 16;
@@ -17358,6 +17359,7 @@ var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRatt
       } else {
         outfit.setNoCombat();
         outfit.plusMonsterLevelWeight = 4;
+        outfit.addBonus("-equip " + this.kramco.name);
       }
 
       return {
@@ -18430,6 +18432,14 @@ var QuestL8IcePeak = /*#__PURE__*/function () {
       }
 
       return QuestStatus.READY;
+    } }, { key: "mustBeDone", value:
+
+    function mustBeDone() {
+      return true;
+    } }, { key: "getAdventuresToComplete", value:
+
+    function getAdventuresToComplete() {
+      return 0;
     } }, { key: "getId", value:
 
     function getId() {
@@ -22153,12 +22163,6 @@ var QuestInitialPulls = /*#__PURE__*/function (_TaskInfo) {QuestInitialPulls_inh
       }
 
       return QuestStatus.READY;
-    } }, { key: "hasPulled", value:
-
-    function hasPulled(item) {
-      return (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls").
-      split(",").
-      includes((0,external_kolmafia_namespaceObject.toInt)(item).toString());
     } }, { key: "run", value:
 
     function run(path) {
@@ -22169,7 +22173,7 @@ var QuestInitialPulls = /*#__PURE__*/function (_TaskInfo) {QuestInitialPulls_inh
           this.donePulls = true;var _iterator2 = QuestInitialPulls_createForOfIteratorHelper(
 
           path.pulls),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var item = _step2.value;
-              if (this.hasPulled(item)) {
+              if (hasPulled(item)) {
                 continue;
               }
 
@@ -27278,7 +27282,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "5f2468e";
+var lastCommitHash = "b66d9f3";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -27554,6 +27558,8 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
           timings.doStart();
         }
 
+        var pullsBeforeStart = (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls");
+
         try {
           for (;
 
@@ -27574,6 +27580,28 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
         } finally {
           if (turns > 0) {
             timings.doEnd();
+          }
+
+          var extraPulls = (0,external_kolmafia_namespaceObject.getProperty)(
+          (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls").replace(pullsBeforeStart, "")).
+
+          split(",").
+          filter((s) => s.length > 0);
+
+          var greyPulls = (0,external_kolmafia_namespaceObject.getProperty)("_greyPulls").
+          split(",").
+          filter((s) => s.length > 0);var _iterator3 = GreyYouMain_createForOfIteratorHelper(
+
+          extraPulls),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var p = _step3.value;
+              if (greyPulls.includes(p)) {
+                continue;
+              }
+
+              greyPulls.push(p);
+            }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+
+          if (greyPulls.length > 0) {
+            (0,external_kolmafia_namespaceObject.setProperty)("_greyPulls", greyPulls.join(","));
           }
 
           (0,external_kolmafia_namespaceObject.print)(
@@ -27616,17 +27644,17 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
 
 
 function printEndOfRun() {
-  var pulls = (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls").
+  var pulls = (0,external_kolmafia_namespaceObject.getProperty)("_greyPulls").
   split(",").
   map((s) => (0,external_kolmafia_namespaceObject.toItem)((0,external_kolmafia_namespaceObject.toInt)(s)));
 
   if (!GreySettings.isHardcoreMode()) {
-    (0,external_kolmafia_namespaceObject.print)(
-    "Used " +
-    pulls.length +
-    " / 20 pulls. Could've done another " + (
-    20 - pulls.length) +
-    " pulls..",
+    (0,external_kolmafia_namespaceObject.print)("Used ".concat(
+    pulls.length, " / ").concat(
+    GreySettings.greyPullsLimit, " pulls. ").concat(
+    (0,external_kolmafia_namespaceObject.pullsRemaining)(), " pull").concat(
+    (0,external_kolmafia_namespaceObject.pullsRemaining)() == 1 ? "" : "s", " remain.."),
+
     "blue");
 
   }
