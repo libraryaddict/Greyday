@@ -35,6 +35,7 @@ export function getBackupChoices(): [number, number][] {
   choices(888, 4);
   choices(889, 5);
   choices(114, 2);
+  choices(115, 1);
   choices(116, 4);
   choices(117, 1);
 
