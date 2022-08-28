@@ -445,7 +445,11 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   }
 
   run(path: PossiblePath): QuestAdventure {
-    if (path.canUse(ResourceCategory.CAT_HEIST) && this.isHeistable()) {
+    if (
+      this.getOreRemaining() < 3 &&
+      path.canUse(ResourceCategory.CAT_HEIST) &&
+      this.isHeistable()
+    ) {
       return {
         location: null,
         outfit: GreyOutfit.IGNORE_OUTFIT,
