@@ -1,5 +1,6 @@
 import { availableAmount, Item, Location, print, visitUrl } from "kolmafia";
 import { greyAdv } from "../../utils/GreyLocations";
+import { GreyOutfit } from "../../utils/GreyOutfitter";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -46,7 +47,7 @@ export class QuestManor implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let danceStatus = this.getDanceStatus();
+    const danceStatus = this.getDanceStatus();
 
     if (danceStatus == DanceStatus.finished) {
       return QuestStatus.COMPLETED;
@@ -87,6 +88,7 @@ export class QuestManor implements QuestInfo {
 
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl("place.php?whichplace=manor2&action=manor2_ladys");
         greyAdv(this.ballroom);
@@ -106,6 +108,7 @@ export class QuestManor implements QuestInfo {
   doUpstairs(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         print("Lets chat up the old lady");
         visitUrl("place.php?whichplace=manor1&action=manor1_ladys");

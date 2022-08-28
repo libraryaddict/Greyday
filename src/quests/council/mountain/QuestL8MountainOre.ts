@@ -145,7 +145,8 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
             ? 2
             : res == ResourceCategory.PULL ||
               res == ResourceCategory.COPIER ||
-              res == ResourceCategory.CLOVER
+              res == ResourceCategory.CLOVER ||
+              res == ResourceCategory.CAT_HEIST
             ? 1
             : 0
         )

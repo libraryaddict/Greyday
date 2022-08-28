@@ -347,11 +347,13 @@ export class QuestRegistry {
       },
       { id: "Council / War / Gremlins" },
 
-      { id: "Council / War / Battlefield" },
       { id: "Council / War / Boss" },
 
       // Tavern needs Larva done
       { id: "Council / Tavern" },
+
+      { id: "Council / War / Battlefield" },
+
       { id: "Council / MacGruffin / Pyramid / EdUndying" },
 
       // Alright, this run is just about over kids. Lets finish it.

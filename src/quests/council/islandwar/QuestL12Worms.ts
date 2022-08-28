@@ -177,6 +177,7 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
       outfit.addItem(Item.get("Beer Helmet"));
       outfit.addItem(Item.get("distressed denim pants"));
       outfit.addItem(Item.get("bejeweled pledge pin"));
+      outfit.addBonus("-tie");
 
       return {
         outfit: outfit,

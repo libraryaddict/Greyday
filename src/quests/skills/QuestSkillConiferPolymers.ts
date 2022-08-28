@@ -23,7 +23,8 @@ export class QuestSkillConiferPolymers implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (haveSkill(this.skill)) {
+    //if (haveSkill(this.skill))
+    {
       return QuestStatus.COMPLETED;
     }
 
