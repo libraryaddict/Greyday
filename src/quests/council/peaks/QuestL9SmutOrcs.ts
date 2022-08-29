@@ -76,6 +76,10 @@ export class SmutOrcs implements QuestInfo {
     return [this.shorts];
   }
 
+  mustBeDone(): boolean {
+    return isGhostBustingTime(this.loc);
+  }
+
   status(): QuestStatus {
     const status = getQuestStatus("questL09Topping");
 
@@ -83,7 +87,7 @@ export class SmutOrcs implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (isGhostBustingTime(this.loc)) {
+    if (isGhostBustingTime(this.loc) && !this.isNCTime()) {
       return QuestStatus.NOT_READY;
     }
 

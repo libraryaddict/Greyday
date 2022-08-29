@@ -144,6 +144,10 @@ export class QuestL11TempleUnlock implements QuestInfo {
     return this.spookyLoc.turnsSpent < 5 && this.toAbsorb.length == 0;
   }
 
+  mustBeDone(): boolean {
+    return isGhostBustingTime(this.spookyLoc);
+  }
+
   run(): QuestAdventure {
     const outfit = isGhostBustingTime(this.spookyLoc)
       ? getGhostBustingOutfit()

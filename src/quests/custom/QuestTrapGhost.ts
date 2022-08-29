@@ -139,6 +139,10 @@ export class QuestTrapGhost implements QuestInfo {
   run(): QuestAdventure {
     const outfit = getGhostBustingOutfit();
 
+    if (this.getLocation() == this.icyPeak) {
+      outfit.addBonus("+10 cold res 5 min");
+    }
+
     return {
       outfit: outfit,
       location: null,

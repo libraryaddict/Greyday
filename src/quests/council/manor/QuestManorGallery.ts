@@ -128,4 +128,8 @@ export class ManorGallery implements QuestInfo {
   getLocations(): Location[] {
     return [this.location];
   }
+
+  mustBeDone(): boolean {
+    return isGhostBustingTime(this.location);
+  }
 }

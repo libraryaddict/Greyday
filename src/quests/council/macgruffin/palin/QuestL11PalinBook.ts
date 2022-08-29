@@ -204,4 +204,8 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
   getLocations(): Location[] {
     return [this.palindome];
   }
+
+  mustBeDone(): boolean {
+    return isGhostBustingTime(this.palindome);
+  }
 }

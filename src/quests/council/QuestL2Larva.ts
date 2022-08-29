@@ -134,6 +134,10 @@ export class QuestL2SpookyLarva implements QuestInfo {
     };
   }
 
+  mustBeDone(): boolean {
+    return isGhostBustingTime(this.location);
+  }
+
   getLocations(): Location[] {
     return [this.location];
   }
