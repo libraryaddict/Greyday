@@ -105,6 +105,7 @@ export class QuestRegistry {
       { id: "Misc / InitialStart" },
       { id: "Misc / PowerLeveling" },
       { id: "Misc / FortuneExp" },
+      { id: "Misc / Ghost Buster" },
 
       { id: "CombatLocket / SystemSweep" },
       { id: "CombatLocket / InfiniteLoop" },

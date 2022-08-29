@@ -118,6 +118,13 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
     return 12;
   }
 
+  isHeistReady() {
+    return (
+      toInt(getProperty("catBurglarBankHeists")) > 0 ||
+      toInt(getProperty("_catBurglarCharge")) >= 10
+    );
+  }
+
   status(path: PossiblePath): QuestStatus {
     if (getProperty("sidequestOrchardCompleted") != "none") {
       return QuestStatus.COMPLETED;

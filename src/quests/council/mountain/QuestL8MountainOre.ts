@@ -366,7 +366,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
       return true;
     }
 
-    return false;
+    return true;
   }
 
   lastBackup(): Monster {

@@ -13,11 +13,17 @@ import { PropertyManager } from "../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
-import { greyAdv } from "../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { QuestType } from "../QuestTypes";
 import { DelayBurners } from "../../iotms/delayburners/DelayBurners";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { hasUnlockedLatteFlavor, LatteFlavor } from "../../utils/LatteUtils";
+import {
+  getGhostBustingMacro,
+  getGhostBustingOutfit,
+  isGhostBustingTime,
+  shouldAvoidGhosts,
+} from "../custom/QuestTrapGhost";
 
 export class QuestL2SpookyLarva implements QuestInfo {
   location: Location = Location.get("The Spooky Forest");
@@ -46,7 +52,11 @@ export class QuestL2SpookyLarva implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (this.isDelayBurning()) {
+    if (isGhostBustingTime(this.location)) {
+      if (shouldAvoidGhosts()) {
+        return QuestStatus.NOT_READY;
+      }
+    } else if (this.isDelayBurning()) {
       if (DelayBurners.isDelayBurnerReady()) {
         return QuestStatus.READY;
       }
@@ -70,7 +80,9 @@ export class QuestL2SpookyLarva implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    const outfit = new GreyOutfit();
+    const outfit = isGhostBustingTime(this.location)
+      ? getGhostBustingOutfit()
+      : new GreyOutfit();
 
     if (this.shouldWearLatte()) {
       outfit.addItem(this.latte);
@@ -85,11 +97,14 @@ export class QuestL2SpookyLarva implements QuestInfo {
       outfit: outfit,
       run: () => {
         const props = new PropertyManager();
+        const settings = new AdventureSettings();
 
         props.setChoice(502, 2);
         props.setChoice(505, 1);
 
-        if (!this.shouldWearLatte() && this.toAbsorb.length == 0) {
+        if (isGhostBustingTime(this.location)) {
+          settings.setStartOfFightMacro(getGhostBustingMacro());
+        } else if (!this.shouldWearLatte() && this.toAbsorb.length == 0) {
           const delay = DelayBurners.getReadyDelayBurner();
 
           if (delay != null) {
@@ -107,7 +122,7 @@ export class QuestL2SpookyLarva implements QuestInfo {
         }
 
         try {
-          greyAdv(this.location, outfit);
+          greyAdv(this.location, outfit, settings);
         } finally {
           props.resetAll();
         }

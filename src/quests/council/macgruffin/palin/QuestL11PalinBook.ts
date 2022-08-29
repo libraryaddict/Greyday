@@ -19,6 +19,12 @@ import { GreySettings } from "../../../../utils/GreySettings";
 import { Macro } from "../../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../../utils/Properties";
 import {
+  getGhostBustingMacro,
+  getGhostBustingOutfit,
+  isGhostBustingTime,
+  shouldAvoidGhosts,
+} from "../../../custom/QuestTrapGhost";
+import {
   getQuestStatus,
   QuestAdventure,
   QuestInfo,
@@ -70,6 +76,14 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
 
     if (status > 1) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (
+      isGhostBustingTime(this.palindome) &&
+      availableAmount(this.talisman) > 0 &&
+      !shouldAvoidGhosts()
+    ) {
+      return QuestStatus.READY;
     }
 
     if (GreySettings.greySkipPalindome && !this.isFarmDudes()) {
@@ -138,8 +152,9 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
   }
 
   farmDudes(): QuestAdventure {
-    // Potential banisher
-    const outfit = new GreyOutfit();
+    const outfit = isGhostBustingTime(this.palindome)
+      ? getGhostBustingOutfit()
+      : new GreyOutfit();
 
     if (availableAmount(this.stuntNuts) == 0) {
       outfit.setItemDrops();
@@ -159,7 +174,9 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
       run: () => {
         let macro: Macro = null;
 
-        if (this.needDogPhoto()) {
+        if (isGhostBustingTime(this.palindome)) {
+          macro = getGhostBustingMacro();
+        } else if (this.needDogPhoto()) {
           macro = new Macro()
             .if_(this.bobRace, Macro.tryItem(this.camera))
             .if_(this.raceBob, Macro.tryItem(this.camera));

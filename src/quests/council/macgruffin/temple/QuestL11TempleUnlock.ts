@@ -22,6 +22,12 @@ import {
   hasUnlockedLatteFlavor,
   LatteFlavor,
 } from "../../../../utils/LatteUtils";
+import {
+  isGhostBustingTime,
+  getGhostBustingMacro,
+  shouldAvoidGhosts,
+  getGhostBustingOutfit,
+} from "../../../custom/QuestTrapGhost";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
@@ -53,6 +59,14 @@ export class QuestL11TempleUnlock implements QuestInfo {
   status(): QuestStatus {
     if (this.templeFound()) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (isGhostBustingTime(this.spookyLoc)) {
+      if (shouldAvoidGhosts()) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.READY;
     }
 
     if (!hasNonCombatSkillsReady(false) && myLevel() >= 5) {
@@ -131,7 +145,9 @@ export class QuestL11TempleUnlock implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    const outfit = new GreyOutfit();
+    const outfit = isGhostBustingTime(this.spookyLoc)
+      ? getGhostBustingOutfit()
+      : new GreyOutfit();
 
     if (this.spookyLoc.turnsSpent >= 5) {
       outfit.setNoCombat();
@@ -147,7 +163,11 @@ export class QuestL11TempleUnlock implements QuestInfo {
           return;
         }
 
-        if (!this.shouldWearLatte() && this.toAbsorb.length == 0) {
+        const settings = new AdventureSettings().setChoices(this.choices);
+
+        if (isGhostBustingTime(this.spookyLoc)) {
+          settings.setStartOfFightMacro(getGhostBustingMacro());
+        } else if (!this.shouldWearLatte() && this.toAbsorb.length == 0) {
           const delay = DelayBurners.getReadyDelayBurner();
 
           if (delay != null) {
@@ -162,8 +182,6 @@ export class QuestL11TempleUnlock implements QuestInfo {
         }
 
         this.runSpookyChoices();
-
-        const settings = new AdventureSettings().setChoices(this.choices);
 
         greyAdv(this.spookyLoc, outfit, settings);
 

@@ -40,6 +40,10 @@ export class QuestL11DesertGnome implements QuestInfo {
     return [];
   }
 
+  getAdventuresToComplete(): number {
+    return 0;
+  }
+
   status(): QuestStatus {
     const status = getQuestStatus("questL11Desert");
 

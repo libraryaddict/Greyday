@@ -33,6 +33,10 @@ import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { Macro } from "../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../utils/Properties";
 import {
+  isGhostBustingTime,
+  shouldAvoidGhosts,
+} from "../../custom/QuestTrapGhost";
+import {
   getQuestStatus,
   QuestAdventure,
   QuestInfo,
@@ -77,6 +81,10 @@ export class SmutOrcs implements QuestInfo {
 
     if (status > 0) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (isGhostBustingTime(this.loc)) {
+      return QuestStatus.NOT_READY;
     }
 
     if (

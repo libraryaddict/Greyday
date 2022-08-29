@@ -39,6 +39,10 @@ export class QuestL11DesertWormRide implements QuestInfo {
     return 11;
   }
 
+  getAdventuresToComplete(): number {
+    return availableAmount(this.drum) > 0 ? 0 : 2;
+  }
+
   status(): QuestStatus {
     const status = getQuestStatus("questL11Desert");
 

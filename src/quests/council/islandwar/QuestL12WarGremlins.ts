@@ -50,12 +50,19 @@ export class WarGremlins implements QuestInfo {
     ],
   ];
 
+  mustBeDone(): boolean {
+    return (
+      itemAmount(this.magnet) == 0 ||
+      this.locations.filter((l) => itemAmount(l[2]) == 0)[0] == null
+    );
+  }
+
   run(): QuestAdventure {
     if (itemAmount(this.magnet) == 0) {
       return this.visitJunkman();
     }
 
-    let toVisit = this.locations.filter((l) => itemAmount(l[2]) == 0)[0];
+    const toVisit = this.locations.filter((l) => itemAmount(l[2]) == 0)[0];
 
     if (toVisit == null) {
       return this.visitJunkman();
@@ -65,27 +72,20 @@ export class WarGremlins implements QuestInfo {
       return this.getSealTooth();
     }
 
-    let loc: Location = toVisit[0];
-    let monster: Monster = toVisit[1];
-    let item: Item = toVisit[2];
-    let magnetString: string = toVisit[3];
+    const loc: Location = toVisit[0];
+    const monster: Monster = toVisit[1];
+    const magnetString: string = toVisit[3];
 
-    let outfit = new GreyOutfit("-ML +DA +DR +familiar experience");
+    const outfit = new GreyOutfit("-ML +DA +DR +familiar experience");
     outfit.hpWeight = 1;
     outfit.umbrellaSetting = UmbrellaState.DAMAGE_REDUCTION_SHIELD;
 
-    let hitWith = this.flyers;
-
-    if (availableAmount(this.flyers) == 0) {
-      hitWith = this.sealTooth;
-    }
-
-    let macro2 = Macro.if_(
+    const macro2 = Macro.if_(
       "match " + magnetString,
       Macro.item(this.magnet).step("abort")
     ).item(this.sealTooth);
 
-    let macro = new Macro().if_(
+    const macro = new Macro().if_(
       monster,
       Macro.while_("!pastround 25 && !hpbelow 50", macro2)
     );
@@ -94,7 +94,7 @@ export class WarGremlins implements QuestInfo {
       location: loc,
       outfit: outfit,
       run: () => {
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
         settings.setDuringFightMacro(macro);
 
         settings.addBanish(Monster.get("A.M.C Gremlin"));
@@ -118,10 +118,11 @@ export class WarGremlins implements QuestInfo {
   }
 
   visitJunkman(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
     outfit.addItem(Item.get("Beer Helmet"));
     outfit.addItem(Item.get("distressed denim pants"));
     outfit.addItem(Item.get("bejeweled pledge pin"));
+    outfit.addBonus("-tie");
 
     return {
       outfit: outfit,

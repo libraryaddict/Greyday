@@ -5,6 +5,8 @@ import {
   cliExecute,
   drinksilent,
   eatsilent,
+  equip,
+  equippedAmount,
   getInventory,
   getProperty,
   gnomadsAvailable,
@@ -74,11 +76,17 @@ export class TaskEater implements Task {
       return;
     }
 
+    const pants = Item.get("Designer Sweatpants");
+
     for (const item of this.npcFoods) {
       const id = toInt(item).toString();
 
       if (eaten.includes(id)) {
         continue;
+      }
+
+      if (availableAmount(pants) > 0 && equippedAmount(pants) == 0) {
+        equip(pants);
       }
 
       cliExecute("acquire 1 " + item.name);

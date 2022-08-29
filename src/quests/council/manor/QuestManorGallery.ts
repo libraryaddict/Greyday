@@ -11,7 +11,7 @@ import {
   hasNonCombatSkillActive,
   hasNonCombatSkillsReady,
 } from "../../../GreyAdventurer";
-import { greyAdv } from "../../../utils/GreyLocations";
+import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
   getQuestStatus,
@@ -22,6 +22,12 @@ import {
 import { QuestType } from "../../QuestTypes";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
+import {
+  getGhostBustingMacro,
+  getGhostBustingOutfit,
+  isGhostBustingTime,
+  shouldAvoidGhosts,
+} from "../../custom/QuestTrapGhost";
 
 export class ManorGallery implements QuestInfo {
   location: Location = Location.get("The Haunted Gallery");
@@ -36,7 +42,10 @@ export class ManorGallery implements QuestInfo {
   status(): QuestStatus {
     const status = getQuestStatus("questM21Dance");
 
-    if (status < 1) {
+    if (
+      status < 1 ||
+      (isGhostBustingTime(this.location) && shouldAvoidGhosts())
+    ) {
       return QuestStatus.NOT_READY;
     }
 
@@ -66,16 +75,22 @@ export class ManorGallery implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    const outfit = new GreyOutfit().setNoCombat();
+    const outfit = isGhostBustingTime(this.location)
+      ? getGhostBustingOutfit()
+      : new GreyOutfit();
+
+    outfit.setNoCombat();
 
     return {
       location: this.location,
       outfit: outfit,
       run: () => {
-        // TODO Handle NCs
         const props = new PropertyManager();
+        const settings = new AdventureSettings();
 
-        if (this.hasDelay()) {
+        if (isGhostBustingTime(this.location)) {
+          settings.setStartOfFightMacro(getGhostBustingMacro());
+        } else if (this.hasDelay()) {
           const delay = DelayBurners.getReadyDelayBurner();
 
           if (delay != null) {
@@ -98,7 +113,7 @@ export class ManorGallery implements QuestInfo {
         }
 
         try {
-          greyAdv(this.location, outfit);
+          greyAdv(this.location, outfit, settings);
         } finally {
           props.resetAll();
         }

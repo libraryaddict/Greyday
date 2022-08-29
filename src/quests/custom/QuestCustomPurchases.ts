@@ -17,6 +17,7 @@ export class QuestCustomPurchases implements QuestInfo {
   silent: Item = Item.get("Silent Beret");
   stealth: Item = Item.get("Xiblaxian stealth cowl");
   firePlusCombat: Item = Item.get("sombrero-mounted sparkler");
+  pack: Item = Item.get("protonic accelerator pack");
   fireworksClan: boolean;
 
   getId(): QuestType {
@@ -59,7 +60,8 @@ export class QuestCustomPurchases implements QuestInfo {
 
         if (
           availableAmount(this.stealth) > 0 ||
-          availableAmount(this.silent) > 0
+          availableAmount(this.silent) > 0 ||
+          availableAmount(this.pack) > 0
         ) {
           toBuy = this.firePlusCombat;
         }
