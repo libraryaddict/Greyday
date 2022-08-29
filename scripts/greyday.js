@@ -7991,6 +7991,10 @@ var QuestTrapGhost = /*#__PURE__*/function () {function QuestTrapGhost() {QuestT
     function run() {
       var outfit = getGhostBustingOutfit();
 
+      if (this.getLocation() == this.icyPeak) {
+        outfit.addBonus("+10 cold res 5 min");
+      }
+
       return {
         outfit: outfit,
         location: null,
@@ -8238,6 +8242,10 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
 
     function getLocations() {
       return [this.palindome];
+    } }, { key: "mustBeDone", value:
+
+    function mustBeDone() {
+      return isGhostBustingTime(this.palindome);
     } }]);return QuestL11PalinBook;}(TaskInfo);
 ;// CONCATENATED MODULE: ./src/quests/council/macgruffin/QuestL11Palindome.ts
 function QuestL11Palindome_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL11Palindome_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL11Palindome_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL11Palindome_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL11Palindome_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL11Palindome_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
@@ -10936,6 +10944,10 @@ var QuestL11TempleUnlock = /*#__PURE__*/function () {function QuestL11TempleUnlo
 
     function isDelayBurning() {
       return this.spookyLoc.turnsSpent < 5 && this.toAbsorb.length == 0;
+    } }, { key: "mustBeDone", value:
+
+    function mustBeDone() {
+      return isGhostBustingTime(this.spookyLoc);
     } }, { key: "run", value:
 
     function run() {
@@ -16023,6 +16035,10 @@ var QuestL2SpookyLarva = /*#__PURE__*/function () {function QuestL2SpookyLarva()
           }
         } };
 
+    } }, { key: "mustBeDone", value:
+
+    function mustBeDone() {
+      return isGhostBustingTime(this.location);
     } }, { key: "getLocations", value:
 
     function getLocations() {
@@ -19019,6 +19035,10 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
 
     function getChildren() {
       return [this.shorts];
+    } }, { key: "mustBeDone", value:
+
+    function mustBeDone() {
+      return isGhostBustingTime(this.loc);
     } }, { key: "status", value:
 
     function status() {
@@ -19028,7 +19048,7 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         return QuestStatus.COMPLETED;
       }
 
-      if (isGhostBustingTime(this.loc)) {
+      if (isGhostBustingTime(this.loc) && !this.isNCTime()) {
         return QuestStatus.NOT_READY;
       }
 
@@ -20303,6 +20323,10 @@ var ManorGallery = /*#__PURE__*/function () {function ManorGallery() {QuestManor
 
     function getLocations() {
       return [this.location];
+    } }, { key: "mustBeDone", value:
+
+    function mustBeDone() {
+      return isGhostBustingTime(this.location);
     } }]);return ManorGallery;}();
 ;// CONCATENATED MODULE: ./src/quests/council/manor/QuestManorKitchen.ts
 function QuestManorKitchen_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestManorKitchen_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestManorKitchen_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestManorKitchen_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestManorKitchen_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestManorKitchen_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
@@ -27558,7 +27582,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "4ff6626";
+var lastCommitHash = "9a0fb22";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
