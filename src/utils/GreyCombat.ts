@@ -165,7 +165,8 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
   if (
     /*toInt(getProperty("flyeredML")) <= 10000 && */ monster.baseHp < 300 &&
     myHp() > 120 &&
-    !monster.attributes.includes("FREE")
+    !monster.attributes.includes("FREE") &&
+    monster != Monster.get("Quantum Mechanic")
   ) {
     macro.tryItem(Item.get("rock band flyers"));
   }
