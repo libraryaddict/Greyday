@@ -6113,9 +6113,17 @@ var TaskMaintainStatus = /*#__PURE__*/function () {
 
 
 
+
+
+
+
+
+
+
+
   function TaskMaintainStatus() {TaskMaintainStatus_classCallCheck(this, TaskMaintainStatus);TaskMaintainStatus_defineProperty(this, "restorers", []);TaskMaintainStatus_defineProperty(this, "toRemove", ["Really Quite Poisoned", "Majorly Poisoned", "Somewhat Poisoned", "A Little Bit Poisoned", "Hardly Poisoned at All", "Temporary Amnesia"].map((s) => external_kolmafia_namespaceObject.Effect.get(s)));
     this.fillRestorers();
-  }TaskMaintainStatus_createClass(TaskMaintainStatus, [{ key: "fillRestorers", value: function fillRestorers() {this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer"), mpRestored: 11, hpRestored: 0, available: () => (0,external_kolmafia_namespaceObject.dispensaryAvailable)() || (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer")) > 0, price: 80 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Black cherry soda"), mpRestored: 11, hpRestored: 0, available: () => (0,external_kolmafia_namespaceObject.blackMarketAvailable)() || (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Black cherry soda")) > 0, price: 80 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Invigorating Tonic"), mpRestored: 11, hpRestored: 0, available: () => true, price: 90 }); // HP
+  }TaskMaintainStatus_createClass(TaskMaintainStatus, [{ key: "fillRestorers", value: function fillRestorers() {this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Psychokinetic energy blob"), mpRestored: 25, hpRestored: 0, available: () => (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Psychokinetic energy blob")) > 0, price: 0 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer"), mpRestored: 11, hpRestored: 0, available: () => (0,external_kolmafia_namespaceObject.dispensaryAvailable)() || (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Knob Goblin seltzer")) > 0, price: 80 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Black cherry soda"), mpRestored: 11, hpRestored: 0, available: () => (0,external_kolmafia_namespaceObject.blackMarketAvailable)() || (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Black cherry soda")) > 0, price: 80 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Invigorating Tonic"), mpRestored: 11, hpRestored: 0, available: () => true, price: 90 }); // HP
       this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Cast"), mpRestored: 0, hpRestored: 30, available: () => (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Cast")) > 0, price: 0 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Homeopathic Elixir"), mpRestored: 0, hpRestored: 19, available: () => true, price: 120 });this.restorers.push({ item: external_kolmafia_namespaceObject.Item.get("Doc Galaktik's Pungent Unguent"), mpRestored: 0, hpRestored: 4, available: () => true, price: 0 });} }, { key: "restoreHPTo", value:
     function restoreHPTo(hp) {
       var desiredHp = Math.min(hp, (0,external_kolmafia_namespaceObject.myMaxhp)());
@@ -20357,7 +20365,7 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
     } }, { key: "level", value:
 
     function level() {
-      return 8;
+      return 4;
     } }, { key: "hasEnoughRes", value:
 
     function hasEnoughRes() {
@@ -26731,9 +26739,10 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       }
 
       outfit.addBonus("+2 bonus lucky gold ring");
+      var sweat = (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("sweat"));
 
-      if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("sweat")) < 100 && outfit.itemDropWeight < 1) {
-        outfit.addBonus("+8 bonus designer sweatpants");
+      if (sweat < 100 && outfit.itemDropWeight < 1) {
+        outfit.addBonus("+".concat(sweat < 5 ? 16 : 8, " bonus designer sweatpants"));
       }
 
       var powerLevelGoose = false;
@@ -27583,7 +27592,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "180a096";
+var lastCommitHash = "7d7783d";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
