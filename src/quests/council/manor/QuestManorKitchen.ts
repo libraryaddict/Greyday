@@ -54,7 +54,7 @@ export class QuestManorKitchen implements QuestInfo {
   }
 
   level(): number {
-    return 8;
+    return 4;
   }
 
   hasEnoughRes(): boolean {

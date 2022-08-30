@@ -41,6 +41,14 @@ export class TaskMaintainStatus implements Task {
 
   fillRestorers() {
     this.restorers.push({
+      item: Item.get("Psychokinetic energy blob"),
+      mpRestored: 25,
+      hpRestored: 0,
+      available: () =>
+        availableAmount(Item.get("Psychokinetic energy blob")) > 0,
+      price: 0,
+    });
+    this.restorers.push({
       item: Item.get("Knob Goblin seltzer"),
       mpRestored: 11,
       hpRestored: 0,

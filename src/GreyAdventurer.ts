@@ -357,9 +357,10 @@ export class GreyAdventurer {
     }
 
     outfit.addBonus("+2 bonus lucky gold ring");
+    const sweat = toInt(getProperty("sweat"));
 
-    if (toInt(getProperty("sweat")) < 100 && outfit.itemDropWeight < 1) {
-      outfit.addBonus(`+8 bonus designer sweatpants`);
+    if (sweat < 100 && outfit.itemDropWeight < 1) {
+      outfit.addBonus(`+${sweat < 5 ? 16 : 8} bonus designer sweatpants`);
     }
 
     let powerLevelGoose: boolean = false;

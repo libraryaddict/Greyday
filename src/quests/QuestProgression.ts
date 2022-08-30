@@ -1,106 +1,174 @@
 import { QuestType } from "./QuestTypes";
 
-const PyramidProgression: (QuestType[] | QuestType)[] = [
-  [
-    "Council / MacGruffin / Desert / Explore",
-    "Council / MacGruffin / Ron / Zepp",
-    "Council / MacGruffin / Palin / Boss",
-  ],
-  "Council / MacGruffin / Pyramid / Top",
-  "Council / MacGruffin / Pyramid / Middle",
-  "Council / MacGruffin / Pyramid / Wheel",
-  "Council / MacGruffin / Pyramid / EdUndying",
-];
-
-const ZeppProgression: (QuestType[] | QuestType)[] = [
-  "Council / MacGruffin / Shen / TurnIn",
-  "Council / MacGruffin / Ron / Crowd",
+startWith(
+  "Council / MacGruffin / Desert / Explore",
   "Council / MacGruffin / Ron / Zepp",
-];
+  "Council / MacGruffin / Palin / Boss"
+)
+  .unlocks("Council / MacGruffin / Pyramid / Top")
+  .unlocks("Council / MacGruffin / Pyramid / Middle")
+  .unlocks("Council / MacGruffin / Pyramid / Wheel")
+  .unlocks("Council / MacGruffin / Pyramid / EdUndying");
 
-const ShenProgression: (QuestType[] | QuestType)[] = [
-  "Council / MacGruffin / Vacation",
-  "Council / MacGruffin / Shen / Meet",
-  "Council / Bats / UnlockLeft",
-  "Council / Beanstalk / Ground",
-  ["Council / Ice / Ore", "Council / Ice / Goats"],
-  "Council / MacGruffin / Shen / TurnIn",
-];
+startWith("Council / MacGruffin / Shen / TurnIn")
+  .unlocks("Council / MacGruffin / Ron / Crowd")
+  .unlocks("Council / MacGruffin / Ron / Zepp");
 
-const SmutProgression: (QuestType[] | QuestType)[] = [
-  "Council / Peaks / Orcs",
-  [
+startWith("Council / MacGruffin / Vacation")
+  .unlocks("Council / MacGruffin / Shen / Meet")
+  .unlocks("Council / Bats / UnlockLeft")
+  .unlocks("Council / Beanstalk / Ground")
+  .unlocks("Council / Ice / Ore", "Council / Ice / Goats")
+  .unlocks("Council / MacGruffin / Shen / TurnIn");
+
+startWith("Council / Peaks / Orcs")
+  .unlocks(
     "Council / Peaks / AbooPeak",
     "Council / Peaks / OilPeak",
-    "Council / Peaks / TwinPeak",
-  ],
-  "Council / Peaks / Lord",
-];
+    "Council / Peaks / TwinPeak"
+  )
+  .unlocks("Council / Peaks / Lord");
 
-const ManorProgression: (QuestType[] | QuestType)[] = [
-  "Manor / Kitchen",
-  "Manor / Billards",
-  "Manor / Library",
-  ["Manor / Gallery", "Manor / Bedroom", "Manor / Bathroom"],
-  "Council / MacGruffin / Manor / Ballroom",
-  "Council / MacGruffin / Vacation",
-  "Council / MacGruffin / Manor / Recipe",
-  [
+startWith("Manor / Kitchen")
+  .unlocks("Manor / Billards")
+  .unlocks("Manor / Library")
+  .unlocks("Manor / Gallery", "Manor / Bedroom", "Manor / Bathroom")
+  .unlocks("Council / MacGruffin / Manor / Ballroom");
+
+startWith("Council / MacGruffin / Vacation")
+  .unlocks("Council / MacGruffin / Manor / Ballroom")
+  .unlocks("Council / MacGruffin / Manor / Recipe")
+  .unlocks(
     "Council / MacGruffin / Manor / Soda",
-    "Council / MacGruffin / Manor / Wine",
-  ],
-  "Council / MacGruffin / Manor / Bomb",
-  "Council / MacGruffin / Manor / Boss",
-];
+    "Council / MacGruffin / Manor / Wine"
+  )
+  .unlocks("Council / MacGruffin / Manor / Bomb")
+  .unlocks("Council / MacGruffin / Manor / Boss");
 
-const HiddenCityProgression: (QuestType[] | QuestType)[] = [
-  "Council / MacGruffin / Vacation",
-  "Council / MacGruffin / Temple / Unlock",
-  "Council / MacGruffin / Temple / GrabWool",
-  "Council / MacGruffin / Temple / Nostril",
-  "Council / MacGruffin / Temple / Unlock",
-  "Council / MacGruffin / HiddenCity / HiddenPark",
-  "Council / MacGruffin / HiddenCity / Vines",
-  "Council / MacGruffin / HiddenCity / BookOfMatches",
-  [
+startWith("Council / MacGruffin / Vacation")
+  .unlocks("Council / MacGruffin / Temple / Unlock")
+  .unlocks("Council / MacGruffin / Temple / GrabWool")
+  .unlocks("Council / MacGruffin / Temple / Nostril")
+  .unlocks("Council / MacGruffin / HiddenCity / HiddenPark")
+  .unlocks("Council / MacGruffin / HiddenCity / Vines")
+  .unlocks("Council / MacGruffin / HiddenCity / BookOfMatches")
+  .unlocks(
     "Council / MacGruffin / HiddenCity / Bowling",
     "Council / MacGruffin / HiddenCity / Curses",
     "Council / MacGruffin / HiddenCity / Doctor",
-    "Council / MacGruffin / HiddenCity / Accountants",
-  ],
-  "Council / MacGruffin / HiddenCity / Boss",
-];
+    "Council / MacGruffin / HiddenCity / Accountants"
+  )
+  .unlocks("Council / MacGruffin / HiddenCity / Boss");
 
-const FratWar: (QuestType[] | QuestType)[] = [
-  "Boat / Vacation",
-  "Council / War / Start",
-  [
+startWith("Boat / Vacation")
+  .unlocks("Council / War / Start")
+  .unlocks(
     "Council / War / Lobsters",
     "Council / War / Flyers",
-    "Council / War / Gremlins",
-  ],
-  "Council / War / Battlefield",
-  "Council / War / Filthworms",
-  "Council / War / Nuns",
-  "Council / War / Boss",
-];
+    "Council / War / Gremlins"
+  )
+  .unlocks("Council / War / Battlefield")
+  .unlocks("Council / War / Filthworms")
+  .unlocks("Council / War / Nuns")
+  .unlocks("Council / War / Boss");
 
-const Palin: QuestType[] = [
-  "Council / MacGruffin / Palin / Book",
-  "Council / MacGruffin / Palin / WetStew",
-  "Council / MacGruffin / Palin / Boss",
-];
+startWith("Council / MacGruffin / Palin / Book")
+  .unlocks("Council / MacGruffin / Palin / WetStew")
+  .unlocks("Council / MacGruffin / Palin / Boss");
 
-const TavernQuest: QuestType[] = ["Council / Larva", "Council / Tavern"];
+startWith(
+  "Council / Crypt / DirtyMan",
+  "Council / Crypt / Eyes",
+  "Council / Crypt / Sprinters",
+  "Council / Crypt / Rattling"
+).unlocks("Council / Crypt / Boss");
 
-const QuestProgression: (QuestType | QuestType[])[][] = [
-  TavernQuest,
-  ManorProgression,
-  PyramidProgression,
-  ZeppProgression,
-  ShenProgression,
-  SmutProgression,
-  HiddenCityProgression,
-  FratWar,
-  Palin,
-];
+startWith("Council / Bats / UnlockLeft")
+  .unlocks("Council / Bats / UnlockRight")
+  .unlocks("Council / Bats / UnlockBoss");
+
+startWith("Council / Beanstalk / EnchantedBean")
+  .unlocks("Council / Beanstalk / Ship")
+  .unlocks("Council / Beanstalk / Basement")
+  .unlocks("Council / Beanstalk / Ground")
+  .unlocks("Council / Beanstalk / Top")
+  .unlocks("Council / Tower / Keys / HoleInSkyUnlock");
+
+startWith(
+  "Council / Friars / Elbow",
+  "Council / Friars / Heart",
+  "Council / Friars / Neck"
+)
+  .unlocks("Council / Friars / TurnIn")
+  .unlocks("Misc / FriarExp");
+
+startWith("Council / Ice / Trapper")
+  .unlocks("Council / Ice / Goats", "Council / Ice / Ore")
+  .unlocks("Council / Ice / Ninjas")
+  .unlocks("Council / Ice / Boss");
+
+startWith("Council / Tower / Contests")
+  .unlocks("Council / Tower / Maze")
+  .unlocks("Council / Tower / WallOfSkin")
+  .unlocks("Council / Tower / WallOfMeat")
+  .unlocks("Council / Tower / WallOfBones")
+  .unlocks("Council / Tower / KeyDoor")
+  .unlocks("Council / Tower / Shadow")
+  .unlocks("Council / Tower / NaughtyBoss");
+
+startWith("Misc / UnlockDungeonsOfDoom").unlocks(
+  "Council / Tower / Keys / Heroes / ZapKeys",
+  "Council / Tower / Keys / Heroes / Pull and Zap Keys"
+);
+
+startWith("Council / Goblins / Outskirts")
+  .unlocks("Council / Goblins / HaremOutfit")
+  .unlocks("Council / Goblins / King")
+  .unlocks("GoblinLabs / LabUnlock")
+  .unlocks("GoblinLabs / MegUnlock")
+  .unlocks("Skills / Phase Shift");
+
+startWith("Council / Larva")
+  .unlocks("Council / Tavern")
+  .unlocks("Misc / UnlockDungeonsOfDoom");
+
+const requires: Map<QuestType, QuestType[]> = new Map();
+
+function startWith(...quest: QuestType[]): TaskThen {
+  return new TaskThen(quest);
+}
+
+class TaskThen {
+  private current: QuestType[];
+
+  constructor(current: QuestType[]) {
+    this.current = current;
+  }
+
+  unlocks(...quest: QuestType[]): TaskThen {
+    const q: QuestType[] = this.current;
+    this.current = quest;
+
+    return this.needs(...q);
+  }
+
+  needs(...quest: QuestType[]): TaskThen {
+    for (const q of this.current) {
+      if (!requires.has(q)) {
+        requires.set(q, []);
+      }
+
+      for (const q1 of quest) {
+        if (requires.get(q).includes(q1)) {
+          continue;
+        }
+
+        requires.get(q).push(q1);
+      }
+    }
+
+    this.current = quest;
+
+    return this;
+  }
+}
