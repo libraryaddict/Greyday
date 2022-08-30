@@ -2,10 +2,12 @@ import {
   autosell,
   availableAmount,
   council,
+  Familiar,
   getProperty,
   Item,
   Location,
   use,
+  useFamiliar,
   visitUrl,
 } from "kolmafia";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -34,6 +36,7 @@ export class QuestL1Toot implements QuestInfo {
       location: null,
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
+        useFamiliar(Familiar.get("Grey Goose")); // Force it to be leveled up if we happen to have short order cook
         council();
         visitUrl("tutorial.php?action=toot");
         use(Item.get("Letter from King Ralph XI"));
