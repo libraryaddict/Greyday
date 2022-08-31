@@ -366,6 +366,12 @@ export class GreyRequirements {
     );
 
     add(
+      Item.get("Fourth of May Cosplay Saber"),
+      "Great for faster lobsterfrogmen, ele res checks and for 1-2 yellow rays!",
+      Required.USEFUL
+    );
+
+    add(
       Item.get("protonic accelerator pack"),
       "Used for some free delay, -5 combat, get a nice +2 fam exp offhand and as a MP restorer! With sweatpants as a stunner, this is great!",
       Required.VERY_USEFUL
@@ -509,14 +515,14 @@ export class GreyRequirements {
 
     add(
       "Gingerbread City",
-      "Useful as another key source - CURRENTLY UNSUPPORTED",
+      "Useful as another key source - <b><u>CURRENTLY UNSUPPORTED</u></b>",
       Required.MINOR,
       toBoolean(getProperty("gingerbreadCityAvailable"))
     );
 
     add(
       "Piraterealm",
-      "Useful as another key source - CURRENTLY UNSUPPORTED",
+      "Useful as another key source - <b><u>CURRENTLY UNSUPPORTED</u></b>",
       Required.MINOR,
       toBoolean(getProperty("prAlways"))
     );
@@ -536,7 +542,7 @@ export class GreyRequirements {
 
     add(
       Item.get("Greatest American Pants"),
-      "Free runs - CURRENTLY UNSUPPORTED",
+      "Free runs - <b><u>CURRENTLY UNSUPPORTED</u></b>",
       Required.USEFUL
     );
 
