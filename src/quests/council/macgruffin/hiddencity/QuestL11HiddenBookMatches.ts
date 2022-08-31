@@ -85,6 +85,7 @@ export class QuestL11HiddenBookMatches extends TaskInfo implements QuestInfo {
     if (!path.canUse(ResourceCategory.PULL)) {
       outfit.setItemDrops();
       outfit.setPlusCombat();
+      outfit.setChampagneBottle();
     } else {
       outfit = GreyOutfit.IGNORE_OUTFIT;
     }

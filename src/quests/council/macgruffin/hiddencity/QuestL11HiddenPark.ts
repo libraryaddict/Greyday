@@ -22,6 +22,7 @@ export class QuestL11HiddenPark implements QuestInfo {
   matches: Item = Item.get("Book of Matches");
   sword: Item = Item.get("Antique Machete");
   loc: Location = Location.get("The Hidden Park");
+  book: Item = Item.get("Book of matches");
 
   level(): number {
     return 11;
@@ -32,7 +33,7 @@ export class QuestL11HiddenPark implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Worship");
+    const status = getQuestStatus("questL11Worship");
 
     if (status < 3) {
       return QuestStatus.NOT_READY;
@@ -57,18 +58,30 @@ export class QuestL11HiddenPark implements QuestInfo {
     return toInt(getProperty("relocatePygmyJanitor")) == myAscensions();
   }
 
+  barUnlocked(): boolean {
+    return toInt(getProperty("hiddenTavernUnlock")) == myAscensions();
+  }
+
   needsSword(): boolean {
     return availableAmount(this.sword) <= 0;
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat().setItemDrops();
+    const outfit = new GreyOutfit().setNoCombat().setItemDrops();
+
+    if (
+      this.hasRelocatedJanitors() &&
+      availableAmount(this.book) == 0 &&
+      this.hasRelocatedJanitors()
+    ) {
+      outfit.setChampagneBottle();
+    }
 
     return {
       location: this.loc,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         if (!this.hasRelocatedJanitors()) {
           props.setChoice(789, 2);
@@ -76,7 +89,7 @@ export class QuestL11HiddenPark implements QuestInfo {
           props.setChoice(789, 1);
         }
 
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
         settings.addBanish(Monster.get("pygmy blowgunner"));
         settings.addBanish(Monster.get("pygmy assault squad"));
         settings.addBanish(Monster.get("boaraffe"));

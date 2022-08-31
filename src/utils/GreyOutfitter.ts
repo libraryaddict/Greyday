@@ -17,6 +17,7 @@ import { UmbrellaState } from "./GreyUtils";
 
 export class GreyOutfit {
   static IGNORE_OUTFIT: any = "Ignore Outfit";
+  private allowChampBottle: boolean = false;
   famExpWeight: number = 30;
   itemDropWeight: number = 0.3;
   meatDropWeight: number = 0.1;
@@ -137,12 +138,18 @@ export class GreyOutfit {
     return this;
   }
 
+  setChampagneBottle(): GreyOutfit {
+    this.allowChampBottle = true;
+
+    return this;
+  }
+
   createString(): string {
     if (this.overrideMaximizer != null) {
       return this.overrideMaximizer;
     }
 
-    let modifiers: string[] = [];
+    const modifiers: string[] = [];
 
     if (this.famExpWeight > 0) {
       modifiers.push("+" + this.famExpWeight + " familiar experience");
@@ -192,19 +199,15 @@ export class GreyOutfit {
       modifiers.push("-" + this.minusMonsterLevelWeight + " ml");
     }
 
-    for (let pair of this.itemsWeight) {
+    for (const pair of this.itemsWeight) {
       modifiers.push("+" + pair[1] + " bonus " + pair[0]);
     }
 
-    for (let pair of this.bonusWeights) {
+    for (const pair of this.bonusWeights) {
       modifiers.push(pair);
     }
 
-    if (
-      modifiers.filter((m) => m.includes("broken champagne bottle")).length ==
-        0 &&
-      this.itemDropWeight < 10
-    ) {
+    if (!this.allowChampBottle) {
       modifiers.push("-equip broken champagne bottle");
     }
 

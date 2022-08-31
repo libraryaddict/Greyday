@@ -116,7 +116,7 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
       if (resource != null) {
         resource.prepare(outfit);
       } else {
-        outfit.setItemDrops();
+        outfit.setItemDrops().setChampagneBottle();
       }
     }
 

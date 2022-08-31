@@ -45,6 +45,10 @@ export class QuestL11ManorSoda implements QuestInfo {
   run(): QuestAdventure {
     const outfit = new GreyOutfit().setItemDrops();
 
+    if (this.laundry.turnsSpent > 1) {
+      outfit.setChampagneBottle();
+    }
+
     return {
       location: this.laundry,
       outfit: outfit,

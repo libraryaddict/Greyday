@@ -18,7 +18,7 @@ export class CryptL7Eyes extends CryptL7Template {
   loc: Location = Location.get("The Defiled Nook");
 
   run(): QuestAdventure {
-    const outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops().setChampagneBottle();
     this.addRetroSword(outfit);
 
     return {

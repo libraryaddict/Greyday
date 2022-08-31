@@ -45,6 +45,10 @@ export class QuestL11ManorWine implements QuestInfo {
   run(): QuestAdventure {
     const outfit = new GreyOutfit().setItemDrops();
 
+    if (this.celler.turnsSpent > 1) {
+      outfit.setChampagneBottle();
+    }
+
     return {
       location: this.celler,
       outfit: outfit,
