@@ -361,8 +361,14 @@ export class GreyRequirements {
 
     add(
       Item.get("Clan VIP Lounge key"),
-      "Used to remove Beaten Up, and the +familiar effect!",
+      "Used to remove Beaten Up, grab yellow rockets, fax and get the +fam exp effect!",
       Required.MUST
+    );
+
+    add(
+      Item.get("protonic accelerator pack"),
+      "Used for some free delay, -5 combat, get a nice +2 fam exp offhand and as a MP restorer! With sweatpants as a stunner, this is great!",
+      Required.VERY_USEFUL
     );
 
     add(
