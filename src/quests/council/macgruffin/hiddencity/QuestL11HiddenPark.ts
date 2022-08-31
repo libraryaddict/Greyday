@@ -70,7 +70,7 @@ export class QuestL11HiddenPark implements QuestInfo {
     const outfit = new GreyOutfit().setNoCombat().setItemDrops();
 
     if (
-      this.hasRelocatedJanitors() &&
+      !this.barUnlocked() &&
       availableAmount(this.book) == 0 &&
       this.hasRelocatedJanitors()
     ) {
