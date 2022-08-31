@@ -159,6 +159,10 @@ export class QuestTrapGhost implements QuestInfo {
   getLocations(): Location[] {
     return [];
   }
+
+  mustBeDone(): boolean {
+    return true;
+  }
 }
 
 const sweatpants = Item.get("Designer Sweatpants");

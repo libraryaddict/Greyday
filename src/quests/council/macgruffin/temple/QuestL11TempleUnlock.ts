@@ -9,6 +9,7 @@ import {
   Monster,
   myLevel,
   print,
+  toJson,
   use,
   useFamiliar,
 } from "kolmafia";
@@ -167,7 +168,7 @@ export class QuestL11TempleUnlock implements QuestInfo {
           return;
         }
 
-        const settings = new AdventureSettings().setChoices(this.choices);
+        const settings = new AdventureSettings();
 
         if (isGhostBustingTime(this.spookyLoc)) {
           settings.setStartOfFightMacro(getGhostBustingMacro());
@@ -186,6 +187,8 @@ export class QuestL11TempleUnlock implements QuestInfo {
         }
 
         this.runSpookyChoices();
+
+        settings.setChoices(this.choices);
 
         greyAdv(this.spookyLoc, outfit, settings);
 

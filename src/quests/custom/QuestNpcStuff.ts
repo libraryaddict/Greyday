@@ -173,6 +173,7 @@ class QuestDruggie implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl("place.php?whichplace=woods");
         visitUrl("tavern.php?place=susguy&action=buygoofballs", true);
@@ -320,6 +321,7 @@ class QuestArtist implements QuestInfo {
   startQuest(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl(
           "place.php?whichplace=town_wrong&action=townwrong_artist_noquest"
@@ -337,6 +339,7 @@ class QuestArtist implements QuestInfo {
   turnInQuest(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl(
           "place.php?whichplace=town_wrong&action=townwrong_artist_quest"
@@ -394,6 +397,7 @@ class QuestMadBaker implements QuestInfo {
   turnInPie(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl("shop.php?whichshop=armory");
         visitUrl("choice.php?whichchoice=" + lastChoice() + "&option=2&pwd=");
@@ -404,6 +408,7 @@ class QuestMadBaker implements QuestInfo {
   startQuest(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl("shop.php?whichshop=armory");
         visitUrl("shop.php?whichshop=armory&action=talk");
@@ -460,6 +465,7 @@ class QuestUntinker implements QuestInfo {
     if (getProperty("questM01Untinker") == "unstarted") {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           visitUrl(
             "place.php?whichplace=forestvillage&preaction=screwquest&action=fv_untinker_quest"
@@ -472,6 +478,7 @@ class QuestUntinker implements QuestInfo {
     if (knollAvailable() && availableAmount(this.item) == 0) {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           visitUrl("place.php?whichplace=knoll_friendly&action=dk_innabox");
         },
@@ -500,6 +507,7 @@ class QuestMeatSmith implements QuestInfo {
     if (getProperty("questM23Meatsmith") == "unstarted") {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           visitUrl("shop.php?whichshop=meatsmith");
           visitUrl("shop.php?whichshop=meatsmith&action=talk");
