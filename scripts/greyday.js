@@ -2493,7 +2493,8 @@ var GreyOutfit = /*#__PURE__*/function () {
 
 
 
-  function GreyOutfit() {var string = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;GreyOutfitter_classCallCheck(this, GreyOutfit);GreyOutfitter_defineProperty(this, "famExpWeight", 30);GreyOutfitter_defineProperty(this, "itemDropWeight", 0.3);GreyOutfitter_defineProperty(this, "meatDropWeight", 0.1);GreyOutfitter_defineProperty(this, "hpWeight", 0.001);GreyOutfitter_defineProperty(this, "hpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "mpWeight", 0.001);GreyOutfitter_defineProperty(this, "mpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "initWeight", 0.05);GreyOutfitter_defineProperty(this, "plusCombatWeight", 0);GreyOutfitter_defineProperty(this, "minusCombatWeight", 0);GreyOutfitter_defineProperty(this, "plusMonsterLevelWeight", 0);GreyOutfitter_defineProperty(this, "minusMonsterLevelWeight", 0);GreyOutfitter_defineProperty(this, "itemsWeight", []);GreyOutfitter_defineProperty(this, "bonusWeights", []);GreyOutfitter_defineProperty(this, "overrideMaximizer", void 0);GreyOutfitter_defineProperty(this, "umbrellaSetting", void 0);
+
+  function GreyOutfit() {var string = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;GreyOutfitter_classCallCheck(this, GreyOutfit);GreyOutfitter_defineProperty(this, "allowChampBottle", false);GreyOutfitter_defineProperty(this, "famExpWeight", 30);GreyOutfitter_defineProperty(this, "itemDropWeight", 0.3);GreyOutfitter_defineProperty(this, "meatDropWeight", 0.1);GreyOutfitter_defineProperty(this, "hpWeight", 0.001);GreyOutfitter_defineProperty(this, "hpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "mpWeight", 0.001);GreyOutfitter_defineProperty(this, "mpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "initWeight", 0.05);GreyOutfitter_defineProperty(this, "plusCombatWeight", 0);GreyOutfitter_defineProperty(this, "minusCombatWeight", 0);GreyOutfitter_defineProperty(this, "plusMonsterLevelWeight", 0);GreyOutfitter_defineProperty(this, "minusMonsterLevelWeight", 0);GreyOutfitter_defineProperty(this, "itemsWeight", []);GreyOutfitter_defineProperty(this, "bonusWeights", []);GreyOutfitter_defineProperty(this, "overrideMaximizer", void 0);GreyOutfitter_defineProperty(this, "umbrellaSetting", void 0);
     this.overrideMaximizer = string;
 
     this.setWeights();
@@ -2594,6 +2595,12 @@ var GreyOutfit = /*#__PURE__*/function () {
       this.itemDropWeight = 2;
 
       return this;
+    } }, { key: "setChampagneBottle", value:
+
+    function setChampagneBottle() {
+      this.allowChampBottle = true;
+
+      return this;
     } }, { key: "createString", value:
 
     function createString() {
@@ -2659,11 +2666,7 @@ var GreyOutfit = /*#__PURE__*/function () {
           modifiers.push(_pair);
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
 
-      if (
-      modifiers.filter((m) => m.includes("broken champagne bottle")).length ==
-      0 &&
-      this.itemDropWeight < 10)
-      {
+      if (!this.allowChampBottle) {
         modifiers.push("-equip broken champagne bottle");
       }
 
@@ -7631,6 +7634,10 @@ var QuestL11ManorSoda = /*#__PURE__*/function () {function QuestL11ManorSoda() {
     function run() {
       var outfit = new GreyOutfit().setItemDrops();
 
+      if (this.laundry.turnsSpent > 1) {
+        outfit.setChampagneBottle();
+      }
+
       return {
         location: this.laundry,
         outfit: outfit,
@@ -7688,6 +7695,10 @@ var QuestL11ManorWine = /*#__PURE__*/function () {function QuestL11ManorWine() {
 
     function run() {
       var outfit = new GreyOutfit().setItemDrops();
+
+      if (this.celler.turnsSpent > 1) {
+        outfit.setChampagneBottle();
+      }
 
       return {
         location: this.celler,
@@ -10435,7 +10446,8 @@ function QuestL11HiddenPark_classCallCheck(instance, Constructor) {if (!(instanc
 var QuestL11HiddenPark = /*#__PURE__*/function () {function QuestL11HiddenPark() {QuestL11HiddenPark_classCallCheck(this, QuestL11HiddenPark);QuestL11HiddenPark_defineProperty(this, "matches",
     external_kolmafia_namespaceObject.Item.get("Book of Matches"));QuestL11HiddenPark_defineProperty(this, "sword",
     external_kolmafia_namespaceObject.Item.get("Antique Machete"));QuestL11HiddenPark_defineProperty(this, "loc",
-    external_kolmafia_namespaceObject.Location.get("The Hidden Park"));}QuestL11HiddenPark_createClass(QuestL11HiddenPark, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Location.get("The Hidden Park"));QuestL11HiddenPark_defineProperty(this, "book",
+    external_kolmafia_namespaceObject.Item.get("Book of matches"));}QuestL11HiddenPark_createClass(QuestL11HiddenPark, [{ key: "level", value:
 
     function level() {
       return 11;
@@ -10469,6 +10481,10 @@ var QuestL11HiddenPark = /*#__PURE__*/function () {function QuestL11HiddenPark()
 
     function hasRelocatedJanitors() {
       return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("relocatePygmyJanitor")) == (0,external_kolmafia_namespaceObject.myAscensions)();
+    } }, { key: "barUnlocked", value:
+
+    function barUnlocked() {
+      return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("hiddenTavernUnlock")) == (0,external_kolmafia_namespaceObject.myAscensions)();
     } }, { key: "needsSword", value:
 
     function needsSword() {
@@ -10477,6 +10493,14 @@ var QuestL11HiddenPark = /*#__PURE__*/function () {function QuestL11HiddenPark()
 
     function run() {
       var outfit = new GreyOutfit().setNoCombat().setItemDrops();
+
+      if (
+      this.hasRelocatedJanitors() &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.book) == 0 &&
+      this.hasRelocatedJanitors())
+      {
+        outfit.setChampagneBottle();
+      }
 
       return {
         location: this.loc,
@@ -10575,6 +10599,7 @@ var QuestL11HiddenBookMatches = /*#__PURE__*/function (_TaskInfo) {QuestL11Hidde
       if (!path.canUse(ResourceCategory.PULL)) {
         outfit.setItemDrops();
         outfit.setPlusCombat();
+        outfit.setChampagneBottle();
       } else {
         outfit = GreyOutfit.IGNORE_OUTFIT;
       }
@@ -17545,7 +17570,7 @@ var CryptL7Eyes = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptEyes_inh
     external_kolmafia_namespaceObject.Location.get("The Defiled Nook"));return _this;}QuestL7CryptEyes_createClass(CryptL7Eyes, [{ key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().setItemDrops();
+      var outfit = new GreyOutfit().setItemDrops().setChampagneBottle();
       this.addRetroSword(outfit);
 
       return {
@@ -20576,7 +20601,7 @@ var QuestManorLibrary = /*#__PURE__*/function (_TaskInfo) {QuestManorLibrary_inh
         if (resource != null) {
           resource.prepare(outfit);
         } else {
-          outfit.setItemDrops();
+          outfit.setItemDrops().setChampagneBottle();
         }
       }
 
@@ -27593,7 +27618,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "bb40f20";
+var lastCommitHash = "7069848";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
