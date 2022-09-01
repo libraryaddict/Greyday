@@ -64,6 +64,7 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
     }
 
     if (
+      path != null &&
       path.canUse(ResourceCategory.YELLOW_RAY) &&
       !path.getResource(ResourceCategory.YELLOW_RAY).ready()
     ) {
