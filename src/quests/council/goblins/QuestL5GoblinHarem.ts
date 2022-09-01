@@ -44,7 +44,7 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
     return 5;
   }
 
-  status(): QuestStatus {
+  status(path: PossiblePath): QuestStatus {
     if (haveOutfit("knob Goblin Harem Girl Disguise")) {
       return QuestStatus.COMPLETED;
     }
@@ -60,6 +60,13 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
     }
 
     if (!canAdventure(this.harem)) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (
+      path.canUse(ResourceCategory.YELLOW_RAY) &&
+      !path.getResource(ResourceCategory.YELLOW_RAY).ready()
+    ) {
       return QuestStatus.NOT_READY;
     }
 
