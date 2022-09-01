@@ -55,7 +55,7 @@ export function getBackupChoices(): [number, number][] {
   choices(107, 4);
   choices(105, 2);
   choices(402, 3);
-  choices(882, 2);
+  choices(882, 1);
 
   // Manor bedroom
   choices(876, 1);
