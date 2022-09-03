@@ -6,6 +6,7 @@ import {
   Item,
   myAdventures,
   myPath,
+  Path,
   print,
   printHtml,
   pullsRemaining,
@@ -108,7 +109,7 @@ class GreyYouMain {
       "blue"
     );
 
-    const color = myPath() == "Grey You" ? "blue" : "red";
+    const color = myPath() == Path.get("Grey You") ? "blue" : "red";
 
     if (color == "red") {
       print("You are not in Grey You, and cannot use these commands.", "gray");
@@ -225,7 +226,7 @@ class GreyYouMain {
       return;
     }
 
-    if (myPath() != "Grey You") {
+    if (myPath() != Path.get("Grey You")) {
       print(
         "You're not in grey you. Use 'help' to see what you can use.",
         "red"

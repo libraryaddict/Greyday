@@ -65,8 +65,7 @@ export const ResourceIds = [
   "Cargo Shorts",
   "Powerful Glove",
   "Fire Extingusher",
-  "Yellow Rocket",
-  "Retro Yellow Ray",
+  "Yellow Ray",
   "Pull",
   "Clover",
   "Deck of Every Card",
@@ -74,7 +73,6 @@ export const ResourceIds = [
   "Cat Burglar Heist",
   "Hot Tub",
   "Chateau Painting",
-  "Parka: Yellow Ray",
   //  "Parka: Clara's Bell",
 ] as const;
 
@@ -146,7 +144,11 @@ const parka: Item = Item.get("Jurassic Parka");
 
 const yellowParka: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
-  id: "Parka: Yellow Ray",
+  id: "Yellow Ray",
+  resourcesUsed:
+    availableAmount(parka) > 0 && haveSkill(Skill.get("Torso Awareness"))
+      ? 100
+      : 10_000,
   worthInAftercore: 0,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
@@ -168,8 +170,9 @@ const vipInvitation: Item = Item.get("Clan VIP Lounge key");
 
 const yellowRocket: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
-  id: "Yellow Rocket",
+  id: "Yellow Ray",
   worthInAftercore: 250, // Cost of a yellow rocket
+  resourcesUsed: availableAmount(vipInvitation) > 0 ? 75 : 10_000,
   prepare: () => {
     if (itemAmount(rocket) == 0) {
       cliExecute("acquire yellow rocket");
@@ -188,8 +191,9 @@ const retrocape: Item = Item.get("unwrapped knock-off retro superhero cape");
 
 const retroRay: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
-  id: "Retro Yellow Ray",
+  id: "Yellow Ray",
   worthInAftercore: 0,
+  resourcesUsed: availableAmount(retrocape) > 0 ? 100 : 10_000,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addItem(retrocape);
@@ -486,56 +490,11 @@ export function getResourcesLeft(
   switch (resourceType) {
     case "Asdon":
       return 0;
-    case "Parka: Yellow Ray":
-      if (
-        availableAmount(parka) == 0 ||
-        !haveSkill(Skill.get("Torso Awareness"))
-      ) {
-        return 0;
-      }
+    case "Yellow Ray":
+      const played =
+        turnsPlayed() + haveEffect(Effect.get("Everything Looks Yellow"));
 
-      {
-        const turnsRemaining =
-          650 -
-          (assumeUnused
-            ? 0
-            : turnsPlayed() +
-              haveEffect(Effect.get("Everything Looks Yellow")));
-
-        return Math.floor(turnsRemaining / 100);
-      }
-    case "Yellow Rocket":
-      if (availableAmount(vipInvitation) == 0) {
-        return 0;
-      }
-
-      {
-        const turnsRemaining =
-          650 -
-          (assumeUnused
-            ? 0
-            : turnsPlayed() +
-              haveEffect(Effect.get("Everything Looks Yellow")));
-
-        return Math.floor(turnsRemaining / 75);
-      }
-    case "Retro Yellow Ray":
-      if (
-        availableAmount(vipInvitation) > 0 ||
-        availableAmount(retrocape) == 0
-      ) {
-        return 0;
-      }
-      {
-        const turnsRemaining =
-          650 -
-          (assumeUnused
-            ? 0
-            : turnsPlayed() +
-              haveEffect(Effect.get("Everything Looks Yellow")));
-
-        return Math.floor(turnsRemaining / 100);
-      }
+      return 650 - (assumeUnused ? 0 : played);
     case "Pull":
       if (GreySettings.isHardcoreMode()) {
         return 0;

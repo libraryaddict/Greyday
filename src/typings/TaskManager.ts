@@ -195,7 +195,12 @@ export class FigureOutPath {
   resources: SomeResource[] = getResources();
 
   getPaths(quests: QuestInfo[], assumeUnstarted: boolean = false): SimmedPath {
-    print("Now calculating resources..");
+    print(
+      "Now calculating resources.. " +
+        (GreySettings.greyBreakAtTower && !assumeUnstarted
+          ? ""
+          : "As you're not breaking at tower, this might take a while..")
+    );
     const allPaths: [QuestInfo, PossiblePath[]][] = [];
     const miscPaths: QuestInfo[] = [];
     const uncompleteable: QuestInfo[] = [];
@@ -250,7 +255,7 @@ export class FigureOutPath {
             continue;
           }
 
-          print("Better check " + quest.getId() + " for " + res);
+          //print("Better check " + quest.getId() + " for " + res);
         }
       }
 
