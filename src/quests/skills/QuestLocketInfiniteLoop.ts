@@ -1,6 +1,8 @@
 import {
+  availableAmount,
   currentRound,
   Effect,
+  equippedAmount,
   handlingChoice,
   haveEffect,
   haveSkill,
@@ -35,6 +37,8 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   pullWish: PossiblePath = new PossiblePath(1)
     .addConsumablePull(this.wish)
     .addConsumablePull(this.instantKill);
+  pantsgiving: Item = Item.get("Pantsgiving");
+  doctorsBag: Item = Item.get("Lil' Doctor&trade; bag");
 
   level(): number {
     return 1;
@@ -71,6 +75,12 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
       path.getResource(ResourceCategory.YELLOW_RAY).prepare(outfit);
     }
 
+    if (availableAmount(this.doctorsBag) > 0) {
+      outfit.addItem(this.doctorsBag);
+    } else if (availableAmount(this.pantsgiving) > 0) {
+      outfit.addItem(this.pantsgiving);
+    }
+
     return {
       location: null,
       outfit: outfit,
@@ -82,13 +92,20 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
         const props = new PropertyManager();
         let macro: Macro;
         let faxResource = path.getResource(ResourceCategory.FAXER);
-        const yrResource = path.getResource(ResourceCategory.YELLOW_RAY);
 
-        if (faxResource != null) {
-          yrResource.prepare(null, props);
-          macro = yrResource.macro();
+        if (equippedAmount(this.doctorsBag) > 0) {
+          macro = Macro.skill(Skill.get("Chest X-Ray"));
+        } else if (equippedAmount(this.pantsgiving) > 0) {
+          macro = Macro.skill(Skill.get("Talk about politics"));
         } else {
-          macro = Macro.item(this.instantKill);
+          const yrResource = path.getResource(ResourceCategory.YELLOW_RAY);
+
+          if (faxResource != null) {
+            yrResource.prepare(null, props);
+            macro = yrResource.macro();
+          } else {
+            macro = Macro.item(this.instantKill);
+          }
         }
 
         if (path.canUse(ResourceCategory.PULL)) {
