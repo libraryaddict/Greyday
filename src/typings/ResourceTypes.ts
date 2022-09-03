@@ -9,6 +9,7 @@ import {
   getProperty,
   haveEffect,
   haveFamiliar,
+  haveSkill,
   heist,
   Item,
   itemAmount,
@@ -486,7 +487,10 @@ export function getResourcesLeft(
     case "Asdon":
       return 0;
     case "Parka: Yellow Ray":
-      if (availableAmount(parka) == 0) {
+      if (
+        availableAmount(parka) == 0 ||
+        !haveSkill(Skill.get("Torso Awareness"))
+      ) {
         return 0;
       }
 
