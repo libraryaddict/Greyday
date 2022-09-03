@@ -26,6 +26,6 @@
     "webpack-cli": "^4.2.0"
   },
   "dependencies": {
-    "kolmafia": "3.4.0"
+    "kolmafia": "4.0.1"
   }
 }

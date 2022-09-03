@@ -25,6 +25,7 @@ import {
   urlEncode,
   visitUrl,
 } from "kolmafia";
+import { AdventureSettings } from "../utils/GreyLocations";
 import { GreyOutfit } from "../utils/GreyOutfitter";
 import { GreySettings } from "../utils/GreySettings";
 import { Macro } from "../utils/MacroBuilder";
@@ -48,6 +49,8 @@ export enum ResourceCategory {
   DECK_OF_EVERY_CARD_CHEAT,
   CAT_HEIST,
   HOT_TUB,
+  INSTANT_KILL,
+  FORCE_NC,
 }
 
 export const ResourceIds = [
@@ -70,6 +73,8 @@ export const ResourceIds = [
   "Cat Burglar Heist",
   "Hot Tub",
   "Chateau Painting",
+  "Parka: Yellow Ray",
+  //  "Parka: Clara's Bell",
 ] as const;
 
 export type ResourceId = typeof ResourceIds[number];
@@ -134,6 +139,27 @@ const pull: SomeResource = {
   id: "Pull",
   worthInAftercore: toInt(getProperty("greyValueOfPull") || "0"), // This doesn't cost us anything to use
   prepare: () => {},
+};
+
+const parka: Item = Item.get("Jurassic Parka");
+
+const yellowParka: SomeResource = {
+  type: ResourceCategory.YELLOW_RAY,
+  id: "Parka: Yellow Ray",
+  worthInAftercore: 0,
+  prepare: (outfit: GreyOutfit, props: PropertyManager) => {
+    if (outfit != null) {
+      outfit.addItem(parka);
+    }
+
+    if (props != null) {
+      cliExecute("parka dilophosaur");
+    }
+  },
+  macro: () => {
+    return Macro.skill(Skill.get("Spit jurassic acid"));
+  },
+  ready: () => haveEffect(Effect.get("Everything Looks Yellow")) == 0,
 };
 
 const rocket: Item = Item.get("Yellow Rocket");
@@ -428,6 +454,7 @@ const allResources = [
   extingusherZoneSpecific,
   pull,
   yellowRocket,
+  yellowParka,
   cosplayYellowRay,
   backupCopier,
   cosplayCopier,
@@ -458,6 +485,21 @@ export function getResourcesLeft(
   switch (resourceType) {
     case "Asdon":
       return 0;
+    case "Parka: Yellow Ray":
+      if (availableAmount(parka) == 0) {
+        return 0;
+      }
+
+      {
+        const turnsRemaining =
+          650 -
+          (assumeUnused
+            ? 0
+            : turnsPlayed() +
+              haveEffect(Effect.get("Everything Looks Yellow")));
+
+        return Math.floor(turnsRemaining / 100);
+      }
     case "Yellow Rocket":
       if (availableAmount(vipInvitation) == 0) {
         return 0;
@@ -609,6 +651,7 @@ export function getResourcesLeft(
       return assumeUnused || !toBoolean(getProperty("_chateauMonsterFought"))
         ? 1
         : 0;
+
     default:
       throw "No idea what the resource " + resourceType + " is.";
   }

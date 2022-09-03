@@ -41,7 +41,7 @@ export class QuestJuneCleaver implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    let fightsLeft = toInt(getProperty("_juneCleaverFightsLeft"));
+    const fightsLeft = toInt(getProperty("_juneCleaverFightsLeft"));
 
     if (fightsLeft > 0) {
       return QuestStatus.NOT_READY;
@@ -61,7 +61,7 @@ export class QuestJuneCleaver implements QuestInfo {
           throw "Something went wrong. Expected to be holding the june cleaver";
         }
 
-        let turn = turnsPlayed();
+        const turn = turnsPlayed();
 
         greyAdv(this.warren);
 

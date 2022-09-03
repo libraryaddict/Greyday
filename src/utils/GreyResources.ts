@@ -555,7 +555,7 @@ export class GreyRequirements {
     required.sort((r1, r2) => r1[0].localeCompare(r2[0]));
 
     printHtml(
-      '<div style="text-align: center;">======= Grey Requirements =======</div>'
+      '<div style="text-align: center;">======= Greyday Requirements =======</div>'
     );
 
     const tick = "<font color='green'>✔</font>";
@@ -576,7 +576,12 @@ export class GreyRequirements {
         continue;
       }
 
-      print("");
+      if (e != Required.MUST) {
+        printHtml("<hr>");
+      } else {
+        printHtml("");
+      }
+
       printHtml(`<div style="text-align: center;"> ${e} </div>`);
       const values = required.filter((r) => r[2] == e);
 

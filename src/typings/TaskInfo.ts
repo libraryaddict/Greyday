@@ -325,7 +325,11 @@ export function createResourcesSnapshot(
   const snapshot = new ResourcesSnapshot();
 
   for (const resource of ResourceIds) {
-    if (resource == "Yellow Rocket" || resource == "Retro Yellow Ray") {
+    if (
+      resource == "Yellow Rocket" ||
+      resource == "Retro Yellow Ray" ||
+      resource == "Parka: Yellow Ray"
+    ) {
       if (haveEffect(Effect.get("Everything Looks Yellow")) == 0) {
         snapshot.unused.push(resource);
       }
@@ -351,7 +355,11 @@ export function getResourcesChanged(
     let resourcesLeft = getResourcesLeft(resource);
 
     // If this resource is a yellow rocket
-    if (resource == "Yellow Rocket" || resource == "Retro Yellow Ray") {
+    if (
+      resource == "Yellow Rocket" ||
+      resource == "Retro Yellow Ray" ||
+      resource == "Parka: Yellow Ray"
+    ) {
       // We're not checking resources left, instead we're checking another state
       resourcesLeft = snapshot.resourceMap.get(resource);
       // If we have yellow vision, and previously it was unused

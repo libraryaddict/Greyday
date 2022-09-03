@@ -33,7 +33,8 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   fax: PossiblePath = new PossiblePath(1)
     .addFax(this.monster)
     .add(ResourceCategory.YELLOW_RAY)
-    .addIgnored("Cosplay Saber");
+    .addIgnored("Cosplay Saber")
+    .addIgnored("Parka: Yellow Ray");
   pullWish: PossiblePath = new PossiblePath(1)
     .addConsumablePull(this.wish)
     .addConsumablePull(this.instantKill);

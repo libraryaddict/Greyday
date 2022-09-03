@@ -147,7 +147,11 @@ export class GreyAdventurer {
         continue;
       }
 
-      if (id == "Yellow Rocket" || id == "Retro Yellow Ray") {
+      if (
+        id == "Yellow Rocket" ||
+        id == "Retro Yellow Ray" ||
+        id == "Parka: Yellow Ray"
+      ) {
         continue;
       } else if (id == "Pull" && getResourcesLeft(id) > 50) {
         continue;

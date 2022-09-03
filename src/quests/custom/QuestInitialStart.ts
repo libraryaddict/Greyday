@@ -34,23 +34,11 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
   flimsyScraps: Item = Item.get("Flimsy hardwood scraps");
   birchBattery: Item = Item.get("Birch battery");
   mummingTrunk: Item = Item.get("mumming trunk");
-  mickyCard: Item = Item.get("1952 Mickey Mantle card");
   paths: PossiblePath[];
 
   createPaths(assumeUnstarted: boolean) {
     this.paths = [];
     this.paths.push(new PossiblePath(0));
-
-    if (!assumeUnstarted) {
-      if (getProperty("_deckCardsSeen").includes("Mickey")) {
-        return;
-      }
-    }
-
-    const cardPath = new PossiblePath(0);
-    cardPath.addMeat(-30000); // Say the initial meat is worth 20k of boombox profit with special seasoning, then 10k for the card worth,
-
-    this.paths.push(cardPath);
   }
 
   getPossiblePaths(): PossiblePath[] {
@@ -166,19 +154,6 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
           availableAmount(this.birchBattery) == 0
         ) {
           cliExecute("acquire " + this.birchBattery.name);
-        }
-
-        if (path.canUse(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT)) {
-          path
-            .getResource(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT)
-            .pickCard("Mickey");
-
-          if (availableAmount(this.mickyCard) > 0) {
-            path.addUsed(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT);
-            autosell(this.mickyCard, 1);
-          } else {
-            throw "Expected to have sold a " + this.mickyCard;
-          }
         }
 
         if (getProperty("breakfastCompleted") == "false") {

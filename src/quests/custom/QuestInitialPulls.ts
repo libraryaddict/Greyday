@@ -30,6 +30,10 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
     [Item.get("Portable cassette player"), -20],
     [Item.get("Pantsgiving"), -20],
   ];
+  highValueSells: Item[] = [
+    Item.get("1,970 carat gold"),
+    Item.get("Gold Wedding Ring"),
+  ];
   paths: PossiblePath[];
   donePulls: boolean;
 
