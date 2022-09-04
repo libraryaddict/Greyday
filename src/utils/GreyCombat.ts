@@ -14,6 +14,7 @@ import {
   haveSkill,
   Item,
   lastMonster,
+  Location,
   Monster,
   monsterElement,
   myAdventures,
@@ -23,6 +24,7 @@ import {
   myLevel,
   myLocation,
   myMaxhp,
+  myMeat,
   myMp,
   myTurncount,
   Skill,
@@ -211,6 +213,15 @@ export function isBanishable(
 export function greyKillingBlow(outfit: GreyOutfit): Macro {
   let macro = new Macro();
   const healthPerc = Math.min(Math.floor((myHp() / myMaxhp()) * 100) - 5, 30);
+
+  if (
+    myMeat() < 500 &&
+    getProperty("hasMaydayContract") == "true" &&
+    getProperty("_maydayDropped") == "false" &&
+    myLocation() == Location.get("The Spooky Forest")
+  ) {
+    macro = macro.attack().repeat();
+  }
 
   if (haveEffect(Effect.get("Temporary Amnesia")) == 0) {
     if (myLevel() < 4 && myFamiliar() == Familiar.get("Grey Goose")) {
