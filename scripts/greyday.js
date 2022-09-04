@@ -185,7 +185,7 @@ function getGreySettings() {
   var greyBountyHunter = {
     name: "greyBountyHunting",
     description:
-    "Should the script pick up bounties that are likely to be collected along the way? Provides no advantage or disadvantage and you likely don't need it, but optimal!",
+    "Should the script pick up bounties that are likely to be collected along the way? Provides no advantage or disadvantage and you likely don't need it, is also slow. Every few days = one token slow.",
     valid: (value) => value == "true" || value == "false",
     default: false };
 
@@ -199,6 +199,7 @@ function getGreySettings() {
 
 
   return [
+  greyBountyHunter,
   towerBreak,
   moonTune,
   manorLights,
@@ -281,6 +282,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {_classCall
 
 
 
+
     function isHardcoreMode() {
       return this.hardcoreMode || (0,external_kolmafia_namespaceObject.inHardcore)();
     } }, { key: "willBeAccessible", value:
@@ -331,7 +333,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {_classCall
 
           GreySettings[setting.name] = prop;
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
-    } }]);return GreySettings;}();_defineProperty(GreySettings, "hardcoreMode", false);_defineProperty(GreySettings, "speedRunMode", false);_defineProperty(GreySettings, "adventuresBeforeAbort", 8);_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);_defineProperty(GreySettings, "usefulSkillsWeight", 6);_defineProperty(GreySettings, "handySkillsWeight", 0.5);_defineProperty(GreySettings, "greyBreakAtTower", void 0);_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));_defineProperty(GreySettings, "greyDailyDungeon", void 0);_defineProperty(GreySettings, "greyDailyMalware", void 0);_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);_defineProperty(GreySettings, "greyFantasyBandits", void 0);_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));_defineProperty(GreySettings, "greySkipPalindome", void 0);_defineProperty(GreySettings, "greyPullsLimit", void 0);_defineProperty(GreySettings, "greyValueOfAdventure", void 0);_defineProperty(GreySettings, "greyUseMummery", void 0);_defineProperty(GreySettings, "greyVotingBooth", void 0);
+    } }]);return GreySettings;}();_defineProperty(GreySettings, "hardcoreMode", false);_defineProperty(GreySettings, "speedRunMode", false);_defineProperty(GreySettings, "adventuresBeforeAbort", 8);_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);_defineProperty(GreySettings, "usefulSkillsWeight", 6);_defineProperty(GreySettings, "handySkillsWeight", 0.5);_defineProperty(GreySettings, "greyBreakAtTower", void 0);_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));_defineProperty(GreySettings, "greyDailyDungeon", void 0);_defineProperty(GreySettings, "greyDailyMalware", void 0);_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);_defineProperty(GreySettings, "greyFantasyBandits", void 0);_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));_defineProperty(GreySettings, "greySkipPalindome", void 0);_defineProperty(GreySettings, "greyPullsLimit", void 0);_defineProperty(GreySettings, "greyValueOfAdventure", void 0);_defineProperty(GreySettings, "greyUseMummery", void 0);_defineProperty(GreySettings, "greyVotingBooth", void 0);_defineProperty(GreySettings, "greyBountyHunting", void 0);
 ;// CONCATENATED MODULE: ./src/quests/Quests.ts
 
 
@@ -6591,7 +6593,7 @@ var QuestL11Black = /*#__PURE__*/function () {function QuestL11Black() {QuestL11
         outfit.addItem(this.latte);
       }
 
-      outfit.addBonus("+moxie");
+      outfit.addBonus("+moxie -ml");
 
       var fam;
 
@@ -20580,7 +20582,10 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
           (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("manorDrawerCount")) < 20 &&
           !this.hasEnoughRes())
           {
-            if ((0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(this.canOfPaint, "Effect")) == 0) {
+            if (
+            (0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(this.canOfPaint, "Effect")) == 0 &&
+            getQuestStatus("questL11Black") > 1)
+            {
               (0,external_kolmafia_namespaceObject.cliExecute)("acquire 1 " + this.canOfPaint.name);
               (0,external_kolmafia_namespaceObject.use)(this.canOfPaint);
             }
@@ -26567,8 +26572,79 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
 
       this.check();
     } }]);return TaskColdMedicineCabinet;}();
+;// CONCATENATED MODULE: ./src/tasks/TaskBountyHunter.ts
+function TaskBountyHunter_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskBountyHunter_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskBountyHunter_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskBountyHunter_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskBountyHunter_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskBountyHunter_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+var TaskBountyHunter = /*#__PURE__*/function () {function TaskBountyHunter() {TaskBountyHunter_classCallCheck(this, TaskBountyHunter);TaskBountyHunter_defineProperty(this, "easyBounties",
+    [
+    "bean-shaped rock",
+    "bloodstained briquette",
+    "brightly-colored bottlecap",
+    "broken petri dish",
+    "bundle of receipts",
+    "cherry stem	cherry stems",
+    "crumpled pink slip",
+    "handful of meatberries",
+    "important bat file",
+    "paper towel	paper towels",
+    "pink bat eye",
+    "sugar button",
+    "suspicious mole",
+    "triffid bark"]);TaskBountyHunter_defineProperty(this, "hardBounties",
+
+    [
+    "beard crumbs",
+    "bit of wilted lettuce",
+    "black eye",
+    "burned-out arcanodiode",
+    "dirty coal button",
+    "discarded pacifier",
+    "dusty wing",
+    "filthy rag",
+    "length of bent pipe",
+    "non-Euclidean hoof",
+    "rusty tap handle",
+    "spare abacus bead",
+    "worthless piece of yellow glass"]);}TaskBountyHunter_createClass(TaskBountyHunter, [{ key: "shouldCheckBounties", value:
+
+
+    function shouldCheckBounties() {
+      return (
+        (0,external_kolmafia_namespaceObject.getProperty)("currentEasyBountyItem") == "" &&
+        (0,external_kolmafia_namespaceObject.getProperty)("_unknownEasyBountyItem") == "" ||
+        (0,external_kolmafia_namespaceObject.getProperty)("currentHardBountyItem") == "" &&
+        (0,external_kolmafia_namespaceObject.getProperty)("_unknownHardBountyItem") == "");
+
+    } }, { key: "run", value:
+
+    function run() {
+      if (!GreySettings.greyBountyHunting) {
+        return;
+      }
+
+      if (this.shouldCheckBounties()) {
+        (0,external_kolmafia_namespaceObject.visitUrl)("bounty.php");
+      }
+
+      if (
+      (0,external_kolmafia_namespaceObject.getProperty)("currentEasyBountyItem") == "" &&
+      this.easyBounties.includes((0,external_kolmafia_namespaceObject.getProperty)("_untakenEasyBountyItem")))
+      {
+        (0,external_kolmafia_namespaceObject.cliExecute)("bounty easy");
+      }
+
+      if (
+      (0,external_kolmafia_namespaceObject.getProperty)("currentHardBountyItem") == "" &&
+      this.hardBounties.includes((0,external_kolmafia_namespaceObject.getProperty)("_untakenHardBountyItem")))
+      {
+        (0,external_kolmafia_namespaceObject.cliExecute)("bounty hard");
+      }
+    } }]);return TaskBountyHunter;}();
 ;// CONCATENATED MODULE: ./src/GreyAdventurer.ts
 function GreyAdventurer_toConsumableArray(arr) {return GreyAdventurer_arrayWithoutHoles(arr) || GreyAdventurer_iterableToArray(arr) || GreyAdventurer_unsupportedIterableToArray(arr) || GreyAdventurer_nonIterableSpread();}function GreyAdventurer_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyAdventurer_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function GreyAdventurer_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return GreyAdventurer_arrayLikeToArray(arr);}function GreyAdventurer_slicedToArray(arr, i) {return GreyAdventurer_arrayWithHoles(arr) || GreyAdventurer_iterableToArrayLimit(arr, i) || GreyAdventurer_unsupportedIterableToArray(arr, i) || GreyAdventurer_nonIterableRest();}function GreyAdventurer_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyAdventurer_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function GreyAdventurer_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function GreyAdventurer_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyAdventurer_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyAdventurer_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyAdventurer_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyAdventurer_arrayLikeToArray(o, minLen);}function GreyAdventurer_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyAdventurer_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyAdventurer_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyAdventurer_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyAdventurer_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyAdventurer_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyAdventurer_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -26604,7 +26680,8 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
     new TaskFuelAsdon(),
     new TaskJuneCleaver(),
     new TaskBoomboxSwitch(),
-    new TaskEquipDistillery()]);}GreyAdventurer_createClass(GreyAdventurer, [{ key: "runTurn", value:
+    new TaskEquipDistillery(),
+    new TaskBountyHunter()]);}GreyAdventurer_createClass(GreyAdventurer, [{ key: "runTurn", value:
 
 
     function runTurn(goTime) {
@@ -27746,7 +27823,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "92a396d";
+var lastCommitHash = "9d29d3c";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
