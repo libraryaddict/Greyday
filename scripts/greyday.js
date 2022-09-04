@@ -1388,7 +1388,7 @@ var retroRay = {
     }
 
     if (props != null) {
-      (0,external_kolmafia_namespaceObject.cliExecute)("retro heck kiss");
+      (0,external_kolmafia_namespaceObject.cliExecute)("retrocape heck kiss");
     }
   },
   macro: () => Macro.skill(external_kolmafia_namespaceObject.Skill.get("Unleash the Devil's Kiss")),
@@ -18707,49 +18707,47 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
           } else if (path.canUse(ResourceCategory.CAT_HEIST)) {
             (0,external_kolmafia_namespaceObject.useFamiliar)(this.burglar);
           }
-
-          if (path.canUse(ResourceCategory.FAXER)) {
-            path.getResource(ResourceCategory.FAXER).fax(this.mountainMan);
-            path.addUsed(ResourceCategory.FAXER);
-          } else if (path.canUse(ResourceCategory.CARGO_SHORTS)) {
-            path.getResource(ResourceCategory.CARGO_SHORTS).pocket(565);
-            path.addUsed(ResourceCategory.CARGO_SHORTS);
-          } else {
-            throw "No way to start a mountain man combat!";
-          }
-
-          if ((0,external_kolmafia_namespaceObject.currentRound)() == 0) {
-            throw "I should be in combat!";
-          }
-
           var macro = new Macro();
 
-          if (this.doDuping()) {
-            macro = macro.skill(external_kolmafia_namespaceObject.Skill.get("Emit Matter Duplicating Drones"));
-          } else if (path.canUse(ResourceCategory.POLAR_VORTEX)) {
-            while (
-            path.canUse(ResourceCategory.POLAR_VORTEX) &&
-            this.getOreRemaining() > 2)
-            {
-              (0,external_kolmafia_namespaceObject.print)("Drop my ore dammit!", "red");
-              path.getResource(ResourceCategory.POLAR_VORTEX).macro().submit();
-              path.addUsed(ResourceCategory.POLAR_VORTEX);
-            }
-
-            if (this.getOreRemaining() > 2) {
-              (0,external_kolmafia_namespaceObject.print)(
-              "Drat. We're going to have to get the last ore another way.",
-              "red");
-
-            }
+          var props = new PropertyManager();
+          if (path.canUse(ResourceCategory.YELLOW_RAY)) {
+            path.getResource(ResourceCategory.YELLOW_RAY).prepare(null, props);
+            macro.step(path.getResource(ResourceCategory.YELLOW_RAY).macro());
           }
 
-          var props = new PropertyManager();
-
           try {
-            if (path.canUse(ResourceCategory.YELLOW_RAY)) {
-              path.getResource(ResourceCategory.YELLOW_RAY).prepare(null, props);
-              macro.step(path.getResource(ResourceCategory.YELLOW_RAY).macro());
+            if (path.canUse(ResourceCategory.FAXER)) {
+              path.getResource(ResourceCategory.FAXER).fax(this.mountainMan);
+              path.addUsed(ResourceCategory.FAXER);
+            } else if (path.canUse(ResourceCategory.CARGO_SHORTS)) {
+              path.getResource(ResourceCategory.CARGO_SHORTS).pocket(565);
+              path.addUsed(ResourceCategory.CARGO_SHORTS);
+            } else {
+              throw "No way to start a mountain man combat!";
+            }
+
+            if ((0,external_kolmafia_namespaceObject.currentRound)() == 0) {
+              throw "I should be in combat!";
+            }
+
+            if (this.doDuping()) {
+              macro = macro.skill(external_kolmafia_namespaceObject.Skill.get("Emit Matter Duplicating Drones"));
+            } else if (path.canUse(ResourceCategory.POLAR_VORTEX)) {
+              while (
+              path.canUse(ResourceCategory.POLAR_VORTEX) &&
+              this.getOreRemaining() > 2)
+              {
+                (0,external_kolmafia_namespaceObject.print)("Drop my ore dammit!", "red");
+                path.getResource(ResourceCategory.POLAR_VORTEX).macro().submit();
+                path.addUsed(ResourceCategory.POLAR_VORTEX);
+              }
+
+              if (this.getOreRemaining() > 2) {
+                (0,external_kolmafia_namespaceObject.print)(
+                "Drat. We're going to have to get the last ore another way.",
+                "red");
+
+              }
             }
 
             greyAdv(
@@ -27748,7 +27746,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "bd48182";
+var lastCommitHash = "92a396d";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
