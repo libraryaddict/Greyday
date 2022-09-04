@@ -145,7 +145,7 @@ export function getGreySettings(): GreySetting[] {
   const greyBountyHunter: GreySetting = {
     name: "greyBountyHunting",
     description:
-      "Should the script pick up bounties that are likely to be collected along the way? Provides no advantage or disadvantage and you likely don't need it, but optimal!",
+      "Should the script pick up bounties that are likely to be collected along the way? Provides no advantage or disadvantage and you likely don't need it, is also slow. Every few days = one token slow.",
     valid: (value) => value == "true" || value == "false",
     default: false,
   };
@@ -159,6 +159,7 @@ export function getGreySettings(): GreySetting[] {
   };
 
   return [
+    greyBountyHunter,
     towerBreak,
     moonTune,
     manorLights,
@@ -240,6 +241,7 @@ export class GreySettings {
   static greyValueOfAdventure: number;
   static greyUseMummery: boolean;
   static greyVotingBooth: boolean;
+  static greyBountyHunting: boolean;
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

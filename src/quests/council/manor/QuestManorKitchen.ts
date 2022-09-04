@@ -138,7 +138,10 @@ export class QuestManorKitchen implements QuestInfo {
           toInt(getProperty("manorDrawerCount")) < 20 &&
           !this.hasEnoughRes()
         ) {
-          if (haveEffect(effectModifier(this.canOfPaint, "Effect")) == 0) {
+          if (
+            haveEffect(effectModifier(this.canOfPaint, "Effect")) == 0 &&
+            getQuestStatus("questL11Black") > 1
+          ) {
             cliExecute("acquire 1 " + this.canOfPaint.name);
             use(this.canOfPaint);
           }

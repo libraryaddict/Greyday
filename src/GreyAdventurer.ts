@@ -58,6 +58,7 @@ import { AdventureSettings, greyAdv } from "./utils/GreyLocations";
 import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
 import { doColor, setUmbrella } from "./utils/GreyUtils";
+import { TaskBountyHunter } from "./tasks/TaskBountyHunter";
 
 export class GreyAdventurer {
   goose: Familiar = Familiar.get("Grey Goose");
@@ -74,6 +75,7 @@ export class GreyAdventurer {
     new TaskJuneCleaver(),
     new TaskBoomboxSwitch(),
     new TaskEquipDistillery(),
+    new TaskBountyHunter(),
   ];
 
   runTurn(goTime: boolean): boolean {

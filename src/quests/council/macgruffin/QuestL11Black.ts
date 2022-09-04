@@ -59,7 +59,7 @@ export class QuestL11Black implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Black");
+    const status = getQuestStatus("questL11Black");
 
     if (status < 0) {
       return QuestStatus.NOT_READY;
@@ -77,7 +77,7 @@ export class QuestL11Black implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setPlusCombat();
+    const outfit = new GreyOutfit().setPlusCombat();
 
     if (availableAmount(this.boots) > 0) {
       outfit.addItem(this.boots);
@@ -90,7 +90,7 @@ export class QuestL11Black implements QuestInfo {
       outfit.addItem(this.latte);
     }
 
-    outfit.addBonus("+moxie");
+    outfit.addBonus("+moxie -ml");
 
     let fam: Familiar;
 
@@ -103,7 +103,7 @@ export class QuestL11Black implements QuestInfo {
       outfit: outfit,
       familiar: fam,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         try {
           props.setChoice(923, 1);
@@ -126,10 +126,10 @@ export class QuestL11Black implements QuestInfo {
             props.setChoice(924, 1); // Fight bush
           }
 
-          let settings = new AdventureSettings();
+          const settings = new AdventureSettings();
 
           if (availableAmount(this.blackbird) == 0) {
-            for (let mon of this.dontBanish) {
+            for (const mon of this.dontBanish) {
               settings.addNoBanish(mon);
             }
           }
