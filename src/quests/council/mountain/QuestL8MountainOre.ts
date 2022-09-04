@@ -522,49 +522,47 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
         } else if (path.canUse(ResourceCategory.CAT_HEIST)) {
           useFamiliar(this.burglar);
         }
-
-        if (path.canUse(ResourceCategory.FAXER)) {
-          path.getResource(ResourceCategory.FAXER).fax(this.mountainMan);
-          path.addUsed(ResourceCategory.FAXER);
-        } else if (path.canUse(ResourceCategory.CARGO_SHORTS)) {
-          path.getResource(ResourceCategory.CARGO_SHORTS).pocket(565);
-          path.addUsed(ResourceCategory.CARGO_SHORTS);
-        } else {
-          throw "No way to start a mountain man combat!";
-        }
-
-        if (currentRound() == 0) {
-          throw "I should be in combat!";
-        }
-
         let macro: Macro = new Macro();
 
-        if (this.doDuping()) {
-          macro = macro.skill(Skill.get("Emit Matter Duplicating Drones"));
-        } else if (path.canUse(ResourceCategory.POLAR_VORTEX)) {
-          while (
-            path.canUse(ResourceCategory.POLAR_VORTEX) &&
-            this.getOreRemaining() > 2
-          ) {
-            print("Drop my ore dammit!", "red");
-            path.getResource(ResourceCategory.POLAR_VORTEX).macro().submit();
-            path.addUsed(ResourceCategory.POLAR_VORTEX);
-          }
-
-          if (this.getOreRemaining() > 2) {
-            print(
-              "Drat. We're going to have to get the last ore another way.",
-              "red"
-            );
-          }
+        const props = new PropertyManager();
+        if (path.canUse(ResourceCategory.YELLOW_RAY)) {
+          path.getResource(ResourceCategory.YELLOW_RAY).prepare(null, props);
+          macro.step(path.getResource(ResourceCategory.YELLOW_RAY).macro());
         }
 
-        const props = new PropertyManager();
-
         try {
-          if (path.canUse(ResourceCategory.YELLOW_RAY)) {
-            path.getResource(ResourceCategory.YELLOW_RAY).prepare(null, props);
-            macro.step(path.getResource(ResourceCategory.YELLOW_RAY).macro());
+          if (path.canUse(ResourceCategory.FAXER)) {
+            path.getResource(ResourceCategory.FAXER).fax(this.mountainMan);
+            path.addUsed(ResourceCategory.FAXER);
+          } else if (path.canUse(ResourceCategory.CARGO_SHORTS)) {
+            path.getResource(ResourceCategory.CARGO_SHORTS).pocket(565);
+            path.addUsed(ResourceCategory.CARGO_SHORTS);
+          } else {
+            throw "No way to start a mountain man combat!";
+          }
+
+          if (currentRound() == 0) {
+            throw "I should be in combat!";
+          }
+
+          if (this.doDuping()) {
+            macro = macro.skill(Skill.get("Emit Matter Duplicating Drones"));
+          } else if (path.canUse(ResourceCategory.POLAR_VORTEX)) {
+            while (
+              path.canUse(ResourceCategory.POLAR_VORTEX) &&
+              this.getOreRemaining() > 2
+            ) {
+              print("Drop my ore dammit!", "red");
+              path.getResource(ResourceCategory.POLAR_VORTEX).macro().submit();
+              path.addUsed(ResourceCategory.POLAR_VORTEX);
+            }
+
+            if (this.getOreRemaining() > 2) {
+              print(
+                "Drat. We're going to have to get the last ore another way.",
+                "red"
+              );
+            }
           }
 
           greyAdv(

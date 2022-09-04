@@ -200,7 +200,7 @@ const retroRay: SomeResource = {
     }
 
     if (props != null) {
-      cliExecute("retro heck kiss");
+      cliExecute("retrocape heck kiss");
     }
   },
   macro: () => Macro.skill(Skill.get("Unleash the Devil's Kiss")),
