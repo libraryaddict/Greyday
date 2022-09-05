@@ -103,6 +103,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
     }
 
     if (
+      this.toAbsorb.length == 0 &&
       canAdventure(this.oasis) &&
       getProperty("_gnasirAvailable") == "true" &&
       this.wantsGnomeRose() &&
