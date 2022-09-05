@@ -200,9 +200,20 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
   shirtlessPull = new PossiblePath(10);
   torso: Skill = Skill.get("Torso Awareness");
   spoon: Item = Item.get("hewn moon-rune spoon");
+  paths: PossiblePath[];
+
+  createPaths(assumeUnstarted: boolean) {
+    this.paths = [];
+
+    if (availableAmount(this.shirt) > 0 && !assumeUnstarted) {
+      this.paths.push(new PossiblePath(0));
+    } else {
+      this.paths.push(this.shirtPull, this.shirtlessPull);
+    }
+  }
 
   getPossiblePaths(): PossiblePath[] {
-    return [this.shirtPull, this.shirtlessPull];
+    return this.paths;
   }
 
   getId(): QuestType {
