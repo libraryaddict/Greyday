@@ -235,24 +235,37 @@ enum Required {
   MINOR = "Minor, can skip",
 }
 
+enum Type {
+  FREE,
+  IOTM,
+  IOTM_EXTRA,
+}
+
 export class GreyRequirements {
   hasRequired() {
-    const required: [string, string, Required, boolean][] = [];
+    const required: [Type, string, string, Required, boolean][] = [];
     const add = (
+      type: Type,
       name: string | Item,
       desc: string,
       e: Required,
-      owns?: boolean
+      owns?: boolean,
+      unsupported: boolean = false
     ) => {
       if (name instanceof Item) {
         owns = availableAmount(name) + storageAmount(name) > 0;
         name = name.name;
       }
 
-      required.push([name, desc, e, owns]);
+      if (unsupported) {
+        desc = "<s>" + desc + "</s> - <b><u>CURRENTLY UNSUPPORTED</u></b>";
+      }
+
+      required.push([type, name, desc, e, owns]);
     };
 
     add(
+      Type.IOTM,
       "Grey Goose",
       "Without this, Grey You isn't really feasible",
       Required.MUST,
@@ -260,16 +273,17 @@ export class GreyRequirements {
     );
 
     add(
-      "Gelatinous Cubeling",
-      "Saves about 10 turns if you're not doing a tower break",
-      Required.VERY_USEFUL,
-      haveFamiliar(Familiar.get("Gelatinous Cubeling"))
+      Type.IOTM,
+      Item.get("Clan VIP Lounge key"),
+      "Used to remove Beaten Up, grab yellow rockets, fax and get the +fam exp effect!",
+      Required.MUST
     );
 
     add(
-      Item.get("Combat Lover's Locket"),
-      "Used as a fax source, with some helpful enchants",
-      Required.VERY_USEFUL
+      Type.FREE,
+      Item.get("Yule Hatchet"),
+      "Gives +2 fam exp every fight, basically a must have",
+      Required.MUST
     );
 
     const locket = Object.keys(getLocketMonsters()).map((s) =>
@@ -291,6 +305,7 @@ export class GreyRequirements {
 
       if (monstersNeed.length > 0) {
         add(
+          Type.IOTM_EXTRA,
           "Combat Locket: " + monstersNeed.join(", "),
           "The script uses these in run, you are missing these from your combat locket",
           Required.MUST,
@@ -300,6 +315,7 @@ export class GreyRequirements {
 
       if (monstersHave.length > 0) {
         add(
+          Type.IOTM_EXTRA,
           "Combat Locket: " + monstersHave.join(", "),
           "The script uses these in run, you have these",
           Required.MUST,
@@ -308,164 +324,13 @@ export class GreyRequirements {
       }
     }
 
-    add(
-      Item.get("Industrial Fire Extinguisher"),
-      "Can speed up by up 15 to 25 turns",
-      Required.USEFUL
-    );
-
-    add(
-      Item.get("Backup Camera"),
-      "Great for +ML, Init and sometimes Fantasy Bandits & Lobsters",
-      Required.VERY_USEFUL
-    );
-
-    add(
-      Item.get("unwrapped knock-off retro superhero cape"),
-      "Great for crypts & tower",
-      Required.VERY_USEFUL
-    );
-
-    add(
-      "Mayday Contract",
-      "Gives a nice +combat cape and starting 5k meat boost",
-      Required.USEFUL,
-      toBoolean(getProperty("maydayContractOwned"))
-    );
-
-    add(
-      Item.get("Unbreakable Umbrella"),
-      "Awesome -Combat and +ML for Oil Peak",
-      Required.VERY_USEFUL
-    );
-
-    add(
-      "Cosmic Bowling Ball",
-      "Banishes for all!",
-      Required.USEFUL,
-      toBoolean(getProperty("hasCosmicBowlingBall"))
-    );
-
-    add(
-      Item.get("miniature crystal ball"),
-      "Great for speeding up predictions",
-      Required.VERY_USEFUL
-    );
-
-    add(
-      "Short Order Cook",
-      "Great for tower killing and provides an absorb at the start of your run",
-      Required.USEFUL,
-      haveFamiliar(Familiar.get("Short Order Cook"))
-    );
-
-    add(
-      Item.get("Clan VIP Lounge key"),
-      "Used to remove Beaten Up, grab yellow rockets, fax and get the +fam exp effect!",
-      Required.MUST
-    );
-
-    add(
-      Item.get("Fourth of May Cosplay Saber"),
-      "Great for faster lobsterfrogmen, ele res checks and for 1-2 yellow rays!",
-      Required.USEFUL
-    );
-
-    add(
-      Item.get("protonic accelerator pack"),
-      "Used for some free delay, -5 combat, get a nice +2 fam exp offhand and as a MP restorer! With sweatpants as a stunner, this is great!",
-      Required.VERY_USEFUL
-    );
-
-    add(
-      Item.get("Familiar Scrapbook"),
-      "Great for power leveling after GYou ends, and the offhand +1 fam exp!",
-      Required.VERY_USEFUL
-    );
-
-    add(
-      Item.get("Powerful Glove"),
-      "If not tower breaking, great for white pixels. If you have cursed mag glass, saves 5 turns?",
-      Required.USEFUL
-    );
-
-    add(
-      Item.get("Cursed Magnifying Glass"),
-      "Only really used for minor delay burning, and lobsters + powerful glove",
-      Required.MINOR
-    );
-
-    add(
-      Item.get("Cargo Cultist Shorts"),
-      "Used to fight Smut Orc to save 6 turns, or for the frat outfit to save pulls or 12 turns",
-      Required.USEFUL
-    );
-
-    add(
-      Item.get("HOA regulation book"),
-      "Prefered over Space Trip safety headphones for the +2 res, saves 20? turns, especially on smut orcs",
-      Required.VERY_USEFUL
-    );
-    add(
-      Item.get("Space Trip safety headphones"),
-      "HOA regulation book is used instead when available, but this still saves 20? turns, especially on smut orcs",
-      Required.VERY_USEFUL
-    );
-
-    add(
-      Item.get("Mafia Thumb Ring"),
-      "Gives roughly 30 extra adventures over the course of your run",
-      Required.VERY_USEFUL
-    );
-
-    add(
-      Item.get("Yule Hatchet"),
-      "Gives +2 fam exp every fight, basically a must have",
-      Required.MUST
-    );
-
-    add(
-      Item.get("Deck of lewd playing cards"),
-      "Speeds up Ron Protesters",
-      Required.USEFUL
-    );
-
-    add(
-      Item.get("SongBoom&trade; BoomBox"),
-      "Awesome for startup meat & nuns, then passive Special Seasoning generation you can use/sell",
-      Required.VERY_USEFUL
-    );
-
-    add(
-      Item.get("latte lovers member's mug"),
-      "Gives +3 familiar exp roughly 100 turns into the run",
-      Required.USEFUL
-    );
-
-    add(
-      Item.get("Designer Sweatpants"),
-      "Great for Ron Protesters, and restoring MP!",
-      Required.VERY_USEFUL
-    );
-
-    add(
-      Item.get("June Cleaver"),
-      "Great for 1.5k meat, occasional 5 advs, smut orcs and the teachers pen which is +2 fam exp!",
-      Required.VERY_USEFUL
-    );
-
-    add(
-      Item.get("mumming trunk"),
-      "Absolutely great for early game MP regeneration. Especially when you're tough on meat.",
-      Required.VERY_USEFUL
-    );
-
     const poolSkill = Math.floor(
       2 * Math.sqrt(toInt(getProperty("poolSharkCount")))
     );
 
     if (poolSkill < 10) {
       add(
+        Type.FREE,
         "Pool Skill",
         `You can train this up using 11-Leaf Clovers to have a permanant +10 across ascensions. You currently have a pool skill of ${poolSkill}, we want 10. Try looking up "A Shark's Chum" in the kol wiki.`,
         Required.MUST,
@@ -473,6 +338,7 @@ export class GreyRequirements {
       );
     } else {
       add(
+        Type.FREE,
         "Pool Skill",
         "You have fully trained up your pool skill, which is great for the Billards pool test!",
         Required.MUST,
@@ -481,6 +347,209 @@ export class GreyRequirements {
     }
 
     add(
+      Type.IOTM,
+      Item.get("Unbreakable Umbrella"),
+      "Awesome -Combat and +ML for Oil Peak",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("miniature crystal ball"),
+      "Great for speeding up predictions",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.FREE,
+      "Gelatinous Cubeling",
+      "Saves about 10 turns if you're not doing a tower break",
+      Required.VERY_USEFUL,
+      haveFamiliar(Familiar.get("Gelatinous Cubeling"))
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("Combat Lover's Locket"),
+      "Used as a fax source, with some helpful enchants",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("Backup Camera"),
+      "Great for +ML, Init and sometimes Fantasy Bandits & Lobsters",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("unwrapped knock-off retro superhero cape"),
+      "Great for crypts & tower",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("Designer Sweatpants"),
+      "Great for Ron Protesters, and restoring MP!",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("June Cleaver"),
+      "Great for 1.5k meat, occasional 5 advs, smut orcs and the teachers pen which is +2 fam exp!",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("mumming trunk"),
+      "Absolutely great for early game MP regeneration. Especially when you're tough on meat.",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("protonic accelerator pack"),
+      "Used for some free delay, -5 combat, get a nice +2 fam exp offhand and as a MP restorer! With sweatpants as a stunner, this is great!",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("Familiar Scrapbook"),
+      "Great for power leveling after GYou ends, and the offhand +1 fam exp!",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("SongBoom&trade; BoomBox"),
+      "Awesome for startup meat & nuns, then passive Special Seasoning generation you can use/sell",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("hewn moon-rune spoon"),
+      "Great for starting as vole, then switching to Blender! Probably worth 20 turns! Don't forget to setup your Greyday settings!",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("Deck of Every Card"),
+      "Used as a key source and as an initial meat source. Not worth buying as its very expensive",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.FREE,
+      Item.get("HOA regulation book"),
+      "Prefered over Space Trip safety headphones for the +2 res, saves 20? turns, especially on smut orcs",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.FREE,
+      Item.get("Space Trip safety headphones"),
+      "HOA regulation book is used instead when available, but this still saves 20? turns, especially on smut orcs",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.FREE,
+      Item.get("Mafia Thumb Ring"),
+      "Gives roughly 30 extra adventures over the course of your run",
+      Required.VERY_USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("Industrial Fire Extinguisher"),
+      "Can speed up by up 15 to 25 turns",
+      Required.USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      "Mayday Contract",
+      "Gives a nice +combat cape and starting 5k meat boost",
+      Required.USEFUL,
+      toBoolean(getProperty("maydayContractOwned"))
+    );
+
+    add(
+      Type.IOTM,
+      "Cosmic Bowling Ball",
+      "Banishes for all!",
+      Required.USEFUL,
+      toBoolean(getProperty("hasCosmicBowlingBall"))
+    );
+
+    add(
+      Type.IOTM,
+      "Short Order Cook",
+      "Great for tower killing and provides an absorb at the start of your run",
+      Required.USEFUL,
+      haveFamiliar(Familiar.get("Short Order Cook"))
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("Fourth of May Cosplay Saber"),
+      "Great for faster lobsterfrogmen, ele res checks and for 1-2 yellow rays!",
+      Required.USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("Powerful Glove"),
+      "If not tower breaking, great for white pixels. If you have cursed mag glass, saves 5 turns?",
+      Required.USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("Cargo Cultist Shorts"),
+      "Used to fight Smut Orc to save 6 turns, or for the frat outfit to save pulls or 12 turns",
+      Required.USEFUL
+    );
+
+    add(
+      Type.FREE,
+      Item.get("Deck of lewd playing cards"),
+      "Speeds up Ron Protesters",
+      Required.USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("latte lovers member's mug"),
+      "Gives +3 familiar exp roughly 100 turns into the run",
+      Required.USEFUL
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("Greatest American Pants"),
+      "Free runs",
+      Required.USEFUL,
+      null,
+      true
+    );
+
+    add(
+      Type.IOTM,
+      Item.get("Pantsgiving"),
+      "Gives +2 all res, 10 items which can help save turncount and stacks up stomach size increasers",
+      Required.USEFUL
+    );
+
+    add(
+      Type.IOTM,
       "Melodramedary",
       "Saves 3 adventures for desert!",
       Required.MINOR,
@@ -488,6 +557,7 @@ export class GreyRequirements {
     );
 
     add(
+      Type.IOTM,
       "Cat Burglar",
       "Only used rarely, generally not worth picking up but does sometimes save 20k of resources in meat!",
       Required.MINOR,
@@ -495,12 +565,7 @@ export class GreyRequirements {
     );
 
     add(
-      Item.get("hewn moon-rune spoon"),
-      "Great for starting as vole, then switching to Blender! Probably worth 20 turns! Don't forget to setup your Greyday settings!",
-      Required.VERY_USEFUL
-    );
-
-    add(
+      Type.IOTM,
       "Fantasyrealm",
       "This isn't worth buying as it devalues Lucky Gold Ring, but if you do have it; Then it's useful as another key source.",
       Required.MINOR,
@@ -508,84 +573,67 @@ export class GreyRequirements {
     );
 
     add(
-      Item.get("Deck of Every Card"),
-      "Used as a key source and as an initial meat source. Not worth buying as its very expensive",
-      Required.VERY_USEFUL
+      Type.IOTM,
+      Item.get("Cursed Magnifying Glass"),
+      "Only really used for minor delay burning, and lobsters + powerful glove",
+      Required.MINOR
     );
 
     add(
+      Type.IOTM,
       "Gingerbread City",
-      "Useful as another key source - <b><u>CURRENTLY UNSUPPORTED</u></b>",
+      "Useful as another key source",
       Required.MINOR,
-      toBoolean(getProperty("gingerbreadCityAvailable"))
+      toBoolean(getProperty("gingerbreadCityAvailable")),
+      true
     );
 
     add(
+      Type.IOTM,
       "Piraterealm",
-      "Useful as another key source - <b><u>CURRENTLY UNSUPPORTED</u></b>",
+      "Useful as another key source",
       Required.MINOR,
-      toBoolean(getProperty("prAlways"))
+      toBoolean(getProperty("prAlways")),
+      true
     );
 
     add(
+      Type.IOTM,
       Item.get("Kramco Sausage-o-Matic&trade;"),
       "Useful as a delay burner, and for another 23 adventures a day",
       Required.MINOR
     );
 
     add(
+      Type.IOTM,
       "Voting Booth",
       "Iotm for voting, +3 hot res, +25% moxie buff, has interaction with powerful glove for lobsterfrogman, and gives 3 free delay burns",
       Required.MINOR,
       toBoolean(getProperty("voteAlways"))
     );
 
-    add(
-      Item.get("Greatest American Pants"),
-      "Free runs - <b><u>CURRENTLY UNSUPPORTED</u></b>",
-      Required.USEFUL
+    required.sort(([t1, r1], [t2, r2]) =>
+      t1 == t2 ? r1.localeCompare(r2) : t1 - t2
     );
-
-    add(
-      Item.get("Pantsgiving"),
-      "Gives +2 all res, 10 items which can help save turncount and stacks up stomach size increasers",
-      Required.USEFUL
-    );
-
-    required.sort((r1, r2) => r1[0].localeCompare(r2[0]));
 
     printHtml(
-      '<div style="text-align: center;">======= Greyday Requirements =======</div>'
+      '<div style="text-align: center;">======= Greyday Requirements =======<br><font color="gray">Note that this has significant overlap with loopgyou</font></div>'
     );
 
     const tick = "<font color='green'>✔</font>";
     const cross = "<font color='red'>✘</font>";
 
     for (const e of Object.values(Required) as Required[]) {
-      let color: string = "green";
-
-      if (e == Required.MUST) {
-        color = "red";
-      } else if (e == Required.VERY_USEFUL) {
-        color = "#BC3823";
-      } else if (e == Required.USEFUL) {
-        color = "blue";
-      } else if (e == Required.MINOR) {
-        color = "gray";
-      } else {
-        continue;
-      }
-
       if (e != Required.MUST) {
         printHtml("<hr>");
-      } else {
-        printHtml("");
       }
 
-      printHtml(`<div style="text-align: center;"> ${e} </div>`);
-      const values = required.filter((r) => r[2] == e);
+      printHtml(
+        `<div style="text-align: center;"><font color="blue">${e}</font></div>`
+      );
+      const values = required.filter((r) => r[3] == e);
 
-      for (const [name, desc, , has] of values) {
+      for (const [, name, desc, , has] of values) {
         printHtml(
           `${has ? tick : cross} <font color='${
             has ? "" : "red"
@@ -594,13 +642,12 @@ export class GreyRequirements {
       }
     }
 
-    if (required.find((r) => r[3] == false) == null) {
+    if (required.find((r) => r[4] == false) == null) {
       printHtml(
         "<center color='green'>Wow! You have everything in here!</center>"
       );
     }
 
     printHtml('<div style="text-align: center;">===============</div>');
-    // TODO Camelcalf?
   }
 }

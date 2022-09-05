@@ -184,6 +184,11 @@ export class QuestRegistry {
 
       { id: "Council / Larva" },
 
+      // Get this done early so we can start flyering
+      { id: "Council / War / Frat Outfit" },
+      { id: "Council / War / Start" },
+      { id: "Council / War / Flyers" },
+
       // We get +3 hot resist from raging bull
       // +3 stench resist from pine bat
       // And the other two skills are manor located
@@ -206,11 +211,6 @@ export class QuestRegistry {
       { id: "Council / Friars / Elbow" },
       { id: "Council / Friars / Neck" },
       { id: "Council / Friars / TurnIn" },
-
-      // Get this done early so we can start flyering
-      { id: "Council / War / Frat Outfit" },
-      { id: "Council / War / Start" },
-      { id: "Council / War / Flyers" },
 
       // If we have the skill, then this doesn't need prioritizing as such
       {

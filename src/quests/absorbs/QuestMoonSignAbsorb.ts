@@ -50,7 +50,23 @@ export abstract class QuestMoonSignAbsorb
       return QuestStatus.NOT_READY;
     }
 
-    if (this.toAbsorb.length == 0 || !path.canUse(ResourceCategory.FAXER)) {
+    if (this.toAbsorb.length == 0) {
+      return QuestStatus.COMPLETED;
+    }
+
+    // If we're not in the moon sign
+    if (!this.isInSign()) {
+      // If we will be in the sign eventually
+      if (this.willMoonTune(false)) {
+        return QuestStatus.NOT_READY;
+      }
+
+      // If we will not be in the sign eventually and can't hit this monster
+      if (!path.canUse(ResourceCategory.FAXER)) {
+        return QuestStatus.COMPLETED;
+      }
+    } else if (getProperty("moonTuned") == "true") {
+      // If we've tuned to this sign, don't bother handling this like a quest
       return QuestStatus.COMPLETED;
     }
 
@@ -98,7 +114,7 @@ export abstract class QuestMoonSignAbsorb
 
   createPaths(assumeUnstarted: boolean): void {
     if (this.isInSign() || this.willMoonTune(assumeUnstarted)) {
-      this.paths = null;
+      this.paths = [new PossiblePath(3)];
       return;
     }
 

@@ -22,6 +22,7 @@ import {
   useFamiliar,
   visitUrl,
 } from "kolmafia";
+import { AdventureFinder } from "../../../GreyChooser";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
@@ -48,7 +49,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   nanovision: Skill = Skill.get("Double Nanovision");
   wish: Item = Item.get("Pocket Wish");
   mines: Location = Location.get("Itznotyerzitz Mine");
-  recreatedPath: boolean;
+  needRecalculate: boolean;
   burglar: Familiar = Familiar.get("Cat Burglar");
   faxAndGooseDupe: PossiblePath = new PossiblePath(1)
     .add(ResourceCategory.YELLOW_RAY)
@@ -117,7 +118,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   }
 
   createPaths(assumeUnstarted: boolean): void {
-    this.recreatedPath = this.getStatus() >= MountainStatus.TRAPPER_DEMANDS;
+    this.needRecalculate = this.getStatus() < MountainStatus.TRAPPER_DEMANDS;
     this.paths = [];
 
     const resourceTypes: ResourceCategory[] = [];
@@ -265,10 +266,6 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
     const status = this.getStatus();
 
     if (status < MountainStatus.TRAPPER_DEMANDS) {
-      if (path != null) {
-        //   throw "Status should only be called when we've finished getting the ore needed. This way we can correctly predict a path.";
-      }
-
       return QuestStatus.NOT_READY;
     }
 
@@ -280,8 +277,8 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!this.recreatedPath) {
-      this.createPaths(false);
+    if (this.needRecalculate) {
+      return QuestStatus.READY;
     }
 
     if (path == null) {
@@ -339,7 +336,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   }
 
   mustBeDone(): boolean {
-    if (this.canBackup()) {
+    if (this.canBackup() || this.needRecalculate) {
       return true;
     }
 
@@ -445,6 +442,17 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   }
 
   run(path: PossiblePath): QuestAdventure {
+    if (this.needRecalculate) {
+      return {
+        location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
+        run: () => {
+          this.createPaths(false);
+          AdventureFinder.recalculatePath();
+        },
+      };
+    }
+
     if (
       this.getOreRemaining() < 3 &&
       path.canUse(ResourceCategory.CAT_HEIST) &&

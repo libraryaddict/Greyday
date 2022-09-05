@@ -15,6 +15,8 @@ import {
   printHtml,
   Skill,
   Stat,
+  totalTurnsPlayed,
+  turnsPlayed,
 } from "kolmafia";
 import {
   hasCombatSkillActive,
@@ -23,7 +25,7 @@ import {
 import { QuestRegistry } from "./quests/QuestRegistry";
 import { QuestAdventure, QuestInfo, QuestStatus } from "./quests/Quests";
 import { PossiblePath } from "./typings/TaskInfo";
-import { SimmedPath } from "./typings/TaskManager";
+import { FigureOutPath, SimmedPath } from "./typings/TaskManager";
 import {
   Absorb,
   AbsorbsProvider,
@@ -41,6 +43,7 @@ export interface FoundAdventure {
 }
 
 export class AdventureFinder {
+  static instance: AdventureFinder;
   registry: QuestRegistry = new QuestRegistry();
   defeated: Map<Monster, Reabsorbed>;
   viableQuests: [QuestInfo, PossiblePath][];
@@ -49,6 +52,29 @@ export class AdventureFinder {
   goodAbsorbs: AdventureLocation[];
   questLocations: Location[];
   path: SimmedPath;
+
+  constructor() {
+    AdventureFinder.instance = this;
+  }
+
+  static recalculatePath() {
+    AdventureFinder.instance.calculatePath();
+  }
+
+  calculatePath() {
+    const simmedPath = new FigureOutPath().getPaths(this.getAllRawQuests());
+
+    if (simmedPath == null) {
+      if (this.path != null) {
+        print("Failed to calculate a path.. Staying on current path..", "gray");
+      }
+
+      return;
+    }
+
+    this.path = simmedPath;
+    this.path.printInfo();
+  }
 
   getAllRawQuests(): QuestInfo[] {
     return this.registry.getQuestsInOrder();
@@ -91,6 +117,11 @@ export class AdventureFinder {
 
   start() {
     this.setPreAbsorbs();
+
+    if (this.path.isRecalculateNeeded()) {
+      this.calculatePath();
+    }
+
     this.viableQuests = this.getDoableQuests();
     this.setAbsorbs();
     this.defeated = this.absorbs.getAbsorbedMonstersFromInstance();
@@ -414,15 +445,18 @@ export class AdventureFinder {
     }
   }
 
-  printStatus() {
+  printStatus(quests: [QuestInfo, PossiblePath][]) {
     const hasBlessing =
       haveEffect(Effect.get("Brother Corsican's Blessing")) +
         haveEffect(Effect.get("A Girl Named Sue")) >
       0;
 
-    for (const [quest, path] of this.viableQuests) {
+    for (const [quest, path] of quests) {
       let status = quest.status(path);
-      status = this.getModifiedStatus(status, quest.run(path), hasBlessing);
+
+      if (status != QuestStatus.NOT_READY && status != QuestStatus.COMPLETED) {
+        status = this.getModifiedStatus(status, quest.run(path), hasBlessing);
+      }
 
       const line =
         "<u>" +

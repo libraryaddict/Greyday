@@ -14,6 +14,7 @@ import {
   Location,
   maximize,
   myAscensions,
+  myLevel,
   myMeat,
   myMp,
   print,
@@ -90,7 +91,7 @@ export class GreyAdventurer {
     this.adventureFinder.start();
     const goodAdventure: FoundAdventure = this.adventureFinder.findGoodVisit();
 
-    this.adventureFinder.printStatus();
+    this.adventureFinder.printStatus(this.adventureFinder.viableQuests);
 
     if (goodAdventure == null) {
       print("Failed, should have printed an error..", "gray");

@@ -16,6 +16,8 @@ import {
   use,
   visitUrl,
 } from "kolmafia";
+import { GreyAdventurer } from "../../GreyAdventurer";
+import { AdventureFinder } from "../../GreyChooser";
 import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -277,6 +279,7 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
         ) {
           GreyPulls.tryPull(this.shirt);
           path.addUsed(ResourceCategory.PULL);
+          AdventureFinder.recalculatePath();
         }
       },
     };
@@ -487,6 +490,7 @@ class QuestUntinker implements QuestInfo {
 
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl("place.php?whichplace=forestvillage&action=fv_untinker");
       },

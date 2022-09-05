@@ -92,6 +92,7 @@ export class QuestDigitalKey implements QuestInfo {
     if (availableAmount(this.transfomer) == 0) {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           visitUrl("place.php?whichplace=forestvillage&action=fv_mystic");
 
@@ -108,6 +109,7 @@ export class QuestDigitalKey implements QuestInfo {
     ) {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           const toMake = Math.min(
             itemAmount(this.rPixel),
@@ -124,6 +126,7 @@ export class QuestDigitalKey implements QuestInfo {
     if (this.needPixels() <= 0 || pullsRemaining() == -1) {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           cliExecute("acquire " + this.key);
         },

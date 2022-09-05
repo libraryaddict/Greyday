@@ -2,6 +2,8 @@ import {
   Effect,
   getProperty,
   getRevision,
+  gitAtHead,
+  gitExists,
   haveEffect,
   Item,
   myAdventures,
@@ -32,10 +34,11 @@ import { lastCommitHash } from "./_git_commit";
 class GreyYouMain {
   adventures: GreyAdventurer;
   private reachedTower: string = "_greyReachedTower";
-  svn_name = "Kasekopf-loop-casual-branches-release";
+  svn_name = "libraryaddict-Greyday-branches-release";
+  git_name = "libraryaddict-Greyday-release";
 
   isRevisionPass(): boolean {
-    const required = 26658;
+    const required = 26718;
 
     if (getRevision() > 0 && getRevision() < required) {
       print(
@@ -139,10 +142,17 @@ class GreyYouMain {
       `grey`
     );
 
-    if (lastCommitHash !== undefined && svnExists(this.svn_name)) {
-      if (!svnAtHead(this.svn_name)) {
+    if (
+      lastCommitHash !== undefined &&
+      (svnExists(this.svn_name) || gitExists(this.git_name))
+    ) {
+      if (
+        gitExists(this.git_name)
+          ? !gitAtHead(this.git_name)
+          : !svnAtHead(this.svn_name)
+      ) {
         print(
-          'A newer version of this script is available and can be obtained with "svn update".',
+          'A newer version of this script is available and can be obtained with "git update".',
           "red"
         );
       } else {
@@ -197,7 +207,8 @@ class GreyYouMain {
       command != "absorbs" &&
       command != "run" &&
       !command.startsWith("run ") &&
-      command != "sim"
+      command != "sim" &&
+      command != "status"
     ) {
       print("Unknown command.");
       return;
@@ -262,21 +273,23 @@ class GreyYouMain {
       setProperty("autoSatisfyWithNPCs", "true");
     }
 
-    const simmedPath = new FigureOutPath().getPaths(
-      this.adventures.adventureFinder.getAllRawQuests()
-    );
+    this.adventures.adventureFinder.calculatePath();
 
-    if (simmedPath == null) {
-      print("Failed to find a way to accomplish!", "red");
+    if (this.adventures.adventureFinder.path == null) {
+      print("Failed to find a way to accomplish Greyday!", "red");
       return;
     }
 
-    this.adventures.adventureFinder.path = simmedPath;
-
-    print("Resources planning..");
-    simmedPath.printInfo();
-
-    if (command == "sim") {
+    if (command == "status") {
+      this.adventures.adventureFinder.setPreAbsorbs();
+      this.adventures.adventureFinder.path.thisPath.sort(([q1], [q2]) =>
+        q1.getId().localeCompare(q2.getId())
+      );
+      this.adventures.adventureFinder.printStatus(
+        this.adventures.adventureFinder.path.thisPath
+      );
+      return;
+    } else if (command == "sim") {
       this.adventures.runTurn(false);
       return;
     } else if (s[0] == "go" || s[0] == "run") {

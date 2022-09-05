@@ -41,6 +41,35 @@ export class SimmedPath {
     }
   }
 
+  isRecalculateNeeded(): boolean {
+    const unused = this.thisPath.find(
+      ([quest, path]) =>
+        path != null &&
+        path.resourcesAvailable.length > 0 &&
+        quest.status(path) == QuestStatus.COMPLETED
+    );
+
+    if (unused == null) {
+      return false;
+    }
+
+    print(
+      unused[0].getId() +
+        " reports that it has resources left over despite being finished. Resources: " +
+        unused[1].resourcesAvailable.map(
+          (r) =>
+            r.id +
+              " x " +
+              ResourceCategory[r.type] +
+              " (Uses " +
+              r.resourcesUsed ?? 1 + ")"
+        ),
+      "red"
+    );
+
+    return true;
+  }
+
   isThisBetterThan(compareAgainst: SimmedPath, eachTurnWorth: number): boolean {
     const oldProfit = compareAgainst.getProfitLost(eachTurnWorth);
     const newProfit = this.getProfitLost(eachTurnWorth);
