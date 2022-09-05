@@ -286,12 +286,14 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
     }
 
     if (
-      !this.doDuping() &&
       path.canUse(ResourceCategory.CAT_HEIST) &&
-      haveFamiliar(this.burglar) &&
       !this.isHeistReady() &&
       !this.hasHeistedAlready()
     ) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (path == this.faxAndGooseDupe && !this.doDuping()) {
       return QuestStatus.NOT_READY;
     }
 
@@ -530,9 +532,11 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
         } else if (path.canUse(ResourceCategory.CAT_HEIST)) {
           useFamiliar(this.burglar);
         }
+
         let macro: Macro = new Macro();
 
         const props = new PropertyManager();
+
         if (path.canUse(ResourceCategory.YELLOW_RAY)) {
           path.getResource(ResourceCategory.YELLOW_RAY).prepare(null, props);
           macro.step(path.getResource(ResourceCategory.YELLOW_RAY).macro());
@@ -600,6 +604,8 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
       return 8;
     } else if (this.neededOre() == this.chrome) {
       return 10;
+    } else {
+      throw "Unknown ore";
     }
   }
 
