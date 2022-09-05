@@ -2885,8 +2885,14 @@ function getZappables(item) {
   return items;
 }var
 
-Required;(function (Required) {Required["MUST"] = "You really should have these";Required["VERY_USEFUL"] = "Optional, but very very useful";Required["USEFUL"] = "Useful, but not major";Required["MINOR"] = "Minor, can skip";})(Required || (Required = {}));
+Required;(function (Required) {Required["MUST"] = "You really should have these";Required["VERY_USEFUL"] = "Optional, but very very useful";Required["USEFUL"] = "Useful, but not major";Required["MINOR"] = "Minor, can skip";})(Required || (Required = {}));var
 
+
+
+
+
+
+Type;(function (Type) {Type[Type["FREE"] = 0] = "FREE";Type[Type["IOTM"] = 1] = "IOTM";Type[Type["IOTM_EXTRA"] = 2] = "IOTM_EXTRA";})(Type || (Type = {}));
 
 
 
@@ -2895,21 +2901,28 @@ Required;(function (Required) {Required["MUST"] = "You really should have these"
 var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {GreyResources_classCallCheck(this, GreyRequirements);}GreyResources_createClass(GreyRequirements, [{ key: "hasRequired", value:
     function hasRequired() {
       var required = [];
-      var add = (
+      var add = function add(
+      type,
       name,
       desc,
       e,
-      owns) =>
-      {
+      owns)
+
+      {var unsupported = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
         if (name instanceof external_kolmafia_namespaceObject.Item) {
           owns = (0,external_kolmafia_namespaceObject.availableAmount)(name) + (0,external_kolmafia_namespaceObject.storageAmount)(name) > 0;
           name = name.name;
         }
 
-        required.push([name, desc, e, owns]);
+        if (unsupported) {
+          desc = "<s>" + desc + "</s> - <b><u>CURRENTLY UNSUPPORTED</u></b>";
+        }
+
+        required.push([type, name, desc, e, owns]);
       };
 
       add(
+      Type.IOTM,
       "Grey Goose",
       "Without this, Grey You isn't really feasible",
       Required.MUST,
@@ -2917,16 +2930,17 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
 
       add(
-      "Gelatinous Cubeling",
-      "Saves about 10 turns if you're not doing a tower break",
-      Required.VERY_USEFUL,
-      (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling")));
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Clan VIP Lounge key"),
+      "Used to remove Beaten Up, grab yellow rockets, fax and get the +fam exp effect!",
+      Required.MUST);
 
 
       add(
-      external_kolmafia_namespaceObject.Item.get("Combat Lover's Locket"),
-      "Used as a fax source, with some helpful enchants",
-      Required.VERY_USEFUL);
+      Type.FREE,
+      external_kolmafia_namespaceObject.Item.get("Yule Hatchet"),
+      "Gives +2 fam exp every fight, basically a must have",
+      Required.MUST);
 
 
       var locket = Object.keys((0,external_kolmafia_namespaceObject.getLocketMonsters)()).map((s) =>
@@ -2948,6 +2962,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
         if (monstersNeed.length > 0) {
           add(
+          Type.IOTM_EXTRA,
           "Combat Locket: " + monstersNeed.join(", "),
           "The script uses these in run, you are missing these from your combat locket",
           Required.MUST,
@@ -2957,6 +2972,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
         if (monstersHave.length > 0) {
           add(
+          Type.IOTM_EXTRA,
           "Combat Locket: " + monstersHave.join(", "),
           "The script uses these in run, you have these",
           Required.MUST,
@@ -2965,164 +2981,13 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
         }
       }
 
-      add(
-      external_kolmafia_namespaceObject.Item.get("Industrial Fire Extinguisher"),
-      "Can speed up by up 15 to 25 turns",
-      Required.USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Backup Camera"),
-      "Great for +ML, Init and sometimes Fantasy Bandits & Lobsters",
-      Required.VERY_USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("unwrapped knock-off retro superhero cape"),
-      "Great for crypts & tower",
-      Required.VERY_USEFUL);
-
-
-      add(
-      "Mayday Contract",
-      "Gives a nice +combat cape and starting 5k meat boost",
-      Required.USEFUL,
-      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("maydayContractOwned")));
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"),
-      "Awesome -Combat and +ML for Oil Peak",
-      Required.VERY_USEFUL);
-
-
-      add(
-      "Cosmic Bowling Ball",
-      "Banishes for all!",
-      Required.USEFUL,
-      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("hasCosmicBowlingBall")));
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("miniature crystal ball"),
-      "Great for speeding up predictions",
-      Required.VERY_USEFUL);
-
-
-      add(
-      "Short Order Cook",
-      "Great for tower killing and provides an absorb at the start of your run",
-      Required.USEFUL,
-      (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Short Order Cook")));
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Clan VIP Lounge key"),
-      "Used to remove Beaten Up, grab yellow rockets, fax and get the +fam exp effect!",
-      Required.MUST);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Fourth of May Cosplay Saber"),
-      "Great for faster lobsterfrogmen, ele res checks and for 1-2 yellow rays!",
-      Required.USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("protonic accelerator pack"),
-      "Used for some free delay, -5 combat, get a nice +2 fam exp offhand and as a MP restorer! With sweatpants as a stunner, this is great!",
-      Required.VERY_USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Familiar Scrapbook"),
-      "Great for power leveling after GYou ends, and the offhand +1 fam exp!",
-      Required.VERY_USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Powerful Glove"),
-      "If not tower breaking, great for white pixels. If you have cursed mag glass, saves 5 turns?",
-      Required.USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Cursed Magnifying Glass"),
-      "Only really used for minor delay burning, and lobsters + powerful glove",
-      Required.MINOR);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Cargo Cultist Shorts"),
-      "Used to fight Smut Orc to save 6 turns, or for the frat outfit to save pulls or 12 turns",
-      Required.USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("HOA regulation book"),
-      "Prefered over Space Trip safety headphones for the +2 res, saves 20? turns, especially on smut orcs",
-      Required.VERY_USEFUL);
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Space Trip safety headphones"),
-      "HOA regulation book is used instead when available, but this still saves 20? turns, especially on smut orcs",
-      Required.VERY_USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Mafia Thumb Ring"),
-      "Gives roughly 30 extra adventures over the course of your run",
-      Required.VERY_USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Yule Hatchet"),
-      "Gives +2 fam exp every fight, basically a must have",
-      Required.MUST);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Deck of lewd playing cards"),
-      "Speeds up Ron Protesters",
-      Required.USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("SongBoom&trade; BoomBox"),
-      "Awesome for startup meat & nuns, then passive Special Seasoning generation you can use/sell",
-      Required.VERY_USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("latte lovers member's mug"),
-      "Gives +3 familiar exp roughly 100 turns into the run",
-      Required.USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Designer Sweatpants"),
-      "Great for Ron Protesters, and restoring MP!",
-      Required.VERY_USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("June Cleaver"),
-      "Great for 1.5k meat, occasional 5 advs, smut orcs and the teachers pen which is +2 fam exp!",
-      Required.VERY_USEFUL);
-
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("mumming trunk"),
-      "Absolutely great for early game MP regeneration. Especially when you're tough on meat.",
-      Required.VERY_USEFUL);
-
-
       var poolSkill = Math.floor(
       2 * Math.sqrt((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("poolSharkCount"))));
 
 
       if (poolSkill < 10) {
         add(
+        Type.FREE,
         "Pool Skill", "You can train this up using 11-Leaf Clovers to have a permanant +10 across ascensions. You currently have a pool skill of ".concat(
         poolSkill, ", we want 10. Try looking up \"A Shark's Chum\" in the kol wiki."),
         Required.MUST,
@@ -3130,6 +2995,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
       } else {
         add(
+        Type.FREE,
         "Pool Skill",
         "You have fully trained up your pool skill, which is great for the Billards pool test!",
         Required.MUST,
@@ -3138,6 +3004,209 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
       }
 
       add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"),
+      "Awesome -Combat and +ML for Oil Peak",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("miniature crystal ball"),
+      "Great for speeding up predictions",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.FREE,
+      "Gelatinous Cubeling",
+      "Saves about 10 turns if you're not doing a tower break",
+      Required.VERY_USEFUL,
+      (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling")));
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Combat Lover's Locket"),
+      "Used as a fax source, with some helpful enchants",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Backup Camera"),
+      "Great for +ML, Init and sometimes Fantasy Bandits & Lobsters",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("unwrapped knock-off retro superhero cape"),
+      "Great for crypts & tower",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Designer Sweatpants"),
+      "Great for Ron Protesters, and restoring MP!",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("June Cleaver"),
+      "Great for 1.5k meat, occasional 5 advs, smut orcs and the teachers pen which is +2 fam exp!",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("mumming trunk"),
+      "Absolutely great for early game MP regeneration. Especially when you're tough on meat.",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("protonic accelerator pack"),
+      "Used for some free delay, -5 combat, get a nice +2 fam exp offhand and as a MP restorer! With sweatpants as a stunner, this is great!",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Familiar Scrapbook"),
+      "Great for power leveling after GYou ends, and the offhand +1 fam exp!",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("SongBoom&trade; BoomBox"),
+      "Awesome for startup meat & nuns, then passive Special Seasoning generation you can use/sell",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"),
+      "Great for starting as vole, then switching to Blender! Probably worth 20 turns! Don't forget to setup your Greyday settings!",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Deck of Every Card"),
+      "Used as a key source and as an initial meat source. Not worth buying as its very expensive",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.FREE,
+      external_kolmafia_namespaceObject.Item.get("HOA regulation book"),
+      "Prefered over Space Trip safety headphones for the +2 res, saves 20? turns, especially on smut orcs",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.FREE,
+      external_kolmafia_namespaceObject.Item.get("Space Trip safety headphones"),
+      "HOA regulation book is used instead when available, but this still saves 20? turns, especially on smut orcs",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.FREE,
+      external_kolmafia_namespaceObject.Item.get("Mafia Thumb Ring"),
+      "Gives roughly 30 extra adventures over the course of your run",
+      Required.VERY_USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Industrial Fire Extinguisher"),
+      "Can speed up by up 15 to 25 turns",
+      Required.USEFUL);
+
+
+      add(
+      Type.IOTM,
+      "Mayday Contract",
+      "Gives a nice +combat cape and starting 5k meat boost",
+      Required.USEFUL,
+      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("maydayContractOwned")));
+
+
+      add(
+      Type.IOTM,
+      "Cosmic Bowling Ball",
+      "Banishes for all!",
+      Required.USEFUL,
+      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("hasCosmicBowlingBall")));
+
+
+      add(
+      Type.IOTM,
+      "Short Order Cook",
+      "Great for tower killing and provides an absorb at the start of your run",
+      Required.USEFUL,
+      (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Short Order Cook")));
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Fourth of May Cosplay Saber"),
+      "Great for faster lobsterfrogmen, ele res checks and for 1-2 yellow rays!",
+      Required.USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Powerful Glove"),
+      "If not tower breaking, great for white pixels. If you have cursed mag glass, saves 5 turns?",
+      Required.USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Cargo Cultist Shorts"),
+      "Used to fight Smut Orc to save 6 turns, or for the frat outfit to save pulls or 12 turns",
+      Required.USEFUL);
+
+
+      add(
+      Type.FREE,
+      external_kolmafia_namespaceObject.Item.get("Deck of lewd playing cards"),
+      "Speeds up Ron Protesters",
+      Required.USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("latte lovers member's mug"),
+      "Gives +3 familiar exp roughly 100 turns into the run",
+      Required.USEFUL);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Greatest American Pants"),
+      "Free runs",
+      Required.USEFUL,
+      null,
+      true);
+
+
+      add(
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Pantsgiving"),
+      "Gives +2 all res, 10 items which can help save turncount and stacks up stomach size increasers",
+      Required.USEFUL);
+
+
+      add(
+      Type.IOTM,
       "Melodramedary",
       "Saves 3 adventures for desert!",
       Required.MINOR,
@@ -3145,6 +3214,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
 
       add(
+      Type.IOTM,
       "Cat Burglar",
       "Only used rarely, generally not worth picking up but does sometimes save 20k of resources in meat!",
       Required.MINOR,
@@ -3152,12 +3222,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
 
       add(
-      external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"),
-      "Great for starting as vole, then switching to Blender! Probably worth 20 turns! Don't forget to setup your Greyday settings!",
-      Required.VERY_USEFUL);
-
-
-      add(
+      Type.IOTM,
       "Fantasyrealm",
       "This isn't worth buying as it devalues Lucky Gold Ring, but if you do have it; Then it's useful as another key source.",
       Required.MINOR,
@@ -3165,100 +3230,82 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
 
       add(
-      external_kolmafia_namespaceObject.Item.get("Deck of Every Card"),
-      "Used as a key source and as an initial meat source. Not worth buying as its very expensive",
-      Required.VERY_USEFUL);
+      Type.IOTM,
+      external_kolmafia_namespaceObject.Item.get("Cursed Magnifying Glass"),
+      "Only really used for minor delay burning, and lobsters + powerful glove",
+      Required.MINOR);
 
 
       add(
+      Type.IOTM,
       "Gingerbread City",
-      "Useful as another key source - <b><u>CURRENTLY UNSUPPORTED</u></b>",
+      "Useful as another key source",
       Required.MINOR,
-      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("gingerbreadCityAvailable")));
+      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("gingerbreadCityAvailable")),
+      true);
 
 
       add(
+      Type.IOTM,
       "Piraterealm",
-      "Useful as another key source - <b><u>CURRENTLY UNSUPPORTED</u></b>",
+      "Useful as another key source",
       Required.MINOR,
-      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("prAlways")));
+      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("prAlways")),
+      true);
 
 
       add(
+      Type.IOTM,
       external_kolmafia_namespaceObject.Item.get("Kramco Sausage-o-Matic&trade;"),
       "Useful as a delay burner, and for another 23 adventures a day",
       Required.MINOR);
 
 
       add(
+      Type.IOTM,
       "Voting Booth",
       "Iotm for voting, +3 hot res, +25% moxie buff, has interaction with powerful glove for lobsterfrogman, and gives 3 free delay burns",
       Required.MINOR,
       (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("voteAlways")));
 
 
-      add(
-      external_kolmafia_namespaceObject.Item.get("Greatest American Pants"),
-      "Free runs - <b><u>CURRENTLY UNSUPPORTED</u></b>",
-      Required.USEFUL);
+      required.sort((_ref, _ref2) => {var _ref3 = GreyResources_slicedToArray(_ref, 2),t1 = _ref3[0],r1 = _ref3[1];var _ref4 = GreyResources_slicedToArray(_ref2, 2),t2 = _ref4[0],r2 = _ref4[1];return (
+          t1 == t2 ? r1.localeCompare(r2) : t1 - t2);});
 
-
-      add(
-      external_kolmafia_namespaceObject.Item.get("Pantsgiving"),
-      "Gives +2 all res, 10 items which can help save turncount and stacks up stomach size increasers",
-      Required.USEFUL);
-
-
-      required.sort((r1, r2) => r1[0].localeCompare(r2[0]));
 
       (0,external_kolmafia_namespaceObject.printHtml)(
-      '<div style="text-align: center;">======= Greyday Requirements =======</div>');
+      '<div style="text-align: center;">======= Greyday Requirements =======<br><font color="gray">Note that this has significant overlap with loopgyou</font></div>');
 
 
       var tick = "<font color='green'>✔</font>";
       var cross = "<font color='red'>✘</font>";var _loop = function _loop() {
 
-        var e = _arr[_i];
-        var color = "green";
-
-        if (e == Required.MUST) {
-          color = "red";
-        } else if (e == Required.VERY_USEFUL) {
-          color = "#BC3823";
-        } else if (e == Required.USEFUL) {
-          color = "blue";
-        } else if (e == Required.MINOR) {
-          color = "gray";
-        } else {
-          return "continue";
-        }
-
+        var e = _arr2[_i2];
         if (e != Required.MUST) {
           (0,external_kolmafia_namespaceObject.printHtml)("<hr>");
-        } else {
-          (0,external_kolmafia_namespaceObject.printHtml)("");
         }
 
-        (0,external_kolmafia_namespaceObject.printHtml)("<div style=\"text-align: center;\"> ".concat(e, " </div>"));
-        var values = required.filter((r) => r[2] == e);var _iterator4 = GreyResources_createForOfIteratorHelper(
+        (0,external_kolmafia_namespaceObject.printHtml)("<div style=\"text-align: center;\"><font color=\"blue\">".concat(
+        e, "</font></div>"));
 
-        values),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var _step4$value = GreyResources_slicedToArray(_step4.value, 4),name = _step4$value[0],desc = _step4$value[1],has = _step4$value[3];
+        var values = required.filter((r) => r[3] == e);var _iterator4 = GreyResources_createForOfIteratorHelper(
+
+        values),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var _step4$value = GreyResources_slicedToArray(_step4.value, 5),name = _step4$value[1],desc = _step4$value[2],has = _step4$value[4];
             (0,external_kolmafia_namespaceObject.printHtml)("".concat(
             has ? tick : cross, " <font color='").concat(
             has ? "" : "red", "'>").concat(
             name, "</font> <font color='gray'>=> ").concat(desc, "</font>"));
 
-          }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}};for (var _i = 0, _arr = Object.values(Required); _i < _arr.length; _i++) {var _ret = _loop();if (_ret === "continue") continue;
+          }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}};for (var _i2 = 0, _arr2 = Object.values(Required); _i2 < _arr2.length; _i2++) {_loop();
       }
 
-      if (required.find((r) => r[3] == false) == null) {
+      if (required.find((r) => r[4] == false) == null) {
         (0,external_kolmafia_namespaceObject.printHtml)(
         "<center color='green'>Wow! You have everything in here!</center>");
 
       }
 
       (0,external_kolmafia_namespaceObject.printHtml)('<div style="text-align: center;">===============</div>');
-      // TODO Camelcalf?
     } }]);return GreyRequirements;}();
 ;// CONCATENATED MODULE: ./src/quests/council/crypts/QuestL7CryptPull.ts
 function QuestL7CryptPull_slicedToArray(arr, i) {return QuestL7CryptPull_arrayWithHoles(arr) || QuestL7CryptPull_iterableToArrayLimit(arr, i) || QuestL7CryptPull_unsupportedIterableToArray(arr, i) || QuestL7CryptPull_nonIterableRest();}function QuestL7CryptPull_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestL7CryptPull_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL7CryptPull_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL7CryptPull_arrayLikeToArray(o, minLen);}function QuestL7CryptPull_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL7CryptPull_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function QuestL7CryptPull_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestL7CryptPull_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL7CryptPull_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL7CryptPull_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL7CryptPull_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL7CryptPull_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL7CryptPull_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL7CryptPull_setPrototypeOf(subClass, superClass);}function QuestL7CryptPull_setPrototypeOf(o, p) {QuestL7CryptPull_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL7CryptPull_setPrototypeOf(o, p);}function QuestL7CryptPull_createSuper(Derived) {var hasNativeReflectConstruct = QuestL7CryptPull_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL7CryptPull_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL7CryptPull_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL7CryptPull_possibleConstructorReturn(this, result);};}function QuestL7CryptPull_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL7CryptPull_assertThisInitialized(self);}function QuestL7CryptPull_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL7CryptPull_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL7CryptPull_getPrototypeOf(o) {QuestL7CryptPull_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL7CryptPull_getPrototypeOf(o);}function QuestL7CryptPull_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
@@ -13423,6 +13470,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.transfomer) == 0) {
         return {
           location: null,
+          outfit: GreyOutfit.IGNORE_OUTFIT,
           run: () => {
             (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=forestvillage&action=fv_mystic");
 
@@ -13439,6 +13487,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       {
         return {
           location: null,
+          outfit: GreyOutfit.IGNORE_OUTFIT,
           run: () => {
             var toMake = Math.min(
             (0,external_kolmafia_namespaceObject.itemAmount)(this.rPixel),
@@ -13455,6 +13504,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       if (this.needPixels() <= 0 || (0,external_kolmafia_namespaceObject.pullsRemaining)() == -1) {
         return {
           location: null,
+          outfit: GreyOutfit.IGNORE_OUTFIT,
           run: () => {
             (0,external_kolmafia_namespaceObject.cliExecute)("acquire " + this.key);
           } };
@@ -18229,12 +18279,13 @@ function QuestL8MountainOre_toConsumableArray(arr) {return QuestL8MountainOre_ar
 
 
 
+
 var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_inherits(QuestL8MountainOre, _TaskInfo);var _super = QuestL8MountainOre_createSuper(QuestL8MountainOre);function QuestL8MountainOre() {var _this;QuestL8MountainOre_classCallCheck(this, QuestL8MountainOre);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "mountainMan",
     external_kolmafia_namespaceObject.Monster.get("Mountain Man"));QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "goose",
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "nanovision",
     external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "wish",
     external_kolmafia_namespaceObject.Item.get("Pocket Wish"));QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "mines",
-    external_kolmafia_namespaceObject.Location.get("Itznotyerzitz Mine"));QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "recreatedPath", void 0);QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "burglar",
+    external_kolmafia_namespaceObject.Location.get("Itznotyerzitz Mine"));QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "needRecalculate", void 0);QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "burglar",
 
     external_kolmafia_namespaceObject.Familiar.get("Cat Burglar"));QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "faxAndGooseDupe",
     new PossiblePath(1).
@@ -18304,7 +18355,7 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
     } }, { key: "createPaths", value:
 
     function createPaths(assumeUnstarted) {
-      this.recreatedPath = this.getStatus() >= MountainStatus.TRAPPER_DEMANDS;
+      this.needRecalculate = this.getStatus() < MountainStatus.TRAPPER_DEMANDS;
       this.paths = [];
 
       var resourceTypes = [];
@@ -18452,10 +18503,6 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
       var status = this.getStatus();
 
       if (status < MountainStatus.TRAPPER_DEMANDS) {
-        if (path != null) {
-          //   throw "Status should only be called when we've finished getting the ore needed. This way we can correctly predict a path.";
-        }
-
         return QuestStatus.NOT_READY;
       }
 
@@ -18467,8 +18514,8 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
         return QuestStatus.COMPLETED;
       }
 
-      if (!this.recreatedPath) {
-        this.createPaths(false);
+      if (this.needRecalculate) {
+        return QuestStatus.READY;
       }
 
       if (path == null) {
@@ -18526,7 +18573,7 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
     } }, { key: "mustBeDone", value:
 
     function mustBeDone() {
-      if (this.canBackup()) {
+      if (this.canBackup() || this.needRecalculate) {
         return true;
       }
 
@@ -18632,6 +18679,17 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
     } }, { key: "run", value:
 
     function run(path) {
+      if (this.needRecalculate) {
+        return {
+          location: null,
+          outfit: GreyOutfit.IGNORE_OUTFIT,
+          run: () => {
+            this.createPaths(false);
+            AdventureFinder.recalculatePath();
+          } };
+
+      }
+
       if (
       this.getOreRemaining() < 3 &&
       path.canUse(ResourceCategory.CAT_HEIST) &&
@@ -21367,7 +21425,23 @@ var QuestMoonSignAbsorb = /*#__PURE__*/function (_TaskInfo) {QuestMoonSignAbsorb
         return QuestStatus.NOT_READY;
       }
 
-      if (this.toAbsorb.length == 0 || !path.canUse(ResourceCategory.FAXER)) {
+      if (this.toAbsorb.length == 0) {
+        return QuestStatus.COMPLETED;
+      }
+
+      // If we're not in the moon sign
+      if (!this.isInSign()) {
+        // If we will be in the sign eventually
+        if (this.willMoonTune(false)) {
+          return QuestStatus.NOT_READY;
+        }
+
+        // If we will not be in the sign eventually and can't hit this monster
+        if (!path.canUse(ResourceCategory.FAXER)) {
+          return QuestStatus.COMPLETED;
+        }
+      } else if ((0,external_kolmafia_namespaceObject.getProperty)("moonTuned") == "true") {
+        // If we've tuned to this sign, don't bother handling this like a quest
         return QuestStatus.COMPLETED;
       }
 
@@ -21415,7 +21489,7 @@ var QuestMoonSignAbsorb = /*#__PURE__*/function (_TaskInfo) {QuestMoonSignAbsorb
 
     function createPaths(assumeUnstarted) {
       if (this.isInSign() || this.willMoonTune(assumeUnstarted)) {
-        this.paths = null;
+        this.paths = [new PossiblePath(3)];
         return;
       }
 
@@ -22982,6 +23056,8 @@ function QuestNpcStuff_inherits(subClass, superClass) {if (typeof superClass !==
 
 
 
+
+
 var QuestNPCStuff = /*#__PURE__*/function () {function QuestNPCStuff() {QuestNpcStuff_classCallCheck(this, QuestNPCStuff);QuestNpcStuff_defineProperty(this, "children",
     [
     new QuestMeatSmith(),
@@ -23230,6 +23306,7 @@ QuestGnomeTrainer = /*#__PURE__*/function (_TaskInfo) {QuestNpcStuff_inherits(Qu
           {
             GreyPulls.tryPull(this.shirt);
             path.addUsed(ResourceCategory.PULL);
+            AdventureFinder.recalculatePath();
           }
         } };
 
@@ -23440,6 +23517,7 @@ QuestUntinker = /*#__PURE__*/function () {function QuestUntinker() {QuestNpcStuf
 
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=forestvillage&action=fv_untinker");
         } };
@@ -25067,6 +25145,11 @@ var QuestRegistry = /*#__PURE__*/function () {
 
       { id: "Council / Larva" },
 
+      // Get this done early so we can start flyering
+      { id: "Council / War / Frat Outfit" },
+      { id: "Council / War / Start" },
+      { id: "Council / War / Flyers" },
+
       // We get +3 hot resist from raging bull
       // +3 stench resist from pine bat
       // And the other two skills are manor located
@@ -25089,11 +25172,6 @@ var QuestRegistry = /*#__PURE__*/function () {
       { id: "Council / Friars / Elbow" },
       { id: "Council / Friars / Neck" },
       { id: "Council / Friars / TurnIn" },
-
-      // Get this done early so we can start flyering
-      { id: "Council / War / Frat Outfit" },
-      { id: "Council / War / Start" },
-      { id: "Council / War / Flyers" },
 
       // If we have the skill, then this doesn't need prioritizing as such
       {
@@ -25294,6 +25372,571 @@ var QuestRegistry = /*#__PURE__*/function () {
 
       return quests;
     } }]);return QuestRegistry;}();
+;// CONCATENATED MODULE: ./src/typings/TaskManager.ts
+function TaskManager_toConsumableArray(arr) {return TaskManager_arrayWithoutHoles(arr) || TaskManager_iterableToArray(arr) || TaskManager_unsupportedIterableToArray(arr) || TaskManager_nonIterableSpread();}function TaskManager_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskManager_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function TaskManager_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return TaskManager_arrayLikeToArray(arr);}function TaskManager_slicedToArray(arr, i) {return TaskManager_arrayWithHoles(arr) || TaskManager_iterableToArrayLimit(arr, i) || TaskManager_unsupportedIterableToArray(arr, i) || TaskManager_nonIterableRest();}function TaskManager_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskManager_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function TaskManager_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskManager_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskManager_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskManager_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskManager_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskManager_arrayLikeToArray(o, minLen);}function TaskManager_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskManager_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskManager_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskManager_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskManager_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskManager_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskManager_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} // The biggest failures are
+// 1. Key sources, we want to get 3 key sources. Some key sources might return more than 1
+// 2. Possible paths. Sometimes there's two questlines we can pick
+// 3. Crypts, the boat technically means the boat should be in all four crypts or something
+// 4. Giving negative adventures, if we provide -50 then we expect to save 50 advs.
+// 5. Paths that have so many variables on what could be provided, but basically just initial pulls
+// 6. Paths that are a one and done, but the quest can still be done
+// 7. Quests that are optional, but entirely depend on the path being picked. We can either provide a dummy path, or something else
+
+
+
+
+
+
+
+var SimmedPath = /*#__PURE__*/function () {
+
+
+
+
+
+
+
+  function SimmedPath(assumeUnused) {var skip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;TaskManager_classCallCheck(this, SimmedPath);TaskManager_defineProperty(this, "resourcesRemaining", new Map());TaskManager_defineProperty(this, "resourcesUsed", []);TaskManager_defineProperty(this, "thisPath", []);TaskManager_defineProperty(this, "totalCost", void 0);TaskManager_defineProperty(this, "advsSaved", void 0);TaskManager_defineProperty(this, "profitLost", void 0);
+    if (skip) {
+      return;
+    }var _iterator = TaskManager_createForOfIteratorHelper(
+
+    getResources()),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var resource = _step.value;
+        this.resourcesRemaining.set(
+        resource.id,
+        getResourcesLeft(resource.id, assumeUnused));
+
+      }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+  }TaskManager_createClass(SimmedPath, [{ key: "isRecalculateNeeded", value:
+
+    function isRecalculateNeeded() {
+      var unused = this.thisPath.find(
+      (_ref) => {var _ref2 = TaskManager_slicedToArray(_ref, 2),quest = _ref2[0],path = _ref2[1];return (
+          path != null &&
+          path.resourcesAvailable.length > 0 &&
+          quest.status(path) == QuestStatus.COMPLETED);});
+
+
+      if (unused == null) {
+        return false;
+      }
+
+      (0,external_kolmafia_namespaceObject.print)(
+      unused[0].getId() +
+      " reports that it has resources left over despite being finished. Resources: " +
+      unused[1].resourcesAvailable.map(
+      (r) => {var _ref3;return (_ref3 =
+        r.id +
+        " x " +
+        ResourceCategory[r.type] +
+        " (Uses " +
+        r.resourcesUsed) !== null && _ref3 !== void 0 ? _ref3 : 1 + ")";}),
+
+      "red");
+
+
+      return true;
+    } }, { key: "isThisBetterThan", value:
+
+    function isThisBetterThan(compareAgainst, eachTurnWorth) {
+      var oldProfit = compareAgainst.getProfitLost(eachTurnWorth);
+      var newProfit = this.getProfitLost(eachTurnWorth);
+
+      if (oldProfit[0] + oldProfit[1] < newProfit[0] + newProfit[1]) {
+        return false;
+      }
+
+      return true;
+    } }, { key: "printInfo", value:
+
+    function printInfo() {var _this = this;
+      var used = new Map();var _iterator2 = TaskManager_createForOfIteratorHelper(
+
+      this.resourcesUsed),_step2;try {var _loop = function _loop() {var _step2$value = TaskManager_slicedToArray(_step2.value, 2),quest = _step2$value[0],resource = _step2$value[1];
+          var key = resource.id;
+
+          if (!used.has(key)) {
+            used.set(key, []);
+          }
+
+          var id = quest.getId();
+
+          var pair = used.get(key).find((_ref8) => {var _ref9 = TaskManager_slicedToArray(_ref8, 1),p = _ref9[0];return p == id;});
+
+          if (pair == null) {
+            var path = _this.thisPath.find((_ref10) => {var _ref11 = TaskManager_slicedToArray(_ref10, 2),qu = _ref11[0],pa = _ref11[1];return qu.getId() === id;})[1];
+
+            used.get(key).push(pair = [id, 0, path.getAverageTurns()]);
+          }
+
+          pair[1] = pair[1] + 1;};for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {_loop();
+        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+
+      var index1 = 0;
+
+      used.forEach((details, k) => {
+        index1++;
+
+        (0,external_kolmafia_namespaceObject.printHtml)("<font color='blue'>".concat(
+        k, " x ").concat(details.
+        map((_ref4) => {var _ref5 = TaskManager_slicedToArray(_ref4, 2),amount = _ref5[1];return amount;}).
+        reduce((d1, d2) => d1 + d2, 0), "</font> => ").concat(details.
+        map(
+        (_ref6, index) => {var _ref7 = TaskManager_slicedToArray(_ref6, 3),quest = _ref7[0],amount = _ref7[1],turns = _ref7[2];return "<font color='".concat(
+
+          (index + index1) % 2 == 0 ? "gray" : "", "'>").concat(
+          quest, " x ").concat(amount, " (").concat(turns, " advs)</font>");}).
+
+        join(", ")));
+
+      });
+
+      var advs = this.getAdvs();
+
+      (0,external_kolmafia_namespaceObject.print)(
+      "With mpa of " +
+      GreySettings.greyValueOfAdventure +
+      " and using estimated " +
+      Math.floor(this.getTotalCost()) +
+      " meat of resources, save " +
+      advs[0] +
+      " to " +
+      advs[1] +
+      " adventures compared to the worst alternatives");
+
+    } }, { key: "setPath", value:
+
+    function setPath(paths) {
+      this.thisPath = paths;
+    } }, { key: "assignResources", value:
+
+    function assignResources() {var _this2 = this;var _iterator3 = TaskManager_createForOfIteratorHelper(
+      this.resourcesUsed),_step3;try {var _loop2 = function _loop2() {var _step3$value = TaskManager_slicedToArray(_step3.value, 2),quest = _step3$value[0],resource = _step3$value[1];
+          var _this2$thisPath$find = _this2.thisPath.find((_ref12) => {var _ref13 = TaskManager_slicedToArray(_ref12, 1),q = _ref13[0];return q === quest;}),_this2$thisPath$find2 = TaskManager_slicedToArray(_this2$thisPath$find, 2),path = _this2$thisPath$find2[1];
+
+          path.resourcesAvailable.push(resource);};for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {_loop2();
+        }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+    } }, { key: "getAdvs", value:
+
+    function getAdvs() {
+      if (this.advsSaved == null) {
+        this.advsSaved = [0, 0];var _iterator4 = TaskManager_createForOfIteratorHelper(
+
+        this.thisPath),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var _step4$value = TaskManager_slicedToArray(_step4.value, 2),path = _step4$value[1];
+            if (path == null) {
+              continue;
+            }
+
+            this.advsSaved[0] += path.advsSavedMin;
+            this.advsSaved[1] += path.advsSavedMax;
+          }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
+      }
+
+      return this.advsSaved;
+    } }, { key: "clone", value:
+
+    function clone() {
+      var newPath = new SimmedPath(false, true);
+      newPath.resourcesRemaining = new Map(this.resourcesRemaining);
+      newPath.resourcesUsed = TaskManager_toConsumableArray(this.resourcesUsed);
+      newPath.thisPath = TaskManager_toConsumableArray(this.thisPath);
+
+      return newPath;
+    } }, { key: "addUse", value:
+
+    function addUse(quest, resource, chance) {
+      this.resourcesUsed.push([quest, resource, chance]);
+      this.resourcesRemaining.set(
+      resource.id,
+      this.resourcesRemaining.get(resource.id) - (resource.resourcesUsed || 1));
+
+    } }, { key: "canUse", value:
+
+    function canUse(resource) {
+      return (
+        this.resourcesRemaining.get(resource.id) >= (resource.resourcesUsed || 1));
+
+    } }, { key: "getTotalCost", value:
+
+    function getTotalCost() {
+      this.totalCost = this.thisPath.
+      map((p) => p[1] != null ? p[1].miscMeat : 0).
+      reduce((p, n) => p + n, 0);var _iterator5 = TaskManager_createForOfIteratorHelper(
+
+      this.resourcesUsed),_step5;try {for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {var resource = _step5.value;
+          this.totalCost += resource[1].worthInAftercore * 1; //resource[2];
+        }} catch (err) {_iterator5.e(err);} finally {_iterator5.f();}
+
+      return this.totalCost;
+    }
+
+    /**
+     * Returns how much profit was lost following this path
+     */ }, { key: "getProfitLost", value:
+    function getProfitLost(advsWorth) {
+      if (this.profitLost == null) {
+        // Costs are a negative
+        var meatGain = this.getTotalCost();
+
+        this.profitLost = [
+        meatGain - this.getAdvs()[0] * advsWorth,
+        meatGain - this.getAdvs()[1] * advsWorth];
+
+      }
+
+      return this.profitLost;
+    } }]);return SimmedPath;}();
+
+
+var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskManager_classCallCheck(this, FigureOutPath);TaskManager_defineProperty(this, "resources",
+    getResources());}TaskManager_createClass(FigureOutPath, [{ key: "getPaths", value:
+
+    function getPaths(quests) {var _this3 = this;var assumeUnstarted = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      (0,external_kolmafia_namespaceObject.print)(
+      "Now calculating resources.. " + (
+      GreySettings.greyBreakAtTower && !assumeUnstarted ?
+      "" :
+      "As you're not breaking at tower, this might take a while.."));
+
+      var allPaths = [];
+      var miscPaths = [];
+      var uncompleteable = [];
+
+      // What we need to do is sort the paths by the most profitable. Ideally we want to eliminate the ones that are just not feasible asap.
+      // If it wants 2 faxes but we only want 1, then we can immediately eliminate the least profitable.
+      var _iterator6 = TaskManager_createForOfIteratorHelper(quests),_step6;try {var _loop3 = function _loop3() {var quest = _step6.value;
+          var q = quest;
+
+          if (q.getPossiblePaths == null) {
+            miscPaths.push(quest);
+            return "continue";
+          }
+
+          if (q.createPaths != null) {
+            q.createPaths(assumeUnstarted);
+          }
+
+          var paths = q.getPossiblePaths();
+
+          if (paths == null) {
+            //miscPaths.push(quest);
+            return "continue";
+          }
+
+          if (paths.length == 0) {
+            (0,external_kolmafia_namespaceObject.print)(
+            "We should never have empty paths, assume this is a bug. If we want to avoid doing the quest, return null and status() instead.",
+            "red");
+
+          }
+
+          if (
+          quest.level() >= 1 &&
+          !assumeUnstarted &&
+          quest.status() == QuestStatus.COMPLETED)
+          {
+            return "continue";
+          }var _iterator8 = TaskManager_createForOfIteratorHelper(
+
+          paths),_step8;try {var _loop4 = function _loop4() {var path = _step8.value;var _iterator10 = TaskManager_createForOfIteratorHelper(
+              ResourceIds),_step10;try {var _loop5 = function _loop5() {var res = _step10.value;
+                  if (path.ignoreResources.includes(res)) {
+                    return "continue";
+                  }
+
+                  var possibles = getResources().filter(
+                  (r) => r.id == res && path.canUse(r.type) > 0);
+
+
+                  if (possibles.length <= 1) {
+                    return "continue";
+                  }
+
+                  //print("Better check " + quest.getId() + " for " + res);
+                };for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {var _ret2 = _loop5();if (_ret2 === "continue") continue;}} catch (err) {_iterator10.e(err);} finally {_iterator10.f();}};for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {_loop4();
+            }} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}
+
+          paths = paths.filter((p) => {
+            var resources = new Map();var _iterator9 = TaskManager_createForOfIteratorHelper(
+
+            ResourceIds),_step9;try {for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {var resourceId = _step9.value;
+                resources.set(
+                resourceId,
+                getResourcesLeft(resourceId, assumeUnstarted));
+
+              }} catch (err) {_iterator9.e(err);} finally {_iterator9.f();}
+
+            var resourcesToComplete = _this3.getResourcesToComplete(
+            resources,
+            quest,
+            p);
+
+
+            if (resourcesToComplete == null) {
+              return false;
+            }
+
+            p.setRoughPathCost(resourcesToComplete);
+
+            return true;
+          });
+
+          if (paths.length == 0) {
+            uncompleteable.push(quest);
+            return "continue";
+          }
+
+          // Now we figure out how many advs each path would save compared to the other
+          var mostAdvsCouldveUsed = paths.
+          map((p) => [p.advsSavedMin, p.advsSavedMax]).
+          reduce((p, n) => [Math.max(p[0], n[0]), Math.max(p[1], n[1])]);
+
+          paths.forEach((p) => {
+            // If this path would take 2 to 5 adventures
+            // And the most adventures are 1 to 30
+            // That means we would profit -1 to 25
+            p.advsSavedMin = mostAdvsCouldveUsed[0] - p.advsSavedMin;
+            p.advsSavedMax = mostAdvsCouldveUsed[1] - p.advsSavedMax;
+          });
+
+          paths.sort((p1, p2) => p1.getCostPerAdv() - p2.getCostPerAdv());
+
+          var cheapestNoResource = paths.find(
+          (p) => p.resourcesNeeded.length == 0);
+
+
+          if (cheapestNoResource != null) {
+            var meatSavedOnPath =
+            cheapestNoResource.pathCost -
+            (cheapestNoResource.advsSavedMin + cheapestNoResource.advsSavedMax) /
+            2 *
+            GreySettings.greyValueOfAdventure;
+          }
+
+          allPaths.push([quest, paths]);};for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {var _ret = _loop3();if (_ret === "continue") continue;
+        }} catch (err) {_iterator6.e(err);} finally {_iterator6.f();}
+
+      if (uncompleteable.length > 0) {var _iterator7 = TaskManager_createForOfIteratorHelper(
+        uncompleteable),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var q = _step7.value;
+            (0,external_kolmafia_namespaceObject.print)(
+            "Unable to plot a path! Not enough resources to complete `" +
+            q.getId() +
+            "`",
+            "red");
+
+            var combos = q.
+            getPossiblePaths().
+            map((p) =>
+            p.resourcesNeeded.map(
+            (_ref14) => {var _ref15 = TaskManager_slicedToArray(_ref14, 2),r = _ref15[0],amount = _ref15[1];return ResourceCategory[r] + " x " + amount;}));
+
+
+
+            (0,external_kolmafia_namespaceObject.print)("Combinations of resources needed are: ".concat(combos.join(" OR ")));
+          }} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}
+
+        return null;
+      }
+
+      allPaths.sort((_ref16, _ref17) => {var _ref18 = TaskManager_slicedToArray(_ref16, 2),_ref18$ = TaskManager_slicedToArray(_ref18[1], 1),p1 = _ref18$[0];var _ref19 = TaskManager_slicedToArray(_ref17, 2),_ref19$ = TaskManager_slicedToArray(_ref19[1], 1),p2 = _ref19$[0];
+        return p1.getCostPerAdv() - p2.getCostPerAdv();
+      });
+
+      var simmedPath = this.doAttempt(
+      new SimmedPath(assumeUnstarted),
+      0,
+      allPaths);
+
+
+      if (simmedPath == null) {
+        return null;
+      }
+
+      simmedPath.assignResources();
+
+      miscPaths.forEach((q) => {
+        simmedPath.thisPath.push([q, null]);
+      });
+
+      return simmedPath;
+    } }, { key: "doAttempt", value:
+
+    function doAttempt(
+    currentPath,
+    index,
+    allPaths)
+    {var _this4 = this;
+      var _allPaths$index = TaskManager_slicedToArray(allPaths[index++], 2),quest = _allPaths$index[0],paths = _allPaths$index[1];
+
+      var possible =
+
+
+
+      [];var _iterator11 = TaskManager_createForOfIteratorHelper(
+
+      paths),_step11;try {for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {var path = _step11.value;
+          var resources =
+          this.getResourcesToComplete(
+          currentPath.resourcesRemaining,
+          quest,
+          path);
+
+
+          if (resources == null) {
+            continue;
+          }
+
+          var resourceCost = resources.
+          map((r) => r[1].worthInAftercore * r[2]).
+          reduce((p, n) => p + n, 0);
+          var extraAdvsWorth =
+          GreySettings.greyValueOfAdventure * (
+          (path.advsSavedMax - path.advsSavedMin) / 2 + path.advsSavedMin);
+
+          possible.push([
+          path,
+          resources,
+          path.miscMeat + resourceCost - extraAdvsWorth]);
+
+        }} catch (err) {_iterator11.e(err);} finally {_iterator11.f();}
+
+      possible.sort((_ref20, _ref21) => {var _ref22 = TaskManager_slicedToArray(_ref20, 3),meat1 = _ref22[2];var _ref23 = TaskManager_slicedToArray(_ref21, 3),meat2 = _ref23[2];return meat1 - meat2;});
+
+      var tried = 0;
+      var best;
+      var addPath = (
+      simmed,
+      quest,
+      path) =>
+      {
+        if (path instanceof PossibleMultiPath) {var _iterator12 = TaskManager_createForOfIteratorHelper(
+          path.subpaths),_step12;try {for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {var _step12$value = TaskManager_slicedToArray(_step12.value, 2),_quest = _step12$value[0],p = _step12$value[1];
+              addPath(simmed, _quest, p);
+            }} catch (err) {_iterator12.e(err);} finally {_iterator12.f();}
+        } else {
+          simmed.thisPath.push([quest, path]);
+        }
+      };var _loop6 = function _loop6() {
+
+        var _possible$_i = TaskManager_slicedToArray(_possible[_i2], 2),path = _possible$_i[0],resources = _possible$_i[1];
+        var simmed = currentPath.clone();
+
+        addPath(simmed, quest, path);
+
+        resources.forEach((_ref24) => {var _ref25 = TaskManager_slicedToArray(_ref24, 3),quest = _ref25[0],resource = _ref25[1],amount = _ref25[2];
+          simmed.addUse(quest, resource, amount);
+        });
+
+        tried++;
+
+        if (index < allPaths.length) {
+          simmed = _this4.doAttempt(simmed, index, allPaths);
+
+          if (simmed == null) {
+            return "continue";
+          }
+        }
+
+        if (
+        best == null ||
+        simmed.isThisBetterThan(best, GreySettings.greyValueOfAdventure))
+        {
+          best = simmed;
+        }
+
+        if (tried >= (path.pathCost <= 5000 ? 1 : 2)) {
+          return { v: best };
+        }};for (var _i2 = 0, _possible = possible; _i2 < _possible.length; _i2++) {var _ret3 = _loop6();if (_ret3 === "continue") continue;if (typeof _ret3 === "object") return _ret3.v;
+      }
+
+      return best;
+    }
+
+    /**
+     * @returns [QuestInfo, Resource, Chance of use][]
+     */ }, { key: "getResourcesToComplete", value:
+    function getResourcesToComplete(
+    resourcesAvailable,
+    quest,
+    path)
+    {
+      return this.doResourcesToComplete(
+      quest,
+      path,
+      new Map(resourcesAvailable),
+      []);
+
+    } }, { key: "doResourcesToComplete", value:
+
+    function doResourcesToComplete(
+    quest,
+    path,
+    resourcesAvailable,
+    resources)
+    {
+      if (path instanceof PossibleMultiPath) {var _iterator13 = TaskManager_createForOfIteratorHelper(
+        path.subpaths),_step13;try {for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {var _step13$value = TaskManager_slicedToArray(_step13.value, 2),q = _step13$value[0],p = _step13$value[1];
+            var result = this.doResourcesToComplete(
+            q,
+            p,
+            resourcesAvailable,
+            resources);
+
+
+            if (result == null) {
+              return null;
+            }
+          }} catch (err) {_iterator13.e(err);} finally {_iterator13.f();}
+      } else {
+        var skip = new Map();var _iterator14 = TaskManager_createForOfIteratorHelper(
+        path.resourcesNeeded),_step14;try {for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {var _r$resourcesUsed;var _step14$value = TaskManager_slicedToArray(_step14.value, 2),res = _step14$value[0],chance = _step14$value[1];
+            if (!skip.has(res)) {
+              skip.set(res, path.getUsed(res));
+            }
+
+            if (skip.get(res) > 0) {
+              skip.set(res, skip.get(res) - 1);
+              continue;
+            }
+
+            var r = this.getResource(
+            resourcesAvailable,
+            res,
+            path.ignoreResources);
+
+
+            if (r == null) {
+              return null;
+            }
+
+            resources.push([quest, r, chance]);
+            resourcesAvailable.set(
+            r.id,
+            resourcesAvailable.get(r.id) - ((_r$resourcesUsed = r.resourcesUsed) !== null && _r$resourcesUsed !== void 0 ? _r$resourcesUsed : 1));
+
+          }} catch (err) {_iterator14.e(err);} finally {_iterator14.f();}
+      }
+
+      return resources;
+    } }, { key: "getResource", value:
+
+    function getResource(
+    used,
+    resourceType,
+    unsupported)
+    {var _iterator15 = TaskManager_createForOfIteratorHelper(
+      this.resources),_step15;try {for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {var resource = _step15.value;
+          if (resource.type != resourceType || unsupported.includes(resource.id)) {
+            continue;
+          }
+
+          if (used.get(resource.id) >= (resource.resourcesUsed || 1)) {
+            return resource;
+          }
+        }} catch (err) {_iterator15.e(err);} finally {_iterator15.f();}
+
+      return null;
+    } }]);return FigureOutPath;}();
 ;// CONCATENATED MODULE: ./src/GreyChooser.ts
 function GreyChooser_toConsumableArray(arr) {return GreyChooser_arrayWithoutHoles(arr) || GreyChooser_iterableToArray(arr) || GreyChooser_unsupportedIterableToArray(arr) || GreyChooser_nonIterableSpread();}function GreyChooser_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyChooser_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function GreyChooser_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return GreyChooser_arrayLikeToArray(arr);}function GreyChooser_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyChooser_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyChooser_slicedToArray(arr, i) {return GreyChooser_arrayWithHoles(arr) || GreyChooser_iterableToArrayLimit(arr, i) || GreyChooser_unsupportedIterableToArray(arr, i) || GreyChooser_nonIterableRest();}function GreyChooser_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyChooser_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyChooser_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyChooser_arrayLikeToArray(o, minLen);}function GreyChooser_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyChooser_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function GreyChooser_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function GreyChooser_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyChooser_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyChooser_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyChooser_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyChooser_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyChooser_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -25312,15 +25955,39 @@ function GreyChooser_toConsumableArray(arr) {return GreyChooser_arrayWithoutHole
 
 
 
-var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {GreyChooser_classCallCheck(this, AdventureFinder);GreyChooser_defineProperty(this, "registry",
-    new QuestRegistry());GreyChooser_defineProperty(this, "defeated", void 0);GreyChooser_defineProperty(this, "viableQuests", void 0);GreyChooser_defineProperty(this, "absorbs",
-
-
-    new AbsorbsProvider());GreyChooser_defineProperty(this, "goose",
-    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));GreyChooser_defineProperty(this, "goodAbsorbs", void 0);GreyChooser_defineProperty(this, "questLocations", void 0);GreyChooser_defineProperty(this, "path", void 0);}GreyChooser_createClass(AdventureFinder, [{ key: "getAllRawQuests", value:
+var AdventureFinder = /*#__PURE__*/function () {
 
 
 
+
+
+
+
+
+
+
+  function AdventureFinder() {GreyChooser_classCallCheck(this, AdventureFinder);GreyChooser_defineProperty(this, "registry", new QuestRegistry());GreyChooser_defineProperty(this, "defeated", void 0);GreyChooser_defineProperty(this, "viableQuests", void 0);GreyChooser_defineProperty(this, "absorbs", new AbsorbsProvider());GreyChooser_defineProperty(this, "goose", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));GreyChooser_defineProperty(this, "goodAbsorbs", void 0);GreyChooser_defineProperty(this, "questLocations", void 0);GreyChooser_defineProperty(this, "path", void 0);
+    AdventureFinder.instance = this;
+  }GreyChooser_createClass(AdventureFinder, [{ key: "calculatePath", value:
+
+
+
+
+
+    function calculatePath() {
+      var simmedPath = new FigureOutPath().getPaths(this.getAllRawQuests());
+
+      if (simmedPath == null) {
+        if (this.path != null) {
+          (0,external_kolmafia_namespaceObject.print)("Failed to calculate a path.. Staying on current path..", "gray");
+        }
+
+        return;
+      }
+
+      this.path = simmedPath;
+      this.path.printInfo();
+    } }, { key: "getAllRawQuests", value:
 
     function getAllRawQuests() {
       return this.registry.getQuestsInOrder();
@@ -25363,6 +26030,11 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
 
     function start() {
       this.setPreAbsorbs();
+
+      if (this.path.isRecalculateNeeded()) {
+        this.calculatePath();
+      }
+
       this.viableQuests = this.getDoableQuests();
       this.setAbsorbs();
       this.defeated = this.absorbs.getAbsorbedMonstersFromInstance();
@@ -25686,15 +26358,18 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
 
     } }, { key: "printStatus", value:
 
-    function printStatus() {
+    function printStatus(quests) {
       var hasBlessing =
       (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Brother Corsican's Blessing")) +
       (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("A Girl Named Sue")) >
       0;var _iterator8 = GreyChooser_createForOfIteratorHelper(
 
-      this.viableQuests),_step8;try {for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {var _step8$value = GreyChooser_slicedToArray(_step8.value, 2),quest = _step8$value[0],path = _step8$value[1];
+      quests),_step8;try {for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {var _step8$value = GreyChooser_slicedToArray(_step8.value, 2),quest = _step8$value[0],path = _step8$value[1];
           var status = quest.status(path);
-          status = this.getModifiedStatus(status, quest.run(path), hasBlessing);
+
+          if (status != QuestStatus.NOT_READY && status != QuestStatus.COMPLETED) {
+            status = this.getModifiedStatus(status, quest.run(path), hasBlessing);
+          }
 
           var line =
           "<u>" +
@@ -25937,7 +26612,7 @@ var AdventureFinder = /*#__PURE__*/function () {function AdventureFinder() {Grey
       "red");
 
       return null;
-    } }]);return AdventureFinder;}();
+    } }], [{ key: "recalculatePath", value: function recalculatePath() {AdventureFinder.instance.calculatePath();} }]);return AdventureFinder;}();GreyChooser_defineProperty(AdventureFinder, "instance", void 0);
 ;// CONCATENATED MODULE: ./src/tasks/TaskBoomboxSwitch.ts
 function TaskBoomboxSwitch_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskBoomboxSwitch_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskBoomboxSwitch_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskBoomboxSwitch_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskBoomboxSwitch_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskBoomboxSwitch_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -26696,7 +27371,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       this.adventureFinder.start();
       var goodAdventure = this.adventureFinder.findGoodVisit();
 
-      this.adventureFinder.printStatus();
+      this.adventureFinder.printStatus(this.adventureFinder.viableQuests);
 
       if (goodAdventure == null) {
         (0,external_kolmafia_namespaceObject.print)("Failed, should have printed an error..", "gray");
@@ -27203,542 +27878,6 @@ function hasNonCombatSkillActive() {
     (0,external_kolmafia_namespaceObject.haveEffect)(external_kolmafia_namespaceObject.Effect.get("Darkened Photons")) > 0);
 
 }
-;// CONCATENATED MODULE: ./src/typings/TaskManager.ts
-function TaskManager_toConsumableArray(arr) {return TaskManager_arrayWithoutHoles(arr) || TaskManager_iterableToArray(arr) || TaskManager_unsupportedIterableToArray(arr) || TaskManager_nonIterableSpread();}function TaskManager_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskManager_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function TaskManager_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return TaskManager_arrayLikeToArray(arr);}function TaskManager_slicedToArray(arr, i) {return TaskManager_arrayWithHoles(arr) || TaskManager_iterableToArrayLimit(arr, i) || TaskManager_unsupportedIterableToArray(arr, i) || TaskManager_nonIterableRest();}function TaskManager_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskManager_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function TaskManager_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskManager_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskManager_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskManager_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskManager_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskManager_arrayLikeToArray(o, minLen);}function TaskManager_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskManager_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskManager_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskManager_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskManager_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskManager_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskManager_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} // The biggest failures are
-// 1. Key sources, we want to get 3 key sources. Some key sources might return more than 1
-// 2. Possible paths. Sometimes there's two questlines we can pick
-// 3. Crypts, the boat technically means the boat should be in all four crypts or something
-// 4. Giving negative adventures, if we provide -50 then we expect to save 50 advs.
-// 5. Paths that have so many variables on what could be provided, but basically just initial pulls
-// 6. Paths that are a one and done, but the quest can still be done
-// 7. Quests that are optional, but entirely depend on the path being picked. We can either provide a dummy path, or something else
-
-
-
-
-
-
-
-var SimmedPath = /*#__PURE__*/function () {
-
-
-
-
-
-
-
-  function SimmedPath(assumeUnused) {var skip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;TaskManager_classCallCheck(this, SimmedPath);TaskManager_defineProperty(this, "resourcesRemaining", new Map());TaskManager_defineProperty(this, "resourcesUsed", []);TaskManager_defineProperty(this, "thisPath", []);TaskManager_defineProperty(this, "totalCost", void 0);TaskManager_defineProperty(this, "advsSaved", void 0);TaskManager_defineProperty(this, "profitLost", void 0);
-    if (skip) {
-      return;
-    }var _iterator = TaskManager_createForOfIteratorHelper(
-
-    getResources()),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var resource = _step.value;
-        this.resourcesRemaining.set(
-        resource.id,
-        getResourcesLeft(resource.id, assumeUnused));
-
-      }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
-  }TaskManager_createClass(SimmedPath, [{ key: "isThisBetterThan", value:
-
-    function isThisBetterThan(compareAgainst, eachTurnWorth) {
-      var oldProfit = compareAgainst.getProfitLost(eachTurnWorth);
-      var newProfit = this.getProfitLost(eachTurnWorth);
-
-      if (oldProfit[0] + oldProfit[1] < newProfit[0] + newProfit[1]) {
-        return false;
-      }
-
-      return true;
-    } }, { key: "printInfo", value:
-
-    function printInfo() {var _this = this;
-      var used = new Map();var _iterator2 = TaskManager_createForOfIteratorHelper(
-
-      this.resourcesUsed),_step2;try {var _loop = function _loop() {var _step2$value = TaskManager_slicedToArray(_step2.value, 2),quest = _step2$value[0],resource = _step2$value[1];
-          var key = resource.id;
-
-          if (!used.has(key)) {
-            used.set(key, []);
-          }
-
-          var id = quest.getId();
-
-          var pair = used.get(key).find((_ref5) => {var _ref6 = TaskManager_slicedToArray(_ref5, 1),p = _ref6[0];return p == id;});
-
-          if (pair == null) {
-            var path = _this.thisPath.find((_ref7) => {var _ref8 = TaskManager_slicedToArray(_ref7, 2),qu = _ref8[0],pa = _ref8[1];return qu.getId() === id;})[1];
-
-            used.get(key).push(pair = [id, 0, path.getAverageTurns()]);
-          }
-
-          pair[1] = pair[1] + 1;};for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {_loop();
-        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
-
-      var index1 = 0;
-
-      used.forEach((details, k) => {
-        index1++;
-
-        (0,external_kolmafia_namespaceObject.printHtml)("<font color='blue'>".concat(
-        k, " x ").concat(details.
-        map((_ref) => {var _ref2 = TaskManager_slicedToArray(_ref, 2),amount = _ref2[1];return amount;}).
-        reduce((d1, d2) => d1 + d2, 0), "</font> => ").concat(details.
-        map(
-        (_ref3, index) => {var _ref4 = TaskManager_slicedToArray(_ref3, 3),quest = _ref4[0],amount = _ref4[1],turns = _ref4[2];return "<font color='".concat(
-
-          (index + index1) % 2 == 0 ? "gray" : "", "'>").concat(
-          quest, " x ").concat(amount, " (").concat(turns, " advs)</font>");}).
-
-        join(", ")));
-
-      });
-
-      var advs = this.getAdvs();
-
-      (0,external_kolmafia_namespaceObject.print)(
-      "With mpa of " +
-      GreySettings.greyValueOfAdventure +
-      " and using estimated " +
-      Math.floor(this.getTotalCost()) +
-      " meat of resources, save " +
-      advs[0] +
-      " to " +
-      advs[1] +
-      " adventures compared to the worst alternatives");
-
-    } }, { key: "setPath", value:
-
-    function setPath(paths) {
-      this.thisPath = paths;
-    } }, { key: "assignResources", value:
-
-    function assignResources() {var _this2 = this;var _iterator3 = TaskManager_createForOfIteratorHelper(
-      this.resourcesUsed),_step3;try {var _loop2 = function _loop2() {var _step3$value = TaskManager_slicedToArray(_step3.value, 2),quest = _step3$value[0],resource = _step3$value[1];
-          var _this2$thisPath$find = _this2.thisPath.find((_ref9) => {var _ref10 = TaskManager_slicedToArray(_ref9, 1),q = _ref10[0];return q === quest;}),_this2$thisPath$find2 = TaskManager_slicedToArray(_this2$thisPath$find, 2),path = _this2$thisPath$find2[1];
-
-          path.resourcesAvailable.push(resource);};for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {_loop2();
-        }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
-    } }, { key: "getAdvs", value:
-
-    function getAdvs() {
-      if (this.advsSaved == null) {
-        this.advsSaved = [0, 0];var _iterator4 = TaskManager_createForOfIteratorHelper(
-
-        this.thisPath),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var _step4$value = TaskManager_slicedToArray(_step4.value, 2),path = _step4$value[1];
-            if (path == null) {
-              continue;
-            }
-
-            this.advsSaved[0] += path.advsSavedMin;
-            this.advsSaved[1] += path.advsSavedMax;
-          }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
-      }
-
-      return this.advsSaved;
-    } }, { key: "clone", value:
-
-    function clone() {
-      var newPath = new SimmedPath(false, true);
-      newPath.resourcesRemaining = new Map(this.resourcesRemaining);
-      newPath.resourcesUsed = TaskManager_toConsumableArray(this.resourcesUsed);
-      newPath.thisPath = TaskManager_toConsumableArray(this.thisPath);
-
-      return newPath;
-    } }, { key: "addUse", value:
-
-    function addUse(quest, resource, chance) {
-      this.resourcesUsed.push([quest, resource, chance]);
-      this.resourcesRemaining.set(
-      resource.id,
-      this.resourcesRemaining.get(resource.id) - (resource.resourcesUsed || 1));
-
-    } }, { key: "canUse", value:
-
-    function canUse(resource) {
-      return (
-        this.resourcesRemaining.get(resource.id) >= (resource.resourcesUsed || 1));
-
-    } }, { key: "getTotalCost", value:
-
-    function getTotalCost() {
-      this.totalCost = this.thisPath.
-      map((p) => p[1] != null ? p[1].miscMeat : 0).
-      reduce((p, n) => p + n, 0);var _iterator5 = TaskManager_createForOfIteratorHelper(
-
-      this.resourcesUsed),_step5;try {for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {var resource = _step5.value;
-          this.totalCost += resource[1].worthInAftercore * 1; //resource[2];
-        }} catch (err) {_iterator5.e(err);} finally {_iterator5.f();}
-
-      return this.totalCost;
-    }
-
-    /**
-     * Returns how much profit was lost following this path
-     */ }, { key: "getProfitLost", value:
-    function getProfitLost(advsWorth) {
-      if (this.profitLost == null) {
-        // Costs are a negative
-        var meatGain = this.getTotalCost();
-
-        this.profitLost = [
-        meatGain - this.getAdvs()[0] * advsWorth,
-        meatGain - this.getAdvs()[1] * advsWorth];
-
-      }
-
-      return this.profitLost;
-    } }]);return SimmedPath;}();
-
-
-var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskManager_classCallCheck(this, FigureOutPath);TaskManager_defineProperty(this, "resources",
-    getResources());}TaskManager_createClass(FigureOutPath, [{ key: "getPaths", value:
-
-    function getPaths(quests) {var _this3 = this;var assumeUnstarted = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      (0,external_kolmafia_namespaceObject.print)(
-      "Now calculating resources.. " + (
-      GreySettings.greyBreakAtTower && !assumeUnstarted ?
-      "" :
-      "As you're not breaking at tower, this might take a while.."));
-
-      var allPaths = [];
-      var miscPaths = [];
-      var uncompleteable = [];
-
-      // What we need to do is sort the paths by the most profitable. Ideally we want to eliminate the ones that are just not feasible asap.
-      // If it wants 2 faxes but we only want 1, then we can immediately eliminate the least profitable.
-      var _iterator6 = TaskManager_createForOfIteratorHelper(quests),_step6;try {var _loop3 = function _loop3() {var quest = _step6.value;
-          var q = quest;
-
-          if (q.getPossiblePaths == null) {
-            miscPaths.push(quest);
-            return "continue";
-          }
-
-          if (q.createPaths != null) {
-            q.createPaths(assumeUnstarted);
-          }
-
-          var paths = q.getPossiblePaths();
-
-          if (paths == null) {
-            //miscPaths.push(quest);
-            return "continue";
-          }
-
-          if (paths.length == 0) {
-            (0,external_kolmafia_namespaceObject.print)(
-            "We should never have empty paths, assume this is a bug. If we want to avoid doing the quest, return null and status() instead.",
-            "red");
-
-          }
-
-          if (
-          quest.level() >= 1 &&
-          !assumeUnstarted &&
-          quest.status() == QuestStatus.COMPLETED)
-          {
-            return "continue";
-          }var _iterator8 = TaskManager_createForOfIteratorHelper(
-
-          paths),_step8;try {var _loop4 = function _loop4() {var path = _step8.value;var _iterator10 = TaskManager_createForOfIteratorHelper(
-              ResourceIds),_step10;try {var _loop5 = function _loop5() {var res = _step10.value;
-                  if (path.ignoreResources.includes(res)) {
-                    return "continue";
-                  }
-
-                  var possibles = getResources().filter(
-                  (r) => r.id == res && path.canUse(r.type) > 0);
-
-
-                  if (possibles.length <= 1) {
-                    return "continue";
-                  }
-
-                  //print("Better check " + quest.getId() + " for " + res);
-                };for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {var _ret2 = _loop5();if (_ret2 === "continue") continue;}} catch (err) {_iterator10.e(err);} finally {_iterator10.f();}};for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {_loop4();
-            }} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}
-
-          paths = paths.filter((p) => {
-            var resources = new Map();var _iterator9 = TaskManager_createForOfIteratorHelper(
-
-            ResourceIds),_step9;try {for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {var resourceId = _step9.value;
-                resources.set(
-                resourceId,
-                getResourcesLeft(resourceId, assumeUnstarted));
-
-              }} catch (err) {_iterator9.e(err);} finally {_iterator9.f();}
-
-            var resourcesToComplete = _this3.getResourcesToComplete(
-            resources,
-            quest,
-            p);
-
-
-            if (resourcesToComplete == null) {
-              return false;
-            }
-
-            p.setRoughPathCost(resourcesToComplete);
-
-            return true;
-          });
-
-          if (paths.length == 0) {
-            uncompleteable.push(quest);
-            return "continue";
-          }
-
-          // Now we figure out how many advs each path would save compared to the other
-          var mostAdvsCouldveUsed = paths.
-          map((p) => [p.advsSavedMin, p.advsSavedMax]).
-          reduce((p, n) => [Math.max(p[0], n[0]), Math.max(p[1], n[1])]);
-
-          paths.forEach((p) => {
-            // If this path would take 2 to 5 adventures
-            // And the most adventures are 1 to 30
-            // That means we would profit -1 to 25
-            p.advsSavedMin = mostAdvsCouldveUsed[0] - p.advsSavedMin;
-            p.advsSavedMax = mostAdvsCouldveUsed[1] - p.advsSavedMax;
-          });
-
-          paths.sort((p1, p2) => p1.getCostPerAdv() - p2.getCostPerAdv());
-
-          var cheapestNoResource = paths.find(
-          (p) => p.resourcesNeeded.length == 0);
-
-
-          if (cheapestNoResource != null) {
-            var meatSavedOnPath =
-            cheapestNoResource.pathCost -
-            (cheapestNoResource.advsSavedMin + cheapestNoResource.advsSavedMax) /
-            2 *
-            GreySettings.greyValueOfAdventure;
-          }
-
-          allPaths.push([quest, paths]);};for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {var _ret = _loop3();if (_ret === "continue") continue;
-        }} catch (err) {_iterator6.e(err);} finally {_iterator6.f();}
-
-      if (uncompleteable.length > 0) {var _iterator7 = TaskManager_createForOfIteratorHelper(
-        uncompleteable),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var q = _step7.value;
-            (0,external_kolmafia_namespaceObject.print)(
-            "Unable to plot a path! Not enough resources to complete `" +
-            q.getId() +
-            "`",
-            "red");
-
-            var combos = q.
-            getPossiblePaths().
-            map((p) =>
-            p.resourcesNeeded.map(
-            (_ref11) => {var _ref12 = TaskManager_slicedToArray(_ref11, 2),r = _ref12[0],amount = _ref12[1];return ResourceCategory[r] + " x " + amount;}));
-
-
-
-            (0,external_kolmafia_namespaceObject.print)("Combinations of resources needed are: ".concat(combos.join(" OR ")));
-          }} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}
-
-        return null;
-      }
-
-      allPaths.sort((_ref13, _ref14) => {var _ref15 = TaskManager_slicedToArray(_ref13, 2),_ref15$ = TaskManager_slicedToArray(_ref15[1], 1),p1 = _ref15$[0];var _ref16 = TaskManager_slicedToArray(_ref14, 2),_ref16$ = TaskManager_slicedToArray(_ref16[1], 1),p2 = _ref16$[0];
-        return p1.getCostPerAdv() - p2.getCostPerAdv();
-      });
-
-      var simmedPath = this.doAttempt(
-      new SimmedPath(assumeUnstarted),
-      0,
-      allPaths);
-
-
-      if (simmedPath == null) {
-        return null;
-      }
-
-      simmedPath.assignResources();
-
-      miscPaths.forEach((q) => {
-        simmedPath.thisPath.push([q, null]);
-      });
-
-      return simmedPath;
-    } }, { key: "doAttempt", value:
-
-    function doAttempt(
-    currentPath,
-    index,
-    allPaths)
-    {var _this4 = this;
-      var _allPaths$index = TaskManager_slicedToArray(allPaths[index++], 2),quest = _allPaths$index[0],paths = _allPaths$index[1];
-
-      var possible =
-
-
-
-      [];var _iterator11 = TaskManager_createForOfIteratorHelper(
-
-      paths),_step11;try {for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {var path = _step11.value;
-          var resources =
-          this.getResourcesToComplete(
-          currentPath.resourcesRemaining,
-          quest,
-          path);
-
-
-          if (resources == null) {
-            continue;
-          }
-
-          var resourceCost = resources.
-          map((r) => r[1].worthInAftercore * r[2]).
-          reduce((p, n) => p + n, 0);
-          var extraAdvsWorth =
-          GreySettings.greyValueOfAdventure * (
-          (path.advsSavedMax - path.advsSavedMin) / 2 + path.advsSavedMin);
-
-          possible.push([
-          path,
-          resources,
-          path.miscMeat + resourceCost - extraAdvsWorth]);
-
-        }} catch (err) {_iterator11.e(err);} finally {_iterator11.f();}
-
-      possible.sort((_ref17, _ref18) => {var _ref19 = TaskManager_slicedToArray(_ref17, 3),meat1 = _ref19[2];var _ref20 = TaskManager_slicedToArray(_ref18, 3),meat2 = _ref20[2];return meat1 - meat2;});
-
-      var tried = 0;
-      var best;
-      var addPath = (
-      simmed,
-      quest,
-      path) =>
-      {
-        if (path instanceof PossibleMultiPath) {var _iterator12 = TaskManager_createForOfIteratorHelper(
-          path.subpaths),_step12;try {for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {var _step12$value = TaskManager_slicedToArray(_step12.value, 2),_quest = _step12$value[0],p = _step12$value[1];
-              addPath(simmed, _quest, p);
-            }} catch (err) {_iterator12.e(err);} finally {_iterator12.f();}
-        } else {
-          simmed.thisPath.push([quest, path]);
-        }
-      };var _loop6 = function _loop6() {
-
-        var _possible$_i = TaskManager_slicedToArray(_possible[_i2], 2),path = _possible$_i[0],resources = _possible$_i[1];
-        var simmed = currentPath.clone();
-
-        addPath(simmed, quest, path);
-
-        resources.forEach((_ref21) => {var _ref22 = TaskManager_slicedToArray(_ref21, 3),quest = _ref22[0],resource = _ref22[1],amount = _ref22[2];
-          simmed.addUse(quest, resource, amount);
-        });
-
-        tried++;
-
-        if (index < allPaths.length) {
-          simmed = _this4.doAttempt(simmed, index, allPaths);
-
-          if (simmed == null) {
-            return "continue";
-          }
-        }
-
-        if (
-        best == null ||
-        simmed.isThisBetterThan(best, GreySettings.greyValueOfAdventure))
-        {
-          best = simmed;
-        }
-
-        if (tried >= (path.pathCost <= 5000 ? 1 : 2)) {
-          return { v: best };
-        }};for (var _i2 = 0, _possible = possible; _i2 < _possible.length; _i2++) {var _ret3 = _loop6();if (_ret3 === "continue") continue;if (typeof _ret3 === "object") return _ret3.v;
-      }
-
-      return best;
-    }
-
-    /**
-     * @returns [QuestInfo, Resource, Chance of use][]
-     */ }, { key: "getResourcesToComplete", value:
-    function getResourcesToComplete(
-    resourcesAvailable,
-    quest,
-    path)
-    {
-      return this.doResourcesToComplete(
-      quest,
-      path,
-      new Map(resourcesAvailable),
-      []);
-
-    } }, { key: "doResourcesToComplete", value:
-
-    function doResourcesToComplete(
-    quest,
-    path,
-    resourcesAvailable,
-    resources)
-    {
-      if (path instanceof PossibleMultiPath) {var _iterator13 = TaskManager_createForOfIteratorHelper(
-        path.subpaths),_step13;try {for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {var _step13$value = TaskManager_slicedToArray(_step13.value, 2),q = _step13$value[0],p = _step13$value[1];
-            var result = this.doResourcesToComplete(
-            q,
-            p,
-            resourcesAvailable,
-            resources);
-
-
-            if (result == null) {
-              return null;
-            }
-          }} catch (err) {_iterator13.e(err);} finally {_iterator13.f();}
-      } else {
-        var skip = new Map();var _iterator14 = TaskManager_createForOfIteratorHelper(
-        path.resourcesNeeded),_step14;try {for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {var _r$resourcesUsed;var _step14$value = TaskManager_slicedToArray(_step14.value, 2),res = _step14$value[0],chance = _step14$value[1];
-            if (!skip.has(res)) {
-              skip.set(res, path.getUsed(res));
-            }
-
-            if (skip.get(res) > 0) {
-              skip.set(res, skip.get(res) - 1);
-              continue;
-            }
-
-            var r = this.getResource(
-            resourcesAvailable,
-            res,
-            path.ignoreResources);
-
-
-            if (r == null) {
-              return null;
-            }
-
-            resources.push([quest, r, chance]);
-            resourcesAvailable.set(
-            r.id,
-            resourcesAvailable.get(r.id) - ((_r$resourcesUsed = r.resourcesUsed) !== null && _r$resourcesUsed !== void 0 ? _r$resourcesUsed : 1));
-
-          }} catch (err) {_iterator14.e(err);} finally {_iterator14.f();}
-      }
-
-      return resources;
-    } }, { key: "getResource", value:
-
-    function getResource(
-    used,
-    resourceType,
-    unsupported)
-    {var _iterator15 = TaskManager_createForOfIteratorHelper(
-      this.resources),_step15;try {for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {var resource = _step15.value;
-          if (resource.type != resourceType || unsupported.includes(resource.id)) {
-            continue;
-          }
-
-          if (used.get(resource.id) >= (resource.resourcesUsed || 1)) {
-            return resource;
-          }
-        }} catch (err) {_iterator15.e(err);} finally {_iterator15.f();}
-
-      return null;
-    } }]);return FigureOutPath;}();
 ;// CONCATENATED MODULE: ./src/utils/GreyTimings.ts
 function GreyTimings_slicedToArray(arr, i) {return GreyTimings_arrayWithHoles(arr) || GreyTimings_iterableToArrayLimit(arr, i) || GreyTimings_unsupportedIterableToArray(arr, i) || GreyTimings_nonIterableRest();}function GreyTimings_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyTimings_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function GreyTimings_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function GreyTimings_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyTimings_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyTimings_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyTimings_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyTimings_arrayLikeToArray(o, minLen);}function GreyTimings_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyTimings_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyTimings_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyTimings_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyTimings_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyTimings_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyTimings_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -27823,9 +27962,9 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "9d29d3c";
+var lastCommitHash = "7275420";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
-function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function GreyYouMain_slicedToArray(arr, i) {return GreyYouMain_arrayWithHoles(arr) || GreyYouMain_iterableToArrayLimit(arr, i) || GreyYouMain_unsupportedIterableToArray(arr, i) || GreyYouMain_nonIterableRest();}function GreyYouMain_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyYouMain_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function GreyYouMain_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -27839,10 +27978,11 @@ var
 GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_classCallCheck(this, GreyYouMain);GreyYouMain_defineProperty(this, "adventures", void 0);GreyYouMain_defineProperty(this, "reachedTower",
 
     "_greyReachedTower");GreyYouMain_defineProperty(this, "svn_name",
-    "Kasekopf-loop-casual-branches-release");}GreyYouMain_createClass(GreyYouMain, [{ key: "isRevisionPass", value:
+    "libraryaddict-Greyday-branches-release");GreyYouMain_defineProperty(this, "git_name",
+    "libraryaddict-Greyday-release");}GreyYouMain_createClass(GreyYouMain, [{ key: "isRevisionPass", value:
 
     function isRevisionPass() {
-      var required = 26658;
+      var required = 26718;
 
       if ((0,external_kolmafia_namespaceObject.getRevision)() > 0 && (0,external_kolmafia_namespaceObject.getRevision)() < required) {
         (0,external_kolmafia_namespaceObject.print)("Please update your mafia. You are using ".concat(
@@ -27946,10 +28086,17 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
 
 
 
-      if (lastCommitHash !== undefined && (0,external_kolmafia_namespaceObject.svnExists)(this.svn_name)) {
-        if (!(0,external_kolmafia_namespaceObject.svnAtHead)(this.svn_name)) {
+      if (
+      lastCommitHash !== undefined && (
+      (0,external_kolmafia_namespaceObject.svnExists)(this.svn_name) || (0,external_kolmafia_namespaceObject.gitExists)(this.git_name)))
+      {
+        if (
+        (0,external_kolmafia_namespaceObject.gitExists)(this.git_name) ?
+        !(0,external_kolmafia_namespaceObject.gitAtHead)(this.git_name) :
+        !(0,external_kolmafia_namespaceObject.svnAtHead)(this.svn_name))
+        {
           (0,external_kolmafia_namespaceObject.print)(
-          'A newer version of this script is available and can be obtained with "svn update".',
+          'A newer version of this script is available and can be obtained with "git update".',
           "red");
 
         } else {
@@ -28004,7 +28151,8 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
       command != "absorbs" &&
       command != "run" &&
       !command.startsWith("run ") &&
-      command != "sim")
+      command != "sim" &&
+      command != "status")
       {
         (0,external_kolmafia_namespaceObject.print)("Unknown command.");
         return;
@@ -28069,21 +28217,23 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
         (0,external_kolmafia_namespaceObject.setProperty)("autoSatisfyWithNPCs", "true");
       }
 
-      var simmedPath = new FigureOutPath().getPaths(
-      this.adventures.adventureFinder.getAllRawQuests());
+      this.adventures.adventureFinder.calculatePath();
 
-
-      if (simmedPath == null) {
-        (0,external_kolmafia_namespaceObject.print)("Failed to find a way to accomplish!", "red");
+      if (this.adventures.adventureFinder.path == null) {
+        (0,external_kolmafia_namespaceObject.print)("Failed to find a way to accomplish Greyday!", "red");
         return;
       }
 
-      this.adventures.adventureFinder.path = simmedPath;
+      if (command == "status") {
+        this.adventures.adventureFinder.setPreAbsorbs();
+        this.adventures.adventureFinder.path.thisPath.sort((_ref, _ref2) => {var _ref3 = GreyYouMain_slicedToArray(_ref, 1),q1 = _ref3[0];var _ref4 = GreyYouMain_slicedToArray(_ref2, 1),q2 = _ref4[0];return (
+            q1.getId().localeCompare(q2.getId()));});
 
-      (0,external_kolmafia_namespaceObject.print)("Resources planning..");
-      simmedPath.printInfo();
+        this.adventures.adventureFinder.printStatus(
+        this.adventures.adventureFinder.path.thisPath);
 
-      if (command == "sim") {
+        return;
+      } else if (command == "sim") {
         this.adventures.runTurn(false);
         return;
       } else if (s[0] == "go" || s[0] == "run") {
