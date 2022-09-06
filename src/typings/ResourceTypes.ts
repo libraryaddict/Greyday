@@ -149,7 +149,7 @@ const yellowParka: SomeResource = {
     availableAmount(parka) > 0 && haveSkill(Skill.get("Torso Awareness"))
       ? 100
       : 10_000,
-  worthInAftercore: 0,
+  worthInAftercore: -3000,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addItem(parka);

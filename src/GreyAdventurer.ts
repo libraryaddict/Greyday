@@ -366,6 +366,8 @@ export class GreyAdventurer {
       outfit.addBonus(`+${sweat < 5 ? 16 : 8} bonus designer sweatpants`);
     }
 
+    outfit.addBonus("+1 bonus june cleaver");
+
     let powerLevelGoose: boolean = false;
 
     if (

@@ -550,6 +550,14 @@ export class GreyRequirements {
 
     add(
       Type.IOTM,
+      "Shorter-Order Cook",
+      "Gives an initial boost to start, skip 6-8 leveling turns!",
+      Required.USEFUL,
+      haveFamiliar(Familiar.get("Shorter-Order Cook"))
+    );
+
+    add(
+      Type.IOTM,
       "Melodramedary",
       "Saves 3 adventures for desert!",
       Required.MINOR,

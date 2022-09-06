@@ -120,6 +120,7 @@ export class AdventureFinder {
 
     if (this.path.isRecalculateNeeded()) {
       this.calculatePath();
+      this.setPreAbsorbs();
     }
 
     this.viableQuests = this.getDoableQuests();
