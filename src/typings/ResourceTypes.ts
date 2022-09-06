@@ -19,6 +19,7 @@ import {
   print,
   pullsRemaining,
   Skill,
+  storageAmount,
   toBoolean,
   toInt,
   toMonster,
@@ -149,7 +150,7 @@ const yellowParka: SomeResource = {
     availableAmount(parka) > 0 && haveSkill(Skill.get("Torso Awareness"))
       ? 99
       : 10_000,
-  worthInAftercore: -3000,
+  worthInAftercore: 0,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addItem(parka);
@@ -215,8 +216,8 @@ const cosplayYellowRay: SomeResource = {
   id: "Cosplay Saber",
   // If we have more than 60 pills, the saber is free. Otherwise it's worth 3k meat when its alien free day
   worthInAftercore:
-    availableAmount(Item.get("distention pill")) > 60
-      ? 0
+    storageAmount(Item.get("distention pill")) > 60
+      ? -100
       : modifierEval("G") >= 4
       ? 3000
       : 0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights

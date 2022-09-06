@@ -7,9 +7,11 @@ import {
   eatsilent,
   equip,
   equippedAmount,
+  Familiar,
   getInventory,
   getProperty,
   gnomadsAvailable,
+  haveFamiliar,
   historicalPrice,
   Item,
   itemAmount,
@@ -66,6 +68,11 @@ export class TaskEater implements Task {
 
       // Insufficient level
       dontEat.push(Item.get("Pie man was not meant to eat"));
+
+      // Robortender driveby
+      if (haveFamiliar(Familiar.get("Robortender"))) {
+        dontEat.push(Item.get("Grapefruit"));
+      }
 
       setProperty(this.prop, dontEat.map((s) => toInt(s)).join(","));
     }

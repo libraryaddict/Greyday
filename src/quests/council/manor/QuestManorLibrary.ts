@@ -6,6 +6,7 @@ import {
   Item,
   Location,
   Monster,
+  print,
   Skill,
   toInt,
 } from "kolmafia";
