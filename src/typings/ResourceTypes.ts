@@ -147,7 +147,7 @@ const yellowParka: SomeResource = {
   id: "Yellow Ray",
   resourcesUsed:
     availableAmount(parka) > 0 && haveSkill(Skill.get("Torso Awareness"))
-      ? 100
+      ? 99
       : 10_000,
   worthInAftercore: -3000,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {

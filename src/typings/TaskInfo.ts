@@ -153,6 +153,7 @@ export class PossiblePath {
       }
 
       this.addUsedResource(resources[0], amountUsed);
+
       changed.resources.push(...resources.slice(0, amountUsed));
       print(
         "Detected resource change, " +

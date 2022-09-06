@@ -67,6 +67,10 @@ export class SimmedPath {
         ),
       "red"
     );
+    print(
+      "Used resources: " +
+        unused[1].resourceUsed.map((r) => ResourceCategory[r]).join(", ")
+    );
 
     return true;
   }

@@ -47,7 +47,7 @@ export class QuestManorBillards implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questM20Necklace");
+    const status = getQuestStatus("questM20Necklace");
 
     if (status < 1) {
       return QuestStatus.NOT_READY;
@@ -69,7 +69,7 @@ export class QuestManorBillards implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (
       availableAmount(this.cue) == 0 ||
@@ -77,7 +77,7 @@ export class QuestManorBillards implements QuestInfo {
       availableAmount(this.chalk) > 0 ||
       toInt(getProperty("poolSkill")) < 2
     ) {
-      outfit.setNoCombat();
+      outfit.setNoCombat().setNoCombat();
     }
 
     outfit.addItem(this.cue);
@@ -95,7 +95,7 @@ export class QuestManorBillards implements QuestInfo {
           use(this.chalk);
         }
 
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
 
         if (
           availableAmount(this.chalk) == 0 &&
@@ -105,8 +105,8 @@ export class QuestManorBillards implements QuestInfo {
           settings.addBanish(this.poolgeist);
         }
 
-        let props = new PropertyManager();
-        let poolSkill =
+        const props = new PropertyManager();
+        const poolSkill =
           toInt(getProperty("poolSkill")) + numericModifier("pool skill") + 10;
 
         try {

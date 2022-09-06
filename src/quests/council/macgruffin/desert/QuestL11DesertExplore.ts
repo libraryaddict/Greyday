@@ -1,4 +1,5 @@
 import {
+  absorbedMonsters,
   availableAmount,
   canAdventure,
   Effect,
@@ -27,6 +28,7 @@ import {
 import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
 import { ResourceCategory } from "../../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
+import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -59,6 +61,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
   kramco: Item = Item.get("Kramco Sausage-o-Matic&trade;");
   paths: PossiblePath[] = [];
   curse3: Effect = Effect.get("Thrice-Cursed");
+  blur: Monster = Monster.get("Blur");
 
   createPaths(assumeUnstarted: boolean) {
     this.paths = [];
@@ -107,7 +110,9 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
       canAdventure(this.oasis) &&
       getProperty("_gnasirAvailable") == "true" &&
       this.wantsGnomeRose() &&
-      availableAmount(this.rose) == 0
+      availableAmount(this.rose) == 0 &&
+      (familiarWeight(this.goose) >= 6 ||
+        AbsorbsProvider.getAbsorbedMonsters().includes(this.blur))
     ) {
       return false;
     }
