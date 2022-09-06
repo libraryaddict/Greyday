@@ -7,6 +7,7 @@ import {
   familiarWeight,
   haveSkill,
   useFamiliar,
+  myLevel,
 } from "kolmafia";
 import { PossiblePath } from "../../typings/TaskInfo";
 import { greyKillingBlow } from "../../utils/GreyCombat";
@@ -30,7 +31,7 @@ export class QuestShortOrderExpLevel implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (!haveFamiliar(this.cook)) {
+    if (!haveFamiliar(this.cook) || myLevel() > 7) {
       return QuestStatus.COMPLETED;
     }
 

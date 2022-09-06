@@ -1,11 +1,14 @@
 import {
   availableAmount,
   cliExecute,
+  getProperty,
   Item,
   Location,
   Monster,
   myMaxhp,
   myMeat,
+  print,
+  toInt,
   use,
   visitUrl,
 } from "kolmafia";
@@ -120,6 +123,14 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
   }
 
   run(path: PossiblePath): QuestAdventure {
+    // Workaround for some weird bug I had
+    if (
+      availableAmount(this.loveBook1) == 0 &&
+      toInt(getProperty("palindomeDudesDefeated")) >= 5
+    ) {
+      cliExecute("refresh inventory");
+    }
+
     if (this.isFarmDudes()) {
       return this.farmDudes();
     }
