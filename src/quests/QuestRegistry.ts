@@ -150,6 +150,7 @@ export class QuestRegistry {
       { id: "Skills / ScalingItem" },
       { id: "Skills / ScalingMeat" },
       { id: "Skills / DoubleNanovision" },
+      { id: "Misc / Short Cook Goose" },
 
       {
         id: "Skills / ScalingDR",

@@ -199,6 +199,7 @@ const QuestMisc = [
   "Misc / Moonsign",
   "Misc / JuneCleaver",
   "Misc / Ghost Buster",
+  "Misc / Short Cook Goose",
 ] as const;
 const QuestCombatLocket = [
   "CombatLocket / SystemSweep",

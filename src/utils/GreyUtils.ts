@@ -96,14 +96,17 @@ const ballProp = () =>
     );
 
 let lastBallCheck: number = 0;
+const crystalBall: Item = Item.get("miniature crystal ball");
 /**
  * Returns a map of locations, and the monsters predicted.
  *
  * The boolean is a "Should we show fights that will still be valid if we waste a turn elsewhere"
  */
-export function currentPredictions(
-  showPredictionsNotAboutToExpire = true
-): Map<Location, Monster> {
+export function currentPredictions(): Map<Location, Monster> {
+  if (availableAmount(crystalBall) == 0) {
+    return new Map();
+  }
+
   let predictions = ballProp();
 
   if (lastBallCheck != turnsPlayed()) {

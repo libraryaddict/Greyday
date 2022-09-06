@@ -1,6 +1,7 @@
 import { Location, Item, availableAmount, Monster } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { currentPredictions } from "../../../../utils/GreyUtils";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -14,6 +15,7 @@ export class QuestL11ManorWine implements QuestInfo {
   celler: Location = Location.get("The Haunted Wine Cellar");
   unstable: Item = Item.get("unstable fulminate");
   bomb: Item = Item.get("Wine Bomb");
+  monster: Monster = Monster.get("possessed wine rack");
 
   getId(): QuestType {
     return "Council / MacGruffin / Manor / Wine";
@@ -45,7 +47,7 @@ export class QuestL11ManorWine implements QuestInfo {
   run(): QuestAdventure {
     const outfit = new GreyOutfit().setItemDrops();
 
-    if (this.celler.turnsSpent > 1) {
+    if (currentPredictions().get(this.celler) == this.monster) {
       outfit.setChampagneBottle();
     }
 
@@ -54,7 +56,7 @@ export class QuestL11ManorWine implements QuestInfo {
       outfit: outfit,
       run: () => {
         const settings = new AdventureSettings();
-        settings.addNoBanish(Monster.get("possessed wine rack"));
+        settings.addNoBanish(this.monster);
 
         greyAdv(this.celler, outfit, settings);
       },

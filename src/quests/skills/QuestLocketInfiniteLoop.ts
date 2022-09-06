@@ -64,6 +64,10 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
     return QuestStatus.READY;
   }
 
+  mustBeDone(): boolean {
+    return true;
+  }
+
   run(path: PossiblePath): QuestAdventure {
     const outfit = new GreyOutfit();
     outfit.addBonus("+10 init");

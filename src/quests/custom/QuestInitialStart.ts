@@ -53,6 +53,10 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
     return 1;
   }
 
+  mustBeDone(): boolean {
+    return true;
+  }
+
   status(): QuestStatus {
     if (availableAmount(this.mayday) > 0) {
       return QuestStatus.READY;

@@ -59,10 +59,11 @@ export class SimmedPath {
         unused[1].resourcesAvailable.map(
           (r) =>
             r.id +
-              " x " +
-              ResourceCategory[r.type] +
-              " (Uses " +
-              r.resourcesUsed ?? 1 + ")"
+            " x " +
+            ResourceCategory[r.type] +
+            " (Uses " +
+            (r.resourcesUsed ?? 1) +
+            ")"
         ),
       "red"
     );

@@ -64,8 +64,12 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
 
     const mixup: [ResourceCategory, number][] = [];
 
-    // Skip first cos queen doesn't need special strats
     for (let i = 0; i < wormsToKill; i++) {
+      if (i == 0) {
+        // Add 1 for the queen, she doesn't need special attention
+        mixup.push([null, 1]);
+        continue;
+      }
       // So we run 300% item drop lets assume
       // That's 30 chance a fight. That's eh, 4 fights? Lets call it 6 cos we're bad luck.
       mixup.push([null, 6]);
@@ -75,7 +79,7 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
 
     this.paths = [];
 
-    // At queen!
+    // At turn in!
     if (wormsToKill == 0) {
       this.paths.push(new PossiblePath(1));
     }
@@ -210,7 +214,7 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
     } else if (resource != null) {
       resource.prepare(outfit);
     } else {
-      outfit.setItemDrops();
+      outfit.setItemDrops().setChampagneBottle();
     }
 
     const chamber = this.worms.find((worm) => worm.isDoable());
@@ -220,7 +224,7 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
       outfit: outfit,
       run: () => {
         if (chamber.effect != null && haveEffect(chamber.effect) == 0) {
-          use(chamber.glands);
+          use(chamber.glandsRequired);
         }
 
         let killingBlow: Macro;
@@ -258,7 +262,7 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
       }
 
       // If the gland is available
-      if (availableAmount(worm.glands) > 0) {
+      if (availableAmount(worm.glandsRequired) > 0) {
         return false;
       }
     }
@@ -268,26 +272,26 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
 }
 
 class WormProgress {
-  glands: Item;
+  glandsRequired: Item;
   effect: Effect;
   location: Location;
 
-  constructor(item: Item, location: Location) {
+  constructor(itemRequired: Item, location: Location) {
     this.location = location;
-    this.glands = item;
+    this.glandsRequired = itemRequired;
 
-    if (item == null) {
+    if (itemRequired == null) {
       return;
     }
 
-    this.effect = effectModifier(item, "Effect");
+    this.effect = effectModifier(itemRequired, "Effect");
   }
 
   isDoable() {
     return (
-      this.glands == null ||
+      this.glandsRequired == null ||
       haveEffect(this.effect) > 0 ||
-      availableAmount(this.glands) > 0
+      availableAmount(this.glandsRequired) > 0
     );
   }
 }

@@ -1,6 +1,7 @@
 import { Location, Item, availableAmount, Monster } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { currentPredictions } from "../../../../utils/GreyUtils";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -14,6 +15,7 @@ export class QuestL11ManorSoda implements QuestInfo {
   laundry: Location = Location.get("The Haunted Laundry Room");
   unstable: Item = Item.get("unstable fulminate");
   bomb: Item = Item.get("Wine Bomb");
+  monster: Monster = Monster.get("cabinet of Dr. Limpieza");
 
   getId(): QuestType {
     return "Council / MacGruffin / Manor / Soda";
@@ -45,7 +47,7 @@ export class QuestL11ManorSoda implements QuestInfo {
   run(): QuestAdventure {
     const outfit = new GreyOutfit().setItemDrops();
 
-    if (this.laundry.turnsSpent > 1) {
+    if (currentPredictions().get(this.laundry) == this.monster) {
       outfit.setChampagneBottle();
     }
 
@@ -54,7 +56,7 @@ export class QuestL11ManorSoda implements QuestInfo {
       outfit: outfit,
       run: () => {
         const settings = new AdventureSettings();
-        settings.addNoBanish(Monster.get("cabinet of Dr. Limpieza"));
+        settings.addNoBanish(this.monster);
 
         greyAdv(this.laundry, outfit, settings);
       },
