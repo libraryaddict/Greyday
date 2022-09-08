@@ -5,7 +5,9 @@ import {
   Familiar,
   getProperty,
   Item,
+  itemAmount,
   Location,
+  myMeat,
   storageAmount,
   toBoolean,
   use,
@@ -21,9 +23,11 @@ import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
 export class QuestL1Toot extends TaskInfo implements QuestInfo {
-  toSell: Item[] = ["hamethyst", "baconstone", "porquoise"].map((s) =>
-    Item.get(s)
-  );
+  purq: Item = Item.get("porquoise");
+  bacon: Item = Item.get("baconstone");
+  ham: Item = Item.get("hamethyst");
+
+  sellGems: PossiblePath;
   paths: PossiblePath[];
   boombox: Item = Item.get("SongBoom&trade; BoomBox");
   deck: Item = Item.get("Deck of Every Card");
@@ -41,6 +45,14 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
     }
 
     return QuestStatus.READY;
+  }
+
+  mustBeDone(): boolean {
+    return true;
+  }
+
+  free(): boolean {
+    return true;
   }
 
   createPaths(assumeUnstarted: boolean): void {
@@ -63,7 +75,7 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
       }
 
       if (!assumeUnstarted && GreySettings.isHardcoreMode()) {
-        this.paths.push(new PossiblePath(20).addIgnored("Wish"));
+        this.paths.push((this.sellGems = new PossiblePath(20)));
       }
 
       if (
@@ -86,7 +98,6 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
       location: null,
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
-        useFamiliar(Familiar.get("Grey Goose")); // Force it to be leveled up if we happen to have short order cook
         council();
         visitUrl("tutorial.php?action=toot");
         use(Item.get("Letter from King Ralph XI"));
@@ -94,8 +105,8 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
 
         if (path.canUse(ResourceCategory.PULL)) {
           GreyPulls.tryPull(path.pulls[0]);
-        } else if (path.ignoreResources.includes("Wish")) {
-          for (const i of this.toSell) {
+        } else if (path === this.sellGems) {
+          for (const i of [this.purq, this.bacon, this.ham]) {
             if (availableAmount(i) > 0) {
               autosell(i, availableAmount(i));
             }
@@ -110,6 +121,19 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
             autosell(this.mickyCard, 1);
           } else {
             throw "Expected to have sold a " + this.mickyCard;
+          }
+        }
+
+        // If we're poor, sell one of the gems for some starting meat
+        if (myMeat() < 500) {
+          // Sell one of the gems, with purq last
+          for (const item of [this.bacon, this.ham, this.purq]) {
+            if (itemAmount(item) == 0) {
+              continue;
+            }
+
+            autosell(item, 1);
+            break;
           }
         }
 

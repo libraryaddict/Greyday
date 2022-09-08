@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  Familiar,
   getProperty,
   historicalPrice,
   Item,
@@ -9,6 +10,7 @@ import {
   storageAmount,
   toInt,
   turnsPlayed,
+  useFamiliar,
 } from "kolmafia";
 import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
@@ -119,6 +121,7 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         this.donePulls = true;
+        useFamiliar(Familiar.get("Grey Goose")); // Force it to be leveled up if we happen to have short order cook
 
         for (const item of path.pulls) {
           if (hasPulled(item)) {

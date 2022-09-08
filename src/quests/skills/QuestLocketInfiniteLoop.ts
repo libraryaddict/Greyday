@@ -1,17 +1,13 @@
 import {
   availableAmount,
   currentRound,
-  Effect,
   equippedAmount,
   handlingChoice,
-  haveEffect,
   haveSkill,
   Item,
   itemAmount,
   Location,
   Monster,
-  myLevel,
-  myMeat,
   numericModifier,
   Skill,
 } from "kolmafia";
@@ -27,7 +23,6 @@ import { QuestType } from "../QuestTypes";
 export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   monster: Monster = Monster.get("Pygmy witch lawyer");
   skill: Skill = Skill.get("Infinite Loop");
-  effect: Effect = Effect.get("Everything Looks Yellow");
   instantKill: Item = Item.get("Flame orb");
   wish: Item = Item.get("Pocket Wish");
   fax: PossiblePath;
@@ -57,16 +52,19 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
     return [this.fax, this.pullWish];
   }
 
-  status(): QuestStatus {
+  status(path: PossiblePath): QuestStatus {
     if (haveSkill(this.skill)) {
       return QuestStatus.COMPLETED;
     }
 
-    if (haveEffect(this.effect) > 0) {
+    if (path == null) {
       return QuestStatus.NOT_READY;
     }
 
-    if (myMeat() < 350 || myLevel() < 4) {
+    if (
+      path.canUse(ResourceCategory.YELLOW_RAY) &&
+      !path.getResource(ResourceCategory.YELLOW_RAY).ready()
+    ) {
       return QuestStatus.NOT_READY;
     }
 
@@ -84,14 +82,12 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
     outfit.hpRegenWeight = 1;
     outfit.mpRegenWeight = 1;
 
-    if (path.canUse(ResourceCategory.YELLOW_RAY)) {
-      path.getResource(ResourceCategory.YELLOW_RAY).prepare(outfit);
-    }
-
     if (availableAmount(this.doctorsBag) > 0) {
       outfit.addItem(this.doctorsBag);
     } else if (availableAmount(this.pantsgiving) > 0) {
       outfit.addItem(this.pantsgiving);
+    } else if (path.canUse(ResourceCategory.YELLOW_RAY)) {
+      path.getResource(ResourceCategory.YELLOW_RAY).prepare(outfit);
     }
 
     return {
@@ -105,21 +101,6 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
         const props = new PropertyManager();
         let macro: Macro;
         let faxResource = path.getResource(ResourceCategory.FAXER);
-
-        if (equippedAmount(this.doctorsBag) > 0) {
-          macro = Macro.skill(Skill.get("Chest X-Ray"));
-        } else if (equippedAmount(this.pantsgiving) > 0) {
-          macro = Macro.skill(Skill.get("Talk about politics"));
-        } else {
-          const yrResource = path.getResource(ResourceCategory.YELLOW_RAY);
-
-          if (faxResource != null) {
-            yrResource.prepare(null, props);
-            macro = yrResource.macro();
-          } else {
-            macro = Macro.item(this.instantKill);
-          }
-        }
 
         if (path.canUse(ResourceCategory.PULL)) {
           GreyPulls.tryPull(this.wish, 51000);
@@ -137,6 +118,21 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
           path.addUsed(ResourceCategory.PULL);
           path.addUsed(ResourceCategory.PULL);
           faxResource = getResources().find((r) => r.id == "Wish");
+        }
+
+        if (equippedAmount(this.doctorsBag) > 0) {
+          macro = Macro.skill(Skill.get("Chest X-Ray"));
+        } else if (equippedAmount(this.pantsgiving) > 0) {
+          macro = Macro.skill(Skill.get("Talk about politics"));
+        } else {
+          const yrResource = path.getResource(ResourceCategory.YELLOW_RAY);
+
+          if (faxResource != null) {
+            yrResource.prepare(null, props);
+            macro = yrResource.macro();
+          } else {
+            macro = Macro.item(this.instantKill);
+          }
         }
 
         faxResource.fax(this.monster);
