@@ -50,6 +50,7 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
   dogPhoto: Item = Item.get("photograph of a dog");
   bobRace = Monster.get("Bob Racecar");
   raceBob = Monster.get("Racecar Bob");
+  drab: Monster = Monster.get("Drab Bard");
   paths: PossiblePath[];
 
   createPaths(assumeUnused: boolean) {
@@ -175,6 +176,17 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
       outfit.setNoCombat();
     }
 
+    const orbs: Monster[] = [];
+
+    if (toInt(getProperty("palindomeDudesDefeated")) < 5) {
+      orbs.push(this.drab);
+      orbs.push(this.bobRace);
+      orbs.push(this.raceBob);
+    } else if (this.needDogPhoto()) {
+      orbs.push(this.bobRace);
+      orbs.push(this.raceBob);
+    }
+
     // No NCs to be hit other than quest so no need to +combat
 
     outfit.addItem(this.talisman);
@@ -182,6 +194,7 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
     return {
       outfit: outfit,
       location: this.palindome,
+      orbs: orbs,
       run: () => {
         let macro: Macro = null;
 
@@ -218,5 +231,9 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
 
   mustBeDone(): boolean {
     return isGhostBustingTime(this.palindome);
+  }
+
+  free(): boolean {
+    return this.mustBeDone();
   }
 }

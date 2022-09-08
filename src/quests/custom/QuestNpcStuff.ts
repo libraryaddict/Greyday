@@ -9,6 +9,7 @@ import {
   Location,
   myAscensions,
   myMeat,
+  print,
   runChoice,
   setProperty,
   Skill,
@@ -224,13 +225,28 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
     return 1;
   }
 
+  free(): boolean {
+    return true;
+  }
+
+  mustBeDone(): boolean {
+    return true;
+  }
+
   getLocations(): Location[] {
     return [];
   }
 
-  status(): QuestStatus {
+  status(path: PossiblePath): QuestStatus {
     if (availableAmount(this.letter) > 0) {
       //  return QuestStatus.READY;
+    }
+
+    if (
+      path == null ||
+      (haveSkill(this.torso) && path.canUse(ResourceCategory.PULL))
+    ) {
+      return QuestStatus.READY;
     }
 
     if (
@@ -275,6 +291,17 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
       };
     }
 
+    if (haveSkill(this.torso) && path.canUse(ResourceCategory.PULL)) {
+      return {
+        location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
+        run: () => {
+          GreyPulls.tryPull(this.shirt);
+          AdventureFinder.recalculatePath();
+        },
+      };
+    }
+
     return {
       location: null,
       outfit: GreyOutfit.IGNORE_OUTFIT,
@@ -283,13 +310,7 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
 
         visitUrl("gnomes.php?action=trainskill&whichskill=" + toInt(skill));
 
-        if (
-          path.canUse(ResourceCategory.PULL) &&
-          haveSkill(skill) &&
-          skill == this.torso
-        ) {
-          GreyPulls.tryPull(this.shirt);
-          path.addUsed(ResourceCategory.PULL);
+        if (!path.canUse(ResourceCategory.PULL) && skill == this.torso) {
           AdventureFinder.recalculatePath();
         }
       },

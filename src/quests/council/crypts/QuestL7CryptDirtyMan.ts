@@ -74,6 +74,7 @@ export class CryptL7DirtyMan extends CryptL7Template {
       familiar: fam,
       location: this.loc,
       outfit: outfit,
+      olfaction: [this.dirty],
       run: () => {
         this.adjustRetroCape();
 

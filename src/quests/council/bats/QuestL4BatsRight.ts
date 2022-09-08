@@ -1,4 +1,11 @@
-import { Location, Familiar, availableAmount, Item, use } from "kolmafia";
+import {
+  Location,
+  Familiar,
+  availableAmount,
+  Item,
+  use,
+  Monster,
+} from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
@@ -12,6 +19,7 @@ import { QuestType } from "../../QuestTypes";
 export class QuestL4BatsRight implements QuestInfo {
   loc: Location = Location.get("The Beanbat Chamber");
   bean: Item = Item.get("Enchanted Bean");
+  monster: Monster = Monster.get("beanbat");
 
   getId(): QuestType {
     return "Council / Bats / UnlockBoss";
@@ -21,13 +29,14 @@ export class QuestL4BatsRight implements QuestInfo {
     return 4;
   }
 
-  status(): QuestStatus {
-    let giantStatus = getQuestStatus("questL10Garbage");
+  needsBean(): boolean {
+    return (
+      availableAmount(this.bean) == 0 && getQuestStatus("questL10Garbage") <= 0
+    );
+  }
 
-    if (
-      getQuestStatus("questL04Bat") > 2 &&
-      (giantStatus > 0 || availableAmount(this.bean) > 0)
-    ) {
+  status(): QuestStatus {
+    if (getQuestStatus("questL04Bat") > 2 && !this.needsBean()) {
       return QuestStatus.COMPLETED;
     }
 
@@ -39,11 +48,12 @@ export class QuestL4BatsRight implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops();
 
     return {
       location: this.loc,
       outfit: outfit,
+      orbs: this.needsBean() ? [this.monster] : null,
       run: () => {
         greyAdv(this.loc, outfit);
       },

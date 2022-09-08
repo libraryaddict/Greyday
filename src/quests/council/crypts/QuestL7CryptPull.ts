@@ -157,4 +157,8 @@ export class QuestL7CryptPull extends TaskInfo implements QuestInfo {
   mustBeDone(): boolean {
     return true;
   }
+
+  free(): boolean {
+    return true;
+  }
 }

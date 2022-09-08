@@ -51,6 +51,10 @@ export class QuestL9Smut implements QuestInfo {
     return true;
   }
 
+  free(): boolean {
+    return true;
+  }
+
   getStatus(): PeakStatus {
     return PeakStatus[getProperty("questL09Topping")];
   }

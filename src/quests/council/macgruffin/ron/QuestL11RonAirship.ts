@@ -24,6 +24,9 @@ export class QuestL11RonAirship implements QuestInfo {
   ticket: Item = Item.get("Red Zeppelin Ticket");
   ron: Monster = Monster.get('Ron "The Weasel" Copperhead');
   airship: Location = Location.get("The Red Zeppelin");
+  butler: Monster = Monster.get("Red Butler");
+  skeleton: Monster = Monster.get("Red Skeleton");
+  buttons: Monster = Monster.get("Man with the red buttons");
 
   getLocations(): Location[] {
     return [this.airship];
@@ -61,6 +64,8 @@ export class QuestL11RonAirship implements QuestInfo {
     return {
       location: this.airship,
       outfit: outfit,
+      orbs: [this.skeleton, this.butler, this.buttons],
+      olfaction: [this.butler],
       run: () => {
         if (availableAmount(this.ticket) == 0) {
           retrieveItem(this.ticket);

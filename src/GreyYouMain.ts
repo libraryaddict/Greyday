@@ -286,7 +286,7 @@ class GreyYouMain {
         q1.getId().localeCompare(q2.getId())
       );
       this.adventures.adventureFinder.printStatus(
-        this.adventures.adventureFinder.path.thisPath
+        this.adventures.adventureFinder.path.thisPath as []
       );
       return;
     } else if (command == "sim") {
@@ -318,6 +318,7 @@ class GreyYouMain {
           }
 
           lastBeaten = haveEffect(effect);
+
           const run = this.adventures.runTurn(true);
 
           if (!run) {

@@ -55,7 +55,7 @@ export class QuestL11Shen implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Shen");
+    const status = getQuestStatus("questL11Shen");
 
     if (status > 0) {
       return QuestStatus.COMPLETED;
@@ -72,7 +72,7 @@ export class QuestL11Shen implements QuestInfo {
     return {
       location: null,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(1074, 1); // Approach table
         props.setChoice(851, 1);
 
@@ -89,7 +89,7 @@ export class QuestL11Shen implements QuestInfo {
     return true;
   }
 
-  needAdventures(): number {
-    return 0;
+  free(): boolean {
+    return true;
   }
 }

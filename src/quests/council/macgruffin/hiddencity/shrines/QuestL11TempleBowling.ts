@@ -44,6 +44,8 @@ export class QuestL11Bowling implements QuestInfo {
   nanovision: Skill = Skill.get("Double Nanovision");
   drunk: Monster = Monster.get("Drunk pygmy");
   book: Item = Item.get("Book of matches");
+  bowler: Monster = Monster.get("Pygmy Bowler");
+  sweep: Skill = Skill.get("System Sweep");
   toAbsorb: Monster[];
 
   hasCosmicBowled(): boolean {
@@ -160,10 +162,18 @@ export class QuestL11Bowling implements QuestInfo {
       outfit.setItemDrops();
     }
 
+    const orbs: Monster[] = [];
+
+    if (!haveSkill(this.sweep)) {
+      orbs.push(this.drunk);
+    }
+
     // Banishers
     return {
       location: this.loc,
       outfit: outfit,
+      orbs: orbs,
+      olfaction: [this.bowler],
       run: () => {
         let macro: Macro = null;
         let couldBeBowling: boolean = false;
@@ -199,7 +209,7 @@ export class QuestL11Bowling implements QuestInfo {
         try {
           const settings = new AdventureSettings();
           settings.setStartOfFightMacro(macro);
-          settings.addNoBanish(Monster.get("Pygmy Bowler"));
+          settings.addNoBanish(this.bowler);
 
           if (!haveSkill(this.nanovision)) {
             settings.addNoBanish(this.drunk);

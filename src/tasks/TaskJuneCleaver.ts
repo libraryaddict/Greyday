@@ -15,34 +15,10 @@ export class TaskJuneCleaver implements Task {
   teachersPen: Item = Item.get("Teacher's Pen");
 
   run(): void {
-    if (!this.hasSet) {
-      this.hasSet = true;
-
-      // Alligator
-      setProperty("choiceAdventure1469", "3"); // 1.5k meat
-
-      // Peotic
-      setProperty("choiceAdventure1467", "3"); // Get adventures
+    if (!this.hasSet3 && availableAmount(this.teachersPen) > 1) {
+      this.hasSet3 = true;
       // Teachers
-      setProperty("choiceAdventure1470", "2"); // Teachers pen
-      // Lost and found
-      setProperty("choiceAdventure1471", "1"); // Meat potion
-
-      if (toInt(getProperty("_juneCleaverSkips")) < 5) {
-        // Sprouts
-        setProperty("choiceAdventure1474", "4"); // Skip
-        // Hypnotic
-        setProperty("choiceAdventure1475", "4"); // Skip
-
-        // Summer days
-        setProperty("choiceAdventure1472", "4"); // Skip
-
-        // Aunts
-        setProperty("choiceAdventure1468", "4"); // Skip
-
-        // Bath time
-        setProperty("choiceAdventure1473", "4"); // Skip
-      }
+      setProperty("choiceAdventure1470", "1"); // Teachers Pet
     }
 
     if (!this.hasSet2 && toInt(getProperty("_juneCleaverSkips")) >= 5) {
@@ -64,9 +40,38 @@ export class TaskJuneCleaver implements Task {
       setProperty("choiceAdventure1475", "1"); // Moms necklace.
     }
 
-    if (!this.hasSet3 && availableAmount(this.teachersPen) > 1) {
-      // Teachers
-      setProperty("choiceAdventure1470", "1"); // Teachers Pet
+    if (!this.hasSet) {
+      this.hasSet = true;
+
+      // Peotic
+      setProperty("choiceAdventure1467", "3"); // Get adventures
+
+      // Alligator
+      setProperty("choiceAdventure1469", "3"); // 1.5k meat
+
+      // Lost and found
+      setProperty("choiceAdventure1471", "1"); // Meat potion
+
+      if (!this.hasSet3) {
+        // Teachers
+        setProperty("choiceAdventure1470", "2"); // Teachers pen
+      }
+
+      if (toInt(getProperty("_juneCleaverSkips")) < 5) {
+        // Aunts
+        setProperty("choiceAdventure1468", "4"); // Skip
+
+        // Summer days
+        setProperty("choiceAdventure1472", "4"); // Skip
+
+        // Bath time
+        setProperty("choiceAdventure1473", "4"); // Skip
+
+        // Sprouts
+        setProperty("choiceAdventure1474", "4"); // Skip
+        // Hypnotic
+        setProperty("choiceAdventure1475", "4"); // Skip
+      }
     }
   }
 }

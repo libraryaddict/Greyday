@@ -11,11 +11,12 @@ export class GreyTimings {
 
     this.expectingStart = false;
 
-    let times = getProperty(this.prop)
+    const times = getProperty(this.prop)
       .split(",")
       .filter((s) => s.length > 0);
 
     times.push(this.getTime().toString());
+
     setProperty(this.prop, times.join(","));
   }
 
@@ -25,24 +26,27 @@ export class GreyTimings {
     }
 
     this.expectingStart = true;
-    setProperty(this.prop, getProperty(this.prop) + ":" + this.getTime());
+
+    const time = this.getTime();
+    const prop = getProperty(this.prop) + ":" + time;
+    const secs = this.getTotalSeconds(prop);
+
+    setProperty(this.prop, time - secs + ":" + time);
   }
 
-  getTimings(): [number, number][] {
-    let timings: [number, number][] = [];
+  getTimings(prop: string): [number, number][] {
+    const timings: [number, number][] = [];
 
-    for (let [t1, t2] of getProperty(this.prop)
-      .split(",")
-      .map((s) => s.split(":"))) {
+    for (const [t1, t2] of prop.split(",").map((s) => s.split(":"))) {
       timings.push([toInt(t1), t2 ? toInt(t2) : null]);
     }
 
     return timings;
   }
 
-  getTotalSeconds(): number {
+  getTotalSeconds(prop: string = getProperty(this.prop)): number {
     let timeTaken: number = 0;
-    let timings = this.getTimings();
+    const timings = this.getTimings(prop);
 
     for (let i = 0; i < timings.length; i++) {
       let [started, ended] = timings[i];

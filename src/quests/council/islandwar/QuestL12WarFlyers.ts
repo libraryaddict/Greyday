@@ -53,8 +53,8 @@ export class QuestL12WarFlyers implements QuestInfo {
     };
   }
 
-  needAdventures(): number {
-    return 0;
+  free(): boolean {
+    return true;
   }
 
   mustBeDone(): boolean {

@@ -1,9 +1,11 @@
 import {
   availableAmount,
   Effect,
+  Element,
   Familiar,
   getProperty,
   haveEffect,
+  haveSkill,
   Item,
   Location,
   Monster,
@@ -26,17 +28,35 @@ import {
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { GreySettings } from "../../../utils/GreySettings";
+import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 
 export class QuestManorBillards implements QuestInfo {
   billards: Location = Location.get("The Haunted Billiards Room");
   chalk: Item = Item.get("Handful of hand chalk");
   chalkEffect: Effect = Effect.get("Chalky Hand");
-  invis: Effect = Effect.get("Invisible Avatar");
-  invisSkill: Skill = Skill.get("CHEAT CODE: Invisible Avatar");
   key: Item = Item.get("[7302]Spookyraven library key");
   cue: Item = Item.get("pool cue");
   poolgeist: Monster = Monster.get("pooltergeist");
+  ghost: Monster = Monster.get("Chalkdust wraith");
+  hardening: Skill = Skill.get("Subatomic Hardening");
   toAbsorb: Monster[];
+  elementalSkills: Skill[];
+
+  constructor() {
+    this.elementalSkills = AbsorbsProvider.allAbsorbs
+      .map((a) =>
+        a.skill == null
+          ? null
+          : [
+              a.skill,
+              Element.all()
+                .map((e) => numericModifier(a.skill, e + " Damage"))
+                .reduce((p, n) => p + n, 0),
+            ]
+      )
+      .filter((pair) => pair != null)
+      .map(([p]) => p) as Skill[];
+  }
 
   getId(): QuestType {
     return "Manor / Billards";
@@ -81,11 +101,28 @@ export class QuestManorBillards implements QuestInfo {
     }
 
     outfit.addItem(this.cue);
-    outfit.addBonus("+10 elemental dmg 1 min 1 max");
+
+    if (this.elementalSkills.find((s) => haveSkill(s)) == null) {
+      outfit.addBonus("+10 elemental dmg 1 min 1 max");
+    }
+
+    const orbs: Monster[] = [];
+
+    if (
+      this.toAbsorb.includes(this.ghost) ||
+      (availableAmount(this.chalk) == 0 && haveEffect(this.chalkEffect) <= 1)
+    ) {
+      orbs.push(this.ghost);
+    }
+
+    if (!haveSkill(this.hardening)) {
+      orbs.push(this.poolgeist);
+    }
 
     return {
       outfit: outfit,
       location: this.billards,
+      orbs: orbs,
       run: () => {
         if (
           availableAmount(this.cue) > 0 &&

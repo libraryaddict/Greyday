@@ -66,7 +66,7 @@ export class QuestL11DesertCompass extends TaskInfo implements QuestInfo {
       location: null,
       run: () => {
         if (!path.canUse(ResourceCategory.PULL)) {
-          let props = new PropertyManager();
+          const props = new PropertyManager();
 
           try {
             props.setChoice(793, 1);
@@ -91,9 +91,5 @@ export class QuestL11DesertCompass extends TaskInfo implements QuestInfo {
 
   getLocations(): Location[] {
     return [];
-  }
-
-  needAdventures(): number {
-    return 3;
   }
 }

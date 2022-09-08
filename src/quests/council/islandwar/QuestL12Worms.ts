@@ -250,6 +250,10 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
     };
   }
 
+  free(): boolean {
+    return availableAmount(this.heart) > 0;
+  }
+
   mustBeDone(): boolean {
     for (const worm of this.worms) {
       if (worm.effect == null) {

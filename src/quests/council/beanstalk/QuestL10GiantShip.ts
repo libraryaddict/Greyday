@@ -22,6 +22,7 @@ export class QuestL10GiantShip implements QuestInfo {
   modelShip: Item = Item.get("Model airship");
   amulet: Item = Item.get("Amulet of Extreme Plot Significance");
   umbrella: Item = Item.get("Titanium Assault Umbrella");
+  unbreakable: Item = Item.get("Unbreakable Umbrella");
   wig: Item = Item.get("Mohawk Wig");
   loc: Location = Location.get("The Penultimate Fantasy Airship");
   wads: Item[] = [
@@ -31,6 +32,9 @@ export class QuestL10GiantShip implements QuestInfo {
     "Plastic Wrap Immateria",
   ].map((s) => Item.get(s));
   protag: Monster = Monster.get("Protagonist");
+  healer: Monster = Monster.get("Quiet Healer");
+  burly: Monster = Monster.get("Burly Sidekick");
+  princess: Monster = Monster.get("Spunky Princess");
   toAbsorb: Monster[];
 
   shouldRunNC(): boolean {
@@ -42,7 +46,7 @@ export class QuestL10GiantShip implements QuestInfo {
       return false;
     }
 
-    let wadExpected = this.wads[Math.floor(this.loc.turnsSpent - 5) / 5];
+    const wadExpected = this.wads[Math.floor(this.loc.turnsSpent - 5) / 5];
 
     // If we have this wad already, then we need to wait for the next wad to be available
     if (wadExpected != null && availableAmount(wadExpected) > 0) {
@@ -53,30 +57,43 @@ export class QuestL10GiantShip implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (this.shouldRunNC()) {
       outfit.setNoCombat();
     }
 
-    let wantDrops =
-      availableAmount(this.amulet) == 0 ||
-      availableAmount(this.umbrella) == 0 ||
-      availableAmount(this.wig) == 0;
+    const orbs: Monster[] = [];
 
-    if (wantDrops) {
+    if (availableAmount(this.amulet) == 0) {
+      orbs.push(this.healer);
+    }
+
+    if (
+      availableAmount(this.umbrella) == 0 &&
+      availableAmount(this.unbreakable) == 0
+    ) {
+      orbs.push(this.princess);
+    }
+
+    if (availableAmount(this.wig) == 0) {
+      orbs.push(this.burly);
+    }
+
+    if (orbs.length > 0) {
       outfit.setItemDrops();
     }
 
     return {
       location: this.loc,
       outfit: outfit,
+      orbs: orbs,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(681, 1);
 
         if (!this.shouldRunNC()) {
-          let ready = DelayBurners.getReadyDelayBurner();
+          const ready = DelayBurners.getReadyDelayBurner();
 
           if (ready != null) {
             ready.doFightSetup();
@@ -96,7 +113,7 @@ export class QuestL10GiantShip implements QuestInfo {
             props.setChoice(182, 1);
           }
 
-          let settings = new AdventureSettings();
+          const settings = new AdventureSettings();
           settings.addBanish(this.protag);
 
           greyAdv(this.loc, outfit, settings);
@@ -116,7 +133,7 @@ export class QuestL10GiantShip implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL10Garbage");
+    const status = getQuestStatus("questL10Garbage");
 
     if (status < 1) {
       return QuestStatus.NOT_READY;

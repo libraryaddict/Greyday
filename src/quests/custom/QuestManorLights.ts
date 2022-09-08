@@ -362,7 +362,10 @@ export class QuestManorLights implements QuestInfo {
     return false;
   }
 
-  needAdventures(): number {
-    return 0;
+  free(): boolean {
+    return (
+      (this.isSteveReady() && !this.isSteveFight()) ||
+      (this.isElizaReady() && !this.isElizaFight())
+    );
   }
 }

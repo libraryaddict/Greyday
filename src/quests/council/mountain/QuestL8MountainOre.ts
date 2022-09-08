@@ -537,11 +537,6 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
 
         const props = new PropertyManager();
 
-        if (path.canUse(ResourceCategory.YELLOW_RAY)) {
-          path.getResource(ResourceCategory.YELLOW_RAY).prepare(null, props);
-          macro.step(path.getResource(ResourceCategory.YELLOW_RAY).macro());
-        }
-
         try {
           if (path.canUse(ResourceCategory.FAXER)) {
             path.getResource(ResourceCategory.FAXER).fax(this.mountainMan);
@@ -575,6 +570,11 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
                 "red"
               );
             }
+          }
+
+          if (path.canUse(ResourceCategory.YELLOW_RAY)) {
+            path.getResource(ResourceCategory.YELLOW_RAY).prepare(null, props);
+            macro.step(path.getResource(ResourceCategory.YELLOW_RAY).macro());
           }
 
           greyAdv(
@@ -611,9 +611,5 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
 
   getLocations(): Location[] {
     return [];
-  }
-
-  needAdventures(): number {
-    return 3;
   }
 }

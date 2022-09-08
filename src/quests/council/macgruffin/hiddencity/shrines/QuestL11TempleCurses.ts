@@ -22,6 +22,7 @@ export class QuestL11Curses implements QuestInfo {
   curse2: Effect = Effect.get("Twice-Cursed");
   curse3: Effect = Effect.get("Thrice-Cursed");
   apartment: Location = Location.get("The Hidden Apartment Building");
+  shaman: Monster = Monster.get("pygmy shaman");
   toAbsorb: Monster[];
 
   level(): number {
@@ -50,7 +51,7 @@ export class QuestL11Curses implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getProperty("questL11Curses");
+    const status = getProperty("questL11Curses");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;
@@ -76,7 +77,7 @@ export class QuestL11Curses implements QuestInfo {
   }
 
   delayForNextNC(): number {
-    let totalTurns = this.apartment.turnsSpent;
+    const totalTurns = this.apartment.turnsSpent;
 
     if (totalTurns < 9) {
       return 8 - totalTurns;
@@ -88,14 +89,19 @@ export class QuestL11Curses implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: this.apartment,
+      orbs: haveEffect(this.curse3) <= 2 ? [this.shaman] : null,
+      olfaction:
+        haveEffect(this.curse3) + haveEffect(this.curse2) == 0
+          ? [this.shaman]
+          : null,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         if (haveEffect(this.curse3)) {
           props.setChoice(780, 1);
 
           if (this.delayForNextNC() > 0) {
-            let ready = DelayBurners.getReadyDelayBurner();
+            const ready = DelayBurners.getReadyDelayBurner();
 
             if (ready != null) {
               ready.doFightSetup();
@@ -111,7 +117,7 @@ export class QuestL11Curses implements QuestInfo {
           useFamiliar(Familiar.get("Grey Goose"));
         }
 
-        let settings = new AdventureSettings().addBanish(
+        const settings = new AdventureSettings().addBanish(
           Monster.get("pygmy witch lawyer")
         );
 

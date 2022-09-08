@@ -56,7 +56,7 @@ export class QuestFortuneExp implements QuestInfo {
     return [];
   }
 
-  needAdventures(): number {
-    return 0;
+  free(): boolean {
+    return true;
   }
 }

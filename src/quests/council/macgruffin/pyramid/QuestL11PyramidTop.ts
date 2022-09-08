@@ -35,7 +35,7 @@ export class QuestL11PyramidTop implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Pyramid");
+    const status = getQuestStatus("questL11Pyramid");
 
     if (status <= 0 && !this.isUnlockable()) {
       return QuestStatus.NOT_READY;
@@ -64,6 +64,10 @@ export class QuestL11PyramidTop implements QuestInfo {
     );
   }
 
+  free(): boolean {
+    return this.mustBeDone();
+  }
+
   run(): QuestAdventure {
     if (this.mustBeDone()) {
       return {
@@ -75,7 +79,7 @@ export class QuestL11PyramidTop implements QuestInfo {
       };
     }
 
-    let outfit = new GreyOutfit().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat();
 
     return {
       location: this.topLoc,

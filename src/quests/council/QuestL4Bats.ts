@@ -1,27 +1,7 @@
-import {
-  adv1,
-  adventure,
-  availableAmount,
-  council,
-  Element,
-  elementalResistance,
-  getProperty,
-  haveSkill,
-  Item,
-  Location,
-  myLevel,
-  numericModifier,
-  print,
-  Skill,
-  toInt,
-  use,
-} from "kolmafia";
-import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
+import { availableAmount, Item, Location, use } from "kolmafia";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
-import { Macro } from "../../utils/MacroBuilder";
 import {
   getQuestStatus,
-  OutfitImportance,
   QuestAdventure,
   QuestInfo,
   QuestStatus,
@@ -60,7 +40,7 @@ export class QuestL4Bats implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL04Bat");
+    const status = getQuestStatus("questL04Bat");
 
     if (status < 0) {
       return QuestStatus.NOT_READY;
@@ -94,6 +74,10 @@ export class QuestL4Bats implements QuestInfo {
 
   getId(): QuestType {
     return "Council / Bats / Sonars";
+  }
+
+  free(): boolean {
+    return true;
   }
 }
 

@@ -70,20 +70,25 @@ export class QuestL11PyramidMiddle implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit();
+
+    if (!this.haveEnough()) {
+      outfit.setItemDrops();
+    }
 
     return {
       location: this.middleLoc,
       outfit: outfit,
+      orbs: this.haveEnough() ? null : [this.tombRat],
       run: () => {
-        let settings = new AdventureSettings();
+        const settings = new AdventureSettings();
 
-        let startMacro: Macro = new Macro();
+        const startMacro: Macro = new Macro();
 
         if (availableAmount(this.ratTangle) > 0) {
           startMacro.if_(this.tombRat, Macro.item(this.ratTangle));
         } else if (this.haveEnough() && this.toAbsorb.length == 0) {
-          let delay = DelayBurners.getReadyDelayBurner();
+          const delay = DelayBurners.getReadyDelayBurner();
 
           if (delay != null) {
             delay.doFightSetup();

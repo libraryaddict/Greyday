@@ -34,6 +34,8 @@ export class ManorBedroom implements QuestInfo {
     "Wardrob nightstand",
   ].map((m) => Monster.get(m));
   toAbsorb: Monster[];
+  cameraMonster: Monster = Monster.get("Animated ornate nightstand");
+  dressMonster: Monster = Monster.get("Elegant animated nightstand");
 
   needCamera(): boolean {
     return (
@@ -96,9 +98,20 @@ export class ManorBedroom implements QuestInfo {
   run(): QuestAdventure {
     const outfit = new GreyOutfit();
 
+    const orbs: Monster[] = [];
+
+    if (this.location.turnsSpent >= 5 && this.needDress()) {
+      orbs.push(this.dressMonster);
+    }
+
+    if (this.needCamera() || this.needGlasses()) {
+      orbs.push(this.cameraMonster);
+    }
+
     return {
       location: this.location,
       outfit: outfit,
+      orbs: orbs,
       run: () => {
         const props = new PropertyManager();
 

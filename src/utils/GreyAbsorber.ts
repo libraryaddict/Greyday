@@ -20,7 +20,7 @@ import {
   turnsPlayed,
   visitUrl,
 } from "kolmafia";
-import { getQuestStatus } from "../quests/Quests";
+import { getQuestStatus, NonQuestAdventure } from "../quests/Quests";
 import { getLocations } from "./GreyLocations";
 import { GreySettings } from "./GreySettings";
 
@@ -97,6 +97,10 @@ export class AbsorbsProvider {
     );
   }
 
+  getAbsorb(monster: Monster): Absorb {
+    return AbsorbsProvider.allAbsorbs.find((a) => a.monster == monster);
+  }
+
   getAbsorbsInLocation(location: Location): Absorb[] {
     const absorbs: Absorb[] = [];
 
@@ -138,7 +142,7 @@ export class AbsorbsProvider {
     defeated: Map<Monster, Reabsorbed>,
     monsters: Monster[],
     includeSkills: boolean = true
-  ): AdventureLocation {
+  ): AbsorbDetails {
     const skills = this.getMustHaveSkills();
 
     if (!GreySettings.speedRunMode) {
@@ -146,10 +150,6 @@ export class AbsorbsProvider {
         skills.set(entry[0], entry[1]);
       }
     }
-
-    // for (let entry of this.getRolloverAdvs()) {
-    //   skills.set(entry[0], entry[1]);
-    // }
 
     const absorbs = monsters
       .map((m) => AbsorbsProvider.getAbsorb(m))
@@ -196,26 +196,50 @@ export class AbsorbsProvider {
       newSkills.set(a, skills.get(a.skill));
     }
 
+    const profit =
+      totalAdvs - (advsSpent + Math.max(2, Math.ceil(advsSpent * 0.2)));
+
     return {
-      location: null,
       turnsToGain: totalAdvs,
-      expectedTurnsProfit:
-        totalAdvs - (advsSpent + Math.max(2, Math.ceil(advsSpent * 0.2))),
+      expectedTurnsProfit: profit,
       monsters: absorbs.map((a) => a.monster),
       skills: newSkills,
-      shouldWait:
-        absorbs.filter((a) => a.adventures > 0 && !defeated.has(a.monster))
-          .length > 0,
-      shouldRunOrb: false,
-      ensuredOrb: null,
+      weight: profit + this.generateWeights(newSkills),
+      reabsorb:
+        absorbs.find(
+          (a) =>
+            a.adventures > 0 && defeated.get(a.monster) != Reabsorbed.REABSORBED
+        ) != null,
     };
+  }
+
+  generateWeights(skills: Map<Absorb, string>): number {
+    let weight = 0;
+    const handy = this.getUsefulSkills();
+    const mustHave = this.getMustHaveSkills();
+
+    for (const k of skills.keys()) {
+      let w = 0;
+
+      if (!GreySettings.speedRunMode && handy.has(k.skill)) {
+        //   w = GreySettings.handySkillsWeight;
+      } else if (mustHave.has(k.skill)) {
+        w = GreySettings.usefulSkillsWeight;
+      } else {
+        continue;
+      }
+
+      weight += w;
+    }
+
+    return weight;
   }
 
   getAdventuresInLocation(
     defeated: Map<Monster, Reabsorbed>,
     location: Location,
     includeSkills: boolean = true
-  ): AdventureLocation {
+  ): AbsorbDetails {
     const skills = this.getMustHaveSkills();
 
     if (!GreySettings.speedRunMode) {
@@ -320,18 +344,20 @@ export class AbsorbsProvider {
       newSkills.set(a, skills.get(a.skill));
     }
 
+    const profit =
+      totalAdvs - (advsSpent + Math.max(2, Math.ceil(advsSpent * 0.2)));
+
     return {
-      location: location,
       turnsToGain: totalAdvs,
-      expectedTurnsProfit:
-        totalAdvs - (advsSpent + Math.max(2, Math.ceil(advsSpent * 0.2))),
+      expectedTurnsProfit: profit,
       monsters: absorbs.map((a) => a.monster),
       skills: newSkills,
-      shouldWait:
-        absorbs.filter((a) => a.adventures > 0 && !defeated.has(a.monster))
-          .length > 0,
-      shouldRunOrb: false,
-      ensuredOrb: false,
+      weight: profit + this.generateWeights(newSkills),
+      reabsorb:
+        absorbs.find(
+          (a) =>
+            a.adventures > 0 && defeated.get(a.monster) != Reabsorbed.REABSORBED
+        ) != null,
     };
   }
 
@@ -451,8 +477,8 @@ export class AbsorbsProvider {
   getExtraAdventures(
     defeated: Map<Monster, Reabsorbed>,
     includeSkills: boolean = false
-  ): AdventureLocation[] {
-    const map: Map<Location, AdventureLocation> = new Map();
+  ): [Location, AbsorbDetails][] {
+    const map: Map<Location, AbsorbDetails> = new Map();
 
     for (const absorb of AbsorbsProvider.loadAbsorbs().filter(
       (a) =>
@@ -468,7 +494,7 @@ export class AbsorbsProvider {
       }
     }
 
-    return [...map.values()].filter((a) => a != null);
+    return [...map.entries()].filter(([, abs]) => abs != null);
   }
 
   printRemainingAbsorbs() {
@@ -512,15 +538,13 @@ export class AbsorbsProvider {
   }
 }
 
-export interface AdventureLocation {
-  location: Location;
+export interface AbsorbDetails {
   turnsToGain: number;
+  reabsorb: boolean;
   expectedTurnsProfit: number;
   monsters: Monster[];
   skills: Map<Absorb, string>;
-  shouldWait: boolean;
-  shouldRunOrb: boolean;
-  ensuredOrb: boolean;
+  weight: number;
 }
 
 export enum Reabsorbed {

@@ -57,12 +57,8 @@ export class QuestL11Pyramid implements QuestInfo {
     return "Council / MacGruffin / Pyramid / EdUndying";
   }
 
-  needAdventures(): number {
-    return 9;
-  }
-
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Pyramid");
+    const status = getQuestStatus("questL11Pyramid");
 
     if (status < 3 || getProperty("pyramidBombUsed") == "false") {
       return QuestStatus.NOT_READY;
@@ -72,7 +68,7 @@ export class QuestL11Pyramid implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    let fam = Familiar.get("Grey Goose");
+    const fam = Familiar.get("Grey Goose");
 
     if (familiarWeight(fam) >= 3) {
       return QuestStatus.FASTER_LATER;

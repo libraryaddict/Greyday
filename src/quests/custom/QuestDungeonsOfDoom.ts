@@ -127,10 +127,6 @@ export class QuestDungeonsOfDoom implements QuestInfo {
     return [this.bend];
   }
 
-  needAdventures(): number {
-    return 5;
-  }
-
   mustBeDone?(): boolean {
     return (
       haveEffect(this.teleportis) > 0 && availableAmount(this.plusSign) > 0

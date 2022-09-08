@@ -23,6 +23,7 @@ export class QuestL11HiddenPark implements QuestInfo {
   sword: Item = Item.get("Antique Machete");
   loc: Location = Location.get("The Hidden Park");
   book: Item = Item.get("Book of matches");
+  janitor: Monster = Monster.get("Pygmy Janitor");
 
   level(): number {
     return 11;
@@ -68,18 +69,19 @@ export class QuestL11HiddenPark implements QuestInfo {
 
   run(): QuestAdventure {
     const outfit = new GreyOutfit().setNoCombat().setItemDrops();
-
-    if (
+    const bottle =
       !this.barUnlocked() &&
       availableAmount(this.book) == 0 &&
-      this.hasRelocatedJanitors()
-    ) {
+      this.hasRelocatedJanitors();
+
+    if (bottle) {
       outfit.setChampagneBottle();
     }
 
     return {
       location: this.loc,
       outfit: outfit,
+      orbs: bottle ? [this.janitor] : null,
       run: () => {
         const props = new PropertyManager();
 

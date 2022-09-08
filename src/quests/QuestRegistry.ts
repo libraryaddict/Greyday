@@ -185,10 +185,17 @@ export class QuestRegistry {
 
       { id: "Council / Larva" },
 
+      { id: "Council / Ice / Ore" },
+
       // Get this done early so we can start flyering
       { id: "Council / War / Frat Outfit" },
       { id: "Council / War / Start" },
       { id: "Council / War / Flyers" },
+
+      // OMG who cares about your stupid war
+      {
+        id: "Council / War / Filthworms",
+      },
 
       // We get +3 hot resist from raging bull
       // +3 stench resist from pine bat
@@ -252,7 +259,6 @@ export class QuestRegistry {
       // Unlock ninja tower
       { id: "Council / Ice / Trapper" },
       { id: "Council / Ice / Goats" },
-      { id: "Council / Ice / Ore" },
 
       // Ninja power!
       { id: "Council / MacGruffin / Shen / Ninjas" },
@@ -343,10 +349,6 @@ export class QuestRegistry {
       { id: "Council / Peaks / AbooPeak" },
       { id: "Council / Peaks / Lord" },
 
-      // OMG who cares about your stupid war
-      {
-        id: "Council / War / Filthworms",
-      },
       { id: "Council / War / Gremlins" },
 
       { id: "Council / War / Boss" },
@@ -392,9 +394,11 @@ export class QuestRegistry {
       { id: "Council / Tower / Keys / Heroes" },
     ];
 
-    return order
+    const ordered = order
       .filter((order) => order.testValid == null || order.testValid())
       .map((order) => order.id);
+
+    return ordered.filter((q, index) => ordered.indexOf(q) == index);
   }
 
   getQuestsInOrder(): QuestInfo[] {

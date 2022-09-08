@@ -141,4 +141,8 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
   mustBeDone(): boolean {
     return true;
   }
+
+  free(): boolean {
+    return true;
+  }
 }

@@ -26,6 +26,7 @@ export class QuestL11Business implements QuestInfo {
   binderClip: Item = Item.get("Boring Binder Clip");
   loc: Location = Location.get("the hidden office building");
   apartment: Location = Location.get("The Hidden Apartment Building");
+  accountant: Monster = Monster.get("Pygmy witch accountant");
   toAbsorb: Monster[];
 
   getId(): QuestType {
@@ -91,6 +92,7 @@ export class QuestL11Business implements QuestInfo {
       //
       return {
         location: this.apartment,
+        orbs: [this.accountant],
         run: () => {
           const props = new PropertyManager();
 
@@ -112,6 +114,7 @@ export class QuestL11Business implements QuestInfo {
 
     return {
       location: this.loc,
+      orbs: this.filesRemaining() > 0 ? [this.accountant] : null,
       run: () => {
         const props = new PropertyManager();
 

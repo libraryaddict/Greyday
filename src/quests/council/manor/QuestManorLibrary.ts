@@ -31,6 +31,7 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
   librarian: Monster = Monster.get("Banshee Librarian");
   sweep: Skill = Skill.get("System Sweep");
   nano: Skill = Skill.get("Double Nanovision");
+  desk: Monster = Monster.get("Writing Desk");
   pathYR: PossiblePath = new PossiblePath(10).add(ResourceCategory.YELLOW_RAY);
   path: PossiblePath = new PossiblePath(10, 20);
   paths: PossiblePath[] = [];
@@ -124,6 +125,8 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
     return {
       location: this.library,
       outfit: outfit,
+      orbs: wantJar ? [this.librarian] : [],
+      olfaction: [this.desk],
       run: () => {
         const settings = new AdventureSettings();
         const props = new PropertyManager();

@@ -32,10 +32,6 @@ export class QuestL5Goblin implements QuestInfo {
     return 5;
   }
 
-  needAdventures(): number {
-    return 2;
-  }
-
   getChildren(): QuestInfo[] {
     return [this.outskirts, this.qHarem];
   }

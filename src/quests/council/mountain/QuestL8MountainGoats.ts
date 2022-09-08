@@ -66,6 +66,10 @@ export class QuestL8MountainGoats implements QuestInfo {
     );
   }
 
+  free(): boolean {
+    return this.mustBeDone();
+  }
+
   getOreRemaining(): number {
     return 3 - availableAmount(this.neededOre());
   }
@@ -97,6 +101,8 @@ export class QuestL8MountainGoats implements QuestInfo {
     return {
       location: this.goats,
       outfit: outfit,
+      orbs: haveSkill(this.elementalSkill) ? null : [this.drunk],
+      olfaction: availableAmount(this.cheese) >= 3 ? null : [this.dairy],
       run: () => {
         const settings = new AdventureSettings();
 

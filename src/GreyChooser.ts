@@ -1,10 +1,13 @@
 import {
+  appearanceRates,
+  availableAmount,
   canAdventure,
   Effect,
   Familiar,
   familiarWeight,
   haveEffect,
   haveSkill,
+  Item,
   Location,
   Monster,
   myAdventures,
@@ -15,32 +18,58 @@ import {
   printHtml,
   Skill,
   Stat,
-  totalTurnsPlayed,
-  turnsPlayed,
 } from "kolmafia";
 import {
   hasCombatSkillActive,
   hasNonCombatSkillActive,
 } from "./GreyAdventurer";
 import { QuestRegistry } from "./quests/QuestRegistry";
-import { QuestAdventure, QuestInfo, QuestStatus } from "./quests/Quests";
+import {
+  GenericAdventure,
+  QuestAdventure,
+  QuestInfo,
+  QuestStatus,
+} from "./quests/Quests";
 import { PossiblePath } from "./typings/TaskInfo";
 import { FigureOutPath, SimmedPath } from "./typings/TaskManager";
 import {
-  Absorb,
   AbsorbsProvider,
-  AdventureLocation,
+  AbsorbDetails,
   Reabsorbed,
 } from "./utils/GreyAbsorber";
+import { AdventureSettings, greyAdv } from "./utils/GreyLocations";
+import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
 import { currentPredictions, doColor } from "./utils/GreyUtils";
 
-export interface FoundAdventure {
-  path: PossiblePath;
-  quest: QuestInfo;
-  locationInfo?: AdventureLocation;
-  adventure?: QuestAdventure;
+export enum OrbStatus {
+  READY,
+  NOT_SET,
+  IGNORED,
+  NEEDS_RESET,
 }
+
+export enum ConsiderPriority {
+  ORB_ABSORB, // When we have an orb ready to absorb
+  ORB_OTHER, // When we have an orb that's not an absorb
+  RANDOM_ABSORB, // When we're going here for the absorb
+  RANDOM_COMBAT_ABSORB, // When we're going here for the absorb but want +combat
+  NOTHING_SPECIAL,
+  BAD_COMBAT_RATE, // When we're running -/+ combat which isn't what we want
+  BAD_ABSORB, // When we'd have a chance to hit something we're not ready to absorb
+}
+
+export interface FoundAdventure {
+  locationInfo: AbsorbDetails;
+  adventure: QuestAdventure;
+  path?: PossiblePath;
+  quest?: QuestInfo;
+  status: QuestStatus;
+  orbStatus: OrbStatus;
+  considerPriority: ConsiderPriority; // At what pass of "Looking for adventures" will this be considered
+}
+
+const crystalBall: Item = Item.get("miniature crystal ball");
 
 export class AdventureFinder {
   static instance: AdventureFinder;
@@ -49,8 +78,8 @@ export class AdventureFinder {
   viableQuests: [QuestInfo, PossiblePath][];
   absorbs: AbsorbsProvider = new AbsorbsProvider();
   goose: Familiar = Familiar.get("Grey Goose");
-  goodAbsorbs: AdventureLocation[];
   questLocations: Location[];
+  possibleAdventures: FoundAdventure[];
   path: SimmedPath;
 
   constructor() {
@@ -78,6 +107,239 @@ export class AdventureFinder {
 
   getAllRawQuests(): QuestInfo[] {
     return this.registry.getQuestsInOrder();
+  }
+
+  setPossibleAdventures() {
+    this.possibleAdventures = [];
+
+    for (const [quest, path] of this.getDoableQuests()) {
+      const adventure = quest.run(path);
+      let details: AbsorbDetails;
+
+      if (adventure.location != null) {
+        details = this.absorbs.getAdventuresInLocation(
+          this.defeated,
+          adventure.location,
+          true
+        );
+      } else if (quest.getAbsorbs != null) {
+        const absorbs = quest.getAbsorbs();
+
+        if (absorbs.length > 0) {
+          details = this.absorbs.getAdventuresByAbsorbs(
+            this.defeated,
+            absorbs,
+            true
+          );
+        }
+      }
+
+      if (
+        (details != null || adventure.olfaction != null) &&
+        adventure.orbs == null
+      ) {
+        adventure.orbs = [];
+      }
+
+      if (adventure.olfaction != null) {
+        for (const m of adventure.olfaction) {
+          if (adventure.orbs.includes(m)) {
+            continue;
+          }
+
+          adventure.orbs.push(m);
+        }
+      }
+
+      if (details != null) {
+        for (const m of details.monsters) {
+          if (adventure.orbs.includes(m)) {
+            continue;
+          }
+
+          adventure.orbs.push(m);
+        }
+      }
+
+      const adv: FoundAdventure = {
+        quest: quest,
+        path: path,
+        locationInfo: details,
+        adventure: adventure,
+        orbStatus: OrbStatus.IGNORED,
+        status: quest.status(path),
+        considerPriority: null,
+      };
+
+      this.possibleAdventures.push(adv);
+    }
+
+    for (const [loc, details] of this.absorbs.getExtraAdventures(
+      this.defeated,
+      true
+    )) {
+      if (this.questLocations.includes(loc) || !canAdventure(loc)) {
+        continue;
+      }
+
+      const adv: FoundAdventure = {
+        quest: null,
+        path: null,
+        locationInfo: details,
+        adventure: this.getNonQuest(loc, details),
+        orbStatus: OrbStatus.IGNORED,
+        status: QuestStatus.READY,
+        considerPriority: null,
+      };
+
+      this.possibleAdventures.push(adv);
+    }
+
+    this.adjustAdventures();
+  }
+
+  adjustAdventures() {
+    const absorbTime = this.hasEnoughGooseWeight();
+
+    if (availableAmount(crystalBall) > 0) {
+      const preds = currentPredictions();
+
+      for (const adv of this.possibleAdventures) {
+        if (
+          adv.adventure.location == null ||
+          adv.adventure.orbs == null ||
+          adv.adventure.orbs.length == 0
+        ) {
+          continue;
+        }
+
+        const appear = appearanceRates(adv.adventure.location);
+        const couldAppear = adv.adventure.orbs.filter(
+          (m) => appear[m.name] > 0
+        );
+
+        if (couldAppear.length == 0) {
+          continue;
+        }
+
+        const prediction = preds.get(adv.adventure.location);
+
+        if (prediction == null) {
+          adv.orbStatus = OrbStatus.NOT_SET;
+        } else if (adv.adventure.orbs.includes(prediction)) {
+          adv.orbStatus = OrbStatus.READY;
+
+          const absorb = this.absorbs.getAbsorb(prediction);
+
+          if (absorb != null && absorb.adventures > 0) {
+            adv.considerPriority =
+              absorbTime ||
+              this.defeated.get(prediction) != Reabsorbed.REABSORBED
+                ? ConsiderPriority.ORB_ABSORB
+                : ConsiderPriority.BAD_ABSORB;
+          } else {
+            adv.considerPriority = ConsiderPriority.ORB_OTHER;
+          }
+        } else {
+          adv.orbStatus = OrbStatus.NEEDS_RESET;
+        }
+      }
+    }
+
+    const hasBlessing =
+      haveEffect(Effect.get("Brother Corsican's Blessing")) +
+        haveEffect(Effect.get("A Girl Named Sue")) >
+      0;
+
+    for (const adv of this.possibleAdventures) {
+      if (adv.considerPriority != null) {
+        continue;
+      }
+
+      const wantsAbsorb =
+        adv.locationInfo != null && adv.locationInfo.turnsToGain > 0;
+
+      // If we might hit an absorb we can't reabsorb
+      if (
+        adv.locationInfo != null &&
+        adv.locationInfo.reabsorb &&
+        !absorbTime
+      ) {
+        adv.considerPriority = ConsiderPriority.BAD_ABSORB;
+        continue;
+      }
+
+      const outfit = adv.adventure.outfit;
+
+      // If we want to run -/+ combat but we're running the opposite
+      if (
+        outfit != null &&
+        outfit != GreyOutfit.IGNORE_OUTFIT &&
+        ((outfit.minusCombatWeight > 0 && hasCombatSkillActive()) ||
+          (outfit.plusCombatWeight > 0 && hasNonCombatSkillActive()))
+      ) {
+        adv.considerPriority = ConsiderPriority.BAD_COMBAT_RATE;
+        continue;
+      }
+
+      if (wantsAbsorb) {
+        if (adv.adventure.location == null) {
+          adv.considerPriority = ConsiderPriority.RANDOM_ABSORB;
+          continue;
+        }
+
+        // We should run combat if combat percent is below 100
+        // Or our outfit exists and wants to run combat
+        // And the location isn't black forest, or if it is, we don't have the skill
+        const shouldRunCombat =
+          adv.adventure.location.combatPercent < 100 ||
+          (adv.adventure.outfit != null &&
+            adv.adventure.outfit != GreyOutfit.IGNORE_OUTFIT &&
+            adv.adventure.outfit.plusCombatWeight > 0 &&
+            (adv.adventure.location != Location.get("The Black Forest") ||
+              haveSkill(Skill.get("Photonic Shroud"))));
+
+        if (shouldRunCombat) {
+          adv.considerPriority = ConsiderPriority.RANDOM_COMBAT_ABSORB;
+        } else {
+          adv.considerPriority = ConsiderPriority.RANDOM_ABSORB;
+        }
+
+        continue;
+      }
+
+      adv.considerPriority = ConsiderPriority.NOTHING_SPECIAL;
+    }
+
+    for (const adv of this.possibleAdventures) {
+      adv.status = this.getModifiedStatus(
+        adv.status,
+        adv.adventure,
+        hasBlessing
+      );
+    }
+  }
+
+  getNonQuest(loc: Location, adv: AbsorbDetails): GenericAdventure {
+    const outfit = new GreyOutfit();
+
+    if (loc.combatPercent < 100) {
+      outfit.setPlusCombat();
+    }
+
+    const settings = new AdventureSettings();
+    settings.nonquest = true;
+    adv.monsters.forEach((m) => settings.addNoBanish(m));
+
+    return {
+      outfit: outfit,
+      location: loc,
+      orbs: adv.monsters,
+      run: () => {
+        // We don't want it casting +combat skills
+        greyAdv(loc, null, settings);
+      },
+    };
   }
 
   getDoableQuests(): [QuestInfo, PossiblePath][] {
@@ -126,8 +388,8 @@ export class AdventureFinder {
     this.viableQuests = this.getDoableQuests();
     this.setAbsorbs();
     this.defeated = this.absorbs.getAbsorbedMonstersFromInstance();
-    this.goodAbsorbs = this.absorbs.getExtraAdventures(this.defeated, true);
     this.setQuestLocations();
+    this.setPossibleAdventures();
   }
 
   setPreAbsorbs() {
@@ -190,173 +452,6 @@ export class AdventureFinder {
     return familiarWeight(this.goose) >= 6;
   }
 
-  getNumberOfQuestsWithAdventures(): number {
-    let count = 0;
-
-    loop: for (const [quest, path] of this.path.thisPath) {
-      if (quest.level() < 1 || quest.status(path) == QuestStatus.COMPLETED) {
-        continue;
-      }
-
-      for (const loc of quest.getLocations()) {
-        const advs = this.absorbs.getAdventuresInLocation(this.defeated, loc);
-
-        if (advs == null || advs.turnsToGain == 0) {
-          continue;
-        }
-
-        count++;
-        continue loop;
-      }
-    }
-
-    return count;
-  }
-
-  getQuestsWithAdventures(): [QuestInfo, PossiblePath, AdventureLocation][] {
-    // We want to generate our adventues
-
-    const toReturn: [QuestInfo, PossiblePath, AdventureLocation][] = [];
-
-    this.viableQuests.forEach(([q, path]) => {
-      const run = q.run(path);
-
-      if (run.location == null && q.getAbsorbs == null) {
-        return;
-      }
-
-      const outfit = run.outfit;
-
-      if (
-        outfit != null &&
-        ((outfit.minusCombatWeight > 0 && hasCombatSkillActive()) ||
-          (outfit.plusCombatWeight > 0 && hasNonCombatSkillActive()))
-      ) {
-        return;
-      }
-
-      let advs: AdventureLocation;
-
-      if (q.getAbsorbs != null) {
-        advs = this.absorbs.getAdventuresByAbsorbs(
-          this.defeated,
-          q.getAbsorbs()
-        );
-      } else {
-        advs = this.absorbs.getAdventuresInLocation(
-          this.defeated,
-          run.location
-        );
-      }
-
-      if (advs == null || advs.turnsToGain == 0) {
-        return;
-      }
-
-      toReturn.push([q, path, advs]);
-    });
-
-    toReturn.sort((q1, q2) => {
-      if (q1[0].status(q1[1]) != q2[0].status(q2[1])) {
-        return 0;
-      }
-
-      return q1[2].turnsToGain - q2[2].turnsToGain;
-    });
-
-    return toReturn;
-  }
-
-  getQuestsWithoutAdventures(): [QuestInfo, PossiblePath, AdventureLocation][] {
-    // We want to level up our goose here
-
-    const toReturn: [QuestInfo, PossiblePath, AdventureLocation][] = [];
-
-    this.viableQuests.forEach(([q, path]) => {
-      const run = q.run(path);
-
-      const outfit = run.outfit;
-
-      if (
-        outfit != null &&
-        ((outfit.minusCombatWeight > 0 && hasCombatSkillActive()) ||
-          (outfit.plusCombatWeight > 0 && hasNonCombatSkillActive()))
-      ) {
-        return;
-      }
-
-      if (run.location == null) {
-        toReturn.push([q, path, null]);
-        return;
-      }
-
-      const advs = this.absorbs.getAdventuresInLocation(
-        this.defeated,
-        run.location,
-        true
-      );
-
-      if (advs != null && advs.turnsToGain > 0) {
-        return;
-      }
-
-      toReturn.push([q, path, advs]);
-    });
-
-    return toReturn;
-  }
-
-  getNonQuestsWithSkills(): [AdventureLocation, number][] {
-    const toReturn: [AdventureLocation, number][] = this.goodAbsorbs
-      .filter(
-        (a) =>
-          a.skills.size > 0 &&
-          canAdventure(a.location) &&
-          !this.questLocations.includes(a.location)
-      )
-      .map((a) => {
-        return [a, a.expectedTurnsProfit + this.generateWeights(a.skills) / 10];
-      });
-
-    return toReturn.filter((a) => a[1] > 0);
-  }
-
-  getNonQuestsWithAdventures(): [AdventureLocation, number][] {
-    // We want to generate our adventues
-    // Returns a location and the adventures generated, with helpful skills given a weight / 10
-
-    const toReturn: [AdventureLocation, number][] = this.goodAbsorbs
-      .filter(
-        (a) =>
-          a.turnsToGain > 0 &&
-          canAdventure(a.location) &&
-          !this.questLocations.includes(a.location)
-      )
-      .map((a) => {
-        return [a, a.expectedTurnsProfit + this.generateWeights(a.skills) / 10];
-      });
-
-    return toReturn.filter((a) => a[1] > 0);
-  }
-
-  getNonQuestsWithoutAdventures(): [AdventureLocation, number][] {
-    // We want to level up our goose here, and grab w/e required skills
-    // Returns locations and the weight, where helpful skills are weight of 1, required are weight of 2
-
-    const toReturn: [AdventureLocation, number][] = this.goodAbsorbs
-      .filter(
-        (a) =>
-          a.turnsToGain == 0 &&
-          canAdventure(a.location) &&
-          !this.questLocations.includes(a.location)
-      )
-      .map((a) => {
-        return [a, this.generateWeights(a.skills)];
-      });
-
-    return toReturn.filter((a) => a[1] > 0);
-  }
-
   getModifiedStatus(
     status: QuestStatus,
     runned: QuestAdventure,
@@ -385,28 +480,6 @@ export class AdventureFinder {
     }
 
     return status;
-  }
-
-  generateWeights(skills: Map<Absorb, string>): number {
-    let weight = 0;
-    const handy = this.absorbs.getUsefulSkills();
-    const mustHave = this.absorbs.getMustHaveSkills();
-
-    for (const k of skills.keys()) {
-      let w = 0;
-
-      if (!GreySettings.speedRunMode && handy.has(k.skill)) {
-        //   w = GreySettings.handySkillsWeight;
-      } else if (mustHave.has(k.skill)) {
-        w = GreySettings.usefulSkillsWeight;
-      } else {
-        continue;
-      }
-
-      weight += w;
-    }
-
-    return weight;
   }
 
   getRecommendedFamiliars(): Familiar[] {
@@ -446,13 +519,21 @@ export class AdventureFinder {
     }
   }
 
-  printStatus(quests: [QuestInfo, PossiblePath][]) {
+  printCurrentStatus(quests: FoundAdventure[]) {
+    this.printStatus(
+      quests
+        .filter((q) => q.quest != null)
+        .map((q) => [q.quest, q.path, q.considerPriority])
+    );
+  }
+
+  printStatus(quests: [QuestInfo, PossiblePath, ConsiderPriority][]) {
     const hasBlessing =
       haveEffect(Effect.get("Brother Corsican's Blessing")) +
         haveEffect(Effect.get("A Girl Named Sue")) >
       0;
 
-    for (const [quest, path] of quests) {
+    for (const [quest, path, priority] of quests) {
       let status = quest.status(path);
 
       if (status != QuestStatus.NOT_READY && status != QuestStatus.COMPLETED) {
@@ -463,7 +544,8 @@ export class AdventureFinder {
         "<u>" +
         quest.getId() +
         "</u>: " +
-        doColor(QuestStatus[status], this.getQuestColor(status));
+        doColor(QuestStatus[status], this.getQuestColor(status)) +
+        (priority != null ? " - " + ConsiderPriority[priority] : "");
 
       printHtml(line);
     }
@@ -483,44 +565,32 @@ export class AdventureFinder {
       return;
     }
 
-    let mustBeDone = this.viableQuests.filter(
-      ([q]) => q.mustBeDone != null && q.mustBeDone()
-    );
-
-    if (
-      mustBeDone.length > 1 &&
-      mustBeDone.filter(
-        ([m]) => m.needAdventures == null || m.needAdventures() > 0
-      ).length <= 1
-    ) {
-      mustBeDone = mustBeDone.filter(
-        ([m]) => m.needAdventures != null && m.needAdventures() <= 0
-      );
-
-      if (mustBeDone.length > 1) {
-        mustBeDone = mustBeDone.splice(1);
-      }
-    }
-
-    if (mustBeDone.length > 1) {
-      print(
-        "Multiple quests demand to be done! " +
-          mustBeDone.map(([q]) => q.getId()).join(", "),
-        "red"
-      );
-      print("This is not a real error, but not that great either.", "red");
-    }
+    const mustBeDone: [FoundAdventure, number][] = this.possibleAdventures
+      .filter(
+        (adv) =>
+          adv.quest != null &&
+          adv.quest.mustBeDone != null &&
+          adv.quest.mustBeDone()
+      )
+      .map((a) => [a, a.quest.free != null && a.quest.free() ? 0 : 1]);
 
     if (mustBeDone.length > 0) {
-      return {
-        quest: mustBeDone[0][0],
-        path: mustBeDone[0][1],
-        locationInfo: this.absorbs.getAdventuresInLocation(
-          this.defeated,
-          mustBeDone[0][0].run(mustBeDone[0][1]).location,
-          true
-        ),
-      };
+      mustBeDone.sort(([, m1], [, m2]) => {
+        return m1 - m2;
+      });
+
+      if (mustBeDone.filter(([, m]) => m > 0).length > 1) {
+        print(
+          "Multiple quests demand to be done! " +
+            mustBeDone.map((a) => a[0].quest.getId()).join(", "),
+          "red"
+        );
+        print("This is not a real error, but not that great either.", "red");
+      }
+
+      if (mustBeDone.length > 0) {
+        return mustBeDone[0][0];
+      }
     }
 
     if (generateAdventuresOrAbort && !this.hasEnoughGooseWeight()) {
@@ -531,168 +601,31 @@ export class AdventureFinder {
       return;
     }
 
-    const getPredicts = () => {
-      if (predicts == null) {
-        predicts = currentPredictions();
+    const toNum = (status: OrbStatus) =>
+      status == OrbStatus.IGNORED ? OrbStatus.NOT_SET : status;
+
+    this.possibleAdventures.sort((a1, a2) => {
+      if (a1.considerPriority != a2.considerPriority) {
+        return a1.considerPriority - a2.considerPriority;
       }
 
-      return predicts;
-    };
-    const hasBlessing =
-      haveEffect(Effect.get("Brother Corsican's Blessing")) +
-        haveEffect(Effect.get("A Girl Named Sue")) >
-      0;
-
-    let quests: [QuestInfo, PossiblePath, AdventureLocation][] = [];
-    let nonQuests: [AdventureLocation, number][] = [];
-
-    if (this.hasEnoughGooseWeight() && myLevel() >= 5) {
-      quests = this.getQuestsWithAdventures();
-      nonQuests = this.getNonQuestsWithAdventures();
-
-      nonQuests = nonQuests.filter(([loc]) => {
-        const mon = getPredicts().get(loc.location);
-
-        loc.shouldRunOrb = mon == null || loc.monsters.includes(mon);
-        loc.ensuredOrb = mon != null && loc.monsters.includes(mon);
-
-        return loc.shouldRunOrb;
-      });
-    } else {
-      // It doesn't have enough goose weight to absorb adventures, so lets try do non-quests without adventures
-      // This is mostly skills
-      nonQuests = this.getNonQuestsWithoutAdventures();
-    }
-
-    if (quests.length + nonQuests.length == 0) {
-      quests = this.getQuestsWithoutAdventures();
-
-      if (quests.length == 0 && nonQuests.length == 0) {
-        quests = this.getQuestsWithAdventures();
-      }
-    }
-
-    // Now we see if we can find quests that are ready to run.
-    // If we can't, then we see if we can find non-quests that are ready to run
-    // If we can't, then we see if we can find quests that don't want to run
-    // If we can't, then we abort.
-
-    let bestQuest: [QuestInfo, PossiblePath, AdventureLocation];
-    let bestStatus: QuestStatus;
-    let bestWantsResetOrb: boolean;
-    let bestWantsToRunOrb: boolean;
-    let predicts: Map<Location, Monster>;
-
-    for (const holder of quests) {
-      const [quest, path, adv] = holder;
-
-      let status = quest.status(path);
-      let runned: QuestAdventure;
-      let wantToResetOrb: boolean = false;
-      let wantsToRunOrb: boolean = false;
-
-      if (
-        this.hasEnoughGooseWeight() &&
-        adv != null &&
-        adv.monsters.length > 0
-      ) {
-        const a = adv;
-        runned = quest.run(path);
-
-        const current = getPredicts().get(a.location);
-
-        if (current == null || a.monsters.includes(current)) {
-          wantsToRunOrb = true;
-          a.shouldRunOrb = true;
-          a.ensuredOrb = current != null && a.monsters.includes(current);
-
-          if (
-            current != null &&
-            this.hasEnoughGooseWeight() &&
-            a.turnsToGain > 0
-          ) {
-            a.expectedTurnsProfit = a.turnsToGain - 1;
-          }
-        } else {
-          wantToResetOrb = true;
-        }
+      if (toNum(a1.orbStatus) != toNum(a2.orbStatus)) {
+        return a1.orbStatus - a2.orbStatus;
       }
 
-      if (status == QuestStatus.READY) {
-        if (runned == null) {
-          runned = quest.run(path);
-        }
-
-        status = this.getModifiedStatus(status, runned, hasBlessing);
+      if ((a1.quest == null) != (a2.quest == null)) {
+        return a1.quest == null ? 1 : -1;
       }
 
-      if (bestQuest != null) {
-        if (bestWantsToRunOrb) {
-          if (status >= bestStatus) {
-            continue;
-          }
-        } else if (!bestWantsResetOrb && wantToResetOrb) {
-          continue;
-        } else if (!wantsToRunOrb) {
-          if (status >= bestStatus) {
-            continue;
-          }
-        }
+      if (a1.status != a2.status) {
+        return a1.status - a2.status;
       }
 
-      bestQuest = holder;
-      bestStatus = quest.status(path);
-      bestWantsResetOrb = wantToResetOrb;
-      bestWantsToRunOrb = wantsToRunOrb;
-    }
+      return 0;
+    });
 
-    if (bestQuest != null && bestWantsToRunOrb) {
-      return {
-        quest: bestQuest[0],
-        path: bestQuest[1],
-        locationInfo: bestQuest[2],
-      };
-    }
-
-    nonQuests.sort((v1, v2) => v2[1] - v1[1]);
-
-    if (nonQuests.length > 0) {
-      let best: AdventureLocation;
-
-      for (const [adv] of nonQuests) {
-        const mon = getPredicts().get(adv.location);
-
-        adv.shouldRunOrb =
-          this.hasEnoughGooseWeight() &&
-          (mon == null || adv.monsters.includes(mon));
-
-        // If we already have a best, and the would-be doesn't want to run orb
-        if (best != null && !adv.shouldRunOrb) {
-          continue;
-        }
-
-        best = adv;
-
-        if (best.shouldRunOrb) {
-          break;
-        }
-      }
-
-      if (best != null && (bestQuest == null || best.shouldRunOrb)) {
-        return {
-          quest: null,
-          path: null,
-          locationInfo: best,
-        };
-      }
-    }
-
-    if (bestQuest != null) {
-      return {
-        quest: bestQuest[0],
-        path: bestQuest[1],
-        locationInfo: bestQuest[2],
-      };
+    if (this.possibleAdventures.length > 0) {
+      return this.possibleAdventures[0];
     }
 
     print(

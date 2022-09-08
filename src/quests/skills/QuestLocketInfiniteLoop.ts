@@ -30,18 +30,27 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   effect: Effect = Effect.get("Everything Looks Yellow");
   instantKill: Item = Item.get("Flame orb");
   wish: Item = Item.get("Pocket Wish");
-  fax: PossiblePath = new PossiblePath(1)
-    .addFax(this.monster)
-    .add(ResourceCategory.YELLOW_RAY)
-    .addIgnored("Cosplay Saber");
-  pullWish: PossiblePath = new PossiblePath(1)
-    .addConsumablePull(this.wish)
-    .addConsumablePull(this.instantKill);
+  fax: PossiblePath;
+  pullWish: PossiblePath;
   pantsgiving: Item = Item.get("Pantsgiving");
   doctorsBag: Item = Item.get("Lil' Doctor&trade; bag");
+  paths: PossiblePath[];
 
   level(): number {
     return 1;
+  }
+
+  createPaths(assumeUnstarted: boolean): void {
+    this.fax = new PossiblePath(1).addFax(this.monster);
+    this.pullWish = new PossiblePath(1).addConsumablePull(this.wish);
+
+    if (
+      availableAmount(this.pantsgiving) + availableAmount(this.doctorsBag) ==
+      0
+    ) {
+      this.fax.add(ResourceCategory.YELLOW_RAY).addIgnored("Cosplay Saber");
+      this.pullWish.addConsumablePull(this.instantKill);
+    }
   }
 
   getPossiblePaths(): PossiblePath[] {

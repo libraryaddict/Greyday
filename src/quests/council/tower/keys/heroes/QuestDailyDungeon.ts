@@ -237,10 +237,6 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
     };
   }
 
-  needAdventures(): number {
-    return 9;
-  }
-
   getId(): QuestType {
     return "Council / Tower / Keys / Heroes / DailyDungeon";
   }

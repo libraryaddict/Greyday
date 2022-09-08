@@ -57,6 +57,10 @@ export class WarGremlins implements QuestInfo {
     );
   }
 
+  free(): boolean {
+    return this.mustBeDone();
+  }
+
   run(): QuestAdventure {
     if (itemAmount(this.magnet) == 0) {
       return this.visitJunkman();
@@ -93,6 +97,7 @@ export class WarGremlins implements QuestInfo {
     return {
       location: loc,
       outfit: outfit,
+      orbs: [monster],
       run: () => {
         const settings = new AdventureSettings();
         settings.setDuringFightMacro(macro);

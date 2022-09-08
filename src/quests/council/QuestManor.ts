@@ -117,8 +117,8 @@ export class QuestManor implements QuestInfo {
     };
   }
 
-  needAdventures(): number {
-    return 0;
+  free(): boolean {
+    return true;
   }
 }
 

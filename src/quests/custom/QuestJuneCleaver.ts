@@ -32,8 +32,8 @@ export class QuestJuneCleaver implements QuestInfo {
     return true;
   }
 
-  needAdventures(): number {
-    return 0;
+  free(): boolean {
+    return true;
   }
 
   status(): QuestStatus {

@@ -40,10 +40,6 @@ export class QuestL11DesertGnome implements QuestInfo {
     return [];
   }
 
-  getAdventuresToComplete(): number {
-    return 0;
-  }
-
   status(): QuestStatus {
     const status = getQuestStatus("questL11Desert");
 
@@ -83,8 +79,8 @@ export class QuestL11DesertGnome implements QuestInfo {
     return true;
   }
 
-  needAdventures(): number {
-    return 0;
+  free(): boolean {
+    return true;
   }
 
   run(): QuestAdventure {

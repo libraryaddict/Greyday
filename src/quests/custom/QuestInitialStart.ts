@@ -19,6 +19,7 @@ import {
 } from "kolmafia";
 import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
+import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreySettings } from "../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -57,6 +58,10 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
     return true;
   }
 
+  free(): boolean {
+    return true;
+  }
+
   status(): QuestStatus {
     if (availableAmount(this.mayday) > 0) {
       return QuestStatus.READY;
@@ -83,6 +88,7 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
   run(path: PossiblePath): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         if (!hippyStoneBroken() && toBoolean(getProperty("greyEnablePvP"))) {
           print("Enabling pvp as defined by 'greyEnablePvP'", "blue");

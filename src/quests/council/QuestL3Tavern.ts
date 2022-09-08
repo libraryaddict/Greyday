@@ -74,8 +74,8 @@ export class QuestL3Tavern implements QuestInfo {
     return QuestStatus.FASTER_LATER;
   }
 
-  needAdventures(): number {
-    return getQuestStatus("questL03Rat") > 1 ? 0 : 1;
+  free(): boolean {
+    return getQuestStatus("questL03Rat") > 1;
   }
 
   mustBeDone(): boolean {

@@ -61,6 +61,10 @@ export class QuestL10Beanstalk implements QuestInfo {
     return true;
   }
 
+  free(): boolean {
+    return true;
+  }
+
   run(): QuestAdventure {
     // Use bean if we need to
     const status = getQuestStatus("questL10Garbage");

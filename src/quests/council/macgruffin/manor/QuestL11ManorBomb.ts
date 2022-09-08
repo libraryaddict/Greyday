@@ -25,6 +25,7 @@ export class QuestL11ManorBomb implements QuestInfo {
   unstable: Item = Item.get("unstable fulminate");
   bomb: Item = Item.get("Wine Bomb");
   boiler: Location = Location.get("The Haunted Boiler Room");
+  monster: Monster = Monster.get("Monstrous boiler");
 
   getId(): QuestType {
     return "Council / MacGruffin / Manor / Bomb";
@@ -78,6 +79,7 @@ export class QuestL11ManorBomb implements QuestInfo {
     return {
       location: this.boiler,
       outfit: outfit,
+      orbs: [this.monster],
       run: () => {
         const settings = new AdventureSettings();
         settings.addNoBanish(Monster.get("monstrous boiler"));

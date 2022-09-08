@@ -51,6 +51,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
   lyrndCostume: Item[] = [this.lyrndHat, this.lyrndPants, this.lyrndShirt];
   musk: Item = Item.get("lynyrd musk");
   cig: Item = Item.get("cigarette lighter");
+  cultist: Monster = Monster.get("Blue Oyster Cultist");
   flaming: Item = Item.get("Flamin' Whatshisname");
   musky: Effect = Effect.get("Musky");
   toAbsorb: Monster[];
@@ -438,6 +439,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     return {
       location: this.proLoc,
       outfit: outfit,
+      olfaction: [this.cultist],
       run: () => {
         const props = new PropertyManager();
 
@@ -464,7 +466,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
           settings.setFinishingBlowMacro(
             new Macro().tryItem(this.cig).step(greyKillingBlow(outfit))
           );
-          settings.addNoBanish(Monster.get("Blue Oyster Cultist"));
+          settings.addNoBanish(this.cultist);
           settings.addNoBanish(Monster.get("Lynyrd Skinner"));
 
           greyAdv(this.proLoc, outfit, settings);

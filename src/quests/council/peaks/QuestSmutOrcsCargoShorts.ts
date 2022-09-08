@@ -101,4 +101,8 @@ export class QuestL9SmutOrcsCargoShorts extends TaskInfo implements QuestInfo {
 
     return false;
   }
+
+  free(): boolean {
+    return true;
+  }
 }

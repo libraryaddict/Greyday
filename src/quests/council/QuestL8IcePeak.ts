@@ -52,8 +52,8 @@ export class QuestL8IcePeak implements QuestInfo {
     return true;
   }
 
-  getAdventuresToComplete(): number {
-    return 0;
+  free(): boolean {
+    return true;
   }
 
   getId(): QuestType {

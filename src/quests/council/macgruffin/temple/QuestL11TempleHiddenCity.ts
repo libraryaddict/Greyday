@@ -33,7 +33,7 @@ export class QuestL11TempleHiddenCity implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Worship");
+    const status = getQuestStatus("questL11Worship");
 
     if (status > 1) {
       return QuestStatus.COMPLETED;
@@ -90,10 +90,6 @@ export class QuestL11TempleHiddenCity implements QuestInfo {
     // Script should run the banana solver
     this.choices.runChoice(125, 3); // Unlock city
   }
-
-  needAdventures(): number {
-    return 4;
-  }
 }
 
 class TempleChoices implements GreyChoices {
@@ -128,7 +124,7 @@ class TempleChoices implements GreyChoices {
       );
     }
 
-    let toReturn = this.choices[0][1];
+    const toReturn = this.choices[0][1];
     this.choices.splice(0, 1);
 
     return toReturn;

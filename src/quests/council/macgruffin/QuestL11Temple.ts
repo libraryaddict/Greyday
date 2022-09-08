@@ -69,10 +69,6 @@ export class QuestL11Temple implements QuestInfo {
     return "Council / MacGruffin / HiddenCity / Boss";
   }
 
-  needAdventures(): number {
-    return 13;
-  }
-
   getLocations(): Location[] {
     return [];
   }
@@ -82,7 +78,7 @@ export class QuestL11Temple implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getProperty("questL11Worship");
+    const status = getProperty("questL11Worship");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;
@@ -120,7 +116,7 @@ export class QuestL11Temple implements QuestInfo {
     return {
       location: Location.get("A Massive Ziggurat"),
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(791, 1);
 
         try {

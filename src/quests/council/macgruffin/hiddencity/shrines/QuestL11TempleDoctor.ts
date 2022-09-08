@@ -8,12 +8,7 @@ import {
   Monster,
   myLevel,
 } from "kolmafia";
-import {
-  OutfitImportance,
-  QuestAdventure,
-  QuestInfo,
-  QuestStatus,
-} from "../../../../Quests";
+import { QuestAdventure, QuestInfo, QuestStatus } from "../../../../Quests";
 import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
 import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
 import { PropertyManager } from "../../../../../utils/Properties";
@@ -28,6 +23,7 @@ export class QuestL11Doctor implements QuestInfo {
     "surgical mask",
   ].map((s) => Item.get(s));
   loc: Location = Location.get("The Hidden Hospital");
+  surgeon: Monster = Monster.get("pygmy witch surgeon");
 
   getLocations(): Location[] {
     return [this.loc];
@@ -42,7 +38,7 @@ export class QuestL11Doctor implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getProperty("questL11Doctor");
+    const status = getProperty("questL11Doctor");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;
@@ -60,10 +56,12 @@ export class QuestL11Doctor implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
+    let seekingOutfit: boolean = false;
 
-    for (let i of this.equips) {
+    for (const i of this.equips) {
       if (availableAmount(i) == 0) {
+        seekingOutfit = true;
         continue;
       }
 
@@ -73,17 +71,16 @@ export class QuestL11Doctor implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      olfaction: seekingOutfit ? [this.surgeon] : null,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(784, 1);
 
         try {
           greyAdv(
             this.loc,
             outfit,
-            new AdventureSettings().addNoBanish(
-              Monster.get("pygmy witch surgeon")
-            )
+            new AdventureSettings().addNoBanish(this.surgeon)
           );
         } finally {
           props.resetAll();

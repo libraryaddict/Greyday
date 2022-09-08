@@ -58,8 +58,8 @@ export class QuestL11ShenTurnIn implements QuestInfo {
     return this.haveEffect();
   }
 
-  needAdventures(): number {
-    return this.haveEffect() ? 0 : 1;
+  free(): boolean {
+    return this.haveEffect();
   }
 
   status(): QuestStatus {

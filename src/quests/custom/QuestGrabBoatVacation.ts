@@ -158,10 +158,6 @@ export class QuestGrabBoatVacation implements QuestInfo {
     return [];
   }
 
-  needAdventures(): number {
-    return 9;
-  }
-
   hasBoat(): boolean {
     return toInt(getProperty("lastIslandUnlock")) == myAscensions();
   }

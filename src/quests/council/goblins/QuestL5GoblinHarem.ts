@@ -91,6 +91,9 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
     return {
       location: this.harem,
       outfit: outfit,
+      orbs: path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE)
+        ? null
+        : [this.haremGirl],
       run: () => {
         // When we have access to the harem, blast it down
         let macro: Macro = new Macro();

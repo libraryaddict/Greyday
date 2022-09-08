@@ -26,10 +26,6 @@ export class QuestL11PyramidControl implements QuestInfo {
     return "Council / MacGruffin / Pyramid / Wheel";
   }
 
-  needAdventures(): number {
-    return 3;
-  }
-
   status(): QuestStatus {
     if (
       getProperty("lowerChamberUnlock") != "true" ||

@@ -14,7 +14,6 @@ import {
   Location,
   maximize,
   myAscensions,
-  myLevel,
   myMeat,
   myMp,
   print,
@@ -27,7 +26,12 @@ import {
   useFamiliar,
   useSkill,
 } from "kolmafia";
-import { AdventureFinder, FoundAdventure } from "./GreyChooser";
+import {
+  AdventureFinder,
+  ConsiderPriority,
+  FoundAdventure,
+  OrbStatus,
+} from "./GreyChooser";
 import { QuestAdventure } from "./quests/Quests";
 import { TaskBoomboxSwitch } from "./tasks/TaskBoomboxSwitch";
 import { TaskCouncil } from "./tasks/TaskCouncil";
@@ -50,12 +54,7 @@ import {
   getResourcesChanged,
   ResourcesSnapshot,
 } from "./typings/TaskInfo";
-import {
-  AbsorbsProvider,
-  AdventureLocation,
-  Reabsorbed,
-} from "./utils/GreyAbsorber";
-import { AdventureSettings, greyAdv } from "./utils/GreyLocations";
+import { AbsorbsProvider, Reabsorbed } from "./utils/GreyAbsorber";
 import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
 import { doColor, setUmbrella } from "./utils/GreyUtils";
@@ -91,7 +90,9 @@ export class GreyAdventurer {
     this.adventureFinder.start();
     const goodAdventure: FoundAdventure = this.adventureFinder.findGoodVisit();
 
-    this.adventureFinder.printStatus(this.adventureFinder.viableQuests);
+    this.adventureFinder.printCurrentStatus(
+      this.adventureFinder.possibleAdventures
+    );
 
     if (goodAdventure == null) {
       print("Failed, should have printed an error..", "gray");
@@ -261,13 +262,9 @@ export class GreyAdventurer {
     let prefix: string;
 
     if (goodAdventure.quest != null) {
-      goodAdventure.adventure = goodAdventure.quest.run(goodAdventure.path);
-
       prefix =
         goodAdventure.quest.getId() + " @ " + goodAdventure.adventure.location;
     } else {
-      goodAdventure.adventure = this.getNonQuest(goodAdventure.locationInfo);
-
       prefix = "Non-Quest @ " + goodAdventure.adventure.location;
     }
 
@@ -275,29 +272,10 @@ export class GreyAdventurer {
       "<u>" +
         doColor(prefix, "blue") +
         ", Goals:</u> " +
-        doColor(plan.map((s) => "<u>" + s + "</u>").join(", "), "gray")
+        doColor(plan.map((s) => "<u>" + s + "</u>").join(", "), "gray") +
+        " Consideration: " +
+        ConsiderPriority[goodAdventure.considerPriority]
     );
-  }
-
-  getNonQuest(adv: AdventureLocation): QuestAdventure {
-    const outfit = new GreyOutfit();
-
-    if (adv.location.combatPercent < 100) {
-      outfit.setPlusCombat();
-    }
-
-    const settings = new AdventureSettings();
-    settings.nonquest = true;
-    adv.monsters.forEach((m) => settings.addNoBanish(m));
-
-    return {
-      outfit: outfit,
-      location: adv.location,
-      run: () => {
-        // We don't want it casting +combat skills
-        greyAdv(adv.location, null, settings);
-      },
-    };
   }
 
   doOutfitPrep(adventure: FoundAdventure) {
@@ -311,9 +289,25 @@ export class GreyAdventurer {
       outfit.addItem(Item.get("Talisman o' Namsilat"));
     }
 
+    let doOrb: boolean = false;
+
+    if (
+      adventure.orbStatus != OrbStatus.IGNORED &&
+      adventure.orbStatus != OrbStatus.NEEDS_RESET &&
+      adventure.considerPriority != ConsiderPriority.BAD_ABSORB
+    ) {
+      doOrb = true;
+
+      if (adventure.orbStatus == OrbStatus.NOT_SET && adventure.quest == null) {
+        outfit.addBonus("+20 bonus Kramco Sausage-o-Matic&trade;");
+      }
+    }
+
     let familiar: Familiar = this.goose;
     const wantToAbsorb: boolean =
-      adventure.locationInfo != null && adventure.locationInfo.turnsToGain > 0;
+      adventure.locationInfo != null &&
+      adventure.locationInfo.turnsToGain > 0 &&
+      (!doOrb || adventure.considerPriority != ConsiderPriority.ORB_OTHER);
     const gooseReplaceable =
       !wantToAbsorb && this.adventureFinder.hasEnoughGooseWeight();
     const canDoMagGlass: boolean =
@@ -325,15 +319,6 @@ export class GreyAdventurer {
     const reallyLovesMagGlass =
       getProperty("sidequestLighthouseCompleted") == "none" &&
       availableAmount(Item.get("barrel of gunpowder")) < 5;
-    let doOrb: boolean = false;
-
-    if (adventure.locationInfo != null && adventure.locationInfo.shouldRunOrb) {
-      doOrb = true;
-
-      if (!adventure.locationInfo.ensuredOrb) {
-        outfit.addBonus("+20 bonus Kramco Sausage-o-Matic&trade;");
-      }
-    }
 
     if (canDoMagGlass) {
       let bonus = 10;

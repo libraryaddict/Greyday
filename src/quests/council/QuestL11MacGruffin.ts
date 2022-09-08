@@ -98,7 +98,7 @@ export class QuestL11MacGruffin implements QuestInfo {
             retrieveItem(this.forged);
           }
 
-          let props = new PropertyManager();
+          const props = new PropertyManager();
 
           try {
             props.setChoice(793, 1);
@@ -112,9 +112,5 @@ export class QuestL11MacGruffin implements QuestInfo {
         use(this.diary);
       },
     };
-  }
-
-  needAdventures(): number {
-    return 3;
   }
 }

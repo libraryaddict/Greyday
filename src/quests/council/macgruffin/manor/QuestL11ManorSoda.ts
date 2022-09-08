@@ -54,6 +54,7 @@ export class QuestL11ManorSoda implements QuestInfo {
     return {
       location: this.laundry,
       outfit: outfit,
+      olfaction: [this.monster],
       run: () => {
         const settings = new AdventureSettings();
         settings.addNoBanish(this.monster);

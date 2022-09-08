@@ -39,10 +39,6 @@ export class QuestL11DesertWormRide implements QuestInfo {
     return 11;
   }
 
-  getAdventuresToComplete(): number {
-    return availableAmount(this.drum) > 0 ? 0 : 2;
-  }
-
   status(): QuestStatus {
     const status = getQuestStatus("questL11Desert");
 
@@ -89,8 +85,8 @@ export class QuestL11DesertWormRide implements QuestInfo {
     return true;
   }
 
-  needAdventures(): number {
-    return 0;
+  free(): boolean {
+    return availableAmount(this.drum) > 0 && availableAmount(this.hooks) > 0;
   }
 
   wantsToWormRide(): boolean {
@@ -105,6 +101,7 @@ export class QuestL11DesertWormRide implements QuestInfo {
       return {
         outfit: outfit,
         location: this.oasis,
+        orbs: [Monster.get("Blur")],
         run: () => {
           greyAdv(this.oasis, outfit);
         },

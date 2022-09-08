@@ -1,28 +1,22 @@
 import {
-  adv1,
   availableAmount,
-  council,
   Familiar,
-  getProperty,
   Item,
   Location,
   Monster,
   myHp,
-  myLevel,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
   getQuestStatus,
-  OutfitImportance,
   QuestAdventure,
   QuestInfo,
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { hasUnlockedLatteFlavor, LatteFlavor } from "../../../utils/LatteUtils";
-import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { QuestTowerKillSkin } from "../tower/stages/QuestTowerWallSkin";
 import { GreySettings } from "../../../utils/GreySettings";
 
@@ -32,9 +26,11 @@ export class QuestL11Black implements QuestInfo {
   loc: Location = Location.get("The Black Forest");
   latte: Item = Item.get("Latte lovers member's mug");
   blackbird: Item = Item.get("reassembled blackbird");
-  dontBanish: Monster[] = ["Black Adder", "Black Panther"].map((s) =>
-    Monster.get(s)
-  );
+  sunkenEyes: Item = Item.get("Sunken Eyes");
+  brokenWings: Item = Item.get("Broken Wings");
+  eyesMonster: Monster = Monster.get("black adder");
+  wingsMonster: Monster = Monster.get("Black Panther");
+
   toAbsorb: Monster[];
   blackberry: Item = Item.get("Blackberry");
   skinKiller: QuestTowerKillSkin = new QuestTowerKillSkin();
@@ -102,6 +98,7 @@ export class QuestL11Black implements QuestInfo {
       location: this.loc,
       outfit: outfit,
       familiar: fam,
+      orbs: this.getNeededMonsters(),
       run: () => {
         const props = new PropertyManager();
 
@@ -129,7 +126,7 @@ export class QuestL11Black implements QuestInfo {
           const settings = new AdventureSettings();
 
           if (availableAmount(this.blackbird) == 0) {
-            for (const mon of this.dontBanish) {
+            for (const mon of this.getNeededMonsters()) {
               settings.addNoBanish(mon);
             }
           }
@@ -142,7 +139,21 @@ export class QuestL11Black implements QuestInfo {
     };
   }
 
-  needAdventures(): number {
-    return 4;
+  getNeededMonsters(): Monster[] {
+    if (availableAmount(this.blackbird) > 0) {
+      return [];
+    }
+
+    const monsters = [];
+
+    if (availableAmount(this.sunkenEyes) == 0) {
+      monsters.push(this.sunkenEyes);
+    }
+
+    if (availableAmount(this.brokenWings) == 0) {
+      monsters.push(this.wingsMonster);
+    }
+
+    return monsters;
   }
 }

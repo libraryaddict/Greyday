@@ -54,6 +54,7 @@ export class QuestL11ManorWine implements QuestInfo {
     return {
       location: this.celler,
       outfit: outfit,
+      olfaction: [this.monster],
       run: () => {
         const settings = new AdventureSettings();
         settings.addNoBanish(this.monster);

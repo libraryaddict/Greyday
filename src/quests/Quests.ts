@@ -10,11 +10,10 @@ export interface QuestInfo {
   status(path?: PossiblePath): QuestStatus; // Ready / Faster later / Delay Burning / Not ready / Complete
   run(path?: PossiblePath): QuestAdventure; // Returns an outfit + location + runnable object
   getLocations(): Location[]; // What should we avoid looking for absorbs in
-  needAdventures?(): number; // If this is set, then require at least this many adventures to be available because we don't want to resume
+  free?(): boolean; // If this is set, then require at least this many adventures to be available because we don't want to resume
   getChildren?(): QuestInfo[]; // For helpfully grouping quests together
   mustBeDone?(): boolean; // If there's some state that requires this to be done asap, like effects that'll run out
   hasFamiliarRecommendation?(): Familiar; // This quest would like this familiar leveled up as it'd be useful
-  getAdventuresToComplete?(): number; // The amount of adventures remaining and needed to finish this location. Used when seeking absorbs
   getAbsorbs?(): Monster[]; // Unexposed by Locations[], this is a backup for getting available absorbs
 }
 
@@ -30,19 +29,20 @@ export enum DelayType {
   NONCOMBAT_HITTING,
 }
 
-export interface QuestAdventure {
+export interface GenericAdventure {
   outfit?: GreyOutfit;
-  familiar?: Familiar;
-  disableFamOverride?: boolean; // If set to true, familiar is forced
   location: Location; // The place we are going to adventure, set to null if this is effectively zoneless
-  delay?: DelayType;
+  orbs?: Monster[]; // All monsters in olfaction are added to orbs
   run: () => void;
 }
 
-export enum OutfitImportance {
-  REQUIRED,
-  VERY_HELPFUL,
-  HELPS,
+export type NonQuestAdventure = GenericAdventure;
+
+export interface QuestAdventure extends GenericAdventure {
+  familiar?: Familiar;
+  disableFamOverride?: boolean; // If set to true, familiar is forced
+  delay?: DelayType;
+  olfaction?: Monster[];
 }
 
 export function getQuestStatus(property: string): number {
