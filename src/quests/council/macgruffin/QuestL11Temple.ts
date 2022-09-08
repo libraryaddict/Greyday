@@ -1,39 +1,10 @@
-import {
-  adv1,
-  availableAmount,
-  cliExecute,
-  council,
-  Effect,
-  getProperty,
-  handlingChoice,
-  haveEffect,
-  hiddenTempleUnlocked,
-  Item,
-  itemAmount,
-  lastChoice,
-  Location,
-  myAscensions,
-  myLevel,
-  print,
-  runChoice,
-  toInt,
-  use,
-  visitUrl,
-} from "kolmafia";
+import { getProperty, Item, itemAmount, Location, visitUrl } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
-import {
-  getQuestStatus,
-  OutfitImportance,
-  QuestAdventure,
-  QuestInfo,
-  QuestStatus,
-} from "../../Quests";
-import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestL11Bowling } from "./hiddencity/shrines/QuestL11TempleBowling";
 import { QuestL11Business } from "./hiddencity/shrines/QuestL11TempleBusiness";
 import { QuestL11Curses } from "./hiddencity/shrines/QuestL11TempleCurses";
 import { QuestL11Doctor } from "./hiddencity/shrines/QuestL11TempleDoctor";
-import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { QuestL11ShrineVines } from "./hiddencity/QuestL11ShrineVines";
 import { QuestL11HiddenPark } from "./hiddencity/QuestL11HiddenPark";

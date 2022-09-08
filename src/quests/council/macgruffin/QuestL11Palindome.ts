@@ -1,33 +1,13 @@
-import {
-  adv1,
-  availableAmount,
-  cliExecute,
-  council,
-  getProperty,
-  haveEffect,
-  Item,
-  itemAmount,
-  Location,
-  Monster,
-  myLevel,
-  print,
-  restoreHp,
-  use,
-  visitUrl,
-} from "kolmafia";
+import { availableAmount, Item, Location } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import {
   getQuestStatus,
-  OutfitImportance,
   QuestAdventure,
   QuestInfo,
   QuestStatus,
 } from "../../Quests";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
-import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
-import { Macro } from "../../../utils/MacroBuilder";
-import { GreyPulls } from "../../../utils/GreyResources";
+import { greyAdv } from "../../../utils/GreyLocations";
 import { QuestType } from "../../QuestTypes";
 import { QuestL11PalinStew } from "./palin/QuestL11PalinStew";
 import { QuestL11PalinBook } from "./palin/QuestL11PalinBook";
