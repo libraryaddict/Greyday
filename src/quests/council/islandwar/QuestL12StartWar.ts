@@ -28,10 +28,10 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
   paths: PossiblePath[];
 
   createPaths(assumeUnstarted: boolean) {
-    /* this.paths = [
+    this.paths = [
       new PossiblePath(8),
-      new PossiblePath(1).add(ResourceCategory.FORCE_NC),
-    ];*/
+      //   new PossiblePath(1).add(ResourceCategory.FORCE_NC),
+    ];
   }
 
   getPossiblePaths(): PossiblePath[] {
@@ -69,7 +69,7 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!this.canStartWar()) {
+    if (path == null || !this.canStartWar()) {
       return QuestStatus.NOT_READY;
     }
 
