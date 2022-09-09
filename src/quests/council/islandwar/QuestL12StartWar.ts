@@ -69,7 +69,7 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (path == null || !this.canStartWar()) {
+    if (!this.canStartWar()) {
       return QuestStatus.NOT_READY;
     }
 

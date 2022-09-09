@@ -93,6 +93,7 @@ export class QuestL11HiddenBookMatches extends TaskInfo implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      olfaction: [this.monster],
       run: () => {
         if (availableAmount(this.book) == 0) {
           if (path.canUse(ResourceCategory.PULL)) {
