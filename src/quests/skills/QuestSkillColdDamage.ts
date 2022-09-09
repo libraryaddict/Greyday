@@ -52,6 +52,7 @@ export class QuestSkillColdDamage15 implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: this.location,
+      orbs: [this.monster],
       run: () => {
         const settings = new AdventureSettings().addNoBanish(this.monster);
 

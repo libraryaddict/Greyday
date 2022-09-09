@@ -51,6 +51,7 @@ export class QuestSkillDoubleNanovision implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: this.bowling,
+      orbs: [this.drunk],
       run: () => {
         if (itemAmount(this.ball) > 0) {
           putCloset(this.ball, itemAmount(this.ball));

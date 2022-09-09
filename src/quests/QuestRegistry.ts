@@ -250,6 +250,7 @@ export class QuestRegistry {
 
       { id: "Council / Bats / Sonars" },
       { id: "Council / Bats / UnlockLeft" },
+      { id: "Council / Bats / Boss" },
 
       // We've unlocked the left way, just do shen and hopefully we unlock right without actually burning extra turns
       { id: "Council / MacGruffin / Shen / Meet" },
@@ -296,7 +297,6 @@ export class QuestRegistry {
 
       // Given we earn nothing but meat, delays for days
       { id: "Council / Bats / UnlockBoss" },
-      { id: "Council / Bats / Boss" },
 
       // We do shaman first to potentially grab extra accountant stuff
       { id: "Council / MacGruffin / HiddenCity / Curses" },

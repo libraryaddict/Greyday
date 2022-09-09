@@ -20,6 +20,7 @@ import {
   Skill,
   haveSkill,
   getZapWand,
+  Monster,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
@@ -40,6 +41,7 @@ export class QuestMPRegen implements QuestInfo {
   deadMimic: Item = Item.get("dead mimic");
   skill: Skill = Skill.get("Hivemindedness");
   plusSign: Item = Item.get("plus sign");
+  mindflayer: Monster = Monster.get("Mind flayer");
 
   getId(): QuestType {
     return "Skills / MPRegen";
@@ -113,6 +115,7 @@ export class QuestMPRegen implements QuestInfo {
     return {
       outfit: outfit,
       location: this.realDung,
+      orbs: [this.mindflayer],
       run: () => {
         const props = new PropertyManager();
 

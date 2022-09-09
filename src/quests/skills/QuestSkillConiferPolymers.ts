@@ -49,6 +49,7 @@ export class QuestSkillConiferPolymers implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      orbs: [this.monster],
       run: () => {
         const settings = new AdventureSettings();
         settings.addNoBanish(this.monster);
