@@ -538,6 +538,12 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
         const props = new PropertyManager();
 
         try {
+          const yr = path.getResource(ResourceCategory.YELLOW_RAY);
+
+          if (yr != null) {
+            yr.prepare(null, props);
+          }
+
           if (path.canUse(ResourceCategory.FAXER)) {
             path.getResource(ResourceCategory.FAXER).fax(this.mountainMan);
             path.addUsed(ResourceCategory.FAXER);
@@ -572,9 +578,8 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
             }
           }
 
-          if (path.canUse(ResourceCategory.YELLOW_RAY)) {
-            path.getResource(ResourceCategory.YELLOW_RAY).prepare(null, props);
-            macro.step(path.getResource(ResourceCategory.YELLOW_RAY).macro());
+          if (yr != null) {
+            macro.step(yr.macro());
           }
 
           greyAdv(
