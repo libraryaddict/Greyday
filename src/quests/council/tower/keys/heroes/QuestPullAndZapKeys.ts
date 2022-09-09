@@ -30,28 +30,6 @@ export class QuestPullAndZapKeys
   extends QuestKeyStuffAbstract
   implements QuestInfo
 {
-  toAbsorb?: Monster[];
-  free?(): boolean {
-    throw new Error("Method not implemented.");
-  }
-  getChildren?(): QuestInfo[] {
-    throw new Error("Method not implemented.");
-  }
-  mustBeDone?(): boolean {
-    throw new Error("Method not implemented.");
-  }
-  hasFamiliarRecommendation?(): Familiar {
-    throw new Error("Method not implemented.");
-  }
-  getAbsorbs?(): Monster[] {
-    throw new Error("Method not implemented.");
-  }
-  attemptPrime?(): void {
-    throw new Error("Method not implemented.");
-  }
-  canAcceptPrimes?(): boolean {
-    throw new Error("Method not implemented.");
-  }
   pullKey: PossiblePath;
   paths: PossiblePath[];
 
