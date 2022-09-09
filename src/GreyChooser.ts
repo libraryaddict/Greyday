@@ -185,7 +185,11 @@ export class AdventureFinder {
       this.defeated,
       true
     )) {
-      if (this.questLocations.includes(loc) || !canAdventure(loc)) {
+      if (
+        this.questLocations.includes(loc) ||
+        !canAdventure(loc) ||
+        details.expectedTurnsProfit < 0
+      ) {
         continue;
       }
 
