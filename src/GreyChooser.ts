@@ -30,6 +30,7 @@ import {
   QuestInfo,
   QuestStatus,
 } from "./quests/Quests";
+import { ResourceCategory } from "./typings/ResourceTypes";
 import { PossiblePath } from "./typings/TaskInfo";
 import { FigureOutPath, SimmedPath } from "./typings/TaskManager";
 import {
@@ -37,7 +38,13 @@ import {
   AbsorbDetails,
   Reabsorbed,
 } from "./utils/GreyAbsorber";
-import { AdventureSettings, greyAdv } from "./utils/GreyLocations";
+import {
+  AdventureSettings,
+  getPrimedResource,
+  greyAdv,
+  resetPrimedResource,
+  setPrimedResource,
+} from "./utils/GreyLocations";
 import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
 import { currentPredictions, doColor } from "./utils/GreyUtils";
@@ -213,6 +220,13 @@ export class AdventureFinder {
           continue;
         }
 
+        if (
+          adv.adventure.forcedFight != null &&
+          adv.adventure.forcedFight[0] == 0
+        ) {
+          continue;
+        }
+
         const appear = appearanceRates(adv.adventure.location);
         const couldAppear = adv.adventure.orbs.filter(
           (m) => appear[m.name] > 0
@@ -292,7 +306,8 @@ export class AdventureFinder {
         // Or our outfit exists and wants to run combat
         // And the location isn't black forest, or if it is, we don't have the skill
         const shouldRunCombat =
-          adv.adventure.location.combatPercent < 100 ||
+          (adv.adventure.location.combatPercent < 100 &&
+            adv.adventure.outfit == null) ||
           (adv.adventure.outfit != null &&
             adv.adventure.outfit != GreyOutfit.IGNORE_OUTFIT &&
             adv.adventure.outfit.plusCombatWeight > 0 &&
@@ -548,6 +563,120 @@ export class AdventureFinder {
         (priority != null ? " - " + ConsiderPriority[priority] : "");
 
       printHtml(line);
+    }
+  }
+
+  findPrimedVisit(): FoundAdventure {
+    const primed = getPrimedResource();
+
+    if (primed == null) {
+      return null;
+    }
+
+    if (!primed.resource.primed()) {
+      resetPrimedResource();
+      return null;
+    }
+
+    const status = primed.quest.status(primed.path);
+
+    if (status != QuestStatus.READY && status != QuestStatus.FASTER_LATER) {
+      throw (
+        "Expected a quest status of ready or faster later on " +
+        primed.quest.getId() +
+        " which was primed for a resource " +
+        primed.resource.id
+      );
+    }
+
+    return {
+      quest: primed.quest,
+      path: primed.path,
+      locationInfo: null,
+      adventure: primed.quest.run(primed.path),
+      status: status,
+      orbStatus: OrbStatus.IGNORED,
+      considerPriority: ConsiderPriority.NOTHING_SPECIAL,
+    };
+
+    // TODO Find the visit or error
+  }
+
+  // Try setup something so we can prime this visit
+  tryPrime(adventure: FoundAdventure) {
+    // If this quest is one that is an absorb potential, or will be using a crystal ball
+    if (
+      adventure.quest == null ||
+      adventure.orbStatus == OrbStatus.READY ||
+      adventure.orbStatus == OrbStatus.NOT_SET
+    ) {
+      return;
+    }
+
+    // We don't want to prime on something that might demand to be done later
+    if (adventure.quest.mustBeDone != null) {
+      return;
+    }
+
+    // If this quest is one that can't be primed on
+    if (
+      adventure.quest.canAcceptPrimes != null &&
+      !adventure.quest.canAcceptPrimes()
+    ) {
+      return;
+    }
+
+    // We don't want to prime on something that isn't using an outfit, or is using items in that outfit
+    if (
+      adventure.adventure.outfit == GreyOutfit.IGNORE_OUTFIT ||
+      (adventure.adventure.outfit != null &&
+        adventure.adventure.outfit.itemsWeight.length > 0)
+    ) {
+      return;
+    }
+
+    // So! This adventure is one we can prime on!
+
+    for (const [quest, path] of this.path.thisPath) {
+      if (quest == null || path == null) {
+        continue;
+      }
+
+      if (quest.attemptPrime == null) {
+        continue;
+      }
+
+      const status = quest.status(path);
+
+      if (status == QuestStatus.COMPLETED) {
+        continue;
+      }
+
+      const hasPrimed = quest.attemptPrime(path);
+
+      // If this did not want to prime a resource
+      if (!hasPrimed) {
+        continue;
+      }
+
+      const primed = getPrimedResource();
+
+      if (primed == null) {
+        throw (
+          quest.getId() +
+          " claimed to have prepared a primed resource, but nothing was set."
+        );
+      }
+
+      print(
+        quest.getId() +
+          " has primed " +
+          primed.resource.id +
+          " of " +
+          ResourceCategory[primed.resource.type],
+        "blue"
+      );
+      return;
     }
   }
 

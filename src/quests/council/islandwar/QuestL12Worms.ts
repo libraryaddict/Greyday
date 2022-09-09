@@ -273,6 +273,10 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
 
     return false;
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }
 
 class WormProgress {

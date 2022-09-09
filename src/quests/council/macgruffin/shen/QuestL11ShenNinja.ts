@@ -22,7 +22,7 @@ export class QuestL11ShenNinja implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Shen");
+    const status = getQuestStatus("questL11Shen");
 
     if (status > 3) {
       return QuestStatus.COMPLETED;
@@ -40,7 +40,7 @@ export class QuestL11ShenNinja implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (getQuestStatus("questL08Trapper") <= 2) {
       outfit.setPlusCombat();
@@ -57,5 +57,9 @@ export class QuestL11ShenNinja implements QuestInfo {
 
   getLocations(): Location[] {
     return [this.location];
+  }
+
+  canAcceptPrimes(): boolean {
+    return getQuestStatus("questL08Trapper") > 2;
   }
 }

@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  Familiar,
   getProperty,
   gnomadsAvailable,
   haveSkill,
@@ -7,6 +8,7 @@ import {
   knollAvailable,
   lastChoice,
   Location,
+  Monster,
   myAscensions,
   myMeat,
   print,
@@ -554,6 +556,7 @@ class QuestMeatSmith implements QuestInfo {
 
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl("shop.php?whichshop=meatsmith");
         visitUrl("choice.php?whichchoice=" + lastChoice() + "&option=2&pwd=");

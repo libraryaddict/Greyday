@@ -127,9 +127,15 @@ export class QuestDungeonsOfDoom implements QuestInfo {
     return [this.bend];
   }
 
-  mustBeDone?(): boolean {
+  mustBeDone(): boolean {
     return (
       haveEffect(this.teleportis) > 0 && availableAmount(this.plusSign) > 0
+    );
+  }
+
+  canAcceptPrimes(): boolean {
+    return (
+      availableAmount(this.plusSign) == 0 && haveEffect(this.teleportis) == 0
     );
   }
 }

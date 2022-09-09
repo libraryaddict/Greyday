@@ -22,6 +22,7 @@ import { QuestStarKey } from "../keys/QuestStarKey";
 import { QuestKeyStuffAbstract } from "../../../custom/QuestKeyStuffAbstract";
 import { QuestHeroKeys } from "../keys/heroes/QuestHeroKeys";
 import { PossiblePath } from "../../../../typings/TaskInfo";
+import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 
 export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
   keyItems: [string, Item][] = [
@@ -38,6 +39,7 @@ export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
     new QuestDigitalKey(),
     new QuestHeroKeys(),
   ];
+
   refreshedStorage: boolean = false;
 
   getPossiblePaths?(): PossiblePath[];
@@ -130,6 +132,7 @@ export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
 
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         const notDone = this.getNotDone();
 

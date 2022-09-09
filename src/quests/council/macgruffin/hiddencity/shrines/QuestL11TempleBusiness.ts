@@ -5,6 +5,7 @@ import {
   Item,
   Location,
   Monster,
+  toMonster,
   use,
   useFamiliar,
 } from "kolmafia";
@@ -27,6 +28,7 @@ export class QuestL11Business implements QuestInfo {
   loc: Location = Location.get("the hidden office building");
   apartment: Location = Location.get("The Hidden Apartment Building");
   accountant: Monster = Monster.get("Pygmy witch accountant");
+  spirit: Monster = toMonster(444);
   toAbsorb: Monster[];
 
   getId(): QuestType {
@@ -115,6 +117,10 @@ export class QuestL11Business implements QuestInfo {
     return {
       location: this.loc,
       orbs: this.filesRemaining() > 0 ? [this.accountant] : null,
+      forcedFight:
+        availableAmount(this.completeFile) > 0
+          ? [this.delayUntilNextNC(), this.spirit]
+          : null,
       run: () => {
         const props = new PropertyManager();
 
@@ -168,9 +174,5 @@ export class QuestL11Business implements QuestInfo {
 
   filesRemaining(): number {
     return this.files.reduce((p, v) => (availableAmount(v) > 0 ? 1 : 0) + p, 0);
-  }
-
-  shouldExploreApartments(): boolean {
-    return;
   }
 }

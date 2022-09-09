@@ -612,4 +612,8 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   getLocations(): Location[] {
     return [];
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

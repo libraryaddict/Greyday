@@ -157,4 +157,8 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   getLocations(): Location[] {
     return [];
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

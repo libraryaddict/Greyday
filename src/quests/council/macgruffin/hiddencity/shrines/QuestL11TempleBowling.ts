@@ -164,6 +164,12 @@ export class QuestL11Bowling implements QuestInfo {
 
     const orbs: Monster[] = [];
 
+    const cosmicBall =
+      !this.hasCosmicBowled() &&
+      this.ownCosmicBall() &&
+      this.isCosmicBallNextCombat();
+    const bowlingBall = !cosmicBall && closetAmount(this.bowlingBall) > 0;
+
     if (!haveSkill(this.sweep)) {
       orbs.push(this.drunk);
     }
@@ -178,18 +184,14 @@ export class QuestL11Bowling implements QuestInfo {
         let macro: Macro = null;
         let couldBeBowling: boolean = false;
 
-        if (
-          !this.hasCosmicBowled() &&
-          this.ownCosmicBall() &&
-          this.isCosmicBallNextCombat()
-        ) {
+        if (cosmicBall) {
           macro = new Macro().item(this.cosmicBall);
           couldBeBowling = true;
 
           if (itemAmount(this.bowlingBall) > 0) {
             putCloset(this.bowlingBall, availableAmount(this.bowlingBall));
           }
-        } else if (closetAmount(this.bowlingBall) > 0) {
+        } else if (bowlingBall) {
           takeCloset(this.bowlingBall, closetAmount(this.bowlingBall));
         }
 

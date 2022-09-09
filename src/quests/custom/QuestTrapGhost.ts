@@ -163,6 +163,10 @@ export class QuestTrapGhost implements QuestInfo {
   mustBeDone(): boolean {
     return true;
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }
 
 const sweatpants = Item.get("Designer Sweatpants");

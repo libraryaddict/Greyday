@@ -59,4 +59,8 @@ export class QuestFortuneExp implements QuestInfo {
   free(): boolean {
     return true;
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

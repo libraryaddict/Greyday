@@ -76,6 +76,10 @@ export class SmutOrcs implements QuestInfo {
     return [this.shorts];
   }
 
+  canAcceptPrimes(): boolean {
+    return false;
+  }
+
   mustBeDone(): boolean {
     return isGhostBustingTime(this.loc);
   }

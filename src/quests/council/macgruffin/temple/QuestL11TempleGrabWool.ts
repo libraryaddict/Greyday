@@ -125,4 +125,8 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
   shouldGrabWool(): boolean {
     return availableAmount(this.wool) == 0;
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

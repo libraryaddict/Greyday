@@ -30,7 +30,7 @@ export class QuestTowerMaze implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit("+hot res +spooky res +stench res -tie");
+    const outfit = new GreyOutfit("+hot res +spooky res +stench res -tie");
 
     return {
       location: null,
@@ -48,5 +48,9 @@ export class QuestTowerMaze implements QuestInfo {
 
   getLocations(): Location[] {
     return [];
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 }

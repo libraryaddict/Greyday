@@ -236,4 +236,8 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
   free(): boolean {
     return this.mustBeDone();
   }
+
+  canAcceptPrimes(): boolean {
+    return this.isFarmDudes();
+  }
 }

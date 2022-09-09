@@ -7,9 +7,12 @@ import {
   toInt,
   visitUrl,
   zap,
+  Familiar,
+  Monster,
 } from "kolmafia";
 import { ResourceCategory } from "../../../../../typings/ResourceTypes";
 import { PossiblePath } from "../../../../../typings/TaskInfo";
+import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
 import { GreyPulls } from "../../../../../utils/GreyResources";
 import { GreySettings } from "../../../../../utils/GreySettings";
 import { getAllCombinations, hasPulled } from "../../../../../utils/GreyUtils";
@@ -27,6 +30,28 @@ export class QuestPullAndZapKeys
   extends QuestKeyStuffAbstract
   implements QuestInfo
 {
+  toAbsorb?: Monster[];
+  free?(): boolean {
+    throw new Error("Method not implemented.");
+  }
+  getChildren?(): QuestInfo[] {
+    throw new Error("Method not implemented.");
+  }
+  mustBeDone?(): boolean {
+    throw new Error("Method not implemented.");
+  }
+  hasFamiliarRecommendation?(): Familiar {
+    throw new Error("Method not implemented.");
+  }
+  getAbsorbs?(): Monster[] {
+    throw new Error("Method not implemented.");
+  }
+  attemptPrime?(): void {
+    throw new Error("Method not implemented.");
+  }
+  canAcceptPrimes?(): boolean {
+    throw new Error("Method not implemented.");
+  }
   pullKey: PossiblePath;
   paths: PossiblePath[];
 
@@ -108,6 +133,7 @@ export class QuestPullAndZapKeys
   run(path: PossibleKeyPath): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         const wand = getZapWand();
 

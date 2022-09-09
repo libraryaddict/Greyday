@@ -6,6 +6,7 @@ import {
   Effect,
   Familiar,
   faxbot,
+  getCampground,
   getProperty,
   haveEffect,
   haveFamiliar,
@@ -15,9 +16,13 @@ import {
   itemAmount,
   modifierEval,
   Monster,
+  mpCost,
   myMeat,
+  myMp,
+  outfit,
   print,
   pullsRemaining,
+  setProperty,
   Skill,
   storageAmount,
   toBoolean,
@@ -27,7 +32,6 @@ import {
   urlEncode,
   visitUrl,
 } from "kolmafia";
-import { AdventureSettings } from "../utils/GreyLocations";
 import { GreyOutfit } from "../utils/GreyOutfitter";
 import { GreySettings } from "../utils/GreySettings";
 import { Macro } from "../utils/MacroBuilder";
@@ -53,6 +57,8 @@ export enum ResourceCategory {
   HOT_TUB,
   INSTANT_KILL,
   FORCE_NC,
+  FORCE_FIGHT,
+  PILL_KEEPER,
 }
 
 export const ResourceIds = [
@@ -74,14 +80,28 @@ export const ResourceIds = [
   "Cat Burglar Heist",
   "Hot Tub",
   "Chateau Painting",
-  //  "Parka: Clara's Bell",
+  "Parka: Clara's Bell",
+  "Pillkeeper",
+  "Portscan",
 ] as const;
+
+export enum PillkeeperPill {
+  YELLOW_RAY = "explode",
+  DOUBLE_POTION = "extend",
+  FORCE_NC = "noncombat",
+  ALL_RES = "element",
+  DOUBLE_STATS = "stat",
+  FAM_WEIGHT = "familiar",
+  LUCKY = "lucky",
+  RANDOM_ADVENTURE = "random",
+}
 
 export type ResourceId = typeof ResourceIds[number];
 
 export interface SomeResource {
   type: ResourceCategory;
   id: ResourceId;
+  available?: () => boolean; // Some iotms might not be available, like parka and torso
   resourcesUsed?: number;
   worthInAftercore: number; // If used by garbo, how much profit would we miss out
   prepare: (outfit: GreyOutfit, props?: PropertyManager) => void;
@@ -91,6 +111,10 @@ export interface SomeResource {
   doHeist?: (item: Item) => void;
   pickCard?: (card: string) => void;
   ready?: () => boolean;
+  pillkeeper?: (pill: PillkeeperPill) => void;
+  attemptPrime?: () => boolean; // This should be executed inside a fight
+  primed?: () => boolean; // If this resource has been primed and is ready to go
+  unprime?: () => void; // Must be called after a resource has been used
 }
 
 const glove = Item.get("Powerful Glove");
@@ -141,15 +165,112 @@ const pull: SomeResource = {
   prepare: () => {},
 };
 
+const pillkeeper: Item = Item.get("Eight Days a Week Pill Keeper");
+
+const pillkeeperNC: SomeResource = {
+  type: ResourceCategory.FORCE_NC,
+  id: "Pillkeeper",
+  worthInAftercore: 50000, // Lets just value it at a frost flower?
+  prepare: (outfit: GreyOutfit, props: PropertyManager) => {
+    if (props != null) {
+      cliExecute("pillkeeper " + PillkeeperPill.FORCE_NC);
+    }
+  },
+  ready: () => true,
+};
+
+const sourceTerminal = getCampground()["Source terminal"] > 0;
+const portscanProp = "_portscanPrimed";
+
+const portscan: SomeResource = {
+  type: ResourceCategory.FORCE_FIGHT,
+  id: "Portscan",
+  worthInAftercore: 0,
+  prepare: (outfit: GreyOutfit, props: PropertyManager) => {
+    if (props == null) {
+      return;
+    }
+
+    cliExecute("terminal educate portscan.edu");
+  },
+  primed: () => toBoolean(getProperty(portscanProp) || "false"),
+  unprime: () => setProperty(portscanProp, "false"),
+  attemptPrime: () => {
+    if (currentRound() != 0) {
+      return false;
+    }
+
+    const skill = Skill.get("Portscan");
+
+    if (!haveSkill(skill) || myMp() < mpCost(skill)) {
+      return false;
+    }
+
+    const prop = "_sourceTerminalPortscanUses";
+    const scans = toInt(getProperty(prop));
+
+    Macro.skill(skill).submit();
+
+    if (scans != toInt(getProperty(prop))) {
+      setProperty(portscanProp, "true");
+      return true;
+    }
+
+    print("Failed to portscan for some reason..");
+    return false;
+  },
+};
+
 const parka: Item = Item.get("Jurassic Parka");
+const torso: Skill = Skill.get("Torso Awareness");
+const parkaProp: string = "_parkaPrimed";
+
+const ncParka: SomeResource = {
+  type: ResourceCategory.FORCE_NC,
+  id: "Parka: Clara's Bell",
+  worthInAftercore: 0,
+  prepare: (outfit: GreyOutfit, props: PropertyManager) => {
+    if (outfit != null) {
+      outfit.addItem(parka);
+    }
+
+    if (props != null) {
+      cliExecute("parka spikolodon");
+    }
+  },
+  primed: () => toBoolean(getProperty(parkaProp) || "false"),
+  unprime: () => setProperty(parkaProp, "false"),
+  attemptPrime: () => {
+    if (currentRound() != 0) {
+      return false;
+    }
+
+    const skill = Skill.get("Launch spikolodon spikes");
+
+    if (!haveSkill(skill) || myMp() < mpCost(skill)) {
+      return false;
+    }
+
+    const prop = "_spikolodonSpikeUses";
+    const spikes = toInt(getProperty(prop));
+
+    Macro.skill(skill).submit();
+
+    if (spikes != toInt(getProperty(prop))) {
+      setProperty(parkaProp, "true");
+      return true;
+    }
+
+    print("Failed to launch spikolodon spikes for some reason..", "red");
+    return false;
+  },
+};
 
 const yellowParka: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
   id: "Yellow Ray",
-  resourcesUsed:
-    availableAmount(parka) > 0 && haveSkill(Skill.get("Torso Awareness"))
-      ? 99
-      : 10_000,
+  available: () => availableAmount(parka) > 0 && haveSkill(torso),
+  resourcesUsed: 99,
   worthInAftercore: 0,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
@@ -173,7 +294,8 @@ const yellowRocket: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
   id: "Yellow Ray",
   worthInAftercore: 250, // Cost of a yellow rocket
-  resourcesUsed: availableAmount(vipInvitation) > 0 ? 75 : 10_000,
+  resourcesUsed: 75,
+  available: () => availableAmount(vipInvitation) > 0,
   prepare: () => {
     if (itemAmount(rocket) == 0) {
       cliExecute("acquire yellow rocket");
@@ -194,7 +316,8 @@ const retroRay: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
   id: "Yellow Ray",
   worthInAftercore: 0,
-  resourcesUsed: availableAmount(retrocape) > 0 ? 100 : 10_000,
+  available: () => availableAmount(retrocape) > 0,
+  resourcesUsed: 100,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addItem(retrocape);
@@ -461,7 +584,10 @@ const allResources = [
   pull,
   yellowRocket,
   yellowParka,
+  portscan,
+  ncParka,
   cosplayYellowRay,
+  pillkeeperNC,
   backupCopier,
   cosplayCopier,
   cargoShorts,
@@ -480,8 +606,14 @@ const allResources = [
   chateauPainting,
 ].sort((r1, r2) => r1.worthInAftercore - r2.worthInAftercore);
 
-export function getResources(): SomeResource[] {
-  return allResources;
+export function getResources(
+  includingUnavailable: boolean = false
+): SomeResource[] {
+  if (includingUnavailable) {
+    return allResources;
+  }
+
+  return allResources.filter((r) => r.available == null || r.available());
 }
 
 export function getResourcesLeft(
@@ -615,7 +747,34 @@ export function getResourcesLeft(
       return assumeUnused || !toBoolean(getProperty("_chateauMonsterFought"))
         ? 1
         : 0;
+    case "Parka: Clara's Bell":
+      if (!haveSkill(torso) || availableAmount(parka) == 0) {
+        return 0;
+      }
 
+      return (
+        5 - (assumeUnused ? 0 : toInt(getProperty("_spikolodonSpikeUses")))
+      );
+    case "Pillkeeper":
+      if (availableAmount(pillkeeper) == 0) {
+        return 0;
+      }
+
+      return assumeUnused || toBoolean(getProperty("_freePillKeeperUsed"))
+        ? 1
+        : 0;
+    case "Portscan":
+      if (
+        !sourceTerminal ||
+        !getProperty("sourceTerminalEducateKnown").includes("portscan.edu")
+      ) {
+        return 0;
+      }
+
+      return (
+        3 -
+        (assumeUnused ? 0 : toInt(getProperty("_sourceTerminalPortscanUses")))
+      );
     default:
       throw "No idea what the resource " + resourceType + " is.";
   }

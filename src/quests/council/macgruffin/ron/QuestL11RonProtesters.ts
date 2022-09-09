@@ -484,4 +484,8 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
   getLocations(): Location[] {
     return [this.proLoc];
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

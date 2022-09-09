@@ -33,8 +33,12 @@ export class QuestL8MountainNinja implements QuestInfo {
     return 8;
   }
 
+  canAcceptPrimes(): boolean {
+    return false;
+  }
+
   status(): QuestStatus {
-    let status = this.getStatus();
+    const status = this.getStatus();
 
     if (status > MountainStatus.GET_OUTFIT) {
       return QuestStatus.COMPLETED;
@@ -75,7 +79,7 @@ export class QuestL8MountainNinja implements QuestInfo {
       };
     }
 
-    let outfit = new GreyOutfit().setPlusCombat();
+    const outfit = new GreyOutfit().setPlusCombat();
 
     return {
       location: this.ninja,

@@ -72,4 +72,8 @@ export class QuestL11Palin implements QuestInfo {
       },
     };
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

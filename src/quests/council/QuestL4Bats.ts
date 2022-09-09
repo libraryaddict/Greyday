@@ -35,10 +35,6 @@ export class QuestL4Bats implements QuestInfo {
     return 4;
   }
 
-  mustBeDone(): boolean {
-    return true;
-  }
-
   status(): QuestStatus {
     const status = getQuestStatus("questL04Bat");
 
@@ -74,10 +70,6 @@ export class QuestL4Bats implements QuestInfo {
 
   getId(): QuestType {
     return "Council / Bats / Sonars";
-  }
-
-  free(): boolean {
-    return true;
   }
 }
 

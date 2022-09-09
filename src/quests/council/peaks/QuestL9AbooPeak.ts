@@ -210,6 +210,10 @@ export class ABooHandler implements QuestInfo {
     return this.canUseClue();
   }
 
+  canAcceptPrimes(): boolean {
+    return false;
+  }
+
   status(): QuestStatus {
     if (
       getQuestStatus("questL09Topping") < 1 ||

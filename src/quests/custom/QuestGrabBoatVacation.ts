@@ -161,4 +161,8 @@ export class QuestGrabBoatVacation implements QuestInfo {
   hasBoat(): boolean {
     return toInt(getProperty("lastIslandUnlock")) == myAscensions();
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

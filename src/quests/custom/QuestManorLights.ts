@@ -368,4 +368,8 @@ export class QuestManorLights implements QuestInfo {
       (this.isElizaReady() && !this.isElizaFight())
     );
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

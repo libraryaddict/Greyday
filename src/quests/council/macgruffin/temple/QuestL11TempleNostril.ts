@@ -108,4 +108,8 @@ class TempleChoices implements GreyChoices {
 
     return toReturn;
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

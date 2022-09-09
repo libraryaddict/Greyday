@@ -137,6 +137,10 @@ export class QuestMPRegen implements QuestInfo {
     };
   }
 
+  canAcceptPrimes(): boolean {
+    return this.getWand() != null;
+  }
+
   getLocations(): Location[] {
     return [this.realDung];
   }

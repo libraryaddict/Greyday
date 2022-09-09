@@ -105,4 +105,8 @@ export class QuestL9SmutOrcsCargoShorts extends TaskInfo implements QuestInfo {
   free(): boolean {
     return true;
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

@@ -125,6 +125,10 @@ export class QuestTowerWallSkin extends TaskInfo implements QuestInfo {
       },
     };
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }
 
 export class QuestTowerKillSkin {

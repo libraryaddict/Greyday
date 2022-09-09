@@ -25,6 +25,7 @@ import { QuestL11ShenBats } from "./shen/QuestL11ShenBats";
 import { QuestL11ShenGiants } from "./shen/QuestL11ShenGiants";
 import { QuestL11ShenNinja } from "./shen/QuestL11ShenNinja";
 import { QuestL11ShenTurnIn } from "./shen/QuestL11ShenTurnIn";
+import { GreyOutfit } from "../../../utils/GreyOutfitter";
 
 export class QuestL11Shen implements QuestInfo {
   shenClub: Location = Location.get("The Copperhead Club");
@@ -71,6 +72,7 @@ export class QuestL11Shen implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         const props = new PropertyManager();
         props.setChoice(1074, 1); // Approach table
@@ -91,5 +93,9 @@ export class QuestL11Shen implements QuestInfo {
 
   free(): boolean {
     return true;
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 }

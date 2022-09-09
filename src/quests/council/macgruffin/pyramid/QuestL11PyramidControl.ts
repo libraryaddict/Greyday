@@ -7,6 +7,7 @@ import {
   availableAmount,
   Location,
 } from "kolmafia";
+import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
@@ -52,6 +53,7 @@ export class QuestL11PyramidControl implements QuestInfo {
 
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         visitUrl("place.php?whichplace=pyramid&action=pyramid_control");
 
@@ -82,5 +84,9 @@ export class QuestL11PyramidControl implements QuestInfo {
         }
       },
     };
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 }

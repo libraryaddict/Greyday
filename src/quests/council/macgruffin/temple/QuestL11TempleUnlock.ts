@@ -62,6 +62,10 @@ export class QuestL11TempleUnlock implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (getProperty("questL02Larva") != "finished") {
+      return QuestStatus.NOT_READY;
+    }
+
     if (isGhostBustingTime(this.spookyLoc)) {
       if (shouldAvoidGhosts()) {
         return QuestStatus.NOT_READY;
@@ -231,5 +235,9 @@ class TempleChoices implements GreyChoices {
     this.choices.splice(0, 1);
 
     return toReturn;
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 }

@@ -295,4 +295,8 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
   getExploredRemaining(): number {
     return 100 - this.getExplored();
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

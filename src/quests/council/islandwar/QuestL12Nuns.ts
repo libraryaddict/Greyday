@@ -220,7 +220,7 @@ export class Quest12WarNuns implements QuestInfo {
         print(
           `Turns Taken: ${this.loc.turnsSpent}, that's approx ${Math.round(
             this.getMeat() / this.loc.turnsSpent
-          )} meat per adventure!`,
+          )} meat per adventure! ${this.getMeat()} / 100,000 collected.`,
           "blue"
         );
       },
@@ -264,5 +264,9 @@ export class Quest12WarNuns implements QuestInfo {
     ) {
       use(this.savingsBond);
     }
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 }

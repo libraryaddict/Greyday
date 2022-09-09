@@ -54,7 +54,7 @@ export class QuestTowerWallBones implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL13Final");
+    const status = getQuestStatus("questL13Final");
 
     if (status < 8) {
       return QuestStatus.NOT_READY;
@@ -79,7 +79,7 @@ export class QuestTowerWallBones implements QuestInfo {
     return {
       location: null,
       run: () => {
-        let macro = new Macro().tryItem(this.knife);
+        const macro = new Macro().tryItem(this.knife);
 
         greyAdv(
           "place.php?whichplace=nstower&action=ns_07_monster3",
@@ -91,13 +91,13 @@ export class QuestTowerWallBones implements QuestInfo {
   }
 
   runKnife(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat();
 
     return {
       location: this.groundFloor,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         DelayBurners.tryReplaceCombats();
 
         if (DelayBurners.isTryingForDupeableGoblin()) {
@@ -120,6 +120,10 @@ export class QuestTowerWallBones implements QuestInfo {
 
   getLocations(): Location[] {
     return [];
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 }
 
@@ -146,8 +150,8 @@ export class QuestTowerKillBones {
 
     maximize("moxie +equip " + this.rocket.name, true);
 
-    let moxie = numericModifier("Generated:_spec", "Buffed Moxie");
-    let damage = this.damageMultiplier * (moxie * 0.4);
+    const moxie = numericModifier("Generated:_spec", "Buffed Moxie");
+    const damage = this.damageMultiplier * (moxie * 0.4);
 
     print(
       "Using rocket, we predict " +
@@ -179,8 +183,8 @@ export class QuestTowerKillBones {
 
     maximize("mys", true);
 
-    let mys = numericModifier("Generated:_spec", "Buffed Mysticality");
-    let damage = this.damageMultiplier * (mys * 0.15);
+    const mys = numericModifier("Generated:_spec", "Buffed Mysticality");
+    const damage = this.damageMultiplier * (mys * 0.15);
 
     print(
       "Using " +

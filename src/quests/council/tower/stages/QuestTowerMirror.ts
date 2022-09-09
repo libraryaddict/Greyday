@@ -53,7 +53,7 @@ export class QuestTowerMirror implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL13Final");
+    const status = getQuestStatus("questL13Final");
 
     if (status < 9) {
       return QuestStatus.NOT_READY;
@@ -82,13 +82,13 @@ export class QuestTowerMirror implements QuestInfo {
     }
 
     // Equip outfit early to try save some hp
-    let outfit = GreyOutfit.IGNORE_OUTFIT;
+    const outfit = GreyOutfit.IGNORE_OUTFIT;
 
     return {
       location: null,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(1015, 2); // Break mirror
 
         try {
@@ -107,18 +107,18 @@ export class QuestTowerMirror implements QuestInfo {
       toGrab.length > 0 &&
       (GreySettings.isHardcoreMode() || pullsRemaining() != -1)
     ) {
-      for (let [, monster, loc] of toGrab) {
+      for (const [, monster, loc] of toGrab) {
         if (availableAmount(this.clover) > 0) {
           return this.tryClover();
         }
 
-        let outfit = new GreyOutfit().setItemDrops();
+        const outfit = new GreyOutfit().setItemDrops();
 
         return {
           location: loc,
           outfit: outfit,
           run: () => {
-            let settings = new AdventureSettings();
+            const settings = new AdventureSettings();
             settings.addNoBanish(monster);
 
             greyAdv(loc, outfit, settings);
@@ -138,5 +138,9 @@ export class QuestTowerMirror implements QuestInfo {
 
   getLocations(): Location[] {
     return [];
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 }

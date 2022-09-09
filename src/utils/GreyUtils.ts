@@ -10,11 +10,11 @@ import {
   Monster,
   myFamiliar,
   retrieveItem,
+  sessionLogs,
   toInt,
   toLocation,
   toMonster,
   turnsPlayed,
-  useFamiliar,
   visitUrl,
 } from "kolmafia";
 
@@ -80,6 +80,47 @@ export function getBackupsRemaining() {
 
 export function doColor(text: string, color: string): string {
   return `<font color='${color}'>${text}</font>`;
+}
+
+export function getEncounters(
+  location: string,
+  encounters: string[] = null
+): [string, number][] {
+  const spl = sessionLogs(1)[0].split("\n");
+  const reg = /^\[(\d+)\] (.*?)\r?$/;
+  const matches: [string, number][] = [];
+  let turn: number;
+  let doing = false;
+
+  for (const s of spl) {
+    if (s.startsWith("[")) {
+      const match = s.match(reg);
+
+      if (match == null) {
+        continue;
+      }
+
+      turn = toInt(match[1]);
+
+      if (location != null) {
+        doing = match[2] == location;
+      }
+    } else if (s.startsWith("Encounter: ")) {
+      if (turn == null) {
+        continue;
+      }
+
+      const name = s.substring(s.indexOf(": ") + 2).replace("\r", "");
+
+      if (!doing && (encounters == null || !encounters.includes(name))) {
+        continue;
+      }
+
+      matches.push([name, turn]);
+    }
+  }
+
+  return matches;
 }
 
 const ballProp = () =>

@@ -12,6 +12,7 @@ import {
 import { ResourceCategory } from "../../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
 import { greyAdv } from "../../../../utils/GreyLocations";
+import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { GreyPulls } from "../../../../utils/GreyResources";
 import { PropertyManager } from "../../../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../../Quests";
@@ -64,6 +65,7 @@ export class QuestL11DesertCompass extends TaskInfo implements QuestInfo {
   run(path: PossiblePath): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         if (!path.canUse(ResourceCategory.PULL)) {
           const props = new PropertyManager();
@@ -91,5 +93,9 @@ export class QuestL11DesertCompass extends TaskInfo implements QuestInfo {
 
   getLocations(): Location[] {
     return [];
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 }

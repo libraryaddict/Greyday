@@ -57,6 +57,17 @@ export class QuestSkeletonKey implements QuestInfo {
     return QuestStatus.FASTER_LATER;
   }
 
+  mustBeDone(): boolean {
+    return (
+      pullsRemaining() == -1 ||
+      (availableAmount(this.bone) > 0 && availableAmount(this.teeth) > 0)
+    );
+  }
+
+  free(): boolean {
+    return this.mustBeDone();
+  }
+
   run(): QuestAdventure {
     if (
       pullsRemaining() == -1 ||
@@ -71,6 +82,7 @@ export class QuestSkeletonKey implements QuestInfo {
   craft(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         retrieveItem(this.key);
       },

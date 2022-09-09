@@ -9,6 +9,7 @@ import {
   Monster,
   myLevel,
   toInt,
+  toMonster,
   useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../../../utils/Properties";
@@ -23,6 +24,7 @@ export class QuestL11Curses implements QuestInfo {
   curse3: Effect = Effect.get("Thrice-Cursed");
   apartment: Location = Location.get("The Hidden Apartment Building");
   shaman: Monster = Monster.get("pygmy shaman");
+  spirit: Monster = toMonster(442);
   toAbsorb: Monster[];
 
   level(): number {
@@ -91,8 +93,13 @@ export class QuestL11Curses implements QuestInfo {
       location: this.apartment,
       orbs: haveEffect(this.curse3) <= 2 ? [this.shaman] : null,
       olfaction:
-        haveEffect(this.curse3) + haveEffect(this.curse2) == 0
+        haveEffect(this.curse3) + haveEffect(this.curse2) <
+        Math.max(1, this.delayForNextNC())
           ? [this.shaman]
+          : null,
+      forcedFight:
+        haveEffect(this.curse3) > 0
+          ? [this.delayForNextNC(), this.spirit]
           : null,
       run: () => {
         const props = new PropertyManager();
@@ -128,5 +135,14 @@ export class QuestL11Curses implements QuestInfo {
         }
       },
     };
+  }
+
+  canAcceptPrimes(): boolean {
+    const turns =
+      haveEffect(this.curse1) +
+      haveEffect(this.curse2) +
+      haveEffect(this.curse3);
+
+    return turns == 0 || turns > 10;
   }
 }

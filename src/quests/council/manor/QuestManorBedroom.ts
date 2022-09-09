@@ -171,4 +171,8 @@ export class ManorBedroom implements QuestInfo {
   getLocations(): Location[] {
     return [this.location];
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

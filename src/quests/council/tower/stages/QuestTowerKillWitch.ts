@@ -33,7 +33,7 @@ export class QuestTowerKillWitch implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL13Final");
+    const status = getQuestStatus("questL13Final");
 
     if (status < 11) {
       return QuestStatus.NOT_READY;
@@ -78,5 +78,9 @@ export class QuestTowerKillWitch implements QuestInfo {
         printEndOfRun();
       },
     };
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 }

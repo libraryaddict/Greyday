@@ -28,6 +28,7 @@ import {
 export class QuestL2SpookyLarva implements QuestInfo {
   location: Location = Location.get("The Spooky Forest");
   latte: Item = Item.get("Latte lovers member's mug");
+  headless: Monster = Monster.get("The Headless Horseman");
   toAbsorb: Monster[];
 
   shouldWearLatte(): boolean {
@@ -95,6 +96,9 @@ export class QuestL2SpookyLarva implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      forcedFight: isGhostBustingTime(this.location)
+        ? [0, this.headless]
+        : null,
       run: () => {
         const props = new PropertyManager();
         const settings = new AdventureSettings();

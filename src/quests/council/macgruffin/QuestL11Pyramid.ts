@@ -89,4 +89,8 @@ export class QuestL11Pyramid implements QuestInfo {
       },
     };
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

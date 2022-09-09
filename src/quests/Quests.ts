@@ -15,6 +15,8 @@ export interface QuestInfo {
   mustBeDone?(): boolean; // If there's some state that requires this to be done asap, like effects that'll run out
   hasFamiliarRecommendation?(): Familiar; // This quest would like this familiar leveled up as it'd be useful
   getAbsorbs?(): Monster[]; // Unexposed by Locations[], this is a backup for getting available absorbs
+  attemptPrime?(path: PossiblePath): boolean; // Should only ever be called if the outfit is basically vanilla, no items wanted
+  canAcceptPrimes?(): boolean; // If this task is a bad idea to prime resources on
 }
 
 export enum QuestStatus {
@@ -43,6 +45,7 @@ export interface QuestAdventure extends GenericAdventure {
   disableFamOverride?: boolean; // If set to true, familiar is forced
   delay?: DelayType;
   olfaction?: Monster[];
+  forcedFight?: [number, Monster]; // How many turns until a fight is forced
 }
 
 export function getQuestStatus(property: string): number {

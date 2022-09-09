@@ -1,10 +1,12 @@
 import {
   availableAmount,
   Familiar,
+  getProperty,
   Item,
   Location,
   Monster,
   myHp,
+  setProperty,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
@@ -19,6 +21,7 @@ import { QuestType } from "../../QuestTypes";
 import { hasUnlockedLatteFlavor, LatteFlavor } from "../../../utils/LatteUtils";
 import { QuestTowerKillSkin } from "../tower/stages/QuestTowerWallSkin";
 import { GreySettings } from "../../../utils/GreySettings";
+import { currentPredictions, getEncounters } from "../../../utils/GreyUtils";
 
 export class QuestL11Black implements QuestInfo {
   boots: Item = Item.get("Blackberry Galoshes");
@@ -30,6 +33,7 @@ export class QuestL11Black implements QuestInfo {
   brokenWings: Item = Item.get("Broken Wings");
   eyesMonster: Monster = Monster.get("black adder");
   wingsMonster: Monster = Monster.get("Black Panther");
+  blackberryBush: Monster = Monster.get("Blackberry bush");
 
   toAbsorb: Monster[];
   blackberry: Item = Item.get("Blackberry");
@@ -72,11 +76,38 @@ export class QuestL11Black implements QuestInfo {
     return QuestStatus.READY;
   }
 
+  forcedNCIn(): number {
+    const encounters = getEncounters("The Black Forest", ["All Over the Map"])
+      .filter(([e]) => e.startsWith("black ") || e == "All Over The Map")
+      .reverse();
+
+    let fights = 0;
+
+    for (const [encounter] of encounters) {
+      if (encounter == "All Over The Map") {
+        break;
+      }
+
+      fights++;
+    }
+
+    return Math.max(0, fights - 4);
+  }
+
   run(): QuestAdventure {
-    const outfit = new GreyOutfit().setPlusCombat();
+    const ncIn = this.forcedNCIn();
+    const ncTime = ncIn == 0;
+
+    const outfit = new GreyOutfit();
+
+    if (!ncTime) {
+      outfit.setPlusCombat();
+    }
 
     if (availableAmount(this.boots) > 0) {
-      outfit.addItem(this.boots);
+      if (!ncTime) {
+        outfit.addItem(this.boots);
+      }
     } else if (availableAmount(this.blackberry) <= 1) {
       outfit.setItemDrops();
       outfit.addBonus("+0.1 booze drop +0.1 food drop");
@@ -90,12 +121,13 @@ export class QuestL11Black implements QuestInfo {
 
     let fam: Familiar;
 
-    if (availableAmount(this.blackbird) == 0) {
+    if (availableAmount(this.blackbird) == 0 && !ncTime) {
       fam = Familiar.get("Reassembled Blackbird");
     }
 
     return {
       location: this.loc,
+      forcedFight: [ncIn, this.blackberryBush],
       outfit: outfit,
       familiar: fam,
       orbs: this.getNeededMonsters(),

@@ -128,4 +128,8 @@ export class QuestL11DesertWormRide implements QuestInfo {
   getExploredRemaining(): number {
     return 100 - this.getExplored();
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

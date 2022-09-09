@@ -59,6 +59,7 @@ import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
 import { doColor, setUmbrella } from "./utils/GreyUtils";
 import { TaskBountyHunter } from "./tasks/TaskBountyHunter";
+import { getPrimedResource } from "./utils/GreyLocations";
 
 export class GreyAdventurer {
   goose: Familiar = Familiar.get("Grey Goose");
@@ -151,7 +152,13 @@ export class GreyAdventurer {
         continue;
       }
 
-      if (id == "Yellow Ray") {
+      if (
+        getPrimedResource() != null &&
+        getPrimedResource().resource.primed() &&
+        getPrimedResource().resource.id == id
+      ) {
+        continue;
+      } else if (id == "Yellow Ray") {
         continue;
       } else if (id == "Pull" && getResourcesLeft(id) > 50) {
         continue;

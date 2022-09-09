@@ -162,4 +162,8 @@ export class QuestManorBillards implements QuestInfo {
   getLocations(): Location[] {
     return [this.billards];
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

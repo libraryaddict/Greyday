@@ -8,6 +8,7 @@ import {
   myMeat,
   toInt,
 } from "kolmafia";
+import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -35,6 +36,7 @@ export class QuestL11ShoreAccess implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         buy(Item.get("Desert Bus pass"));
 
@@ -43,6 +45,10 @@ export class QuestL11ShoreAccess implements QuestInfo {
         }
       },
     };
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 
   getLocations(): Location[] {

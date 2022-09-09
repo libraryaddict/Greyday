@@ -141,4 +141,8 @@ export class QuestMoonSign implements QuestInfo {
 
     return true;
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

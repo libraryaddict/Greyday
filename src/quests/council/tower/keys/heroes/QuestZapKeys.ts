@@ -10,6 +10,7 @@ import {
   zap,
 } from "kolmafia";
 import { PossiblePath } from "../../../../../typings/TaskInfo";
+import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
 import { QuestKeyStuffAbstract } from "../../../../custom/QuestKeyStuffAbstract";
 import {
   QuestInfo,
@@ -65,6 +66,7 @@ export class QuestZapKeys extends QuestKeyStuffAbstract implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         const wand = getZapWand();
 

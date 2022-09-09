@@ -212,4 +212,8 @@ export class QuestTowerShadow extends TaskInfo implements QuestInfo {
   getLocations(): Location[] {
     return [];
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

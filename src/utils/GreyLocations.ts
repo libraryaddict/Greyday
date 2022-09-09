@@ -16,12 +16,75 @@ import {
   visitUrl,
 } from "kolmafia";
 import { castCombatSkill, castNoCombatSkills } from "../GreyAdventurer";
+import { QuestInfo, QuestStatus } from "../quests/Quests";
+import { SomeResource } from "../typings/ResourceTypes";
+import { PossiblePath } from "../typings/TaskInfo";
 import { GreyChoices } from "./GreyChoices";
 import { greyDuringFightMacro, greyKillingBlow } from "./GreyCombat";
 import { GreyOutfit } from "./GreyOutfitter";
 import { Macro } from "./MacroBuilder";
 import { handledChoices } from "./Properties";
 import { getBackupChoices } from "./RandomChoiceHandler";
+
+export type PrimedResource = {
+  quest: QuestInfo;
+  path: PossiblePath;
+  resource: SomeResource;
+};
+
+let primedResource: PrimedResource;
+
+export function runPrimedResource() {
+  if (getPrimedResource() == null || getPrimedResource().resource.primed()) {
+    return;
+  }
+
+  getPrimedResource().resource.attemptPrime();
+}
+
+export function getPrimedResource(): PrimedResource {
+  return primedResource;
+}
+
+export function resetPrimedResource() {
+  if (getPrimedResource() == null) {
+    return;
+  }
+
+  if (getPrimedResource().resource.primed()) {
+    throw "Can't reset a resource that's been primed";
+  }
+
+  primedResource = null;
+}
+
+export function setPrimedResource(
+  quest: QuestInfo,
+  path: PossiblePath,
+  resource: SomeResource
+) {
+  if (getPrimedResource() != null) {
+    throw "A resource has already been set to be primed";
+  }
+
+  if (resource.primed == null) {
+    throw "This resource isn't one that can be primed";
+  }
+
+  if (resource.primed()) {
+    throw "This resource is already primed";
+  }
+
+  if (quest.status(path) == QuestStatus.COMPLETED) {
+    throw "The quest " + quest.getId() + " claims to be completed";
+  }
+
+  primedResource = {
+    quest: quest,
+    path: path,
+    resource: resource,
+  };
+}
 
 export class AdventureSettings {
   startOfFightMacro: Macro;

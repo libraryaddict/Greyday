@@ -73,4 +73,8 @@ export class QuestShortOrderExpLevel implements QuestInfo {
   getLocations(): Location[] {
     return [];
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

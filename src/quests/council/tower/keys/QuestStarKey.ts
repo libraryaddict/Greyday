@@ -85,13 +85,14 @@ export class QuestStarKey implements QuestInfo {
     if (this.hasEnoughMaterials()) {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           retrieveItem(this.key);
         },
       };
     }
 
-    let outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit().setItemDrops();
 
     return {
       location: this.location,
@@ -145,13 +146,13 @@ export class QuestTowerHoleInSkyUnlock implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat();
 
     return {
       location: this.topFloor,
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         props.setChoice(this.copperFeel, 2); // Grab rocket
         props.setChoice(this.gothNC, 4); // Crawl to steam

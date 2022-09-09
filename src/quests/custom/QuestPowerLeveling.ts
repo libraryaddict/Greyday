@@ -169,4 +169,8 @@ export class QuestPowerLeveling implements QuestInfo {
   getId(): QuestType {
     return "Misc / PowerLeveling";
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

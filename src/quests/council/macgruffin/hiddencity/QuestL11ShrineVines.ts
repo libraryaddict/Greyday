@@ -49,7 +49,7 @@ export class QuestL11ShrineVines implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Worship");
+    const status = getQuestStatus("questL11Worship");
 
     if (status > 4) {
       return QuestStatus.COMPLETED;
@@ -78,9 +78,9 @@ export class QuestL11ShrineVines implements QuestInfo {
     //need to check the combat names due to wanderers
     //we are assuming victory. you could have potentially fought liana without machete and then ran away. but you we are assuming you didn't
     let dense_liana_defeated = 0;
-    let area_combats_seen = loc.combatQueue.split("; ");
+    const area_combats_seen = loc.combatQueue.split("; ");
 
-    for (let s of area_combats_seen) {
+    for (const s of area_combats_seen) {
       if (s == "dense liana") {
         dense_liana_defeated += 1;
       }
@@ -90,7 +90,7 @@ export class QuestL11ShrineVines implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let adv = this.shrineNeedsDoing();
+    const adv = this.shrineNeedsDoing();
     let outfit: GreyOutfit;
 
     if (adv[2]) {
@@ -103,7 +103,7 @@ export class QuestL11ShrineVines implements QuestInfo {
       location: adv[0],
       outfit: outfit,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         if (adv[1] != null) {
           props.setChoice(adv[1], adv[2] ? 1 : 2);
@@ -120,7 +120,7 @@ export class QuestL11ShrineVines implements QuestInfo {
 
   // Location, choice adv number, needs to clear vines
   shrineNeedsDoing(): [Location, number, boolean] {
-    for (let l of this.locs) {
+    for (const l of this.locs) {
       if (
         l[0] != null ? toInt(getProperty(l[0])) <= 0 : !this.lianaCleared(l[1])
       ) {
@@ -133,5 +133,9 @@ export class QuestL11ShrineVines implements QuestInfo {
     }
 
     return null;
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 }

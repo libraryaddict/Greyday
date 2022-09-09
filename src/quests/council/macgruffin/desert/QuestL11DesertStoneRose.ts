@@ -102,4 +102,8 @@ export class QuestL11DesertStoneRose implements QuestInfo {
   mustBeDone(): boolean {
     return haveEffect(this.hydrated) > 0;
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

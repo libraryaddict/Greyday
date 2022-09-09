@@ -14,30 +14,66 @@ import {
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
-import { greyAdv } from "../../../utils/GreyLocations";
+import { ResourceCategory } from "../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
+import { greyAdv, setPrimedResource } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { PropertyManager } from "../../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
-export class QuestL12StartWar implements QuestInfo {
+export class QuestL12StartWar extends TaskInfo implements QuestInfo {
   loc: Location = Location.get("Hippy Camp");
   umbrella: Item = Item.get("Unbreakable Umbrella");
+  paths: PossiblePath[];
+
+  createPaths(assumeUnstarted: boolean) {
+    /* this.paths = [
+      new PossiblePath(8),
+      new PossiblePath(1).add(ResourceCategory.FORCE_NC),
+    ];*/
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
+
+  attemptPrime(path: PossiblePath): boolean {
+    if (!path.canUse(ResourceCategory.FORCE_NC) || !this.canStartWar()) {
+      return false;
+    }
+
+    setPrimedResource(this, path, path.getResource(ResourceCategory.FORCE_NC));
+
+    return true;
+  }
 
   level(): number {
     return 12;
   }
 
-  status(): QuestStatus {
+  canStartWar(): boolean {
+    if (!this.hasBoat() || !this.hasOutfit()) {
+      return false;
+    }
+
+    if (Stat.all().find((s) => myBasestat(s) < 70) != null) {
+      return false;
+    }
+
+    return true;
+  }
+
+  status(path: PossiblePath): QuestStatus {
     if (getProperty("warProgress") != "unstarted") {
       return QuestStatus.COMPLETED;
     }
 
-    if (!this.hasBoat() || !this.hasOutfit()) {
+    if (path == null || !this.canStartWar()) {
       return QuestStatus.NOT_READY;
     }
 
-    if (Stat.all().find((s) => myBasestat(s) < 70) != null) {
+    if (path.canUse(ResourceCategory.FORCE_NC)) {
       return QuestStatus.NOT_READY;
     }
 
@@ -56,17 +92,23 @@ export class QuestL12StartWar implements QuestInfo {
     return haveOutfit("Frat Warrior Fatigues");
   }
 
-  run(): QuestAdventure {
-    const outfit = new GreyOutfit().setNoCombat();
+  run(path: PossiblePath): QuestAdventure {
+    const outfit = new GreyOutfit();
     outfit.addItem(Item.get("Beer Helmet"));
     outfit.addItem(Item.get("distressed denim pants"));
     outfit.addItem(Item.get("bejeweled pledge pin"));
 
-    if (
-      availableAmount(this.umbrella) > 0 &&
-      !DelayBurners.isDelayBurnerReady()
-    ) {
-      outfit.addItem(this.umbrella);
+    const nc = path.getResource(ResourceCategory.FORCE_NC);
+
+    if (nc == null) {
+      outfit.setNoCombat();
+
+      if (
+        availableAmount(this.umbrella) > 0 &&
+        !DelayBurners.isDelayBurnerReady()
+      ) {
+        outfit.addItem(this.umbrella);
+      }
     }
 
     return {
@@ -75,6 +117,7 @@ export class QuestL12StartWar implements QuestInfo {
       run: () => {
         // If we can cast both NC skills
         if (
+          nc == null &&
           DelayBurners.isDelayBurnerReady() &&
           equippedAmount(this.umbrella) == 0
         ) {

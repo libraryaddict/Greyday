@@ -181,6 +181,10 @@ export class QuestL3Tavern implements QuestInfo {
       },
     };
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }
 
 class TavernLayout {

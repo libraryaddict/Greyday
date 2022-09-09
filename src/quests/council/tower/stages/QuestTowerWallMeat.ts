@@ -35,7 +35,7 @@ export class QuestTowerWallMeat implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL13Final");
+    const status = getQuestStatus("questL13Final");
 
     if (status < 7) {
       return QuestStatus.NOT_READY;
@@ -57,7 +57,7 @@ export class QuestTowerWallMeat implements QuestInfo {
       outfit: GreyOutfit.IGNORE_OUTFIT,
       location: null,
       run: () => {
-        let robo = Familiar.get("Grey Goose");
+        const robo = Familiar.get("Grey Goose");
 
         if (haveFamiliar(robo) && this.hasDrunkMeat()) {
           useFamiliar(Familiar.get("Robortender"));
@@ -90,5 +90,9 @@ export class QuestTowerWallMeat implements QuestInfo {
 
   getLocations(): Location[] {
     return [];
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
   }
 }

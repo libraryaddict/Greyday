@@ -205,4 +205,8 @@ export class QuestL11DesertGnome implements QuestInfo {
   wantsToWormRide(): boolean {
     return (this.getGnome() & 16) != 16;
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

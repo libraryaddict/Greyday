@@ -1,12 +1,9 @@
 import {
-  adv1,
   availableAmount,
-  council,
   getProperty,
   Item,
   Location,
   Monster,
-  myLevel,
 } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../../../Quests";
 import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
@@ -24,6 +21,7 @@ export class QuestL11Doctor implements QuestInfo {
   ].map((s) => Item.get(s));
   loc: Location = Location.get("The Hidden Hospital");
   surgeon: Monster = Monster.get("pygmy witch surgeon");
+  shirt: Item = Item.get("Surgical apron");
 
   getLocations(): Location[] {
     return [this.loc];

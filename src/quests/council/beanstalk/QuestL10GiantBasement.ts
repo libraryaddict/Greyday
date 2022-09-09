@@ -31,7 +31,7 @@ export class QuestL10GiantBasement implements QuestInfo {
   // TODO Once we've got the absorbs, try replace combats if it doesn't interfere with our slots cos umbrella
 
   constructor() {
-    let umbrella = Item.get("Unbreakable Umbrella");
+    const umbrella = Item.get("Unbreakable Umbrella");
 
     if (availableAmount(umbrella) > 0) {
       this.umbrella = umbrella; // They replace!
@@ -39,13 +39,13 @@ export class QuestL10GiantBasement implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat();
 
     return {
       location: this.loc,
       outfit: outfit,
       run: () => {
-        let turnsSpent = turnsPlayed();
+        const turnsSpent = turnsPlayed();
         this.runAdv(outfit);
 
         // If we took a turn, or the last choice wasn't one asking for umbrella & amulet
@@ -61,7 +61,7 @@ export class QuestL10GiantBasement implements QuestInfo {
           "blue"
         );
 
-        for (let i of [this.umbrella, this.amulet]) {
+        for (const i of [this.umbrella, this.amulet]) {
           if (equippedAmount(i) > 0 || itemAmount(i) == 0) {
             continue;
           }
@@ -75,7 +75,7 @@ export class QuestL10GiantBasement implements QuestInfo {
   }
 
   runAdv(outfit: GreyOutfit) {
-    let props = new PropertyManager();
+    const props = new PropertyManager();
 
     try {
       // Do umbrella
@@ -120,7 +120,7 @@ export class QuestL10GiantBasement implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL10Garbage");
+    const status = getQuestStatus("questL10Garbage");
 
     if (status < 7) {
       return QuestStatus.NOT_READY;

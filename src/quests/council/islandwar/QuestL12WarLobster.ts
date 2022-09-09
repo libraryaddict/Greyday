@@ -486,4 +486,8 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
 
     return true;
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

@@ -98,6 +98,10 @@ export class QuestL7Crypt implements QuestInfo {
       },
     };
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }
 
 export enum CryptStatus {
