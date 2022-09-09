@@ -294,7 +294,9 @@ export class AdventureFinder {
         outfit != null &&
         outfit != GreyOutfit.IGNORE_OUTFIT &&
         ((outfit.minusCombatWeight > 0 && hasCombatSkillActive()) ||
-          (outfit.plusCombatWeight > 0 && hasNonCombatSkillActive()))
+          (outfit.plusCombatWeight > 0 &&
+            adv.quest != null &&
+            hasNonCombatSkillActive()))
       ) {
         adv.considerPriority = ConsiderPriority.BAD_COMBAT_RATE;
         continue;
@@ -318,7 +320,7 @@ export class AdventureFinder {
             (adv.adventure.location != Location.get("The Black Forest") ||
               haveSkill(Skill.get("Photonic Shroud"))));
 
-        if (shouldRunCombat) {
+        if (shouldRunCombat && hasNonCombatSkillActive()) {
           adv.considerPriority = ConsiderPriority.RANDOM_COMBAT_ABSORB;
         } else {
           adv.considerPriority = ConsiderPriority.RANDOM_ABSORB;
