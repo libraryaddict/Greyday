@@ -170,13 +170,14 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
   }
 
   run(path: PossiblePath): QuestAdventure {
+    const pred = currentPredictions().get(this.desert);
     const resource =
       toBoolean(getProperty("_gnasirAvailable")) &&
       familiarWeight(this.goose) >= 6
         ? path.getResource(ResourceCategory.FIRE_EXTINGUSHER_ZONE)
         : null;
 
-    if (resource == null) {
+    if (resource == null && (pred == null || !this.toAbsorb.includes(pred))) {
       if (
         canAdventure(this.oasis) &&
         haveEffect(this.hydrated) == 0 &&

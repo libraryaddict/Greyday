@@ -2,6 +2,7 @@ import {
   availableAmount,
   currentRound,
   equippedAmount,
+  getProperty,
   handlingChoice,
   haveSkill,
   Item,
@@ -53,6 +54,10 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   }
 
   status(path: PossiblePath): QuestStatus {
+    if (getProperty("questM05Toot") != "finished") {
+      return QuestStatus.NOT_READY;
+    }
+
     if (haveSkill(this.skill)) {
       return QuestStatus.COMPLETED;
     }

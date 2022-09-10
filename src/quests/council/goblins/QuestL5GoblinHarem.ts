@@ -29,7 +29,7 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
   taskYR: PossiblePath = new PossiblePath(2, 5).add(
     ResourceCategory.YELLOW_RAY
   );
-  taskManual = new PossiblePath(6, 10);
+  taskManual = new PossiblePath(8, 12);
   haremGirl: Monster = Monster.get("Knob Goblin Harem Girl");
 
   getPossiblePaths(): PossiblePath[] {

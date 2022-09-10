@@ -35,18 +35,22 @@ export class QuestL4Bats implements QuestInfo {
     return 4;
   }
 
+  mustBeDone(): boolean {
+    return true;
+  }
+
+  free(): boolean {
+    return true;
+  }
+
   status(): QuestStatus {
     const status = getQuestStatus("questL04Bat");
-
-    if (status < 0) {
-      return QuestStatus.NOT_READY;
-    }
 
     if (status >= 3) {
       return QuestStatus.COMPLETED;
     }
 
-    if (availableAmount(this.sonar) == 0) {
+    if (status < 0 || availableAmount(this.sonar) == 0) {
       return QuestStatus.NOT_READY;
     }
 
@@ -71,14 +75,4 @@ export class QuestL4Bats implements QuestInfo {
   getId(): QuestType {
     return "Council / Bats / Sonars";
   }
-}
-
-enum BatStatus {
-  unstarted = -1,
-  started = 0,
-  LEFT_SMASHED = 1,
-  RIGHT_SMASHED = 2,
-  BOTTOM_SMASHED = 3,
-  BOSS_MURDERED = 4,
-  finished = 100,
 }

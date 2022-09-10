@@ -240,8 +240,8 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
   }
 
   status(path: PossiblePath): QuestStatus {
-    if (availableAmount(this.letter) > 0) {
-      //  return QuestStatus.READY;
+    if (availableAmount(this.letter) > 0 && !haveSkill(this.torso)) {
+      return QuestStatus.READY;
     }
 
     if (
@@ -283,7 +283,7 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
   }
 
   run(path: PossiblePath): QuestAdventure {
-    if (availableAmount(this.letter) > 0) {
+    if (availableAmount(this.letter) > 0 && !haveSkill(this.torso)) {
       return {
         location: null,
         outfit: GreyOutfit.IGNORE_OUTFIT,

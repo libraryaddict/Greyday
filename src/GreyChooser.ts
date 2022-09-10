@@ -316,9 +316,7 @@ export class AdventureFinder {
             adv.adventure.outfit == null) ||
           (adv.adventure.outfit != null &&
             adv.adventure.outfit != GreyOutfit.IGNORE_OUTFIT &&
-            adv.adventure.outfit.plusCombatWeight > 0 &&
-            (adv.adventure.location != Location.get("The Black Forest") ||
-              haveSkill(Skill.get("Photonic Shroud"))));
+            adv.adventure.outfit.plusCombatWeight > 0);
 
         if (shouldRunCombat && hasNonCombatSkillActive()) {
           adv.considerPriority = ConsiderPriority.RANDOM_COMBAT_ABSORB;
@@ -604,8 +602,6 @@ export class AdventureFinder {
       orbStatus: OrbStatus.IGNORED,
       considerPriority: ConsiderPriority.NOTHING_SPECIAL,
     };
-
-    // TODO Find the visit or error
   }
 
   // Try setup something so we can prime this visit
@@ -633,10 +629,14 @@ export class AdventureFinder {
     }
 
     // We don't want to prime on something that isn't using an outfit, or is using items in that outfit
+    const outfit = adventure.adventure.outfit;
+
     if (
-      adventure.adventure.outfit == GreyOutfit.IGNORE_OUTFIT ||
-      (adventure.adventure.outfit != null &&
-        adventure.adventure.outfit.itemsWeight.length > 0)
+      outfit != null &&
+      (outfit == GreyOutfit.IGNORE_OUTFIT ||
+        outfit.plusCombatWeight > 0 ||
+        outfit.minusCombatWeight > 0 ||
+        outfit.itemsWeight.length > 0)
     ) {
       return;
     }
