@@ -154,7 +154,9 @@ const extingusherZoneSpecific: SomeResource = {
   resourcesUsed: 20,
   worthInAftercore: 3000, // Tattered paper cost x 2
   prepare: (outfit: GreyOutfit) =>
-    outfit != null ? outfit.addItem(extingusher) : null,
+    outfit != null
+      ? outfit.addItem(extingusher).addBonus("-equip smoke ball")
+      : null,
   macro: () => Macro.skill(Skill.get("Fire Extinguisher: Zone Specific")),
 };
 
