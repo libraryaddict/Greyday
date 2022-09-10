@@ -16,6 +16,7 @@ import {
   print,
   Monster,
   visitUrl,
+  itemDrops,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
@@ -28,6 +29,7 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
+import { currentPredictions } from "../../../utils/GreyUtils";
 
 export class MurderHandler implements QuestInfo {
   crude: Item = Item.get("Bubblin' Crude");
@@ -88,7 +90,15 @@ export class MurderHandler implements QuestInfo {
 
     if (availableAmount(this.rusty) == 0) {
       outfit.setNoCombat();
-      outfit.setItemDrops();
+
+      const preds = currentPredictions();
+
+      if (
+        !preds.has(this.loc) ||
+        itemDrops(preds.get(this.loc))[this.rusty.name] != null
+      ) {
+        outfit.setItemDrops();
+      }
     }
 
     if (this.needsInit() && !haveSkill(Skill.get("Overclocking"))) {

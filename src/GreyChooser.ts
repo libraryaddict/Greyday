@@ -250,11 +250,14 @@ export class AdventureFinder {
           const absorb = this.absorbs.getAbsorb(prediction);
 
           if (absorb != null && absorb.adventures > 0) {
-            adv.considerPriority =
-              absorbTime ||
-              this.defeated.get(prediction) != Reabsorbed.REABSORBED
-                ? ConsiderPriority.ORB_ABSORB
-                : ConsiderPriority.BAD_ABSORB;
+            if (
+              this.defeated.get(prediction) == Reabsorbed.REABSORBED ||
+              absorbTime
+            ) {
+              adv.considerPriority = ConsiderPriority.ORB_ABSORB;
+            } else {
+              adv.considerPriority = ConsiderPriority.BAD_ABSORB;
+            }
           } else {
             adv.considerPriority = ConsiderPriority.ORB_OTHER;
           }

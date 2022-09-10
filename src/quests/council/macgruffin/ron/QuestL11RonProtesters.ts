@@ -283,7 +283,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
 
     if (
       availableAmount(this.sweatpants) + equippedAmount(this.sweatpants) > 0 &&
-      toInt(getProperty("sweat")) < 100
+      toInt(getProperty("sweat")) < 95
     ) {
       return QuestStatus.NOT_READY;
     }
