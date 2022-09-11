@@ -58,16 +58,17 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
   }
 
   createPaths(assumeUnstarted: boolean): void {
-    const wormsToKill = assumeUnstarted
-      ? 4
-      : this.worms.findIndex((w) => w.isDoable()) + 1;
     this.paths = [];
 
     // At turn in!
-    if (wormsToKill == 0) {
-      this.paths.push(new PossiblePath(1));
+    if (availableAmount(this.heart) > 0) {
+      this.paths.push(new PossiblePath(0));
       return;
     }
+
+    const wormsToKill = assumeUnstarted
+      ? 4
+      : this.worms.findIndex((w) => w.isDoable()) + 1;
 
     const mixup: [ResourceCategory, number][] = [];
 
