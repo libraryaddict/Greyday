@@ -289,10 +289,7 @@ export class GreyAdventurer {
     const toRun: QuestAdventure = adventure.adventure;
     const outfit = toRun.outfit;
 
-    if (
-      outfit != null &&
-      toRun.location == Location.get("Inside the Palindome")
-    ) {
+    if (toRun.location == Location.get("Inside the Palindome")) {
       outfit.addItem(Item.get("Talisman o' Namsilat"));
     }
 
@@ -443,9 +440,12 @@ export class GreyAdventurer {
       outfit.famExpWeight = 0;
     } else if (
       familiar != this.goose ||
-      (familiarWeight(this.goose) >= 6 && !powerLevelGoose)
+      (familiarWeight(this.goose) >= 6 &&
+        !powerLevelGoose &&
+        adventure.considerPriority != ConsiderPriority.ORB_ABSORB)
     ) {
-      outfit.famExpWeight = 1;
+      outfit.famExpWeight =
+        adventure.considerPriority == ConsiderPriority.RANDOM_ABSORB ? 3 : 1;
     }
 
     const maximizeResult = maximize(
