@@ -122,7 +122,7 @@ export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
   }
 
   getPossiblePaths(): PossiblePath[] {
-    return [this.fax, this.avoid];
+    return this.paths;
   }
 
   getId(): QuestType {
