@@ -281,6 +281,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
         ) {
           print("Worm Pages: " + availableAmount(this.page) + " / 15", "blue");
         }
+        print("Explored: " + this.getExplored() + "/100", "blue");
       },
     };
   }

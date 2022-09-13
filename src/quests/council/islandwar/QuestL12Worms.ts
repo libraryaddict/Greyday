@@ -86,7 +86,10 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
     }
 
     for (const combo of getAllCombinations(mixup)) {
-      if (combo.length != wormsToKill) {
+      if (
+        combo.length != wormsToKill ||
+        combo.find(([turn]) => turn == 1) == null
+      ) {
         continue;
       }
 
@@ -231,7 +234,7 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
         let killingBlow: Macro;
         const props = new PropertyManager();
 
-        if (resource != null) {
+        if (resource != null && !this.isKillingQueen()) {
           resource.prepare(null, props);
           killingBlow = resource.macro().skill(this.nanovision).repeat();
         } else {
