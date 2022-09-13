@@ -257,7 +257,9 @@ export class AdventureFinder {
           }
 
           // Free run if we've taken the absorb
-          return this.defeated.has(monster);
+          return absorb.hp + absorb.mp + (myLevel() < 10 ? absorb.mox : 0) > 0
+            ? this.defeated.has(monster)
+            : true;
         },
       };
 
@@ -293,11 +295,7 @@ export class AdventureFinder {
 
           const absorb = AbsorbsProvider.getAbsorb(monster);
 
-          if (
-            absorb == null ||
-            (absorb.skill != null &&
-              numericModifier(absorb.skill, "Adventures") > 0)
-          ) {
+          if (absorb == null) {
             return true;
           }
 
@@ -305,7 +303,10 @@ export class AdventureFinder {
             return this.defeated.get(monster) == Reabsorbed.REABSORBED;
           }
 
-          return this.defeated.has(monster);
+          // Free run if we've taken the absorb
+          return absorb.hp + absorb.mp + (myLevel() < 10 ? absorb.mox : 0) > 0
+            ? this.defeated.has(monster)
+            : true;
         },
       };
 
