@@ -670,10 +670,15 @@ export function getResourcesLeft(
                   .filter((s) => s.length > 0).length)
         : 0;
     case "Cargo Shorts":
-      return availableAmount(Item.get("Cargo Cultist Shorts")) > 0 &&
-        (assumeUnused || getProperty("_cargoPocketEmptied") != "true")
-        ? 1
-        : 0;
+      if (availableAmount(Item.get("Cargo Cultist Shorts")) == 0) {
+        return 0;
+      }
+
+      if (!assumeUnused && toBoolean(getProperty("_cargoPocketEmptied"))) {
+        return 0;
+      }
+
+      return 1;
     case "Powerful Glove":
       return availableAmount(glove) > 0
         ? 100 -

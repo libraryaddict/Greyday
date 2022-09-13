@@ -30,6 +30,7 @@ export class QuestL11DesertWormRide implements QuestInfo {
   fam: Familiar = Familiar.get("Grey Goose");
   curse3: Effect = Effect.get("Thrice-Cursed");
   hydrated: Effect = Effect.get("Ultrahydrated");
+  blur: Monster = Monster.get("Blur");
 
   getId(): QuestType {
     return "Council / MacGruffin / Desert / WormRide";
@@ -101,7 +102,7 @@ export class QuestL11DesertWormRide implements QuestInfo {
       return {
         outfit: outfit,
         location: this.oasis,
-        orbs: [Monster.get("Blur")],
+        orbs: [this.blur],
         run: () => {
           greyAdv(this.oasis, outfit);
         },

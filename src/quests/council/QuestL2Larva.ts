@@ -99,6 +99,7 @@ export class QuestL2SpookyLarva implements QuestInfo {
       forcedFight: isGhostBustingTime(this.location)
         ? [0, this.headless]
         : null,
+      freeRun: () => true,
       run: () => {
         const props = new PropertyManager();
         const settings = new AdventureSettings();

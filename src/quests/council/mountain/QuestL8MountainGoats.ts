@@ -119,7 +119,7 @@ export class QuestL8MountainGoats implements QuestInfo {
 
         greyAdv(this.goats, outfit, settings);
 
-        if (availableAmount(this.cheese) >= 3 && this.getOreRemaining() <= 0) {
+        if (this.hasEverything()) {
           this.talkTrapper();
         }
       },

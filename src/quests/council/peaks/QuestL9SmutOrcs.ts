@@ -210,6 +210,7 @@ export class SmutOrcs implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      mayFreeRun: false,
       run: () => {
         let attack: Macro;
 

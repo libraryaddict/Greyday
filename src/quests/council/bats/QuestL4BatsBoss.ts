@@ -7,6 +7,8 @@ import {
   Item,
   getProperty,
   availableAmount,
+  Monster,
+  myMeat,
 } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -22,6 +24,7 @@ import { QuestType } from "../../QuestTypes";
 export class QuestL4BatsBoss implements QuestInfo {
   loc: Location = Location.get("The Boss Bat's Lair");
   camera: Item = Item.get("Backup Camera");
+  guard: Monster = Monster.get("Beefy bodyguard bat");
 
   getId(): QuestType {
     return "Council / Bats / Boss";
@@ -62,6 +65,7 @@ export class QuestL4BatsBoss implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      freeRun: (monster) => myMeat() > 5_000 && monster == this.guard,
       run: () => {
         greyAdv(this.loc, outfit);
 

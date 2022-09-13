@@ -109,6 +109,7 @@ export class QuestL11ShenTurnIn implements QuestInfo {
       location: this.shenClub,
       outfit: outfit,
       familiar: usingRobo ? this.robor : null,
+      mayFreeRun: false,
       run: () => {
         if (!this.hittingNC()) {
           if (!this.haveEffect() && availableAmount(this.disguise) > 0) {

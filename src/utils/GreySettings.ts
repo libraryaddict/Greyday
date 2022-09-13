@@ -201,7 +201,7 @@ export type MoonSign =
 
 export type MoonZone = "Knoll" | "Canadia" | "Gnomad";
 
-export function getMoonZone(sign: MoonSign): MoonZone {
+export function getMoonZone(sign: MoonSign = mySign() as MoonSign): MoonZone {
   const index = moonSigns.findIndex(
     (s) => s.toLowerCase() == sign?.toLowerCase()
   );

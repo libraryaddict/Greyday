@@ -114,6 +114,7 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      freeRun: () => true,
       run: () => {
         // If we can cast both NC skills
         if (

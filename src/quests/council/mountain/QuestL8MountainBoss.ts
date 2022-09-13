@@ -1,4 +1,4 @@
-import { Location, Familiar, council, visitUrl } from "kolmafia";
+import { Location, Familiar, council, visitUrl, myMeat } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
@@ -41,6 +41,7 @@ export class QuestL8MountainBoss implements QuestInfo {
     return {
       location: this.peak,
       outfit: outfit,
+      freeRun: () => myMeat() > 5000,
       run: () => {
         greyAdv("place.php?whichplace=mclargehuge&action=cloudypeak2", outfit);
 

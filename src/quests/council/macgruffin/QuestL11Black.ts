@@ -102,6 +102,7 @@ export class QuestL11Black implements QuestInfo {
 
     if (!ncTime) {
       outfit.setPlusCombat();
+      outfit.addBonus("+3 init 50 max");
     }
 
     if (availableAmount(this.boots) > 0) {
@@ -131,6 +132,7 @@ export class QuestL11Black implements QuestInfo {
       outfit: outfit,
       familiar: fam,
       orbs: this.getNeededMonsters(),
+      mayFreeRun: false,
       run: () => {
         const props = new PropertyManager();
 

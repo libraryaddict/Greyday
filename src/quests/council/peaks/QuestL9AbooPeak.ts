@@ -200,6 +200,7 @@ export class ABooHandler implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      mayFreeRun: false,
       run: () => {
         greyAdv(this.loc, outfit);
       },

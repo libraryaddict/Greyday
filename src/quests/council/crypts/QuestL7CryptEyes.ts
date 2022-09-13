@@ -24,6 +24,7 @@ export class CryptL7Eyes extends CryptL7Template {
     return {
       location: this.loc,
       outfit: outfit,
+      mayFreeRun: false,
       run: () => {
         this.adjustRetroCape();
 

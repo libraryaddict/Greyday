@@ -5,6 +5,7 @@ import {
   haveEffect,
   Item,
   Location,
+  Monster,
   toInt,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
@@ -20,6 +21,9 @@ export class CryptL7Rattling extends CryptL7Template {
   loc: Location = Location.get("The Defiled Cranny");
   beatenUp: Effect = Effect.get("Beaten Up");
   kramco = Item.get("Kramco Sausage-o-Matic&trade;");
+  runs: Monster[] = ["Gaunt ghuol", "gluttonous ghuol"].map((s) =>
+    Monster.get(s)
+  );
 
   level(): number {
     return availableAmount(this.cape) > 0 ? 7 : 16;
@@ -41,6 +45,7 @@ export class CryptL7Rattling extends CryptL7Template {
     return {
       location: this.loc,
       outfit: outfit,
+      freeRun: (monster) => this.runs.includes(monster),
       run: () => {
         this.adjustRetroCape();
         changeMcd(10);

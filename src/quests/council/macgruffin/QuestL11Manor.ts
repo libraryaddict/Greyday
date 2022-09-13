@@ -72,6 +72,7 @@ export class QuestL11Manor implements QuestInfo {
     return {
       location: this.ballroom,
       outfit: outfit,
+      freeRun: () => true,
       run: () => {
         const props = new PropertyManager();
 

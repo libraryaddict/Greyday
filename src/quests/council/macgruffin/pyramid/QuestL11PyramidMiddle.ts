@@ -80,6 +80,7 @@ export class QuestL11PyramidMiddle implements QuestInfo {
       location: this.middleLoc,
       outfit: outfit,
       orbs: this.haveEnough() ? null : [this.tombRat],
+      freeRun: (monster) => this.haveEnough() || this.tombRat != monster,
       run: () => {
         const settings = new AdventureSettings();
 

@@ -43,6 +43,7 @@ export class QuestL10GiantTop implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      freeRun: (monster) => true,
       run: () => {
         const props = new PropertyManager();
 

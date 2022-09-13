@@ -1,4 +1,4 @@
-import { Location, Familiar } from "kolmafia";
+import { Location, Familiar, Monster } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
@@ -12,6 +12,7 @@ import { QuestType } from "../../../QuestTypes";
 export class QuestL11ShenNinja implements QuestInfo {
   location: Location = Location.get("Lair of the Ninja Snowmen");
   // TODO Once we've got the absorbs, try replace combats if assassins isnt done cos we're really just stacking +combat
+  assassin: Monster = Monster.get("Ninja Snowman Assassin");
 
   getId(): QuestType {
     return "Council / MacGruffin / Shen / Ninjas";
@@ -49,6 +50,7 @@ export class QuestL11ShenNinja implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      freeRun: (monster) => monster != this.assassin,
       run: () => {
         greyAdv(this.location, outfit);
       },

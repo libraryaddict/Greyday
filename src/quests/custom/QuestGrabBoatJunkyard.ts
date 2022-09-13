@@ -99,6 +99,7 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      freeRun: () => true,
       run: () => {
         const props = new PropertyManager();
 

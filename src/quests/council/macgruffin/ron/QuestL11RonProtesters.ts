@@ -288,7 +288,11 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (gnomadsAvailable() && !haveSkill(this.torsoAwareness)) {
+    if (
+      gnomadsAvailable() &&
+      !haveSkill(this.torsoAwareness) &&
+      !GreySettings.isHardcoreMode()
+    ) {
       return QuestStatus.NOT_READY;
     }
 
@@ -302,7 +306,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
       availableAmount(this.starChart) == 0 &&
       !GreySettings.shouldAvoidTowerRequirements()
     ) {
-      return QuestStatus.NOT_READY;
+      //   return QuestStatus.NOT_READY;
     }
 
     if (
@@ -387,8 +391,6 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
           if (haveEffect(this.lucky)) {
             throw "Expected not to have lucky effect";
           }
-
-          path.addUsed(ResourceCategory.CLOVER);
         }
       },
     };
@@ -440,6 +442,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
       location: this.proLoc,
       outfit: outfit,
       olfaction: [this.cultist],
+      mayFreeRun: false,
       run: () => {
         const props = new PropertyManager();
 

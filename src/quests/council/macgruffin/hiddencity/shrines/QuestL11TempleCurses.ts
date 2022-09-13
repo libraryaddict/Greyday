@@ -1,10 +1,12 @@
 import {
   adv1,
+  availableAmount,
   council,
   Effect,
   Familiar,
   getProperty,
   haveEffect,
+  Item,
   Location,
   Monster,
   myLevel,
@@ -26,6 +28,15 @@ export class QuestL11Curses implements QuestInfo {
   shaman: Monster = Monster.get("pygmy shaman");
   spirit: Monster = toMonster(442);
   toAbsorb: Monster[];
+  files: Item[] = [
+    "McClusky file (page 1)",
+    "McClusky file (page 2)",
+    "McClusky file (page 3)",
+    "McClusky file (page 4)",
+    "McClusky file (page 5)",
+  ].map((s) => Item.get(s));
+  completeFile: Item = Item.get("McClusky file (complete)");
+  accountant: Monster = Monster.get("Pygmy witch accountant");
 
   level(): number {
     return 11;
@@ -88,19 +99,36 @@ export class QuestL11Curses implements QuestInfo {
     return 7 - ((totalTurns - 9) % 8);
   }
 
+  filesRemaining(): number {
+    return this.files.reduce((p, v) => (availableAmount(v) > 0 ? 1 : 0) + p, 0);
+  }
+
   run(): QuestAdventure {
+    const needCurses = haveEffect(this.curse3) <= this.delayForNextNC();
+    const needFiles =
+      getProperty("questL11Business") != "finished" &&
+      this.filesRemaining() > 0 &&
+      availableAmount(this.completeFile) == 0;
+
+    const orb: Monster[] = [];
+
+    if (needCurses) {
+      orb.push(this.shaman);
+    }
+
+    if (needFiles) {
+      orb.push(this.accountant);
+    }
+
     return {
       location: this.apartment,
-      orbs: haveEffect(this.curse3) <= 2 ? [this.shaman] : null,
-      olfaction:
-        haveEffect(this.curse3) + haveEffect(this.curse2) <
-        Math.max(1, this.delayForNextNC())
-          ? [this.shaman]
-          : null,
+      orbs: orb,
+      olfaction: needCurses ? [this.shaman] : null,
       forcedFight:
         haveEffect(this.curse3) > 0
           ? [this.delayForNextNC(), this.spirit]
           : null,
+      freeRun: (monster) => monster != this.shaman || !needCurses,
       run: () => {
         const props = new PropertyManager();
 

@@ -10,13 +10,19 @@ import {
   knollAvailable,
   Location,
   Monster,
+  mySign,
   Skill,
 } from "kolmafia";
 import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { greyAdv } from "../../utils/GreyLocations";
-import { MoonZone, GreySettings, getMoonZone } from "../../utils/GreySettings";
+import {
+  MoonZone,
+  GreySettings,
+  getMoonZone,
+  MoonSign,
+} from "../../utils/GreySettings";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -38,7 +44,16 @@ export abstract class QuestMoonSignAbsorb
   abstract getId(): QuestType;
 
   level(): number {
-    return this.isInSign() ? 10 : 18;
+    if (
+      this.isInSign() &&
+      GreySettings.canMoonSpoon() &&
+      getMoonZone() != "Gnomad" &&
+      getMoonZone(GreySettings.greyTuneMoonSpoon) == "Gnomad"
+    ) {
+      return 6;
+    }
+
+    return this.isInSign() ? 12 : 18;
   }
 
   getAbsorbs(): Monster[] {
@@ -102,6 +117,7 @@ export abstract class QuestMoonSignAbsorb
 
     return {
       location: this.location,
+      freeRun: (monster) => monster != this.monster,
       run: () => {
         greyAdv(this.location);
       },

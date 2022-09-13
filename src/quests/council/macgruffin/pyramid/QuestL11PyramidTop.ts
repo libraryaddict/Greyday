@@ -84,6 +84,7 @@ export class QuestL11PyramidTop implements QuestInfo {
     return {
       location: this.topLoc,
       outfit: outfit,
+      freeRun: () => true,
       run: () => {
         greyAdv(this.topLoc, outfit);
       },

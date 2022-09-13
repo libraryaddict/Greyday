@@ -93,6 +93,7 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
       olfaction: path.canUse(ResourceCategory.POLAR_VORTEX)
         ? null
         : [this.woolMonster],
+      freeRun: (monster) => this.woolMonster != monster,
       run: () => {
         const settings = new AdventureSettings();
         settings.addNoBanish(this.woolMonster);

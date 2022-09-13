@@ -33,7 +33,7 @@ export class ManorBathroom implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questM21Dance");
+    const status = getQuestStatus("questM21Dance");
 
     if (status < 1) {
       return QuestStatus.NOT_READY;
@@ -65,7 +65,7 @@ export class ManorBathroom implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (!this.hasDelay()) {
       outfit.setNoCombat();
@@ -74,8 +74,9 @@ export class ManorBathroom implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      freeRun: () => true,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(882, 1);
         props.setChoice(881, 1);
 

@@ -1,17 +1,13 @@
 import {
-  Monster,
   Location,
   Familiar,
   Skill,
   haveFamiliar,
   familiarWeight,
-  haveSkill,
   useFamiliar,
   myLevel,
   getProperty,
 } from "kolmafia";
-import { PossiblePath } from "../../typings/TaskInfo";
-import { greyKillingBlow } from "../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { Macro } from "../../utils/MacroBuilder";

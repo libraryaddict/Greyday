@@ -24,7 +24,7 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL05Goblin");
+    const status = getQuestStatus("questL05Goblin");
 
     if (status > 0) {
       return QuestStatus.COMPLETED;
@@ -50,11 +50,12 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: this.location,
+      freeRun: () => true,
       run: () => {
         if (availableAmount(this.map) > 0 && availableAmount(this.key)) {
           use(this.map);
         } else {
-          let ready = DelayBurners.getReadyDelayBurner();
+          const ready = DelayBurners.getReadyDelayBurner();
 
           if (ready != null) {
             ready.doFightSetup();
@@ -62,7 +63,7 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
             DelayBurners.tryReplaceCombats();
           }
 
-          let props = new PropertyManager();
+          const props = new PropertyManager();
           props.setChoice(113, 2);
           props.setChoice(111, 3);
           props.setChoice(118, 2);

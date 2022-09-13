@@ -82,7 +82,7 @@ export class QuestL11ManorBomb implements QuestInfo {
       orbs: [this.monster],
       run: () => {
         const settings = new AdventureSettings();
-        settings.addNoBanish(Monster.get("monstrous boiler"));
+        settings.addNoBanish(this.monster);
 
         greyAdv(this.boiler, outfit, settings);
 

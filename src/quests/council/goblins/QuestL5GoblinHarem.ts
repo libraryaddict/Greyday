@@ -120,7 +120,9 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
           greyAdv(
             this.harem,
             outfit,
-            new AdventureSettings().setStartOfFightMacro(macro)
+            new AdventureSettings()
+              .setStartOfFightMacro(macro)
+              .addNoBanish(this.haremGirl)
           );
         } finally {
           props.resetAll();

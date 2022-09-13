@@ -250,6 +250,7 @@ export class QuestFantasyBandit extends TaskInfo implements QuestInfo {
     return {
       outfit: outfit,
       location: null,
+      mayFreeRun: false,
       run: () => {
         greyAdv(
           loc,

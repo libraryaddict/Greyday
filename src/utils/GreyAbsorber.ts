@@ -7,20 +7,16 @@ import {
   getMonsters,
   getProperty,
   haveSkill,
-  lastMonster,
   Location,
   Monster,
   print,
   printHtml,
-  setProperty,
   Skill,
   toInt,
   toMonster,
   toSkill,
-  turnsPlayed,
-  visitUrl,
 } from "kolmafia";
-import { getQuestStatus, NonQuestAdventure } from "../quests/Quests";
+import { getQuestStatus } from "../quests/Quests";
 import { getLocations } from "./GreyLocations";
 import { GreySettings } from "./GreySettings";
 

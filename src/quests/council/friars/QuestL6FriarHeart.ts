@@ -44,7 +44,7 @@ export class QuestL6FriarHeart implements QuestInfo {
   }
 
   isAllAbsorbed(): boolean {
-    let absorbed = AbsorbsProvider.getReabsorbedMonsters();
+    const absorbed = AbsorbsProvider.getReabsorbedMonsters();
 
     return this.absorbs.find((a) => !absorbed.includes(a)) == null;
   }
@@ -83,7 +83,7 @@ export class QuestL6FriarHeart implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setNoCombat().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
     if (this.shouldWearLatte()) {
       outfit.addItem(this.latte);
@@ -92,12 +92,13 @@ export class QuestL6FriarHeart implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      freeRun: () => true,
       run: () => {
         if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
           if (availableAmount(this.umbrella) == 0) {
             DelayBurners.tryReplaceCombats();
           } else {
-            let burner = DelayBurners.getReadyDelayBurner();
+            const burner = DelayBurners.getReadyDelayBurner();
 
             if (burner != null) {
               burner.doFightSetup();

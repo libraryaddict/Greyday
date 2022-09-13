@@ -1,13 +1,16 @@
 import {
+  absorbedMonsters,
   adv1,
   council,
   getProperty,
   Item,
   itemAmount,
   Location,
+  Monster,
   myLevel,
   visitUrl,
 } from "kolmafia";
+import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -23,6 +26,11 @@ export class QuestL6Friar implements QuestInfo {
     new QuestL6FriarNeck(),
   ];
   exp: QuestInfo = new QuestL6FriarExp();
+  absorbs: Monster[] = ["G", "L", "P", "W"].map((s) => Monster.get(s + " Imp"));
+
+  canTurnIn(): boolean {
+    return this.absorbs.find((m) => absorbedMonsters()[m.name]) == null;
+  }
 
   getLocations(): Location[] {
     return [];
@@ -50,6 +58,10 @@ export class QuestL6Friar implements QuestInfo {
     if (
       this.woods.filter((c) => c.status() != QuestStatus.COMPLETED).length > 0
     ) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (!this.canTurnIn()) {
       return QuestStatus.NOT_READY;
     }
 

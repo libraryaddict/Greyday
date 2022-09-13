@@ -5,6 +5,7 @@ import {
   getProperty,
   Item,
   Location,
+  Monster,
   Skill,
   use,
 } from "kolmafia";
@@ -29,6 +30,7 @@ export class QuestL4BatsCenter extends TaskInfo implements QuestInfo {
   taskManual = new PossiblePath(3, 8);
   goose: Familiar = Familiar.get("Grey Goose");
   paths: PossiblePath[] = [];
+  vampBat: Monster = Monster.get("vampire bat");
 
   createPaths(assumeUnstarted: boolean) {
     this.paths = [];

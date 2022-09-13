@@ -27,6 +27,8 @@ export class QuestL11PalinStew implements QuestInfo {
   rib: Item = Item.get("Bird Rib");
   lionOil: Item = Item.get("lion oil");
   grove: Location = Location.get("Whitey's Grove");
+  lion: Monster = Monster.get("white lion");
+  snake: Monster = Monster.get("whitesnake");
 
   getId(): QuestType {
     return "Council / MacGruffin / Palin / WetStew";
@@ -37,7 +39,7 @@ export class QuestL11PalinStew implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Palindome");
+    const status = getQuestStatus("questL11Palindome");
 
     if (status < 3) {
       return QuestStatus.NOT_READY;
@@ -55,17 +57,26 @@ export class QuestL11PalinStew implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit().setItemDrops().setPlusCombat();
+    const outfit = new GreyOutfit().setItemDrops().setPlusCombat();
+    const orbs: Monster[] = [];
+
+    if (availableAmount(this.rib) == 0) {
+      orbs.push(this.snake);
+    }
+
+    if (availableAmount(this.lionOil) == 0) {
+      orbs.push(this.lion);
+    }
 
     return {
       location: this.grove,
       outfit: outfit,
       run: () => {
-        let settings = new AdventureSettings();
-        settings.addNoBanish(Monster.get("white lion"));
-        settings.addNoBanish(Monster.get("whitesnake"));
+        const settings = new AdventureSettings();
+        settings.addNoBanish(this.lion);
+        settings.addNoBanish(this.snake);
 
-        let props = new PropertyManager();
+        const props = new PropertyManager();
         props.setChoice(73, 3);
         props.setChoice(74, 2);
         props.setChoice(75, 2);

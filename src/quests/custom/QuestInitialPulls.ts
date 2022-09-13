@@ -31,6 +31,7 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
     [Item.get("Mafia Thumb Ring"), -30],
     [Item.get("Portable cassette player"), -20],
     [Item.get("Pantsgiving"), -20],
+    [Item.get("Greatest American Pants"), -30],
   ];
   highValueSells: Item[] = [
     Item.get("1,970 carat gold"),
@@ -48,6 +49,10 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
       this.requiredPulls.push([mlItem[0], -30]);
     }
 
+    const freeRunner = ["Greatest American Pants", "navel ring of navel gazing"]
+      .map((s) => Item.get(s))
+      .find((i) => availableAmount(i) + storageAmount(i) > 0);
+
     this.paths = [];
     this.paths.push(new PossiblePath(0));
 
@@ -61,6 +66,10 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
           availableAmount(i) == 0 &&
           (historicalPrice(i) < 50_000 || storageAmount(i) > 0)
       );
+    }
+
+    if (freeRunner != null && availableAmount(freeRunner) == 0) {
+      this.possiblePulls.push([freeRunner, -30]);
     }
 
     this.paths.push(this.getTotals(this.requiredPulls));

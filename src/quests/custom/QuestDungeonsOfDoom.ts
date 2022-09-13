@@ -84,6 +84,7 @@ export class QuestDungeonsOfDoom implements QuestInfo {
     return {
       outfit: outfit,
       location: this.bend,
+      freeRun: () => true,
       run: () => {
         if (
           availableAmount(this.plusSign) > 0 &&

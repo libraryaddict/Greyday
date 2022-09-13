@@ -92,6 +92,7 @@ export class QuestGetZapWand implements QuestInfo {
     return {
       outfit: outfit,
       location: this.realDung,
+      freeRun: () => true,
       run: () => {
         const props = new PropertyManager();
 

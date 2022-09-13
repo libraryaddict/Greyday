@@ -88,6 +88,7 @@ export class QuestL10GiantShip implements QuestInfo {
       location: this.loc,
       outfit: outfit,
       orbs: orbs,
+      freeRun: (monster: Monster) => !orbs.includes(monster),
       run: () => {
         const props = new PropertyManager();
         props.setChoice(681, 1);

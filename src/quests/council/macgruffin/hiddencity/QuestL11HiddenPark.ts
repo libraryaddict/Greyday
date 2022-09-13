@@ -81,6 +81,7 @@ export class QuestL11HiddenPark implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      freeRun: (monster) => bottle || monster != this.janitor,
       orbs: bottle ? [this.janitor] : null,
       run: () => {
         const props = new PropertyManager();
@@ -92,9 +93,10 @@ export class QuestL11HiddenPark implements QuestInfo {
         }
 
         const settings = new AdventureSettings();
-        settings.addBanish(Monster.get("pygmy blowgunner"));
-        settings.addBanish(Monster.get("pygmy assault squad"));
-        settings.addBanish(Monster.get("boaraffe"));
+
+        if (bottle) {
+          settings.addNoBanish(this.janitor);
+        }
 
         try {
           greyAdv(this.loc, outfit, settings);

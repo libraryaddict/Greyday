@@ -70,6 +70,7 @@ export class QuestL11Doctor implements QuestInfo {
       location: this.loc,
       outfit: outfit,
       olfaction: seekingOutfit ? [this.surgeon] : null,
+      freeRun: (mons) => mons != this.surgeon || !seekingOutfit,
       run: () => {
         const props = new PropertyManager();
         props.setChoice(784, 1);

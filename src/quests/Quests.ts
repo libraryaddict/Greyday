@@ -1,5 +1,6 @@
 import { Familiar, getProperty, Location, Monster, toInt } from "kolmafia";
 import { PossiblePath } from "../typings/TaskInfo";
+import { AdventureSettings } from "../utils/GreyLocations";
 import { GreyOutfit } from "../utils/GreyOutfitter";
 import { QuestType } from "./QuestTypes";
 
@@ -38,14 +39,14 @@ export interface GenericAdventure {
   run: () => void;
 }
 
-export type NonQuestAdventure = GenericAdventure;
-
 export interface QuestAdventure extends GenericAdventure {
   familiar?: Familiar;
   disableFamOverride?: boolean; // If set to true, familiar is forced
   delay?: DelayType;
   olfaction?: Monster[];
   forcedFight?: [number, Monster]; // How many turns until a fight is forced
+  mayFreeRun?: boolean;
+  freeRun?: (monster: Monster, settings: AdventureSettings | null) => boolean;
 }
 
 export function getQuestStatus(property: string): number {

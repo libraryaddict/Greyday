@@ -48,6 +48,7 @@ export class QuestL11ShenBats implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      freeRun: () => getQuestStatus("questL04Bat") > 3,
       run: () => {
         greyAdv(this.location);
       },

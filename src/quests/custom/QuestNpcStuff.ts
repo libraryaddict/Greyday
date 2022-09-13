@@ -80,6 +80,14 @@ class QuestDoctor implements QuestInfo {
     return 5;
   }
 
+  free(): boolean {
+    return true;
+  }
+
+  mustBeDone(): boolean {
+    return true;
+  }
+
   status(): QuestStatus {
     if (getProperty("questM24Doc") != "unstarted") {
       return QuestStatus.COMPLETED;
@@ -117,6 +125,14 @@ class QuestKnollMayor implements QuestInfo {
 
   level(): number {
     return 2;
+  }
+
+  free(): boolean {
+    return true;
+  }
+
+  mustBeDone(): boolean {
+    return true;
   }
 
   status(): QuestStatus {
@@ -161,6 +177,14 @@ class QuestDruggie implements QuestInfo {
 
   level(): number {
     return 5;
+  }
+
+  free(): boolean {
+    return true;
+  }
+
+  mustBeDone(): boolean {
+    return true;
   }
 
   status(): QuestStatus {
@@ -208,11 +232,22 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
   createPaths(assumeUnstarted: boolean) {
     this.paths = [];
 
-    if (availableAmount(this.shirt) > 0 && !assumeUnstarted) {
+    if (!assumeUnstarted && availableAmount(this.shirt) > 0) {
       this.paths.push(new PossiblePath(0));
-    } else {
-      this.paths.push(this.shirtPull, this.shirtlessPull);
+      return;
     }
+
+    // If we're not in gnomes
+    if (
+      getMoonZone() != "Gnomad" &&
+      !GreySettings.willBeAccessible("Gnomad", assumeUnstarted)
+    ) {
+      // If we won't be in gnomes
+      this.paths.push(new PossiblePath(0));
+      return;
+    }
+
+    this.paths.push(this.shirtPull, this.shirtlessPull);
   }
 
   getPossiblePaths(): PossiblePath[] {
@@ -259,17 +294,10 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
     }
 
     if (!gnomadsAvailable()) {
-      if (
-        getMoonZone(GreySettings.greyTuneMoonSpoon) == "Gnomad" &&
-        getProperty("moonTuned") != "true"
-      ) {
-        return QuestStatus.NOT_READY;
-      }
-
-      return QuestStatus.COMPLETED;
+      return QuestStatus.NOT_READY;
     }
 
-    const meat = 10000 + (haveSkill(this.skills[0]) ? 5000 : 0);
+    const meat = 7500 + (haveSkill(this.torso) ? 5000 : 0);
 
     if (myMeat() < meat) {
       return QuestStatus.NOT_READY;
@@ -299,7 +327,6 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           GreyPulls.tryPull(this.shirt);
-          AdventureFinder.recalculatePath();
         },
       };
     }
@@ -312,7 +339,8 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
 
         visitUrl("gnomes.php?action=trainskill&whichskill=" + toInt(skill));
 
-        if (!path.canUse(ResourceCategory.PULL) && skill == this.torso) {
+        if (haveSkill(this.torso) && path.canUse(ResourceCategory.PULL)) {
+          GreyPulls.tryPull(this.shirt);
           AdventureFinder.recalculatePath();
         }
       },
@@ -335,6 +363,14 @@ class QuestArtist implements QuestInfo {
 
   getLocations(): Location[] {
     return [];
+  }
+
+  free(): boolean {
+    return true;
+  }
+
+  mustBeDone(): boolean {
+    return true;
   }
 
   status(): QuestStatus {
@@ -415,6 +451,14 @@ class QuestMadBaker implements QuestInfo {
     return [];
   }
 
+  free(): boolean {
+    return true;
+  }
+
+  mustBeDone(): boolean {
+    return true;
+  }
+
   status(): QuestStatus {
     if (getProperty("questM25Armorer") == "finished") {
       return QuestStatus.COMPLETED;
@@ -482,6 +526,14 @@ class QuestUntinker implements QuestInfo {
     return 1;
   }
 
+  free(): boolean {
+    return true;
+  }
+
+  mustBeDone(): boolean {
+    return true;
+  }
+
   status(): QuestStatus {
     if (getProperty("questM01Untinker") == "finished") {
       return QuestStatus.COMPLETED;
@@ -539,6 +591,14 @@ class QuestMeatSmith implements QuestInfo {
 
   level(): number {
     return 1;
+  }
+
+  free(): boolean {
+    return true;
+  }
+
+  mustBeDone(): boolean {
+    return true;
   }
 
   run(): QuestAdventure {

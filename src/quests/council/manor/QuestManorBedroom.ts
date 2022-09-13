@@ -112,6 +112,7 @@ export class ManorBedroom implements QuestInfo {
       location: this.location,
       outfit: outfit,
       orbs: orbs,
+      freeRun: (monster) => !orbs.includes(monster),
       run: () => {
         const props = new PropertyManager();
 

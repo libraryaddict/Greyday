@@ -36,6 +36,11 @@ export class MurderHandler implements QuestInfo {
   jar: Item = Item.get("Jar of Oil");
   rusty: Item = Item.get("Rusty Hedge Trimmers");
   loc: Location = Location.get("Twin Peak");
+  trimmerMonsters: Monster[] = [
+    "bearpig topiary animal",
+    "elephant (meatcar?) topiary animal",
+    "spider (duck?) topiary animal",
+  ].map((s) => Monster.get(s));
 
   getId(): QuestType {
     return "Council / Peaks / TwinPeak";
@@ -119,6 +124,7 @@ export class MurderHandler implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      orbs: this.trimmerMonsters,
       run: () => {
         const props = new PropertyManager();
         //cliExecute("retrocape vampire hold");
@@ -159,11 +165,9 @@ export class MurderHandler implements QuestInfo {
           } else {
             const settings = new AdventureSettings();
 
-            settings.addNoBanish(Monster.get("bearpig topiary animal"));
-            settings.addNoBanish(
-              Monster.get("elephant (meatcar?) topiary animal")
-            );
-            settings.addNoBanish(Monster.get("spider (duck?) topiary animal"));
+            for (const monster of this.trimmerMonsters) {
+              settings.addNoBanish(monster);
+            }
 
             greyAdv(this.loc, outfit);
           }

@@ -13,6 +13,7 @@ import {
   haveOutfit,
   haveSkill,
   Item,
+  itemAmount,
   lastMonster,
   Location,
   Monster,
@@ -29,7 +30,9 @@ import {
   myTurncount,
   Skill,
   Stat,
+  use,
 } from "kolmafia";
+import { FoundAdventure } from "../GreyChooser";
 import { BanishType, getBanished, hasBanished } from "./Banishers";
 import { AbsorbsProvider } from "./GreyAbsorber";
 import { AdventureSettings } from "./GreyLocations";
@@ -37,35 +40,6 @@ import { GreyOutfit } from "./GreyOutfitter";
 import { GreySettings } from "./GreySettings";
 import { currentPredictions } from "./GreyUtils";
 import { Macro } from "./MacroBuilder";
-
-class MacroFiller {
-  addBanish(monster: Monster) {}
-
-  addGenericStuff() {
-    // Sing!
-    // Absorb
-    // Whatever
-  }
-
-  addMountainMan() {}
-
-  addGlarkCable() {}
-
-  addCigerette() {}
-
-  addKilling() {
-    // Absorb
-    // Infinite Loop
-    // +Item Drop
-    // Banish
-  }
-
-  addYellowRay(monster: Monster) {}
-
-  useBackups() {}
-
-  addGremlins() {}
-}
 
 export function greyDuringFightMacro(settings: AdventureSettings): Macro {
   let macro = new Macro();
@@ -168,7 +142,8 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
     /*toInt(getProperty("flyeredML")) <= 10000 && */ monster.baseHp < 300 &&
     myHp() > 120 &&
     !monster.attributes.includes("FREE") &&
-    monster != Monster.get("Quantum Mechanic")
+    monster != Monster.get("Quantum Mechanic") &&
+    myLocation() != Location.get("The Black Forest")
   ) {
     macro.tryItem(Item.get("rock band flyers"));
   }
@@ -209,16 +184,27 @@ export function isBanishable(
 
   return false;
 }
+const toRemove: Effect[] = [
+  "Really Quite Poisoned",
+  "Majorly Poisoned",
+  "Somewhat Poisoned",
+  "A Little Bit Poisoned",
+  "Hardly Poisoned at All",
+].map((s) => Effect.get(s));
+const antidote: Item = Item.get("anti-anti-antidote");
 
 export function greyKillingBlow(outfit: GreyOutfit): Macro {
   let macro = new Macro();
   const healthPerc = Math.min(Math.floor((myHp() / myMaxhp()) * 100) - 5, 30);
 
+  if (toRemove.find((e) => haveEffect(e) > 0) && itemAmount(antidote) > 0) {
+    use(antidote);
+  }
+
   if (
     myMeat() < 500 &&
     getProperty("hasMaydayContract") == "true" &&
-    getProperty("_maydayDropped") == "false" &&
-    myLocation() == Location.get("The Spooky Forest")
+    getProperty("_maydayDropped") == "false"
   ) {
     macro = macro.attack().repeat();
   }

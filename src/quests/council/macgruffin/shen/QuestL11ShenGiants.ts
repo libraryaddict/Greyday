@@ -33,7 +33,7 @@ export class QuestL11ShenGiants implements QuestInfo {
   gothNC: number = 675;
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (
       availableAmount(this.rocketToStars) == 0 ||
@@ -49,8 +49,9 @@ export class QuestL11ShenGiants implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      freeRun: () => true,
       run: () => {
-        let props = new PropertyManager();
+        const props = new PropertyManager();
 
         try {
           // Goth and steam love each other
@@ -109,7 +110,7 @@ export class QuestL11ShenGiants implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Shen");
+    const status = getQuestStatus("questL11Shen");
 
     if (status > 5) {
       return QuestStatus.COMPLETED;

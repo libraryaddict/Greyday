@@ -103,6 +103,7 @@ export class QuestL6FriarElbow implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      freeRun: () => true,
       run: () => {
         if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
           if (availableAmount(this.umbrella) == 0) {

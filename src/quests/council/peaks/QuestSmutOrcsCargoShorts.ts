@@ -77,6 +77,7 @@ export class QuestL9SmutOrcsCargoShorts extends TaskInfo implements QuestInfo {
       location: null,
       familiar: Familiar.get("Grey Goose"),
       disableFamOverride: true,
+      mayFreeRun: false,
       run: () => {
         path.getResource(ResourceCategory.CARGO_SHORTS).pocket(666);
 

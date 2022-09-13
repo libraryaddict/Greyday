@@ -8,6 +8,7 @@ import {
   haveEffect,
   Item,
   Location,
+  Monster,
   myAscensions,
   myLevel,
   numericModifier,
@@ -35,6 +36,7 @@ export class QuestL3Tavern implements QuestInfo {
   tangle: Item = Item.get("tangle of rat tails");
   teleportis: Effect = Effect.get("Teleportitis");
   umbrella: Item = Item.get("Unbreakable Umbrella");
+  king: Monster = Monster.get("Drunken Rat King");
 
   level(): number {
     return 3;
@@ -123,6 +125,7 @@ export class QuestL3Tavern implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      freeRun: (monster) => monster != this.king,
       run: () => {
         if (!advTime) {
           visitUrl("tavern.php?place=barkeep");

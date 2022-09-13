@@ -180,6 +180,7 @@ export class QuestL11Bowling implements QuestInfo {
       outfit: outfit,
       orbs: orbs,
       olfaction: [this.bowler],
+      freeRun: () => true,
       run: () => {
         let macro: Macro = null;
         let couldBeBowling: boolean = false;

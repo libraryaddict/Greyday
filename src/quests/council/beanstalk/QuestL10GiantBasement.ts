@@ -9,6 +9,7 @@ import {
   lastChoice,
   equip,
   print,
+  Monster,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -28,6 +29,8 @@ export class QuestL10GiantBasement implements QuestInfo {
   loc: Location = Location.get(
     "The Castle in the Clouds in the Sky (Basement)"
   );
+  alphaGiant: Monster = Monster.get("Alphabet Giant");
+  letterD: Item = Item.get("Heavy D");
   // TODO Once we've got the absorbs, try replace combats if it doesn't interfere with our slots cos umbrella
 
   constructor() {
@@ -44,6 +47,8 @@ export class QuestL10GiantBasement implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      freeRun: (monster) =>
+        monster == this.alphaGiant && itemAmount(this.letterD) == 0,
       run: () => {
         const turnsSpent = turnsPlayed();
         this.runAdv(outfit);

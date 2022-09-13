@@ -133,6 +133,7 @@ export class QuestManorKitchen implements QuestInfo {
     return {
       outfit: outfit,
       location: this.kitchen,
+      mayFreeRun: false,
       run: () => {
         if (
           toInt(getProperty("manorDrawerCount")) < 20 &&

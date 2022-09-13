@@ -1,6 +1,7 @@
 import {
   availableAmount,
   blackMarketAvailable,
+  buy,
   cliExecute,
   dispensaryAvailable,
   Effect,
@@ -38,6 +39,7 @@ export class TaskMaintainStatus implements Task {
     "Hardly Poisoned at All",
     "Temporary Amnesia",
   ].map((s) => Effect.get(s));
+  antidote: Item = Item.get("anti-anti-antidote");
 
   fillRestorers() {
     this.restorers.push({
@@ -197,6 +199,10 @@ export class TaskMaintainStatus implements Task {
       if (haveEffect(effect) > 0) {
         throw "Tried to remove " + effect.name + " but failed!";
       }
+    }
+
+    if (availableAmount(this.antidote) == 0 && myMeat() > 1_000) {
+      buy(this.antidote);
     }
 
     if (myMaxmp() < 20) {

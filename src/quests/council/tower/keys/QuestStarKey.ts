@@ -151,6 +151,7 @@ export class QuestTowerHoleInSkyUnlock implements QuestInfo {
     return {
       location: this.topFloor,
       outfit: outfit,
+      freeRun: () => true,
       run: () => {
         const props = new PropertyManager();
 

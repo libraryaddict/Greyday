@@ -5,6 +5,7 @@ import {
   Effect,
   Familiar,
   familiarWeight,
+  getProperty,
   haveEffect,
   haveSkill,
   Item,
@@ -14,10 +15,12 @@ import {
   myBasestat,
   myLevel,
   myMp,
+  numericModifier,
   print,
   printHtml,
   Skill,
   Stat,
+  toInt,
 } from "kolmafia";
 import {
   hasCombatSkillActive,
@@ -74,6 +77,8 @@ export interface FoundAdventure {
   status: QuestStatus;
   orbStatus: OrbStatus;
   considerPriority: ConsiderPriority; // At what pass of "Looking for adventures" will this be considered
+  mayFreeRun: boolean;
+  freeRun: (monster: Monster, settings: AdventureSettings | null) => boolean;
 }
 
 const crystalBall: Item = Item.get("miniature crystal ball");
@@ -168,6 +173,20 @@ export class AdventureFinder {
         }
       }
 
+      const noDisruptiveResources: boolean =
+        path == null ||
+        [
+          ResourceCategory.FAXER,
+          ResourceCategory.COPIER,
+          ResourceCategory.OLFACT_COPIER,
+          ResourceCategory.CARGO_SHORTS,
+        ].find((r) => path.resourceUsed.includes(r) || path.canUse(r)) == null;
+      const canFreeRun =
+        noDisruptiveResources &&
+        familiarWeight(this.goose) >= 6 &&
+        adventure.mayFreeRun !== false &&
+        adventure.forcedFight == null;
+
       const adv: FoundAdventure = {
         quest: quest,
         path: path,
@@ -176,6 +195,70 @@ export class AdventureFinder {
         orbStatus: OrbStatus.IGNORED,
         status: quest.status(path),
         considerPriority: null,
+        mayFreeRun: canFreeRun,
+        freeRun: (monster: Monster, settings: AdventureSettings | null) => {
+          // Never run from a boss, or a free fight
+          if (
+            !canFreeRun ||
+            monster.boss ||
+            monster.attributes.includes("FREE")
+          ) {
+            return false;
+          }
+
+          // Never run from something we're trying to hit with orb, or oflact
+          if (
+            (adventure.orbs != null && adventure.orbs.includes(monster)) ||
+            (adventure.olfaction != null &&
+              adventure.olfaction.includes(monster))
+          ) {
+            return false;
+          }
+
+          // Never run from something we're deliberately not banishing
+          if (
+            settings != null &&
+            settings.dontBanishThese != null &&
+            settings.dontBanishThese.includes(monster)
+          ) {
+            return false;
+          }
+
+          // Always run from something we're deliberately banishing
+          if (
+            settings != null &&
+            settings.banishThese != null &&
+            settings.banishThese.includes(monster)
+          ) {
+            return true;
+          }
+
+          // If the adventure hasn't decided to free run or not, never free run
+          if (adventure.freeRun == null) {
+            return false;
+          }
+
+          // If the adventure says not to free run, don't
+          if (!adventure.freeRun(monster, settings)) {
+            return false;
+          }
+
+          const absorb = AbsorbsProvider.getAbsorb(monster);
+
+          // If we absorb nothing from this, free run
+          if (absorb == null) {
+            return true;
+          }
+
+          // If we get adventures from this
+          if (absorb.adventures > 0) {
+            // Only free run if we can't absorb
+            return this.defeated.get(monster) == Reabsorbed.REABSORBED;
+          }
+
+          // Free run if we've taken the absorb
+          return this.defeated.has(monster);
+        },
       };
 
       this.possibleAdventures.push(adv);
@@ -201,6 +284,29 @@ export class AdventureFinder {
         orbStatus: OrbStatus.IGNORED,
         status: QuestStatus.READY,
         considerPriority: null,
+        mayFreeRun: true,
+        freeRun: (monster: Monster) => {
+          // Never run from a boss, or a free fight
+          if (monster.boss || monster.attributes.includes("FREE")) {
+            return false;
+          }
+
+          const absorb = AbsorbsProvider.getAbsorb(monster);
+
+          if (
+            absorb == null ||
+            (absorb.skill != null &&
+              numericModifier(absorb.skill, "Adventures") > 0)
+          ) {
+            return true;
+          }
+
+          if (absorb.adventures > 0) {
+            return this.defeated.get(monster) == Reabsorbed.REABSORBED;
+          }
+
+          return this.defeated.has(monster);
+        },
       };
 
       this.possibleAdventures.push(adv);
@@ -246,6 +352,7 @@ export class AdventureFinder {
           adv.orbStatus = OrbStatus.NOT_SET;
         } else if (adv.adventure.orbs.includes(prediction)) {
           adv.orbStatus = OrbStatus.READY;
+          adv.mayFreeRun = false;
 
           const absorb = this.absorbs.getAbsorb(prediction);
 
@@ -569,7 +676,7 @@ export class AdventureFinder {
         doColor(QuestStatus[status], this.getQuestColor(status)) +
         (priority != null ? " - " + ConsiderPriority[priority] : "");
 
-      printHtml(line);
+      printHtml(line, true);
     }
   }
 
@@ -604,6 +711,8 @@ export class AdventureFinder {
       status: status,
       orbStatus: OrbStatus.IGNORED,
       considerPriority: ConsiderPriority.NOTHING_SPECIAL,
+      mayFreeRun: false,
+      freeRun: () => false,
     };
   }
 
@@ -720,7 +829,10 @@ export class AdventureFinder {
       if (mustBeDone.filter(([, m]) => m > 0).length > 1) {
         print(
           "Multiple quests demand to be done! " +
-            mustBeDone.map((a) => a[0].quest.getId()).join(", "),
+            mustBeDone
+              .filter(([, m]) => m > 0)
+              .map((a) => a[0].quest.getId())
+              .join(", "),
           "red"
         );
         print("This is not a real error, but not that great either.", "red");
@@ -741,6 +853,8 @@ export class AdventureFinder {
 
     const toNum = (status: OrbStatus) =>
       status == OrbStatus.IGNORED ? OrbStatus.NOT_SET : status;
+    const compareFreeRuns = toInt(getProperty("_navelRunaways")) > 0;
+    const levelingGoose = familiarWeight(this.goose) >= 6;
 
     this.possibleAdventures.sort((a1, a2) => {
       if (a1.considerPriority != a2.considerPriority) {
@@ -757,6 +871,16 @@ export class AdventureFinder {
 
       if (a1.status != a2.status) {
         return a1.status - a2.status;
+      }
+
+      if (compareFreeRuns && a1.mayFreeRun != a2.mayFreeRun) {
+        // If we're trying to level our goose, we want to prioritize places we're not allowed to free run in
+
+        if (levelingGoose) {
+          return a1.mayFreeRun ? 1 : -1;
+        }
+
+        return a1.mayFreeRun ? -1 : 1;
       }
 
       return 0;

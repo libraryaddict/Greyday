@@ -43,6 +43,14 @@ export class QuestMoonSign implements QuestInfo {
     return 8;
   }
 
+  free(): boolean {
+    return true;
+  }
+
+  mustBeDone(): boolean {
+    return true;
+  }
+
   status(): QuestStatus {
     if (
       getProperty("moonTuned") != "false" ||

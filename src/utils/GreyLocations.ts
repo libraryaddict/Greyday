@@ -3,19 +3,27 @@ import {
   choiceFollowsFight,
   cliExecute,
   currentRound,
+  equippedAmount,
   fightFollowsChoice,
   getLocationMonsters,
   getProperty,
   handlingChoice,
+  Item,
   lastChoice,
+  lastMonster,
   Location,
   Monster,
+  myLevel,
   print,
   toInt,
   toJson,
   visitUrl,
 } from "kolmafia";
-import { castCombatSkill, castNoCombatSkills } from "../GreyAdventurer";
+import {
+  castCombatSkill,
+  castNoCombatSkills,
+  GreyAdventurer,
+} from "../GreyAdventurer";
 import { QuestInfo, QuestStatus } from "../quests/Quests";
 import { SomeResource } from "../typings/ResourceTypes";
 import { PossiblePath } from "../typings/TaskInfo";
@@ -177,6 +185,10 @@ export class AdventureSettings {
 }
 
 const backupChoices = getBackupChoices();
+const freeRunners: Item[] = [
+  "navel ring of navel gazing",
+  "Greatest American Pants",
+].map((s) => Item.get(s));
 
 export function greyAdv(
   location: Location | string,
@@ -209,6 +221,15 @@ export function greyAdv(
     }
 
     if (settings.finishingBlowMacro == null) {
+      if (
+        freeRunners.find((i) => equippedAmount(i) > 0) != null &&
+        GreyAdventurer.currentAdventure != null &&
+        GreyAdventurer.currentAdventure.freeRun != null &&
+        GreyAdventurer.currentAdventure.freeRun(lastMonster(), settings)
+      ) {
+        macro.runaway();
+      }
+
       macro.step(greyKillingBlow(outfit));
     } else {
       macro.step(settings.finishingBlowMacro);

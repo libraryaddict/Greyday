@@ -165,6 +165,7 @@ export class QuestL11TempleUnlock implements QuestInfo {
     return {
       location: this.spookyLoc,
       outfit: outfit,
+      freeRun: () => true,
       run: () => {
         this.tryUnlockTemple();
 

@@ -57,7 +57,7 @@ export class QuestL10GiantGround implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
 
     if (this.loc.turnsSpent < 11) {
       if (this.isKnifeHunting()) {
@@ -70,12 +70,13 @@ export class QuestL10GiantGround implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      freeRun: () => true,
       run: () => {
-        let props = new PropertyManager();
-        let hasBone = availableAmount(this.boning) > 0;
+        const props = new PropertyManager();
+        const hasBone = availableAmount(this.boning) > 0;
 
         if (this.isDelayBurning()) {
-          let ready = DelayBurners.getReadyDelayBurner();
+          const ready = DelayBurners.getReadyDelayBurner();
 
           if (ready != null) {
             ready.doFightSetup();
@@ -116,7 +117,7 @@ export class QuestL10GiantGround implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL10Garbage");
+    const status = getQuestStatus("questL10Garbage");
 
     if (status < 8) {
       return QuestStatus.NOT_READY;

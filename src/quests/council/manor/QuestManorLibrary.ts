@@ -127,6 +127,8 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
       outfit: outfit,
       orbs: wantJar ? [this.librarian] : [],
       olfaction: [this.desk],
+      freeRun: (monster) =>
+        monster != this.desk && (!wantJar || monster != this.librarian),
       run: () => {
         const settings = new AdventureSettings();
         const props = new PropertyManager();

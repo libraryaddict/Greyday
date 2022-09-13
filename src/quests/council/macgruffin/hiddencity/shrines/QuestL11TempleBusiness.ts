@@ -71,6 +71,10 @@ export class QuestL11Business implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (getProperty("questL11Curses") != "finished" && this.goCurses()) {
+      return QuestStatus.NOT_READY;
+    }
+
     if (this.isDelayBurning()) {
       if (DelayBurners.isDelayBurnerReady()) {
         return QuestStatus.READY;
@@ -84,13 +88,17 @@ export class QuestL11Business implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
-    // Banish non-accountant?
-    if (
+  goCurses() {
+    return (
       availableAmount(this.binderClip) > 0 &&
       this.filesRemaining() > 0 &&
       this.delayUntilNextNC() == 0
-    ) {
+    );
+  }
+
+  run(): QuestAdventure {
+    // Banish non-accountant?
+    if (this.goCurses()) {
       //
       return {
         location: this.apartment,
@@ -121,6 +129,8 @@ export class QuestL11Business implements QuestInfo {
         availableAmount(this.completeFile) > 0
           ? [this.delayUntilNextNC(), this.spirit]
           : null,
+      freeRun: (monster) =>
+        this.filesRemaining() == 0 || monster != this.accountant,
       run: () => {
         const props = new PropertyManager();
 

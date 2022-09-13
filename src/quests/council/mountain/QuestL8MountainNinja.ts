@@ -8,8 +8,10 @@ import {
   Item,
   haveSkill,
   Skill,
+  Monster,
 } from "kolmafia";
 import { hasCombatSkillReady } from "../../../GreyAdventurer";
+import { PossiblePath } from "../../../typings/TaskInfo";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
@@ -24,6 +26,7 @@ import { MountainStatus } from "../QuestL8IcePeak";
 export class QuestL8MountainNinja implements QuestInfo {
   ninja: Location = Location.get("Lair of the Ninja Snowmen");
   // TODO Once we've got the absorbs, try replace combats if assassins isnt done cos we're really just stacking +combat
+  assassin: Monster = Monster.get("Ninja snowman assassin");
 
   getId(): QuestType {
     return "Council / Ice / Ninjas";
@@ -84,6 +87,7 @@ export class QuestL8MountainNinja implements QuestInfo {
     return {
       location: this.ninja,
       outfit: outfit,
+      freeRun: (monster) => monster != this.assassin,
       run: () => {
         greyAdv(this.ninja, outfit);
       },

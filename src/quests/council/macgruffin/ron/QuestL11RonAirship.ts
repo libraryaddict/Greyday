@@ -60,12 +60,14 @@ export class QuestL11RonAirship implements QuestInfo {
 
   run(): QuestAdventure {
     const outfit = new GreyOutfit().setItemDrops();
+    const orbs: Monster[] = [this.skeleton, this.butler, this.buttons];
 
     return {
       location: this.airship,
       outfit: outfit,
-      orbs: [this.skeleton, this.butler, this.buttons],
+      orbs: orbs,
       olfaction: [this.butler],
+      freeRun: (monster) => !orbs.includes(monster),
       run: () => {
         if (availableAmount(this.ticket) == 0) {
           retrieveItem(this.ticket);

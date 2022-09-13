@@ -78,6 +78,11 @@ export class GreyAdventurer {
     new TaskEquipDistillery(),
     new TaskBountyHunter(),
   ];
+  static currentAdventure: FoundAdventure;
+  freeRunners: Item[] = [
+    "Greatest American Pants",
+    "navel ring of navel gazing",
+  ].map((s) => Item.get(s));
 
   runTurn(goTime: boolean): boolean {
     this.goTime = goTime;
@@ -281,7 +286,8 @@ export class GreyAdventurer {
         ", Goals:</u> " +
         doColor(plan.map((s) => "<u>" + s + "</u>").join(", "), "gray") +
         " Consideration: " +
-        ConsiderPriority[goodAdventure.considerPriority]
+        ConsiderPriority[goodAdventure.considerPriority],
+      true
     );
   }
 
@@ -422,6 +428,14 @@ export class GreyAdventurer {
       outfit.addBonus("+10 bonus june cleaver");
     }
 
+    if (adventure.mayFreeRun) {
+      const item = this.freeRunners.find((i) => availableAmount(i) > 0);
+
+      if (item != null) {
+        outfit.addBonus("+12 bonus " + item.name);
+      }
+    }
+
     let locationToSet = toRun.location;
 
     if (locationToSet == null) {
@@ -484,8 +498,11 @@ export class GreyAdventurer {
       const turn = turnsPlayed();
 
       try {
+        GreyAdventurer.currentAdventure = adventure;
         toRun.run();
       } finally {
+        GreyAdventurer.currentAdventure = null;
+
         if (GreySettings.greyDebug) {
           const name = `grey_turns_played_${myAscensions()}.txt`;
 

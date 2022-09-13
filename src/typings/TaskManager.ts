@@ -124,7 +124,8 @@ export class SimmedPath {
                 (index + index1) % 2 == 0 ? "gray" : ""
               }'>${quest} x ${amount} (${turns} advs)</font>`
           )
-          .join(", ")}`
+          .join(", ")}`,
+        true
       );
     });
 

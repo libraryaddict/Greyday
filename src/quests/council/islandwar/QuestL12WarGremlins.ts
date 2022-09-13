@@ -98,6 +98,7 @@ export class WarGremlins implements QuestInfo {
       location: loc,
       outfit: outfit,
       orbs: [monster],
+      freeRun: (mons) => mons != monster,
       run: () => {
         const settings = new AdventureSettings();
         settings.setDuringFightMacro(macro);

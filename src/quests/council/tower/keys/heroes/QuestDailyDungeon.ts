@@ -12,6 +12,7 @@ import {
   itemAmount,
   Location,
   mallPrice,
+  Monster,
   print,
   pullsRemaining,
   toBoolean,
@@ -36,6 +37,25 @@ import {
 import { QuestType } from "../../../../QuestTypes";
 
 export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
+  toAbsorb?: Monster[];
+  free?(): boolean {
+    throw new Error("Method not implemented.");
+  }
+  getChildren?(): QuestInfo[] {
+    throw new Error("Method not implemented.");
+  }
+  mustBeDone?(): boolean {
+    throw new Error("Method not implemented.");
+  }
+  getAbsorbs?(): Monster[] {
+    throw new Error("Method not implemented.");
+  }
+  attemptPrime?(path: PossiblePath): boolean {
+    throw new Error("Method not implemented.");
+  }
+  canAcceptPrimes?(): boolean {
+    throw new Error("Method not implemented.");
+  }
   pole: Item = Item.get("eleven-foot pole");
   ring: Item = Item.get("ring of Detect Boring Doors");
   picklocks: Item = Item.get("Pick-O-Matic lockpicks");
@@ -198,6 +218,7 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
     return {
       outfit: outfit,
       location: this.location,
+      freeRun: () => itemAmount(this.malware) == 0 || this.isMalwareUsed(),
       run: () => {
         const dontHave: Item[] = [this.ring, this.picklocks, this.pole].filter(
           (i) => itemAmount(i) + equippedAmount(i) == 0

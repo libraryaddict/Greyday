@@ -195,6 +195,7 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
       outfit: outfit,
       location: this.palindome,
       orbs: orbs,
+      freeRun: (monster) => !orbs.includes(monster),
       run: () => {
         let macro: Macro = null;
 
