@@ -534,11 +534,13 @@ export class GreyRequirements {
 
     add(
       Type.IOTM,
-      Item.get("Greatest American Pants"),
+      "'Greatest American Pants' or 'Navel Ring of Navel Gazing'",
       "Free runs",
       Required.USEFUL,
-      null,
-      true
+      [
+        Item.get("Greatest American Pants"),
+        Item.get("navel ring of navel gazing"),
+      ].find((i) => availableAmount(i) + storageAmount(i) > 0) != null
     );
 
     add(
