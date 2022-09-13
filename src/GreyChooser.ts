@@ -201,6 +201,7 @@ export class AdventureFinder {
           if (
             !canFreeRun ||
             monster.boss ||
+            !monster.copyable ||
             monster.attributes.includes("FREE")
           ) {
             return false;
@@ -289,7 +290,11 @@ export class AdventureFinder {
         mayFreeRun: true,
         freeRun: (monster: Monster) => {
           // Never run from a boss, or a free fight
-          if (monster.boss || monster.attributes.includes("FREE")) {
+          if (
+            monster.boss ||
+            !monster.copyable ||
+            monster.attributes.includes("FREE")
+          ) {
             return false;
           }
 

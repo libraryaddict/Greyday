@@ -1,4 +1,5 @@
 import {
+  absorbedMonsters,
   availableAmount,
   canAdventure,
   Effect,
@@ -80,7 +81,10 @@ export class QuestL11DesertStoneRose implements QuestInfo {
       location: this.oasis,
       run: () => {
         const settings = new AdventureSettings();
-        settings.addNoBanish(this.blur);
+
+        if (!absorbedMonsters()[this.blur.name]) {
+          settings.addNoBanish(this.blur);
+        }
 
         greyAdv(this.oasis, null, settings);
       },
