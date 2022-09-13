@@ -31,7 +31,6 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
     [Item.get("Mafia Thumb Ring"), -30],
     [Item.get("Portable cassette player"), -20],
     [Item.get("Pantsgiving"), -20],
-    [Item.get("Greatest American Pants"), -30],
   ];
   highValueSells: Item[] = [
     Item.get("1,970 carat gold"),
