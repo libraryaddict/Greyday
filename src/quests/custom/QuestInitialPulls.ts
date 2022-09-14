@@ -1,15 +1,12 @@
 import {
   availableAmount,
   Familiar,
-  getProperty,
   historicalPrice,
   Item,
   itemAmount,
   Location,
   pullsRemaining,
   storageAmount,
-  toInt,
-  turnsPlayed,
   useFamiliar,
 } from "kolmafia";
 import { ResourceCategory } from "../../typings/ResourceTypes";
