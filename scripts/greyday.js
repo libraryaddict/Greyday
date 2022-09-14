@@ -13788,23 +13788,20 @@ var QuestL12Worms = /*#__PURE__*/function (_TaskInfo) {QuestL12Worms_inherits(Qu
       this.paths = [];
 
       // At turn in!
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.heart) > 0) {
+      if (!assumeUnstarted && (0,external_kolmafia_namespaceObject.availableAmount)(this.heart) > 0) {
         this.paths.push(new PossiblePath(0));
         return;
       }
 
-      var wormsToKill = assumeUnstarted ?
-      4 :
-      this.worms.findIndex((w) => w.isDoable()) + 1;
+      var wormsToYR = assumeUnstarted ?
+      3 :
+      this.worms.findIndex((w) => w.isDoable());
+      var wormsToKill = wormsToYR + 1;
 
       var mixup = [];
+      mixup.push([null, 1]);
 
-      for (var i = 0; i < wormsToKill; i++) {
-        if (i == 0) {
-          // Add 1 for the queen, she doesn't need special attention
-          mixup.push([null, 1]);
-          continue;
-        }
+      for (var i = 0; i < wormsToYR; i++) {
         // So we run 300% item drop lets assume
         // That's 30 chance a fight. That's eh, 4 fights? Lets call it 6 cos we're bad luck.
         mixup.push([null, 6]);
@@ -13815,13 +13812,14 @@ var QuestL12Worms = /*#__PURE__*/function (_TaskInfo) {QuestL12Worms_inherits(Qu
       getAllCombinations(mixup)),_step;try {var _loop = function _loop() {var combo = _step.value;
           if (
           combo.length != wormsToKill ||
-          combo.find((_ref) => {var _ref2 = QuestL12Worms_slicedToArray(_ref, 1),turn = _ref2[0];return turn == 1;}) == null)
+          combo.find((_ref) => {var _ref2 = QuestL12Worms_slicedToArray(_ref, 2),res = _ref2[0],turn = _ref2[1];return res == null && turn == 1;}) == null)
           {
             return "continue";
           }
 
           var path = new PossiblePath(
-          combo.map((_ref3) => {var _ref4 = QuestL12Worms_slicedToArray(_ref3, 2),turns = _ref4[1];return turns;}).reduce((p, n) => p + n, 1));
+          combo.map((_ref3) => {var _ref4 = QuestL12Worms_slicedToArray(_ref3, 2),turns = _ref4[1];return turns;}).reduce((p, n) => p + n, 0));
+
 
           path.addIgnored("Cosplay Saber");
 
@@ -29537,7 +29535,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "c9b431b";
+var lastCommitHash = "c5f90ff";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_slicedToArray(arr, i) {return GreyYouMain_arrayWithHoles(arr) || GreyYouMain_iterableToArrayLimit(arr, i) || GreyYouMain_unsupportedIterableToArray(arr, i) || GreyYouMain_nonIterableRest();}function GreyYouMain_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyYouMain_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function GreyYouMain_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
