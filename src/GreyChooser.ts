@@ -184,7 +184,6 @@ export class AdventureFinder {
         ].find((r) => path.resourceUsed.includes(r) || path.canUse(r)) == null;
       const canFreeRun =
         noDisruptiveResources &&
-        familiarWeight(this.goose) >= 6 &&
         adventure.mayFreeRun !== false &&
         adventure.forcedFight == null;
 
