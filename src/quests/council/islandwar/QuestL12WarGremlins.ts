@@ -6,8 +6,6 @@ import {
   itemAmount,
   Location,
   Monster,
-  myHp,
-  print,
   retrieveItem,
   Skill,
   visitUrl,
@@ -21,40 +19,54 @@ import { QuestType } from "../../QuestTypes";
 
 export class WarGremlins implements QuestInfo {
   magnet: Item = Item.get("molybdenum magnet");
-  flyers: Item = Item.get("Rock band flyers");
   sealTooth: Item = Item.get("Seal Tooth");
-  locations: [Location, Monster, Item, string][] = [
-    [
-      Location.get("Next to that barrel with something burning in it"),
-      Monster.get("batwinged gremlin (tool)"),
-      Item.get("molybdenum hammer"),
-      "It whips out a hammer",
-    ],
-    [
-      Location.get("Out by that rusted-out car"),
-      Monster.get("vegetable gremlin (tool)"),
-      Item.get("molybdenum screwdriver"),
-      "It whips out a screwdriver",
-    ],
-    [
-      Location.get("over where the old tires are"),
-      Monster.get("erudite gremlin (tool)"),
-      Item.get("molybdenum crescent wrench"),
-      "He whips out a crescent wrench",
-    ],
-    [
-      Location.get("near an abandoned refrigerator"),
-      Monster.get("spider gremlin (tool)"),
-      Item.get("Molybdenum Pliers"),
-      "It whips out a pair of pliers",
-    ],
-  ];
+  children: GremlinQuest[] = [];
+
+  constructor() {
+    this.children.push(
+      new GremlinQuest(
+        "Council / War / Gremlins / Burning Barrel",
+        Location.get("Next to that barrel with something burning in it"),
+        Monster.get("batwinged gremlin (tool)"),
+        Item.get("molybdenum hammer"),
+        "It whips out a hammer"
+      )
+    );
+    this.children.push(
+      new GremlinQuest(
+        "Council / War / Gremlins / Abandoned Refrigerator",
+        Location.get("near an abandoned refrigerator"),
+        Monster.get("spider gremlin (tool)"),
+        Item.get("Molybdenum Pliers"),
+        "It whips out a pair of pliers"
+      )
+    );
+    this.children.push(
+      new GremlinQuest(
+        "Council / War / Gremlins / Old Tires",
+        Location.get("over where the old tires are"),
+        Monster.get("erudite gremlin (tool)"),
+        Item.get("molybdenum crescent wrench"),
+        "He whips out a crescent wrench"
+      )
+    );
+    this.children.push(
+      new GremlinQuest(
+        "Council / War / Gremlins / Rusted Car",
+        Location.get("Out by that rusted-out car"),
+        Monster.get("vegetable gremlin (tool)"),
+        Item.get("molybdenum screwdriver"),
+        "It whips out a screwdriver"
+      )
+    );
+  }
+
+  getChildren(): QuestInfo[] {
+    return this.children;
+  }
 
   mustBeDone(): boolean {
-    return (
-      itemAmount(this.magnet) == 0 ||
-      this.locations.filter((l) => itemAmount(l[2]) == 0)[0] == null
-    );
+    return itemAmount(this.magnet) == 0 || availableAmount(this.sealTooth) == 0;
   }
 
   free(): boolean {
@@ -66,57 +78,17 @@ export class WarGremlins implements QuestInfo {
       return this.visitJunkman();
     }
 
-    const toVisit = this.locations.filter((l) => itemAmount(l[2]) == 0)[0];
-
-    if (toVisit == null) {
-      return this.visitJunkman();
-    }
-
     if (availableAmount(this.sealTooth) == 0) {
       return this.getSealTooth();
     }
 
-    const loc: Location = toVisit[0];
-    const monster: Monster = toVisit[1];
-    const magnetString: string = toVisit[3];
-
-    const outfit = new GreyOutfit("-ML +DA +DR +familiar experience");
-    outfit.hpWeight = 1;
-    outfit.umbrellaSetting = UmbrellaState.DAMAGE_REDUCTION_SHIELD;
-
-    const macro2 = Macro.if_(
-      "match " + magnetString,
-      Macro.item(this.magnet).step("abort")
-    ).item(this.sealTooth);
-
-    const macro = new Macro().if_(
-      monster,
-      Macro.while_("!pastround 25 && !hpbelow 50", macro2)
-    );
-
-    return {
-      location: loc,
-      outfit: outfit,
-      orbs: [monster],
-      freeRun: (mons) => mons != monster,
-      run: () => {
-        const settings = new AdventureSettings();
-        settings.setDuringFightMacro(macro);
-
-        settings.addBanish(Monster.get("A.M.C Gremlin"));
-        // settings.addBanish(Monster.get("vegetable gremlin"));
-        // settings.addBanish(Monster.get("batwinged gremlin"));
-        // settings.addBanish(Monster.get("spider gremlin"));
-        // settings.addBanish(Monster.get("batwinged gremlin"));
-
-        greyAdv(loc, outfit, settings);
-      },
-    };
+    return this.visitJunkman();
   }
 
   getSealTooth(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         retrieveItem(Item.get("Seal tooth"));
       },
@@ -152,7 +124,11 @@ export class WarGremlins implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (!haveSkill(Skill.get("Subatomic Hardening"))) {
+    if (
+      availableAmount(this.sealTooth) > 0 &&
+      availableAmount(this.magnet) > 0 &&
+      this.children.find((c) => c.status() != QuestStatus.COMPLETED) != null
+    ) {
       return QuestStatus.NOT_READY;
     }
 
@@ -164,8 +140,105 @@ export class WarGremlins implements QuestInfo {
   }
 
   getLocations(): Location[] {
-    return this.locations
-      .filter((g) => availableAmount(g[2]) == 0)
-      .map((g) => g[0]);
+    return [];
+  }
+}
+
+class GremlinQuest implements QuestInfo {
+  id: QuestType;
+  loc: Location;
+  monster: Monster;
+  item: Item;
+  toolString: string;
+  magnet: Item = Item.get("molybdenum magnet");
+  flyers: Item = Item.get("Rock band flyers");
+  sealTooth: Item = Item.get("Seal Tooth");
+
+  constructor(
+    id: QuestType,
+    loc: Location,
+    monster: Monster,
+    item: Item,
+    toolString: string
+  ) {
+    this.id = id;
+    this.loc = loc;
+    this.monster = monster;
+    this.item = item;
+    this.toolString = toolString;
+  }
+
+  getId(): QuestType {
+    return this.id;
+  }
+
+  level(): number {
+    return 12;
+  }
+
+  status(): QuestStatus {
+    if (getProperty("sidequestJunkyardCompleted") != "none") {
+      return QuestStatus.COMPLETED;
+    }
+
+    if (
+      availableAmount(this.sealTooth) == 0 ||
+      availableAmount(this.magnet) == 0
+    ) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (availableAmount(this.item) > 0) {
+      return QuestStatus.COMPLETED;
+    }
+
+    if (getProperty("warProgress") != "started") {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (!haveSkill(Skill.get("Subatomic Hardening"))) {
+      return QuestStatus.NOT_READY;
+    }
+
+    return QuestStatus.READY;
+  }
+
+  run(): QuestAdventure {
+    const outfit = new GreyOutfit("-ML +DA +DR +familiar experience");
+    outfit.hpWeight = 1;
+    outfit.umbrellaSetting = UmbrellaState.DAMAGE_REDUCTION_SHIELD;
+
+    const macro2 = Macro.if_(
+      "match " + this.toolString,
+      Macro.item(this.magnet).step("abort")
+    ).item(this.sealTooth);
+
+    const macro = new Macro().if_(
+      this.monster,
+      Macro.while_("!pastround 25 && !hpbelow 50", macro2)
+    );
+
+    return {
+      location: this.loc,
+      outfit: outfit,
+      orbs: [this.monster],
+      freeRun: (mons) => mons != this.monster,
+      run: () => {
+        const settings = new AdventureSettings();
+        settings.setDuringFightMacro(macro);
+
+        settings.addBanish(Monster.get("A.M.C Gremlin"));
+        // settings.addBanish(Monster.get("vegetable gremlin"));
+        // settings.addBanish(Monster.get("batwinged gremlin"));
+        // settings.addBanish(Monster.get("spider gremlin"));
+        // settings.addBanish(Monster.get("batwinged gremlin"));
+
+        greyAdv(this.loc, outfit, settings);
+      },
+    };
+  }
+
+  getLocations(): Location[] {
+    return [this.loc];
   }
 }

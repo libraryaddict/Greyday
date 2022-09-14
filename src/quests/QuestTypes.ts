@@ -119,6 +119,12 @@ const QuestMacGruffin = [
   ...QuestBlack,
   ...QuestManorMacGruffin,
 ] as const;
+const QuestIslandWarGremlins = [
+  "Council / War / Gremlins / Burning Barrel",
+  "Council / War / Gremlins / Rusted Car",
+  "Council / War / Gremlins / Old Tires",
+  "Council / War / Gremlins / Abandoned Refrigerator",
+] as const;
 const QuestIslandWar = [
   "Council / War / Parent",
   "Council / War / Frat Outfit",
@@ -130,6 +136,7 @@ const QuestIslandWar = [
   "Council / War / Filthworms",
   "Council / War / Nuns",
   "Council / War / Boss",
+  ...QuestIslandWarGremlins,
 ] as const;
 const QuestKeys = [
   "Council / Tower / Keys / Heroes",

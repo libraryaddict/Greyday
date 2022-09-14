@@ -663,7 +663,10 @@ export class AdventureFinder {
   printStatus(quests: FoundAdventure[]) {
     for (const adv of quests) {
       const status = adv.status;
-      const id = adv.quest == null ? "Non-Quest" : adv.quest.getId();
+      const id =
+        adv.quest == null
+          ? "Non-Quest / " + adv.adventure.location
+          : adv.quest.getId();
 
       const line =
         "<u>" +

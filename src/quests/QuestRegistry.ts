@@ -350,6 +350,10 @@ export class QuestRegistry {
       { id: "Council / Peaks / Lord" },
 
       { id: "Council / War / Gremlins" },
+      { id: "Council / War / Gremlins / Burning Barrel" },
+      { id: "Council / War / Gremlins / Abandoned Refrigerator" },
+      { id: "Council / War / Gremlins / Old Tires" },
+      { id: "Council / War / Gremlins / Rusted Car" },
 
       { id: "Council / War / Boss" },
 
