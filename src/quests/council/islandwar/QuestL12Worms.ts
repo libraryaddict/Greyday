@@ -61,23 +61,20 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
     this.paths = [];
 
     // At turn in!
-    if (availableAmount(this.heart) > 0) {
+    if (!assumeUnstarted && availableAmount(this.heart) > 0) {
       this.paths.push(new PossiblePath(0));
       return;
     }
 
-    const wormsToKill = assumeUnstarted
-      ? 4
-      : this.worms.findIndex((w) => w.isDoable()) + 1;
+    const wormsToYR = assumeUnstarted
+      ? 3
+      : this.worms.findIndex((w) => w.isDoable());
+    const wormsToKill = wormsToYR + 1;
 
     const mixup: [ResourceCategory, number][] = [];
+    mixup.push([null, 1]);
 
-    for (let i = 0; i < wormsToKill; i++) {
-      if (i == 0) {
-        // Add 1 for the queen, she doesn't need special attention
-        mixup.push([null, 1]);
-        continue;
-      }
+    for (let i = 0; i < wormsToYR; i++) {
       // So we run 300% item drop lets assume
       // That's 30 chance a fight. That's eh, 4 fights? Lets call it 6 cos we're bad luck.
       mixup.push([null, 6]);
@@ -88,14 +85,15 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
     for (const combo of getAllCombinations(mixup)) {
       if (
         combo.length != wormsToKill ||
-        combo.find(([turn]) => turn == 1) == null
+        combo.find(([res, turn]) => res == null && turn == 1) == null
       ) {
         continue;
       }
 
       const path = new PossiblePath(
-        combo.map(([, turns]) => turns).reduce((p, n) => p + n, 1)
+        combo.map(([, turns]) => turns).reduce((p, n) => p + n, 0)
       );
+
       path.addIgnored("Cosplay Saber");
 
       combo.forEach(([resource]) => {
