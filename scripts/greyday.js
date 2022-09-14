@@ -13130,42 +13130,56 @@ function QuestL12WarGremlins_classCallCheck(instance, Constructor) {if (!(instan
 
 
 
-var WarGremlins = /*#__PURE__*/function () {function WarGremlins() {QuestL12WarGremlins_classCallCheck(this, WarGremlins);QuestL12WarGremlins_defineProperty(this, "magnet",
-    external_kolmafia_namespaceObject.Item.get("molybdenum magnet"));QuestL12WarGremlins_defineProperty(this, "flyers",
-    external_kolmafia_namespaceObject.Item.get("Rock band flyers"));QuestL12WarGremlins_defineProperty(this, "sealTooth",
-    external_kolmafia_namespaceObject.Item.get("Seal Tooth"));QuestL12WarGremlins_defineProperty(this, "locations",
-    [
-    [
+var WarGremlins = /*#__PURE__*/function () {
+
+
+
+
+  function WarGremlins() {QuestL12WarGremlins_classCallCheck(this, WarGremlins);QuestL12WarGremlins_defineProperty(this, "magnet", external_kolmafia_namespaceObject.Item.get("molybdenum magnet"));QuestL12WarGremlins_defineProperty(this, "sealTooth", external_kolmafia_namespaceObject.Item.get("Seal Tooth"));QuestL12WarGremlins_defineProperty(this, "children", []);
+    this.children.push(
+    new GremlinQuest(
+    "Council / War / Gremlins / Burning Barrel",
     external_kolmafia_namespaceObject.Location.get("Next to that barrel with something burning in it"),
     external_kolmafia_namespaceObject.Monster.get("batwinged gremlin (tool)"),
     external_kolmafia_namespaceObject.Item.get("molybdenum hammer"),
-    "It whips out a hammer"],
+    "It whips out a hammer"));
 
-    [
-    external_kolmafia_namespaceObject.Location.get("Out by that rusted-out car"),
-    external_kolmafia_namespaceObject.Monster.get("vegetable gremlin (tool)"),
-    external_kolmafia_namespaceObject.Item.get("molybdenum screwdriver"),
-    "It whips out a screwdriver"],
 
-    [
-    external_kolmafia_namespaceObject.Location.get("over where the old tires are"),
-    external_kolmafia_namespaceObject.Monster.get("erudite gremlin (tool)"),
-    external_kolmafia_namespaceObject.Item.get("molybdenum crescent wrench"),
-    "He whips out a crescent wrench"],
-
-    [
+    this.children.push(
+    new GremlinQuest(
+    "Council / War / Gremlins / Abandoned Refrigerator",
     external_kolmafia_namespaceObject.Location.get("near an abandoned refrigerator"),
     external_kolmafia_namespaceObject.Monster.get("spider gremlin (tool)"),
     external_kolmafia_namespaceObject.Item.get("Molybdenum Pliers"),
-    "It whips out a pair of pliers"]]);}QuestL12WarGremlins_createClass(WarGremlins, [{ key: "mustBeDone", value:
+    "It whips out a pair of pliers"));
 
 
+    this.children.push(
+    new GremlinQuest(
+    "Council / War / Gremlins / Old Tires",
+    external_kolmafia_namespaceObject.Location.get("over where the old tires are"),
+    external_kolmafia_namespaceObject.Monster.get("erudite gremlin (tool)"),
+    external_kolmafia_namespaceObject.Item.get("molybdenum crescent wrench"),
+    "He whips out a crescent wrench"));
+
+
+    this.children.push(
+    new GremlinQuest(
+    "Council / War / Gremlins / Rusted Car",
+    external_kolmafia_namespaceObject.Location.get("Out by that rusted-out car"),
+    external_kolmafia_namespaceObject.Monster.get("vegetable gremlin (tool)"),
+    external_kolmafia_namespaceObject.Item.get("molybdenum screwdriver"),
+    "It whips out a screwdriver"));
+
+
+  }QuestL12WarGremlins_createClass(WarGremlins, [{ key: "getChildren", value:
+
+    function getChildren() {
+      return this.children;
+    } }, { key: "mustBeDone", value:
 
     function mustBeDone() {
-      return (
-        (0,external_kolmafia_namespaceObject.itemAmount)(this.magnet) == 0 ||
-        this.locations.filter((l) => (0,external_kolmafia_namespaceObject.itemAmount)(l[2]) == 0)[0] == null);
-
+      return (0,external_kolmafia_namespaceObject.itemAmount)(this.magnet) == 0 || (0,external_kolmafia_namespaceObject.availableAmount)(this.sealTooth) == 0;
     } }, { key: "free", value:
 
     function free() {
@@ -13177,57 +13191,17 @@ var WarGremlins = /*#__PURE__*/function () {function WarGremlins() {QuestL12WarG
         return this.visitJunkman();
       }
 
-      var toVisit = this.locations.filter((l) => (0,external_kolmafia_namespaceObject.itemAmount)(l[2]) == 0)[0];
-
-      if (toVisit == null) {
-        return this.visitJunkman();
-      }
-
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.sealTooth) == 0) {
         return this.getSealTooth();
       }
 
-      var loc = toVisit[0];
-      var monster = toVisit[1];
-      var magnetString = toVisit[3];
-
-      var outfit = new GreyOutfit("-ML +DA +DR +familiar experience");
-      outfit.hpWeight = 1;
-      outfit.umbrellaSetting = UmbrellaState.DAMAGE_REDUCTION_SHIELD;
-
-      var macro2 = Macro.if_(
-      "match " + magnetString,
-      Macro.item(this.magnet).step("abort")).
-      item(this.sealTooth);
-
-      var macro = new Macro().if_(
-      monster,
-      Macro.while_("!pastround 25 && !hpbelow 50", macro2));
-
-
-      return {
-        location: loc,
-        outfit: outfit,
-        orbs: [monster],
-        freeRun: (mons) => mons != monster,
-        run: () => {
-          var settings = new AdventureSettings();
-          settings.setDuringFightMacro(macro);
-
-          settings.addBanish(external_kolmafia_namespaceObject.Monster.get("A.M.C Gremlin"));
-          // settings.addBanish(Monster.get("vegetable gremlin"));
-          // settings.addBanish(Monster.get("batwinged gremlin"));
-          // settings.addBanish(Monster.get("spider gremlin"));
-          // settings.addBanish(Monster.get("batwinged gremlin"));
-
-          greyAdv(loc, outfit, settings);
-        } };
-
+      return this.visitJunkman();
     } }, { key: "getSealTooth", value:
 
     function getSealTooth() {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           (0,external_kolmafia_namespaceObject.retrieveItem)(external_kolmafia_namespaceObject.Item.get("Seal tooth"));
         } };
@@ -13263,7 +13237,11 @@ var WarGremlins = /*#__PURE__*/function () {function WarGremlins() {QuestL12WarG
         return QuestStatus.NOT_READY;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Subatomic Hardening"))) {
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.sealTooth) > 0 &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.magnet) > 0 &&
+      this.children.find((c) => c.status() != QuestStatus.COMPLETED) != null)
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -13275,10 +13253,107 @@ var WarGremlins = /*#__PURE__*/function () {function WarGremlins() {QuestL12WarG
     } }, { key: "getLocations", value:
 
     function getLocations() {
-      return this.locations.
-      filter((g) => (0,external_kolmafia_namespaceObject.availableAmount)(g[2]) == 0).
-      map((g) => g[0]);
-    } }]);return WarGremlins;}();
+      return [];
+    } }]);return WarGremlins;}();var
+
+
+GremlinQuest = /*#__PURE__*/function () {
+
+
+
+
+
+
+
+
+
+  function GremlinQuest(
+  id,
+  loc,
+  monster,
+  item,
+  toolString)
+  {QuestL12WarGremlins_classCallCheck(this, GremlinQuest);QuestL12WarGremlins_defineProperty(this, "id", void 0);QuestL12WarGremlins_defineProperty(this, "loc", void 0);QuestL12WarGremlins_defineProperty(this, "monster", void 0);QuestL12WarGremlins_defineProperty(this, "item", void 0);QuestL12WarGremlins_defineProperty(this, "toolString", void 0);QuestL12WarGremlins_defineProperty(this, "magnet", external_kolmafia_namespaceObject.Item.get("molybdenum magnet"));QuestL12WarGremlins_defineProperty(this, "flyers", external_kolmafia_namespaceObject.Item.get("Rock band flyers"));QuestL12WarGremlins_defineProperty(this, "sealTooth", external_kolmafia_namespaceObject.Item.get("Seal Tooth"));
+    this.id = id;
+    this.loc = loc;
+    this.monster = monster;
+    this.item = item;
+    this.toolString = toolString;
+  }QuestL12WarGremlins_createClass(GremlinQuest, [{ key: "getId", value:
+
+    function getId() {
+      return this.id;
+    } }, { key: "level", value:
+
+    function level() {
+      return 12;
+    } }, { key: "status", value:
+
+    function status() {
+      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestJunkyardCompleted") != "none") {
+        return QuestStatus.COMPLETED;
+      }
+
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.sealTooth) == 0 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.magnet) == 0)
+      {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.item) > 0) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("warProgress") != "started") {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (!(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Subatomic Hardening"))) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.READY;
+    } }, { key: "run", value:
+
+    function run() {
+      var outfit = new GreyOutfit("-ML +DA +DR +familiar experience");
+      outfit.hpWeight = 1;
+      outfit.umbrellaSetting = UmbrellaState.DAMAGE_REDUCTION_SHIELD;
+
+      var macro2 = Macro.if_(
+      "match " + this.toolString,
+      Macro.item(this.magnet).step("abort")).
+      item(this.sealTooth);
+
+      var macro = new Macro().if_(
+      this.monster,
+      Macro.while_("!pastround 25 && !hpbelow 50", macro2));
+
+
+      return {
+        location: this.loc,
+        outfit: outfit,
+        orbs: [this.monster],
+        freeRun: (mons) => mons != this.monster,
+        run: () => {
+          var settings = new AdventureSettings();
+          settings.setDuringFightMacro(macro);
+
+          settings.addBanish(external_kolmafia_namespaceObject.Monster.get("A.M.C Gremlin"));
+          // settings.addBanish(Monster.get("vegetable gremlin"));
+          // settings.addBanish(Monster.get("batwinged gremlin"));
+          // settings.addBanish(Monster.get("spider gremlin"));
+          // settings.addBanish(Monster.get("batwinged gremlin"));
+
+          greyAdv(this.loc, outfit, settings);
+        } };
+
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [this.loc];
+    } }]);return GremlinQuest;}();
 ;// CONCATENATED MODULE: ./src/quests/council/islandwar/QuestL12WarLobster.ts
 function QuestL12WarLobster_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL12WarLobster_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestL12WarLobster_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL12WarLobster_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL12WarLobster_arrayLikeToArray(o, minLen);}function QuestL12WarLobster_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL12WarLobster_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL12WarLobster_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL12WarLobster_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL12WarLobster_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL12WarLobster_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL12WarLobster_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL12WarLobster_setPrototypeOf(subClass, superClass);}function QuestL12WarLobster_setPrototypeOf(o, p) {QuestL12WarLobster_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL12WarLobster_setPrototypeOf(o, p);}function QuestL12WarLobster_createSuper(Derived) {var hasNativeReflectConstruct = QuestL12WarLobster_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL12WarLobster_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL12WarLobster_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL12WarLobster_possibleConstructorReturn(this, result);};}function QuestL12WarLobster_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL12WarLobster_assertThisInitialized(self);}function QuestL12WarLobster_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL12WarLobster_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL12WarLobster_getPrototypeOf(o) {QuestL12WarLobster_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL12WarLobster_getPrototypeOf(o);}function QuestL12WarLobster_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -26181,6 +26256,12 @@ QuestHiddenCity,
 QuestBlack,
 QuestManorMacGruffin);
 
+var QuestIslandWarGremlins = [
+"Council / War / Gremlins / Burning Barrel",
+"Council / War / Gremlins / Rusted Car",
+"Council / War / Gremlins / Old Tires",
+"Council / War / Gremlins / Abandoned Refrigerator"];
+
 var QuestIslandWar = [
 "Council / War / Parent",
 "Council / War / Frat Outfit",
@@ -26191,7 +26272,8 @@ var QuestIslandWar = [
 "Council / War / Battlefield",
 "Council / War / Filthworms",
 "Council / War / Nuns",
-"Council / War / Boss"];
+"Council / War / Boss"].concat(
+QuestIslandWarGremlins);
 
 var QuestKeys = [
 "Council / Tower / Keys / Heroes",
@@ -26280,8 +26362,8 @@ QuestCrypt,
 QuestIcePeak,
 QuestTriplePeaks,
 QuestBeanStalk, QuestTypes_toConsumableArray(
-QuestMacGruffin),
-QuestIslandWar, QuestTypes_toConsumableArray(
+QuestMacGruffin), QuestTypes_toConsumableArray(
+QuestIslandWar), QuestTypes_toConsumableArray(
 QuestTower));
 
 var QuestNPCs = [
@@ -26673,6 +26755,10 @@ var QuestRegistry = /*#__PURE__*/function () {
       { id: "Council / Peaks / Lord" },
 
       { id: "Council / War / Gremlins" },
+      { id: "Council / War / Gremlins / Burning Barrel" },
+      { id: "Council / War / Gremlins / Abandoned Refrigerator" },
+      { id: "Council / War / Gremlins / Old Tires" },
+      { id: "Council / War / Gremlins / Rusted Car" },
 
       { id: "Council / War / Boss" },
 
@@ -27935,7 +28021,10 @@ var AdventureFinder = /*#__PURE__*/function () {
     function printStatus(quests) {var _iterator12 = GreyChooser_createForOfIteratorHelper(
       quests),_step12;try {for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {var adv = _step12.value;
           var status = adv.status;
-          var id = adv.quest == null ? "Non-Quest" : adv.quest.getId();
+          var id =
+          adv.quest == null ?
+          "Non-Quest / " + adv.adventure.location :
+          adv.quest.getId();
 
           var line =
           "<u>" +
@@ -29537,7 +29626,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "17435da";
+var lastCommitHash = "1cf6724";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
