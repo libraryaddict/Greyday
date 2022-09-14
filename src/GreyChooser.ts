@@ -660,33 +660,18 @@ export class AdventureFinder {
     }
   }
 
-  printCurrentStatus(quests: FoundAdventure[]) {
-    this.printStatus(
-      quests
-        .filter((q) => q.quest != null)
-        .map((q) => [q.quest, q.path, q.considerPriority])
-    );
-  }
-
-  printStatus(quests: [QuestInfo, PossiblePath, ConsiderPriority][]) {
-    const hasBlessing =
-      haveEffect(Effect.get("Brother Corsican's Blessing")) +
-        haveEffect(Effect.get("A Girl Named Sue")) >
-      0;
-
-    for (const [quest, path, priority] of quests) {
-      let status = quest.status(path);
-
-      if (status != QuestStatus.NOT_READY && status != QuestStatus.COMPLETED) {
-        status = this.getModifiedStatus(status, quest.run(path), hasBlessing);
-      }
+  printStatus(quests: FoundAdventure[]) {
+    for (const adv of quests) {
+      const status = adv.status;
+      const id = adv.quest == null ? "Non-Quest" : adv.quest.getId();
 
       const line =
         "<u>" +
-        quest.getId() +
+        id +
         "</u>: " +
         doColor(QuestStatus[status], this.getQuestColor(status)) +
-        (priority != null ? " - " + ConsiderPriority[priority] : "");
+        " - " +
+        ConsiderPriority[adv.considerPriority];
 
       printHtml(line, true);
     }

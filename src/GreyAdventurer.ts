@@ -96,9 +96,7 @@ export class GreyAdventurer {
     this.adventureFinder.start();
     const goodAdventure: FoundAdventure = this.adventureFinder.findGoodVisit();
 
-    this.adventureFinder.printCurrentStatus(
-      this.adventureFinder.possibleAdventures
-    );
+    this.adventureFinder.printStatus(this.adventureFinder.possibleAdventures);
 
     if (goodAdventure == null) {
       print("Failed, should have printed an error..", "gray");

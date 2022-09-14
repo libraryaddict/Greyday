@@ -1,12 +1,14 @@
 import {
   absorbedMonsters,
   appearanceRates,
+  availableAmount,
   Familiar,
   familiarWeight,
   fileToBuffer,
   getMonsters,
   getProperty,
   haveSkill,
+  Item,
   Location,
   Monster,
   print,
@@ -34,6 +36,8 @@ export class Absorb {
 export class AbsorbsProvider {
   static allAbsorbs: Absorb[];
   static remainingAdvAbsorbs: Monster[];
+  static hasBall: boolean =
+    availableAmount(Item.get("miniature crystal ball")) > 0;
 
   getRolloverAdvs(): Map<Skill, string> {
     return new Map(
@@ -323,6 +327,10 @@ export class AbsorbsProvider {
       ).length > 0
     ) {
       advsSpent++;
+    }
+
+    if (AbsorbsProvider.hasBall) {
+      advsSpent = Math.floor(advsSpent / 2);
     }
 
     const totalAdvs = absorbs.reduce(

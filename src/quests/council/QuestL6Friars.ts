@@ -1,16 +1,11 @@
 import {
   absorbedMonsters,
-  adv1,
   council,
   getProperty,
-  Item,
-  itemAmount,
   Location,
   Monster,
-  myLevel,
   visitUrl,
 } from "kolmafia";
-import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -29,7 +24,7 @@ export class QuestL6Friar implements QuestInfo {
   absorbs: Monster[] = ["G", "L", "P", "W"].map((s) => Monster.get(s + " Imp"));
 
   canTurnIn(): boolean {
-    return this.absorbs.find((m) => absorbedMonsters()[m.name]) == null;
+    return this.absorbs.find((m) => !absorbedMonsters()[m.name]) == null;
   }
 
   getLocations(): Location[] {
@@ -66,6 +61,14 @@ export class QuestL6Friar implements QuestInfo {
     }
 
     return QuestStatus.READY;
+  }
+
+  mustBeDone(): boolean {
+    return true;
+  }
+
+  free(): boolean {
+    return true;
   }
 
   run(): QuestAdventure {

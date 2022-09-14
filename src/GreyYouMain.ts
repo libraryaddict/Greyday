@@ -281,12 +281,9 @@ class GreyYouMain {
     }
 
     if (command == "status") {
-      this.adventures.adventureFinder.setPreAbsorbs();
-      this.adventures.adventureFinder.path.thisPath.sort(([q1], [q2]) =>
-        q1.getId().localeCompare(q2.getId())
-      );
+      this.adventures.adventureFinder.start();
       this.adventures.adventureFinder.printStatus(
-        this.adventures.adventureFinder.path.thisPath as []
+        this.adventures.adventureFinder.possibleAdventures
       );
       return;
     } else if (command == "sim") {
