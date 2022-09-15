@@ -116,7 +116,7 @@ export class QuestL11Curses implements QuestInfo {
       orb.push(this.shaman);
     }
 
-    if (needFiles) {
+    if (needFiles && haveEffect(this.curse3)) {
       orb.push(this.accountant);
     }
 

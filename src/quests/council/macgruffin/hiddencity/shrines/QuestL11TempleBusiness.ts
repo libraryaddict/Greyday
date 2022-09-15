@@ -2,6 +2,7 @@ import {
   availableAmount,
   Familiar,
   getProperty,
+  isBanished,
   Item,
   Location,
   Monster,
@@ -75,6 +76,10 @@ export class QuestL11Business implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (isBanished(this.accountant)) {
+      return QuestStatus.NOT_READY;
+    }
+
     if (this.isDelayBurning()) {
       if (DelayBurners.isDelayBurnerReady()) {
         return QuestStatus.READY;
@@ -129,6 +134,7 @@ export class QuestL11Business implements QuestInfo {
         availableAmount(this.completeFile) > 0
           ? [this.delayUntilNextNC(), this.spirit]
           : null,
+      mayFreeRun: this.delayUntilNextNC() > 0,
       freeRun: (monster) =>
         this.filesRemaining() == 0 || monster != this.accountant,
       run: () => {

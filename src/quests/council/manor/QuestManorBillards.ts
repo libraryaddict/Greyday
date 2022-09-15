@@ -43,7 +43,7 @@ export class QuestManorBillards implements QuestInfo {
   elementalSkills: Skill[];
 
   constructor() {
-    this.elementalSkills = AbsorbsProvider.allAbsorbs
+    this.elementalSkills = AbsorbsProvider.loadAbsorbs()
       .map((a) =>
         a.skill == null
           ? null

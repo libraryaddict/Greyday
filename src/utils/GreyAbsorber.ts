@@ -8,6 +8,7 @@ import {
   getMonsters,
   getProperty,
   haveSkill,
+  isBanished,
   Item,
   Location,
   Monster,
@@ -34,7 +35,7 @@ export class Absorb {
 }
 
 export class AbsorbsProvider {
-  static allAbsorbs: Absorb[];
+  private static allAbsorbs: Absorb[];
   static remainingAdvAbsorbs: Monster[];
   static hasBall: boolean =
     availableAmount(Item.get("miniature crystal ball")) > 0;
@@ -71,7 +72,7 @@ export class AbsorbsProvider {
         // ["Ire Proof", "+3 Hot Resist"],
         // ["Snow-Cooling System", "+15 Cold Dmg"],
         ["Cooling Tubules", "+10 Cold Dmg"],
-        //["Financial Spreadsheets", "+40% Meat from Monsters"],
+        ["Financial Spreadsheets", "+40% Meat from Monsters"],
         //["Innuendo Circuitry", "+15 Sleaze Damage"],
         ["Ponzi Apparatus", "Scaling meat%"],
         // ["Procgen Ribaldry", "10 Sleaze Damage"],
@@ -98,7 +99,7 @@ export class AbsorbsProvider {
   }
 
   getAbsorb(monster: Monster): Absorb {
-    return AbsorbsProvider.allAbsorbs.find((a) => a.monster == monster);
+    return AbsorbsProvider.loadAbsorbs().find((a) => a.monster == monster);
   }
 
   getAbsorbsInLocation(location: Location): Absorb[] {
@@ -395,7 +396,7 @@ export class AbsorbsProvider {
 
   static loadAbsorbs(): Absorb[] {
     if (AbsorbsProvider.allAbsorbs != null) {
-      return AbsorbsProvider.allAbsorbs;
+      return AbsorbsProvider.allAbsorbs.filter((a) => !isBanished(a.monster));
     }
 
     AbsorbsProvider.allAbsorbs = [];
@@ -444,7 +445,7 @@ export class AbsorbsProvider {
       .filter((a) => a.adventures > 0)
       .map((a) => a.monster);
 
-    return AbsorbsProvider.allAbsorbs;
+    return AbsorbsProvider.allAbsorbs.filter((a) => !isBanished(a.monster));
   }
 
   getAbsorbedMonstersFromInstance(): Map<Monster, Reabsorbed> {

@@ -69,6 +69,13 @@ export class QuestL11ShenTurnIn implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (
+      currentPredictions().get(this.shenClub) == this.penguin &&
+      (this.toAbsorb.includes(this.penguin) || haveFamiliar(this.robor))
+    ) {
+      return QuestStatus.READY;
+    }
+
     if (status < 2) {
       return QuestStatus.NOT_READY;
     }
@@ -109,6 +116,7 @@ export class QuestL11ShenTurnIn implements QuestInfo {
       location: this.shenClub,
       outfit: outfit,
       familiar: usingRobo ? this.robor : null,
+      olfaction: haveFamiliar(this.robor) ? [this.penguin] : null,
       mayFreeRun: false,
       run: () => {
         if (!this.hittingNC()) {

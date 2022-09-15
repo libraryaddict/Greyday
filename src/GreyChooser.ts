@@ -257,10 +257,19 @@ export class AdventureFinder {
             return this.defeated.get(monster) == Reabsorbed.REABSORBED;
           }
 
+          if (this.defeated.has(monster)) {
+            return true;
+          }
+
+          if (
+            absorb.skill != null &&
+            this.absorbs.getUsefulSkills().has(absorb.skill)
+          ) {
+            return false;
+          }
+
           // Free run if we've taken the absorb
-          return absorb.hp + absorb.mp + (myLevel() < 10 ? absorb.mox : 0) > 0
-            ? this.defeated.has(monster)
-            : true;
+          return absorb.hp + absorb.mp + (myLevel() < 10 ? absorb.mox : 0) == 0;
         },
       };
 
@@ -304,14 +313,25 @@ export class AdventureFinder {
             return true;
           }
 
+          // If we get adventures from this
           if (absorb.adventures > 0) {
+            // Only free run if we can't absorb
             return this.defeated.get(monster) == Reabsorbed.REABSORBED;
           }
 
+          if (this.defeated.has(monster)) {
+            return true;
+          }
+
+          if (
+            absorb.skill != null &&
+            this.absorbs.getUsefulSkills().has(absorb.skill)
+          ) {
+            return false;
+          }
+
           // Free run if we've taken the absorb
-          return absorb.hp + absorb.mp + (myLevel() < 10 ? absorb.mox : 0) > 0
-            ? this.defeated.has(monster)
-            : true;
+          return absorb.hp + absorb.mp + (myLevel() < 10 ? absorb.mox : 0) == 0;
         },
       };
 
@@ -825,7 +845,10 @@ export class AdventureFinder {
         return m1 - m2;
       });
 
-      if (mustBeDone.filter(([, m]) => m > 0).length > 1) {
+      if (
+        mustBeDone[0][1] > 0 &&
+        mustBeDone.filter(([, m]) => m > 0).length > 1
+      ) {
         print(
           "Multiple quests demand to be done! " +
             mustBeDone

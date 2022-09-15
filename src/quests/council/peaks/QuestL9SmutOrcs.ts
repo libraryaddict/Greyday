@@ -57,6 +57,8 @@ export class SmutOrcs implements QuestInfo {
   lastColdCheck: number = 0;
   hasEnoughCold: boolean = false;
   lastColdMaximize: string;
+  smutSleazeSkill: Skill = Skill.get("Procgen Ribaldry");
+  sleazeMonster: Monster = Monster.get("Smut orc screwer");
   damagingEquips: Item[] = [
     "Muscle band",
     "Ant Hoe",
@@ -211,6 +213,7 @@ export class SmutOrcs implements QuestInfo {
       location: this.loc,
       outfit: outfit,
       mayFreeRun: false,
+      orbs: haveSkill(this.smutSleazeSkill) ? null : [this.sleazeMonster],
       run: () => {
         let attack: Macro;
 
