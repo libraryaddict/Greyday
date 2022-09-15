@@ -65,7 +65,7 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
     }
 
     if (freeRunner != null && availableAmount(freeRunner) == 0) {
-      this.possiblePulls.push([freeRunner, -30]);
+      this.possiblePulls.push([freeRunner, -20]);
     }
 
     this.paths.push(this.getTotals(this.requiredPulls));
