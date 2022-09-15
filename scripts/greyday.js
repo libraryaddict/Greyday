@@ -4027,7 +4027,7 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
       // ["Ire Proof", "+3 Hot Resist"],
       // ["Snow-Cooling System", "+15 Cold Dmg"],
       ["Cooling Tubules", "+10 Cold Dmg"],
-      //["Financial Spreadsheets", "+40% Meat from Monsters"],
+      ["Financial Spreadsheets", "+40% Meat from Monsters"],
       //["Innuendo Circuitry", "+15 Sleaze Damage"],
       ["Ponzi Apparatus", "Scaling meat%"],
       // ["Procgen Ribaldry", "10 Sleaze Damage"],
@@ -4054,7 +4054,7 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
     } }, { key: "getAbsorb", value:
 
     function getAbsorb(monster) {
-      return AbsorbsProvider.allAbsorbs.find((a) => a.monster == monster);
+      return AbsorbsProvider.loadAbsorbs().find((a) => a.monster == monster);
     } }, { key: "getAbsorbsInLocation", value:
 
     function getAbsorbsInLocation(location) {
@@ -4495,7 +4495,7 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
 
       join(", "));
 
-    } }], [{ key: "getAbsorb", value: function getAbsorb(monster) {var _iterator9 = GreyAbsorber_createForOfIteratorHelper(AbsorbsProvider.loadAbsorbs()),_step9;try {for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {var absorb = _step9.value;if (absorb.monster != monster) {continue;}return absorb;}} catch (err) {_iterator9.e(err);} finally {_iterator9.f();}return null;} }, { key: "loadAbsorbs", value: function loadAbsorbs() {if (AbsorbsProvider.allAbsorbs != null) {return AbsorbsProvider.allAbsorbs;}AbsorbsProvider.allAbsorbs = [];var _iterator10 = GreyAbsorber_createForOfIteratorHelper((0,external_kolmafia_namespaceObject.fileToBuffer)("data/grey_you_data.txt").split("\n")),_step10;try {for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {var line = _step10.value;var spl = line.split("\t");if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {continue;}var mons = (0,external_kolmafia_namespaceObject.toMonster)(spl[0]);if (mons == external_kolmafia_namespaceObject.Monster.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown " + spl[0]);continue;}var absorb = new Absorb();absorb.monster = mons;if (spl[1].endsWith("adventures")) {absorb.adventures = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("muscle")) {absorb.mus = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("mysticality")) {absorb.mys = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("moxie")) {absorb.mox = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("maximum hp")) {absorb.hp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else if (spl[1].endsWith("maximum mp")) {absorb.mp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else {absorb.skill = (0,external_kolmafia_namespaceObject.toSkill)(spl[1]);if (absorb.skill == external_kolmafia_namespaceObject.Skill.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown thingy " + spl[1]);}}AbsorbsProvider.allAbsorbs.push(absorb);}} catch (err) {_iterator10.e(err);} finally {_iterator10.f();}this.remainingAdvAbsorbs = AbsorbsProvider.allAbsorbs.filter((a) => a.adventures > 0).map((a) => a.monster);return AbsorbsProvider.allAbsorbs;} }, { key: "getAbsorbedMonsters", value: function getAbsorbedMonsters() {return Object.keys((0,external_kolmafia_namespaceObject.absorbedMonsters)()).map((m) => external_kolmafia_namespaceObject.Monster.get(m));} }, { key: "getReabsorbedMonsters", value: function getReabsorbedMonsters() {return (0,external_kolmafia_namespaceObject.getProperty)("gooseReprocessed").split(",").filter((s) => s != "").map((m) => (0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.toInt)(m)));} }]);return AbsorbsProvider;}();GreyAbsorber_defineProperty(AbsorbsProvider, "allAbsorbs", void 0);GreyAbsorber_defineProperty(AbsorbsProvider, "remainingAdvAbsorbs", void 0);GreyAbsorber_defineProperty(AbsorbsProvider, "hasBall", (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("miniature crystal ball")) > 0);
+    } }], [{ key: "getAbsorb", value: function getAbsorb(monster) {var _iterator9 = GreyAbsorber_createForOfIteratorHelper(AbsorbsProvider.loadAbsorbs()),_step9;try {for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {var absorb = _step9.value;if (absorb.monster != monster) {continue;}return absorb;}} catch (err) {_iterator9.e(err);} finally {_iterator9.f();}return null;} }, { key: "loadAbsorbs", value: function loadAbsorbs() {if (AbsorbsProvider.allAbsorbs != null) {return AbsorbsProvider.allAbsorbs.filter((a) => !(0,external_kolmafia_namespaceObject.isBanished)(a.monster));}AbsorbsProvider.allAbsorbs = [];var _iterator10 = GreyAbsorber_createForOfIteratorHelper((0,external_kolmafia_namespaceObject.fileToBuffer)("data/grey_you_data.txt").split("\n")),_step10;try {for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {var line = _step10.value;var spl = line.split("\t");if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {continue;}var mons = (0,external_kolmafia_namespaceObject.toMonster)(spl[0]);if (mons == external_kolmafia_namespaceObject.Monster.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown " + spl[0]);continue;}var absorb = new Absorb();absorb.monster = mons;if (spl[1].endsWith("adventures")) {absorb.adventures = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("muscle")) {absorb.mus = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("mysticality")) {absorb.mys = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("moxie")) {absorb.mox = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("maximum hp")) {absorb.hp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else if (spl[1].endsWith("maximum mp")) {absorb.mp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else {absorb.skill = (0,external_kolmafia_namespaceObject.toSkill)(spl[1]);if (absorb.skill == external_kolmafia_namespaceObject.Skill.get("None")) {(0,external_kolmafia_namespaceObject.print)("Unknown thingy " + spl[1]);}}AbsorbsProvider.allAbsorbs.push(absorb);}} catch (err) {_iterator10.e(err);} finally {_iterator10.f();}this.remainingAdvAbsorbs = AbsorbsProvider.allAbsorbs.filter((a) => a.adventures > 0).map((a) => a.monster);return AbsorbsProvider.allAbsorbs.filter((a) => !(0,external_kolmafia_namespaceObject.isBanished)(a.monster));} }, { key: "getAbsorbedMonsters", value: function getAbsorbedMonsters() {return Object.keys((0,external_kolmafia_namespaceObject.absorbedMonsters)()).map((m) => external_kolmafia_namespaceObject.Monster.get(m));} }, { key: "getReabsorbedMonsters", value: function getReabsorbedMonsters() {return (0,external_kolmafia_namespaceObject.getProperty)("gooseReprocessed").split(",").filter((s) => s != "").map((m) => (0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.toInt)(m)));} }]);return AbsorbsProvider;}();GreyAbsorber_defineProperty(AbsorbsProvider, "allAbsorbs", void 0);GreyAbsorber_defineProperty(AbsorbsProvider, "remainingAdvAbsorbs", void 0);GreyAbsorber_defineProperty(AbsorbsProvider, "hasBall", (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("miniature crystal ball")) > 0);
 
 
 
@@ -7438,7 +7438,7 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
           {
             (0,external_kolmafia_namespaceObject.print)("Worm Pages: " + (0,external_kolmafia_namespaceObject.availableAmount)(this.page) + " / 15", "blue");
           }
-          (0,external_kolmafia_namespaceObject.print)("Explored: " + this.getExplored() + "/100", "blue");
+          (0,external_kolmafia_namespaceObject.print)("Desert Explored: " + this.getExplored() + " / 100", "blue");
         } };
 
     } }, { key: "getLocations", value:
@@ -10141,6 +10141,13 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
         return QuestStatus.COMPLETED;
       }
 
+      if (
+      currentPredictions().get(this.shenClub) == this.penguin && (
+      this.toAbsorb.includes(this.penguin) || (0,external_kolmafia_namespaceObject.haveFamiliar)(this.robor)))
+      {
+        return QuestStatus.READY;
+      }
+
       if (status < 2) {
         return QuestStatus.NOT_READY;
       }
@@ -10181,6 +10188,7 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
         location: this.shenClub,
         outfit: outfit,
         familiar: usingRobo ? this.robor : null,
+        olfaction: (0,external_kolmafia_namespaceObject.haveFamiliar)(this.robor) ? [this.penguin] : null,
         mayFreeRun: false,
         run: () => {
           if (!this.hittingNC()) {
@@ -10630,6 +10638,10 @@ var QuestL11Business = /*#__PURE__*/function () {function QuestL11Business() {Qu
         return QuestStatus.NOT_READY;
       }
 
+      if ((0,external_kolmafia_namespaceObject.isBanished)(this.accountant)) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (this.isDelayBurning()) {
         if (DelayBurners.isDelayBurnerReady()) {
           return QuestStatus.READY;
@@ -10684,6 +10696,7 @@ var QuestL11Business = /*#__PURE__*/function () {function QuestL11Business() {Qu
         (0,external_kolmafia_namespaceObject.availableAmount)(this.completeFile) > 0 ?
         [this.delayUntilNextNC(), this.spirit] :
         null,
+        mayFreeRun: this.delayUntilNextNC() > 0,
         freeRun: (monster) =>
         this.filesRemaining() == 0 || monster != this.accountant,
         run: () => {
@@ -10844,7 +10857,7 @@ var QuestL11Curses = /*#__PURE__*/function () {function QuestL11Curses() {QuestL
         orb.push(this.shaman);
       }
 
-      if (needFiles) {
+      if (needFiles && (0,external_kolmafia_namespaceObject.haveEffect)(this.curse3)) {
         orb.push(this.accountant);
       }
 
@@ -20165,8 +20178,10 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestL9SmutOrcs_defineProperty(this, "driveSafe",
     external_kolmafia_namespaceObject.Effect.get("Driving Safely"));QuestL9SmutOrcs_defineProperty(this, "lastColdCheck",
     0);QuestL9SmutOrcs_defineProperty(this, "hasEnoughCold",
-    false);QuestL9SmutOrcs_defineProperty(this, "lastColdMaximize", void 0);QuestL9SmutOrcs_defineProperty(this, "damagingEquips",
+    false);QuestL9SmutOrcs_defineProperty(this, "lastColdMaximize", void 0);QuestL9SmutOrcs_defineProperty(this, "smutSleazeSkill",
 
+    external_kolmafia_namespaceObject.Skill.get("Procgen Ribaldry"));QuestL9SmutOrcs_defineProperty(this, "sleazeMonster",
+    external_kolmafia_namespaceObject.Monster.get("Smut orc screwer"));QuestL9SmutOrcs_defineProperty(this, "damagingEquips",
     [
     "Muscle band",
     "Ant Hoe",
@@ -20321,6 +20336,7 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         location: this.loc,
         outfit: outfit,
         mayFreeRun: false,
+        orbs: (0,external_kolmafia_namespaceObject.haveSkill)(this.smutSleazeSkill) ? null : [this.sleazeMonster],
         run: () => {
           var attack;
 
@@ -21312,7 +21328,8 @@ var QuestManorBillards = /*#__PURE__*/function () {
 
 
   function QuestManorBillards() {QuestManorBillards_classCallCheck(this, QuestManorBillards);QuestManorBillards_defineProperty(this, "billards", external_kolmafia_namespaceObject.Location.get("The Haunted Billiards Room"));QuestManorBillards_defineProperty(this, "chalk", external_kolmafia_namespaceObject.Item.get("Handful of hand chalk"));QuestManorBillards_defineProperty(this, "chalkEffect", external_kolmafia_namespaceObject.Effect.get("Chalky Hand"));QuestManorBillards_defineProperty(this, "key", external_kolmafia_namespaceObject.Item.get("[7302]Spookyraven library key"));QuestManorBillards_defineProperty(this, "cue", external_kolmafia_namespaceObject.Item.get("pool cue"));QuestManorBillards_defineProperty(this, "poolgeist", external_kolmafia_namespaceObject.Monster.get("pooltergeist"));QuestManorBillards_defineProperty(this, "ghost", external_kolmafia_namespaceObject.Monster.get("Chalkdust wraith"));QuestManorBillards_defineProperty(this, "hardening", external_kolmafia_namespaceObject.Skill.get("Subatomic Hardening"));QuestManorBillards_defineProperty(this, "toAbsorb", void 0);QuestManorBillards_defineProperty(this, "elementalSkills", void 0);
-    this.elementalSkills = AbsorbsProvider.allAbsorbs.map((a) =>
+    this.elementalSkills = AbsorbsProvider.loadAbsorbs().
+    map((a) =>
     a.skill == null ?
     null :
     [
@@ -27615,10 +27632,19 @@ var AdventureFinder = /*#__PURE__*/function () {
                 return _this.defeated.get(monster) == Reabsorbed.REABSORBED;
               }
 
+              if (_this.defeated.has(monster)) {
+                return true;
+              }
+
+              if (
+              absorb.skill != null &&
+              _this.absorbs.getUsefulSkills().has(absorb.skill))
+              {
+                return false;
+              }
+
               // Free run if we've taken the absorb
-              return absorb.hp + absorb.mp + ((0,external_kolmafia_namespaceObject.myLevel)() < 10 ? absorb.mox : 0) > 0 ?
-              _this.defeated.has(monster) :
-              true;
+              return absorb.hp + absorb.mp + ((0,external_kolmafia_namespaceObject.myLevel)() < 10 ? absorb.mox : 0) == 0;
             } };
 
 
@@ -27662,14 +27688,25 @@ var AdventureFinder = /*#__PURE__*/function () {
                 return true;
               }
 
+              // If we get adventures from this
               if (absorb.adventures > 0) {
+                // Only free run if we can't absorb
                 return this.defeated.get(monster) == Reabsorbed.REABSORBED;
               }
 
+              if (this.defeated.has(monster)) {
+                return true;
+              }
+
+              if (
+              absorb.skill != null &&
+              this.absorbs.getUsefulSkills().has(absorb.skill))
+              {
+                return false;
+              }
+
               // Free run if we've taken the absorb
-              return absorb.hp + absorb.mp + ((0,external_kolmafia_namespaceObject.myLevel)() < 10 ? absorb.mox : 0) > 0 ?
-              this.defeated.has(monster) :
-              true;
+              return absorb.hp + absorb.mp + ((0,external_kolmafia_namespaceObject.myLevel)() < 10 ? absorb.mox : 0) == 0;
             } };
 
 
@@ -28183,7 +28220,10 @@ var AdventureFinder = /*#__PURE__*/function () {
           return m1 - m2;
         });
 
-        if (mustBeDone.filter((_ref9) => {var _ref10 = GreyChooser_slicedToArray(_ref9, 2),m = _ref10[1];return m > 0;}).length > 1) {
+        if (
+        mustBeDone[0][1] > 0 &&
+        mustBeDone.filter((_ref9) => {var _ref10 = GreyChooser_slicedToArray(_ref9, 2),m = _ref10[1];return m > 0;}).length > 1)
+        {
           (0,external_kolmafia_namespaceObject.print)(
           "Multiple quests demand to be done! " +
           mustBeDone.
@@ -29625,7 +29665,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "8b9794b";
+var lastCommitHash = "8ddb7dc";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
