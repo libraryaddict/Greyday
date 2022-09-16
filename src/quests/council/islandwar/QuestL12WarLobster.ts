@@ -215,7 +215,7 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       familiarWeight(Familiar.get("Grey Goose")) > 2 &&
       familiarWeight(Familiar.get("Grey Goose")) < 6
     ) {
-      return QuestStatus.NOT_READY;
+      return QuestStatus.FASTER_LATER;
     }
 
     if (
