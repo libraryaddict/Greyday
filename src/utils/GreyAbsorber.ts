@@ -402,7 +402,7 @@ export class AbsorbsProvider {
     AbsorbsProvider.allAbsorbs = [];
 
     for (const line of fileToBuffer("data/grey_you_data.txt").split("\n")) {
-      const spl = line.split("\t");
+      const spl = line.replace("\r", "").split("\t");
 
       if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {
         continue;
@@ -434,7 +434,7 @@ export class AbsorbsProvider {
         absorb.skill = toSkill(spl[1]);
 
         if (absorb.skill == Skill.get("None")) {
-          print("Unknown thingy " + spl[1]);
+          throw "Unknown line '" + spl[1] + "' in absorb data";
         }
       }
 
