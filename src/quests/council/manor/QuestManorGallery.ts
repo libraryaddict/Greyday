@@ -130,7 +130,11 @@ export class ManorGallery implements QuestInfo {
     return [this.location];
   }
 
-  mustBeDone(): boolean {
+  mustBeDone(reallyMustBeDone: boolean): boolean {
+    if (reallyMustBeDone) {
+      return false;
+    }
+
     return isGhostBustingTime(this.location);
   }
 }

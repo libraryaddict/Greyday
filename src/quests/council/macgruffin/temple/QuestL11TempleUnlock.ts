@@ -149,7 +149,11 @@ export class QuestL11TempleUnlock implements QuestInfo {
     return this.spookyLoc.turnsSpent < 5 && this.toAbsorb.length == 0;
   }
 
-  mustBeDone(): boolean {
+  mustBeDone(reallyMustBeDone: boolean): boolean {
+    if (reallyMustBeDone) {
+      return false;
+    }
+
     return isGhostBustingTime(this.spookyLoc);
   }
 

@@ -640,22 +640,18 @@ export function getResourcesLeft(
       }
 
       // Clamp
-      const pullsLimit = Math.max(0, Math.min(GreySettings.greyPullsLimit, 20));
+      let pullsSetting = Math.max(0, Math.min(GreySettings.greyPullsLimit, 20));
 
       if (assumeUnused) {
-        return pullsLimit;
+        return pullsSetting;
       }
 
-      const greyPulled = getProperty("_greyPulls")
+      const pullsUsed = getProperty("_greyPulls")
         .split(",")
-        .filter((s) => s.length > 0);
+        .filter((s) => s.length > 0).length;
+      pullsSetting -= pullsUsed;
 
-      const pullsAllowed = Math.min(
-        pullsRemaining(),
-        pullsLimit - greyPulled.length
-      );
-
-      return Math.max(0, pullsAllowed);
+      return Math.max(0, Math.min(pullsSetting, pullsRemaining()));
     case "Backup Camera":
       return availableAmount(backupCamera) > 0
         ? 11 - (assumeUnused ? 0 : toInt(getProperty("_backUpUses")))

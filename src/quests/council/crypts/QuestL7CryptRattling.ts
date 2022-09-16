@@ -11,6 +11,7 @@ import {
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { currentPredictions } from "../../../utils/GreyUtils";
 import { PropertyManager } from "../../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
@@ -24,6 +25,7 @@ export class CryptL7Rattling extends CryptL7Template {
   runs: Monster[] = ["Gaunt ghuol", "gluttonous ghuol"].map((s) =>
     Monster.get(s)
   );
+  toAbsorb: Monster[];
 
   level(): number {
     return availableAmount(this.cape) > 0 ? 7 : 16;
@@ -37,7 +39,14 @@ export class CryptL7Rattling extends CryptL7Template {
     if (this.getStatus() == CryptStatus.BOSS) {
       outfit.meatDropWeight = 5;
     } else {
-      outfit.setNoCombat();
+      if (
+        currentPredictions().get(this.loc) != null &&
+        this.toAbsorb.includes(currentPredictions().get(this.loc))
+      ) {
+        outfit.setPlusCombat();
+      } else {
+        outfit.setNoCombat();
+      }
       outfit.plusMonsterLevelWeight = 4;
       outfit.addBonus("-equip " + this.kramco.name);
     }

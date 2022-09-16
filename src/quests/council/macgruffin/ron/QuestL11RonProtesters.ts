@@ -65,6 +65,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
   // TODO Once we've got the absorbs, try replace combats if it won't hurt our NCs
   vipInvitation: Item = Item.get("Clan VIP Lounge key");
   transparentPants: Item = Item.get("Transparent pants");
+  parka: Item = Item.get("Jurassic Parka");
   clover: Item = Item.get("11-Leaf Clover");
   lucky: Effect = Effect.get("Lucky!");
   paths: PossiblePath[] = [];
@@ -76,6 +77,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     availableAmount(this.sweatpants) > 0
       ? this.sweatpants
       : Item.get("Transparent pants"),
+    this.parka,
   ];
 
   getRelation(id: QuestType): TaskRelation {
@@ -101,7 +103,9 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     // Combinations of sleaze equips, clover, costume
     let allPossible: (Item | string)[] = [
       ...this.sleazeEquips.filter(
-        (i) => storageAmount(i) > 0 || availableAmount(i) > 0
+        (i) =>
+          (i != this.parka || haveSkill(Skill.get("Torso Awareness"))) &&
+          (storageAmount(i) > 0 || availableAmount(i) > 0)
       ),
       ...this.lyrndCostume,
       "Clover",
@@ -118,6 +122,13 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
         (combination.includes(this.sweatpants) ||
           combination.includes(this.transparentPants)) &&
         combination.includes(this.lyrndPants)
+      ) {
+        continue;
+      }
+
+      if (
+        combination.includes(this.lyrndShirt) &&
+        combination.includes(this.parka)
       ) {
         continue;
       }
@@ -171,16 +182,20 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     let estimatedFires = 2;
     const lynyrdScares =
       3 + this.lyrndCostume.filter((i) => item.includes(i)).length * 5; // Do calcs without musk
-    let sleazeScares =
-      (availableAmount(this.sweatpants) > 0 ? 120 : 0) +
-      item
-        .map(
-          (i) =>
-            i != this.sweatpants &&
-            numericModifier(i, "Sleaze Damage") +
-              numericModifier(i, "Sleaze Spell Damage")
-        )
-        .reduce((p, n) => p + n, 0);
+    let sleazeScares = item
+      .map((i) =>
+        i == this.sweatpants
+          ? availableAmount(this.sweatpants) > 0
+            ? 120
+            : 0
+          : i == this.parka
+          ? haveSkill(this.torsoAwareness)
+            ? 40
+            : 0
+          : numericModifier(i, "Sleaze Damage") +
+            numericModifier(i, "Sleaze Spell Damage")
+      )
+      .reduce((p, n) => p + n, 0);
 
     sleazeScares = Math.floor(Math.pow(sleazeScares, 0.5));
     // Assume we're running -20 so 65% chance of a combat

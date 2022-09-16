@@ -140,7 +140,7 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
     };
   }
 
-  mustBeDone(): boolean {
+  /*mustBeDone(): boolean {
     if (!GreySettings.isHippyMode()) {
       return false;
     }
@@ -150,7 +150,7 @@ export class QuestGrabBoatJunkyard implements QuestInfo {
     }
 
     return false;
-  }
+  }*/
 
   getLocations(): Location[] {
     return [this.location];

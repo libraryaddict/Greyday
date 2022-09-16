@@ -79,7 +79,11 @@ export class QuestL11Bowling implements QuestInfo {
     );
   }
 
-  mustBeDone(): boolean {
+  mustBeDone(insists: boolean): boolean {
+    if (insists) {
+      return false;
+    }
+
     if (this.toAbsorb.length > 0 && familiarWeight(this.goose) < 6) {
       return false;
     }

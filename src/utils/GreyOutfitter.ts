@@ -57,7 +57,8 @@ export class GreyOutfit {
   }
 
   setWeights() {
-    this.addBonus("+50 bonus mafia thumb ring");
+    this.addBonus("+20 bonus lucky gold ring");
+    this.addBonus("+19 bonus mafia thumb ring");
 
     if (getQuestStatus("questL13Final") <= 5) {
       if (availableAmount(Item.get("powerful glove")) > 0) {

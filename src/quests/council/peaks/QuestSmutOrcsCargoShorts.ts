@@ -95,8 +95,8 @@ export class QuestL9SmutOrcsCargoShorts extends TaskInfo implements QuestInfo {
     return [];
   }
 
-  mustBeDone(): boolean {
-    if (familiarWeight(Familiar.get("Grey Goose")) >= 6) {
+  mustBeDone(reallyMustBeDone: boolean): boolean {
+    if (!reallyMustBeDone && familiarWeight(Familiar.get("Grey Goose")) >= 6) {
       return true;
     }
 

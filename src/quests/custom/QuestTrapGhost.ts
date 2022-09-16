@@ -160,8 +160,8 @@ export class QuestTrapGhost implements QuestInfo {
     return [];
   }
 
-  mustBeDone(): boolean {
-    return true;
+  mustBeDone(reallyMustBeDone: boolean): boolean {
+    return !reallyMustBeDone;
   }
 
   canAcceptPrimes(): boolean {

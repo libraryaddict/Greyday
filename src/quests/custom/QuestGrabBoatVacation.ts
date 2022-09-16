@@ -142,8 +142,8 @@ export class QuestGrabBoatVacation implements QuestInfo {
     };
   }
 
-  mustBeDone(): boolean {
-    if (!GreySettings.isHippyMode()) {
+  mustBeDone(reallyMustBeDone: boolean): boolean {
+    if (!GreySettings.isHippyMode() || reallyMustBeDone) {
       return false;
     }
 

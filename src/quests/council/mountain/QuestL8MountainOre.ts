@@ -337,7 +337,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  mustBeDone(): boolean {
+  mustBeDone(reallyMustBeDone: boolean): boolean {
     if (this.canBackup() || this.needRecalculate) {
       return true;
     }
@@ -350,12 +350,16 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
       return false;
     }
 
+    if (this.isHeistReady() && this.isHeistable()) {
+      return true;
+    }
+
     if (myAdventures() < 40) {
       return false;
     }
 
-    if (this.isHeistReady() && this.isHeistable()) {
-      return true;
+    if (reallyMustBeDone) {
+      return false;
     }
 
     if (

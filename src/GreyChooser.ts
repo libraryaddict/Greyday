@@ -831,12 +831,12 @@ export class AdventureFinder {
       return;
     }
 
-    const mustBeDone: [FoundAdventure, number][] = this.possibleAdventures
+    let mustBeDone: [FoundAdventure, number][] = this.possibleAdventures
       .filter(
         (adv) =>
           adv.quest != null &&
           adv.quest.mustBeDone != null &&
-          adv.quest.mustBeDone()
+          adv.quest.mustBeDone(false)
       )
       .map((a) => [a, a.quest.free != null && a.quest.free() ? 0 : 1]);
 
@@ -844,6 +844,10 @@ export class AdventureFinder {
       mustBeDone.sort(([, m1], [, m2]) => {
         return m1 - m2;
       });
+
+      if (mustBeDone.length > 1 && mustBeDone[0][1] > 0) {
+        mustBeDone = mustBeDone.filter(([a]) => a.quest.mustBeDone(true));
+      }
 
       if (
         mustBeDone[0][1] > 0 &&

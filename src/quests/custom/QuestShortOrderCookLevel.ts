@@ -45,8 +45,8 @@ export class QuestShortOrderExpLevel implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  mustBeDone(): boolean {
-    return true;
+  mustBeDone(reallyMustBeDone: boolean): boolean {
+    return !reallyMustBeDone;
   }
 
   run(): QuestAdventure {

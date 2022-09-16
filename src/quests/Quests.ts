@@ -13,7 +13,7 @@ export interface QuestInfo {
   getLocations(): Location[]; // What should we avoid looking for absorbs in
   free?(): boolean; // If this is set, then require at least this many adventures to be available because we don't want to resume
   getChildren?(): QuestInfo[]; // For helpfully grouping quests together
-  mustBeDone?(): boolean; // If there's some state that requires this to be done asap, like effects that'll run out
+  mustBeDone?(reallyMustBeDone?: boolean): boolean; // If there's some state that requires this to be done asap, like effects that'll run out
   hasFamiliarRecommendation?(): Familiar; // This quest would like this familiar leveled up as it'd be useful
   getAbsorbs?(): Monster[]; // Unexposed by Locations[], this is a backup for getting available absorbs
   attemptPrime?(path: PossiblePath): boolean; // Should only ever be called if the outfit is basically vanilla, no items wanted

@@ -82,7 +82,11 @@ export class SmutOrcs implements QuestInfo {
     return false;
   }
 
-  mustBeDone(): boolean {
+  mustBeDone(reallyMustBeDone: boolean): boolean {
+    if (reallyMustBeDone) {
+      return false;
+    }
+
     return isGhostBustingTime(this.loc);
   }
 

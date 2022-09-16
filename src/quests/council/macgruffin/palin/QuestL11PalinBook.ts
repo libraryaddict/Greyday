@@ -230,12 +230,12 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
     return [this.palindome];
   }
 
-  mustBeDone(): boolean {
-    return isGhostBustingTime(this.palindome);
-  }
+  mustBeDone(reallyMustBeDone: boolean): boolean {
+    if (reallyMustBeDone) {
+      return false;
+    }
 
-  free(): boolean {
-    return this.mustBeDone();
+    return isGhostBustingTime(this.palindome);
   }
 
   canAcceptPrimes(): boolean {
