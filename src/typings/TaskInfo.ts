@@ -141,7 +141,11 @@ export class PossiblePath {
           resources[0].resourcesUsed ?? 1
         } from ${resources[0].id} of type ${
           ResourceCategory[resources[0].type]
-        } but got a total of ${diff.get(resourceId)} used!`;
+        } but got a total of ${diff.get(
+          resourceId
+        )} used! Original value: ${snapshot.resourceMap.get(
+          resources[0].id
+        )}, Current Value: ${getResourcesLeft(resources[0].id)}`;
       }
 
       if (amountUsed > resources.length) {
@@ -149,7 +153,11 @@ export class PossiblePath {
           resources.length
         } or less of ${resources[0].id} of type ${
           ResourceCategory[resources[0].type]
-        } but got a total of ${diff.get(resourceId)} used!`;
+        } but got a total of ${diff.get(
+          resourceId
+        )} used! Original value: ${snapshot.resourceMap.get(
+          resources[0].id
+        )}, Current Value: ${getResourcesLeft(resources[0].id)}`;
       }
 
       this.addUsedResource(resources[0], amountUsed);
