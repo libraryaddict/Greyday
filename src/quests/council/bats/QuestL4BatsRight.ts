@@ -54,6 +54,10 @@ export class QuestL4BatsRight implements QuestInfo {
       location: this.loc,
       outfit: outfit,
       orbs: this.needsBean() ? [this.monster] : null,
+      mayFreeRun: getQuestStatus("questL04Bat") > 2,
+      freeRun: (monster) =>
+        getQuestStatus("questL04Bat") > 2 &&
+        (monster != this.monster || !this.needsBean()),
       run: () => {
         greyAdv(this.loc, outfit);
       },

@@ -71,6 +71,7 @@ export class QuestL11PalinStew implements QuestInfo {
     return {
       location: this.grove,
       outfit: outfit,
+      orbs: orbs,
       run: () => {
         const settings = new AdventureSettings();
         settings.addNoBanish(this.lion);

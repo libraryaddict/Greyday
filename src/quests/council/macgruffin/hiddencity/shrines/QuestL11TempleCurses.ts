@@ -128,6 +128,7 @@ export class QuestL11Curses implements QuestInfo {
         haveEffect(this.curse3) > 0
           ? [this.delayForNextNC(), this.spirit]
           : null,
+      mayFreeRun: true,
       freeRun: (monster) => monster != this.shaman || !needCurses,
       run: () => {
         const props = new PropertyManager();

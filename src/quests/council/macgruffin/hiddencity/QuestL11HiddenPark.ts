@@ -81,6 +81,7 @@ export class QuestL11HiddenPark implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
+      mayFreeRun: true,
       freeRun: (monster) => bottle || monster != this.janitor,
       orbs: bottle ? [this.janitor] : null,
       run: () => {

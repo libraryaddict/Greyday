@@ -123,6 +123,7 @@ export class QuestManorBillards implements QuestInfo {
       outfit: outfit,
       location: this.billards,
       orbs: orbs,
+      mayFreeRun: true,
       freeRun: (monster) => !orbs.includes(monster),
       run: () => {
         if (
