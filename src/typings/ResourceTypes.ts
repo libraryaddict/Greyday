@@ -649,6 +649,7 @@ export function getResourcesLeft(
       const pullsUsed = getProperty("_greyPulls")
         .split(",")
         .filter((s) => s.length > 0).length;
+
       pullsSetting -= pullsUsed;
 
       return Math.max(0, Math.min(pullsSetting, pullsRemaining()));

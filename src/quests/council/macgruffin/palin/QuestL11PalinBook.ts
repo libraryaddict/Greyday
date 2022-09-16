@@ -230,7 +230,15 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
     return [this.palindome];
   }
 
+  free(): boolean {
+    return !this.isFarmDudes();
+  }
+
   mustBeDone(reallyMustBeDone: boolean): boolean {
+    if (!this.isFarmDudes()) {
+      return true;
+    }
+
     if (reallyMustBeDone) {
       return false;
     }
