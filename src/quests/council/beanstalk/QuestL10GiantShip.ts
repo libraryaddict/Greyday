@@ -20,27 +20,6 @@ import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { PossiblePath } from "../../../typings/TaskInfo";
 
 export class QuestL10GiantShip implements QuestInfo {
-  free?(): boolean {
-    throw new Error("Method not implemented.");
-  }
-  getChildren?(): QuestInfo[] {
-    throw new Error("Method not implemented.");
-  }
-  mustBeDone?(reallyMustBeDone?: boolean): boolean {
-    throw new Error("Method not implemented.");
-  }
-  hasFamiliarRecommendation?(): Familiar {
-    throw new Error("Method not implemented.");
-  }
-  getAbsorbs?(): Monster[] {
-    throw new Error("Method not implemented.");
-  }
-  attemptPrime?(path: PossiblePath): boolean {
-    throw new Error("Method not implemented.");
-  }
-  canAcceptPrimes?(): boolean {
-    throw new Error("Method not implemented.");
-  }
   modelShip: Item = Item.get("Model airship");
   amulet: Item = Item.get("Amulet of Extreme Plot Significance");
   umbrella: Item = Item.get("Titanium Assault Umbrella");
