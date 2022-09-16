@@ -352,7 +352,6 @@ export class GreyAdventurer {
       outfit.addBonus("+" + bonus + " bonus familiar scrapbook");
     }
 
-    outfit.addBonus("+2 bonus lucky gold ring");
     const sweat = toInt(getProperty("sweat"));
 
     if (sweat < 100 && outfit.itemDropWeight < 1) {
@@ -400,9 +399,6 @@ export class GreyAdventurer {
 
       const toLevelUp = [
         "Pocket Professor",
-        haveFamiliar(Familiar.get("Frumious Bandersnatch"))
-          ? "Frumious Bandersnatch"
-          : "Pair of Stomping Boots",
         haveFamiliar(robor) ? (doRobor ? "Robortender" : "") : "Hobomonkey",
         "Jumpsuited Hound Dog",
       ]
