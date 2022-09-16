@@ -29,6 +29,7 @@ import { GreyRequirements } from "./utils/GreyResources";
 import { getGreySettings, GreySettings } from "./utils/GreySettings";
 import { GreyTimings } from "./utils/GreyTimings";
 import { centerText } from "./utils/GreyUtils";
+import { PropertyManager } from "./utils/Properties";
 import { lastCommitHash } from "./_git_commit";
 
 class GreyYouMain {
@@ -260,19 +261,6 @@ class GreyYouMain {
       return;
     }
 
-    if (getProperty("autoSatisfyWithNPCs") == "false") {
-      const prompt = userConfirm(
-        "Your 'Buy from NPC stores' is disabled. Enable?"
-      );
-
-      if (!prompt) {
-        print("Unable to continue, not allowed to buy from NPC stores.", "red");
-        return;
-      }
-
-      setProperty("autoSatisfyWithNPCs", "true");
-    }
-
     this.adventures.adventureFinder.calculatePath();
 
     if (this.adventures.adventureFinder.path == null) {
@@ -304,6 +292,10 @@ class GreyYouMain {
 
       const pullsBeforeStart = getProperty("_roninStoragePulls");
 
+      const props = new PropertyManager();
+      props.setProperty("autoSatisfyWithNPCs", "true");
+      props.setProperty("autoSatisfyWithCoinmasters", "true");
+
       try {
         for (
           ;
@@ -326,6 +318,8 @@ class GreyYouMain {
         if (turns > 0) {
           timings.doEnd();
         }
+
+        props.resetAll();
 
         const extraPulls = getProperty(
           getProperty("_roninStoragePulls").replace(pullsBeforeStart, "")
