@@ -5763,7 +5763,29 @@ function QuestL10GiantShip_classCallCheck(instance, Constructor) {if (!(instance
 
 
 
+
 var QuestL10GiantShip = /*#__PURE__*/function () {function QuestL10GiantShip() {QuestL10GiantShip_classCallCheck(this, QuestL10GiantShip);QuestL10GiantShip_defineProperty(this, "modelShip",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     external_kolmafia_namespaceObject.Item.get("Model airship"));QuestL10GiantShip_defineProperty(this, "amulet",
     external_kolmafia_namespaceObject.Item.get("Amulet of Extreme Plot Significance"));QuestL10GiantShip_defineProperty(this, "umbrella",
     external_kolmafia_namespaceObject.Item.get("Titanium Assault Umbrella"));QuestL10GiantShip_defineProperty(this, "unbreakable",
@@ -5779,7 +5801,7 @@ var QuestL10GiantShip = /*#__PURE__*/function () {function QuestL10GiantShip() {
     external_kolmafia_namespaceObject.Monster.get("Protagonist"));QuestL10GiantShip_defineProperty(this, "healer",
     external_kolmafia_namespaceObject.Monster.get("Quiet Healer"));QuestL10GiantShip_defineProperty(this, "burly",
     external_kolmafia_namespaceObject.Monster.get("Burly Sidekick"));QuestL10GiantShip_defineProperty(this, "princess",
-    external_kolmafia_namespaceObject.Monster.get("Spunky Princess"));QuestL10GiantShip_defineProperty(this, "toAbsorb", void 0);}QuestL10GiantShip_createClass(QuestL10GiantShip, [{ key: "shouldRunNC", value:
+    external_kolmafia_namespaceObject.Monster.get("Spunky Princess"));QuestL10GiantShip_defineProperty(this, "toAbsorb", void 0);}QuestL10GiantShip_createClass(QuestL10GiantShip, [{ key: "free", value: function free() {throw new Error("Method not implemented.");} }, { key: "getChildren", value: function getChildren() {throw new Error("Method not implemented.");} }, { key: "mustBeDone", value: function mustBeDone(reallyMustBeDone) {throw new Error("Method not implemented.");} }, { key: "hasFamiliarRecommendation", value: function hasFamiliarRecommendation() {throw new Error("Method not implemented.");} }, { key: "getAbsorbs", value: function getAbsorbs() {throw new Error("Method not implemented.");} }, { key: "attemptPrime", value: function attemptPrime(path) {throw new Error("Method not implemented.");} }, { key: "canAcceptPrimes", value: function canAcceptPrimes() {throw new Error("Method not implemented.");} }, { key: "shouldRunNC", value:
 
 
     function shouldRunNC() {
@@ -5833,6 +5855,7 @@ var QuestL10GiantShip = /*#__PURE__*/function () {function QuestL10GiantShip() {
         location: this.loc,
         outfit: outfit,
         orbs: orbs,
+        mayFreeRun: true,
         freeRun: (monster) => !orbs.includes(monster),
         run: () => {
           var props = new PropertyManager();
@@ -8373,6 +8396,7 @@ var QuestL11PalinStew = /*#__PURE__*/function () {function QuestL11PalinStew() {
       return {
         location: this.grove,
         outfit: outfit,
+        orbs: orbs,
         run: () => {
           var settings = new AdventureSettings();
           settings.addNoBanish(this.lion);
@@ -8777,6 +8801,7 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
         outfit: outfit,
         location: this.palindome,
         orbs: orbs,
+        mayFreeRun: true,
         freeRun: (monster) => !orbs.includes(monster),
         run: () => {
           var macro = null;
@@ -10897,6 +10922,7 @@ var QuestL11Curses = /*#__PURE__*/function () {function QuestL11Curses() {QuestL
         (0,external_kolmafia_namespaceObject.haveEffect)(this.curse3) > 0 ?
         [this.delayForNextNC(), this.spirit] :
         null,
+        mayFreeRun: true,
         freeRun: (monster) => monster != this.shaman || !needCurses,
         run: () => {
           var props = new PropertyManager();
@@ -11233,6 +11259,7 @@ var QuestL11HiddenPark = /*#__PURE__*/function () {function QuestL11HiddenPark()
       return {
         location: this.loc,
         outfit: outfit,
+        mayFreeRun: true,
         freeRun: (monster) => bottle || monster != this.janitor,
         orbs: bottle ? [this.janitor] : null,
         run: () => {
@@ -17568,6 +17595,10 @@ var QuestL4BatsRight = /*#__PURE__*/function () {function QuestL4BatsRight() {Qu
         location: this.loc,
         outfit: outfit,
         orbs: this.needsBean() ? [this.monster] : null,
+        mayFreeRun: getQuestStatus("questL04Bat") > 2,
+        freeRun: (monster) =>
+        getQuestStatus("questL04Bat") > 2 && (
+        monster != this.monster || !this.needsBean()),
         run: () => {
           greyAdv(this.loc, outfit);
         } };
@@ -17814,6 +17845,8 @@ var QuestL5GoblinHarem = /*#__PURE__*/function (_TaskInfo) {QuestL5GoblinHarem_i
         orbs: path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE) ?
         null :
         [this.haremGirl],
+        mayFreeRun: true,
+        freeRun: (monster) => monster != this.haremGirl,
         run: () => {
           // When we have access to the harem, blast it down
           var macro = new Macro();
@@ -21275,6 +21308,7 @@ var ManorBedroom = /*#__PURE__*/function () {function ManorBedroom() {QuestManor
         location: this.location,
         outfit: outfit,
         orbs: orbs,
+        mayFreeRun: true,
         freeRun: (monster) => !orbs.includes(monster),
         run: () => {
           var props = new PropertyManager();
@@ -21443,6 +21477,7 @@ var QuestManorBillards = /*#__PURE__*/function () {
         outfit: outfit,
         location: this.billards,
         orbs: orbs,
+        mayFreeRun: true,
         freeRun: (monster) => !orbs.includes(monster),
         run: () => {
           if (
@@ -29704,7 +29739,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "6a871c5";
+var lastCommitHash = "c859413";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
