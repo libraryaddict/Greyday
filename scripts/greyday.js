@@ -1828,22 +1828,18 @@ resourceType)
       }
 
       // Clamp
-      var pullsLimit = Math.max(0, Math.min(GreySettings.greyPullsLimit, 20));
+      var pullsSetting = Math.max(0, Math.min(GreySettings.greyPullsLimit, 20));
 
       if (assumeUnused) {
-        return pullsLimit;
+        return pullsSetting;
       }
 
-      var greyPulled = (0,external_kolmafia_namespaceObject.getProperty)("_greyPulls").
+      var pullsUsed = (0,external_kolmafia_namespaceObject.getProperty)("_greyPulls").
       split(",").
-      filter((s) => s.length > 0);
+      filter((s) => s.length > 0).length;
+      pullsSetting -= pullsUsed;
 
-      var pullsAllowed = Math.min(
-      (0,external_kolmafia_namespaceObject.pullsRemaining)(),
-      pullsLimit - greyPulled.length);
-
-
-      return Math.max(0, pullsAllowed);
+      return Math.max(0, Math.min(pullsSetting, (0,external_kolmafia_namespaceObject.pullsRemaining)()));
     case "Backup Camera":
       return (0,external_kolmafia_namespaceObject.availableAmount)(backupCamera) > 0 ?
       11 - (assumeUnused ? 0 : (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_backUpUses"))) :
@@ -2732,7 +2728,8 @@ var GreyOutfit = /*#__PURE__*/function () {
     } }, { key: "setWeights", value:
 
     function setWeights() {
-      this.addBonus("+50 bonus mafia thumb ring");
+      this.addBonus("+20 bonus lucky gold ring");
+      this.addBonus("+19 bonus mafia thumb ring");
 
       if (getQuestStatus("questL13Final") <= 5) {
         if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("powerful glove")) > 0) {
@@ -8552,8 +8549,8 @@ var QuestTrapGhost = /*#__PURE__*/function () {function QuestTrapGhost() {QuestT
       return [];
     } }, { key: "mustBeDone", value:
 
-    function mustBeDone() {
-      return true;
+    function mustBeDone(reallyMustBeDone) {
+      return !reallyMustBeDone;
     } }, { key: "canAcceptPrimes", value:
 
     function canAcceptPrimes() {
@@ -8814,12 +8811,12 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
       return [this.palindome];
     } }, { key: "mustBeDone", value:
 
-    function mustBeDone() {
-      return isGhostBustingTime(this.palindome);
-    } }, { key: "free", value:
+    function mustBeDone(reallyMustBeDone) {
+      if (reallyMustBeDone) {
+        return false;
+      }
 
-    function free() {
-      return this.mustBeDone();
+      return isGhostBustingTime(this.palindome);
     } }, { key: "canAcceptPrimes", value:
 
     function canAcceptPrimes() {
@@ -9390,7 +9387,8 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
     external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "vipInvitation",
 
     external_kolmafia_namespaceObject.Item.get("Clan VIP Lounge key"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "transparentPants",
-    external_kolmafia_namespaceObject.Item.get("Transparent pants"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "clover",
+    external_kolmafia_namespaceObject.Item.get("Transparent pants"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "parka",
+    external_kolmafia_namespaceObject.Item.get("Jurassic Parka"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "clover",
     external_kolmafia_namespaceObject.Item.get("11-Leaf Clover"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "lucky",
     external_kolmafia_namespaceObject.Effect.get("Lucky!"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "paths",
     []);QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "sleazeEquips",
@@ -9401,7 +9399,8 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
     _this2.deck,
     (0,external_kolmafia_namespaceObject.availableAmount)(_this2.sweatpants) > 0 ?
     _this2.sweatpants :
-    external_kolmafia_namespaceObject.Item.get("Transparent pants")]);return _this2;}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "getRelation", value:
+    external_kolmafia_namespaceObject.Item.get("Transparent pants"),
+    _this2.parka]);return _this2;}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "getRelation", value:
 
 
     function getRelation(id) {
@@ -9427,7 +9426,9 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
       // Combinations of sleaze equips, clover, costume
       var allPossible = [].concat(QuestL11RonProtesters_toConsumableArray(
       this.sleazeEquips.filter(
-      (i) => (0,external_kolmafia_namespaceObject.storageAmount)(i) > 0 || (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0)), QuestL11RonProtesters_toConsumableArray(
+      (i) =>
+      (i != this.parka || (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Torso Awareness"))) && (
+      (0,external_kolmafia_namespaceObject.storageAmount)(i) > 0 || (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0))), QuestL11RonProtesters_toConsumableArray(
 
       this.lyrndCostume), [
       "Clover",
@@ -9444,6 +9445,13 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
           (combination.includes(this.sweatpants) ||
           combination.includes(this.transparentPants)) &&
           combination.includes(this.lyrndPants))
+          {
+            continue;
+          }
+
+          if (
+          combination.includes(this.lyrndShirt) &&
+          combination.includes(this.parka))
           {
             continue;
           }
@@ -9497,12 +9505,16 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
       var estimatedFires = 2;
       var lynyrdScares =
       3 + this.lyrndCostume.filter((i) => item.includes(i)).length * 5; // Do calcs without musk
-      var sleazeScares =
-      ((0,external_kolmafia_namespaceObject.availableAmount)(this.sweatpants) > 0 ? 120 : 0) +
-      item.
-      map(
-      (i) =>
-      i != this.sweatpants &&
+      var sleazeScares = item.
+      map((i) =>
+      i == this.sweatpants ?
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.sweatpants) > 0 ?
+      120 :
+      0 :
+      i == this.parka ?
+      (0,external_kolmafia_namespaceObject.haveSkill)(this.torsoAwareness) ?
+      40 :
+      0 :
       (0,external_kolmafia_namespaceObject.numericModifier)(i, "Sleaze Damage") +
       (0,external_kolmafia_namespaceObject.numericModifier)(i, "Sleaze Spell Damage")).
 
@@ -10416,7 +10428,11 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
 
     } }, { key: "mustBeDone", value:
 
-    function mustBeDone() {
+    function mustBeDone(insists) {
+      if (insists) {
+        return false;
+      }
+
       if (this.toAbsorb.length > 0 && (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) < 6) {
         return false;
       }
@@ -11701,7 +11717,11 @@ var QuestL11TempleUnlock = /*#__PURE__*/function () {function QuestL11TempleUnlo
       return this.spookyLoc.turnsSpent < 5 && this.toAbsorb.length == 0;
     } }, { key: "mustBeDone", value:
 
-    function mustBeDone() {
+    function mustBeDone(reallyMustBeDone) {
+      if (reallyMustBeDone) {
+        return false;
+      }
+
       return isGhostBustingTime(this.spookyLoc);
     } }, { key: "run", value:
 
@@ -14697,26 +14717,7 @@ function QuestDailyDungeon_classCallCheck(instance, Constructor) {if (!(instance
 
 
 
-var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inherits(QuestDailyDungeon, _TaskInfo);var _super = QuestDailyDungeon_createSuper(QuestDailyDungeon);function QuestDailyDungeon() {var _this;QuestDailyDungeon_classCallCheck(this, QuestDailyDungeon);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "toAbsorb", void 0);QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "pole",
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inherits(QuestDailyDungeon, _TaskInfo);var _super = QuestDailyDungeon_createSuper(QuestDailyDungeon);function QuestDailyDungeon() {var _this;QuestDailyDungeon_classCallCheck(this, QuestDailyDungeon);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "pole",
     external_kolmafia_namespaceObject.Item.get("eleven-foot pole"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "ring",
     external_kolmafia_namespaceObject.Item.get("ring of Detect Boring Doors"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "picklocks",
     external_kolmafia_namespaceObject.Item.get("Pick-O-Matic lockpicks"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "location",
@@ -14724,7 +14725,7 @@ var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inh
     external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "malware",
     external_kolmafia_namespaceObject.Item.get("Daily dungeon malware"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "malwarePath", void 0);QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "noMalware",
 
-    new PossiblePath(4));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "paths", void 0);return _this;}QuestDailyDungeon_createClass(QuestDailyDungeon, [{ key: "free", value: function free() {throw new Error("Method not implemented.");} }, { key: "getChildren", value: function getChildren() {throw new Error("Method not implemented.");} }, { key: "mustBeDone", value: function mustBeDone() {throw new Error("Method not implemented.");} }, { key: "getAbsorbs", value: function getAbsorbs() {throw new Error("Method not implemented.");} }, { key: "attemptPrime", value: function attemptPrime(path) {throw new Error("Method not implemented.");} }, { key: "canAcceptPrimes", value: function canAcceptPrimes() {throw new Error("Method not implemented.");} }, { key: "getLocations", value:
+    new PossiblePath(4));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "paths", void 0);return _this;}QuestDailyDungeon_createClass(QuestDailyDungeon, [{ key: "getLocations", value:
 
 
     function getLocations() {
@@ -18694,12 +18695,14 @@ function QuestL7CryptRattling_classCallCheck(instance, Constructor) {if (!(insta
 
 
 
+
 var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRattling_inherits(CryptL7Rattling, _CryptL7Template);var _super = QuestL7CryptRattling_createSuper(CryptL7Rattling);function CryptL7Rattling() {var _this;QuestL7CryptRattling_classCallCheck(this, CryptL7Rattling);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "loc",
     external_kolmafia_namespaceObject.Location.get("The Defiled Cranny"));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "beatenUp",
     external_kolmafia_namespaceObject.Effect.get("Beaten Up"));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "kramco",
     external_kolmafia_namespaceObject.Item.get("Kramco Sausage-o-Matic&trade;"));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "runs",
     ["Gaunt ghuol", "gluttonous ghuol"].map((s) =>
-    external_kolmafia_namespaceObject.Monster.get(s)));return _this;}QuestL7CryptRattling_createClass(CryptL7Rattling, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Monster.get(s)));QuestL7CryptRattling_defineProperty(QuestL7CryptRattling_assertThisInitialized(_this), "toAbsorb", void 0);return _this;}QuestL7CryptRattling_createClass(CryptL7Rattling, [{ key: "level", value:
+
 
 
     function level() {
@@ -18714,7 +18717,14 @@ var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRatt
       if (this.getStatus() == CryptStatus.BOSS) {
         outfit.meatDropWeight = 5;
       } else {
-        outfit.setNoCombat();
+        if (
+        currentPredictions().get(this.loc) != null &&
+        this.toAbsorb.includes(currentPredictions().get(this.loc)))
+        {
+          outfit.setPlusCombat();
+        } else {
+          outfit.setNoCombat();
+        }
         outfit.plusMonsterLevelWeight = 4;
         outfit.addBonus("-equip " + this.kramco.name);
       }
@@ -18778,9 +18788,11 @@ function QuestL7CryptSprinters_classCallCheck(instance, Constructor) {if (!(inst
 
 
 
+
 var CryptL7Sprinters = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptSprinters_inherits(CryptL7Sprinters, _CryptL7Template);var _super = QuestL7CryptSprinters_createSuper(CryptL7Sprinters);function CryptL7Sprinters() {var _this;QuestL7CryptSprinters_classCallCheck(this, CryptL7Sprinters);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL7CryptSprinters_defineProperty(QuestL7CryptSprinters_assertThisInitialized(_this), "loc",
     external_kolmafia_namespaceObject.Location.get("The Defiled Alcove"));QuestL7CryptSprinters_defineProperty(QuestL7CryptSprinters_assertThisInitialized(_this), "sprinter",
-    external_kolmafia_namespaceObject.Monster.get("Modern zmobie"));return _this;}QuestL7CryptSprinters_createClass(CryptL7Sprinters, [{ key: "run", value:
+    external_kolmafia_namespaceObject.Monster.get("Modern zmobie"));QuestL7CryptSprinters_defineProperty(QuestL7CryptSprinters_assertThisInitialized(_this), "toAbsorb", void 0);return _this;}QuestL7CryptSprinters_createClass(CryptL7Sprinters, [{ key: "run", value:
+
 
     function run() {
       var outfit = new GreyOutfit();
@@ -18788,7 +18800,10 @@ var CryptL7Sprinters = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptSpr
 
       if (this.getStatus() == CryptStatus.BOSS) {
         outfit.meatDropWeight = 5;
-      } else {
+      } else if (
+      currentPredictions().get(this.loc) == null ||
+      !this.toAbsorb.includes(currentPredictions().get(this.loc)))
+      {
         outfit.initWeight = 2;
       }
 
@@ -19503,7 +19518,7 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
       return QuestStatus.READY;
     } }, { key: "mustBeDone", value:
 
-    function mustBeDone() {
+    function mustBeDone(reallyMustBeDone) {
       if (this.canBackup() || this.needRecalculate) {
         return true;
       }
@@ -19516,12 +19531,16 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
         return false;
       }
 
+      if (this.isHeistReady() && this.isHeistable()) {
+        return true;
+      }
+
       if ((0,external_kolmafia_namespaceObject.myAdventures)() < 40) {
         return false;
       }
 
-      if (this.isHeistReady() && this.isHeistable()) {
-        return true;
+      if (reallyMustBeDone) {
+        return false;
       }
 
       if (
@@ -20141,8 +20160,8 @@ var QuestL9SmutOrcsCargoShorts = /*#__PURE__*/function (_TaskInfo) {QuestSmutOrc
       return [];
     } }, { key: "mustBeDone", value:
 
-    function mustBeDone() {
-      if ((0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) >= 6) {
+    function mustBeDone(reallyMustBeDone) {
+      if (!reallyMustBeDone && (0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) >= 6) {
         return true;
       }
 
@@ -20205,7 +20224,11 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
       return false;
     } }, { key: "mustBeDone", value:
 
-    function mustBeDone() {
+    function mustBeDone(reallyMustBeDone) {
+      if (reallyMustBeDone) {
+        return false;
+      }
+
       return isGhostBustingTime(this.loc);
     } }, { key: "status", value:
 
@@ -21565,7 +21588,11 @@ var ManorGallery = /*#__PURE__*/function () {function ManorGallery() {QuestManor
       return [this.location];
     } }, { key: "mustBeDone", value:
 
-    function mustBeDone() {
+    function mustBeDone(reallyMustBeDone) {
+      if (reallyMustBeDone) {
+        return false;
+      }
+
       return isGhostBustingTime(this.location);
     } }]);return ManorGallery;}();
 ;// CONCATENATED MODULE: ./src/quests/council/manor/QuestManorKitchen.ts
@@ -21933,6 +21960,10 @@ var QuestManor = /*#__PURE__*/function () {function QuestManor() {QuestManor_cla
 
     function mustBeDone() {
       return true;
+    } }, { key: "free", value:
+
+    function free() {
+      return true;
     } }, { key: "run", value:
 
     function run() {
@@ -21969,10 +22000,6 @@ var QuestManor = /*#__PURE__*/function () {function QuestManor() {QuestManor_cla
           (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=manor2&action=manor2_ladys");
         } };
 
-    } }, { key: "free", value:
-
-    function free() {
-      return true;
     } }]);return QuestManor;}();var
 
 
@@ -23430,19 +23457,19 @@ var QuestGrabBoatJunkyard = /*#__PURE__*/function () {function QuestGrabBoatJunk
           this.createBoat();
         } };
 
-    } }, { key: "mustBeDone", value:
+    }
 
-    function mustBeDone() {
+    /*mustBeDone(): boolean {
       if (!GreySettings.isHippyMode()) {
         return false;
       }
-
-      if ((0,external_kolmafia_namespaceObject.myLevel)() == 11 && isJunkYardBoatApproach()) {
+       if (myLevel() == 11 && isJunkYardBoatApproach()) {
         return true;
       }
+       return false;
+    }*/ }, { key: "getLocations", value:
 
-      return false;
-    } }, { key: "getLocations", value:
+
 
     function getLocations() {
       return [this.location];
@@ -23623,8 +23650,8 @@ var QuestGrabBoatVacation = /*#__PURE__*/function () {function QuestGrabBoatVaca
 
     } }, { key: "mustBeDone", value:
 
-    function mustBeDone() {
-      if (!GreySettings.isHippyMode()) {
+    function mustBeDone(reallyMustBeDone) {
+      if (!GreySettings.isHippyMode() || reallyMustBeDone) {
         return false;
       }
 
@@ -26029,8 +26056,8 @@ var QuestShortOrderExpLevel = /*#__PURE__*/function () {function QuestShortOrder
       return QuestStatus.READY;
     } }, { key: "mustBeDone", value:
 
-    function mustBeDone() {
-      return true;
+    function mustBeDone(reallyMustBeDone) {
+      return !reallyMustBeDone;
     } }, { key: "run", value:
 
     function run() {
@@ -28211,7 +28238,7 @@ var AdventureFinder = /*#__PURE__*/function () {
       (adv) =>
       adv.quest != null &&
       adv.quest.mustBeDone != null &&
-      adv.quest.mustBeDone()).
+      adv.quest.mustBeDone(false)).
 
       map((a) => [a, a.quest.free != null && a.quest.free() ? 0 : 1]);
 
@@ -28220,14 +28247,18 @@ var AdventureFinder = /*#__PURE__*/function () {
           return m1 - m2;
         });
 
+        if (mustBeDone.length > 1 && mustBeDone[0][1] > 0) {
+          mustBeDone = mustBeDone.filter((_ref9) => {var _ref10 = GreyChooser_slicedToArray(_ref9, 1),a = _ref10[0];return a.quest.mustBeDone(true);});
+        }
+
         if (
         mustBeDone[0][1] > 0 &&
-        mustBeDone.filter((_ref9) => {var _ref10 = GreyChooser_slicedToArray(_ref9, 2),m = _ref10[1];return m > 0;}).length > 1)
+        mustBeDone.filter((_ref11) => {var _ref12 = GreyChooser_slicedToArray(_ref11, 2),m = _ref12[1];return m > 0;}).length > 1)
         {
           (0,external_kolmafia_namespaceObject.print)(
           "Multiple quests demand to be done! " +
           mustBeDone.
-          filter((_ref11) => {var _ref12 = GreyChooser_slicedToArray(_ref11, 2),m = _ref12[1];return m > 0;}).
+          filter((_ref13) => {var _ref14 = GreyChooser_slicedToArray(_ref13, 2),m = _ref14[1];return m > 0;}).
           map((a) => a[0].quest.getId()).
           join(", "),
           "red");
@@ -29665,7 +29696,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "53d6f50";
+var lastCommitHash = "f137330";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
