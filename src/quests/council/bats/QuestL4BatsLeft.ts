@@ -1,4 +1,4 @@
-import { Location, Familiar, Item, availableAmount, use } from "kolmafia";
+import { Location } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import {
   getQuestStatus,
@@ -20,17 +20,21 @@ export class QuestL4BatsLeft implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL04Bat");
+    const status = getQuestStatus("questL04Bat");
 
     // If right has been unlocked
     if (status > 1) {
       return QuestStatus.COMPLETED;
     }
 
-    let statusShen = getQuestStatus("questL11Shen");
+    if (status < 1) {
+      return QuestStatus.NOT_READY;
+    }
+
+    const statusShen = getQuestStatus("questL11Shen");
 
     if (statusShen <= 1) {
-      return QuestStatus.NOT_READY;
+      return QuestStatus.FASTER_LATER;
     }
 
     return QuestStatus.READY;
