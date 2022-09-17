@@ -56,6 +56,33 @@ export class ResourcesSnapshot {
   resources: SomeResource[] = [];
   resourceMap: Map<ResourceId, number> = new Map();
   unused: ResourceId[] = []; // For those special resources that have limits that change on the fly, aka yellow rocket
+
+  toString(): string {
+    const output: string[] = [];
+
+    output.push("Resource Snapshot");
+
+    const resourceStrings = this.resources
+      .map(
+        (s) =>
+          s.id +
+            " x " +
+            ResourceCategory[s.type] +
+            " - Uses " +
+            s.resourcesUsed ?? 1
+      )
+      .join(", ");
+    const resMap = [...this.resourceMap].map(
+      ([id, amount]) => id + " x " + amount
+    );
+    const unused = this.unused.join(", ");
+
+    output.push("Resources: " + resourceStrings);
+    output.push("Resources Count: " + resMap.join(", "));
+    output.push("Unused: " + unused);
+
+    return output.join(" || ");
+  }
 }
 
 export class PossiblePath {
@@ -118,6 +145,11 @@ export class PossiblePath {
     const viableResources = this.resourcesAvailable.filter(
       (r) => diff.has(r.id) && diff.get(r.id) >= (r.resourcesUsed ?? 1)
     );
+    const doDebug = () => {
+      print("Snapshot " + snapshot.toString());
+      print("Now " + createResourcesSnapshot(this).toString());
+      print("Changed " + changed.toString());
+    };
 
     for (const resourceId of diff.keys()) {
       const resources = viableResources.filter((r) => r.id == resourceId);
@@ -128,6 +160,7 @@ export class PossiblePath {
 
       // If all the resources using this key, are not of the same type
       if (resources.filter((r) => r.type != resources[0].type).length > 1) {
+        doDebug();
         throw `Multiple resources of the same source were used, need to manually register the resources of ${resourceId} and types ${resources.map(
           (r) => ResourceCategory[r.type]
         )} as used.`;
@@ -137,6 +170,7 @@ export class PossiblePath {
         diff.get(resourceId) / (resources[0].resourcesUsed ?? 1);
 
       if (amountUsed % 1 != 0) {
+        doDebug();
         throw `Unexpected amount of a resource used! Expected a multiple of ${
           resources[0].resourcesUsed ?? 1
         } from ${resources[0].id} of type ${
@@ -149,6 +183,7 @@ export class PossiblePath {
       }
 
       if (amountUsed > resources.length) {
+        doDebug();
         throw `Unexpected amount of a resource used! Expected ${
           resources.length
         } or less of ${resources[0].id} of type ${
