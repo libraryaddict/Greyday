@@ -41,6 +41,7 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
   loc: Location = Location.get("Sonofa Beach");
   item: Item = Item.get("barrel of gunpowder");
   monster: Monster = Monster.get("Lobsterfrogman");
+  bossBat: Monster = Monster.get("Boss Bat");
   cursedMagnifyingGlass: Item = Item.get("Cursed Magnifying Glass");
   powerfulGlove: Item = Item.get("Powerful Glove");
   backupCamera: Item = Item.get("Backup Camera");
@@ -449,7 +450,10 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
           ) {
             visitUrl("adventure.php?snarfblat=" + toInt(this.loc));
 
-            Macro.ifNot_(this.monster, gloveMacro.macro()).submit();
+            Macro.ifNot_(
+              this.monster,
+              Macro.ifNot_(this.bossBat, gloveMacro.macro())
+            ).submit();
           }
 
           greyAdv(
