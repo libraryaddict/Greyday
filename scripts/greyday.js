@@ -1972,7 +1972,7 @@ resourceType)
 
 }
 ;// CONCATENATED MODULE: ./src/typings/TaskInfo.ts
-function TaskInfo_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) TaskInfo_setPrototypeOf(subClass, superClass);}function TaskInfo_setPrototypeOf(o, p) {TaskInfo_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return TaskInfo_setPrototypeOf(o, p);}function TaskInfo_createSuper(Derived) {var hasNativeReflectConstruct = TaskInfo_isNativeReflectConstruct();return function _createSuperInternal() {var Super = TaskInfo_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = TaskInfo_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return TaskInfo_possibleConstructorReturn(this, result);};}function TaskInfo_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return TaskInfo_assertThisInitialized(self);}function TaskInfo_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function TaskInfo_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function TaskInfo_getPrototypeOf(o) {TaskInfo_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return TaskInfo_getPrototypeOf(o);}function TaskInfo_toConsumableArray(arr) {return TaskInfo_arrayWithoutHoles(arr) || TaskInfo_iterableToArray(arr) || TaskInfo_unsupportedIterableToArray(arr) || TaskInfo_nonIterableSpread();}function TaskInfo_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskInfo_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function TaskInfo_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return TaskInfo_arrayLikeToArray(arr);}function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || TaskInfo_unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskInfo_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskInfo_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskInfo_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskInfo_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskInfo_arrayLikeToArray(o, minLen);}function TaskInfo_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskInfo_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function TaskInfo_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskInfo_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskInfo_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskInfo_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskInfo_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}
+function TaskInfo_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) TaskInfo_setPrototypeOf(subClass, superClass);}function TaskInfo_setPrototypeOf(o, p) {TaskInfo_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return TaskInfo_setPrototypeOf(o, p);}function TaskInfo_createSuper(Derived) {var hasNativeReflectConstruct = TaskInfo_isNativeReflectConstruct();return function _createSuperInternal() {var Super = TaskInfo_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = TaskInfo_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return TaskInfo_possibleConstructorReturn(this, result);};}function TaskInfo_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return TaskInfo_assertThisInitialized(self);}function TaskInfo_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function TaskInfo_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function TaskInfo_getPrototypeOf(o) {TaskInfo_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return TaskInfo_getPrototypeOf(o);}function TaskInfo_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskInfo_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || TaskInfo_unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskInfo_toConsumableArray(arr) {return TaskInfo_arrayWithoutHoles(arr) || TaskInfo_iterableToArray(arr) || TaskInfo_unsupportedIterableToArray(arr) || TaskInfo_nonIterableSpread();}function TaskInfo_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskInfo_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskInfo_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskInfo_arrayLikeToArray(o, minLen);}function TaskInfo_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function TaskInfo_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return TaskInfo_arrayLikeToArray(arr);}function TaskInfo_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskInfo_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function TaskInfo_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskInfo_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskInfo_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskInfo_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskInfo_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}
 
 
 
@@ -2000,11 +2000,38 @@ var TaskInfo = /*#__PURE__*/TaskInfo_createClass(function TaskInfo() {TaskInfo_c
 
 
 
-var ResourcesSnapshot = /*#__PURE__*/TaskInfo_createClass(function ResourcesSnapshot() {TaskInfo_classCallCheck(this, ResourcesSnapshot);TaskInfo_defineProperty(this, "resources",
-  []);TaskInfo_defineProperty(this, "resourceMap",
-  new Map());TaskInfo_defineProperty(this, "unused",
-  []);} // For those special resources that have limits that change on the fly, aka yellow rocket
-);
+var ResourcesSnapshot = /*#__PURE__*/function () {function ResourcesSnapshot() {TaskInfo_classCallCheck(this, ResourcesSnapshot);TaskInfo_defineProperty(this, "resources",
+    []);TaskInfo_defineProperty(this, "resourceMap",
+    new Map());TaskInfo_defineProperty(this, "unused",
+    []);}TaskInfo_createClass(ResourcesSnapshot, [{ key: "toString", value: // For those special resources that have limits that change on the fly, aka yellow rocket
+
+    function toString() {
+      var output = [];
+
+      output.push("Resource Snapshot");
+
+      var resourceStrings = this.resources.
+      map(
+      (s) => {var _ref;return (_ref =
+        s.id +
+        " x " +
+        ResourceCategory[s.type] +
+        " - Uses " +
+        s.resourcesUsed) !== null && _ref !== void 0 ? _ref : 1;}).
+
+      join(", ");
+      var resMap = TaskInfo_toConsumableArray(this.resourceMap).map(
+      (_ref2) => {var _ref3 = _slicedToArray(_ref2, 2),id = _ref3[0],amount = _ref3[1];return id + " x " + amount;});
+
+      var unused = this.unused.join(", ");
+
+      output.push("Resources: " + resourceStrings);
+      output.push("Resources Count: " + resMap.join(", "));
+      output.push("Unused: " + unused);
+
+      return output.join(" || ");
+    } }]);return ResourcesSnapshot;}();
+
 
 var PossiblePath = /*#__PURE__*/function () {
 
@@ -2048,7 +2075,7 @@ var PossiblePath = /*#__PURE__*/function () {
       var path = new PossiblePath(this.advsSavedMin, this.advsSavedMax);
       path.resourcesNeeded = TaskInfo_toConsumableArray(
       this.resourcesNeeded.map(
-      (_ref) => {var _ref2 = _slicedToArray(_ref, 2),v1 = _ref2[0],v2 = _ref2[1];return [v1, v2];}));
+      (_ref4) => {var _ref5 = _slicedToArray(_ref4, 2),v1 = _ref5[0],v2 = _ref5[1];return [v1, v2];}));
 
 
       path.resourceUsed = TaskInfo_toConsumableArray(this.resourceUsed);
@@ -2064,8 +2091,13 @@ var PossiblePath = /*#__PURE__*/function () {
       var diff = changed.resourceMap;
       // Get all resources that were among the changed, and uses enough of the resource to fit in
       var viableResources = this.resourcesAvailable.filter(
-      (r) => {var _r$resourcesUsed;return diff.has(r.id) && diff.get(r.id) >= ((_r$resourcesUsed = r.resourcesUsed) !== null && _r$resourcesUsed !== void 0 ? _r$resourcesUsed : 1);});var _iterator2 = TaskInfo_createForOfIteratorHelper(
+      (r) => {var _r$resourcesUsed;return diff.has(r.id) && diff.get(r.id) >= ((_r$resourcesUsed = r.resourcesUsed) !== null && _r$resourcesUsed !== void 0 ? _r$resourcesUsed : 1);});
 
+      var doDebug = () => {
+        (0,external_kolmafia_namespaceObject.print)("Snapshot " + snapshot.toString());
+        (0,external_kolmafia_namespaceObject.print)("Now " + createResourcesSnapshot(this).toString());
+        (0,external_kolmafia_namespaceObject.print)("Changed " + changed.toString());
+      };var _iterator2 = TaskInfo_createForOfIteratorHelper(
 
       diff.keys()),_step2;try {var _loop = function _loop() {var _resources$0$resource, _changed$resources;var resourceId = _step2.value;
           var resources = viableResources.filter((r) => r.id == resourceId);
@@ -2076,6 +2108,7 @@ var PossiblePath = /*#__PURE__*/function () {
 
           // If all the resources using this key, are not of the same type
           if (resources.filter((r) => r.type != resources[0].type).length > 1) {
+            doDebug();
             throw "Multiple resources of the same source were used, need to manually register the resources of ".concat(resourceId, " and types ").concat(resources.map(
             (r) => ResourceCategory[r.type]), " as used.");
 
@@ -2085,6 +2118,7 @@ var PossiblePath = /*#__PURE__*/function () {
           diff.get(resourceId) / ((_resources$0$resource = resources[0].resourcesUsed) !== null && _resources$0$resource !== void 0 ? _resources$0$resource : 1);
 
           if (amountUsed % 1 != 0) {var _resources$0$resource2;
+            doDebug();
             throw "Unexpected amount of a resource used! Expected a multiple of ".concat((_resources$0$resource2 =
             resources[0].resourcesUsed) !== null && _resources$0$resource2 !== void 0 ? _resources$0$resource2 : 1, " from ").concat(
             resources[0].id, " of type ").concat(
@@ -2097,6 +2131,7 @@ var PossiblePath = /*#__PURE__*/function () {
           }
 
           if (amountUsed > resources.length) {
+            doDebug();
             throw "Unexpected amount of a resource used! Expected ".concat(
             resources.length, " or less of ").concat(
             resources[0].id, " of type ").concat(
@@ -2414,7 +2449,7 @@ amount)
       }
 
       var drops = Object.entries(itemDrops(monster)).map(
-      (_ref3) => {var _ref4 = _slicedToArray(_ref3, 2),i = _ref4[0],n = _ref4[1];return [Item.get(i), n];});
+      (_ref6) => {var _ref7 = _slicedToArray(_ref6, 2),i = _ref7[0],n = _ref7[1];return [Item.get(i), n];});
 
 
       var _rates = [];var _iterator7 = TaskInfo_createForOfIteratorHelper(
@@ -29726,7 +29761,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "67edfc3";
+var lastCommitHash = "857fc92";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
