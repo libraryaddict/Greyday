@@ -283,7 +283,10 @@ export class AdventureFinder {
       if (
         this.questLocations.includes(loc) ||
         !canAdventure(loc) ||
-        details.expectedTurnsProfit < 0
+        ([...details.skills.keys()].find((s) =>
+          this.absorbs.getMustHaveSkills().has(s.skill)
+        ) == null &&
+          details.expectedTurnsProfit < 0)
       ) {
         continue;
       }

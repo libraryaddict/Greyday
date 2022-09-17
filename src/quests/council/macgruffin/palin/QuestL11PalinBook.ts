@@ -52,6 +52,7 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
   raceBob = Monster.get("Racecar Bob");
   drab: Monster = Monster.get("Drab Bard");
   paths: PossiblePath[];
+  toAbsorb: Monster[];
 
   createPaths(assumeUnused: boolean) {
     this.paths = [new PossiblePath(0).addMeat(1000)];
@@ -178,11 +179,14 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
 
     const orbs: Monster[] = [];
 
-    if (toInt(getProperty("palindomeDudesDefeated")) < 5) {
+    if (
+      toInt(getProperty("palindomeDudesDefeated")) <
+      5 - this.toAbsorb.length
+    ) {
       orbs.push(this.drab);
       orbs.push(this.bobRace);
       orbs.push(this.raceBob);
-    } else if (this.needDogPhoto()) {
+    } else if (this.toAbsorb.length == 0 && this.needDogPhoto()) {
       orbs.push(this.bobRace);
       orbs.push(this.raceBob);
     }
@@ -228,7 +232,11 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
   }
 
   getLocations(): Location[] {
-    return [this.palindome];
+    if (this.isFarmDudes()) {
+      return [this.palindome];
+    }
+
+    return [];
   }
 
   free(): boolean {
