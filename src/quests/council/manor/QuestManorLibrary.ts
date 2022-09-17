@@ -95,7 +95,7 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
       path.canUse(ResourceCategory.YELLOW_RAY) > 0 &&
       !path.getResource(ResourceCategory.YELLOW_RAY).ready()
     ) {
-      return QuestStatus.NOT_READY;
+      return QuestStatus.FASTER_LATER;
     }
 
     if (!haveSkill(this.sweep) || !haveSkill(this.nano)) {
@@ -110,9 +110,13 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
     const wantJar =
       this.wantsGnomeKillingJar() && availableAmount(this.killingJar) == 0;
     const banishLibrarian = !wantJar && !isBanished(this.librarian);
-    const resource = wantJar
+    let resource = wantJar
       ? path.getResource(ResourceCategory.YELLOW_RAY)
       : null;
+
+    if (resource != null && !resource.ready()) {
+      resource = null;
+    }
 
     if (wantJar) {
       if (resource != null) {
