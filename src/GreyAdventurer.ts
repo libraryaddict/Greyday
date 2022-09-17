@@ -336,6 +336,13 @@ export class GreyAdventurer {
       }
 
       outfit.addBonus(`+${bonus} bonus cursed magnifying glass`);
+    } else if (
+      toInt(getProperty("cursedMagnifyingGlassCount")) == 13 &&
+      outfit.minusCombatWeight < 0
+    ) {
+      outfit.addBonus(`-50 bonus cursed magnifying glass`);
+    } else if (toInt(getProperty("_voidFreeFights")) >= 5) {
+      outfit.addBonus(`-30 bonus cursed magnifying glass`);
     }
 
     if (toInt(getProperty("scrapbookCharges")) < 100) {

@@ -10,6 +10,7 @@ import {
   Location,
   Monster,
   numericModifier,
+  print,
   Skill,
 } from "kolmafia";
 import { getResources, ResourceCategory } from "../../typings/ResourceTypes";
@@ -150,6 +151,17 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
 
         if (!haveSkill(this.skill)) {
           throw "Expected to have Infinite Loop skill!";
+        }
+
+        if (
+          path.canUse(ResourceCategory.YELLOW_RAY) &&
+          (equippedAmount(this.doctorsBag) > 0 ||
+            equippedAmount(this.pantsgiving) > 0)
+        ) {
+          print(
+            "The following error about a YR not being used can be ignored, this is because the script found an alternative.",
+            "blue"
+          );
         }
       },
     };
