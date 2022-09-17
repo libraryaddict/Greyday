@@ -345,6 +345,10 @@ export class GreyAdventurer {
       outfit.addBonus(`-30 bonus cursed magnifying glass`);
     }
 
+    if (adventure.considerPriority == ConsiderPriority.ORB_ABSORB) {
+      outfit.addBonus("-equip Carnivorous potted plant");
+    }
+
     if (toInt(getProperty("scrapbookCharges")) < 100) {
       let bonus = 2;
 
