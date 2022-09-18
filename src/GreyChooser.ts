@@ -130,13 +130,7 @@ export class AdventureFinder {
       const adventure = quest.run(path);
       let details: AbsorbDetails;
 
-      if (adventure.location != null) {
-        details = this.absorbs.getAdventuresInLocation(
-          this.defeated,
-          adventure.location,
-          true
-        );
-      } else if (quest.getAbsorbs != null) {
+      if (quest.getAbsorbs != null) {
         const absorbs = quest.getAbsorbs();
 
         if (absorbs.length > 0) {
@@ -146,6 +140,14 @@ export class AdventureFinder {
             true
           );
         }
+      }
+
+      if (details == null && adventure.location != null) {
+        details = this.absorbs.getAdventuresInLocation(
+          this.defeated,
+          adventure.location,
+          true
+        );
       }
 
       if (

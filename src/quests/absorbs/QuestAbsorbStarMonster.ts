@@ -21,16 +21,16 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
   oddMonster: Monster = Monster.get("Little Man in the Canoe");
   familiar: Familiar = Familiar.get("Grey Goose");
   nanovision: Skill = Skill.get("Double Nanovision");
-  fax: PossiblePath;
-  avoid: PossiblePath = new PossiblePath(20);
+  paths: PossiblePath[];
 
   createPaths() {
-    this.fax = new PossiblePath(1);
-    this.fax.addFax(this.getMonster());
+    this.paths = [];
+    this.paths.push(new PossiblePath(1).addFax(this.getMonster()));
+    this.paths.push(new PossiblePath(20));
   }
 
   getPossiblePaths(): PossiblePath[] {
-    return [this.fax, this.avoid];
+    return this.paths;
   }
 
   getMonster(): Monster {
@@ -42,7 +42,7 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
   }
 
   level(): number {
-    return 18;
+    return 16;
   }
 
   getLocations(): Location[] {

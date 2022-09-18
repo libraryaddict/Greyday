@@ -53,7 +53,7 @@ export abstract class QuestMoonSignAbsorb
       return 6;
     }
 
-    return this.isInSign() ? 12 : 18;
+    return this.isInSign() ? 12 : 16;
   }
 
   getAbsorbs(): Monster[] {
