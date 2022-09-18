@@ -27561,7 +27561,8 @@ var OrbStatus;(function (OrbStatus) {OrbStatus[OrbStatus["READY"] = 0] = "READY"
 
 
 
-var ConsiderPriority;(function (ConsiderPriority) {ConsiderPriority[ConsiderPriority["ORB_ABSORB"] = 0] = "ORB_ABSORB";ConsiderPriority[ConsiderPriority["ORB_OTHER"] = 1] = "ORB_OTHER";ConsiderPriority[ConsiderPriority["RANDOM_ABSORB"] = 2] = "RANDOM_ABSORB";ConsiderPriority[ConsiderPriority["RANDOM_COMBAT_ABSORB"] = 3] = "RANDOM_COMBAT_ABSORB";ConsiderPriority[ConsiderPriority["NOTHING_SPECIAL"] = 4] = "NOTHING_SPECIAL";ConsiderPriority[ConsiderPriority["BAD_COMBAT_RATE"] = 5] = "BAD_COMBAT_RATE";ConsiderPriority[ConsiderPriority["BAD_PREDICTION"] = 6] = "BAD_PREDICTION";ConsiderPriority[ConsiderPriority["BAD_ABSORB"] = 7] = "BAD_ABSORB";})(ConsiderPriority || (ConsiderPriority = {}));
+var ConsiderPriority;(function (ConsiderPriority) {ConsiderPriority[ConsiderPriority["ORB_ABSORB"] = 0] = "ORB_ABSORB";ConsiderPriority[ConsiderPriority["ORB_OTHER"] = 1] = "ORB_OTHER";ConsiderPriority[ConsiderPriority["RANDOM_ABSORB"] = 2] = "RANDOM_ABSORB";ConsiderPriority[ConsiderPriority["RANDOM_COMBAT_ABSORB"] = 3] = "RANDOM_COMBAT_ABSORB";ConsiderPriority[ConsiderPriority["NOTHING_SPECIAL"] = 4] = "NOTHING_SPECIAL";ConsiderPriority[ConsiderPriority["BAD_COMBAT_RATE"] = 5] = "BAD_COMBAT_RATE";ConsiderPriority[ConsiderPriority["BAD_PREDICTION"] = 6] = "BAD_PREDICTION";ConsiderPriority[ConsiderPriority["BAD_ABSORB"] = 7] = "BAD_ABSORB";ConsiderPriority[ConsiderPriority["BAD_ABSORB_PREDICTION"] = 8] = "BAD_ABSORB_PREDICTION";})(ConsiderPriority || (ConsiderPriority = {}));
+
 
 
 
@@ -27894,7 +27895,7 @@ var AdventureFinder = /*#__PURE__*/function () {
                 {
                   adv.considerPriority = ConsiderPriority.ORB_ABSORB;
                 } else {
-                  adv.considerPriority = ConsiderPriority.BAD_ABSORB;
+                  adv.considerPriority = ConsiderPriority.BAD_ABSORB_PREDICTION;
                 }
               } else {
                 adv.considerPriority = ConsiderPriority.ORB_OTHER;
@@ -29806,7 +29807,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "384a521";
+var lastCommitHash = "8f3b628";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
