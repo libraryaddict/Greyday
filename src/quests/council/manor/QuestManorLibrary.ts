@@ -32,8 +32,8 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
   sweep: Skill = Skill.get("System Sweep");
   nano: Skill = Skill.get("Double Nanovision");
   desk: Monster = Monster.get("Writing Desk");
-  pathYR: PossiblePath = new PossiblePath(10).add(ResourceCategory.YELLOW_RAY);
-  path: PossiblePath = new PossiblePath(10, 20);
+  pathYR: PossiblePath;
+  path: PossiblePath;
   paths: PossiblePath[] = [];
 
   createPaths(assumeUnstarted: boolean) {

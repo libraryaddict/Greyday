@@ -50,28 +50,27 @@ export class QuestFantasyBandit extends TaskInfo implements QuestInfo {
       return;
     }
 
-    this.path.addFax(this.monster);
-    this.path.add(ResourceCategory.COPIER, 4);
+    // If the last monster was is a bandit, no need to fax
+    // But we still need to fight X more bandits.
+    if (this.lastBackup() != this.monster || assumeUnstarted) {
+      this.path.addFax(this.monster);
+    } else {
+      // We need to fax, so one of those copies is a fax and can be removed
+      fightsRemaining--;
+    }
+
+    this.path.add(ResourceCategory.COPIER, fightsRemaining - 1);
 
     // If we're assuming we've unstarted, no need to add this stuff
     if (assumeUnstarted) {
       return;
     }
 
-    // If the last monster was is a bandit, no need to fax
-    // But we still need to fight X more bandits.
-    if (this.lastBackup() == this.monster) {
-      this.path.addUsed(ResourceCategory.FAXER);
-    } else {
-      // We need to fax, so one of those copies is a fax and can be removed
-      fightsRemaining--;
-    }
-
     // Assuming we're at fought = 1, so 4 bandits remaining.
     // If last monster is sheep, then we'd need to do a fax and 3 copies = 4
     // If last monster is bandit, then we'd need to do 4 copies
     for (let i = fightsRemaining; i < 4; i++) {
-      this.path.addUsed(ResourceCategory.COPIER);
+      //  this.path.addUsed(ResourceCategory.COPIER);
     }
   }
 

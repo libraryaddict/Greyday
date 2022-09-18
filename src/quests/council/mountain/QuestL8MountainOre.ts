@@ -57,9 +57,6 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   failsafeBackup: PossiblePath = new PossiblePath(1).add(
     ResourceCategory.COPIER
   );
-  faxAndHeist: PossiblePath = new PossiblePath(1)
-    .add(ResourceCategory.CAT_HEIST)
-    .addFax(this.mountainMan);
   paths: PossiblePath[] = [];
   asbestos: Item = Item.get("asbestos ore");
   linoleum: Item = Item.get("linoleum ore");
@@ -212,6 +209,8 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
         !combo.includes(ResourceCategory.CAT_HEIST)
       ) {
         const cargoShorts = path.clone();
+        cargoShorts.advsSavedMin -= 1;
+        cargoShorts.advsSavedMax -= 1;
 
         cargoShorts.resourcesNeeded.forEach((res) => {
           if (res[0] == ResourceCategory.FAXER) {
@@ -225,10 +224,6 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
 
         this.paths.push(cargoShorts);
       }
-    }
-
-    if (assumeUnstarted || !this.hasHeistedAlready()) {
-      this.paths.push(this.faxAndHeist);
     }
 
     // Ignore cosplay saber for any path that requires a proper fight finishing blow

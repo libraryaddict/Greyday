@@ -135,13 +135,13 @@ export abstract class QuestMoonSignAbsorb
     }
 
     this.paths = [];
-    this.faxing = new PossiblePath(1).addFax(this.monster);
+    this.faxing = new PossiblePath(1);
 
     if (
-      !assumeUnstarted &&
-      AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)
+      assumeUnstarted ||
+      !AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)
     ) {
-      this.faxing.addUsed(ResourceCategory.FAXER);
+      this.faxing.addFax(this.monster);
     }
 
     this.paths.push(this.faxing, this.ignore);

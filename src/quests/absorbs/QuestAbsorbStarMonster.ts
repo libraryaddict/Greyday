@@ -21,10 +21,11 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
   oddMonster: Monster = Monster.get("Little Man in the Canoe");
   familiar: Familiar = Familiar.get("Grey Goose");
   nanovision: Skill = Skill.get("Double Nanovision");
-  fax: PossiblePath = new PossiblePath(1);
+  fax: PossiblePath;
   avoid: PossiblePath = new PossiblePath(20);
 
   createPaths() {
+    this.fax = new PossiblePath(1);
     this.fax.addFax(this.getMonster());
   }
 

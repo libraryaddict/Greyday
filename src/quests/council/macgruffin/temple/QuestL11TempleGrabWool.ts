@@ -25,13 +25,6 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
   loc: Location = Location.get("The Hidden Temple");
   woolMonster: Monster = Monster.get("Baa-relief sheep");
   luckyWoolMonster: Monster = Monster.get("Baa'baa'bu'ran");
-  polarPath: PossiblePath = new PossiblePath(1, 3).add(
-    ResourceCategory.POLAR_VORTEX,
-    2
-  );
-  manual: PossiblePath = new PossiblePath(2, 8);
-  clover: PossiblePath = new PossiblePath(1).add(ResourceCategory.CLOVER);
-  fax: PossiblePath = new PossiblePath(1).addFax(this.luckyWoolMonster);
   deck: PossiblePath = new PossiblePath(0).add(
     ResourceCategory.DECK_OF_EVERY_CARD
   );
@@ -46,6 +39,7 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
     this.paths.push(
       new PossiblePath(1, 3).add(ResourceCategory.POLAR_VORTEX, amountNeeded)
     );
+    //  this.paths.push(this.deck);
   }
 
   getPossiblePaths(): PossiblePath[] {

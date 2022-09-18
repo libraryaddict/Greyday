@@ -7,7 +7,7 @@
 // 6. Paths that are a one and done, but the quest can still be done
 // 7. Quests that are optional, but entirely depend on the path being picked. We can either provide a dummy path, or something else
 
-import { print, printHtml } from "kolmafia";
+import { print, printHtml, toJson } from "kolmafia";
 import { QuestInfo, QuestStatus } from "../quests/Quests";
 import { GreySettings } from "../utils/GreySettings";
 import {
@@ -269,6 +269,14 @@ export class FigureOutPath {
       }
 
       if (
+        paths.find(
+          (p) => p.resourcesAvailable.length + p.resourceUsed.length > 0
+        ) != null
+      ) {
+        throw "Resources not cleared for " + quest.getId();
+      }
+
+      if (
         quest.level() >= 1 &&
         !assumeUnstarted &&
         quest.status() == QuestStatus.COMPLETED
@@ -337,7 +345,16 @@ export class FigureOutPath {
         p.advsSavedMax = mostAdvsCouldveUsed[1] - p.advsSavedMax;
       });
 
-      paths.sort((p1, p2) => p1.getCostPerAdv() - p2.getCostPerAdv());
+      paths.sort((p1, p2) => {
+        const cost1 = p1.getCostOfPath();
+        const cost2 = p2.getCostOfPath();
+
+        if (cost1 == cost2) {
+          return 0;
+        }
+
+        return cost1 - cost2;
+      });
 
       const cheapestNoResource: PossiblePath = paths.find(
         (p) => p.resourcesNeeded.length == 0
@@ -377,7 +394,14 @@ export class FigureOutPath {
     }
 
     allPaths.sort(([, [p1]], [, [p2]]) => {
-      return p1.getCostPerAdv() - p2.getCostPerAdv();
+      const cost1 = p1.getCostOfPath();
+      const cost2 = p2.getCostOfPath();
+
+      if (cost1 == cost2) {
+        return 0;
+      }
+
+      return cost1 - cost2;
     });
 
     const simmedPath = this.doAttempt(

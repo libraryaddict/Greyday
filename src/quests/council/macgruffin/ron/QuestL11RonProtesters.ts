@@ -153,10 +153,8 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
       }
 
       for (const item of toPull) {
-        path.addPull(item);
-
-        if (!assumeUnstarted && availableAmount(item) > 0) {
-          path.addUsed(ResourceCategory.PULL);
+        if (assumeUnstarted || availableAmount(item) == 0) {
+          path.addPull(item);
         }
       }
 

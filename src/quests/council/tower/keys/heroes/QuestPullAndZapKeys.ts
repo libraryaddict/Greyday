@@ -30,7 +30,6 @@ export class QuestPullAndZapKeys
   extends QuestKeyStuffAbstract
   implements QuestInfo
 {
-  pullKey: PossiblePath;
   paths: PossiblePath[];
 
   getId(): QuestType {

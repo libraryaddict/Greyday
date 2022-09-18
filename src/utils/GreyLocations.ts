@@ -15,6 +15,7 @@ import {
   Monster,
   myLevel,
   print,
+  toBoolean,
   toInt,
   toJson,
   visitUrl,
@@ -319,6 +320,13 @@ export function greyAdv(
       visitUrl(<string>location);
     } else if (location != null) {
       visitUrl("adventure.php?snarfblat=" + toInt(location));
+    }
+
+    if (
+      toBoolean(getProperty("stopForUltraRare")) &&
+      lastMonster()?.attributes?.includes("ULTRARARE")
+    ) {
+      throw "Ultrarare encounter?";
     }
   }
 

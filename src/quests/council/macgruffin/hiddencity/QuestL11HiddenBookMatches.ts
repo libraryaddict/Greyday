@@ -31,7 +31,7 @@ export class QuestL11HiddenBookMatches extends TaskInfo implements QuestInfo {
   nanovision: Skill = Skill.get("Double Nanovision");
   toAbsorb: Monster[];
   noPull: PossiblePath = new PossiblePath(5);
-  doPull: PossiblePath = new PossiblePath(0).addConsumablePull(this.book);
+  doPull: PossiblePath;
 
   getId(): QuestType {
     return "Council / MacGruffin / HiddenCity / BookOfMatches";
@@ -39,6 +39,18 @@ export class QuestL11HiddenBookMatches extends TaskInfo implements QuestInfo {
 
   level(): number {
     return 11;
+  }
+
+  createPaths(assumeUnstarted: boolean): void {
+    this.noPull = new PossiblePath(5);
+    this.doPull = new PossiblePath(0);
+
+    if (
+      assumeUnstarted ||
+      (availableAmount(this.book) == 0 && !this.barUnlocked())
+    ) {
+      this.doPull.addConsumablePull(this.book);
+    }
   }
 
   getPossiblePaths(): PossiblePath[] {

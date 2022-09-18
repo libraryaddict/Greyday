@@ -91,14 +91,31 @@ export class PossiblePath {
   resourcesAvailable: SomeResource[] = [];
   ignoreResources: ResourceId[] = [];
   pulls: Item[] = [];
+  tags: string[] = [];
   advsSavedMin: number;
   advsSavedMax: number;
   miscMeat: number = 0;
-  pathCost: number;
+  pathCost: number = 0;
 
   constructor(advsMin: number, advsMax: number = advsMin) {
     this.advsSavedMax = advsMax;
     this.advsSavedMin = advsMin;
+  }
+
+  addTag(tag: string): PossiblePath {
+    this.tags.push(tag);
+
+    return this;
+  }
+
+  removeTag(tag: string): PossiblePath {
+    this.tags = this.tags.filter((t) => t != tag);
+
+    return this;
+  }
+
+  hasTag(tag: string): boolean {
+    return this.tags.includes(tag);
   }
 
   setRoughPathCost(resourcesUsed: [QuestInfo, SomeResource, number][]) {
@@ -120,6 +137,10 @@ export class PossiblePath {
   }
 
   getCostPerAdv(): number {
+    if (this.getAverageTurns() == 0) {
+      return this.pathCost;
+    }
+
     return this.pathCost / this.getAverageTurns();
   }
 

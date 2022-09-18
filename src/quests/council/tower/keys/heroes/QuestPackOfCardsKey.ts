@@ -12,12 +12,6 @@ export class QuestPackOfCardsKey extends TaskInfo implements QuestInfo {
     this.pickCard = new PossiblePath(0).add(
       ResourceCategory.DECK_OF_EVERY_CARD_CHEAT
     );
-
-    if (!assumeUnstarted) {
-      if (getProperty("_deckCardsSeen").includes("XVI - The Tower")) {
-        this.pickCard.addUsed(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT);
-      }
-    }
   }
 
   getPossiblePaths(): PossiblePath[] {
@@ -33,6 +27,10 @@ export class QuestPackOfCardsKey extends TaskInfo implements QuestInfo {
   }
 
   status(path: PossiblePath): QuestStatus {
+    if (getProperty("_deckCardsSeen").includes("XVI - The Tower")) {
+      return QuestStatus.COMPLETED;
+    }
+
     if (
       path != null &&
       !path.canUse(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT)
