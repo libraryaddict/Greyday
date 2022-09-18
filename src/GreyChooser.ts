@@ -68,6 +68,7 @@ export enum ConsiderPriority {
   BAD_COMBAT_RATE, // When we're running -/+ combat which isn't what we want
   BAD_PREDICTION,
   BAD_ABSORB, // When we'd have a chance to hit something we're not ready to absorb
+  BAD_ABSORB_PREDICTION,
 }
 
 export interface FoundAdventure {
@@ -392,7 +393,7 @@ export class AdventureFinder {
             ) {
               adv.considerPriority = ConsiderPriority.ORB_ABSORB;
             } else {
-              adv.considerPriority = ConsiderPriority.BAD_ABSORB;
+              adv.considerPriority = ConsiderPriority.BAD_ABSORB_PREDICTION;
             }
           } else {
             adv.considerPriority = ConsiderPriority.ORB_OTHER;
