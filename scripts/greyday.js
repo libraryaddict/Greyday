@@ -24704,9 +24704,7 @@ QuestGnomeTrainer = /*#__PURE__*/function (_TaskInfo) {QuestNpcStuff_inherits(Qu
     "Gnefarious Pickpocketing"].
     map((s) => external_kolmafia_namespaceObject.Skill.get(s)));QuestNpcStuff_defineProperty(QuestNpcStuff_assertThisInitialized(_this), "letter",
     external_kolmafia_namespaceObject.Item.get("Letter for Melvign the Gnome"));QuestNpcStuff_defineProperty(QuestNpcStuff_assertThisInitialized(_this), "shirt",
-    external_kolmafia_namespaceObject.Item.get('"Remember the Trees" Shirt'));QuestNpcStuff_defineProperty(QuestNpcStuff_assertThisInitialized(_this), "shirtPull",
-    new PossiblePath(0).addPull(_this.shirt));QuestNpcStuff_defineProperty(QuestNpcStuff_assertThisInitialized(_this), "shirtlessPull",
-    new PossiblePath(10));QuestNpcStuff_defineProperty(QuestNpcStuff_assertThisInitialized(_this), "torso",
+    external_kolmafia_namespaceObject.Item.get('"Remember the Trees" Shirt'));QuestNpcStuff_defineProperty(QuestNpcStuff_assertThisInitialized(_this), "torso",
     external_kolmafia_namespaceObject.Skill.get("Torso Awareness"));QuestNpcStuff_defineProperty(QuestNpcStuff_assertThisInitialized(_this), "spoon",
     external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"));QuestNpcStuff_defineProperty(QuestNpcStuff_assertThisInitialized(_this), "paths", void 0);return _this;}QuestNpcStuff_createClass(QuestGnomeTrainer, [{ key: "createPaths", value:
 
@@ -24729,7 +24727,10 @@ QuestGnomeTrainer = /*#__PURE__*/function (_TaskInfo) {QuestNpcStuff_inherits(Qu
         return;
       }
 
-      this.paths.push(this.shirtPull, this.shirtlessPull);
+      this.paths.push(
+      new PossiblePath(0).addPull(this.shirt),
+      new PossiblePath(10));
+
     } }, { key: "getPossiblePaths", value:
 
     function getPossiblePaths() {
@@ -30064,7 +30065,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "fec9109";
+var lastCommitHash = "4030f57";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
