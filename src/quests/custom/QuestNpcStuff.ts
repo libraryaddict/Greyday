@@ -223,8 +223,6 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
   ].map((s) => Skill.get(s));
   letter: Item = Item.get("Letter for Melvign the Gnome");
   shirt: Item = Item.get('"Remember the Trees" Shirt');
-  shirtPull = new PossiblePath(0).addPull(this.shirt);
-  shirtlessPull = new PossiblePath(10);
   torso: Skill = Skill.get("Torso Awareness");
   spoon: Item = Item.get("hewn moon-rune spoon");
   paths: PossiblePath[];
@@ -247,7 +245,10 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
       return;
     }
 
-    this.paths.push(this.shirtPull, this.shirtlessPull);
+    this.paths.push(
+      new PossiblePath(0).addPull(this.shirt),
+      new PossiblePath(10)
+    );
   }
 
   getPossiblePaths(): PossiblePath[] {
