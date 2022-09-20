@@ -47,8 +47,8 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
     combos.push([ResourceCategory.POLAR_VORTEX, 0]);
     combos.push([ResourceCategory.HUGS_AND_KISSES, 0]);
     combos.push([ResourceCategory.HUGS_AND_KISSES, 1]);
-    combos.push([null, 1]);
-    combos.push([null, 1]);
+    combos.push([null, 4]);
+    combos.push([null, 4]);
 
     for (const combination of getAllCombinations(combos, true)) {
       if (combination.length != amountNeeded) {
