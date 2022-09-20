@@ -23,17 +23,19 @@ import { QuestType } from "../../QuestTypes";
 export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
   harem: Location = Location.get("Cobb's Knob Harem");
   toAbsorb: Monster[];
-  polarVortex: PossiblePath = new PossiblePath(0).add(
-    ResourceCategory.FIRE_EXTINGUSHER_ZONE
-  );
-  taskYR: PossiblePath = new PossiblePath(2, 5).add(
-    ResourceCategory.YELLOW_RAY
-  );
-  taskManual = new PossiblePath(8, 12);
+
   haremGirl: Monster = Monster.get("Knob Goblin Harem Girl");
+  paths: PossiblePath[];
+  createPaths() {
+    this.paths = [
+      new PossiblePath(0).add(ResourceCategory.FIRE_EXTINGUSHER_ZONE),
+      new PossiblePath(8, 12),
+      new PossiblePath(2, 5).add(ResourceCategory.YELLOW_RAY),
+    ];
+  }
 
   getPossiblePaths(): PossiblePath[] {
-    return [this.taskManual, this.taskYR, this.polarVortex];
+    return this.paths;
   }
 
   getId(): QuestType {
