@@ -159,7 +159,7 @@ export function getGreySettings(): GreySetting[] {
   };
 
   return [
-    greyBountyHunter,
+    //greyBountyHunter,
     towerBreak,
     moonTune,
     manorLights,
