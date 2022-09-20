@@ -31,8 +31,6 @@ export class QuestL10GiantTop implements QuestInfo {
   punkNC: number = 678;
   gothNC: number = 675;
 
-  // TODO Once we've got the absorbs, try replace combats
-
   run(): QuestAdventure {
     const outfit = new GreyOutfit().setNoCombat();
 

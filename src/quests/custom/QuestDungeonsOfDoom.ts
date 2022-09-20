@@ -27,8 +27,6 @@ export class QuestDungeonsOfDoom implements QuestInfo {
   teleportis: Effect = Effect.get("Teleportitis");
   beatenUp: Effect = Effect.get("Beaten Up");
 
-  // TODO Once we have the absorb, do replace combats
-
   getId(): QuestType {
     return "Misc / UnlockDungeonsOfDoom";
   }

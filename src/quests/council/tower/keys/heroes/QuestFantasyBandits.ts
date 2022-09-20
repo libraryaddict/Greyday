@@ -272,7 +272,6 @@ export class QuestFantasyBandit extends TaskInfo implements QuestInfo {
   }
 
   mustBeDone(): boolean {
-    // TODO Throw error if more than one quest reports this
     return this.getFoughtToday() > 0 && !this.hasFoughtEnough();
   }
 
