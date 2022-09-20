@@ -39,7 +39,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "main": () => (/* binding */ GreyYouMain_main),
+  "main": () => (/* binding */ main),
   "printEndOfRun": () => (/* binding */ printEndOfRun)
 });
 
@@ -4597,100 +4597,7 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
 
 
 
-var Reabsorbed;(function (Reabsorbed) {Reabsorbed[Reabsorbed["REABSORBED"] = 0] = "REABSORBED";Reabsorbed[Reabsorbed["NOT_REABSORBED"] = 1] = "NOT_REABSORBED";})(Reabsorbed || (Reabsorbed = {}));var
-
-
-
-
-GreyYou = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {function GreyYou() {GreyAbsorber_classCallCheck(this, GreyYou);}GreyAbsorber_createClass(GreyYou, [{ key: "doCommand", value:
-    function doCommand(command) {
-      // this.getPlacesToAdv();
-    }
-
-    /*getPlacesToAdv(includeSkills: boolean = true) {
-      let fought = this.utils.getAbsorbedMonsters();
-      let map: Map<Location, AdventureLocation> = new Map();
-       for (let absorb of this.utils.getOnlyUsefulAbsorbs(
-        this.utils.getUnabsorbed()
-      )) {
-        for (let l of this.getLocations(absorb.monster)) {
-          if (map.has(l)) continue;
-           map.set(l, this.utils.getExtraAdventures(fought, l, includeSkills));
-        }
-      }
-       let sort: AdventureLocation[] = [];
-       for (let entry of map.values()) {
-        if (entry == null) {
-          continue;
-        }
-         sort.push(entry);
-      }
-       sort.sort((v1, v2) => v2.expectedTurnsInZone - v1.expectedTurnsInZone);
-      let unnatural = this.getUnnaturalLocations();
-      let impossible = this.getImpossibleLocations();
-      let intentional = this.getManualUnlocks();
-      let color = function (message: string, color: string) {
-        return `<font color='${color}'>${message}</font>`;
-      };
-       let htmls: string[] = [];
-       for (let r of sort) {
-        // TODO Highlight zones based on if we'll encounter them naturally in our path
-         // If we'll encounter this naturally, don't bother displaying yet
-        if (
-          !impossible.includes(r.location) &&
-          !intentional.includes(r.location) &&
-          !canAdv(r.location)
-        ) {
-          continue;
-        }
-         let html = `Try ${r.location}: ${r.expectedTurnsInZone} (${
-          r.turnsToGain
-        }) adventures, Monsters: ${color(
-          r.monsters.map((m) => m.name).join(", "),
-          "gray"
-        )}`;
-         if (r.skills.size > 0) {
-          html += " " + color("Grab while you're here: ", "black");
-           for (let absorb of r.skills.keys()) {
-            html += absorb.monster.name + " (" + r.skills.get(absorb) + ") ";
-          }
-        }
-         html = color(
-          html,
-          impossible.includes(r.location)
-            ? "purple"
-            : !canAdv(r.location)
-            ? "red"
-            : unnatural.includes(r.location)
-            ? "blue"
-            : "green"
-        );
-         htmls.push(html);
-      }
-       for (let html of htmls) {
-        printHtml(html);
-      }
-    }*/ }]);return GreyYou;}()));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function main(command) {
-  new GreyYou().doCommand(command);
-}
+var Reabsorbed;(function (Reabsorbed) {Reabsorbed[Reabsorbed["REABSORBED"] = 0] = "REABSORBED";Reabsorbed[Reabsorbed["NOT_REABSORBED"] = 1] = "NOT_REABSORBED";})(Reabsorbed || (Reabsorbed = {}));
 ;// CONCATENATED MODULE: ./src/utils/GreyCombat.ts
 
 
@@ -6272,8 +6179,6 @@ var QuestL10GiantTop = /*#__PURE__*/function () {function QuestL10GiantTop() {Qu
     676);QuestL10GiantTop_defineProperty(this, "punkNC",
     678);QuestL10GiantTop_defineProperty(this, "gothNC",
     675);}QuestL10GiantTop_createClass(QuestL10GiantTop, [{ key: "run", value:
-
-    // TODO Once we've got the absorbs, try replace combats
 
     function run() {
       var outfit = new GreyOutfit().setNoCombat();
@@ -9241,8 +9146,6 @@ var QuestL11PyramidTop = /*#__PURE__*/function () {function QuestL11PyramidTop()
     external_kolmafia_namespaceObject.Item.get("headpiece of the Staff of Ed"));QuestL11PyramidTop_defineProperty(this, "staff",
     external_kolmafia_namespaceObject.Item.get("Staff of Fats"));QuestL11PyramidTop_defineProperty(this, "staff2",
     external_kolmafia_namespaceObject.Item.get("[2325]Staff Of Ed"));}QuestL11PyramidTop_createClass(QuestL11PyramidTop, [{ key: "getId", value:
-
-    // TODO Once we've got the absorbs, try replace combats
 
     function getId() {
       return "Council / MacGruffin / Pyramid / Top";
@@ -15608,7 +15511,6 @@ var QuestFantasyBandit = /*#__PURE__*/function (_TaskInfo) {QuestFantasyBandits_
     } }, { key: "mustBeDone", value:
 
     function mustBeDone() {
-      // TODO Throw error if more than one quest reports this
       return this.getFoughtToday() > 0 && !this.hasFoughtEnough();
     } }, { key: "canAcceptPrimes", value:
 
@@ -19569,7 +19471,6 @@ function QuestL8MountainNinja_classCallCheck(instance, Constructor) {if (!(insta
 
 var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNinja() {QuestL8MountainNinja_classCallCheck(this, QuestL8MountainNinja);QuestL8MountainNinja_defineProperty(this, "ninja",
     external_kolmafia_namespaceObject.Location.get("Lair of the Ninja Snowmen"));QuestL8MountainNinja_defineProperty(this, "assassin",
-
     external_kolmafia_namespaceObject.Monster.get("Ninja snowman assassin"));}QuestL8MountainNinja_createClass(QuestL8MountainNinja, [{ key: "getId", value:
 
     function getId() {
@@ -23449,8 +23350,6 @@ var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom
     external_kolmafia_namespaceObject.Item.get("plus sign"));QuestDungeonsOfDoom_defineProperty(this, "teleportis",
     external_kolmafia_namespaceObject.Effect.get("Teleportitis"));QuestDungeonsOfDoom_defineProperty(this, "beatenUp",
     external_kolmafia_namespaceObject.Effect.get("Beaten Up"));}QuestDungeonsOfDoom_createClass(QuestDungeonsOfDoom, [{ key: "getId", value:
-
-    // TODO Once we have the absorb, do replace combats
 
     function getId() {
       return "Misc / UnlockDungeonsOfDoom";
@@ -30187,7 +30086,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "6ea617a";
+var lastCommitHash = "b1ac7c6";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -30579,7 +30478,7 @@ function printEndOfRun() {
   (0,external_kolmafia_namespaceObject.print)("Pulled: " + pulls.map((i) => i.name).join(", "), "gray");
 }
 
-function GreyYouMain_main() {var parameter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+function main() {var parameter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
   new GreyYouMain().handleCommand(parameter);
 }
 var __webpack_export_target__ = exports;
