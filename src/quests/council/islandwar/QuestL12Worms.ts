@@ -2,6 +2,7 @@ import {
   availableAmount,
   Effect,
   effectModifier,
+  Familiar,
   getProperty,
   haveEffect,
   haveSkill,
@@ -13,6 +14,7 @@ import {
   Skill,
   toInt,
   use,
+  useFamiliar,
   visitUrl,
 } from "kolmafia";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
@@ -79,6 +81,7 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
       // That's 30 chance a fight. That's eh, 4 fights? Lets call it 6 cos we're bad luck.
       mixup.push([null, 6]);
       mixup.push([ResourceCategory.POLAR_VORTEX, 1]);
+      mixup.push([ResourceCategory.HUGS_AND_KISSES, 1]);
       mixup.push([ResourceCategory.YELLOW_RAY, 1]);
     }
 
@@ -169,6 +172,7 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
 
     if (
       !path.canUse(ResourceCategory.POLAR_VORTEX) &&
+      !path.canUse(ResourceCategory.HUGS_AND_KISSES) &&
       !haveSkill(this.nanovision)
     ) {
       return QuestStatus.NOT_READY;
@@ -211,6 +215,10 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
       resource = path.getResource(ResourceCategory.POLAR_VORTEX);
     }
 
+    if (resource == null) {
+      resource = path.getResource(ResourceCategory.HUGS_AND_KISSES);
+    }
+
     if (this.isKillingQueen()) {
       outfit.meatDropWeight = 4;
     } else if (resource != null) {
@@ -224,6 +232,8 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
     return {
       location: chamber.location,
       outfit: outfit,
+      familiar: resource?.familiar,
+      disableFamOverride: resource?.familiar != null,
       run: () => {
         if (chamber.effect != null && haveEffect(chamber.effect) == 0) {
           use(chamber.glandsRequired);

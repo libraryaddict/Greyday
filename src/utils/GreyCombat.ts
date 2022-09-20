@@ -225,7 +225,7 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
       (lastMonster().baseHp < 2 || lastMonster().physicalResistance < 70) &&
       myMp() >= 20
     ) {
-      if (outfit.itemDropWeight >= 2 || myLevel() > 20) {
+      if (outfit.itemDropWeight >= 2 || myLevel() > 18) {
         macro.while_(
           `!pastround 15 && !hppercentbelow ${healthPerc} && hasskill Double Nanovision`,
           Macro.trySkill(Skill.get("Double Nanovision"))
@@ -235,7 +235,7 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
       // Only infinite loop if we're underleveled or have the outfit
       if (
         myLevel() <= 10 ||
-        (myLevel() < 20 &&
+        (myLevel() < 18 &&
           (!GreySettings.isHippyMode() ||
             haveOutfit("Filthy Hippy Disguise") ||
             haveOutfit("Frat Warrior Fatigues")))

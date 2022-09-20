@@ -49,6 +49,7 @@ export enum ResourceCategory {
   ZAP,
   CLOVER,
   POLAR_VORTEX,
+  HUGS_AND_KISSES,
   FIRE_EXTINGUSHER_ZONE,
   GLOVE_REPLACE,
   DECK_OF_EVERY_CARD,
@@ -83,6 +84,7 @@ export const ResourceIds = [
   "Parka: Clara's Bell",
   "Pillkeeper",
   "Portscan",
+  "Hugs and Kisses",
 ] as const;
 
 export enum PillkeeperPill {
@@ -105,6 +107,7 @@ export interface SomeResource {
   resourcesUsed?: number;
   worthInAftercore: number; // If used by garbo, how much profit would we miss out
   prepare: (outfit: GreyOutfit, props?: PropertyManager) => void;
+  familiar?: Familiar;
   fax?: (monster: Monster) => void;
   pocket?: (pocket: number) => void;
   macro?: () => Macro;
@@ -134,6 +137,21 @@ const clover: SomeResource = {
   id: "Clover",
   worthInAftercore: 22000, // How much we could sell a clover for
   prepare: () => {},
+};
+
+const xoFam = Familiar.get("XO Skeleton");
+
+const hugsAndKisses: SomeResource = {
+  type: ResourceCategory.HUGS_AND_KISSES,
+  id: "Hugs and Kisses",
+  worthInAftercore: 4000,
+  familiar: xoFam,
+  prepare: () => null,
+  macro: () =>
+    Macro.while_(
+      "!pastround 15 && !match While your foe shudders from having a bunch of their life drained away",
+      Macro.skill(Skill.get("Hugs and Kisses!"))
+    ),
 };
 
 const extingusher: Item = Item.get("industrial fire extinguisher");
@@ -606,6 +624,7 @@ const allResources = [
   hottub,
   retroRay,
   chateauPainting,
+  hugsAndKisses,
 ].sort((r1, r2) => r1.worthInAftercore - r2.worthInAftercore);
 
 export function getResources(
@@ -625,6 +644,12 @@ export function getResourcesLeft(
   switch (resourceType) {
     case "Asdon":
       return 0;
+    case "Hugs and Kisses":
+      if (!haveFamiliar(xoFam)) {
+        return 0;
+      }
+
+      return 11 - (assumeUnused ? 0 : toInt(getProperty("_xoHugsUsed")));
     case "Yellow Ray":
       const played =
         turnsPlayed() + haveEffect(Effect.get("Everything Looks Yellow"));

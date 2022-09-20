@@ -10,6 +10,7 @@ import { ResourceCategory } from "../../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { getAllCombinations } from "../../../../utils/GreyUtils";
 import { Macro } from "../../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../../utils/Properties";
 import {
@@ -35,11 +36,32 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
 
     const amountNeeded = 2 - (assumeUnstarted ? 0 : availableAmount(this.wool));
 
-    this.paths.push(new PossiblePath(2, 4 * amountNeeded));
-    this.paths.push(
-      new PossiblePath(1, 3).add(ResourceCategory.POLAR_VORTEX, amountNeeded)
-    );
-    //  this.paths.push(this.deck);
+    if (amountNeeded <= 0) {
+      this.paths.push(new PossiblePath(0));
+      return;
+    }
+
+    const combos: [ResourceCategory, number][] = [];
+    combos.push([ResourceCategory.POLAR_VORTEX, 0]);
+    combos.push([ResourceCategory.POLAR_VORTEX, 0]);
+    combos.push([ResourceCategory.HUGS_AND_KISSES, 0]);
+    combos.push([ResourceCategory.HUGS_AND_KISSES, 1]);
+    combos.push([null, 4]);
+
+    for (const combination of getAllCombinations(combos, true)) {
+      if (combination.length != amountNeeded) {
+        continue;
+      }
+
+      const fightsNeeded =
+        1 + combos.map(([, turns]) => turns).reduce((t1, t2) => t1 + t2);
+
+      const path = new PossiblePath(fightsNeeded, fightsNeeded * 4);
+
+      combination.filter(([r]) => r != null).forEach(([r]) => path.add(r));
+
+      this.paths.push(path);
+    }
   }
 
   getPossiblePaths(): PossiblePath[] {
@@ -74,15 +96,19 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
 
   run(path: PossiblePath): QuestAdventure {
     const outfit = new GreyOutfit().setItemDrops().setPlusCombat();
-    const resource = path.getResource(ResourceCategory.POLAR_VORTEX);
+    const polarVortex = path.getResource(ResourceCategory.POLAR_VORTEX);
 
-    if (resource != null) {
-      resource.prepare(outfit);
+    if (polarVortex != null) {
+      polarVortex.prepare(outfit);
     }
+
+    const hugs = path.getResource(ResourceCategory.HUGS_AND_KISSES);
 
     return {
       location: this.loc,
       outfit: outfit,
+      familiar: hugs?.familiar,
+      disableFamOverride: hugs?.familiar != null,
       orbs: [this.woolMonster],
       olfaction: path.canUse(ResourceCategory.POLAR_VORTEX)
         ? null
@@ -92,10 +118,24 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
         const settings = new AdventureSettings();
         settings.addNoBanish(this.woolMonster);
 
-        if (resource != null) {
-          settings.setStartOfFightMacro(
-            Macro.if_(this.woolMonster, resource.macro().step(resource.macro()))
-          );
+        if (polarVortex != null || hugs != null) {
+          const macro = new Macro();
+
+          if (hugs != null) {
+            macro.step(hugs.macro());
+          }
+
+          if (polarVortex != null) {
+            for (
+              let i = 0;
+              i < path.canUse(ResourceCategory.POLAR_VORTEX);
+              i++
+            ) {
+              macro.step(polarVortex.macro());
+            }
+          }
+
+          settings.setStartOfFightMacro(Macro.if_(this.woolMonster, macro));
         }
 
         const props = new PropertyManager();

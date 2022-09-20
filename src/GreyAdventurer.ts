@@ -409,9 +409,9 @@ export class GreyAdventurer {
         familiarWeight(robor) < 20;
 
       const toLevelUp = [
-        "Pocket Professor",
         haveFamiliar(robor) ? (doRobor ? "Robortender" : "") : "Hobomonkey",
         "Jumpsuited Hound Dog",
+        "Pocket Professor",
       ]
         .filter((f) => f.length > 0)
         .map((f) => Familiar.get(f))
