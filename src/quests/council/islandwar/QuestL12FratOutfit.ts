@@ -11,7 +11,6 @@ import {
   myAscensions,
   myLevel,
   outfitPieces,
-  print,
   toInt,
 } from "kolmafia";
 import { AdventureFinder } from "../../../GreyChooser";
@@ -153,8 +152,16 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (path == null || path.canUse(ResourceCategory.PULL)) {
+    if (path == null) {
       return QuestStatus.READY;
+    }
+
+    if (path.canUse(ResourceCategory.PULL)) {
+      if (myLevel() < 12) {
+        return QuestStatus.NOT_READY;
+      } else {
+        return QuestStatus.READY;
+      }
     }
 
     if (

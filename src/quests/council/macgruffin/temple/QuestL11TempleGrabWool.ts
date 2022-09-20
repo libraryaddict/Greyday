@@ -59,7 +59,7 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
         1 +
         combination.map(([, turns]) => turns).reduce((t1, t2) => t1 + t2, 0);
 
-      const path = new PossiblePath(fightsNeeded, fightsNeeded * 4);
+      const path = new PossiblePath(fightsNeeded, fightsNeeded * 3);
 
       combination.filter(([r]) => r != null).forEach(([r]) => path.add(r));
 

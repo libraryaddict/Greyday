@@ -433,7 +433,10 @@ export class GreyAdventurer {
       outfit.addBonus("+10 bonus june cleaver");
     }
 
-    if (adventure.mayFreeRun && familiarWeight(this.goose) >= 6) {
+    if (
+      adventure.mayFreeRun &&
+      (familiar != this.goose || familiarWeight(this.goose) >= 6)
+    ) {
       const item = this.freeRunners.find((i) => availableAmount(i) > 0);
 
       if (item != null) {

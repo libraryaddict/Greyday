@@ -295,7 +295,7 @@ const yellowParka: SomeResource = {
   id: "Yellow Ray",
   available: () => availableAmount(parka) > 0 && haveSkill(torso),
   resourcesUsed: 99,
-  worthInAftercore: 0,
+  worthInAftercore: -GreySettings.greyValueOfAdventure,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addItem(parka);

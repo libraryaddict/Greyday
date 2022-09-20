@@ -6,6 +6,7 @@ import {
   Location,
   Monster,
   myHp,
+  print,
   setProperty,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
@@ -134,6 +135,7 @@ export class QuestL11Black implements QuestInfo {
       orbs: this.getNeededMonsters(),
       mayFreeRun: false,
       run: () => {
+        print("Black NC in: " + ncIn, "gray");
         const props = new PropertyManager();
 
         try {
@@ -181,7 +183,7 @@ export class QuestL11Black implements QuestInfo {
     const monsters = [];
 
     if (availableAmount(this.sunkenEyes) == 0) {
-      monsters.push(this.sunkenEyes);
+      monsters.push(this.eyesMonster);
     }
 
     if (availableAmount(this.brokenWings) == 0) {
