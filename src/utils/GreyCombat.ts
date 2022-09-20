@@ -210,10 +210,6 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
   }
 
   if (haveEffect(Effect.get("Temporary Amnesia")) == 0) {
-    if (myLevel() < 4 && myFamiliar() == Familiar.get("Grey Goose")) {
-      macro = macro.trySkill(" Convert Matter to Pomade");
-    }
-
     if (
       getProperty("retroCapeSuperhero") == "vampire" &&
       getProperty("retroCapeWashingInstructions") == "kill"
