@@ -1,13 +1,11 @@
 import {
   availableAmount,
   Familiar,
-  getProperty,
   Item,
   Location,
   Monster,
   myHp,
   print,
-  setProperty,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
@@ -22,9 +20,12 @@ import { QuestType } from "../../QuestTypes";
 import { hasUnlockedLatteFlavor, LatteFlavor } from "../../../utils/LatteUtils";
 import { QuestTowerKillSkin } from "../tower/stages/QuestTowerWallSkin";
 import { GreySettings } from "../../../utils/GreySettings";
-import { currentPredictions, getEncounters } from "../../../utils/GreyUtils";
+import { getEncounters } from "../../../utils/GreyUtils";
+import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
+import { ResourceCategory } from "../../../typings/ResourceTypes";
+import { GreyPulls } from "../../../utils/GreyResources";
 
-export class QuestL11Black implements QuestInfo {
+export class QuestL11Black extends TaskInfo implements QuestInfo {
   boots: Item = Item.get("Blackberry Galoshes");
   beehive: Item = Item.get("Beehive");
   loc: Location = Location.get("The Black Forest");
@@ -39,9 +40,23 @@ export class QuestL11Black implements QuestInfo {
   toAbsorb: Monster[];
   blackberry: Item = Item.get("Blackberry");
   skinKiller: QuestTowerKillSkin = new QuestTowerKillSkin();
+  paths: PossiblePath[];
 
   level(): number {
     return 11;
+  }
+
+  createPaths(assumeUnstarted: boolean): void {
+    this.paths = [];
+    this.paths.push(new PossiblePath(17, 25));
+
+    if (availableAmount(this.boots) == 0) {
+      this.paths.push(new PossiblePath(13, 17).addPull(this.boots));
+    }
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
   }
 
   shouldWearLatte(): boolean {
@@ -95,7 +110,7 @@ export class QuestL11Black implements QuestInfo {
     return Math.max(0, fights - 4);
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     const ncIn = this.forcedNCIn();
     const ncTime = ncIn == 0;
 
@@ -135,6 +150,10 @@ export class QuestL11Black implements QuestInfo {
       orbs: this.getNeededMonsters(),
       mayFreeRun: false,
       run: () => {
+        if (path.canUse(ResourceCategory.PULL)) {
+          GreyPulls.tryPull(this.boots);
+        }
+
         print("Black NC in: " + ncIn, "gray");
         const props = new PropertyManager();
 

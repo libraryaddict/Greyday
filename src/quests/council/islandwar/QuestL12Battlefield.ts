@@ -135,6 +135,7 @@ export class QuestL12Battlefield implements QuestInfo {
       location: this.loc,
       familiar: fam,
       disableFamOverride: fam == this.gelCube,
+      mayFreeRun: false,
       run: () => {
         const burner = DelayBurners.getReadyDelayBurner();
 

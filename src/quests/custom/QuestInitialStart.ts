@@ -21,6 +21,7 @@ import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreySettings } from "../../utils/GreySettings";
+import { PropertyManager } from "../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
@@ -142,20 +143,18 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
 
         if (getProperty("breakfastCompleted") == "false") {
           let breakfastScript = getProperty("breakfastScript");
-          const cloverProp =
-            "grabClovers" + (inHardcore() ? "Hardcore" : "Softcore");
-          const propValue = getProperty(cloverProp);
+          const props = new PropertyManager();
+          props.setProperty("grabCloversSoftcore", "true");
+          props.setProperty("grabCloversHardcore", "true");
 
           try {
-            setProperty(cloverProp, "true");
-
             if (breakfastScript == "") {
               breakfastScript = "breakfast";
             }
 
             cliExecute(breakfastScript);
           } finally {
-            setProperty(cloverProp, propValue);
+            props.resetAll();
           }
         }
 

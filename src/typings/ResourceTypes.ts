@@ -352,8 +352,7 @@ const retroRay: SomeResource = {
     }
   },
   macro: () => Macro.skill(Skill.get("Unleash the Devil's Kiss")),
-  ready: () =>
-    myMeat() > 300 && haveEffect(Effect.get("Everything Looks Yellow")) == 0,
+  ready: () => haveEffect(Effect.get("Everything Looks Yellow")) == 0,
 };
 
 const cosplaySaber: Item = Item.get("Fourth of May Cosplay Saber");
