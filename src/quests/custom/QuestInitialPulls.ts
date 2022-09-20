@@ -26,8 +26,8 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
   possiblePulls: [Item, number][] = [
     [Item.get("Giant Yellow Hat"), -35],
     [Item.get("Mafia Thumb Ring"), -30],
-    [Item.get("Portable cassette player"), -20],
-    [Item.get("Pantsgiving"), -20],
+    [Item.get("Portable cassette player"), -15],
+    [Item.get("Pantsgiving"), -10],
   ];
   highValueSells: Item[] = [
     Item.get("1,970 carat gold"),
