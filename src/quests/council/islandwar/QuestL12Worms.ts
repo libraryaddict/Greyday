@@ -234,7 +234,9 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
 
         if (resource != null && !this.isKillingQueen()) {
           resource.prepare(null, props);
-          killingBlow = resource.macro().skill(this.nanovision).repeat();
+          killingBlow = Macro.if_("monstername filthworm", resource.macro())
+            .skill(this.nanovision)
+            .repeat();
         } else {
           killingBlow = Macro.skill(this.nanovision).repeat();
         }
