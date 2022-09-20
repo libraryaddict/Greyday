@@ -22,7 +22,7 @@ export function getGreySettings(): GreySetting[] {
     description:
       "Should the script halt when it reaches the tower? False by default. Useful as continuing after breaking ronin takes less turns. This will change the behavior of the script to skip some zones.",
     valid: (value) => value == "true" || value == "false",
-    default: false,
+    default: true,
   };
 
   const moonTune: GreySetting = {

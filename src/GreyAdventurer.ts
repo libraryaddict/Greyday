@@ -76,7 +76,7 @@ export class GreyAdventurer {
     new TaskJuneCleaver(),
     new TaskBoomboxSwitch(),
     new TaskEquipDistillery(),
-    new TaskBountyHunter(),
+    //new TaskBountyHunter(),
   ];
   static currentAdventure: FoundAdventure;
   freeRunners: Item[] = [
