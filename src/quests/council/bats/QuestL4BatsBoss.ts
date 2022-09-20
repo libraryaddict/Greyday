@@ -53,8 +53,6 @@ export class QuestL4BatsBoss implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    // TODO If lobster needs a backup
-
     return QuestStatus.READY;
   }
 
