@@ -2,6 +2,7 @@ import {
   availableAmount,
   Effect,
   effectModifier,
+  equippedAmount,
   Familiar,
   getProperty,
   haveEffect,
@@ -234,19 +235,30 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
       outfit: outfit,
       familiar: resource?.familiar,
       disableFamOverride: resource?.familiar != null,
+      mayFreeRun:
+        resource != null && resource.type != ResourceCategory.YELLOW_RAY,
+      freeRun: (monster) => !monster.name.includes("filthworm"),
       run: () => {
         if (chamber.effect != null && haveEffect(chamber.effect) == 0) {
           use(chamber.glandsRequired);
         }
 
+        const tryRun =
+          equippedAmount(Item.get("Greatest American Pants")) +
+            equippedAmount(Item.get("navel ring of navel gazing")) >
+          0;
         let killingBlow: Macro;
         const props = new PropertyManager();
 
         if (resource != null && !this.isKillingQueen()) {
           resource.prepare(null, props);
-          killingBlow = Macro.if_("monstername filthworm", resource.macro())
-            .skill(this.nanovision)
-            .repeat();
+          killingBlow = Macro.if_("monstername filthworm", resource.macro());
+
+          if (tryRun) {
+            killingBlow.runaway();
+          } else {
+            killingBlow.skill(this.nanovision).repeat();
+          }
         } else {
           killingBlow = Macro.skill(this.nanovision).repeat();
         }

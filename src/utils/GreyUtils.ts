@@ -222,7 +222,7 @@ export function getAllCombinations<Type>(
     // If we don't want the same arrays but in different orders
     if (uniquesOnly) {
       const id = temp
-        .map((t) => uniques.indexOf(t))
+        .map((t) => uniques.findIndex((v) => v === t))
         .sort()
         .join(",");
 

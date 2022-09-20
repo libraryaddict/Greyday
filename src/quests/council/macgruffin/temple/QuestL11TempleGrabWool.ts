@@ -5,6 +5,7 @@ import {
   Item,
   Location,
   Monster,
+  print,
 } from "kolmafia";
 import { ResourceCategory } from "../../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
@@ -46,7 +47,8 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
     combos.push([ResourceCategory.POLAR_VORTEX, 0]);
     combos.push([ResourceCategory.HUGS_AND_KISSES, 0]);
     combos.push([ResourceCategory.HUGS_AND_KISSES, 1]);
-    combos.push([null, 4]);
+    combos.push([null, 1]);
+    combos.push([null, 1]);
 
     for (const combination of getAllCombinations(combos, true)) {
       if (combination.length != amountNeeded) {
@@ -54,7 +56,8 @@ export class QuestL11TempleGrabWool extends TaskInfo implements QuestInfo {
       }
 
       const fightsNeeded =
-        1 + combos.map(([, turns]) => turns).reduce((t1, t2) => t1 + t2);
+        1 +
+        combination.map(([, turns]) => turns).reduce((t1, t2) => t1 + t2, 0);
 
       const path = new PossiblePath(fightsNeeded, fightsNeeded * 4);
 

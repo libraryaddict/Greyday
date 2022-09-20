@@ -144,14 +144,18 @@ const xoFam = Familiar.get("XO Skeleton");
 const hugsAndKisses: SomeResource = {
   type: ResourceCategory.HUGS_AND_KISSES,
   id: "Hugs and Kisses",
-  worthInAftercore: 4000,
+  worthInAftercore: 1500,
   familiar: xoFam,
   prepare: () => null,
-  macro: () =>
-    Macro.while_(
-      "!pastround 15 && !match While your foe shudders from having a bunch of their life drained away",
-      Macro.skill(Skill.get("Hugs and Kisses!"))
-    ),
+  macro: () => {
+    const skill = Skill.get("Hugs and Kisses!");
+    return Macro.while_(
+      `!pastround 15 && hasskill ${toInt(
+        skill
+      )} && !match While your foe shudders from having a bunch of their life drained away`,
+      Macro.skill(skill)
+    );
+  },
 };
 
 const extingusher: Item = Item.get("industrial fire extinguisher");
