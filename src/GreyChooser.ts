@@ -724,7 +724,7 @@ export class AdventureFinder {
         "Expected a quest status of ready or faster later on " +
         primed.quest.getId() +
         " which was primed for a resource " +
-        primed.resource.id
+        primed.resource.name
       );
     }
 
@@ -814,7 +814,7 @@ export class AdventureFinder {
       print(
         quest.getId() +
           " has primed " +
-          primed.resource.id +
+          primed.resource.name +
           " of " +
           ResourceCategory[primed.resource.type],
         "blue"

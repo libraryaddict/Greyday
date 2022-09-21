@@ -58,7 +58,7 @@ export class SimmedPath {
         " reports that it has resources left over despite being finished. Resources: " +
         unused[1].resourcesAvailable.map(
           (r) =>
-            r.id +
+            r.name +
             " x " +
             ResourceCategory[r.type] +
             " (Uses " +
@@ -90,7 +90,7 @@ export class SimmedPath {
     const used: Map<string, [string, number, number][]> = new Map();
 
     for (const [quest, resource] of this.resourcesUsed) {
-      const key = resource.id;
+      const key = resource.name;
 
       if (!used.has(key)) {
         used.set(key, []);

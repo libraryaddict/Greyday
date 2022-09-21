@@ -183,13 +183,13 @@ export class GreyAdventurer {
 
     print(
       `These resources were allowed to be used: ${snapshotBeforeRun.resources.map(
-        (r) => r.id + " (" + r.type + ", uses " + (r.resourcesUsed ?? 1) + ")"
+        (r) => r.name + " (" + r.type + ", uses " + (r.resourcesUsed ?? 1) + ")"
       )}`,
       "red"
     );
     print(
       `These resources were marked as used: ${changedBy.resources.map(
-        (r) => r.id + " (" + r.type + ", uses " + (r.resourcesUsed ?? 1) + ")"
+        (r) => r.name + " (" + r.type + ", uses " + (r.resourcesUsed ?? 1) + ")"
       )}`,
       "red"
     );

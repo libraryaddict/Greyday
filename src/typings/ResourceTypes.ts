@@ -103,7 +103,7 @@ export type ResourceId = typeof ResourceIds[number];
 export interface SomeResource {
   type: ResourceCategory;
   resource: ResourceId;
-  id?: string;
+  name?: string;
   available?: () => boolean; // Some iotms might not be available, like parka and torso
   resourcesUsed?: number;
   worthInAftercore: number; // If used by garbo, how much profit would we miss out
@@ -126,6 +126,7 @@ const glove = Item.get("Powerful Glove");
 const gloveReplace: SomeResource = {
   type: ResourceCategory.GLOVE_REPLACE,
   resource: "Powerful Glove",
+  name: "Powerful Glove: Replace",
   worthInAftercore: 22000,
   resourcesUsed: 10,
   prepare: (outfit: GreyOutfit) =>
@@ -164,6 +165,7 @@ const extingusher: Item = Item.get("industrial fire extinguisher");
 const extingusherPolar: SomeResource = {
   type: ResourceCategory.POLAR_VORTEX,
   resource: "Fire Extingusher",
+  name: "Fire Extingusher: Polar Vortex",
   resourcesUsed: 10,
   worthInAftercore: 1500, // Tattered paper cost and assume free run
   prepare: (outfit: GreyOutfit) =>
@@ -174,6 +176,7 @@ const extingusherPolar: SomeResource = {
 const extingusherZoneSpecific: SomeResource = {
   type: ResourceCategory.FIRE_EXTINGUSHER_ZONE,
   resource: "Fire Extingusher",
+  name: "Fire Extingusher: Spray Down Zone",
   resourcesUsed: 20,
   worthInAftercore: 3000, // Tattered paper cost x 2
   prepare: (outfit: GreyOutfit) =>
@@ -294,7 +297,7 @@ const ncParka: SomeResource = {
 const yellowParka: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
   resource: "Yellow Ray",
-  id: "Parka: Yellow Ray",
+  name: "Parka: Yellow Ray",
   available: () => availableAmount(parka) > 0 && haveSkill(torso),
   resourcesUsed: 99,
   worthInAftercore: -3000,
@@ -319,7 +322,7 @@ const vipInvitation: Item = Item.get("Clan VIP Lounge key");
 const yellowRocket: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
   resource: "Yellow Ray",
-  id: "Yellow Rocket",
+  name: "Yellow Rocket",
   worthInAftercore: 250, // Cost of a yellow rocket
   resourcesUsed: 75,
   available: () => availableAmount(vipInvitation) > 0,
@@ -342,7 +345,7 @@ const retrocape: Item = Item.get("unwrapped knock-off retro superhero cape");
 const retroRay: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
   resource: "Yellow Ray",
-  id: "Retrocape: Yellow Ray",
+  name: "Retrocape: Yellow Ray",
   worthInAftercore: 0,
   available: () => availableAmount(retrocape) > 0,
   resourcesUsed: 100,
@@ -364,6 +367,7 @@ const cosplaySaber: Item = Item.get("Fourth of May Cosplay Saber");
 const cosplayYellowRay: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
   resource: "Cosplay Saber",
+  name: "Cosplay Saber: YR",
   // If we have more than 60 pills, the saber is free. Otherwise it's worth 3k meat when its alien free day
   worthInAftercore:
     storageAmount(Item.get("distention pill")) > 60
@@ -397,6 +401,7 @@ const backupCopier: SomeResource = {
 const cosplayCopier: SomeResource = {
   type: ResourceCategory.OLFACT_COPIER,
   resource: "Cosplay Saber",
+  name: "Cosplay Saber: Friends",
   worthInAftercore: 3000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
@@ -505,6 +510,7 @@ const wishFaxer: SomeResource = {
 const cosplayBanisher: SomeResource = {
   type: ResourceCategory.BANISHER,
   resource: "Cosplay Saber",
+  name: "Cosplay Saber: Banish",
   worthInAftercore: 3000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
@@ -549,6 +555,7 @@ const deckOfEveryCard: SomeResource = {
 const deckOfEveryCardCheat: SomeResource = {
   type: ResourceCategory.DECK_OF_EVERY_CARD_CHEAT,
   resource: "Deck of Every Card",
+  name: "Deck of Every Card: Cheat",
   worthInAftercore: 20000, // Worth 20k, 20k and 10k (Blue mana x2, then misc)
   resourcesUsed: 5,
   prepare: () => {},
@@ -634,7 +641,7 @@ const allResources = [
   hugsAndKisses,
 ]
   .map((r) => {
-    r.id = r.id ?? r.resource;
+    r.name = r.name ?? r.resource;
 
     return r;
   })

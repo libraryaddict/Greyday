@@ -65,7 +65,7 @@ export class ResourcesSnapshot {
     const resourceStrings = this.resources
       .map(
         (s) =>
-          s.id +
+          s.name +
             " x " +
             ResourceCategory[s.type] +
             " - Uses " +
@@ -195,7 +195,7 @@ export class PossiblePath {
         doDebug();
         throw `Unexpected amount of a resource used! Expected a multiple of ${
           resources[0].resourcesUsed ?? 1
-        } from ${resources[0].id} of type ${
+        } from ${resources[0].name} of type ${
           ResourceCategory[resources[0].type]
         } but got a total of ${diff.get(
           resourceId
@@ -208,7 +208,7 @@ export class PossiblePath {
         doDebug();
         throw `Unexpected amount of a resource used! Expected ${
           resources.length
-        } or less of ${resources[0].id} of type ${
+        } or less of ${resources[0].name} of type ${
           ResourceCategory[resources[0].type]
         } but got a total of ${diff.get(
           resourceId
@@ -222,7 +222,7 @@ export class PossiblePath {
       changed.resources.push(...resources.slice(0, amountUsed));
       print(
         "Detected resource change, " +
-          resources[0].id +
+          resources[0].name +
           " of " +
           ResourceCategory[resources[0].type] +
           " x " +
@@ -256,7 +256,7 @@ export class PossiblePath {
       if (index >= 0) {
         this.resourcesAvailable.splice(index, 1);
       } else {
-        throw `Expected to find a ${resource.id} of type ${
+        throw `Expected to find a ${resource.name} of type ${
           ResourceCategory[resource.type]
         } but none were remaining!`;
       }
@@ -458,14 +458,16 @@ export function getResourcesChanged(
     }
 
     newSnapshot.resources.push(resource);
-    print("Removing " + resource.id + " x " + ResourceCategory[resource.type]);
+    print(
+      "Removing " + resource.name + " x " + ResourceCategory[resource.type]
+    );
   });
 
   if (newSnapshot.resources.length > 0) {
     print(
       "We manually used: " +
         newSnapshot.resources
-          .map((r) => r.id + " x " + ResourceCategory[r.type])
+          .map((r) => r.name + " x " + ResourceCategory[r.type])
           .join(", ")
     );
   }
