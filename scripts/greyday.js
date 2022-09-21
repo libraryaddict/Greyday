@@ -7002,17 +7002,17 @@ var QuestL11Black = /*#__PURE__*/function (_TaskInfo) {QuestL11Black_inherits(Qu
       filter((_ref) => {var _ref2 = QuestL11Black_slicedToArray(_ref, 1),e = _ref2[0];return e.startsWith("black ") || e == "All Over The Map";}).
       reverse();
 
-      var fights = 0;var _iterator = QuestL11Black_createForOfIteratorHelper(
+      var fightsSinceLastNC = 0;var _iterator = QuestL11Black_createForOfIteratorHelper(
 
       encounters),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _step$value = QuestL11Black_slicedToArray(_step.value, 1),encounter = _step$value[0];
           if (encounter == "All Over The Map") {
             break;
           }
 
-          fights++;
+          fightsSinceLastNC++;
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
 
-      return Math.max(0, fights - 4);
+      return Math.max(0, 4 - fightsSinceLastNC);
     } }, { key: "run", value:
 
     function run(path) {
@@ -7598,7 +7598,12 @@ var QuestL11DesertGnome = /*#__PURE__*/function () {function QuestL11DesertGnome
 
       }
 
-      throw "Not sure why we got to this state";
+      return {
+        location: null,
+        run: () => {
+          throw "Not sure why we got to this state";
+        } };
+
     } }, { key: "turnInItem", value:
 
     function turnInItem() {
@@ -8554,7 +8559,7 @@ var QuestTrapGhost = /*#__PURE__*/function () {function QuestTrapGhost() {QuestT
     function run() {
       var outfit = getGhostBustingOutfit();
 
-      if (this.getLocation() == this.icyPeak) {
+      if (this.isReady() && this.getLocation() == this.icyPeak) {
         outfit.addBonus("+10 cold res 5 min");
       }
 
@@ -15002,7 +15007,7 @@ var QuestKeyStuffAbstract = /*#__PURE__*/function (_TaskInfo) {QuestKeyStuffAbst
       }
 
       // If we can fight bandit
-      if ((0,external_kolmafia_namespaceObject.toInt)("_foughtFantasyRealm") < 5) {
+      if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_foughtFantasyRealm")) < 5) {
         // If we own fantasyrealm
         if (
         (0,external_kolmafia_namespaceObject.getProperty)("frAlways") == "true" ||
@@ -18739,7 +18744,7 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
     function getSword() {
       var items = this.swords.filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0);
 
-      if (items.length == 0) {
+      if (items.length == 0 && (0,external_kolmafia_namespaceObject.myMeat)() >= 100) {
         (0,external_kolmafia_namespaceObject.retrieveItem)(external_kolmafia_namespaceObject.Item.get("sweet ninja sword"));
 
         return this.getSword();
@@ -22714,7 +22719,12 @@ var QuestManorLights = /*#__PURE__*/function () {
         }
       }
 
-      throw "Neither steve or eliza were ready!";
+      return {
+        location: null,
+        run: () => {
+          throw "Neither steve or eliza were ready!";
+        } };
+
     } }, { key: "doEliza", value:
 
     function doEliza() {
@@ -23263,7 +23273,7 @@ var QuestBugbearBakery = /*#__PURE__*/function () {function QuestBugbearBakery()
     } }, { key: "getLocations", value:
 
     function getLocations() {
-      return [this.garage];
+      return (0,external_kolmafia_namespaceObject.knollAvailable)() ? [] : [this.garage];
     } }]);return QuestBugbearBakery;}();
 ;// CONCATENATED MODULE: ./src/quests/custom/QuestCustomPurchases.ts
 function QuestCustomPurchases_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestCustomPurchases_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestCustomPurchases_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestCustomPurchases_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestCustomPurchases_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestCustomPurchases_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
@@ -27902,7 +27912,7 @@ var AdventureFinder = /*#__PURE__*/function () {
     function setPossibleAdventures() {var _this = this;
       this.possibleAdventures = [];var _iterator = GreyChooser_createForOfIteratorHelper(
 
-      this.getDoableQuests()),_step;try {var _loop = function _loop() {var _step$value = GreyChooser_slicedToArray(_step.value, 2),quest = _step$value[0],path = _step$value[1];
+      this.viableQuests),_step;try {var _loop = function _loop() {var _step$value = GreyChooser_slicedToArray(_step.value, 2),quest = _step$value[0],path = _step$value[1];
           var adventure = quest.run(path);
           var details = void 0;
 
@@ -28284,15 +28294,16 @@ var AdventureFinder = /*#__PURE__*/function () {
 
     } }, { key: "getDoableQuests", value:
 
-    function getDoableQuests() {
+    function getDoableQuests() {var allQuests = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       var quests = [];
 
       var tryAdd = (q, path) => {
-        if (q.level() > (0,external_kolmafia_namespaceObject.myLevel)() || q.level() < 0) {
+        if (!allQuests && q.level() > (0,external_kolmafia_namespaceObject.myLevel)() || q.level() < 0) {
           return;
         }
 
         if (
+        !allQuests &&
         q.level() * ((0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Infinite Loop")) ? 1 : 6) >
         (0,external_kolmafia_namespaceObject.myBasestat)(external_kolmafia_namespaceObject.Stat.get("Moxie")))
         {
@@ -28301,11 +28312,10 @@ var AdventureFinder = /*#__PURE__*/function () {
 
         var status = q.status(path);
 
-        if (status == QuestStatus.COMPLETED) {
-          return;
-        }
-
-        if (status == QuestStatus.NOT_READY) {
+        if (
+        !allQuests && (
+        status == QuestStatus.COMPLETED || status == QuestStatus.NOT_READY))
+        {
           return;
         }
 
@@ -28319,7 +28329,7 @@ var AdventureFinder = /*#__PURE__*/function () {
       return quests;
     } }, { key: "start", value:
 
-    function start() {
+    function start() {var allQuests = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       this.setPreAbsorbs();
 
       if (this.path.isRecalculateNeeded()) {
@@ -28327,10 +28337,10 @@ var AdventureFinder = /*#__PURE__*/function () {
         this.setPreAbsorbs();
       }
 
-      this.viableQuests = this.getDoableQuests();
+      this.viableQuests = this.getDoableQuests(allQuests);
       this.setAbsorbs();
       this.defeated = this.absorbs.getAbsorbedMonstersFromInstance();
-      this.setQuestLocations();
+      this.setQuestLocations(allQuests);
       this.setPossibleAdventures();
     } }, { key: "setPreAbsorbs", value:
 
@@ -28378,11 +28388,11 @@ var AdventureFinder = /*#__PURE__*/function () {
         }} catch (err) {_iterator10.e(err);} finally {_iterator10.f();}
     } }, { key: "setQuestLocations", value:
 
-    function setQuestLocations() {
+    function setQuestLocations(allQuests) {
       this.questLocations = [];var _iterator11 = GreyChooser_createForOfIteratorHelper(
 
       this.path.thisPath),_step11;try {for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {var _this$questLocations;var _step11$value = GreyChooser_slicedToArray(_step11.value, 2),quest = _step11$value[0],path = _step11$value[1];
-          if (quest.status(path) == QuestStatus.COMPLETED) {
+          if (!allQuests && quest.status(path) == QuestStatus.COMPLETED) {
             continue;
           }
 
@@ -30016,7 +30026,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "7899bc3";
+var lastCommitHash = "1063dc1";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -30246,7 +30256,7 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
 
       if ((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") == "") {
         (0,external_kolmafia_namespaceObject.print)(
-        "The 'greyBreakAtTower' setting has not been set, the script will not break when it reaches the tower.",
+        "The 'greyBreakAtTower' setting has not been set, the script will break when it reaches the tower.",
         "red");
 
       }
@@ -30267,7 +30277,27 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
       }
 
       if (command == "status") {
-        this.adventures.adventureFinder.start();
+        this.adventures.adventureFinder.start(true);
+        this.adventures.adventureFinder.possibleAdventures.sort((a1, a2) => {
+          if (a1.quest == null != (a2.quest == null)) {
+            return a1.quest == null ? 1 : -1;
+          }
+
+          if (a1.quest != null) {
+            return a1.quest.getId().localeCompare(a2.quest.getId());
+          }
+
+          if (a1.status != a2.status) {
+            return a1.status - a2.status;
+          }
+
+          if (a1.considerPriority != a2.considerPriority) {
+            return a1.considerPriority - a2.considerPriority;
+          }
+
+          return 0;
+        });
+
         this.adventures.adventureFinder.printStatus(
         this.adventures.adventureFinder.possibleAdventures);
 
