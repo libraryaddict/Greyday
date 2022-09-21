@@ -59,12 +59,13 @@ export class DelayBurningVoter implements DelayBurner {
   }
 
   isViable(): boolean {
-    return (
-      availableAmount(this.sticker) > 0 ||
-      getProperty("voteAlways") == "true" ||
-      getProperty("_voteToday") == "true" ||
-      availableAmount(this.absentee) > 0
-    );
+    return availableAmount(this.sticker) > 0;
+    // return (
+    //   availableAmount(this.sticker) > 0 ||
+    //   getProperty("voteAlways") == "true" ||
+    //   getProperty("_voteToday") == "true" ||
+    //   availableAmount(this.absentee) > 0
+    // );
   }
 
   isFree(): boolean {
