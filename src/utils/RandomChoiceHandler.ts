@@ -124,6 +124,10 @@ export function getBackupChoices(): [number, number][] {
   choices(924, 1);
 
   // Hidden city
+  choices(785, 6);
+  choices(783, 6);
+  choices(781, 6);
+  choices(787, 6);
   choices(791, 6);
   choices(788, 1);
   choices(786, 1);
