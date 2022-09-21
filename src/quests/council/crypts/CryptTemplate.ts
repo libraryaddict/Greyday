@@ -40,7 +40,7 @@ export abstract class CryptL7Template implements QuestInfo {
   getSword(): Item {
     const items = this.swords.filter((i) => availableAmount(i) > 0);
 
-    if (items.length == 0) {
+    if (items.length == 0 && myMeat() >= 100) {
       retrieveItem(Item.get("sweet ninja sword"));
 
       return this.getSword();

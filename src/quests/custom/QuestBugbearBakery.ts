@@ -83,6 +83,6 @@ export class QuestBugbearBakery implements QuestInfo {
   }
 
   getLocations(): Location[] {
-    return [this.garage];
+    return knollAvailable() ? [] : [this.garage];
   }
 }

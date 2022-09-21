@@ -126,7 +126,7 @@ export class AdventureFinder {
   setPossibleAdventures() {
     this.possibleAdventures = [];
 
-    for (const [quest, path] of this.getDoableQuests()) {
+    for (const [quest, path] of this.viableQuests) {
       const adventure = quest.run(path);
       let details: AbsorbDetails;
 
@@ -508,28 +508,28 @@ export class AdventureFinder {
     };
   }
 
-  getDoableQuests(): [QuestInfo, PossiblePath][] {
+  getDoableQuests(allQuests: boolean = false): [QuestInfo, PossiblePath][] {
     const quests: [QuestInfo, PossiblePath][] = [];
 
     const tryAdd = (q: QuestInfo, path: PossiblePath) => {
-      if (q.level() > myLevel() || q.level() < 0) {
+      if ((!allQuests && q.level() > myLevel()) || q.level() < 0) {
         return;
       }
 
       if (
+        !allQuests &&
         q.level() * (haveSkill(Skill.get("Infinite Loop")) ? 1 : 6) >
-        myBasestat(Stat.get("Moxie"))
+          myBasestat(Stat.get("Moxie"))
       ) {
         return;
       }
 
       const status = q.status(path);
 
-      if (status == QuestStatus.COMPLETED) {
-        return;
-      }
-
-      if (status == QuestStatus.NOT_READY) {
+      if (
+        !allQuests &&
+        (status == QuestStatus.COMPLETED || status == QuestStatus.NOT_READY)
+      ) {
         return;
       }
 
@@ -543,7 +543,7 @@ export class AdventureFinder {
     return quests;
   }
 
-  start() {
+  start(allQuests: boolean = false) {
     this.setPreAbsorbs();
 
     if (this.path.isRecalculateNeeded()) {
@@ -551,10 +551,10 @@ export class AdventureFinder {
       this.setPreAbsorbs();
     }
 
-    this.viableQuests = this.getDoableQuests();
+    this.viableQuests = this.getDoableQuests(allQuests);
     this.setAbsorbs();
     this.defeated = this.absorbs.getAbsorbedMonstersFromInstance();
-    this.setQuestLocations();
+    this.setQuestLocations(allQuests);
     this.setPossibleAdventures();
   }
 
@@ -602,11 +602,11 @@ export class AdventureFinder {
     }
   }
 
-  setQuestLocations() {
+  setQuestLocations(allQuests: boolean) {
     this.questLocations = [];
 
     for (const [quest, path] of this.path.thisPath) {
-      if (quest.status(path) == QuestStatus.COMPLETED) {
+      if (!allQuests && quest.status(path) == QuestStatus.COMPLETED) {
         continue;
       }
 

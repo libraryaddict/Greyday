@@ -133,7 +133,12 @@ export class QuestL11DesertGnome implements QuestInfo {
       };
     }
 
-    throw "Not sure why we got to this state";
+    return {
+      location: null,
+      run: () => {
+        throw "Not sure why we got to this state";
+      },
+    };
   }
 
   turnInItem() {

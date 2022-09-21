@@ -283,7 +283,12 @@ export class QuestManorLights implements QuestInfo {
       }
     }
 
-    throw "Neither steve or eliza were ready!";
+    return {
+      location: null,
+      run: () => {
+        throw "Neither steve or eliza were ready!";
+      },
+    };
   }
 
   doEliza(): QuestAdventure {

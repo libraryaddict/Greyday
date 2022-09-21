@@ -248,7 +248,7 @@ class GreyYouMain {
 
     if (getProperty("greyBreakAtTower") == "") {
       print(
-        "The 'greyBreakAtTower' setting has not been set, the script will not break when it reaches the tower.",
+        "The 'greyBreakAtTower' setting has not been set, the script will break when it reaches the tower.",
         "red"
       );
     }
@@ -269,7 +269,27 @@ class GreyYouMain {
     }
 
     if (command == "status") {
-      this.adventures.adventureFinder.start();
+      this.adventures.adventureFinder.start(true);
+      this.adventures.adventureFinder.possibleAdventures.sort((a1, a2) => {
+        if ((a1.quest == null) != (a2.quest == null)) {
+          return a1.quest == null ? 1 : -1;
+        }
+
+        if (a1.quest != null) {
+          return a1.quest.getId().localeCompare(a2.quest.getId());
+        }
+
+        if (a1.status != a2.status) {
+          return a1.status - a2.status;
+        }
+
+        if (a1.considerPriority != a2.considerPriority) {
+          return a1.considerPriority - a2.considerPriority;
+        }
+
+        return 0;
+      });
+
       this.adventures.adventureFinder.printStatus(
         this.adventures.adventureFinder.possibleAdventures
       );

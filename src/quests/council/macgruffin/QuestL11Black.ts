@@ -97,17 +97,17 @@ export class QuestL11Black extends TaskInfo implements QuestInfo {
       .filter(([e]) => e.startsWith("black ") || e == "All Over The Map")
       .reverse();
 
-    let fights = 0;
+    let fightsSinceLastNC = 0;
 
     for (const [encounter] of encounters) {
       if (encounter == "All Over The Map") {
         break;
       }
 
-      fights++;
+      fightsSinceLastNC++;
     }
 
-    return Math.max(0, fights - 4);
+    return Math.max(0, 4 - fightsSinceLastNC);
   }
 
   run(path: PossiblePath): QuestAdventure {
