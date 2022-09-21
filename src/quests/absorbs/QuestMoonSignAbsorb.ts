@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  canadiaAvailable,
   currentRound,
   Familiar,
   familiarWeight,
@@ -32,10 +33,7 @@ export abstract class QuestMoonSignAbsorb
   implements QuestInfo
 {
   spoon: Item = Item.get("hewn moon-rune spoon");
-  toAbsorb?: Monster[];
   goose: Familiar = Familiar.get("Grey Goose");
-  faxing: PossiblePath;
-  ignore: PossiblePath = new PossiblePath(14);
   paths: PossiblePath[];
   abstract monster: Monster;
   abstract location: Location;
@@ -65,7 +63,7 @@ export abstract class QuestMoonSignAbsorb
       return QuestStatus.NOT_READY;
     }
 
-    if (this.toAbsorb.length == 0) {
+    if (AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)) {
       return QuestStatus.COMPLETED;
     }
 
@@ -117,6 +115,7 @@ export abstract class QuestMoonSignAbsorb
 
     return {
       location: this.location,
+      orbs: [this.monster],
       freeRun: (monster) => monster != this.monster,
       run: () => {
         greyAdv(this.location);
@@ -135,16 +134,16 @@ export abstract class QuestMoonSignAbsorb
     }
 
     this.paths = [];
-    this.faxing = new PossiblePath(1);
+    const faxing = new PossiblePath(1);
 
     if (
       assumeUnstarted ||
       !AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)
     ) {
-      this.faxing.addFax(this.monster);
+      faxing.addFax(this.monster);
     }
 
-    this.paths.push(this.faxing, this.ignore);
+    this.paths.push(faxing, new PossiblePath(14));
   }
 
   getPossiblePaths(): PossiblePath[] {
@@ -160,7 +159,11 @@ export abstract class QuestMoonSignAbsorb
       return this.moonZone == "Gnomad";
     }
 
-    return this.moonZone == "Canadia";
+    if (canadiaAvailable()) {
+      return this.moonZone == "Canadia";
+    }
+
+    return false;
   }
 
   willMoonTune(assumeUnstarted: boolean): boolean {
