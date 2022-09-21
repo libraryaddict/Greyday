@@ -478,7 +478,7 @@ export class GreyRequirements {
       "Mayday Contract",
       "Gives a nice +combat cape and starting 5k meat boost",
       Required.USEFUL,
-      toBoolean(getProperty("maydayContractOwned"))
+      toBoolean(getProperty("hasMaydayContract"))
     );
 
     add(
@@ -491,10 +491,10 @@ export class GreyRequirements {
 
     add(
       Type.IOTM,
-      "Short Order Cook",
+      "Shorter-Order Cook",
       "Great for tower killing and provides an absorb at the start of your run",
       Required.USEFUL,
-      haveFamiliar(Familiar.get("Short Order Cook"))
+      haveFamiliar(Familiar.get("Shorter-Order Cook"))
     );
 
     add(
