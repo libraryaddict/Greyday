@@ -11226,6 +11226,7 @@ function QuestL11HiddenPark_classCallCheck(instance, Constructor) {if (!(instanc
 
 
 
+
 var QuestL11HiddenPark = /*#__PURE__*/function () {function QuestL11HiddenPark() {QuestL11HiddenPark_classCallCheck(this, QuestL11HiddenPark);QuestL11HiddenPark_defineProperty(this, "matches",
     external_kolmafia_namespaceObject.Item.get("Book of Matches"));QuestL11HiddenPark_defineProperty(this, "sword",
     external_kolmafia_namespaceObject.Item.get("Antique Machete"));QuestL11HiddenPark_defineProperty(this, "loc",
@@ -11282,7 +11283,9 @@ var QuestL11HiddenPark = /*#__PURE__*/function () {function QuestL11HiddenPark()
       (0,external_kolmafia_namespaceObject.availableAmount)(this.book) == 0 &&
       this.hasRelocatedJanitors();
 
-      if (bottle) {
+      var pred = currentPredictions().get(this.loc);
+
+      if (bottle && (pred == null || pred == this.janitor)) {
         outfit.setChampagneBottle();
       }
 
@@ -23021,6 +23024,7 @@ function QuestAbsorbStarMonster_classCallCheck(instance, Constructor) {if (!(ins
 
 
 
+
 var QuestAbsorbStarMonster = /*#__PURE__*/function (_TaskInfo) {QuestAbsorbStarMonster_inherits(QuestAbsorbStarMonster, _TaskInfo);var _super = QuestAbsorbStarMonster_createSuper(QuestAbsorbStarMonster);function QuestAbsorbStarMonster() {var _this;QuestAbsorbStarMonster_classCallCheck(this, QuestAbsorbStarMonster);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "evenMonster",
     external_kolmafia_namespaceObject.Monster.get("One-Eyed Willie"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "oddMonster",
     external_kolmafia_namespaceObject.Monster.get("Little Man in the Canoe"));QuestAbsorbStarMonster_defineProperty(QuestAbsorbStarMonster_assertThisInitialized(_this), "familiar",
@@ -23067,11 +23071,14 @@ var QuestAbsorbStarMonster = /*#__PURE__*/function (_TaskInfo) {QuestAbsorbStarM
         return QuestStatus.COMPLETED;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision)) {
+      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.familiar) < 6) {
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.familiar) < 6) {
+      if (
+      !(0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision) &&
+      !GreySettings.shouldAvoidTowerRequirements())
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -30051,7 +30058,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "8c34cb9";
+var lastCommitHash = "4693171";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
