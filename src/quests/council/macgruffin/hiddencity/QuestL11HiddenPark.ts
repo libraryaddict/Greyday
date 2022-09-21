@@ -9,6 +9,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { currentPredictions } from "../../../../utils/GreyUtils";
 import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
@@ -74,7 +75,9 @@ export class QuestL11HiddenPark implements QuestInfo {
       availableAmount(this.book) == 0 &&
       this.hasRelocatedJanitors();
 
-    if (bottle) {
+    const pred = currentPredictions().get(this.loc);
+
+    if (bottle && (pred == null || pred == this.janitor)) {
       outfit.setChampagneBottle();
     }
 

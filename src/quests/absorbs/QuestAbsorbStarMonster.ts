@@ -12,6 +12,7 @@ import {
 import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
+import { GreySettings } from "../../utils/GreySettings";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -62,11 +63,14 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!haveSkill(this.nanovision)) {
+    if (familiarWeight(this.familiar) < 6) {
       return QuestStatus.NOT_READY;
     }
 
-    if (familiarWeight(this.familiar) < 6) {
+    if (
+      !haveSkill(this.nanovision) &&
+      !GreySettings.shouldAvoidTowerRequirements()
+    ) {
       return QuestStatus.NOT_READY;
     }
 
