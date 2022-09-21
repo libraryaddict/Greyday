@@ -470,7 +470,8 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
             use(this.musk);
           }
 
-          const doLynrd = lynyrdScares > 3;
+          const doLynrd =
+            lynyrdScares > 3 || this.getProtestersRemaining() <= 3;
           const doSleaze = sleazeScares >= 5;
           const doFire =
             this.getProtestersRemaining() <= 3 ||
