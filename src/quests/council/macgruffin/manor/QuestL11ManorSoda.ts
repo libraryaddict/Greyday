@@ -47,7 +47,11 @@ export class QuestL11ManorSoda implements QuestInfo {
   run(): QuestAdventure {
     const outfit = new GreyOutfit().setItemDrops();
 
-    if (currentPredictions().get(this.laundry) == this.monster) {
+    if (
+      this.laundry.combatQueue.split("; ").filter((s) => s == this.monster.name)
+        .length > 1 &&
+      currentPredictions().get(this.laundry) == this.monster
+    ) {
       outfit.setChampagneBottle();
     }
 

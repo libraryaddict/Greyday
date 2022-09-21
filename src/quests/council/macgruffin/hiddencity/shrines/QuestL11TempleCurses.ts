@@ -51,16 +51,18 @@ export class QuestL11Curses implements QuestInfo {
   }
 
   mustBeDone(): boolean {
-    if (haveEffect(this.curse3) > 9) {
+    const turns =
+      haveEffect(this.curse1) +
+      haveEffect(this.curse2) +
+      haveEffect(this.curse3);
+
+    if (turns == 0) {
       return false;
     }
 
-    return (
-      haveEffect(this.curse1) +
-        haveEffect(this.curse2) +
-        haveEffect(this.curse3) >
-      0
-    );
+    const delay = this.delayForNextNC() + 1;
+
+    return turns <= delay;
   }
 
   status(): QuestStatus {

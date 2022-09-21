@@ -47,7 +47,11 @@ export class QuestL11ManorWine implements QuestInfo {
   run(): QuestAdventure {
     const outfit = new GreyOutfit().setItemDrops();
 
-    if (currentPredictions().get(this.celler) == this.monster) {
+    if (
+      this.celler.combatQueue.split("; ").filter((s) => s == this.monster.name)
+        .length > 1 &&
+      currentPredictions().get(this.celler) == this.monster
+    ) {
       outfit.setChampagneBottle();
     }
 
