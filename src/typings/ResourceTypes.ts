@@ -102,7 +102,8 @@ export type ResourceId = typeof ResourceIds[number];
 
 export interface SomeResource {
   type: ResourceCategory;
-  id: ResourceId;
+  resource: ResourceId;
+  id?: string;
   available?: () => boolean; // Some iotms might not be available, like parka and torso
   resourcesUsed?: number;
   worthInAftercore: number; // If used by garbo, how much profit would we miss out
@@ -124,7 +125,7 @@ const glove = Item.get("Powerful Glove");
 
 const gloveReplace: SomeResource = {
   type: ResourceCategory.GLOVE_REPLACE,
-  id: "Powerful Glove",
+  resource: "Powerful Glove",
   worthInAftercore: 22000,
   resourcesUsed: 10,
   prepare: (outfit: GreyOutfit) =>
@@ -134,7 +135,7 @@ const gloveReplace: SomeResource = {
 
 const clover: SomeResource = {
   type: ResourceCategory.CLOVER,
-  id: "Clover",
+  resource: "Clover",
   worthInAftercore: 22000, // How much we could sell a clover for
   prepare: () => {},
 };
@@ -143,7 +144,7 @@ const xoFam = Familiar.get("XO Skeleton");
 
 const hugsAndKisses: SomeResource = {
   type: ResourceCategory.HUGS_AND_KISSES,
-  id: "Hugs and Kisses",
+  resource: "Hugs and Kisses",
   worthInAftercore: 1500,
   familiar: xoFam,
   prepare: () => null,
@@ -162,7 +163,7 @@ const extingusher: Item = Item.get("industrial fire extinguisher");
 
 const extingusherPolar: SomeResource = {
   type: ResourceCategory.POLAR_VORTEX,
-  id: "Fire Extingusher",
+  resource: "Fire Extingusher",
   resourcesUsed: 10,
   worthInAftercore: 1500, // Tattered paper cost and assume free run
   prepare: (outfit: GreyOutfit) =>
@@ -172,7 +173,7 @@ const extingusherPolar: SomeResource = {
 
 const extingusherZoneSpecific: SomeResource = {
   type: ResourceCategory.FIRE_EXTINGUSHER_ZONE,
-  id: "Fire Extingusher",
+  resource: "Fire Extingusher",
   resourcesUsed: 20,
   worthInAftercore: 3000, // Tattered paper cost x 2
   prepare: (outfit: GreyOutfit) =>
@@ -184,7 +185,7 @@ const extingusherZoneSpecific: SomeResource = {
 
 const pull: SomeResource = {
   type: ResourceCategory.PULL,
-  id: "Pull",
+  resource: "Pull",
   worthInAftercore: toInt(getProperty("greyValueOfPull") || "0"), // This doesn't cost us anything to use
   prepare: () => {},
 };
@@ -193,7 +194,7 @@ const pillkeeper: Item = Item.get("Eight Days a Week Pill Keeper");
 
 const pillkeeperNC: SomeResource = {
   type: ResourceCategory.FORCE_NC,
-  id: "Pillkeeper",
+  resource: "Pillkeeper",
   worthInAftercore: 50000, // Lets just value it at a frost flower?
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (props != null) {
@@ -208,7 +209,7 @@ const portscanProp = "_portscanPrimed";
 
 const portscan: SomeResource = {
   type: ResourceCategory.FORCE_FIGHT,
-  id: "Portscan",
+  resource: "Portscan",
   worthInAftercore: 0,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (props == null) {
@@ -251,7 +252,7 @@ const parkaProp: string = "_parkaPrimed";
 
 const ncParka: SomeResource = {
   type: ResourceCategory.FORCE_NC,
-  id: "Parka: Clara's Bell",
+  resource: "Parka: Clara's Bell",
   worthInAftercore: 0,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
@@ -292,10 +293,11 @@ const ncParka: SomeResource = {
 
 const yellowParka: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
-  id: "Yellow Ray",
+  resource: "Yellow Ray",
+  id: "Parka: Yellow Ray",
   available: () => availableAmount(parka) > 0 && haveSkill(torso),
   resourcesUsed: 99,
-  worthInAftercore: -GreySettings.greyValueOfAdventure,
+  worthInAftercore: -3000,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addItem(parka);
@@ -316,7 +318,8 @@ const vipInvitation: Item = Item.get("Clan VIP Lounge key");
 
 const yellowRocket: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
-  id: "Yellow Ray",
+  resource: "Yellow Ray",
+  id: "Yellow Rocket",
   worthInAftercore: 250, // Cost of a yellow rocket
   resourcesUsed: 75,
   available: () => availableAmount(vipInvitation) > 0,
@@ -338,7 +341,8 @@ const retrocape: Item = Item.get("unwrapped knock-off retro superhero cape");
 
 const retroRay: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
-  id: "Yellow Ray",
+  resource: "Yellow Ray",
+  id: "Retrocape: Yellow Ray",
   worthInAftercore: 0,
   available: () => availableAmount(retrocape) > 0,
   resourcesUsed: 100,
@@ -359,7 +363,7 @@ const cosplaySaber: Item = Item.get("Fourth of May Cosplay Saber");
 
 const cosplayYellowRay: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
-  id: "Cosplay Saber",
+  resource: "Cosplay Saber",
   // If we have more than 60 pills, the saber is free. Otherwise it's worth 3k meat when its alien free day
   worthInAftercore:
     storageAmount(Item.get("distention pill")) > 60
@@ -383,7 +387,7 @@ const backupCamera: Item = Item.get("Backup Camera");
 
 const backupCopier: SomeResource = {
   type: ResourceCategory.COPIER,
-  id: "Backup Camera",
+  resource: "Backup Camera",
   worthInAftercore: 20000, // Embezzler
   prepare: (outfit: GreyOutfit) =>
     outfit != null ? outfit.addItem(backupCamera) : null,
@@ -392,7 +396,7 @@ const backupCopier: SomeResource = {
 
 const cosplayCopier: SomeResource = {
   type: ResourceCategory.OLFACT_COPIER,
-  id: "Cosplay Saber",
+  resource: "Cosplay Saber",
   worthInAftercore: 3000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
@@ -407,7 +411,7 @@ const cosplayCopier: SomeResource = {
 
 const cargoShorts: SomeResource = {
   type: ResourceCategory.CARGO_SHORTS,
-  id: "Cargo Shorts",
+  resource: "Cargo Shorts",
   worthInAftercore: 30000, // Some sellable item
   prepare: () => {},
   pocket: (pocket: number) => {
@@ -418,7 +422,7 @@ const cargoShorts: SomeResource = {
 
 const faxMachine: SomeResource = {
   type: ResourceCategory.FAXER,
-  id: "Fax Machine",
+  resource: "Fax Machine",
   worthInAftercore: 20000, // Embezzler
   prepare: () => {},
   fax: (monster: Monster) => {
@@ -448,7 +452,7 @@ const faxMachine: SomeResource = {
 
 const combatLocket: SomeResource = {
   type: ResourceCategory.FAXER,
-  id: "Combat Locket",
+  resource: "Combat Locket",
   worthInAftercore: 20000, // Embezzler
   prepare: () => {},
   fax: (monster: Monster) => {
@@ -462,7 +466,7 @@ const genieBottle = Item.get("Genie Bottle");
 
 const wishFaxer: SomeResource = {
   type: ResourceCategory.FAXER,
-  id: "Wish",
+  resource: "Wish",
   worthInAftercore: 50000, // Sell
   prepare: () => {},
   fax: (monster: Monster) => {
@@ -500,7 +504,7 @@ const wishFaxer: SomeResource = {
 
 const cosplayBanisher: SomeResource = {
   type: ResourceCategory.BANISHER,
-  id: "Cosplay Saber",
+  resource: "Cosplay Saber",
   worthInAftercore: 3000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
@@ -515,7 +519,7 @@ const cosplayBanisher: SomeResource = {
 
 const bowlingBall: SomeResource = {
   type: ResourceCategory.BANISHER,
-  id: "Bowling Ball",
+  resource: "Bowling Ball",
   worthInAftercore: 0, // This doesn't cost us anything to use
   prepare: () => {},
   macro: () => Macro.skill(Skill.get("Bowl a Curveball")),
@@ -523,14 +527,14 @@ const bowlingBall: SomeResource = {
 
 const asdon: SomeResource = {
   type: ResourceCategory.BANISHER,
-  id: "Asdon",
+  resource: "Asdon",
   worthInAftercore: 900, // The rough price to fuel up the asdon
   prepare: () => {},
 };
 
 const deckOfEveryCard: SomeResource = {
   type: ResourceCategory.DECK_OF_EVERY_CARD,
-  id: "Deck of Every Card",
+  resource: "Deck of Every Card",
   worthInAftercore: 2000,
   prepare: () => {},
   pickCard: (card: string) => {
@@ -544,7 +548,7 @@ const deckOfEveryCard: SomeResource = {
 
 const deckOfEveryCardCheat: SomeResource = {
   type: ResourceCategory.DECK_OF_EVERY_CARD_CHEAT,
-  id: "Deck of Every Card",
+  resource: "Deck of Every Card",
   worthInAftercore: 20000, // Worth 20k, 20k and 10k (Blue mana x2, then misc)
   resourcesUsed: 5,
   prepare: () => {},
@@ -553,14 +557,14 @@ const deckOfEveryCardCheat: SomeResource = {
 
 const zappable: SomeResource = {
   type: ResourceCategory.ZAP,
-  id: "Zap Wand",
+  resource: "Zap Wand",
   worthInAftercore: 15000,
   prepare: () => {},
 };
 
 const catHeist: SomeResource = {
   type: ResourceCategory.CAT_HEIST,
-  id: "Cat Burglar Heist",
+  resource: "Cat Burglar Heist",
   worthInAftercore: 0,
   prepare: () => {},
   doHeist: (item) => {
@@ -582,7 +586,7 @@ const catHeist: SomeResource = {
 
 const chateauPainting: SomeResource = {
   type: ResourceCategory.FAXER,
-  id: "Chateau Painting",
+  resource: "Chateau Painting",
   worthInAftercore: 5000,
   prepare: () => {},
   fax: (monster: Monster) => {
@@ -594,7 +598,7 @@ const chateauPainting: SomeResource = {
 
 const hottub: SomeResource = {
   type: ResourceCategory.HOT_TUB,
-  id: "Hot Tub",
+  resource: "Hot Tub",
   worthInAftercore: 0,
   prepare: () => {},
 };
@@ -628,7 +632,13 @@ const allResources = [
   retroRay,
   chateauPainting,
   hugsAndKisses,
-].sort((r1, r2) => r1.worthInAftercore - r2.worthInAftercore);
+]
+  .map((r) => {
+    r.id = r.id ?? r.resource;
+
+    return r;
+  })
+  .sort((r1, r2) => r1.worthInAftercore - r2.worthInAftercore);
 
 export function getResources(
   includingUnavailable: boolean = false

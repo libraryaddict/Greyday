@@ -123,7 +123,7 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
 
           path.addUsed(ResourceCategory.PULL);
           path.addUsed(ResourceCategory.PULL);
-          faxResource = getResources().find((r) => r.id == "Wish");
+          faxResource = getResources().find((r) => r.resource == "Wish");
         }
 
         if (equippedAmount(this.doctorsBag) > 0) {

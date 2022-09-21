@@ -132,8 +132,8 @@ export class GreyAdventurer {
 
     for (const resource of changedBy.resources) {
       expected.set(
-        resource.id,
-        expected.get(resource.id) - (resource.resourcesUsed ?? 1)
+        resource.resource,
+        expected.get(resource.resource) - (resource.resourcesUsed ?? 1)
       );
     }
 
@@ -158,7 +158,7 @@ export class GreyAdventurer {
       if (
         getPrimedResource() != null &&
         getPrimedResource().resource.primed() &&
-        getPrimedResource().resource.id == id
+        getPrimedResource().resource.resource == id
       ) {
         continue;
       } else if (id == "Yellow Ray") {

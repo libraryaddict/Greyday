@@ -164,7 +164,8 @@ export class PossiblePath {
     const diff: Map<ResourceId, number> = changed.resourceMap;
     // Get all resources that were among the changed, and uses enough of the resource to fit in
     const viableResources = this.resourcesAvailable.filter(
-      (r) => diff.has(r.id) && diff.get(r.id) >= (r.resourcesUsed ?? 1)
+      (r) =>
+        diff.has(r.resource) && diff.get(r.resource) >= (r.resourcesUsed ?? 1)
     );
     const doDebug = () => {
       print("Snapshot " + snapshot.toString());
@@ -173,7 +174,7 @@ export class PossiblePath {
     };
 
     for (const resourceId of diff.keys()) {
-      const resources = viableResources.filter((r) => r.id == resourceId);
+      const resources = viableResources.filter((r) => r.resource == resourceId);
 
       if (resources.length == 0) {
         continue;
@@ -199,8 +200,8 @@ export class PossiblePath {
         } but got a total of ${diff.get(
           resourceId
         )} used! Original value: ${snapshot.resourceMap.get(
-          resources[0].id
-        )}, Current Value: ${getResourcesLeft(resources[0].id)}`;
+          resources[0].resource
+        )}, Current Value: ${getResourcesLeft(resources[0].resource)}`;
       }
 
       if (amountUsed > resources.length) {
@@ -212,8 +213,8 @@ export class PossiblePath {
         } but got a total of ${diff.get(
           resourceId
         )} used! Original value: ${snapshot.resourceMap.get(
-          resources[0].id
-        )}, Current Value: ${getResourcesLeft(resources[0].id)}`;
+          resources[0].resource
+        )}, Current Value: ${getResourcesLeft(resources[0].resource)}`;
       }
 
       this.addUsedResource(resources[0], amountUsed);

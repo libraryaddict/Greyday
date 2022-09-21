@@ -35,8 +35,8 @@ export class SimmedPath {
 
     for (const resource of getResources()) {
       this.resourcesRemaining.set(
-        resource.id,
-        getResourcesLeft(resource.id, assumeUnused)
+        resource.resource,
+        getResourcesLeft(resource.resource, assumeUnused)
       );
     }
   }
@@ -185,14 +185,16 @@ export class SimmedPath {
   addUse(quest: QuestInfo, resource: SomeResource, chance: number) {
     this.resourcesUsed.push([quest, resource, chance]);
     this.resourcesRemaining.set(
-      resource.id,
-      this.resourcesRemaining.get(resource.id) - (resource.resourcesUsed || 1)
+      resource.resource,
+      this.resourcesRemaining.get(resource.resource) -
+        (resource.resourcesUsed || 1)
     );
   }
 
   canUse(resource: SomeResource): boolean {
     return (
-      this.resourcesRemaining.get(resource.id) >= (resource.resourcesUsed || 1)
+      this.resourcesRemaining.get(resource.resource) >=
+      (resource.resourcesUsed || 1)
     );
   }
 
@@ -291,7 +293,7 @@ export class FigureOutPath {
           }
 
           const possibles = getResources().filter(
-            (r) => r.id == res && path.canUse(r.type) > 0
+            (r) => r.resource == res && path.canUse(r.type) > 0
           );
 
           if (possibles.length <= 1) {
@@ -573,8 +575,8 @@ export class FigureOutPath {
 
         resources.push([quest, r, chance]);
         resourcesAvailable.set(
-          r.id,
-          resourcesAvailable.get(r.id) - (r.resourcesUsed ?? 1)
+          r.resource,
+          resourcesAvailable.get(r.resource) - (r.resourcesUsed ?? 1)
         );
       }
     }
@@ -588,11 +590,14 @@ export class FigureOutPath {
     unsupported: ResourceId[]
   ): SomeResource {
     for (const resource of this.resources) {
-      if (resource.type != resourceType || unsupported.includes(resource.id)) {
+      if (
+        resource.type != resourceType ||
+        unsupported.includes(resource.resource)
+      ) {
         continue;
       }
 
-      if (used.get(resource.id) >= (resource.resourcesUsed || 1)) {
+      if (used.get(resource.resource) >= (resource.resourcesUsed || 1)) {
         return resource;
       }
     }
