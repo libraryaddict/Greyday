@@ -1314,6 +1314,7 @@ var glove = external_kolmafia_namespaceObject.Item.get("Powerful Glove");
 var gloveReplace = {
   type: ResourceCategory.GLOVE_REPLACE,
   resource: "Powerful Glove",
+  name: "Powerful Glove: Replace",
   worthInAftercore: 22000,
   resourcesUsed: 10,
   prepare: (outfit) =>
@@ -1352,6 +1353,7 @@ var extingusher = external_kolmafia_namespaceObject.Item.get("industrial fire ex
 var extingusherPolar = {
   type: ResourceCategory.POLAR_VORTEX,
   resource: "Fire Extingusher",
+  name: "Fire Extingusher: Polar Vortex",
   resourcesUsed: 10,
   worthInAftercore: 1500, // Tattered paper cost and assume free run
   prepare: (outfit) =>
@@ -1362,6 +1364,7 @@ var extingusherPolar = {
 var extingusherZoneSpecific = {
   type: ResourceCategory.FIRE_EXTINGUSHER_ZONE,
   resource: "Fire Extingusher",
+  name: "Fire Extingusher: Spray Down Zone",
   resourcesUsed: 20,
   worthInAftercore: 3000, // Tattered paper cost x 2
   prepare: (outfit) =>
@@ -1482,7 +1485,7 @@ var ncParka = {
 var yellowParka = {
   type: ResourceCategory.YELLOW_RAY,
   resource: "Yellow Ray",
-  id: "Parka: Yellow Ray",
+  name: "Parka: Yellow Ray",
   available: () => (0,external_kolmafia_namespaceObject.availableAmount)(parka) > 0 && (0,external_kolmafia_namespaceObject.haveSkill)(torso),
   resourcesUsed: 99,
   worthInAftercore: -3000,
@@ -1507,7 +1510,7 @@ var vipInvitation = external_kolmafia_namespaceObject.Item.get("Clan VIP Lounge 
 var yellowRocket = {
   type: ResourceCategory.YELLOW_RAY,
   resource: "Yellow Ray",
-  id: "Yellow Rocket",
+  name: "Yellow Rocket",
   worthInAftercore: 250, // Cost of a yellow rocket
   resourcesUsed: 75,
   available: () => (0,external_kolmafia_namespaceObject.availableAmount)(vipInvitation) > 0,
@@ -1530,7 +1533,7 @@ var retrocape = external_kolmafia_namespaceObject.Item.get("unwrapped knock-off 
 var retroRay = {
   type: ResourceCategory.YELLOW_RAY,
   resource: "Yellow Ray",
-  id: "Retrocape: Yellow Ray",
+  name: "Retrocape: Yellow Ray",
   worthInAftercore: 0,
   available: () => (0,external_kolmafia_namespaceObject.availableAmount)(retrocape) > 0,
   resourcesUsed: 100,
@@ -1552,6 +1555,7 @@ var cosplaySaber = external_kolmafia_namespaceObject.Item.get("Fourth of May Cos
 var cosplayYellowRay = {
   type: ResourceCategory.YELLOW_RAY,
   resource: "Cosplay Saber",
+  name: "Cosplay Saber: YR",
   // If we have more than 60 pills, the saber is free. Otherwise it's worth 3k meat when its alien free day
   worthInAftercore:
   (0,external_kolmafia_namespaceObject.storageAmount)(external_kolmafia_namespaceObject.Item.get("distention pill")) > 60 ?
@@ -1585,6 +1589,7 @@ var backupCopier = {
 var cosplayCopier = {
   type: ResourceCategory.OLFACT_COPIER,
   resource: "Cosplay Saber",
+  name: "Cosplay Saber: Friends",
   worthInAftercore: 3000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit, props) => {
     if (outfit != null) {
@@ -1693,6 +1698,7 @@ var wishFaxer = {
 var cosplayBanisher = {
   type: ResourceCategory.BANISHER,
   resource: "Cosplay Saber",
+  name: "Cosplay Saber: Banish",
   worthInAftercore: 3000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit, props) => {
     if (outfit != null) {
@@ -1737,6 +1743,7 @@ var deckOfEveryCard = {
 var deckOfEveryCardCheat = {
   type: ResourceCategory.DECK_OF_EVERY_CARD_CHEAT,
   resource: "Deck of Every Card",
+  name: "Deck of Every Card: Cheat",
   worthInAftercore: 20000, // Worth 20k, 20k and 10k (Blue mana x2, then misc)
   resourcesUsed: 5,
   prepare: () => {},
@@ -1821,8 +1828,8 @@ retroRay,
 chateauPainting,
 hugsAndKisses].
 
-map((r) => {var _r$id;
-  r.id = (_r$id = r.id) !== null && _r$id !== void 0 ? _r$id : r.resource;
+map((r) => {var _r$name;
+  r.name = (_r$name = r.name) !== null && _r$name !== void 0 ? _r$name : r.resource;
 
   return r;
 }).
@@ -2051,7 +2058,7 @@ var ResourcesSnapshot = /*#__PURE__*/function () {function ResourcesSnapshot() {
       var resourceStrings = this.resources.
       map(
       (s) => {var _ref;return (_ref =
-        s.id +
+        s.name +
         " x " +
         ResourceCategory[s.type] +
         " - Uses " +
@@ -2181,7 +2188,7 @@ var PossiblePath = /*#__PURE__*/function () {
             doDebug();
             throw "Unexpected amount of a resource used! Expected a multiple of ".concat((_resources$0$resource2 =
             resources[0].resourcesUsed) !== null && _resources$0$resource2 !== void 0 ? _resources$0$resource2 : 1, " from ").concat(
-            resources[0].id, " of type ").concat(
+            resources[0].name, " of type ").concat(
             ResourceCategory[resources[0].type], " but got a total of ").concat(
             diff.get(
             resourceId), " used! Original value: ").concat(
@@ -2194,7 +2201,7 @@ var PossiblePath = /*#__PURE__*/function () {
             doDebug();
             throw "Unexpected amount of a resource used! Expected ".concat(
             resources.length, " or less of ").concat(
-            resources[0].id, " of type ").concat(
+            resources[0].name, " of type ").concat(
             ResourceCategory[resources[0].type], " but got a total of ").concat(
             diff.get(
             resourceId), " used! Original value: ").concat(
@@ -2208,7 +2215,7 @@ var PossiblePath = /*#__PURE__*/function () {
           (_changed$resources = changed.resources).push.apply(_changed$resources, TaskInfo_toConsumableArray(resources.slice(0, amountUsed)));
           (0,external_kolmafia_namespaceObject.print)(
           "Detected resource change, " +
-          resources[0].id +
+          resources[0].name +
           " of " +
           ResourceCategory[resources[0].type] +
           " x " +
@@ -2242,7 +2249,7 @@ var PossiblePath = /*#__PURE__*/function () {
         if (index >= 0) {
           this.resourcesAvailable.splice(index, 1);
         } else {
-          throw "Expected to find a ".concat(resource.id, " of type ").concat(
+          throw "Expected to find a ".concat(resource.name, " of type ").concat(
           ResourceCategory[resource.type], " but none were remaining!");
 
         }
@@ -2444,14 +2451,16 @@ path)
     }
 
     newSnapshot.resources.push(resource);
-    (0,external_kolmafia_namespaceObject.print)("Removing " + resource.id + " x " + ResourceCategory[resource.type]);
+    (0,external_kolmafia_namespaceObject.print)(
+    "Removing " + resource.name + " x " + ResourceCategory[resource.type]);
+
   });
 
   if (newSnapshot.resources.length > 0) {
     (0,external_kolmafia_namespaceObject.print)(
     "We manually used: " +
     newSnapshot.resources.
-    map((r) => r.id + " x " + ResourceCategory[r.type]).
+    map((r) => r.name + " x " + ResourceCategory[r.type]).
     join(", "));
 
   }
@@ -27294,7 +27303,7 @@ var SimmedPath = /*#__PURE__*/function () {
       " reports that it has resources left over despite being finished. Resources: " +
       unused[1].resourcesAvailable.map(
       (r) => {var _r$resourcesUsed;return (
-          r.id +
+          r.name +
           " x " +
           ResourceCategory[r.type] +
           " (Uses " + ((_r$resourcesUsed =
@@ -27326,7 +27335,7 @@ var SimmedPath = /*#__PURE__*/function () {
       var used = new Map();var _iterator2 = TaskManager_createForOfIteratorHelper(
 
       this.resourcesUsed),_step2;try {var _loop = function _loop() {var _step2$value = TaskManager_slicedToArray(_step2.value, 2),quest = _step2$value[0],resource = _step2$value[1];
-          var key = resource.id;
+          var key = resource.name;
 
           if (!used.has(key)) {
             used.set(key, []);
@@ -28526,7 +28535,7 @@ var AdventureFinder = /*#__PURE__*/function () {
           "Expected a quest status of ready or faster later on " +
           primed.quest.getId() +
           " which was primed for a resource " +
-          primed.resource.id);
+          primed.resource.name);
 
       }
 
@@ -28616,7 +28625,7 @@ var AdventureFinder = /*#__PURE__*/function () {
           (0,external_kolmafia_namespaceObject.print)(
           quest.getId() +
           " has primed " +
-          primed.resource.id +
+          primed.resource.name +
           " of " +
           ResourceCategory[primed.resource.type],
           "blue");
@@ -29520,13 +29529,13 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
 
       (0,external_kolmafia_namespaceObject.print)("These resources were allowed to be used: ".concat(
       snapshotBeforeRun.resources.map(
-      (r) => {var _r$resourcesUsed;return r.id + " (" + r.type + ", uses " + ((_r$resourcesUsed = r.resourcesUsed) !== null && _r$resourcesUsed !== void 0 ? _r$resourcesUsed : 1) + ")";})),
+      (r) => {var _r$resourcesUsed;return r.name + " (" + r.type + ", uses " + ((_r$resourcesUsed = r.resourcesUsed) !== null && _r$resourcesUsed !== void 0 ? _r$resourcesUsed : 1) + ")";})),
 
       "red");
 
       (0,external_kolmafia_namespaceObject.print)("These resources were marked as used: ".concat(
       changedBy.resources.map(
-      (r) => {var _r$resourcesUsed2;return r.id + " (" + r.type + ", uses " + ((_r$resourcesUsed2 = r.resourcesUsed) !== null && _r$resourcesUsed2 !== void 0 ? _r$resourcesUsed2 : 1) + ")";})),
+      (r) => {var _r$resourcesUsed2;return r.name + " (" + r.type + ", uses " + ((_r$resourcesUsed2 = r.resourcesUsed) !== null && _r$resourcesUsed2 !== void 0 ? _r$resourcesUsed2 : 1) + ")";})),
 
       "red");
 
@@ -30042,7 +30051,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "14d5794";
+var lastCommitHash = "8c34cb9";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
