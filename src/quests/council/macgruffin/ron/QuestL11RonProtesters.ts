@@ -471,9 +471,10 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
           }
 
           const doLynrd =
-            lynyrdScares > 3 || this.getProtestersRemaining() <= 3;
-          const doSleaze = sleazeScares >= 5;
+            true || lynyrdScares > 3 || this.getProtestersRemaining() <= 3;
+          const doSleaze = true || sleazeScares >= 5;
           const doFire =
+            true ||
             this.getProtestersRemaining() <= 3 ||
             availableAmount(this.flaming) > 0 ||
             sleazeScares + lynyrdScares < 18;
