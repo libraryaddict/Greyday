@@ -463,7 +463,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
 
         try {
           if (
-            lynyrdScares > 3 &&
+            //    lynyrdScares > 3 &&
             haveEffect(this.musky) <= 0 &&
             availableAmount(this.musk) > 0
           ) {
