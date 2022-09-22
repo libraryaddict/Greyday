@@ -18,6 +18,7 @@ import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { greyAdv, setPrimedResource } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { getAllCombinations } from "../../../utils/GreyUtils";
 import { PropertyManager } from "../../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
@@ -28,10 +29,37 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
   paths: PossiblePath[];
 
   createPaths(assumeUnstarted: boolean) {
-    this.paths = [
-      new PossiblePath(8),
-      //   new PossiblePath(1).add(ResourceCategory.FORCE_NC),
-    ];
+    this.paths = [];
+
+    const combos: [ResourceCategory, number][] = [];
+
+    for (let i = 0; i < 3; i++) {
+      combos.push([null, 5]);
+      combos.push([ResourceCategory.FORCE_NC, 1]);
+    }
+
+    for (const combo of getAllCombinations(combos)) {
+      if (combo.length != 3) {
+        continue;
+      }
+
+      // Dumb queue manipulation, subtract 1 turn for every NC we hit on a non-forced
+      const turns =
+        combo.map(([, t]) => t).reduce((p, v) => p + v, 0) -
+        combo.filter(([res]) => res == null).length;
+
+      const path = new PossiblePath(turns);
+
+      for (const [res] of combo) {
+        if (res == null) {
+          continue;
+        }
+
+        path.add(res);
+      }
+
+      this.paths.push(path);
+    }
   }
 
   getPossiblePaths(): PossiblePath[] {
@@ -74,6 +102,10 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
     }
 
     if (path.canUse(ResourceCategory.FORCE_NC)) {
+      if (path.getResource(ResourceCategory.FORCE_NC).primed()) {
+        return QuestStatus.READY;
+      }
+
       return QuestStatus.NOT_READY;
     }
 

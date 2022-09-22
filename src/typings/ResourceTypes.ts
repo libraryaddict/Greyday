@@ -19,7 +19,6 @@ import {
   mpCost,
   myMeat,
   myMp,
-  outfit,
   print,
   pullsRemaining,
   setProperty,
@@ -81,7 +80,7 @@ export const ResourceIds = [
   "Cat Burglar Heist",
   "Hot Tub",
   "Chateau Painting",
-  "Parka: Clara's Bell",
+  "Parka: Force NC",
   "Pillkeeper",
   "Portscan",
   "Hugs and Kisses",
@@ -214,8 +213,14 @@ const portscan: SomeResource = {
   type: ResourceCategory.FORCE_FIGHT,
   resource: "Portscan",
   worthInAftercore: 0,
-  prepare: (outfit: GreyOutfit, props: PropertyManager) => {
-    if (props == null) {
+  prepare: (outfit: GreyOutfit) => {
+    if (
+      outfit != null ||
+      (
+        getProperty("sourceTerminalEducate1") +
+        getProperty("sourceTerminalEducate2")
+      ).includes("portscan.edu")
+    ) {
       return;
     }
 
@@ -224,7 +229,7 @@ const portscan: SomeResource = {
   primed: () => toBoolean(getProperty(portscanProp) || "false"),
   unprime: () => setProperty(portscanProp, "false"),
   attemptPrime: () => {
-    if (currentRound() != 0) {
+    if (currentRound() == 0) {
       return false;
     }
 
@@ -255,21 +260,20 @@ const parkaProp: string = "_parkaPrimed";
 
 const ncParka: SomeResource = {
   type: ResourceCategory.FORCE_NC,
-  resource: "Parka: Clara's Bell",
+  resource: "Parka: Force NC",
   worthInAftercore: 0,
-  prepare: (outfit: GreyOutfit, props: PropertyManager) => {
+  //available: () => haveSkill(torso) && availableAmount(parka) > 0,
+  prepare: (outfit: GreyOutfit) => {
     if (outfit != null) {
       outfit.addItem(parka);
-    }
-
-    if (props != null) {
+    } else {
       cliExecute("parka spikolodon");
     }
   },
   primed: () => toBoolean(getProperty(parkaProp) || "false"),
   unprime: () => setProperty(parkaProp, "false"),
   attemptPrime: () => {
-    if (currentRound() != 0) {
+    if (currentRound() == 0) {
       return false;
     }
 
@@ -796,7 +800,7 @@ export function getResourcesLeft(
       return assumeUnused || !toBoolean(getProperty("_chateauMonsterFought"))
         ? 1
         : 0;
-    case "Parka: Clara's Bell":
+    case "Parka: Force NC":
       if (!haveSkill(torso) || availableAmount(parka) == 0) {
         return 0;
       }
@@ -809,7 +813,7 @@ export function getResourcesLeft(
         return 0;
       }
 
-      return assumeUnused || toBoolean(getProperty("_freePillKeeperUsed"))
+      return assumeUnused || !toBoolean(getProperty("_freePillKeeperUsed"))
         ? 1
         : 0;
     case "Portscan":

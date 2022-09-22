@@ -1,7 +1,22 @@
-import { Location, Familiar, Skill, Monster } from "kolmafia";
+import {
+  Location,
+  Familiar,
+  Skill,
+  Monster,
+  availableAmount,
+  getProperty,
+  Item,
+  myAscensions,
+  toInt,
+} from "kolmafia";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { getLocations } from "../../utils/GreyLocations";
-import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
+import {
+  getQuestStatus,
+  QuestAdventure,
+  QuestInfo,
+  QuestStatus,
+} from "../Quests";
 import { QuestType } from "../QuestTypes";
 import { QuestMPRegen } from "./QuestMPRegen";
 import { QuestSkillAbstract } from "./QuestSkillAbstract";
@@ -30,15 +45,30 @@ export class QuestSkillRegistry implements QuestInfo {
   */
 
     this.addSkill("Skills / Phase Shift");
-    this.addSkill("Skills / Photonic Shroud");
-    this.addSkill("Skills / Piezoelectric Honk");
+    this.addSkill(
+      "Skills / Photonic Shroud",
+      () => getQuestStatus("questL11Black") > 1
+    );
+    this.addSkill(
+      "Skills / Piezoelectric Honk",
+      () => getQuestStatus("questL11Palindome") > 4
+    );
     this.addSkill(
       "Skills / ScalingItem",
+      null,
       Skill.get("Gravitational Compression")
     );
-    this.addSkill("Skills / HPRegen", Skill.get("Fluid Dynamics Simulation"));
-    this.addSkill("Skills / ScalingDR", Skill.get("Subatomic Hardening"));
-    this.addSkill("Skills / ScalingMeat", Skill.get("Ponzi Apparatus"));
+    this.addSkill(
+      "Skills / HPRegen",
+      null,
+      Skill.get("Fluid Dynamics Simulation")
+    );
+    this.addSkill(
+      "Skills / ScalingDR",
+      () => getQuestStatus("questM20Necklace") > 2,
+      Skill.get("Subatomic Hardening")
+    );
+    this.addSkill("Skills / ScalingMeat", null, Skill.get("Ponzi Apparatus"));
 
     this.children.push(new QuestMPRegen());
     this.children.push(new QuestSkillSystemSweep());
@@ -48,16 +78,19 @@ export class QuestSkillRegistry implements QuestInfo {
         Location.get("The Hidden Park"),
         Monster.get("pygmy witch lawyer"),
         Skill.get("Infinite Loop"),
-        "Skills / Infinite Loop"
+        "Skills / Infinite Loop",
+        () =>
+          availableAmount(Item.get("Antique Machete")) > 0 &&
+          toInt(getProperty("relocatePygmyJanitor")) == myAscensions()
       )
     );
     this.children.push(new QuestSkillColdDamage15());
     this.children.push(new QuestSkillColdDamage10());
     this.children.push(new QuestSkillDoubleNanovision());
-    this.children.push(new QuestSkillConiferPolymers());
+    //  this.children.push(new QuestSkillConiferPolymers());
   }
 
-  addSkill(questType: QuestType, skill?: Skill) {
+  addSkill(questType: QuestType, valid?: () => boolean, skill?: Skill) {
     if (skill == null) {
       skill = Skill.get(
         questType.substring(questType.lastIndexOf("/") + 1).trim()
@@ -71,12 +104,12 @@ export class QuestSkillRegistry implements QuestInfo {
     let location: Location;
     let monster: Monster;
 
-    for (let absorb of AbsorbsProvider.loadAbsorbs()) {
+    for (const absorb of AbsorbsProvider.loadAbsorbs()) {
       if (absorb.skill != skill) {
         continue;
       }
 
-      let locs = getLocations(absorb.monster);
+      const locs = getLocations(absorb.monster);
 
       if (locs.length != 1) {
         throw (
@@ -99,10 +132,10 @@ export class QuestSkillRegistry implements QuestInfo {
       );
     }
 
-    let level = Math.max(5, Math.sqrt(location.recommendedStat) * 1.35);
+    const level = Math.max(5, Math.sqrt(location.recommendedStat) * 1.35);
 
     this.children.push(
-      new QuestSkillAbstract(level, location, monster, skill, questType)
+      new QuestSkillAbstract(level, location, monster, skill, questType, valid)
     );
   }
 

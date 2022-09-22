@@ -152,10 +152,7 @@ export class QuestRegistry {
       { id: "Skills / DoubleNanovision" },
       { id: "Misc / Short Cook Goose" },
 
-      {
-        id: "Skills / ScalingDR",
-        testValid: () => getQuestStatus("questM20Necklace") > 2,
-      },
+      { id: "Skills / ScalingDR" },
       { id: "Skills / Conifer Polymers" },
 
       // Vines are free kills, why not prioritize them to unlock zones

@@ -296,6 +296,10 @@ export class PossiblePath {
     chance: number,
     amount: number = 1
   ): PossiblePath {
+    if (resource == null) {
+      throw "Tried to add a null resource";
+    }
+
     for (let i = 0; i < amount; i++) {
       this.resourcesNeeded.push([resource, chance]);
     }
@@ -473,99 +477,4 @@ export function getResourcesChanged(
   }
 
   return newSnapshot;
-}
-
-// TODO Read combats.txt to find out the combat rate of the area. Then figure out how much +combat and -combat we can stack.
-// May need to do something for predicting future -combat and +combat
-const combatPercents: Map<Location, number> = new Map();
-
-function getCombatRate(location: Location): number {
-  if (combatPercents.size == 0) {
-    const buffer = fileToBuffer("combats.txt");
-    for (const [loc, combats] of buffer.split("\n").map((s) => s.split("\t"))) {
-      if (combats == null || !combats.match(/-?\d+/)) {
-        continue;
-      }
-
-      const l = Location.get(loc);
-
-      if (l == Location.get("None")) {
-        continue;
-      }
-
-      combatPercents.set(l, parseInt(combats));
-    }
-  }
-
-  return combatPercents.get(location);
-}
-
-export type MinMax = [number, number];
-// What we going to do about resources like -combat, limited banishes, and the like?
-// The obvious answer is to expose a generic interface, listing a benifit, listing a cost, listing how long the benifit lasts
-
-const nanovision: Skill = Skill.get("Double Nanovision");
-const compression: Skill = Skill.get("Gravitational Compression");
-
-export function getEstimatedTurnsToDrop(
-  location: Location,
-  item: Item,
-  amount: number
-): number {
-  const itemDrop = 1 + (haveSkill(nanovision) ? 2 : 0);
-
-  const rates: [Monster, number][] = Object.entries(
-    appearanceRates(location)
-  ).map((val) => [Monster.get(val[0]), val[1]]);
-  const dropChances: [number, number[]][] = [];
-
-  for (const [monster, rate] of rates) {
-    if (rate <= 0 || isBanished(monster)) {
-      continue;
-    }
-
-    const drops: [Item, number][] = Object.entries(itemDrops(monster)).map(
-      ([i, n]) => [Item.get(i), n]
-    );
-
-    const rates: number[] = [];
-
-    for (const [i, perc] of drops) {
-      if (i != item) {
-        continue;
-      }
-
-      rates.push(perc);
-    }
-
-    dropChances.push([rate, rates]);
-  }
-
-  let dropChancePerFight = 0;
-
-  for (const [rate, chances] of dropChances) {
-    if (chances.length == 0) {
-      continue;
-    }
-
-    dropChancePerFight += (rate / 100) * chances.reduce((c, p) => c + p, 0);
-  }
-
-  dropChancePerFight = dropChancePerFight / 100;
-
-  return null;
-}
-
-export function getEstimatedTurnsToHitMonster(
-  location: Location,
-  monster: Monster
-): MinMax {
-  // TODO Calculate crystal ball, banishes, +combat.
-  // Something to account for when we're not allowed to run +combat effect
-  // Account for banishes
-  return [0, 0];
-}
-
-export function getEstimatedTurnsToHitNC(location: Location): MinMax {
-  return [0, 0];
 }

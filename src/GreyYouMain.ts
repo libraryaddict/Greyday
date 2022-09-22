@@ -1,9 +1,11 @@
 import {
+  currentRound,
   Effect,
   getProperty,
   getRevision,
   gitAtHead,
   gitExists,
+  handlingChoice,
   haveEffect,
   Item,
   myAdventures,
@@ -241,6 +243,14 @@ class GreyYouMain {
     if (myPath() != Path.get("Grey You")) {
       print(
         "You're not in grey you. Use 'help' to see what you can use.",
+        "red"
+      );
+      return;
+    }
+
+    if (currentRound() != 0 || handlingChoice()) {
+      print(
+        "In a fight or in a choice, please resolve before contining..",
         "red"
       );
       return;

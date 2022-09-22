@@ -591,6 +591,14 @@ export class GreyRequirements {
 
     add(
       Type.IOTM,
+      "XO Skeleton",
+      "Used for its pickpocket, just saves a polar vortex for the well kitted players",
+      Required.MINOR,
+      haveFamiliar(Familiar.get("XO Skeleton"))
+    );
+
+    add(
+      Type.IOTM,
       "Gingerbread City",
       "Useful as another key source",
       Required.MINOR,

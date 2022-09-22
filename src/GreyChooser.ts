@@ -15,7 +15,6 @@ import {
   myBasestat,
   myLevel,
   myMp,
-  numericModifier,
   print,
   printHtml,
   Skill,
@@ -46,7 +45,6 @@ import {
   getPrimedResource,
   greyAdv,
   resetPrimedResource,
-  setPrimedResource,
 } from "./utils/GreyLocations";
 import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
@@ -60,6 +58,8 @@ export enum OrbStatus {
 }
 
 export enum ConsiderPriority {
+  INSISTS_ON_BEING_DONE,
+  MUST_BE_DONE,
   ORB_ABSORB, // When we have an orb ready to absorb
   ORB_OTHER, // When we have an orb that's not an absorb
   RANDOM_ABSORB, // When we're going here for the absorb
@@ -89,6 +89,7 @@ export class AdventureFinder {
   static instance: AdventureFinder;
   registry: QuestRegistry = new QuestRegistry();
   defeated: Map<Monster, Reabsorbed>;
+  allQuests: [QuestInfo, PossiblePath][];
   viableQuests: [QuestInfo, PossiblePath][];
   absorbs: AbsorbsProvider = new AbsorbsProvider();
   goose: Familiar = Familiar.get("Grey Goose");
@@ -197,7 +198,12 @@ export class AdventureFinder {
         adventure: adventure,
         orbStatus: OrbStatus.IGNORED,
         status: quest.status(path),
-        considerPriority: null,
+        considerPriority:
+          quest.mustBeDone != null && quest.mustBeDone()
+            ? quest.mustBeDone(true)
+              ? ConsiderPriority.INSISTS_ON_BEING_DONE
+              : ConsiderPriority.MUST_BE_DONE
+            : null,
         mayFreeRun: canFreeRun,
         freeRun: (monster: Monster, settings: AdventureSettings | null) => {
           // Never run from a boss, or a free fight
@@ -247,32 +253,7 @@ export class AdventureFinder {
             return false;
           }
 
-          const absorb = AbsorbsProvider.getAbsorb(monster);
-
-          // If we absorb nothing from this, free run
-          if (absorb == null) {
-            return true;
-          }
-
-          // If we get adventures from this
-          if (absorb.adventures > 0) {
-            // Only free run if we can't absorb
-            return this.defeated.get(monster) == Reabsorbed.REABSORBED;
-          }
-
-          if (this.defeated.has(monster)) {
-            return true;
-          }
-
-          if (
-            absorb.skill != null &&
-            this.absorbs.getUsefulSkills().has(absorb.skill)
-          ) {
-            return false;
-          }
-
-          // Free run if we've taken the absorb
-          return absorb.hp + absorb.mp + (myLevel() < 10 ? absorb.mox : 0) == 0;
+          return this.shouldFreeRun(monster);
         },
       };
 
@@ -304,40 +285,7 @@ export class AdventureFinder {
         considerPriority: null,
         mayFreeRun: true,
         freeRun: (monster: Monster) => {
-          // Never run from a boss, or a free fight
-          if (
-            monster.boss ||
-            !monster.copyable ||
-            monster.attributes.includes("FREE")
-          ) {
-            return false;
-          }
-
-          const absorb = AbsorbsProvider.getAbsorb(monster);
-
-          if (absorb == null) {
-            return true;
-          }
-
-          // If we get adventures from this
-          if (absorb.adventures > 0) {
-            // Only free run if we can't absorb
-            return this.defeated.get(monster) == Reabsorbed.REABSORBED;
-          }
-
-          if (this.defeated.has(monster)) {
-            return true;
-          }
-
-          if (
-            absorb.skill != null &&
-            this.absorbs.getUsefulSkills().has(absorb.skill)
-          ) {
-            return false;
-          }
-
-          // Free run if we've taken the absorb
-          return absorb.hp + absorb.mp + (myLevel() < 10 ? absorb.mox : 0) == 0;
+          return this.shouldFreeRun(monster);
         },
       };
 
@@ -345,6 +293,45 @@ export class AdventureFinder {
     }
 
     this.adjustAdventures();
+  }
+
+  shouldFreeRun(monster: Monster): boolean {
+    // Never run from a boss, or a free fight
+    if (
+      monster.boss ||
+      !monster.copyable ||
+      monster.attributes.includes("FREE")
+    ) {
+      return false;
+    }
+
+    const absorb = AbsorbsProvider.getAbsorb(monster);
+
+    // If we absorb nothing from this, free run
+    if (absorb == null) {
+      return true;
+    }
+
+    // If we get adventures from this
+    if (absorb.adventures > 0) {
+      // Only free run if we can't absorb
+      return this.defeated.get(monster) == Reabsorbed.REABSORBED;
+    }
+
+    if (this.defeated.has(monster)) {
+      return true;
+    }
+
+    if (
+      absorb.skill != null &&
+      (this.absorbs.getUsefulSkills().has(absorb.skill) ||
+        this.absorbs.getMustHaveSkills().has(absorb.skill))
+    ) {
+      return false;
+    }
+
+    // Free run if we've taken the absorb
+    return absorb.hp + absorb.mp + (myLevel() < 10 ? absorb.mox : 0) == 0;
   }
 
   adjustAdventures() {
@@ -508,6 +495,21 @@ export class AdventureFinder {
     };
   }
 
+  doAllQuests() {
+    this.allQuests = [];
+
+    const tryAdd = (q: QuestInfo, path: PossiblePath) => {
+      if (q.level() < 0) {
+        return;
+      }
+      this.allQuests.push([q, path]);
+    };
+
+    this.path.thisPath.forEach(([quest, path]) => {
+      tryAdd(quest, path);
+    });
+  }
+
   getDoableQuests(allQuests: boolean = false): [QuestInfo, PossiblePath][] {
     const quests: [QuestInfo, PossiblePath][] = [];
 
@@ -536,7 +538,7 @@ export class AdventureFinder {
       quests.push([q, path]);
     };
 
-    this.path.thisPath.forEach(([quest, path]) => {
+    this.allQuests.forEach(([quest, path]) => {
       tryAdd(quest, path);
     });
 
@@ -551,6 +553,7 @@ export class AdventureFinder {
       this.setPreAbsorbs();
     }
 
+    this.doAllQuests();
     this.viableQuests = this.getDoableQuests(allQuests);
     this.setAbsorbs();
     this.defeated = this.absorbs.getAbsorbedMonstersFromInstance();
@@ -728,6 +731,9 @@ export class AdventureFinder {
       );
     }
 
+    primed.resource.unprime();
+    resetPrimedResource();
+
     return {
       quest: primed.quest,
       path: primed.path,
@@ -735,7 +741,7 @@ export class AdventureFinder {
       adventure: primed.quest.run(primed.path),
       status: status,
       orbStatus: OrbStatus.IGNORED,
-      considerPriority: ConsiderPriority.NOTHING_SPECIAL,
+      considerPriority: ConsiderPriority.INSISTS_ON_BEING_DONE,
       mayFreeRun: false,
       freeRun: () => false,
     };
@@ -757,6 +763,11 @@ export class AdventureFinder {
       return;
     }
 
+    // If this quest is something that wants a prime itself
+    if (adventure.quest.attemptPrime != null) {
+      return;
+    }
+
     // If this quest is one that can't be primed on
     if (
       adventure.quest.canAcceptPrimes != null &&
@@ -765,14 +776,14 @@ export class AdventureFinder {
       return;
     }
 
-    // We don't want to prime on something that isn't using an outfit, or is using items in that outfit
+    // We don't want to prime on something that would be potentially messy with outfit
     const outfit = adventure.adventure.outfit;
 
     if (
       outfit != null &&
       (outfit == GreyOutfit.IGNORE_OUTFIT ||
-        outfit.plusCombatWeight > 0 ||
-        outfit.minusCombatWeight > 0 ||
+        //outfit.plusCombatWeight > 0 ||
+        //  outfit.minusCombatWeight > 0 ||
         outfit.itemsWeight.length > 0)
     ) {
       return;
@@ -799,6 +810,12 @@ export class AdventureFinder {
 
       // If this did not want to prime a resource
       if (!hasPrimed) {
+        if (getPrimedResource() != null) {
+          throw (
+            quest.getId() +
+            " claimed it didn't want to prime, but primed anyways"
+          );
+        }
         continue;
       }
 
@@ -824,6 +841,12 @@ export class AdventureFinder {
   }
 
   findGoodVisit(): FoundAdventure {
+    const adv = this.findPrimedVisit();
+
+    if (adv != null) {
+      return adv;
+    }
+
     const abortNotEnoughAdventures =
       myAdventures() <= GreySettings.adventuresBeforeAbort;
     const generateAdventuresOrAbort: boolean =
@@ -836,6 +859,41 @@ export class AdventureFinder {
       );
       return;
     }
+
+    const toNum = (status: OrbStatus) =>
+      status == OrbStatus.IGNORED ? OrbStatus.NOT_SET : status;
+    const compareFreeRuns = toInt(getProperty("_navelRunaways")) > 0;
+    const levelingGoose = familiarWeight(this.goose) >= 6;
+
+    this.possibleAdventures.sort((a1, a2) => {
+      if (a1.considerPriority != a2.considerPriority) {
+        return a1.considerPriority - a2.considerPriority;
+      }
+
+      if (toNum(a1.orbStatus) != toNum(a2.orbStatus)) {
+        return a1.orbStatus - a2.orbStatus;
+      }
+
+      if ((a1.quest == null) != (a2.quest == null)) {
+        return a1.quest == null ? 1 : -1;
+      }
+
+      if (a1.status != a2.status) {
+        return a1.status - a2.status;
+      }
+
+      if (compareFreeRuns && a1.mayFreeRun != a2.mayFreeRun) {
+        // If we're trying to level our goose, we want to prioritize places we're not allowed to free run in
+
+        if (levelingGoose) {
+          return a1.mayFreeRun ? 1 : -1;
+        }
+
+        return a1.mayFreeRun ? -1 : 1;
+      }
+
+      return 0;
+    });
 
     let mustBeDone: [FoundAdventure, number][] = this.possibleAdventures
       .filter(
@@ -882,41 +940,6 @@ export class AdventureFinder {
       );
       return;
     }
-
-    const toNum = (status: OrbStatus) =>
-      status == OrbStatus.IGNORED ? OrbStatus.NOT_SET : status;
-    const compareFreeRuns = toInt(getProperty("_navelRunaways")) > 0;
-    const levelingGoose = familiarWeight(this.goose) >= 6;
-
-    this.possibleAdventures.sort((a1, a2) => {
-      if (a1.considerPriority != a2.considerPriority) {
-        return a1.considerPriority - a2.considerPriority;
-      }
-
-      if (toNum(a1.orbStatus) != toNum(a2.orbStatus)) {
-        return a1.orbStatus - a2.orbStatus;
-      }
-
-      if ((a1.quest == null) != (a2.quest == null)) {
-        return a1.quest == null ? 1 : -1;
-      }
-
-      if (a1.status != a2.status) {
-        return a1.status - a2.status;
-      }
-
-      if (compareFreeRuns && a1.mayFreeRun != a2.mayFreeRun) {
-        // If we're trying to level our goose, we want to prioritize places we're not allowed to free run in
-
-        if (levelingGoose) {
-          return a1.mayFreeRun ? 1 : -1;
-        }
-
-        return a1.mayFreeRun ? -1 : 1;
-      }
-
-      return 0;
-    });
 
     if (this.possibleAdventures.length > 0) {
       return this.possibleAdventures[0];

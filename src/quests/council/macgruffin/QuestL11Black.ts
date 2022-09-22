@@ -94,13 +94,13 @@ export class QuestL11Black extends TaskInfo implements QuestInfo {
 
   forcedNCIn(): number {
     const encounters = getEncounters("The Black Forest", ["All Over the Map"])
-      .filter(([e]) => e.startsWith("black ") || e == "All Over The Map")
+      .filter(([e]) => e.startsWith("black ") || e == "All Over the Map")
       .reverse();
 
     let fightsSinceLastNC = 0;
 
     for (const [encounter] of encounters) {
-      if (encounter == "All Over The Map") {
+      if (encounter == "All Over the Map") {
         break;
       }
 

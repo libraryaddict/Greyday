@@ -5,6 +5,7 @@ import {
   Familiar,
   getProperty,
   haveEffect,
+  haveFamiliar,
   haveSkill,
   Item,
   Location,
@@ -12,13 +13,15 @@ import {
   numericModifier,
   Skill,
   toInt,
-  toItem,
   use,
-  useSkill,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
-import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
+import {
+  AdventureSettings,
+  greyAdv,
+  setPrimedResource,
+} from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
   getQuestStatus,
@@ -27,10 +30,15 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
-import { GreySettings } from "../../../utils/GreySettings";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
+import {
+  currentPredictions,
+  getAllCombinations,
+} from "../../../utils/GreyUtils";
+import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
+import { ResourceCategory } from "../../../typings/ResourceTypes";
 
-export class QuestManorBillards implements QuestInfo {
+export class QuestManorBillards extends TaskInfo implements QuestInfo {
   billards: Location = Location.get("The Haunted Billiards Room");
   chalk: Item = Item.get("Handful of hand chalk");
   chalkEffect: Effect = Effect.get("Chalky Hand");
@@ -39,10 +47,15 @@ export class QuestManorBillards implements QuestInfo {
   poolgeist: Monster = Monster.get("pooltergeist");
   ghost: Monster = Monster.get("Chalkdust wraith");
   hardening: Skill = Skill.get("Subatomic Hardening");
+  lefthandMan: Familiar = Familiar.get("Left-Hand Man");
+  umbrella: Item = Item.get("Unbreakable Umbrella");
   toAbsorb: Monster[];
   elementalSkills: Skill[];
+  paths: PossiblePath[];
 
   constructor() {
+    super();
+
     this.elementalSkills = AbsorbsProvider.loadAbsorbs()
       .map((a) =>
         a.skill == null
@@ -58,6 +71,42 @@ export class QuestManorBillards implements QuestInfo {
       .map(([p]) => p) as Skill[];
   }
 
+  createPaths(assumeUnstarted: boolean): void {
+    this.paths = [];
+
+    const combos: [ResourceCategory, number][] = [];
+    const ncsNeeded = assumeUnstarted || availableAmount(this.cue) == 0 ? 2 : 1;
+
+    for (let t = 0; t < ncsNeeded; t++) {
+      combos.push([null, 5]);
+      combos.push([ResourceCategory.FORCE_NC, 1]);
+    }
+
+    for (const combination of getAllCombinations(combos)) {
+      if (combination.length != ncsNeeded) {
+        continue;
+      }
+
+      const path = new PossiblePath(
+        combination.map(([, t]) => t).reduce((p, v) => p + v, 0)
+      );
+
+      for (const [res] of combination) {
+        if (res == null) {
+          continue;
+        }
+
+        path.add(res);
+      }
+
+      this.paths.push(path);
+    }
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
+
   getId(): QuestType {
     return "Manor / Billards";
   }
@@ -66,7 +115,30 @@ export class QuestManorBillards implements QuestInfo {
     return 8;
   }
 
-  status(): QuestStatus {
+  attemptPrime(path: PossiblePath): boolean {
+    if (!path.canUse(ResourceCategory.FORCE_NC)) {
+      return false;
+    }
+
+    if (availableAmount(this.chalk) == 0 && haveEffect(this.chalkEffect) <= 1) {
+      return false;
+    }
+
+    const orb = currentPredictions().get(this.billards);
+
+    if (
+      (orb != null && this.toAbsorb.includes(orb)) ||
+      (orb == this.poolgeist && !haveSkill(this.hardening))
+    ) {
+      return false;
+    }
+
+    setPrimedResource(this, path, path.getResource(ResourceCategory.FORCE_NC));
+
+    return true;
+  }
+
+  status(path: PossiblePath): QuestStatus {
     const status = getQuestStatus("questM20Necklace");
 
     if (status < 1) {
@@ -75,6 +147,14 @@ export class QuestManorBillards implements QuestInfo {
 
     if (status > 2 || availableAmount(this.key) > 0) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (
+      path != null &&
+      path.canUse(ResourceCategory.FORCE_NC) &&
+      path.getResource(ResourceCategory.FORCE_NC).primed()
+    ) {
+      return QuestStatus.READY;
     }
 
     if (!hasNonCombatSkillsReady(false)) {
@@ -88,41 +168,69 @@ export class QuestManorBillards implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     const outfit = new GreyOutfit();
+    let primed = path.getResource(ResourceCategory.FORCE_NC);
 
-    if (
-      availableAmount(this.cue) == 0 ||
-      haveEffect(this.chalkEffect) > 0 ||
-      availableAmount(this.chalk) > 0 ||
-      toInt(getProperty("poolSkill")) < 2
-    ) {
-      outfit.setNoCombat().setNoCombat();
-    }
-
-    outfit.addItem(this.cue);
-
-    if (this.elementalSkills.find((s) => haveSkill(s)) == null) {
-      outfit.addBonus("+10 elemental dmg 1 min 1 max");
+    if (primed != null && !primed.primed()) {
+      primed = null;
     }
 
     const orbs: Monster[] = [];
 
-    if (
-      this.toAbsorb.includes(this.ghost) ||
-      (availableAmount(this.chalk) == 0 && haveEffect(this.chalkEffect) <= 1)
-    ) {
-      orbs.push(this.ghost);
+    if (primed == null) {
+      if (
+        availableAmount(this.cue) == 0 ||
+        haveEffect(this.chalkEffect) > 0 ||
+        availableAmount(this.chalk) > 0 ||
+        toInt(getProperty("poolSkill")) < 2
+      ) {
+        outfit.setNoCombat().setNoCombat();
+      }
+
+      if (this.elementalSkills.find((s) => haveSkill(s)) == null) {
+        outfit.addBonus("+10 elemental dmg 1 min 1 max");
+      }
+
+      if (
+        this.toAbsorb.includes(this.ghost) ||
+        (availableAmount(this.chalk) == 0 && haveEffect(this.chalkEffect) <= 1)
+      ) {
+        orbs.push(this.ghost);
+      }
+
+      if (!haveSkill(this.hardening)) {
+        orbs.push(this.poolgeist);
+      }
     }
 
-    if (!haveSkill(this.hardening)) {
-      orbs.push(this.poolgeist);
+    outfit.addItem(this.cue);
+
+    const mustHitGhost =
+      this.toAbsorb.includes(this.ghost) ||
+      haveEffect(this.chalkEffect) + availableAmount(this.chalk) == 0;
+
+    const fam =
+      primed == null &&
+      !orbs.includes(currentPredictions().get(this.billards)) &&
+      !mustHitGhost &&
+      haveFamiliar(this.lefthandMan) &&
+      availableAmount(this.cue) > 0 &&
+      availableAmount(this.umbrella) > 0
+        ? this.lefthandMan
+        : null;
+
+    if (fam != null) {
+      outfit.addBonus("+switch " + this.lefthandMan);
+      outfit.addBonus("+equip " + this.umbrella);
     }
 
     return {
       outfit: outfit,
       location: this.billards,
       orbs: orbs,
+      familiar: fam,
+      disableFamOverride: fam != null,
       mayFreeRun: true,
       freeRun: (monster) => !orbs.includes(monster),
       run: () => {

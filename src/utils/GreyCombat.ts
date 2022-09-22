@@ -35,7 +35,7 @@ import {
 import { FoundAdventure } from "../GreyChooser";
 import { BanishType, getBanished, hasBanished } from "./Banishers";
 import { AbsorbsProvider } from "./GreyAbsorber";
-import { AdventureSettings } from "./GreyLocations";
+import { AdventureSettings, runPrimedResource } from "./GreyLocations";
 import { GreyOutfit } from "./GreyOutfitter";
 import { GreySettings } from "./GreySettings";
 import { currentPredictions } from "./GreyUtils";

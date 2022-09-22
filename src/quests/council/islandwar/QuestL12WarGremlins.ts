@@ -204,9 +204,8 @@ class GremlinQuest implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    const outfit = new GreyOutfit("-ML +DA +DR +familiar experience");
+    const outfit = new GreyOutfit().addBonus("-ML +5 DA +5 DR");
     outfit.hpWeight = 1;
-    outfit.umbrellaSetting = UmbrellaState.DAMAGE_REDUCTION_SHIELD;
 
     const macro2 = Macro.if_(
       "match " + this.toolString,

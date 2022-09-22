@@ -3,19 +3,15 @@ import {
   Effect,
   effectModifier,
   equippedAmount,
-  Familiar,
   getProperty,
   haveEffect,
   haveSkill,
   Item,
   itemAmount,
   Location,
-  myMeat,
-  print,
   Skill,
   toInt,
   use,
-  useFamiliar,
   visitUrl,
 } from "kolmafia";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
@@ -39,24 +35,25 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
 
     this.worms.push(
       new WormProgress(
+        Location.get("The Queen's Chamber"),
         Item.get("filthworm royal guard scent gland"),
-        Location.get("The Queen's Chamber")
+        false
       )
     );
     this.worms.push(
       new WormProgress(
-        Item.get("filthworm drone scent gland"),
-        Location.get("The Royal Guard Chamber")
+        Location.get("The Royal Guard Chamber"),
+        Item.get("filthworm drone scent gland")
       )
     );
     this.worms.push(
       new WormProgress(
-        Item.get("Filthworm hatchling scent gland"),
-        Location.get("The Feeding Chamber")
+        Location.get("The Feeding Chamber"),
+        Item.get("Filthworm hatchling scent gland")
       )
     );
     this.worms.push(
-      new WormProgress(null, Location.get("The Hatching Chamber"))
+      new WormProgress(Location.get("The Hatching Chamber"), null)
     );
   }
 
@@ -69,15 +66,23 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
       return;
     }
 
-    const wormsToYR = assumeUnstarted
-      ? 3
-      : this.worms.findIndex((w) => w.isDoable());
-    const wormsToKill = wormsToYR + 1;
+    const wormsRemaining: WormProgress[] = [];
+
+    for (const worm of this.worms) {
+      wormsRemaining.push(worm);
+
+      if (!assumeUnstarted && worm.isDoable()) {
+        break;
+      }
+    }
+
+    const yrsNeeded = wormsRemaining.filter((w) => w.dropsItem).length;
+    const killsNeeded = wormsRemaining.length;
 
     const mixup: [ResourceCategory, number][] = [];
     mixup.push([null, 1]);
 
-    for (let i = 0; i < wormsToYR; i++) {
+    for (let i = 0; i < yrsNeeded; i++) {
       // So we run 300% item drop lets assume
       // That's 30 chance a fight. That's eh, 4 fights? Lets call it 6 cos we're bad luck.
       mixup.push([null, 6]);
@@ -88,7 +93,7 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
 
     for (const combo of getAllCombinations(mixup)) {
       if (
-        combo.length != wormsToKill ||
+        combo.length != killsNeeded ||
         combo.find(([res, turn]) => res == null && turn == 1) == null
       ) {
         continue;
@@ -309,10 +314,16 @@ class WormProgress {
   glandsRequired: Item;
   effect: Effect;
   location: Location;
+  dropsItem: boolean;
 
-  constructor(itemRequired: Item, location: Location) {
+  constructor(
+    location: Location,
+    itemRequired: Item,
+    dropsItem: boolean = true
+  ) {
     this.location = location;
     this.glandsRequired = itemRequired;
+    this.dropsItem = dropsItem;
 
     if (itemRequired == null) {
       return;

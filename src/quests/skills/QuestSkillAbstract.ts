@@ -10,19 +10,22 @@ export class QuestSkillAbstract implements QuestInfo {
   monster: Monster;
   skill: Skill;
   questName: QuestType;
+  valid: () => boolean;
 
   constructor(
     level: number,
     location: Location,
     monster: Monster,
     skill: Skill,
-    questName: QuestType
+    questName: QuestType,
+    valid: () => boolean
   ) {
     this.requiredLevel = level;
     this.location = location;
     this.monster = monster;
     this.skill = skill;
     this.questName = questName;
+    this.valid = valid;
   }
 
   getId(): QuestType {
@@ -39,6 +42,10 @@ export class QuestSkillAbstract implements QuestInfo {
     }
 
     if (!canAdventure(this.location)) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (this.valid != null && !this.valid()) {
       return QuestStatus.NOT_READY;
     }
 

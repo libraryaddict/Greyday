@@ -32,7 +32,7 @@ import {
   FoundAdventure,
   OrbStatus,
 } from "./GreyChooser";
-import { QuestAdventure } from "./quests/Quests";
+import { QuestAdventure, QuestStatus } from "./quests/Quests";
 import { TaskBoomboxSwitch } from "./tasks/TaskBoomboxSwitch";
 import { TaskCouncil } from "./tasks/TaskCouncil";
 import { TaskEater } from "./tasks/TaskEater";
@@ -58,7 +58,6 @@ import { AbsorbsProvider, Reabsorbed } from "./utils/GreyAbsorber";
 import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
 import { doColor, setUmbrella } from "./utils/GreyUtils";
-import { TaskBountyHunter } from "./tasks/TaskBountyHunter";
 import { getPrimedResource } from "./utils/GreyLocations";
 
 export class GreyAdventurer {
@@ -83,6 +82,7 @@ export class GreyAdventurer {
     "Greatest American Pants",
     "navel ring of navel gazing",
   ].map((s) => Item.get(s));
+  lastTasksComplete: number = -1;
 
   runTurn(goTime: boolean): boolean {
     this.goTime = goTime;
@@ -105,6 +105,10 @@ export class GreyAdventurer {
 
     const snapshot = createResourcesSnapshot(goodAdventure.path);
 
+    if (getPrimedResource() == null) {
+      this.adventureFinder.tryPrime(goodAdventure);
+    }
+
     this.printMessage(goodAdventure);
     this.runAdventure(goodAdventure);
 
@@ -115,6 +119,13 @@ export class GreyAdventurer {
 
     if (this.isMismatch(snapshot, changed)) {
       return false;
+    }
+
+    if (getPrimedResource() != null && getPrimedResource().resource.primed()) {
+      print(
+        "Successfully primed for quest " + getPrimedResource().quest.getId(),
+        "blue"
+      );
     }
 
     return true;
@@ -277,6 +288,35 @@ export class GreyAdventurer {
     } else {
       prefix = "Non-Quest @ " + goodAdventure.adventure.location;
     }
+
+    let completed = 0;
+    let notReady = 0;
+    let inProgress = 0;
+
+    for (const [quest, path] of this.adventureFinder.allQuests) {
+      const status = quest.status(path);
+
+      if (status == QuestStatus.COMPLETED) {
+        completed++;
+      } else if (status == QuestStatus.NOT_READY) {
+        notReady++;
+      } else {
+        inProgress++;
+      }
+    }
+
+    const changed =
+      this.lastTasksComplete >= 0 ? completed - this.lastTasksComplete : 0;
+    this.lastTasksComplete = completed;
+
+    printHtml(
+      "<font color='blue'>Tasks Complete: " +
+        completed +
+        (changed > 0 ? "<font color='green'> (+" + changed + ")</font>" : "") +
+        " / " +
+        this.adventureFinder.allQuests.length +
+        "</font>"
+    );
 
     printHtml(
       "<u>" +
@@ -470,6 +510,12 @@ export class GreyAdventurer {
         adventure.considerPriority == ConsiderPriority.RANDOM_ABSORB ? 3 : 1;
     }
 
+    const primed = getPrimedResource();
+
+    if (primed != null) {
+      primed.resource.prepare(outfit);
+    }
+
     const maximizeResult = maximize(
       outfit.createString() +
         " " +
@@ -477,6 +523,10 @@ export class GreyAdventurer {
         " miniature crystal ball",
       false
     );
+
+    if (primed != null) {
+      primed.resource.prepare(null);
+    }
 
     if (!maximizeResult) {
       throw "Failed to maximize. Either fix, or report to the script author";
@@ -577,9 +627,13 @@ export function castCombatSkill() {
   }
 }
 
+export const skillPhaseShift = Skill.get("Phase Shift");
+export const skillPhotonicShroud = Skill.get("Photonic Shroud");
+export const skillHonk = Skill.get("Piezoelectric Honk");
+
 export function hasNonCombatSkillsReady(wantBoth: boolean = true): boolean {
-  const s1 = haveSkill(Skill.get("Phase Shift"));
-  const s2 = haveSkill(Skill.get("Photonic Shroud"));
+  const s1 = haveSkill(skillPhaseShift);
+  const s2 = haveSkill(skillPhotonicShroud);
 
   const s1e = haveEffect(Effect.get("Shifted Phase")) > 0;
   const s2e = haveEffect(Effect.get("Darkened Photons")) > 0;
@@ -598,8 +652,7 @@ export function hasNonCombatSkillsReady(wantBoth: boolean = true): boolean {
 export function hasCombatSkillReady(): boolean {
   return (
     hasCombatSkillActive() ||
-    (haveSkill(Skill.get("Piezoelectric Honk")) &&
-      myMp() + myMeat() / 200 >= 50)
+    (haveSkill(skillHonk) && myMp() + myMeat() / 200 >= 50)
   );
 }
 

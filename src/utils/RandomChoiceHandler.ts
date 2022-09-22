@@ -30,6 +30,7 @@ export function getBackupChoices(): [number, number][] {
 
   // NEP
   choices(1322, 6);
+  choices(1324, 5);
 
   // Manor pantry
   choices(888, 4);

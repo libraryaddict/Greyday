@@ -20,7 +20,11 @@ import {
 import { hasCombatSkillReady } from "../../../GreyAdventurer";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
-import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
+import {
+  AdventureSettings,
+  greyAdv,
+  setPrimedResource,
+} from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { GreySettings } from "../../../utils/GreySettings";
 import {
@@ -82,9 +86,10 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
 
     // If we're doing voted, or mag class. Then we can do a replace
     if (
-      availableAmount(this.votedSticker) +
-        availableAmount(this.cursedMagnifyingGlass) >
-        0 &&
+      (this.hasPortScan() ||
+        availableAmount(this.votedSticker) +
+          availableAmount(this.cursedMagnifyingGlass) >
+          0) &&
       (!this.isBackupReady() || this.getFriendsRemaining() == 0)
     ) {
       possibleCombo.push(ResourceCategory.GLOVE_REPLACE);
@@ -168,6 +173,10 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
           continue;
         }
 
+        if (type == ResourceCategory.GLOVE_REPLACE && this.hasPortScan()) {
+          path.add(ResourceCategory.FORCE_FIGHT);
+        }
+
         path.add(type);
       }
 
@@ -183,7 +192,32 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
     return this.paths;
   }
 
-  status(path: PossiblePath): QuestStatus {
+  status(path?: PossiblePath): QuestStatus {
+    if (
+      path != null &&
+      path.canUse(ResourceCategory.FORCE_FIGHT) &&
+      path.getResource(ResourceCategory.FORCE_FIGHT).primed()
+    ) {
+      return QuestStatus.READY;
+    }
+
+    const status = this.getStatus(path);
+
+    if (status == null) {
+      if (!path.canUse(ResourceCategory.FORCE_FIGHT)) {
+        return QuestStatus.READY;
+      }
+
+      return QuestStatus.NOT_READY;
+    }
+
+    return status;
+  }
+
+  /**
+   * Lazy code, if we return null, then we want to run this task but only if its a primed
+   */
+  getStatus(path: PossiblePath): QuestStatus {
     if (getProperty("sidequestLighthouseCompleted") != "none") {
       return QuestStatus.COMPLETED;
     }
@@ -208,25 +242,40 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (availableAmount(this.backupCamera) > 0 && this.isBackupReady()) {
+    if (
+      availableAmount(this.backupCamera) > 0 &&
+      this.isBackupReady() &&
+      path.canUse(ResourceCategory.COPIER)
+    ) {
       return QuestStatus.READY;
+    }
+
+    if (
+      path.canUse(ResourceCategory.GLOVE_REPLACE) &&
+      path.canUse(ResourceCategory.FORCE_FIGHT)
+    ) {
+      if (
+        familiarWeight(Familiar.get("Grey Goose")) > 2 &&
+        familiarWeight(Familiar.get("Grey Goose")) < 6
+      ) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return null;
+    }
+
+    if (path.canUse(ResourceCategory.GLOVE_REPLACE)) {
+      if (this.getMonsterReplacer() == null) {
+        return QuestStatus.NOT_READY;
+      }
+    } else if (!hasCombatSkillReady()) {
+      return QuestStatus.FASTER_LATER;
     }
 
     if (
       familiarWeight(Familiar.get("Grey Goose")) > 2 &&
       familiarWeight(Familiar.get("Grey Goose")) < 6
     ) {
-      return QuestStatus.FASTER_LATER;
-    }
-
-    if (
-      path.canUse(ResourceCategory.GLOVE_REPLACE) &&
-      this.hasForcedMonsterAndGlove()
-    ) {
-      if (this.getMonsterReplacer() == null) {
-        return QuestStatus.NOT_READY;
-      }
-    } else if (!hasCombatSkillReady()) {
       return QuestStatus.FASTER_LATER;
     }
 
@@ -285,11 +334,17 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
     return null;
   }
 
-  hasForcedMonsterAndGlove(): boolean {
+  hasPortScan() {
+    return getProperty("sourceTerminalEducateKnown").includes("portscan");
+  }
+
+  hasMonsterForcer(): boolean {
     return (
-      availableAmount(this.cursedMagnifyingGlass) +
-        availableAmount(this.votedSticker) >
-        0 && availableAmount(this.powerfulGlove) > 0
+      (this.hasPortScan() ||
+        availableAmount(this.cursedMagnifyingGlass) +
+          availableAmount(this.votedSticker) >
+          0) &&
+      availableAmount(this.powerfulGlove) > 0
     );
   }
 
@@ -386,6 +441,26 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
     };
   }
 
+  attemptPrime(path: PossiblePath): boolean {
+    if (!path.canUse(ResourceCategory.FORCE_FIGHT)) {
+      return false;
+    }
+
+    const status = this.getStatus(path);
+
+    if (status != null) {
+      return false;
+    }
+
+    setPrimedResource(
+      this,
+      path,
+      path.getResource(ResourceCategory.FORCE_FIGHT)
+    );
+
+    return true;
+  }
+
   run(path: PossiblePath): QuestAdventure {
     // Try to turn in quest
     if (itemAmount(this.item) >= 5) {
@@ -402,17 +477,31 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
 
     const outfit = new GreyOutfit();
 
-    const gloveMacro = path.getResource(ResourceCategory.GLOVE_REPLACE);
-    const monsterReplacerItem = this.getMonsterReplacer();
+    const gloveReplace = path.getResource(ResourceCategory.GLOVE_REPLACE);
 
-    if (
-      gloveMacro != null &&
-      this.hasForcedMonsterAndGlove() &&
-      monsterReplacerItem != null
-    ) {
-      outfit.addItem(monsterReplacerItem);
+    const primed = path.getResource(ResourceCategory.FORCE_FIGHT);
 
-      gloveMacro.prepare(outfit);
+    if (primed != null) {
+      if (!primed.primed()) {
+        // Need to handle primed better, like resumes..
+        //   throw "Unable to run lobster fights, we're supposed to prime it but it isn't primed!";
+      }
+
+      if (gloveReplace == null) {
+        throw "Unable to run lobster fights, we're forcing a fight but don't have a replacer!";
+      }
+    }
+
+    const replaceFight =
+      primed != null ||
+      (this.getMonsterReplacer() != null && gloveReplace != null);
+
+    if (replaceFight != null) {
+      gloveReplace.prepare(outfit);
+
+      if (primed == null) {
+        outfit.addItem(this.getMonsterReplacer());
+      }
     } else {
       outfit.setPlusCombat();
     }
@@ -443,16 +532,12 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
         }
 
         try {
-          if (
-            gloveMacro != null &&
-            this.hasForcedMonsterAndGlove() &&
-            monsterReplacerItem != null
-          ) {
+          if (replaceFight) {
             visitUrl("adventure.php?snarfblat=" + toInt(this.loc));
 
             Macro.ifNot_(
               this.monster,
-              Macro.ifNot_(this.bossBat, gloveMacro.macro())
+              Macro.ifNot_(this.bossBat, gloveReplace.macro())
             ).submit();
           }
 

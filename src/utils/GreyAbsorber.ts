@@ -64,20 +64,15 @@ export class AbsorbsProvider {
   getUsefulSkills(): Map<Skill, string> {
     return new Map(
       [
-        ["Advanced Exo-Alloy", "100 DA"],
-        ["Conifer Polymers", "3 Stench Resist"],
+        //["Conifer Polymers", "3 Stench Resist"],
         //["Clammy Microcilia", "2 Stench Resist"],
         //["Cooling Tubules", "10 Cold Damage"],
         ["Cryocurrency", "5 Cold Damage"],
         // ["Ire Proof", "+3 Hot Resist"],
         // ["Snow-Cooling System", "+15 Cold Dmg"],
         ["Cooling Tubules", "+10 Cold Dmg"],
-        ["Financial Spreadsheets", "+40% Meat from Monsters"],
         //["Innuendo Circuitry", "+15 Sleaze Damage"],
-        ["Ponzi Apparatus", "Scaling meat%"],
         // ["Procgen Ribaldry", "10 Sleaze Damage"],
-        ["Propagation Drive", "20% Item Drops"],
-        ["Overclocking", "Scaling +init"],
       ].map((s) => [toSkill(s[0]), s[1]])
     );
   }
@@ -85,6 +80,11 @@ export class AbsorbsProvider {
   getMustHaveSkills(): Map<Skill, string> {
     return new Map(
       [
+        ["Propagation Drive", "20% Item Drops"],
+        ["Overclocking", "Scaling +init"],
+        ["Ponzi Apparatus", "Scaling meat%"],
+        ["Advanced Exo-Alloy", "100 DA"],
+        ["Financial Spreadsheets", "+40% Meat from Monsters"],
         ["Subatomic Hardening", "Scaling DR"],
         ["Fluid Dynamics Simulation", "Scaling HP Regen"],
         ["Infinite Loop", "Fast Leveling"],

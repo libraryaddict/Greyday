@@ -73,7 +73,12 @@ export function setPrimedResource(
   resource: SomeResource
 ) {
   if (getPrimedResource() != null) {
-    throw "A resource has already been set to be primed";
+    throw (
+      "A resource " +
+      getPrimedResource().quest.getId() +
+      " has already been set to be primed. Said resource primed? " +
+      getPrimedResource().resource.primed()
+    );
   }
 
   if (resource.primed == null) {
@@ -230,6 +235,8 @@ export function greyAdv(
       ) {
         macro.runaway();
       }
+
+      runPrimedResource();
 
       macro.step(greyKillingBlow(outfit));
     } else {
