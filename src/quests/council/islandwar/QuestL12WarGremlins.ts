@@ -12,7 +12,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { UmbrellaState } from "../../../utils/GreyUtils";
+import { currentPredictions, UmbrellaState } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
@@ -153,6 +153,7 @@ class GremlinQuest implements QuestInfo {
   magnet: Item = Item.get("molybdenum magnet");
   flyers: Item = Item.get("Rock band flyers");
   sealTooth: Item = Item.get("Seal Tooth");
+  pants: Item = Item.get("Greatest American Pants");
 
   constructor(
     id: QuestType,
@@ -204,8 +205,15 @@ class GremlinQuest implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    const outfit = new GreyOutfit().addBonus("-ML +5 DA +5 DR");
+    const outfit = new GreyOutfit().addBonus("-ML +1 DA +5 DR");
     outfit.hpWeight = 1;
+
+    if (
+      availableAmount(this.pants) > 0 &&
+      currentPredictions().get(this.loc) != this.monster
+    ) {
+      outfit.addBonus("+equip " + this.pants.name);
+    }
 
     const macro2 = Macro.if_(
       "match " + this.toolString,
