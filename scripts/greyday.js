@@ -13615,13 +13615,14 @@ GremlinQuest = /*#__PURE__*/function () {
 
 
 
+
   function GremlinQuest(
   id,
   loc,
   monster,
   item,
   toolString)
-  {QuestL12WarGremlins_classCallCheck(this, GremlinQuest);QuestL12WarGremlins_defineProperty(this, "id", void 0);QuestL12WarGremlins_defineProperty(this, "loc", void 0);QuestL12WarGremlins_defineProperty(this, "monster", void 0);QuestL12WarGremlins_defineProperty(this, "item", void 0);QuestL12WarGremlins_defineProperty(this, "toolString", void 0);QuestL12WarGremlins_defineProperty(this, "magnet", external_kolmafia_namespaceObject.Item.get("molybdenum magnet"));QuestL12WarGremlins_defineProperty(this, "flyers", external_kolmafia_namespaceObject.Item.get("Rock band flyers"));QuestL12WarGremlins_defineProperty(this, "sealTooth", external_kolmafia_namespaceObject.Item.get("Seal Tooth"));
+  {QuestL12WarGremlins_classCallCheck(this, GremlinQuest);QuestL12WarGremlins_defineProperty(this, "id", void 0);QuestL12WarGremlins_defineProperty(this, "loc", void 0);QuestL12WarGremlins_defineProperty(this, "monster", void 0);QuestL12WarGremlins_defineProperty(this, "item", void 0);QuestL12WarGremlins_defineProperty(this, "toolString", void 0);QuestL12WarGremlins_defineProperty(this, "magnet", external_kolmafia_namespaceObject.Item.get("molybdenum magnet"));QuestL12WarGremlins_defineProperty(this, "flyers", external_kolmafia_namespaceObject.Item.get("Rock band flyers"));QuestL12WarGremlins_defineProperty(this, "sealTooth", external_kolmafia_namespaceObject.Item.get("Seal Tooth"));QuestL12WarGremlins_defineProperty(this, "pants", external_kolmafia_namespaceObject.Item.get("Greatest American Pants"));
     this.id = id;
     this.loc = loc;
     this.monster = monster;
@@ -13665,8 +13666,15 @@ GremlinQuest = /*#__PURE__*/function () {
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().addBonus("-ML +5 DA +5 DR");
+      var outfit = new GreyOutfit().addBonus("-ML +1 DA +5 DR");
       outfit.hpWeight = 1;
+
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.pants) > 0 &&
+      currentPredictions().get(this.loc) != this.monster)
+      {
+        outfit.addBonus("+equip " + this.pants.name);
+      }
 
       var macro2 = Macro.if_(
       "match " + this.toolString,
@@ -30274,7 +30282,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "599b1e8";
+var lastCommitHash = "87144d5";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
