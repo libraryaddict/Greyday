@@ -335,6 +335,8 @@ export class GreyAdventurer {
 
     if (toRun.location == Location.get("Inside the Palindome")) {
       outfit.addItem(Item.get("Talisman o' Namsilat"));
+    } else if (toRun.location == Location.get("The Icy Peak")) {
+      outfit.addBonus("+5 cold res 5 min");
     }
 
     let doOrb: boolean = false;
