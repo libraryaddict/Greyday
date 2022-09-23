@@ -186,7 +186,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
       return QuestStatus.READY;
     }
 
-    if (myLevel() >= 12 && getProperty("warProgress") == "unstarted") {
+    if (myLevel() >= 12 && getProperty("questL12War") == "unstarted") {
       return QuestStatus.NOT_READY;
     }
 
@@ -199,7 +199,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
     if (
       !path.hasTag(WarTag.BEFORE_WAR) &&
       path.hasTag(WarTag.DURING_WAR) &&
-      getProperty("warProgress") == "unstarted"
+      getProperty("questL12War") == "unstarted"
     ) {
       return QuestStatus.NOT_READY;
     }
