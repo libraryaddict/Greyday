@@ -225,6 +225,7 @@ const portscan: SomeResource = {
     }
 
     cliExecute("terminal educate portscan.edu");
+    visitUrl("main.php");
   },
   primed: () => toBoolean(getProperty(portscanProp) || "false"),
   unprime: () => setProperty(portscanProp, "false"),

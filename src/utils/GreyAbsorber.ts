@@ -14,6 +14,7 @@ import {
   Monster,
   print,
   printHtml,
+  pullsRemaining,
   Skill,
   toInt,
   toMonster,
@@ -62,6 +63,10 @@ export class AbsorbsProvider {
   }
 
   getUsefulSkills(): Map<Skill, string> {
+    if (getProperty("questL13Final") != "unstarted") {
+      return new Map();
+    }
+
     return new Map(
       [
         //["Conifer Polymers", "3 Stench Resist"],
@@ -78,6 +83,10 @@ export class AbsorbsProvider {
   }
 
   getMustHaveSkills(): Map<Skill, string> {
+    if (getProperty("questL13Final") != "unstarted") {
+      return new Map();
+    }
+
     return new Map(
       [
         ["Propagation Drive", "20% Item Drops"],

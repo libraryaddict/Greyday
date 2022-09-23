@@ -130,6 +130,10 @@ export class QuestL12Battlefield implements QuestInfo {
       fam = this.jellyfish;
     }
 
+    if (fam == this.goose && familiarWeight(this.goose) >= 6) {
+      outfit.addBonus("+50 bonus mafia thumb ring");
+    }
+
     return {
       outfit: outfit,
       location: this.loc,
