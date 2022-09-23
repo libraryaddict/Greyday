@@ -24,25 +24,22 @@ import { QuestType } from "../../QuestTypes";
 export class QuestL4BatsCenter extends TaskInfo implements QuestInfo {
   loc: Location = Location.get("Guano Junction");
   sonar: Item = Item.get("sonar-in-a-biscuit");
-  task: PossiblePath = new PossiblePath(1).add(
-    ResourceCategory.FIRE_EXTINGUSHER_ZONE
-  );
-  taskManual = new PossiblePath(3, 8);
   goose: Familiar = Familiar.get("Grey Goose");
   paths: PossiblePath[] = [];
   vampBat: Monster = Monster.get("vampire bat");
 
   createPaths(assumeUnstarted: boolean) {
     this.paths = [];
-    this.taskManual = new PossiblePath(3, Math.max(3, 8 - this.loc.turnsSpent));
 
-    this.paths.push(this.taskManual);
+    this.paths.push(new PossiblePath(3, Math.max(3, 8 - this.loc.turnsSpent)));
 
     if (
       assumeUnstarted ||
       getProperty("fireExtinguisherBatHoleUsed") != "true"
     ) {
-      this.paths.push(this.task);
+      this.paths.push(
+        new PossiblePath(1).add(ResourceCategory.FIRE_EXTINGUSHER_ZONE)
+      );
     }
   }
 
