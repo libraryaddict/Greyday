@@ -1,6 +1,7 @@
 import {
   currentRound,
   Effect,
+  getAutoAttack,
   getProperty,
   getRevision,
   gitAtHead,
@@ -14,6 +15,7 @@ import {
   print,
   printHtml,
   pullsRemaining,
+  setAutoAttack,
   setProperty,
   svnAtHead,
   svnExists,
@@ -326,6 +328,12 @@ class GreyYouMain {
       props.setProperty("autoSatisfyWithNPCs", "true");
       props.setProperty("autoSatisfyWithCoinmasters", "true");
 
+      const autoAttack = getAutoAttack();
+
+      if (autoAttack != 0) {
+        setAutoAttack(0);
+      }
+
       try {
         for (
           ;
@@ -378,6 +386,10 @@ class GreyYouMain {
             timings.getTimeAsString(timings.getTotalSeconds()),
           "blue"
         );
+
+        if (autoAttack != 0) {
+          setAutoAttack(autoAttack);
+        }
       }
 
       if (haveEffect(effect) - lastBeaten == 3) {
