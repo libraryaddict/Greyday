@@ -496,7 +496,7 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       primed != null ||
       (this.getMonsterReplacer() != null && gloveReplace != null);
 
-    if (replaceFight != null) {
+    if (gloveReplace != null) {
       gloveReplace.prepare(outfit);
 
       if (primed == null) {
