@@ -4,6 +4,7 @@ import {
   Item,
   itemAmount,
   myFamiliar,
+  totalTurnsPlayed,
   visitUrl,
 } from "kolmafia";
 import { Task } from "./Tasks";
@@ -11,7 +12,7 @@ import { Task } from "./Tasks";
 export class TaskEquipDistillery implements Task {
   gelcube: Familiar = Familiar.get("Gelatinous Cubeling");
   distill: Item = Item.get("Tiny stillsuit");
-  lastRun: number = 0;
+  lastChecked: number = 0;
 
   run(): void {
     if (itemAmount(this.distill) == 0) {
@@ -22,11 +23,11 @@ export class TaskEquipDistillery implements Task {
       return;
     }
 
-    if (this.lastRun-- > 0) {
+    if (this.lastChecked == totalTurnsPlayed()) {
       return;
     }
 
-    this.lastRun = 2;
+    this.lastChecked = totalTurnsPlayed();
 
     visitUrl("familiar.php?action=equip&pwd=&whichfam=171&whichitem=10932");
   }

@@ -124,12 +124,7 @@ export class QuestManorBillards extends TaskInfo implements QuestInfo {
       return false;
     }
 
-    const orb = currentPredictions().get(this.billards);
-
-    if (
-      (orb != null && this.toAbsorb.includes(orb)) ||
-      (orb == this.poolgeist && !haveSkill(this.hardening))
-    ) {
+    if (!haveSkill(this.hardening) || this.toAbsorb.length > 0) {
       return false;
     }
 

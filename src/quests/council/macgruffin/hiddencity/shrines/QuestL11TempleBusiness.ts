@@ -6,17 +6,30 @@ import {
   Item,
   Location,
   Monster,
+  print,
   toMonster,
+  totalTurnsPlayed,
   use,
   useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../../../utils/Properties";
-import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
+import {
+  AdventureSettings,
+  greyAdv,
+  setPrimedResource,
+} from "../../../../../utils/GreyLocations";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../../../Quests";
 import { QuestType } from "../../../../QuestTypes";
 import { DelayBurners } from "../../../../../iotms/delayburners/DelayBurners";
+import { PossiblePath, TaskInfo } from "../../../../../typings/TaskInfo";
+import { ResourceCategory } from "../../../../../typings/ResourceTypes";
+import {
+  getAllCombinations,
+  getEncounters,
+} from "../../../../../utils/GreyUtils";
+import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
 
-export class QuestL11Business implements QuestInfo {
+export class QuestL11Business extends TaskInfo implements QuestInfo {
   files: Item[] = [
     "McClusky file (page 1)",
     "McClusky file (page 2)",
@@ -31,9 +44,64 @@ export class QuestL11Business implements QuestInfo {
   accountant: Monster = Monster.get("Pygmy witch accountant");
   spirit: Monster = toMonster(444);
   toAbsorb: Monster[];
+  paths: PossiblePath[];
+  savedEncounters: [string, number][] = [];
+  encountersSaved: number = 0;
 
   getId(): QuestType {
     return "Council / MacGruffin / HiddenCity / Accountants";
+  }
+
+  createPaths(assumeUnstarted: boolean): void {
+    const firstTurns = this.hasFirstNC()
+      ? 0
+      : assumeUnstarted
+      ? 5
+      : this.delayUntilNextNC();
+    const secondTurns =
+      !this.hasFirstNC() || assumeUnstarted ? 4 : this.delayUntilNextNC();
+
+    this.paths = [new PossiblePath(firstTurns + secondTurns)];
+
+    const combos: [ResourceCategory, number][] = [];
+
+    if (firstTurns > 0) {
+      combos.push([ResourceCategory.FORCE_NC, 0]);
+      combos.push([null, firstTurns]);
+    }
+
+    if (secondTurns > 0) {
+      combos.push([ResourceCategory.FORCE_NC, 0]);
+      combos.push([null, secondTurns]);
+    }
+
+    if (combos.length == 0) {
+      return;
+    }
+
+    for (const combo of getAllCombinations(combos)) {
+      if (combo.length != combos.length / 2) {
+        continue;
+      }
+
+      const path = new PossiblePath(
+        combo.map(([, t]) => t).reduce((p, v) => p + v, 0)
+      );
+
+      for (const [res] of combo) {
+        if (res == null) {
+          continue;
+        }
+
+        path.add(res);
+      }
+
+      this.paths.push(path);
+    }
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
   }
 
   getLocations(): Location[] {
@@ -45,9 +113,39 @@ export class QuestL11Business implements QuestInfo {
   }
 
   delayUntilNextNC(): number {
-    const totalTurns = this.loc.turnsSpent;
+    if (this.encountersSaved != this.loc.turnsSpent) {
+      this.encountersSaved = this.loc.turnsSpent;
+      this.savedEncounters = getEncounters("The Hidden Office Building", [
+        "Working Holiday",
+      ]).reverse();
+    }
 
-    return 4 - ((totalTurns - 1) % 5);
+    let turnsSpent = 0;
+    let ncAfter: number = 5;
+
+    for (const [encounter] of this.savedEncounters) {
+      if (encounter == "Working Holiday") {
+        ncAfter = 4;
+        break;
+      }
+
+      turnsSpent++;
+    }
+
+    if (turnsSpent > ncAfter) {
+      print(
+        "Weird. Parsing is wrong. Expected to hit the apartment NC after " +
+          ncAfter +
+          " delay, but we have " +
+          turnsSpent +
+          " spent..",
+        "red"
+      );
+    }
+
+    const delay = Math.max(0, ncAfter - turnsSpent);
+
+    return delay;
   }
 
   isDelayBurning(): boolean {
@@ -57,23 +155,52 @@ export class QuestL11Business implements QuestInfo {
     );
   }
 
-  status(): QuestStatus {
+  hasFirstNC(): boolean {
+    return (
+      availableAmount(this.binderClip) + availableAmount(this.completeFile) > 0
+    );
+  }
+
+  canRun(): boolean {
+    return (
+      getProperty("questL11Business") != "unstarted" &&
+      getProperty("questL11Worship") == "step3"
+    );
+  }
+
+  status(path: PossiblePath): QuestStatus {
     const status = getProperty("questL11Business");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;
     }
 
-    if (status == "unstarted") {
+    if (path == null || !this.canRun()) {
       return QuestStatus.NOT_READY;
     }
 
-    if (getProperty("questL11Worship") != "step3") {
+    if (availableAmount(this.binderClip) > 0 && this.filesRemaining() == 0) {
+      return QuestStatus.READY;
+    }
+
+    if (getProperty("questL11Curses") != "finished" && this.goCurses(path)) {
       return QuestStatus.NOT_READY;
     }
 
-    if (getProperty("questL11Curses") != "finished" && this.goCurses()) {
-      return QuestStatus.NOT_READY;
+    if (this.wantToForceNextNC(path)) {
+      if (path.getResource(ResourceCategory.FORCE_NC).primed()) {
+        return QuestStatus.READY;
+      }
+
+      // Only run the first NC when primed
+      if (!this.hasFirstNC()) {
+        return QuestStatus.NOT_READY;
+      }
+
+      // Only run the second NC when primed
+      if (this.toAbsorb.length == 0) {
+        return QuestStatus.NOT_READY;
+      }
     }
 
     if (isBanished(this.accountant)) {
@@ -93,17 +220,71 @@ export class QuestL11Business implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  goCurses() {
+  goCurses(path: PossiblePath) {
     return (
-      availableAmount(this.binderClip) > 0 &&
-      this.filesRemaining() > 0 &&
-      this.delayUntilNextNC() == 0
+      this.farmFiles() &&
+      (this.wantToForceNextNC(path) || this.delayUntilNextNC() == 0)
     );
   }
 
-  run(): QuestAdventure {
-    // Banish non-accountant?
-    if (this.goCurses()) {
+  farmFiles(): boolean {
+    return availableAmount(this.binderClip) > 0 && this.filesRemaining() > 0;
+  }
+
+  wantToForceNextNC(path: PossiblePath): boolean {
+    if (path.canUse(ResourceCategory.FORCE_NC) == 0) {
+      return false;
+    }
+
+    if (this.delayUntilNextNC() == 0) {
+      return false;
+    }
+
+    // If we haven't had our first NC, force that
+    if (!this.hasFirstNC()) {
+      return true;
+    }
+
+    // If we've picked up our absorb
+    return this.toAbsorb.length == 0;
+  }
+
+  readyToForceNC(): boolean {
+    return !this.hasFirstNC()
+      ? !this.farmFiles()
+      : availableAmount(this.completeFile) > 0 && this.toAbsorb.length == 0;
+  }
+
+  attemptPrime(path: PossiblePath): boolean {
+    if (!this.wantToForceNextNC(path) || !this.canRun()) {
+      return false;
+    }
+
+    if (!this.readyToForceNC()) {
+      return false;
+    }
+
+    setPrimedResource(this, path, path.getResource(ResourceCategory.FORCE_NC));
+
+    return true;
+  }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
+
+  run(path: PossiblePath): QuestAdventure {
+    if (availableAmount(this.binderClip) > 0 && this.filesRemaining() == 0) {
+      return {
+        location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
+        run: () => {
+          this.tryCreate();
+        },
+      };
+    }
+
+    if (path != null && this.goCurses(path)) {
       //
       return {
         location: this.apartment,
@@ -128,7 +309,11 @@ export class QuestL11Business implements QuestInfo {
     }
 
     return {
-      location: this.loc,
+      location:
+        path.canUse(ResourceCategory.FORCE_NC) &&
+        path.getResource(ResourceCategory.FORCE_NC).primed()
+          ? null
+          : this.loc,
       orbs: this.filesRemaining() > 0 ? [this.accountant] : null,
       forcedFight:
         availableAmount(this.completeFile) > 0

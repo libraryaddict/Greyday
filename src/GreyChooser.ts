@@ -739,7 +739,7 @@ export class AdventureFinder {
     primed.resource.unprime();
     resetPrimedResource();
 
-    return {
+    const toReturn = {
       quest: primed.quest,
       path: primed.path,
       locationInfo: null,
@@ -750,35 +750,43 @@ export class AdventureFinder {
       mayFreeRun: false,
       freeRun: () => false,
     };
+
+    primed.path.addUsedResource(primed.resource);
+
+    return toReturn;
   }
 
   // Try setup something so we can prime this visit
   tryPrime(adventure: FoundAdventure) {
-    // If this quest is one that is an absorb potential, or will be using a crystal ball
-    if (
-      adventure.quest == null ||
-      adventure.orbStatus == OrbStatus.READY ||
-      adventure.orbStatus == OrbStatus.NOT_SET
-    ) {
+    if (adventure.quest == null) {
       return;
     }
 
-    // We don't want to prime on something that might demand to be done later
-    if (adventure.quest.mustBeDone != null) {
-      return;
-    }
+    // If this quest has an opinion on being primed
+    if (adventure.quest.canAcceptPrimes != null) {
+      // If this quest doesn't want to be primed
+      if (!adventure.quest.canAcceptPrimes(adventure.quest)) {
+        return;
+      }
+    } else {
+      // Quest has no opinion on being primed, so decide it for ourselves
+      // If this quest is one that is an absorb potential, or will be using a crystal ball
+      if (
+        adventure.orbStatus == OrbStatus.READY ||
+        adventure.orbStatus == OrbStatus.NOT_SET
+      ) {
+        return;
+      }
 
-    // If this quest is something that wants a prime itself
-    if (adventure.quest.attemptPrime != null) {
-      return;
-    }
+      // We don't want to prime on something that might demand to be done later
+      if (adventure.quest.mustBeDone != null) {
+        return;
+      }
 
-    // If this quest is one that can't be primed on
-    if (
-      adventure.quest.canAcceptPrimes != null &&
-      !adventure.quest.canAcceptPrimes()
-    ) {
-      return;
+      // If this quest is something that wants a prime itself
+      if (adventure.quest.attemptPrime != null) {
+        return;
+      }
     }
 
     // We don't want to prime on something that would be potentially messy with outfit

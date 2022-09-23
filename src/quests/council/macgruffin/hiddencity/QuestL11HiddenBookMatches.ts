@@ -53,6 +53,14 @@ export class QuestL11HiddenBookMatches extends TaskInfo implements QuestInfo {
     }
   }
 
+  mustBeDone(reallyMustBeDone?: boolean): boolean {
+    return availableAmount(this.book) > 0;
+  }
+
+  free(): boolean {
+    return true;
+  }
+
   getPossiblePaths(): PossiblePath[] {
     return [this.noPull, this.doPull];
   }

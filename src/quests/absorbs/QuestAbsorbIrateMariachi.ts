@@ -27,7 +27,6 @@ import { QuestType } from "../QuestTypes";
 export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
   irateMariachi: Monster = Monster.get("Irate Mariachi");
   familiar: Familiar = Familiar.get("Grey Goose");
-  fax: PossiblePath = new PossiblePath(1).addFax(this.irateMariachi);
   avoid: PossiblePath = new PossiblePath(10);
   manual: PossiblePath = new PossiblePath(0);
   paths: PossiblePath[];
@@ -47,7 +46,8 @@ export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
 
   createPaths(assumeUnstarted: boolean) {
     this.paths = [];
-    this.paths.push(this.fax, this.avoid);
+    this.paths.push(new PossiblePath(1).addFax(this.irateMariachi));
+    this.paths.push(this.avoid);
 
     if (
       this.getExpectedTurns(this.getPossibleCombats(false, assumeUnstarted)) <
@@ -78,10 +78,16 @@ export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
     return Math.ceil(turns * turnsMult);
   }
 
-  getPossibleCombats(current: boolean, assumeUnstarted: boolean): number {
+  getPossibleCombats(
+    usingWhatWeHaveNow: boolean,
+    assumeUnstarted: boolean
+  ): number {
     let combat = 10; // Start off with skill
 
-    if (!current && !toBoolean(getProperty("_fireworksShopHatBought"))) {
+    if (
+      !usingWhatWeHaveNow &&
+      !toBoolean(getProperty("_fireworksShopHatBought"))
+    ) {
       if (this.ncItems.find((i) => availableAmount(i) > 0) != null) {
         combat += 5; // We buy the hat
       }
@@ -91,13 +97,13 @@ export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
 
     if (
       availableAmount(this.thermal) > 0 ||
-      (!current && toBoolean(getProperty("hasMaydayContract")))
+      (!usingWhatWeHaveNow && toBoolean(getProperty("hasMaydayContract")))
     ) {
       combat += 5; // Cape
     }
 
     if (
-      current
+      usingWhatWeHaveNow
         ? availableAmount(this.shirt) > 0
         : !GreySettings.isHardcoreMode() &&
           (gnomadsAvailable() ||
@@ -107,7 +113,7 @@ export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
     }
 
     if (
-      current
+      usingWhatWeHaveNow
         ? availableAmount(this.player) > 0
         : !GreySettings.isHardcoreMode()
     ) {
@@ -138,7 +144,10 @@ export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
   }
 
   status(path: PossiblePath): QuestStatus {
-    if (AbsorbsProvider.getReabsorbedMonsters().includes(this.irateMariachi)) {
+    if (
+      AbsorbsProvider.getReabsorbedMonsters().includes(this.irateMariachi) ||
+      path == this.avoid
+    ) {
       return QuestStatus.COMPLETED;
     }
 
@@ -146,14 +155,7 @@ export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (path != this.manual && !path.canUse(ResourceCategory.FAXER)) {
-      return QuestStatus.COMPLETED;
-    }
-
-    if (
-      familiarWeight(this.familiar) < 6 ||
-      familiarWeight(this.familiar) > 8
-    ) {
+    if (familiarWeight(this.familiar) < 6) {
       return QuestStatus.NOT_READY;
     }
 

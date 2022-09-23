@@ -8,6 +8,7 @@ import {
   haveSkill,
   Item,
   availableAmount,
+  Monster,
 } from "kolmafia";
 import { greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -20,7 +21,7 @@ export class QuestSkillSystemSweep implements QuestInfo {
   sword: Item = Item.get("Antique Machete");
   nanovision: Skill = Skill.get("Double Nanovision");
   book: Item = Item.get("Book of matches");
-
+  monster: Monster = Monster.get("pygmy janitor");
   getId(): QuestType {
     return "Skills / System Sweep";
   }
@@ -46,12 +47,13 @@ export class QuestSkillSystemSweep implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    let outfit = new GreyOutfit();
+    const outfit = new GreyOutfit();
     outfit.setPlusCombat().setItemDrops();
 
     return {
       location: this.park,
       outfit: outfit,
+      orbs: [this.monster],
       run: () => {
         greyAdv(this.park, outfit);
       },

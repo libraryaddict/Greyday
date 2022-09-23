@@ -1,7 +1,5 @@
 import {
-  adv1,
   availableAmount,
-  council,
   Effect,
   Familiar,
   getProperty,
@@ -9,18 +7,25 @@ import {
   Item,
   Location,
   Monster,
-  myLevel,
   toInt,
   toMonster,
   useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../../../utils/Properties";
-import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
+import {
+  AdventureSettings,
+  greyAdv,
+  setPrimedResource,
+} from "../../../../../utils/GreyLocations";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../../../Quests";
 import { QuestType } from "../../../../QuestTypes";
 import { DelayBurners } from "../../../../../iotms/delayburners/DelayBurners";
+import { PossiblePath, TaskInfo } from "../../../../../typings/TaskInfo";
+import { ResourceCategory } from "../../../../../typings/ResourceTypes";
+import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
+import { AdventureFinder } from "../../../../../GreyChooser";
 
-export class QuestL11Curses implements QuestInfo {
+export class QuestL11Curses extends TaskInfo implements QuestInfo {
   curse1: Effect = Effect.get("Once-Cursed");
   curse2: Effect = Effect.get("Twice-Cursed");
   curse3: Effect = Effect.get("Thrice-Cursed");
@@ -37,6 +42,46 @@ export class QuestL11Curses implements QuestInfo {
   ].map((s) => Item.get(s));
   completeFile: Item = Item.get("McClusky file (complete)");
   accountant: Monster = Monster.get("Pygmy witch accountant");
+  paths: PossiblePath[];
+  needRecalculate: boolean;
+
+  getPossiblePaths() {
+    return this.paths;
+  }
+
+  createPaths(assumeUnstarted: boolean): void {
+    this.paths = [];
+
+    if (assumeUnstarted || !this.shouldLookAtForcingNC()) {
+      this.paths.push(new PossiblePath(0));
+      return;
+    }
+
+    this.paths.push(
+      new PossiblePath(this.filesRemaining() == 0 ? this.delayForNextNC() : 7)
+    );
+    this.paths.push(new PossiblePath(0).add(ResourceCategory.FORCE_NC));
+  }
+
+  shouldLookAtForcingNC(): boolean {
+    const turns = this.delayForNextNC();
+
+    if (turns <= 0) {
+      return false;
+    }
+
+    const effect = haveEffect(this.curse3);
+
+    if (effect == 0) {
+      return false;
+    }
+
+    if (effect < turns) {
+      return true;
+    }
+
+    return this.filesRemaining() == 0;
+  }
 
   level(): number {
     return 11;
@@ -65,23 +110,44 @@ export class QuestL11Curses implements QuestInfo {
     return turns <= delay;
   }
 
-  status(): QuestStatus {
+  canRun(): boolean {
+    return (
+      getProperty("questL11Curses") != "unstarted" &&
+      getProperty("questL11Worship") == "step3"
+    );
+  }
+
+  status(path: PossiblePath): QuestStatus {
     const status = getProperty("questL11Curses");
 
     if (status == "finished") {
       return QuestStatus.COMPLETED;
     }
 
-    if (status == "unstarted") {
-      return QuestStatus.NOT_READY;
-    }
-
-    if (getProperty("questL11Worship") != "step3") {
+    if (path == null || !this.canRun()) {
       return QuestStatus.NOT_READY;
     }
 
     if (toInt(getProperty("hiddenBowlingAlleyProgress")) <= 1) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (this.needRecalculate == null && this.shouldLookAtForcingNC()) {
+      this.needRecalculate = true;
+    }
+
+    if (this.needRecalculate || path == null) {
+      return QuestStatus.READY;
+    }
+
+    if (path.canUse(ResourceCategory.FORCE_NC)) {
+      if (path.getResource(ResourceCategory.FORCE_NC).primed()) {
+        return QuestStatus.READY;
+      }
+
+      if (!this.mustBeDone()) {
+        return QuestStatus.NOT_READY;
+      }
     }
 
     if (haveEffect(this.curse3) && this.delayForNextNC() == 0) {
@@ -105,7 +171,27 @@ export class QuestL11Curses implements QuestInfo {
     return this.files.reduce((p, v) => (availableAmount(v) > 0 ? 1 : 0) + p, 0);
   }
 
-  run(): QuestAdventure {
+  attemptPrime(path: PossiblePath): boolean {
+    if (!path.canUse(ResourceCategory.FORCE_NC)) {
+      return false;
+    }
+
+    setPrimedResource(this, path, path.getResource(ResourceCategory.FORCE_NC));
+  }
+
+  run(path: PossiblePath): QuestAdventure {
+    if (this.needRecalculate) {
+      return {
+        location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
+        run: () => {
+          this.needRecalculate = false;
+
+          AdventureFinder.recalculatePath();
+        },
+      };
+    }
+
     const needCurses = haveEffect(this.curse3) <= this.delayForNextNC();
     const needFiles =
       getProperty("questL11Business") != "finished" &&
@@ -131,7 +217,9 @@ export class QuestL11Curses implements QuestInfo {
           ? [this.delayForNextNC(), this.spirit]
           : null,
       mayFreeRun: true,
-      freeRun: (monster) => monster != this.shaman || !needCurses,
+      freeRun: (monster) =>
+        (monster != this.accountant || !needFiles) &&
+        (monster != this.shaman || !needCurses),
       run: () => {
         const props = new PropertyManager();
 
@@ -168,7 +256,11 @@ export class QuestL11Curses implements QuestInfo {
     };
   }
 
-  canAcceptPrimes(): boolean {
+  canAcceptPrimes(quest: QuestInfo): boolean {
+    if (quest == this) {
+      return true;
+    }
+
     const turns =
       haveEffect(this.curse1) +
       haveEffect(this.curse2) +

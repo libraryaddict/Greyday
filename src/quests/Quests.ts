@@ -17,7 +17,7 @@ export interface QuestInfo {
   hasFamiliarRecommendation?(): Familiar; // This quest would like this familiar leveled up as it'd be useful
   getAbsorbs?(): Monster[]; // Unexposed by Locations[], this is a backup for getting available absorbs
   attemptPrime?(path: PossiblePath): boolean; // Should only ever be called if the outfit is basically vanilla, no items wanted
-  canAcceptPrimes?(): boolean; // If this task is a bad idea to prime resources on
+  canAcceptPrimes?(quest?: QuestInfo): boolean; // If this task is a bad idea to prime resources on
 }
 
 export enum QuestStatus {
