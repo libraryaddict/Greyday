@@ -91,6 +91,16 @@ export class QuestL11ShrineVines implements QuestInfo {
 
   run(): QuestAdventure {
     const adv = this.shrineNeedsDoing();
+
+    if (adv == null) {
+      return {
+        location: null,
+        run: () => {
+          throw "??? Shrine not ready";
+        },
+      };
+    }
+
     let outfit: GreyOutfit;
 
     if (adv[2]) {
