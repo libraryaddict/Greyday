@@ -427,7 +427,11 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
       };
     }
 
-    if (path.canUse(ResourceCategory.CLOVER) && this.toAbsorb.length == 0) {
+    if (
+      this.getProtestersRemaining() > 1 &&
+      path.canUse(ResourceCategory.CLOVER) &&
+      this.toAbsorb.length == 0
+    ) {
       return this.runClover(path);
     }
 

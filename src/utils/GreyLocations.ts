@@ -255,7 +255,7 @@ export function greyAdv(
 
     if (lastChoice() == 904) {
       cliExecute("choice-goal");
-      return;
+      return "";
     }
 
     const juneCleaver = lastChoice() >= 1467 && lastChoice() <= 1475;
@@ -303,8 +303,8 @@ export function greyAdv(
     const url =
       "choice.php?pwd=&whichchoice=" + lastChoice() + "&option=" + choiceToPick;
 
-    visitUrl(url);
     print("Visited " + url);
+    return visitUrl(url);
   };
 
   const runCombat = function () {
@@ -313,7 +313,7 @@ export function greyAdv(
     }
 
     print(macro.toString());
-    macro.submit();
+    return macro.submit();
   };
 
   if (currentRound() == 0 && !handlingChoice()) {
@@ -338,14 +338,20 @@ export function greyAdv(
   }
 
   while (currentRound() != 0 || handlingChoice() || fightFollowsChoice()) {
+    let page: string = "";
+
     if (currentRound() != 0) {
-      runCombat();
+      page = runCombat();
 
       if (currentRound() != 0) {
         throw "Didn't expect to still be in combat! Maybe health is too low that we aborted to be safe?";
       }
     } else if (handlingChoice() || fightFollowsChoice()) {
-      runChoice();
+      page = runChoice();
+    }
+
+    if (page != null && page.includes("The phone in your doctor's bag rings")) {
+      visitUrl("main.php");
     }
   }
 }
