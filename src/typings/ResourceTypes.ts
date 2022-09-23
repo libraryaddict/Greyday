@@ -742,7 +742,7 @@ export function getResourcesLeft(
     case "Clover":
       return assumeUnused || !toBoolean(getProperty("breakfastCompleted"))
         ? 3
-        : availableAmount(Item.get("11-leaf clover"));
+        : itemAmount(Item.get("11-leaf clover"));
     case "Deck of Every Card":
       return availableAmount(Item.get("Deck of Every Card")) > 0
         ? 15 - (assumeUnused ? 0 : toInt(getProperty("_deckCardsDrawn")))
@@ -771,7 +771,7 @@ export function getResourcesLeft(
 
       const fightsRemaining = 3 - toInt(getProperty("_genieFightsUsed"));
       const wishesAvailable = Math.max(
-        availableAmount(wish),
+        itemAmount(wish),
         3 - toInt(getProperty("_genieWishesUsed"))
       );
 

@@ -20,6 +20,8 @@ The following commands are supported.
 
 `greyday run <turns>` - Runs <turns> turns, then exits
 
+`greyday status` - Generally just for debug, but this lists all the quest tasks with their status to console
+
 **Installation**
 
 Installation of this script is fairly easy.
@@ -62,3 +64,7 @@ Using iotms such as vip invitation, and more will increase your game experience.
 Run this to get an idea of what we want.
 
 `greyday required`
+
+**Final Notes**
+
+Super secret setting `greyDebug` if set to true will make your dreams come true.
