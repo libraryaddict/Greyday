@@ -583,25 +583,30 @@ export class AdventureFinder {
     const defeated = this.absorbs.getAbsorbedMonstersFromInstance();
 
     for (const [quest, path] of this.path.thisPath) {
-      if (
-        quest.status(path) == QuestStatus.NOT_READY ||
-        quest.status(path) == QuestStatus.COMPLETED
-      ) {
-        continue;
+      try {
+        if (
+          quest.status(path) == QuestStatus.NOT_READY ||
+          quest.status(path) == QuestStatus.COMPLETED
+        ) {
+          continue;
+        }
+
+        const run = quest.run(path);
+
+        if (run.location == null) {
+          continue;
+        }
+
+        const result = this.absorbs.getAdventuresInLocation(
+          defeated,
+          run.location
+        );
+
+        quest.toAbsorb = result == null ? [] : result.monsters;
+      } catch (e) {
+        print("Errored while trying to set absorbs on " + quest.getId());
+        throw e;
       }
-
-      const run = quest.run(path);
-
-      if (run.location == null) {
-        continue;
-      }
-
-      const result = this.absorbs.getAdventuresInLocation(
-        defeated,
-        run.location
-      );
-
-      quest.toAbsorb = result == null ? [] : result.monsters;
     }
   }
 
