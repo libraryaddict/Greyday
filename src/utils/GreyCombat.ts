@@ -230,6 +230,7 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
 
       // Only infinite loop if we're underleveled or have the outfit
       if (
+        !haveSkill(Skill.get("Double Nanovision")) ||
         myLevel() <= 10 ||
         (myLevel() < 18 &&
           (!GreySettings.isHippyMode() ||

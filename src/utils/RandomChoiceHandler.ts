@@ -65,6 +65,11 @@ export function getBackupChoices(): [number, number][] {
   choices(879, 4, 2);
   choices(880, 1, 2);
 
+  // Manor babies
+  choices(884, 1);
+  choices(885, 1);
+  choices(886, 1);
+
   // Palin
   choices(180, 2);
   choices(127, 1);
