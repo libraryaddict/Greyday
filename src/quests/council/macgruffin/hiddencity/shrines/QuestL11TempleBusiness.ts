@@ -221,10 +221,7 @@ export class QuestL11Business extends TaskInfo implements QuestInfo {
   }
 
   goCurses(path: PossiblePath) {
-    return (
-      this.farmFiles() &&
-      (this.wantToForceNextNC(path) || this.delayUntilNextNC() == 0)
-    );
+    return this.farmFiles() && this.delayUntilNextNC() == 0;
   }
 
   farmFiles(): boolean {
