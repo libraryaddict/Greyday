@@ -17,6 +17,7 @@ import { Task } from "./Tasks";
 export class TaskLatteFiller implements Task {
   skipLatte: boolean = toInt(getProperty("_latteRefillsUsed")) > 0;
   latte: Item = Item.get("Latte lovers member's mug");
+  ghostBuster: Item = Item.get("Protonic accelerator pack");
 
   run(): void {
     if (this.skipLatte) {
@@ -28,8 +29,13 @@ export class TaskLatteFiller implements Task {
       return;
     }
 
+    const firstFlavor =
+      availableAmount(this.ghostBuster) > 0
+        ? LatteFlavor.PLUS_COMBAT
+        : LatteFlavor.FAMILIAR_WEIGHT;
+
     const flavors: LatteFlavor[] = [
-      LatteFlavor.FAMILIAR_WEIGHT,
+      firstFlavor,
       LatteFlavor.MEAT_DROP,
       LatteFlavor.FAM_EXP,
     ];
