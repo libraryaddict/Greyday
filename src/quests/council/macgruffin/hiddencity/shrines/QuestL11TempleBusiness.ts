@@ -197,8 +197,8 @@ export class QuestL11Business extends TaskInfo implements QuestInfo {
         return QuestStatus.NOT_READY;
       }
 
-      // Only run the second NC when primed
-      if (this.toAbsorb.length == 0) {
+      // Only run the second NC when primed and no files remaining
+      if (this.toAbsorb.length == 0 && availableAmount(this.completeFile) > 0) {
         return QuestStatus.NOT_READY;
       }
     }
