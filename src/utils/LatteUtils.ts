@@ -25,6 +25,7 @@ const latteAliases: Map<string, string> = new Map([["fortified", "vitamins"]]);
 
 function getFlavors(): string[] {
   const page = visitUrl("main.php?latte=1", false);
+  visitUrl("main.php");
   const flavors: string[] = [];
 
   for (const spl of page.split(
