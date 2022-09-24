@@ -374,6 +374,6 @@ export class QuestL11Business extends TaskInfo implements QuestInfo {
   }
 
   filesRemaining(): number {
-    return this.files.reduce((p, v) => (availableAmount(v) > 0 ? 1 : 0) + p, 0);
+    return this.files.filter((f) => availableAmount(f) == 0).length;
   }
 }
