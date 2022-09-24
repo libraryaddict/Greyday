@@ -22184,6 +22184,12 @@ var QuestManorBillards = /*#__PURE__*/function (_TaskInfo) {QuestManorBillards_i
         return false;
       }
 
+      var lightsOut = (0,external_kolmafia_namespaceObject.totalTurnsPlayed)() % 37;
+
+      if (lightsOut == 0 || lightsOut >= 34) {
+        return false;
+      }
+
       setPrimedResource(this, path, path.getResource(ResourceCategory.FORCE_NC));
 
       return true;
@@ -22200,12 +22206,14 @@ var QuestManorBillards = /*#__PURE__*/function (_TaskInfo) {QuestManorBillards_i
         return QuestStatus.COMPLETED;
       }
 
-      if (
-      path != null &&
-      path.canUse(ResourceCategory.FORCE_NC) &&
-      path.getResource(ResourceCategory.FORCE_NC).primed())
-      {
-        return QuestStatus.READY;
+      if (path != null && path.canUse(ResourceCategory.FORCE_NC)) {
+        if (path.getResource(ResourceCategory.FORCE_NC).primed()) {
+          return QuestStatus.READY;
+        }
+
+        if (this.toAbsorb.length == 0 && (0,external_kolmafia_namespaceObject.haveSkill)(this.hardening)) {
+          return QuestStatus.NOT_READY;
+        }
       }
 
       if (!hasNonCombatSkillsReady(false)) {
@@ -30613,7 +30621,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "30e8538";
+var lastCommitHash = "6fb6aeb";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
