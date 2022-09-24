@@ -73,7 +73,7 @@ export class QuestL3Tavern implements QuestInfo {
     }
 
     // Always put this off as long as possible, aka until every quest wants to delay
-    return QuestStatus.FASTER_LATER;
+    return QuestStatus.READY;
   }
 
   free(): boolean {

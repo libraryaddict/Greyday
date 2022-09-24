@@ -93,7 +93,7 @@ export class QuestL12Battlefield implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    return QuestStatus.READY;
+    return QuestStatus.FASTER_LATER;
   }
 
   getId(): QuestType {
