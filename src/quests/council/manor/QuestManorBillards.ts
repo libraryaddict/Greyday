@@ -13,6 +13,7 @@ import {
   numericModifier,
   Skill,
   toInt,
+  totalTurnsPlayed,
   use,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
@@ -128,6 +129,12 @@ export class QuestManorBillards extends TaskInfo implements QuestInfo {
       return false;
     }
 
+    const lightsOut = totalTurnsPlayed() % 37;
+
+    if (lightsOut == 0 || lightsOut >= 34) {
+      return false;
+    }
+
     setPrimedResource(this, path, path.getResource(ResourceCategory.FORCE_NC));
 
     return true;
@@ -144,12 +151,14 @@ export class QuestManorBillards extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (
-      path != null &&
-      path.canUse(ResourceCategory.FORCE_NC) &&
-      path.getResource(ResourceCategory.FORCE_NC).primed()
-    ) {
-      return QuestStatus.READY;
+    if (path != null && path.canUse(ResourceCategory.FORCE_NC)) {
+      if (path.getResource(ResourceCategory.FORCE_NC).primed()) {
+        return QuestStatus.READY;
+      }
+
+      if (this.toAbsorb.length == 0 && haveSkill(this.hardening)) {
+        return QuestStatus.NOT_READY;
+      }
     }
 
     if (!hasNonCombatSkillsReady(false)) {
