@@ -5,6 +5,7 @@ import {
   Item,
   print,
   toInt,
+  visitUrl,
 } from "kolmafia";
 import {
   getCurrentLatteFlavors,
@@ -51,5 +52,6 @@ export class TaskLatteFiller implements Task {
     }
 
     cliExecute("latte refill " + flavors.join(" "));
+    visitUrl("main.php");
   }
 }
