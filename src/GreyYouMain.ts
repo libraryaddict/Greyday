@@ -251,11 +251,15 @@ class GreyYouMain {
     }
 
     if (currentRound() != 0 || handlingChoice()) {
-      print(
-        "In a fight or in a choice, please resolve before contining..",
-        "red"
-      );
-      return;
+      visitUrl("main.php");
+
+      if (currentRound() != 0 || handlingChoice()) {
+        print(
+          "In a fight or in a choice, please resolve before continuing..",
+          "red"
+        );
+        return;
+      }
     }
 
     if (getProperty("greyBreakAtTower") == "") {
