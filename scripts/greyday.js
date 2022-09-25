@@ -28871,7 +28871,13 @@ var AdventureFinder = /*#__PURE__*/function () {
           }
 
           var wantsAbsorb =
-          adv.locationInfo != null && adv.locationInfo.turnsToGain > 0;
+          adv.locationInfo != null && (
+          adv.locationInfo.turnsToGain > 0 ||
+          GreyChooser_toConsumableArray(adv.locationInfo.skills).find(
+          (_ref) => {var _ref2 = GreyChooser_slicedToArray(_ref, 1),a = _ref2[0];return (
+              !(0,external_kolmafia_namespaceObject.haveSkill)(a.skill) &&
+              this.absorbs.getMustHaveSkills().has(a.skill));}) !=
+          null);
 
           // If we might hit an absorb we can't reabsorb
           if (
@@ -28972,7 +28978,7 @@ var AdventureFinder = /*#__PURE__*/function () {
         this.allQuests.push([q, path]);
       };
 
-      this.path.thisPath.forEach((_ref) => {var _ref2 = GreyChooser_slicedToArray(_ref, 2),quest = _ref2[0],path = _ref2[1];
+      this.path.thisPath.forEach((_ref3) => {var _ref4 = GreyChooser_slicedToArray(_ref3, 2),quest = _ref4[0],path = _ref4[1];
         tryAdd(quest, path);
       });
     } }, { key: "getDoableQuests", value:
@@ -29005,7 +29011,7 @@ var AdventureFinder = /*#__PURE__*/function () {
         quests.push([q, path]);
       };
 
-      this.allQuests.forEach((_ref3) => {var _ref4 = GreyChooser_slicedToArray(_ref3, 2),quest = _ref4[0],path = _ref4[1];
+      this.allQuests.forEach((_ref5) => {var _ref6 = GreyChooser_slicedToArray(_ref5, 2),quest = _ref6[0],path = _ref6[1];
         tryAdd(quest, path);
       });
 
@@ -29125,7 +29131,7 @@ var AdventureFinder = /*#__PURE__*/function () {
 
     function getRecommendedFamiliars() {
       return this.path.thisPath.
-      map((_ref5) => {var _ref6 = GreyChooser_slicedToArray(_ref5, 2),q = _ref6[0],path = _ref6[1];
+      map((_ref7) => {var _ref8 = GreyChooser_slicedToArray(_ref7, 2),q = _ref8[0],path = _ref8[1];
         if (q.hasFamiliarRecommendation == null) {
           return null;
         }
@@ -29385,22 +29391,22 @@ var AdventureFinder = /*#__PURE__*/function () {
       map((a) => [a, a.quest.free != null && a.quest.free() ? 0 : 1]);
 
       if (mustBeDone.length > 0) {
-        mustBeDone.sort((_ref7, _ref8) => {var _ref9 = GreyChooser_slicedToArray(_ref7, 2),m1 = _ref9[1];var _ref10 = GreyChooser_slicedToArray(_ref8, 2),m2 = _ref10[1];
+        mustBeDone.sort((_ref9, _ref10) => {var _ref11 = GreyChooser_slicedToArray(_ref9, 2),m1 = _ref11[1];var _ref12 = GreyChooser_slicedToArray(_ref10, 2),m2 = _ref12[1];
           return m1 - m2;
         });
 
         if (mustBeDone.length > 1 && mustBeDone[0][1] > 0) {
-          mustBeDone = mustBeDone.filter((_ref11) => {var _ref12 = GreyChooser_slicedToArray(_ref11, 1),a = _ref12[0];return a.quest.mustBeDone(true);});
+          mustBeDone = mustBeDone.filter((_ref13) => {var _ref14 = GreyChooser_slicedToArray(_ref13, 1),a = _ref14[0];return a.quest.mustBeDone(true);});
         }
 
         if (
         mustBeDone[0][1] > 0 &&
-        mustBeDone.filter((_ref13) => {var _ref14 = GreyChooser_slicedToArray(_ref13, 2),m = _ref14[1];return m > 0;}).length > 1)
+        mustBeDone.filter((_ref15) => {var _ref16 = GreyChooser_slicedToArray(_ref15, 2),m = _ref16[1];return m > 0;}).length > 1)
         {
           (0,external_kolmafia_namespaceObject.print)(
           "Multiple quests demand to be done! " +
           mustBeDone.
-          filter((_ref15) => {var _ref16 = GreyChooser_slicedToArray(_ref15, 2),m = _ref16[1];return m > 0;}).
+          filter((_ref17) => {var _ref18 = GreyChooser_slicedToArray(_ref17, 2),m = _ref18[1];return m > 0;}).
           map((a) => a[0].quest.getId()).
           join(", "),
           "red");
@@ -30867,7 +30873,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "29d15d2";
+var lastCommitHash = "988f474";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
