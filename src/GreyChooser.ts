@@ -843,9 +843,9 @@ export class AdventureFinder {
 
       print(
         quest.getId() +
-          " has primed " +
+          " will be using " +
           primed.resource.name +
-          " of " +
+          " to try prime the resource " +
           ResourceCategory[primed.resource.type],
         "blue"
       );

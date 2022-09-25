@@ -280,11 +280,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
       return QuestStatus.READY;
     }
 
-    if (
-      path.canUse(ResourceCategory.CAT_HEIST) &&
-      !this.isHeistReady() &&
-      !this.hasHeistedAlready()
-    ) {
+    if (path.canUse(ResourceCategory.CAT_HEIST) && !this.isHeistReady()) {
       return QuestStatus.NOT_READY;
     }
 
@@ -528,8 +524,19 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
       run: () => {
         if (this.doDuping()) {
           useFamiliar(this.goose);
-        } else if (path.canUse(ResourceCategory.CAT_HEIST)) {
+        } else if (
+          path.canUse(ResourceCategory.CAT_HEIST) &&
+          this.isHeistReady()
+        ) {
           useFamiliar(this.burglar);
+        } else if (
+          this.getOreRemaining() == 3 &&
+          !path.canUse(ResourceCategory.PULL) &&
+          !path.canUse(ResourceCategory.COPIER) &&
+          !path.canUse(ResourceCategory.POLAR_VORTEX) &&
+          !path.canUse(ResourceCategory.CLOVER)
+        ) {
+          throw "Something seems wrong, trying to call a faxer but we can probably only get 2 ores";
         }
 
         let macro: Macro = new Macro();

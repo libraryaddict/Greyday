@@ -442,6 +442,8 @@ const faxMachine: SomeResource = {
       throw "The fax was already used!";
     }
 
+    print("Now trying to fax " + monster.name, "blue");
+
     const hasReceivedFax = () => {
       if (availableAmount(Item.get(`photocopied monster`)) == 0) {
         cliExecute("fax receive");
