@@ -205,11 +205,17 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
       outfit.addBonus("-equip " + this.kramco.name);
     }
 
+    const crystalBall: Map<Location, Monster> = currentPredictions();
+
     return {
       outfit: outfit,
       location: this.desert,
       familiar: haveFamiliar(this.camel) ? this.camel : null,
-      disableFamOverride: this.toAbsorb.length == 0 && haveFamiliar(this.camel),
+      disableFamOverride:
+        (this.toAbsorb.length == 0 ||
+          (crystalBall.has(this.desert) &&
+            !this.toAbsorb.includes(crystalBall.get(this.desert)))) &&
+        haveFamiliar(this.camel),
       run: () => {
         let killing: Macro = Macro.if_(
           Effect.get("Tenuous Grip on Reality"),
@@ -222,8 +228,6 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
           availableAmount(this.ball) > 0 &&
           haveFamiliar(this.camel)
         ) {
-          const crystalBall: Map<Location, Monster> = currentPredictions();
-
           // If we already have a prediction, and the prediction isn't what we want
           if (
             crystalBall.has(this.desert) &&
