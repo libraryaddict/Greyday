@@ -4,13 +4,16 @@ import {
   cliExecute,
   getFuel,
   getInventory,
+  getProperty,
   getWorkshed,
   haveOutfit,
   historicalPrice,
   Item,
   mallPrice,
+  myAscensions,
   myMeat,
   toInt,
+  use,
 } from "kolmafia";
 import { getQuestStatus } from "../quests/Quests";
 import { Task } from "./Tasks";
@@ -20,6 +23,8 @@ export class TaskFuelAsdon implements Task {
   eachFuelWorth: number = 24; // We pay 50 + 70 meat for a loaf of bread = 5-7 fuel. So at worst, 24 meat per fuel and best is 17.14. Lets go with 24.
   invalidFuels: Item[] = [];
   asdonMartin: Item = Item.get("Asdon Martin keyfob");
+  flower: Item = Item.get("All-purpose flower");
+  dough: Item = Item.get("Wad of Dough");
 
   run(): void {
     if (
@@ -30,24 +35,49 @@ export class TaskFuelAsdon implements Task {
       return;
     }
 
-    if (getFuel() >= 150 || !haveOutfit("Bugbear Costume")) {
+    if (getFuel() >= 150) {
       return;
     }
 
-    while (myMeat() > 1500 && getFuel() < 50) {
+    if (!this.canMakeBread()) {
+      return;
+    }
+
+    while (myMeat() > 4500 && getFuel() < 50) {
       // Each soda bread is worth 5-7 so lets always keep 50 / 6 = 9ish on hand
-      let toUse = Math.ceil((50 - getFuel()) / 6);
+      const toUse = Math.ceil((50 - getFuel()) / 6);
+      this.acquireBread(toUse);
 
       cliExecute("asdonmartin fuel " + toUse + " " + this.sodaBread);
     }
   }
 
+  acquireBread(amount: number) {
+    if (haveOutfit("bugbear costume")) {
+      return;
+    }
+
+    while (myMeat() > 2000 && availableAmount(this.dough) < amount) {
+      buy(this.flower);
+      use(this.flower);
+    }
+  }
+
+  canMakeBread(): boolean {
+    return (
+      haveOutfit("Bugbear Costume") ||
+      (myAscensions() > 10 &&
+        toInt(getProperty("lastDesertUnlock")) == myAscensions() &&
+        myMeat() > 2000)
+    );
+  }
+
   getAvailableItems(): [Item, number, number][] {
     // Returns <Item, Amount, Each Fuel Worth in Mall>
-    let items: [Item, number, number][] = [];
+    const items: [Item, number, number][] = [];
 
-    for (let [itemName, amount] of Object.entries(getInventory())) {
-      let item = Item.get(itemName);
+    for (const [itemName, amount] of Object.entries(getInventory())) {
+      const item = Item.get(itemName);
 
       if (this.invalidFuels.includes(item)) {
         continue;
@@ -83,8 +113,8 @@ export class TaskFuelAsdon implements Task {
         histPrice = Math.max(histPrice, mallPrice(item));
       }
 
-      let advs = toInt(item.adventures.split("-")[0]);
-      let costPerFuel = histPrice / advs;
+      const advs = toInt(item.adventures.split("-")[0]);
+      const costPerFuel = histPrice / advs;
 
       // If the fuel would cost more than soda bread..
       if (costPerFuel > this.eachFuelWorth) {

@@ -1,6 +1,7 @@
 import {
   availableAmount,
   canFaxbot,
+  chatPrivate,
   cliExecute,
   currentRound,
   Effect,
@@ -30,6 +31,7 @@ import {
   turnsPlayed,
   urlEncode,
   visitUrl,
+  wait,
 } from "kolmafia";
 import { GreyOutfit } from "../utils/GreyOutfitter";
 import { GreySettings } from "../utils/GreySettings";
@@ -435,25 +437,41 @@ const faxMachine: SomeResource = {
   resource: "Fax Machine",
   worthInAftercore: 20000, // Embezzler
   prepare: () => {},
-  fax: (monster: Monster) => {
-    if (!canFaxbot(monster)) {
-      throw (
-        "Can't fax in " +
-        monster.name +
-        ". Try fax it in manually, and yellow rocket it?"
-      );
+  fax: (monster: Monster) => () => {
+    if (getProperty("_photocopyUsed") != "false") {
+      throw "The fax was already used!";
     }
 
-    faxbot(monster);
+    const hasReceivedFax = () => {
+      if (availableAmount(Item.get(`photocopied monster`)) == 0) {
+        cliExecute("fax receive");
+      }
 
-    if (getProperty("photocopyMonster") != monster.name) {
-      throw (
-        "Expected " +
-        monster.name +
-        " but mafia reports we have a faxed " +
-        getProperty("photocopyMonster") +
-        ". Try fax it in manually and yellow rocket it?"
-      );
+      if (
+        getProperty("photocopyMonster").toLowerCase() ==
+        monster.name.toLowerCase()
+      ) {
+        return true;
+      }
+
+      cliExecute("fax send");
+      return false;
+    };
+
+    if (!hasReceivedFax()) {
+      chatPrivate("cheesefax", monster.name);
+
+      for (let i = 0; i < 3; i++) {
+        wait(10);
+
+        if (hasReceivedFax()) {
+          break;
+        }
+      }
+
+      if (!hasReceivedFax()) {
+        throw new Error("Failed to acquire photocopied " + monster);
+      }
     }
 
     visitUrl("inv_use.php?which=3&whichitem=4873&pwd");

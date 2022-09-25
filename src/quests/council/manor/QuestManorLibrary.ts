@@ -9,6 +9,7 @@ import {
   print,
   Skill,
   toInt,
+  visitUrl,
 } from "kolmafia";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
@@ -160,6 +161,13 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
         } finally {
           props.resetAll();
         }
+
+        if (toInt(getProperty("writingDesksDefeated")) < 5) {
+          return;
+        }
+
+        visitUrl("place.php?whichplace=manor1&action=manor1_ladys");
+        visitUrl("place.php?whichplace=manor2&action=manor2_ladys");
       },
     };
   }

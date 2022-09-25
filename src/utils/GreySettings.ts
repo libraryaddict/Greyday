@@ -6,6 +6,7 @@ import {
   mySign,
   toBoolean,
   toInt,
+  toItem,
 } from "kolmafia";
 
 export type GreySetting = {
@@ -158,6 +159,16 @@ export function getGreySettings(): GreySetting[] {
     default: false,
   };
 
+  const greySwitchWorkshed: GreySetting = {
+    name: "greySwitchWorkshed",
+    description:
+      "Applicable only for CMC, if set to the name of a workshed item, will switch to that workshed after all 5 CMC uses are expended. Requires the item to be in inventory",
+    valid: (value) => {
+      return value == "" || toItem(value).usable;
+    },
+    default: "",
+  };
+
   return [
     //greyBountyHunter,
     towerBreak,
@@ -173,6 +184,7 @@ export function getGreySettings(): GreySetting[] {
     useMummery,
     greyPullValue,
     greyVoteMonster,
+    greySwitchWorkshed,
   ];
 }
 
@@ -242,6 +254,7 @@ export class GreySettings {
   static greyUseMummery: boolean;
   static greyVotingBooth: boolean;
   static greyBountyHunting: boolean;
+  static greySwitchWorkshed: string;
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

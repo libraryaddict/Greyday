@@ -133,6 +133,7 @@ export class GreyPulls {
 
     const propPrior = getProperty("_roninStoragePulls");
 
+    print("Pulling " + item.name, "blue");
     cliExecute("pull " + item.name);
 
     if (getProperty("_roninStoragePulls") != propPrior) {

@@ -7,10 +7,13 @@ import {
   Item,
   lastChoice,
   Location,
+  print,
   runChoice,
   setProperty,
   toInt,
+  toItem,
   totalTurnsPlayed,
+  use,
   visitUrl,
 } from "kolmafia";
 import { GreySettings } from "../utils/GreySettings";
@@ -21,6 +24,7 @@ export class TaskColdMedicineCabinet implements Task {
   hat: Item = Item.get("Ice Crown");
   pants: Item = Item.get("frozen jeans");
   cabinet: Item = Item.get("Cold medicine cabinet");
+  triedSwitch: boolean = false;
 
   hasConsults(): boolean {
     return toInt(getProperty("_coldMedicineConsults")) < 5;
@@ -77,12 +81,46 @@ export class TaskColdMedicineCabinet implements Task {
       return;
     }
 
-    if (
-      !this.hasConsults() ||
-      !this.isConsultReady() ||
-      !this.isIndoors() ||
-      !this.shouldCheck()
-    ) {
+    if (!this.hasConsults()) {
+      if (!this.triedSwitch && GreySettings.greySwitchWorkshed != "") {
+        this.triedSwitch = true;
+
+        const item = toItem(GreySettings.greySwitchWorkshed);
+
+        if (!item.usable) {
+          print(
+            "An item was set in greySwitchWorkshed but is not usable",
+            "red"
+          );
+          return;
+        }
+
+        if (availableAmount(item)) {
+          print(
+            "An item was set in greySwitchWorkshed but is not available, will skip",
+            "red"
+          );
+          return;
+        }
+
+        use(item);
+
+        if (getWorkshed() == this.cabinet) {
+          print(
+            "Failed to switch workshed to " +
+              item +
+              ", are you sure it's a workshed item?",
+            "red"
+          );
+          return;
+        }
+
+        print("Now using " + getWorkshed() + " as the workshed!", "blue");
+      }
+      return;
+    }
+
+    if (!this.isConsultReady() || !this.isIndoors() || !this.shouldCheck()) {
       return;
     }
 
