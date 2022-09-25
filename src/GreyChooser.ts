@@ -410,7 +410,13 @@ export class AdventureFinder {
       }
 
       const wantsAbsorb =
-        adv.locationInfo != null && adv.locationInfo.turnsToGain > 0;
+        adv.locationInfo != null &&
+        (adv.locationInfo.turnsToGain > 0 ||
+          [...adv.locationInfo.skills].find(
+            ([a]) =>
+              !haveSkill(a.skill) &&
+              this.absorbs.getMustHaveSkills().has(a.skill)
+          ) != null);
 
       // If we might hit an absorb we can't reabsorb
       if (
