@@ -17,11 +17,16 @@ export enum LatteFlavor {
   SPOOKY_RESIST = "squamous salt",
   STENCH_RESIST = "clove",
   FAMILIAR_WEIGHT = "rawhide",
-  UNKNOWN = "",
+  UNKNOWN = "??",
 }
 
 // Map of kol latte names, to mafia latte names
-const latteAliases: Map<string, string> = new Map([["fortified", "vitamins"]]);
+const latteAliases: Map<string, string> = new Map([
+  ["fortified", "vitamins"],
+  ["hot wing", "wing"],
+  ["hot wings", "wing"],
+  ["hot wing and", "wing"],
+]);
 
 function getFlavors(): string[] {
   const page = visitUrl("main.php?latte=1", false);

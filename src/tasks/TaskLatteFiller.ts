@@ -3,7 +3,6 @@ import {
   cliExecute,
   getProperty,
   Item,
-  print,
   toInt,
   visitUrl,
 } from "kolmafia";
