@@ -7,7 +7,7 @@ export enum LatteFlavor {
   MEAT_DROP = "cajun",
   FAM_WEIGHT = "rawhide",
   PVP_FIGHTS = "hellion",
-  PLUS_COMBAT = "hot wing",
+  PLUS_COMBAT = "wing",
   MINUS_COMBAT = "ink",
   MP_5_REGEN = "carrrdamom",
   MP_10_REGEN = "lizard milk",
