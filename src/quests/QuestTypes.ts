@@ -207,6 +207,8 @@ const QuestMisc = [
   "Misc / JuneCleaver",
   "Misc / Ghost Buster",
   "Misc / Short Cook Goose",
+  "Misc / Latte / Fam Exp",
+  "Misc / Latte / Plus Combat",
 ] as const;
 const QuestCombatLocket = [
   "CombatLocket / SystemSweep",

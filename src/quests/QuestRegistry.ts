@@ -217,6 +217,9 @@ export class QuestRegistry {
       { id: "Council / Friars / Neck" },
       { id: "Council / Friars / TurnIn" },
 
+      { id: "Misc / Latte / Fam Exp" },
+      { id: "Misc / Latte / Plus Combat" },
+
       // If we have the skill, then this doesn't need prioritizing as such
       {
         id: "Council / MacGruffin / Black",

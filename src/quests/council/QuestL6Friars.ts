@@ -13,12 +13,16 @@ import { QuestL6FriarElbow } from "./friars/QuestL6FriarElbow";
 import { QuestL6FriarExp } from "./friars/QuestL6FriarExp";
 import { QuestL6FriarHeart } from "./friars/QuestL6FriarHeart";
 import { QuestL6FriarNeck } from "./friars/QuestL6FriarNeck";
+import { QuestL6LatteFamExp } from "./friars/QuestL6FriarsLatteElbow";
+import { QuestL6LattePlusCombat } from "./friars/QuestL6FriarsLatteHeart";
 
 export class QuestL6Friar implements QuestInfo {
   woods: QuestInfo[] = [
     new QuestL6FriarElbow(),
     new QuestL6FriarHeart(),
     new QuestL6FriarNeck(),
+    new QuestL6LatteFamExp(),
+    new QuestL6LattePlusCombat(),
   ];
   exp: QuestInfo = new QuestL6FriarExp();
   absorbs: Monster[] = ["G", "L", "P", "W"].map((s) => Monster.get(s + " Imp"));
