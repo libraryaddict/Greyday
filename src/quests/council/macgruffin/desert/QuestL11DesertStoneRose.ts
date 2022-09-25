@@ -79,6 +79,8 @@ export class QuestL11DesertStoneRose implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: this.oasis,
+      mayFreeRun: true,
+      freeRun: (monster: Monster) => monster != this.blur,
       run: () => {
         const settings = new AdventureSettings();
 

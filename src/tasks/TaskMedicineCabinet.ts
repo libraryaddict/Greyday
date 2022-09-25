@@ -95,7 +95,7 @@ export class TaskColdMedicineCabinet implements Task {
           return;
         }
 
-        if (availableAmount(item)) {
+        if (availableAmount(item) == 0) {
           print(
             "An item was set in greySwitchWorkshed but is not available, will skip",
             "red"
