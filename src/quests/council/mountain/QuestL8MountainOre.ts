@@ -521,6 +521,8 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
     return {
       location: null,
       outfit: outfit,
+      familiar: path.canUse(ResourceCategory.CAT_HEIST) ? this.burglar : null,
+      disableFamOverride: path.canUse(ResourceCategory.CAT_HEIST) > 0,
       run: () => {
         if (this.doDuping()) {
           useFamiliar(this.goose);

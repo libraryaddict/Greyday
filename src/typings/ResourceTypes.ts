@@ -437,7 +437,7 @@ const faxMachine: SomeResource = {
   resource: "Fax Machine",
   worthInAftercore: 20000, // Embezzler
   prepare: () => {},
-  fax: (monster: Monster) => () => {
+  fax: (monster: Monster) => {
     if (getProperty("_photocopyUsed") != "false") {
       throw "The fax was already used!";
     }
