@@ -168,7 +168,9 @@ export class QuestL11Curses extends TaskInfo implements QuestInfo {
   }
 
   filesRemaining(): number {
-    return this.files.filter((f) => availableAmount(f) == 0).length;
+    return availableAmount(this.completeFile) > 0
+      ? 0
+      : this.files.filter((f) => availableAmount(f) == 0).length;
   }
 
   attemptPrime(path: PossiblePath): boolean {
