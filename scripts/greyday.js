@@ -13087,19 +13087,15 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
 
             if (yellowRay != null) {
               yellowRay.prepare(null, props);
+              var macro = new Macro();
 
-              settings.setStartOfFightMacro(
-              Macro.if_("monstername Hippy", yellowRay.macro()));
-
-              settings.setStartOfFightMacro(
-              Macro.if_("monstername War Pledge", yellowRay.macro()));
-
-              settings.setStartOfFightMacro(
-              Macro.if_(
+              macro = macro.if_("monstername Hippy", yellowRay.macro());
+              macro = macro.if_("monstername War Pledge", yellowRay.macro());
+              macro = macro.if_(
               "monstername Frat Warrior drill sergeant",
-              yellowRay.macro()));
+              yellowRay.macro());
 
-
+              settings.setStartOfFightMacro(macro);
             }
 
             greyAdv(loc, outfit, settings);
@@ -13483,7 +13479,7 @@ var QuestL12StartWar = /*#__PURE__*/function (_TaskInfo) {QuestL12StartWar_inher
       var combos = [];
 
       for (var i = 0; i < 3; i++) {
-        combos.push([null, 5]);
+        combos.push([null, 4]);
         combos.push([ResourceCategory.FORCE_NC, 1]);
       }var _iterator = QuestL12StartWar_createForOfIteratorHelper(
 
@@ -30873,7 +30869,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "988f474";
+var lastCommitHash = "8cdcc02";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -31283,12 +31279,16 @@ function printEndOfRun() {
   var pulls = (0,external_kolmafia_namespaceObject.getProperty)("_greyPulls").
   split(",").
   map((s) => (0,external_kolmafia_namespaceObject.toItem)((0,external_kolmafia_namespaceObject.toInt)(s)));
+  var playerPulls = (0,external_kolmafia_namespaceObject.getProperty)("_roninStoragePulls").
+  split(",").
+  map((s) => (0,external_kolmafia_namespaceObject.toItem)((0,external_kolmafia_namespaceObject.toInt)(s))).
+  filter((i) => !pulls.includes(i));
 
   if (!GreySettings.isHardcoreMode()) {
-    (0,external_kolmafia_namespaceObject.print)("Used ".concat(
-    pulls.length, " / ").concat(
+    (0,external_kolmafia_namespaceObject.print)("Greyday pulled ".concat(
+    pulls.length, " of allowed ").concat(
     GreySettings.greyPullsLimit, " pulls. ").concat(
-    (0,external_kolmafia_namespaceObject.pullsRemaining)(), " pull").concat(
+    (0,external_kolmafia_namespaceObject.pullsRemaining)(), " total pull").concat(
     (0,external_kolmafia_namespaceObject.pullsRemaining)() == 1 ? "" : "s", " remain.."),
 
     "blue");
@@ -31304,7 +31304,14 @@ function printEndOfRun() {
   "blue");
 
   new AbsorbsProvider().printRemainingAbsorbs();
-  (0,external_kolmafia_namespaceObject.print)("Pulled: " + pulls.map((i) => i.name).join(", "), "gray");
+
+  if (playerPulls.length > 0) {
+    (0,external_kolmafia_namespaceObject.print)("Player pulled: ".concat(
+    playerPulls.length, " items, ").concat(playerPulls.join(", ")));
+
+  }
+
+  (0,external_kolmafia_namespaceObject.print)("Greyday Pulls: " + pulls.map((i) => i.name).join(", "), "gray");
 }
 
 function main() {var parameter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
