@@ -60,7 +60,11 @@ export class CryptL7DirtyMan extends CryptL7Template {
   run(path: PossiblePath): QuestAdventure {
     const outfit = this.addRetroSword();
 
-    if (path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE)) {
+    const hasAbsorbed = AbsorbsProvider.getReabsorbedMonsters().includes(
+      this.advsAbsorb
+    );
+
+    if (hasAbsorbed && path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE)) {
       path.getResource(ResourceCategory.FIRE_EXTINGUSHER_ZONE).prepare(outfit);
     }
 
@@ -80,18 +84,15 @@ export class CryptL7DirtyMan extends CryptL7Template {
 
         let avoid: Macro;
 
-        if (path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE)) {
+        if (
+          hasAbsorbed &&
+          path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE)
+        ) {
           // If its a dirty lich, don't spray down
           avoid = Macro.ifNot_(
             this.dirty,
             path.getResource(ResourceCategory.FIRE_EXTINGUSHER_ZONE).macro()
           );
-
-          if (
-            !AbsorbsProvider.getReabsorbedMonsters().includes(this.advsAbsorb)
-          ) {
-            avoid = Macro.ifNot_(this.advsAbsorb, avoid);
-          }
         }
 
         let start: Macro;
