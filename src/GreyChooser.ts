@@ -5,9 +5,11 @@ import {
   Effect,
   Familiar,
   familiarWeight,
+  getLocationMonsters,
   getProperty,
   haveEffect,
   haveSkill,
+  isBanished,
   Item,
   Location,
   Monster,
@@ -897,6 +899,25 @@ export class AdventureFinder {
 
       if (toNum(a1.orbStatus) != toNum(a2.orbStatus)) {
         return a1.orbStatus - a2.orbStatus;
+      }
+
+      const banished1: number =
+        a1.adventure.location != null
+          ? Object.keys(getLocationMonsters(a1.adventure.location)).filter(
+              (m) => isBanished(Monster.get(m))
+            ).length
+          : 0;
+      const banished2: number =
+        a2.adventure.location != null
+          ? Object.keys(getLocationMonsters(a2.adventure.location)).filter(
+              (m) => isBanished(Monster.get(m))
+            ).length
+          : 0;
+
+      // If we've done banishes in one location..
+      if (banished1 != banished2) {
+        // We want the location with the most banishes to be prioritized
+        return banished2 - banished1;
       }
 
       if ((a1.quest == null) != (a2.quest == null)) {

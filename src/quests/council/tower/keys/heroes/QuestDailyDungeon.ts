@@ -63,26 +63,38 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
       return;
     }
 
-    this.paths = [];
+    const mustDoMalware = GreySettings.greyDailyMalware == "true";
+    const mustNeverDoMalware = GreySettings.greyDailyMalware == "false";
 
-    if (GreySettings.greyDailyMalware != "true") {
-      this.paths.push(new PossiblePath(4));
-    }
-
-    if (
-      !assumeUnstarted &&
-      (availableAmount(this.malware) > 0 ||
-        toBoolean(getProperty("_dailyDungeonMalwareUsed")))
-    ) {
+    if (mustDoMalware && GreySettings.isHardcoreMode()) {
+      this.paths = null;
       return;
     }
 
-    if (
-      GreySettings.greyDailyMalware != "false" &&
-      (assumeUnstarted || !GreySettings.isHardcoreMode())
-    ) {
-      this.paths.push(new PossiblePath(4).addConsumablePull(this.malware));
+    this.paths = [];
+
+    // We don't need to do malware
+    if (!mustDoMalware) {
+      this.paths.push(new PossiblePath(4));
     }
+
+    if (mustNeverDoMalware) {
+      return;
+    }
+
+    const pulledMalware =
+      availableAmount(this.malware) > 0 ||
+      toBoolean(getProperty("_dailyDungeonMalwareUsed"));
+
+    const malwarePath = new PossiblePath(4);
+
+    this.paths.push(malwarePath);
+
+    if (!assumeUnstarted && pulledMalware) {
+      return;
+    }
+
+    malwarePath.addConsumablePull(this.malware);
   }
 
   getPossiblePaths(): PossiblePath[] {
