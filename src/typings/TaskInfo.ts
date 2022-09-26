@@ -422,14 +422,16 @@ export function getResourcesChanged(
 
     // If this resource is a yellow rocket
     if (resource == "Yellow Ray") {
-      // We're not checking resources left, instead we're checking another state
-      resourcesLeft = snapshot.resourceMap.get(resource);
-      // If we have yellow vision, and previously it was unused
-      if (
-        haveEffect(Effect.get("Everything Looks Yellow")) > 60 &&
-        snapshot.unused.includes(resource)
-      ) {
-        resourcesLeft--;
+      const prev = snapshot.resourceMap.get(resource);
+      const diff = prev - resourcesLeft;
+
+      // On YR effect, previously if we had 100 left
+      // We'd now have 25 left
+      // If a turn elapsed, then it'll go from 100 to 99
+
+      // If we have a diff of less than 10, then it probably wasn't a YR
+      if (diff < 10) {
+        resourcesLeft = prev;
       }
     }
 
