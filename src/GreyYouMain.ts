@@ -432,12 +432,16 @@ export function printEndOfRun() {
   const pulls: Item[] = getProperty("_greyPulls")
     .split(",")
     .map((s) => toItem(toInt(s)));
+  const playerPulls: Item[] = getProperty("_roninStoragePulls")
+    .split(",")
+    .map((s) => toItem(toInt(s)))
+    .filter((i) => !pulls.includes(i));
 
   if (!GreySettings.isHardcoreMode()) {
     print(
-      `Used ${pulls.length} / ${
+      `Greyday pulled ${pulls.length} of allowed ${
         GreySettings.greyPullsLimit
-      } pulls. ${pullsRemaining()} pull${
+      } pulls. ${pullsRemaining()} total pull${
         pullsRemaining() == 1 ? "" : "s"
       } remain..`,
       "blue"
@@ -453,7 +457,14 @@ export function printEndOfRun() {
     "blue"
   );
   new AbsorbsProvider().printRemainingAbsorbs();
-  print("Pulled: " + pulls.map((i) => i.name).join(", "), "gray");
+
+  if (playerPulls.length > 0) {
+    print(
+      `Player pulled: ${playerPulls.length} items, ${playerPulls.join(", ")}`
+    );
+  }
+
+  print("Greyday Pulls: " + pulls.map((i) => i.name).join(", "), "gray");
 }
 
 export function main(parameter: string = "") {

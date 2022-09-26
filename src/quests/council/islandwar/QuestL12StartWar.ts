@@ -34,7 +34,7 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
     const combos: [ResourceCategory, number][] = [];
 
     for (let i = 0; i < 3; i++) {
-      combos.push([null, 5]);
+      combos.push([null, 4]);
       combos.push([ResourceCategory.FORCE_NC, 1]);
     }
 

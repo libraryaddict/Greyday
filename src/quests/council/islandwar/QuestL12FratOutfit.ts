@@ -312,19 +312,15 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
 
           if (yellowRay != null) {
             yellowRay.prepare(null, props);
+            let macro = new Macro();
 
-            settings.setStartOfFightMacro(
-              Macro.if_("monstername Hippy", yellowRay.macro())
+            macro = macro.if_("monstername Hippy", yellowRay.macro());
+            macro = macro.if_("monstername War Pledge", yellowRay.macro());
+            macro = macro.if_(
+              "monstername Frat Warrior drill sergeant",
+              yellowRay.macro()
             );
-            settings.setStartOfFightMacro(
-              Macro.if_("monstername War Pledge", yellowRay.macro())
-            );
-            settings.setStartOfFightMacro(
-              Macro.if_(
-                "monstername Frat Warrior drill sergeant",
-                yellowRay.macro()
-              )
-            );
+            settings.setStartOfFightMacro(macro);
           }
 
           greyAdv(loc, outfit, settings);
