@@ -355,6 +355,14 @@ class GreyYouMain {
           if (!run) {
             break;
           }
+
+          if (handlingChoice() || currentRound() != 0) {
+            print(
+              "I'm currently in a choice or combat, this is unexpected!",
+              "red"
+            );
+            break;
+          }
         }
       } finally {
         if (turns > 0) {
