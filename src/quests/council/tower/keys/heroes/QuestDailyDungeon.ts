@@ -43,8 +43,6 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
   location: Location = Location.get("The Daily Dungeon");
   fam: Familiar = Familiar.get("Gelatinous Cubeling");
   malware: Item = Item.get("Daily dungeon malware");
-  malwarePath: PossiblePath;
-  noMalware: PossiblePath = new PossiblePath(4);
   paths: PossiblePath[];
 
   getLocations(): Location[] {
@@ -67,28 +65,23 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
 
     this.paths = [];
 
-    this.malwarePath = new PossiblePath(4).addConsumablePull(this.malware);
-
     if (GreySettings.greyDailyMalware != "true") {
-      this.paths.push(this.noMalware);
+      this.paths.push(new PossiblePath(4));
+    }
+
+    if (
+      !assumeUnstarted &&
+      (availableAmount(this.malware) > 0 ||
+        toBoolean(getProperty("_dailyDungeonMalwareUsed")))
+    ) {
+      return;
     }
 
     if (
       GreySettings.greyDailyMalware != "false" &&
       (assumeUnstarted || !GreySettings.isHardcoreMode())
     ) {
-      this.paths.push(this.malwarePath);
-    }
-
-    if (assumeUnstarted) {
-      return;
-    }
-
-    if (
-      availableAmount(this.malware) > 0 ||
-      toBoolean(getProperty("_dailyDungeonMalwareUsed"))
-    ) {
-      this.malwarePath.addUsed(ResourceCategory.PULL);
+      this.paths.push(new PossiblePath(4).addConsumablePull(this.malware));
     }
   }
 

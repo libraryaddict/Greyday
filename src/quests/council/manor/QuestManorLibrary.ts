@@ -39,7 +39,9 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
 
   createPaths(assumeUnstarted: boolean) {
     const wantJar =
-      this.wantsGnomeKillingJar() && availableAmount(this.killingJar) == 0;
+      this.wantsGnomeKillingJar() &&
+      availableAmount(this.killingJar) == 0 &&
+      getQuestStatus("questL11Desert") <= 0;
     const desksLeft =
       5 - (assumeUnstarted ? 0 : toInt(getProperty("writingDesksDefeated")));
 
@@ -109,7 +111,9 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
   run(path: PossiblePath): QuestAdventure {
     const outfit = new GreyOutfit();
     const wantJar =
-      this.wantsGnomeKillingJar() && availableAmount(this.killingJar) == 0;
+      this.wantsGnomeKillingJar() &&
+      availableAmount(this.killingJar) == 0 &&
+      getQuestStatus("questL11Desert") <= 0;
     const banishLibrarian = !wantJar && !isBanished(this.librarian);
     let resource = wantJar
       ? path.getResource(ResourceCategory.YELLOW_RAY)
