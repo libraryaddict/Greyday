@@ -306,7 +306,7 @@ const yellowParka: SomeResource = {
   resource: "Yellow Ray",
   name: "Parka: Yellow Ray",
   available: () => availableAmount(parka) > 0 && haveSkill(torso),
-  resourcesUsed: 99,
+  resourcesUsed: 100,
   worthInAftercore: -3000,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
