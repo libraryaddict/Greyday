@@ -159,7 +159,7 @@ export class QuestManorBillards extends TaskInfo implements QuestInfo {
       if (
         this.toAbsorb.length == 0 &&
         haveSkill(this.hardening) &&
-        (availableAmount(this.chalk) > 0 || haveEffect(this.chalkEffect) > 0)
+        (availableAmount(this.chalk) > 0 || haveEffect(this.chalkEffect) > 1)
       ) {
         return QuestStatus.NOT_READY;
       }
