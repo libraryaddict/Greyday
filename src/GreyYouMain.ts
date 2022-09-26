@@ -357,11 +357,14 @@ class GreyYouMain {
           }
 
           if (handlingChoice() || currentRound() != 0) {
-            print(
-              "I'm currently in a choice or combat, this is unexpected!",
-              "red"
-            );
-            break;
+            visitUrl("main.php");
+            if (handlingChoice() || currentRound() != 0) {
+              print(
+                "I'm currently in a choice or combat, this is unexpected!",
+                "red"
+              );
+              break;
+            }
           }
         }
       } finally {
