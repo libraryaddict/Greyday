@@ -149,7 +149,10 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (GreySettings.shouldAvoidTowerRequirements()) {
+    if (
+      GreySettings.shouldAvoidTowerRequirements() &&
+      !GreySettings.greyReachedTower
+    ) {
       if (GreySettings.greyDailyMalware) {
         if (GreySettings.greyReachedTower) {
           return QuestStatus.READY;
