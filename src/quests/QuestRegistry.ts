@@ -371,6 +371,7 @@ export class QuestRegistry {
       { id: "Council / Tower / Keys / Heroes / Pull and Zap Keys" },
       { id: "Council / Tower / Keys / Heroes / ZapKeys" },
       { id: "Council / Tower / Keys / Heroes / DailyDungeon" },
+      { id: "Council / Tower / Keys / Heroes / DeckOfCards" },
       { id: "Council / Tower / Keys / Digital" },
       { id: "Council / Tower / Keys / Skeleton" },
 
