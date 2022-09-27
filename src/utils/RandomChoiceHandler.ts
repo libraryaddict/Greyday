@@ -78,8 +78,8 @@ export function getBackupChoices(): [number, number][] {
   // Airship
   choices(178, 2);
   choices(182, 4, 1);
-  choices(669, 4);
-  choices(670, 5);
+  choices(669, 1, 4);
+  choices(670, 1, 5);
   choices(671, 1);
   choices(672, 3);
   choices(673, 3);
