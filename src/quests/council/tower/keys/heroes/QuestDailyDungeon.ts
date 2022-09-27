@@ -184,7 +184,7 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
     if (pullsRemaining() == -1) {
       cliExecute("acquire " + this.malware);
     } else {
-      GreyPulls.tryPull(this.malware, 50000);
+      GreyPulls.tryPull(this.malware, 80000);
       path.addUsed(ResourceCategory.PULL);
     }
 

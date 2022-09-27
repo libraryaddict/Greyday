@@ -188,8 +188,17 @@ export class PossiblePath {
         )} as used.`;
       }
 
-      const amountUsed =
-        diff.get(resourceId) / (resources[0].resourcesUsed ?? 1);
+      let amountUsed = diff.get(resourceId) / (resources[0].resourcesUsed ?? 1);
+
+      // If its a yellow ray, round it if its a turn off
+      if (resourceId == "Yellow Ray" && Math.abs(amountUsed) <= 1) {
+        diff.set(
+          resourceId,
+          Math.round(amountUsed) * resources[0].resourcesUsed ?? 1
+        );
+
+        amountUsed = Math.round(amountUsed);
+      }
 
       if (amountUsed % 1 != 0) {
         doDebug();

@@ -125,7 +125,7 @@ export class QuestPullAndZapKeys
             throw "Failed to find a zappable key to pull?";
           }
 
-          GreyPulls.tryRetrieve(toPull, 40000);
+          GreyPulls.tryRetrieve(toPull, 80000);
 
           if (this.getOwnedZappables().length == 0) {
             throw "Expected to have a zappable key grabbed";
