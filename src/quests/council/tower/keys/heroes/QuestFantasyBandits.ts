@@ -268,12 +268,12 @@ export class QuestFantasyBandit extends TaskInfo implements QuestInfo {
     return [];
   }
 
-  needAdventures?(): number {
-    return 5;
-  }
-
   mustBeDone(): boolean {
-    return this.getFoughtToday() > 0 && !this.hasFoughtEnough();
+    return (
+      this.getFoughtToday() > 0 &&
+      !this.hasFoughtEnough() &&
+      !this.hasRealmAccess()
+    );
   }
 
   canAcceptPrimes(): boolean {
