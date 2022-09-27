@@ -175,14 +175,15 @@ export class QuestFantasyBandit extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!GreySettings.greyFantasyBandits) {
+    /*if (!GreySettings.greyFantasyBandits)
+     {
       if (
         GreySettings.shouldAvoidTowerRequirements() ||
         GreySettings.isHardcoreMode()
       ) {
         return QuestStatus.NOT_READY;
       }
-    }
+    }*/
 
     if (getQuestStatus("questL08Trapper") <= 1) {
       return QuestStatus.NOT_READY;
