@@ -164,7 +164,7 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (this.hasFamiliarRecommendation() != null) {
+    if (this.hasFamiliarRecommendation() != null && pullsRemaining() >= 0) {
       return QuestStatus.NOT_READY;
     }
 
