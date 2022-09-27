@@ -2217,8 +2217,17 @@ var PossiblePath = /*#__PURE__*/function () {
 
           }
 
-          var amountUsed =
-          diff.get(resourceId) / ((_resources$0$resource = resources[0].resourcesUsed) !== null && _resources$0$resource !== void 0 ? _resources$0$resource : 1);
+          var amountUsed = diff.get(resourceId) / ((_resources$0$resource = resources[0].resourcesUsed) !== null && _resources$0$resource !== void 0 ? _resources$0$resource : 1);
+
+          // If its a yellow ray, round it if its a turn off
+          if (resourceId == "Yellow Ray" && Math.abs(amountUsed) <= 1) {var _ref6;
+            diff.set(
+            resourceId, (_ref6 =
+            Math.round(amountUsed) * resources[0].resourcesUsed) !== null && _ref6 !== void 0 ? _ref6 : 1);
+
+
+            amountUsed = Math.round(amountUsed);
+          }
 
           if (amountUsed % 1 != 0) {var _resources$0$resource2;
             doDebug();
@@ -15663,7 +15672,7 @@ var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inh
       if ((0,external_kolmafia_namespaceObject.pullsRemaining)() == -1) {
         (0,external_kolmafia_namespaceObject.cliExecute)("acquire " + this.malware);
       } else {
-        GreyPulls.tryPull(this.malware, 50000);
+        GreyPulls.tryPull(this.malware, 80000);
         path.addUsed(ResourceCategory.PULL);
       }
 
@@ -15975,14 +15984,14 @@ var QuestFantasyBandit = /*#__PURE__*/function (_TaskInfo) {QuestFantasyBandits_
 
     function getLocations() {
       return [];
-    } }, { key: "needAdventures", value:
-
-    function needAdventures() {
-      return 5;
     } }, { key: "mustBeDone", value:
 
     function mustBeDone() {
-      return this.getFoughtToday() > 0 && !this.hasFoughtEnough();
+      return (
+        this.getFoughtToday() > 0 &&
+        !this.hasFoughtEnough() &&
+        !this.hasRealmAccess());
+
     } }, { key: "canAcceptPrimes", value:
 
     function canAcceptPrimes() {
@@ -16163,7 +16172,7 @@ var QuestPullAndZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestPu
               throw "Failed to find a zappable key to pull?";
             }
 
-            GreyPulls.tryRetrieve(toPull, 40000);
+            GreyPulls.tryRetrieve(toPull, 80000);
 
             if (this.getOwnedZappables().length == 0) {
               throw "Expected to have a zappable key grabbed";
@@ -30905,7 +30914,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "0bb07f3";
+var lastCommitHash = "1fdf429";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
