@@ -191,7 +191,10 @@ export class PossiblePath {
       let amountUsed = diff.get(resourceId) / (resources[0].resourcesUsed ?? 1);
 
       // If its a yellow ray, round it if its a turn off
-      if (resourceId == "Yellow Ray" && Math.abs(amountUsed) <= 1) {
+      if (
+        resourceId == "Yellow Ray" &&
+        Math.abs(diff.get(resourceId) - (resources[0].resourcesUsed ?? 0)) <= 1
+      ) {
         diff.set(
           resourceId,
           Math.round(amountUsed) * resources[0].resourcesUsed ?? 1

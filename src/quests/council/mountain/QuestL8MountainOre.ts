@@ -432,6 +432,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
 
   isHeistable(): boolean {
     return (
+      toInt(getProperty("_catBurglarCharge")) >= 11 &&
       Object.keys(heistTargets()).find(
         (k) => k.toLowerCase() == "mountain man"
       ) != null
