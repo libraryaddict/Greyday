@@ -76,7 +76,7 @@ export abstract class QuestKeyStuffAbstract extends TaskInfo {
       }
     }
 
-    // If we can fight bandit
+    /* // If we can fight bandit
     if (toInt(getProperty("_foughtFantasyRealm")) < 5) {
       // If we own fantasyrealm
       if (
@@ -90,7 +90,7 @@ export abstract class QuestKeyStuffAbstract extends TaskInfo {
       ) {
         keys += 1;
       }
-    }
+    }*/
 
     return keys;
   }
