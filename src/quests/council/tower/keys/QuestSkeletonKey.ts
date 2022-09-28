@@ -7,6 +7,7 @@ import {
   myMeat,
   pullsRemaining,
   canAdventure,
+  cliExecute,
 } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -84,7 +85,11 @@ export class QuestSkeletonKey implements QuestInfo {
       location: null,
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
-        retrieveItem(this.key);
+        cliExecute("acquire " + this.key);
+
+        if (availableAmount(this.key) == 0) {
+          throw "Failed to acquire " + this.key;
+        }
       },
     };
   }
