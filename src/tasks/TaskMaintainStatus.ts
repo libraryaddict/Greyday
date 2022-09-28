@@ -135,6 +135,7 @@ export class TaskMaintainStatus implements Task {
       }
 
       cliExecute("use " + toUse + " " + restorer.item);
+      return true;
     }
 
     return myHp() >= hp;

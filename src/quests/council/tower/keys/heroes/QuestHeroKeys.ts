@@ -6,7 +6,12 @@ import {
 } from "../../../../../typings/TaskInfo";
 import { GreySettings } from "../../../../../utils/GreySettings";
 import { getAllCombinations } from "../../../../../utils/GreyUtils";
-import { QuestAdventure, QuestInfo, QuestStatus } from "../../../../Quests";
+import {
+  getQuestStatus,
+  QuestAdventure,
+  QuestInfo,
+  QuestStatus,
+} from "../../../../Quests";
 import { QuestType } from "../../../../QuestTypes";
 import { QuestDailyDungeon } from "./QuestDailyDungeon";
 import { QuestFantasyBandit } from "./QuestFantasyBandits";
@@ -48,8 +53,9 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
     // Don't use our resources on key stuff
     if (
       !assumeUnstarted &&
-      GreySettings.shouldAvoidTowerRequirements() &&
-      !GreySettings.greyReachedTower
+      ((GreySettings.shouldAvoidTowerRequirements() &&
+        !GreySettings.greyReachedTower) ||
+        getQuestStatus("questL13Final") > 5)
     ) {
       this.paths = null;
       return;
