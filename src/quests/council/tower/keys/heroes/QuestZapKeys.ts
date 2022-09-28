@@ -37,7 +37,7 @@ export class QuestZapKeys extends QuestKeyStuffAbstract implements QuestInfo {
 
   status(): QuestStatus {
     if (pullsRemaining() == -1) {
-      // return QuestStatus.COMPLETED;
+      return QuestStatus.COMPLETED;
     }
 
     const status = getQuestStatus("questL13Final");
