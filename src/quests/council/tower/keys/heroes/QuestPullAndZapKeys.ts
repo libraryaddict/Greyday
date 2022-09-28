@@ -81,14 +81,14 @@ export class QuestPullAndZapKeys
     return 8;
   }
 
-  status(): QuestStatus {
+  status(path: PossibleKeyPath): QuestStatus {
     if (GreySettings.isHardcoreMode()) {
       return QuestStatus.COMPLETED;
     }
 
     const status = getQuestStatus("questL13Final");
 
-    if (status < 5) {
+    if (status < 5 || path == null) {
       return QuestStatus.NOT_READY;
     }
 
@@ -96,12 +96,16 @@ export class QuestPullAndZapKeys
       return QuestStatus.COMPLETED;
     }
 
-    if (this.getViableKeyCount() >= 3) {
+    if (!path.canUse(ResourceCategory.PULL)) {
       return QuestStatus.COMPLETED;
     }
 
+    if (this.getViableKeyCount() >= 3) {
+      //    return QuestStatus.COMPLETED;
+    }
+
     if (this.getOwnedZappables().length > 0) {
-      return QuestStatus.COMPLETED;
+      //   return QuestStatus.COMPLETED;
     }
 
     return QuestStatus.READY;
