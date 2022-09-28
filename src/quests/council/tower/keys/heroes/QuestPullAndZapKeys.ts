@@ -44,7 +44,7 @@ export class QuestPullAndZapKeys
 
     let pullableKeys: Item[] = GreyPulls.getPullableKeys();
 
-    if (!assumeUnstarted) {
+    if (!assumeUnstarted && pullsRemaining() >= 0) {
       pullableKeys = pullableKeys.filter(
         (i) => !hasPulled(i) || availableAmount(i) > 0
       );

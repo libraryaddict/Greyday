@@ -1,5 +1,4 @@
 import { Location, Item, availableAmount, print, getProperty } from "kolmafia";
-import { ResourceCategory } from "../../../../../typings/ResourceTypes";
 import {
   PossibleMultiPath,
   PossiblePath,
@@ -66,7 +65,7 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
 
       (quest as TaskInfo).createPaths(assumeUnstarted);
 
-      const paths = (quest as TaskInfo).getPossiblePaths();
+      let paths = (quest as TaskInfo).getPossiblePaths();
 
       // This shouldn't be done at this point
       if (paths == null) {
@@ -76,6 +75,16 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
 
       if (paths.length == 0) {
         print("Empty paths found for key path, " + quest.getId(), "red");
+        continue;
+      }
+
+      paths = paths.filter(
+        (p) =>
+          assumeUnstarted ||
+          (quest as QuestInfo).status(p) != QuestStatus.COMPLETED
+      );
+
+      if (paths.length == 0) {
         continue;
       }
 
