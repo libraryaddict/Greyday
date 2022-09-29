@@ -16907,7 +16907,7 @@ var QuestTowerMaze = /*#__PURE__*/function () {function QuestTowerMaze() {QuestT
       return false;
     } }]);return QuestTowerMaze;}();
 ;// CONCATENATED MODULE: ./src/quests/council/tower/stages/QuestTowerWallMeat.ts
-function QuestTowerWallMeat_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerWallMeat_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerWallMeat_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerWallMeat_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerWallMeat_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}
+function QuestTowerWallMeat_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerWallMeat_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerWallMeat_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerWallMeat_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerWallMeat_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerWallMeat_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestTowerWallMeat_setPrototypeOf(subClass, superClass);}function QuestTowerWallMeat_setPrototypeOf(o, p) {QuestTowerWallMeat_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestTowerWallMeat_setPrototypeOf(o, p);}function QuestTowerWallMeat_createSuper(Derived) {var hasNativeReflectConstruct = QuestTowerWallMeat_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestTowerWallMeat_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestTowerWallMeat_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestTowerWallMeat_possibleConstructorReturn(this, result);};}function QuestTowerWallMeat_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestTowerWallMeat_assertThisInitialized(self);}function QuestTowerWallMeat_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestTowerWallMeat_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestTowerWallMeat_getPrototypeOf(o) {QuestTowerWallMeat_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestTowerWallMeat_getPrototypeOf(o);}function QuestTowerWallMeat_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -16915,9 +16915,24 @@ function QuestTowerWallMeat_classCallCheck(instance, Constructor) {if (!(instanc
 
 
 
-var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat() {QuestTowerWallMeat_classCallCheck(this, QuestTowerWallMeat);}QuestTowerWallMeat_createClass(QuestTowerWallMeat, [{ key: "getId", value:
+
+
+var QuestTowerWallMeat = /*#__PURE__*/function (_TaskInfo) {QuestTowerWallMeat_inherits(QuestTowerWallMeat, _TaskInfo);var _super = QuestTowerWallMeat_createSuper(QuestTowerWallMeat);function QuestTowerWallMeat() {var _this;QuestTowerWallMeat_classCallCheck(this, QuestTowerWallMeat);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestTowerWallMeat_defineProperty(QuestTowerWallMeat_assertThisInitialized(_this), "paths", void 0);return _this;}QuestTowerWallMeat_createClass(QuestTowerWallMeat, [{ key: "getId", value:
+
+
     function getId() {
       return "Council / Tower / WallOfMeat";
+    } }, { key: "createPaths", value:
+
+    function createPaths(assumeUnstarted) {
+      this.paths = [
+      new PossiblePath(0).addMeat(2000),
+      new PossiblePath(0).add(ResourceCategory.HOT_TUB)];
+
+    } }, { key: "getPossiblePaths", value:
+
+    function getPossiblePaths() {
+      return this.paths;
     } }, { key: "level", value:
 
     function level() {
@@ -16942,7 +16957,7 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
       return (0,external_kolmafia_namespaceObject.getProperty)("_roboDrinks").includes("drive-by shooting");
     } }, { key: "run", value:
 
-    function run() {
+    function run(path) {
       return {
         outfit: GreyOutfit.IGNORE_OUTFIT,
         location: null,
@@ -16961,7 +16976,13 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
             throw "Max HP too low! Run +meat and kill the wall of meat yourself?";
           }
 
-          restoreHPTo(Math.min((0,external_kolmafia_namespaceObject.myMaxhp)(), 600));
+          if ((0,external_kolmafia_namespaceObject.myHp)() < (0,external_kolmafia_namespaceObject.myMaxhp)()) {
+            if (path.canUse(ResourceCategory.HOT_TUB)) {
+              (0,external_kolmafia_namespaceObject.cliExecute)("hottub");
+            } else {
+              restoreHPTo(Math.min((0,external_kolmafia_namespaceObject.myMaxhp)(), 600));
+            }
+          }
 
           if ((0,external_kolmafia_namespaceObject.myHp)() < 200) {
             throw "HP too low";
@@ -16984,7 +17005,7 @@ var QuestTowerWallMeat = /*#__PURE__*/function () {function QuestTowerWallMeat()
 
     function canAcceptPrimes() {
       return false;
-    } }]);return QuestTowerWallMeat;}();
+    } }]);return QuestTowerWallMeat;}(TaskInfo);
 ;// CONCATENATED MODULE: ./src/quests/council/tower/stages/QuestTowerWallBones.ts
 function QuestTowerWallBones_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerWallBones_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestTowerWallBones_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerWallBones_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerWallBones_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerWallBones_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -30989,7 +31010,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "1ee44ad";
+var lastCommitHash = "51d5a27";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
