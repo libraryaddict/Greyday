@@ -148,7 +148,8 @@ export class QuestL11Black extends TaskInfo implements QuestInfo {
       outfit: outfit,
       familiar: fam,
       orbs: this.getNeededMonsters(),
-      mayFreeRun: false,
+      mayFreeRun: ncIn == 0 && availableAmount(this.boots) > 0,
+      freeRun: (monster) => monster == this.blackberryBush,
       run: () => {
         if (path.canUse(ResourceCategory.PULL)) {
           GreyPulls.tryPull(this.boots);

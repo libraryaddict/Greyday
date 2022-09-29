@@ -3,7 +3,10 @@ import {
   availableAmount,
   cliExecute,
   Familiar,
+  familiarEquipment,
   getProperty,
+  haveFamiliar,
+  haveSkill,
   hippyStoneBroken,
   inHardcore,
   Item,
@@ -12,6 +15,7 @@ import {
   myFamiliar,
   print,
   setProperty,
+  Skill,
   toBoolean,
   use,
   useFamiliar,
@@ -110,6 +114,38 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
           getProperty("_saberMod") == "0"
         ) {
           cliExecute("saber resistance");
+        }
+
+        const clipFams: [Familiar, Item][] = GreySettings.greyClipArt
+          .split(",")
+          .filter((s) => s.length != 0)
+          .map((s) => Familiar.get(s))
+          .map((f) => [f, familiarEquipment(f)] as [Familiar, Item])
+          .filter(([f, e]) => availableAmount(e) == 0 && haveFamiliar(f));
+
+        const clipArt = Skill.get("Summon Clip Art");
+        const jacks = Item.get("box of familiar jacks");
+
+        for (const [fam, item] of clipFams) {
+          if (!haveSkill(clipArt) || clipArt.dailylimit <= 0) {
+            break;
+          }
+
+          if (availableAmount(item) > 0) {
+            continue;
+          }
+
+          print(
+            `Using the familiar ${fam.toString()} to acquire fam equip ${item} from Summon Clip Art`,
+            "blue"
+          );
+
+          if (availableAmount(jacks) == 0) {
+            cliExecute("acquire box of familiar jacks");
+          }
+
+          useFamiliar(fam);
+          use(jacks);
         }
 
         if (

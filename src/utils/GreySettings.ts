@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  Familiar,
   getProperty,
   inHardcore,
   Item,
@@ -7,6 +8,7 @@ import {
   toBoolean,
   toInt,
   toItem,
+  toString,
 } from "kolmafia";
 
 export type GreySetting = {
@@ -169,6 +171,26 @@ export function getGreySettings(): GreySetting[] {
     default: "",
   };
 
+  const greyClipArt: GreySetting = {
+    name: "greyClipArt",
+    description:
+      "A comma seperated list of familiar names you'd like us to use Tome of Clip Art on if we have the iotm",
+    valid: (value) => {
+      return (
+        value
+          .split(",")
+          .find(
+            (s) =>
+              s.length != 0 &&
+              Familiar.all().find(
+                (f) => f.toString().toLowerCase() == s.toLowerCase()
+              ) == null
+          ) == null
+      );
+    },
+    default: "Grey Goose",
+  };
+
   return [
     //greyBountyHunter,
     towerBreak,
@@ -185,6 +207,7 @@ export function getGreySettings(): GreySetting[] {
     greyPullValue,
     greyVoteMonster,
     greySwitchWorkshed,
+    greyClipArt,
   ];
 }
 
@@ -255,6 +278,7 @@ export class GreySettings {
   static greyVotingBooth: boolean;
   static greyBountyHunting: boolean;
   static greySwitchWorkshed: string;
+  static greyClipArt: string;
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();
