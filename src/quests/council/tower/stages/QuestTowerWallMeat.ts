@@ -1,19 +1,17 @@
 import {
   Location,
   Familiar,
-  myBasestat,
-  Stat,
   Skill,
   myHp,
-  maximize,
   myMaxhp,
-  print,
   cliExecute,
   haveFamiliar,
   getProperty,
   useFamiliar,
 } from "kolmafia";
 import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
+import { ResourceCategory } from "../../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
@@ -25,9 +23,22 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
-export class QuestTowerWallMeat implements QuestInfo {
+export class QuestTowerWallMeat extends TaskInfo implements QuestInfo {
+  paths: PossiblePath[];
+
   getId(): QuestType {
     return "Council / Tower / WallOfMeat";
+  }
+
+  createPaths(assumeUnstarted: boolean): void {
+    this.paths = [
+      new PossiblePath(0).addMeat(2000),
+      new PossiblePath(0).add(ResourceCategory.HOT_TUB),
+    ];
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
   }
 
   level(): number {
@@ -52,7 +63,7 @@ export class QuestTowerWallMeat implements QuestInfo {
     return getProperty("_roboDrinks").includes("drive-by shooting");
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     return {
       outfit: GreyOutfit.IGNORE_OUTFIT,
       location: null,
@@ -71,7 +82,13 @@ export class QuestTowerWallMeat implements QuestInfo {
           throw "Max HP too low! Run +meat and kill the wall of meat yourself?";
         }
 
-        restoreHPTo(Math.min(myMaxhp(), 600));
+        if (myHp() < myMaxhp()) {
+          if (path.canUse(ResourceCategory.HOT_TUB)) {
+            cliExecute("hottub");
+          } else {
+            restoreHPTo(Math.min(myMaxhp(), 600));
+          }
+        }
 
         if (myHp() < 200) {
           throw "HP too low";
