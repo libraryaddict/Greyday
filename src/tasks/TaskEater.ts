@@ -51,6 +51,7 @@ export class TaskEater implements Task {
       // Are you sure you want to eat this bla bla
       // Suppress that annoying "pvp stone no brokey??"
       dontEat.push(Item.get("Can of Red Minotaur"));
+      dontEat.push(Item.get("Watered-down Red Minotaur"));
 
       // Palin quest items
       dontEat.push(Item.get("Stunt Nuts"));
