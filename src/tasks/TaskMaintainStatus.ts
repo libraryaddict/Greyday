@@ -8,6 +8,7 @@ import {
   getProperty,
   haveEffect,
   Item,
+  itemAmount,
   myHp,
   myMaxhp,
   myMaxmp,
@@ -129,10 +130,15 @@ export class TaskMaintainStatus implements Task {
       if (availableAmount(restorer.item) > 0) {
         toUse = Math.min(toUse, availableAmount(restorer.item));
       } else {
-        toUse = Math.min(Math.floor(myMeat() / restorer.price), toUse);
+        toUse = Math.min(Math.floor(myMeat() / restorer.price), toUse + 4);
 
         cliExecute("acquire " + toUse + " " + restorer.item);
       }
+
+      toUse = Math.min(
+        itemAmount(restorer.item),
+        Math.ceil((desiredHp - myHp()) / restorer.hpRestored)
+      );
 
       cliExecute("use " + toUse + " " + restorer.item);
       return true;
