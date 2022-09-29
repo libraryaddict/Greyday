@@ -228,7 +228,10 @@ class GremlinQuest implements QuestInfo {
     return {
       location: this.loc,
       outfit: outfit,
-      orbs: [this.monster, Monster.get(this.monster.name)],
+      orbs: [
+        this.monster,
+        Monster.get(this.monster.name.replace(" (tool)", "")),
+      ],
       freeRun: (mons) => mons != this.monster,
       run: () => {
         const settings = new AdventureSettings();
