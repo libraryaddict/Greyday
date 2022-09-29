@@ -11,7 +11,7 @@ import {
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { currentPredictions } from "../../../utils/GreyUtils";
+import { currentPredictions, UmbrellaState } from "../../../utils/GreyUtils";
 import { PropertyManager } from "../../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
@@ -47,7 +47,8 @@ export class CryptL7Rattling extends CryptL7Template {
       } else {
         outfit.setNoCombat();
       }
-      outfit.plusMonsterLevelWeight = 4;
+      outfit.umbrellaSetting = UmbrellaState.MONSTER_LEVEL;
+      outfit.addBonus("+4 ML");
       outfit.addBonus("-equip " + this.kramco.name);
     }
 

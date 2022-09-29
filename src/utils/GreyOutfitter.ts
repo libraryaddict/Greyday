@@ -28,8 +28,6 @@ export class GreyOutfit {
   initWeight: number = 0.05;
   plusCombatWeight: number = 0;
   minusCombatWeight: number = 0;
-  plusMonsterLevelWeight: number = 0;
-  minusMonsterLevelWeight: number = 0;
   itemsWeight: [Item, number][] = [];
   bonusWeights: string[] = [];
   overrideMaximizer: string;
@@ -45,8 +43,6 @@ export class GreyOutfit {
     if (this.umbrellaSetting == null) {
       if (this.minusCombatWeight > 0) {
         return UmbrellaState.MINUS_COMBAT;
-      } else if (this.plusMonsterLevelWeight > 0) {
-        return UmbrellaState.MONSTER_LEVEL;
       } else {
         //if (outfit.itemDropWeight > 2) {
         return UmbrellaState.ITEM_DROPS;
@@ -190,14 +186,6 @@ export class GreyOutfit {
 
     if (this.minusCombatWeight > 0) {
       modifiers.push("-" + this.minusCombatWeight + " combat 25 MAX");
-    }
-
-    if (this.plusMonsterLevelWeight > 0) {
-      modifiers.push("+" + this.plusMonsterLevelWeight + " ml");
-    }
-
-    if (this.minusMonsterLevelWeight > 0) {
-      modifiers.push("-" + this.minusMonsterLevelWeight + " ml");
     }
 
     for (const pair of this.itemsWeight) {

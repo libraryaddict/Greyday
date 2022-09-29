@@ -184,7 +184,7 @@ export class SmutOrcs implements QuestInfo {
   tryCombat(): QuestAdventure {
     // max -ml, max cold dmg, raise item drop finally
     const outfit = new GreyOutfit();
-    outfit.minusMonsterLevelWeight = 5;
+    outfit.addBonus("-5 ML");
     outfit.setItemDrops();
 
     if (

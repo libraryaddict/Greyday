@@ -107,7 +107,8 @@ export class QuestL3Tavern implements QuestInfo {
 
       if (getProperty("pyramidBombUsed") != "true") {
         outfit.setPlusCombat();
-        outfit.plusMonsterLevelWeight = 10;
+        outfit.umbrellaSetting = UmbrellaState.MONSTER_LEVEL;
+        outfit.addBonus("+10 ML");
         outfit.addBonus("-offhand");
 
         // Boost our damage
@@ -153,7 +154,7 @@ export class QuestL3Tavern implements QuestInfo {
 
         try {
           if (
-            outfit.plusMonsterLevelWeight >= 10 &&
+            outfit.umbrellaSetting == UmbrellaState.MONSTER_LEVEL &&
             availableAmount(this.umbrella) > 0
           ) {
             setUmbrella(UmbrellaState.MONSTER_LEVEL);

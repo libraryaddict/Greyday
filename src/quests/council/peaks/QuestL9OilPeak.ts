@@ -145,8 +145,8 @@ export class OilHandler implements QuestInfo {
     }
 
     const outfit = new GreyOutfit().setItemDrops();
-    outfit.plusMonsterLevelWeight = 2;
-    //    outfit.addItem(Item.get("Unbreakable Umbrella"));
+    outfit.addBonus("+2 ML 100 MAX");
+    outfit.umbrellaSetting = UmbrellaState.MONSTER_LEVEL;
     outfit.addBonus("-offhand");
 
     return {
