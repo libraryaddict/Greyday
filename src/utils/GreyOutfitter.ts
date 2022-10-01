@@ -32,6 +32,10 @@ export class GreyOutfit {
   bonusWeights: string[] = [];
   overrideMaximizer: string;
   umbrellaSetting: UmbrellaState;
+  /**
+   * When we don't want to cap how much combat we run
+   */
+  uncapped: boolean = false;
 
   constructor(string: string = null) {
     this.overrideMaximizer = string;
@@ -120,11 +124,19 @@ export class GreyOutfit {
   }
 
   setNoCombat(): GreyOutfit {
+    if (this.minusCombatWeight > 0) {
+      this.setUncapped();
+    }
+
     this.minusCombatWeight += 10;
     return this;
   }
 
   setPlusCombat(): GreyOutfit {
+    if (this.plusCombatWeight > 0) {
+      this.setUncapped();
+    }
+
     this.plusCombatWeight += 10;
     return this;
   }
@@ -137,6 +149,12 @@ export class GreyOutfit {
 
   setChampagneBottle(): GreyOutfit {
     this.allowChampBottle = true;
+
+    return this;
+  }
+
+  setUncapped() {
+    this.uncapped = true;
 
     return this;
   }
@@ -181,11 +199,21 @@ export class GreyOutfit {
     }
 
     if (this.plusCombatWeight > 0) {
-      modifiers.push("+" + this.plusCombatWeight + " combat 25 MAX");
+      modifiers.push(
+        "+" +
+          this.plusCombatWeight +
+          " combat" +
+          (this.uncapped ? "" : " 25 MAX")
+      );
     }
 
     if (this.minusCombatWeight > 0) {
-      modifiers.push("-" + this.minusCombatWeight + " combat 25 MAX");
+      modifiers.push(
+        "-" +
+          this.minusCombatWeight +
+          " combat" +
+          (this.uncapped ? "" : " 25 MAX")
+      );
     }
 
     for (const pair of this.itemsWeight) {
