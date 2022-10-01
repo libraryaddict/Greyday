@@ -34,6 +34,10 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
     Item.get("Gold Wedding Ring"),
   ];
   paths: PossiblePath[];
+  freeRunners: Item[] = [
+    "Greatest American Pants",
+    "navel ring of navel gazing",
+  ].map((s) => Item.get(s));
   donePulls: boolean;
 
   createPaths(assumeUnstarted: boolean) {
@@ -45,9 +49,9 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
       this.requiredPulls.push([mlItem[0], -30]);
     }
 
-    const freeRunner = ["Greatest American Pants", "navel ring of navel gazing"]
-      .map((s) => Item.get(s))
-      .find((i) => availableAmount(i) + storageAmount(i) > 0);
+    const freeRunner = this.freeRunners.find(
+      (i) => availableAmount(i) + storageAmount(i) > 0
+    );
 
     this.paths = [];
     this.paths.push(new PossiblePath(0));
@@ -89,7 +93,15 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
       ([i]) => storageAmount(i) > 0 || historicalPrice(i) < 50000
     );*/
 
-    const advs = items.map(([, amount]) => amount).reduce((p, n) => p + n, 0);
+    let advs = items.map(([, amount]) => amount).reduce((p, n) => p + n, 0);
+
+    if (
+      items.find(([item]) => item == Item.get("Mafia Thumb Ring")) != null &&
+      items.find(([item]) => this.freeRunners.includes(item))
+    ) {
+      // If we're using mafia ring and we plan to do free runs, mafia won't trigger as much..
+      advs -= 20;
+    }
 
     const path = new PossiblePath(advs);
 

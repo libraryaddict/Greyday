@@ -35,7 +35,7 @@ export class GreyOutfit {
   /**
    * When we don't want to cap how much combat we run
    */
-  uncapped: boolean = false;
+  combatCap: number = 25;
 
   constructor(string: string = null) {
     this.overrideMaximizer = string;
@@ -156,7 +156,7 @@ export class GreyOutfit {
   }
 
   setUncapped() {
-    this.uncapped = true;
+    this.combatCap = 100;
 
     return this;
   }
@@ -202,19 +202,13 @@ export class GreyOutfit {
 
     if (this.plusCombatWeight > 0) {
       modifiers.push(
-        "+" +
-          this.plusCombatWeight +
-          " combat" +
-          (this.uncapped ? "" : " 25 MAX")
+        "+" + this.plusCombatWeight + " combat " + this.combatCap + " MAX"
       );
     }
 
     if (this.minusCombatWeight > 0) {
       modifiers.push(
-        "-" +
-          this.minusCombatWeight +
-          " combat" +
-          (this.uncapped ? "" : " 25 MAX")
+        "-" + this.minusCombatWeight + " combat " + this.combatCap + " MAX"
       );
     }
 

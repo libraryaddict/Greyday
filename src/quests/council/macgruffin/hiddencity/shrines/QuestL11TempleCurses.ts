@@ -179,6 +179,8 @@ export class QuestL11Curses extends TaskInfo implements QuestInfo {
     }
 
     setPrimedResource(this, path, path.getResource(ResourceCategory.FORCE_NC));
+
+    return true;
   }
 
   run(path: PossiblePath): QuestAdventure {
