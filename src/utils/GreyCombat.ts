@@ -41,6 +41,23 @@ import { GreySettings } from "./GreySettings";
 import { currentPredictions } from "./GreyUtils";
 import { Macro } from "./MacroBuilder";
 
+const poisonousMonsters: Monster[] = [
+  "Black Adder",
+  "Black Widow",
+  "tomb asp",
+  "big creepy spider",
+  "completely different spider",
+  "Stone temple pirate",
+  "spectral jellyfish",
+  "Stephen Spookyraven",
+  "Swarm of killer bees",
+  "whitesnake",
+  "Mayonnaise wasp",
+  "Dodecapede",
+  "Quantum Mechanic",
+  "Protagonist",
+].map((s) => Monster.get(s));
+
 export function greyDuringFightMacro(settings: AdventureSettings): Macro {
   let macro = new Macro();
 
@@ -142,8 +159,7 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
     /*toInt(getProperty("flyeredML")) <= 10000 && */ monster.baseHp < 300 &&
     myHp() > 120 &&
     !monster.attributes.includes("FREE") &&
-    monster != Monster.get("Quantum Mechanic") &&
-    myLocation() != Location.get("The Black Forest")
+    !poisonousMonsters.includes(monster)
   ) {
     macro.tryItem(Item.get("rock band flyers"));
   }
@@ -256,6 +272,7 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
     `!pastround 15 && !hppercentbelow ${healthPerc}`,
     Macro.tryItem(Item.get("Beehive"))
   );
+  macro.tryItem(Item.get("Cosmic Bowling Ball"));
   macro.while_("!pastround 15 && !hppercentbelow 30", Macro.attack());
   macro.abort();
 

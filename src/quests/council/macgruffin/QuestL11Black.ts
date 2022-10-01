@@ -118,6 +118,7 @@ export class QuestL11Black extends TaskInfo implements QuestInfo {
 
     if (!ncTime) {
       outfit.setPlusCombat();
+      outfit.addBonus("+combat 5 max");
       outfit.addBonus("+3 init 50 max");
     }
 
