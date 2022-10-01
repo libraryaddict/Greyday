@@ -125,6 +125,7 @@ export class GreyOutfit {
 
   setNoCombat(): GreyOutfit {
     if (this.minusCombatWeight > 0) {
+      this.minusCombatWeight += 20;
       this.setUncapped();
     }
 
@@ -134,6 +135,7 @@ export class GreyOutfit {
 
   setPlusCombat(): GreyOutfit {
     if (this.plusCombatWeight > 0) {
+      this.plusCombatWeight += 20;
       this.setUncapped();
     }
 
