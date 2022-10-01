@@ -2802,7 +2802,7 @@ var GreyOutfit = /*#__PURE__*/function () {
    */
 
 
-  function GreyOutfit() {var string = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;GreyOutfitter_classCallCheck(this, GreyOutfit);GreyOutfitter_defineProperty(this, "allowChampBottle", false);GreyOutfitter_defineProperty(this, "famExpWeight", 30);GreyOutfitter_defineProperty(this, "itemDropWeight", 0.3);GreyOutfitter_defineProperty(this, "meatDropWeight", 0.1);GreyOutfitter_defineProperty(this, "hpWeight", 0.001);GreyOutfitter_defineProperty(this, "hpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "mpWeight", 0.001);GreyOutfitter_defineProperty(this, "mpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "initWeight", 0.05);GreyOutfitter_defineProperty(this, "plusCombatWeight", 0);GreyOutfitter_defineProperty(this, "minusCombatWeight", 0);GreyOutfitter_defineProperty(this, "itemsWeight", []);GreyOutfitter_defineProperty(this, "bonusWeights", []);GreyOutfitter_defineProperty(this, "overrideMaximizer", void 0);GreyOutfitter_defineProperty(this, "umbrellaSetting", void 0);GreyOutfitter_defineProperty(this, "uncapped", false);
+  function GreyOutfit() {var string = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;GreyOutfitter_classCallCheck(this, GreyOutfit);GreyOutfitter_defineProperty(this, "allowChampBottle", false);GreyOutfitter_defineProperty(this, "famExpWeight", 30);GreyOutfitter_defineProperty(this, "itemDropWeight", 0.3);GreyOutfitter_defineProperty(this, "meatDropWeight", 0.1);GreyOutfitter_defineProperty(this, "hpWeight", 0.001);GreyOutfitter_defineProperty(this, "hpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "mpWeight", 0.001);GreyOutfitter_defineProperty(this, "mpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "initWeight", 0.05);GreyOutfitter_defineProperty(this, "plusCombatWeight", 0);GreyOutfitter_defineProperty(this, "minusCombatWeight", 0);GreyOutfitter_defineProperty(this, "itemsWeight", []);GreyOutfitter_defineProperty(this, "bonusWeights", []);GreyOutfitter_defineProperty(this, "overrideMaximizer", void 0);GreyOutfitter_defineProperty(this, "umbrellaSetting", void 0);GreyOutfitter_defineProperty(this, "combatCap", 25);
     this.overrideMaximizer = string;
 
     this.setWeights();
@@ -2921,7 +2921,7 @@ var GreyOutfit = /*#__PURE__*/function () {
     } }, { key: "setUncapped", value:
 
     function setUncapped() {
-      this.uncapped = true;
+      this.combatCap = 100;
 
       return this;
     } }, { key: "createString", value:
@@ -2967,19 +2967,13 @@ var GreyOutfit = /*#__PURE__*/function () {
 
       if (this.plusCombatWeight > 0) {
         modifiers.push(
-        "+" +
-        this.plusCombatWeight +
-        " combat" + (
-        this.uncapped ? "" : " 25 MAX"));
+        "+" + this.plusCombatWeight + " combat " + this.combatCap + " MAX");
 
       }
 
       if (this.minusCombatWeight > 0) {
         modifiers.push(
-        "-" +
-        this.minusCombatWeight +
-        " combat" + (
-        this.uncapped ? "" : " 25 MAX"));
+        "-" + this.minusCombatWeight + " combat " + this.combatCap + " MAX");
 
       }var _iterator = GreyOutfitter_createForOfIteratorHelper(
 
@@ -7113,7 +7107,7 @@ var QuestL11Black = /*#__PURE__*/function (_TaskInfo) {QuestL11Black_inherits(Qu
 
       if (!ncTime) {
         outfit.setPlusCombat();
-        outfit.addBonus("+combat 5 max");
+        outfit.combatCap = 5;
         outfit.addBonus("+3 init 50 max");
       }
 
@@ -11268,6 +11262,8 @@ var QuestL11Curses = /*#__PURE__*/function (_TaskInfo) {QuestL11TempleCurses_inh
       }
 
       setPrimedResource(this, path, path.getResource(ResourceCategory.FORCE_NC));
+
+      return true;
     } }, { key: "run", value:
 
     function run(path) {
@@ -24900,9 +24896,13 @@ var QuestInitialPulls = /*#__PURE__*/function (_TaskInfo) {QuestInitialPulls_inh
 
     [
     external_kolmafia_namespaceObject.Item.get("1,970 carat gold"),
-    external_kolmafia_namespaceObject.Item.get("Gold Wedding Ring")]);QuestInitialPulls_defineProperty(QuestInitialPulls_assertThisInitialized(_this), "paths", void 0);QuestInitialPulls_defineProperty(QuestInitialPulls_assertThisInitialized(_this), "donePulls", void 0);return _this;}QuestInitialPulls_createClass(QuestInitialPulls, [{ key: "createPaths", value:
+    external_kolmafia_namespaceObject.Item.get("Gold Wedding Ring")]);QuestInitialPulls_defineProperty(QuestInitialPulls_assertThisInitialized(_this), "paths", void 0);QuestInitialPulls_defineProperty(QuestInitialPulls_assertThisInitialized(_this), "freeRunners",
 
 
+    [
+    "Greatest American Pants",
+    "navel ring of navel gazing"].
+    map((s) => external_kolmafia_namespaceObject.Item.get(s)));QuestInitialPulls_defineProperty(QuestInitialPulls_assertThisInitialized(_this), "donePulls", void 0);return _this;}QuestInitialPulls_createClass(QuestInitialPulls, [{ key: "createPaths", value:
 
 
     function createPaths(assumeUnstarted) {
@@ -24914,9 +24914,9 @@ var QuestInitialPulls = /*#__PURE__*/function (_TaskInfo) {QuestInitialPulls_inh
         this.requiredPulls.push([mlItem[0], -30]);
       }
 
-      var freeRunner = ["Greatest American Pants", "navel ring of navel gazing"].
-      map((s) => external_kolmafia_namespaceObject.Item.get(s)).
-      find((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) + (0,external_kolmafia_namespaceObject.storageAmount)(i) > 0);
+      var freeRunner = this.freeRunners.find(
+      (i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) + (0,external_kolmafia_namespaceObject.storageAmount)(i) > 0);
+
 
       this.paths = [];
       this.paths.push(new PossiblePath(0));
@@ -24960,9 +24960,17 @@ var QuestInitialPulls = /*#__PURE__*/function (_TaskInfo) {QuestInitialPulls_inh
 
       var advs = items.map((_ref5) => {var _ref6 = QuestInitialPulls_slicedToArray(_ref5, 2),amount = _ref6[1];return amount;}).reduce((p, n) => p + n, 0);
 
+      if (
+      items.find((_ref7) => {var _ref8 = QuestInitialPulls_slicedToArray(_ref7, 1),item = _ref8[0];return item == external_kolmafia_namespaceObject.Item.get("Mafia Thumb Ring");}) != null &&
+      items.find((_ref9) => {var _ref10 = QuestInitialPulls_slicedToArray(_ref9, 1),item = _ref10[0];return this.freeRunners.includes(item);}))
+      {
+        // If we're using mafia ring and we plan to do free runs, mafia won't trigger as much..
+        advs -= 20;
+      }
+
       var path = new PossiblePath(advs);
 
-      items.forEach((_ref7) => {var _ref8 = QuestInitialPulls_slicedToArray(_ref7, 1),i = _ref8[0];return path.addPull(i);});
+      items.forEach((_ref11) => {var _ref12 = QuestInitialPulls_slicedToArray(_ref11, 1),i = _ref12[0];return path.addPull(i);});
 
       return path;
     } }, { key: "getPossiblePaths", value:
@@ -31081,7 +31089,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "4d2e4f6";
+var lastCommitHash = "9f430a9";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
