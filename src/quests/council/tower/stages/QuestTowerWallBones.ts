@@ -91,7 +91,7 @@ export class QuestTowerWallBones implements QuestInfo {
   }
 
   runKnife(): QuestAdventure {
-    const outfit = new GreyOutfit().setNoCombat();
+    const outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
     return {
       location: this.groundFloor,

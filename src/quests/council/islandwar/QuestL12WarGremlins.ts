@@ -225,13 +225,16 @@ class GremlinQuest implements QuestInfo {
       Macro.while_("!pastround 25 && !hpbelow 50", macro2)
     );
 
+    const orbs = [
+      this.monster,
+      Monster.get(this.monster.name.replace(" (tool)", "")),
+    ];
+
     return {
       location: this.loc,
       outfit: outfit,
-      orbs: [
-        this.monster,
-        Monster.get(this.monster.name.replace(" (tool)", "")),
-      ],
+      orbs: orbs,
+      mayFreeRun: true,
       freeRun: (mons) => mons != this.monster,
       run: () => {
         const settings = new AdventureSettings();

@@ -133,7 +133,7 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
     const nc = path.getResource(ResourceCategory.FORCE_NC);
 
     if (nc == null) {
-      outfit.setNoCombat();
+      outfit.setNoCombat().setNoCombat();
 
       if (
         availableAmount(this.umbrella) > 0 &&

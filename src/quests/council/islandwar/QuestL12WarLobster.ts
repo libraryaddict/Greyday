@@ -72,16 +72,20 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
     const barrelsNeeded =
       5 - (assumeUnstarted ? 0 : availableAmount(this.item));
     const turnsManual = 8;
-    const possibleCombo: (ResourceCategory | "Manual")[] = [];
+    const possibleCombo: (ResourceCategory | "Manual" | "Friend")[] = [];
 
-    for (
-      let i = 0;
-      i < barrelsNeeded - (assumeUnstarted ? 0 : this.getFriendsRemaining());
-      i++
-    ) {
-      possibleCombo.push("Manual");
+    for (let i = 0; i < barrelsNeeded; i++) {
+      if (i < this.getFriendsRemaining()) {
+        possibleCombo.push("Friend");
+      } else {
+        possibleCombo.push("Manual");
+      }
+
       possibleCombo.push(ResourceCategory.COPIER);
-      possibleCombo.push(ResourceCategory.OLFACT_COPIER);
+
+      if (i <= 1) {
+        possibleCombo.push(ResourceCategory.OLFACT_COPIER);
+      }
     }
 
     // If we're doing voted, or mag class. Then we can do a replace
@@ -132,7 +136,10 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       let barrelsGained = 0;
 
       for (const type of combo) {
-        if (type == "Manual") {
+        if (type == "Friend") {
+          turnsTaken += 1;
+          barrelsGained += 1;
+        } else if (type == "Manual") {
           turnsTaken += turnsManual;
           barrelsGained++;
         } else if (type == ResourceCategory.COPIER) {
@@ -562,6 +569,10 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
         return true;
       }
 
+      return false;
+    }
+
+    if (this.getFriendsRemaining() > 0) {
       return false;
     }
 
