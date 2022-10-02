@@ -414,11 +414,13 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
 
           path.getResource(ResourceCategory.YELLOW_RAY).macro().submit();
 
+          greyAdv("main.php");
+
           if (currentRound() != 0 || handlingChoice()) {
             throw "Expected to have finished combat!";
           }
 
-          if (!haveOutfit("Frat Warrior Fatigues")) {
+          if (!haveOutfit(this.fratDisguise)) {
             throw "Expected to have outfit!";
           }
         } finally {
