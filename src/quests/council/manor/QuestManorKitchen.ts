@@ -48,6 +48,7 @@ export class QuestManorKitchen implements QuestInfo {
   spoon: Item = Item.get("hewn moon-rune spoon");
   scaleShirt: Item = Item.get("blessed rustproof +2 gray dragon scale mail");
   telegram: Item = Item.get("Telegram from Lady Spookyraven");
+  candleBuff: Item = Item.get("rainbow glitter candle");
 
   getId(): QuestType {
     return "Manor / Kitchen";
@@ -139,6 +140,10 @@ export class QuestManorKitchen implements QuestInfo {
           toInt(getProperty("manorDrawerCount")) < 20 &&
           !this.hasEnoughRes()
         ) {
+          if (availableAmount(this.candleBuff) > 0) {
+            use(this.candleBuff);
+          }
+
           if (
             haveEffect(effectModifier(this.canOfPaint, "Effect")) == 0 &&
             getQuestStatus("questL11Black") > 1
