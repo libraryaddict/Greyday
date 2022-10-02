@@ -116,6 +116,13 @@ export function getEncounters(
         continue;
       }
 
+      if (
+        name == "Adjust your Parka" ||
+        name == "Configure Your Unbreakable Umbrella"
+      ) {
+        continue;
+      }
+
       matches.push([name, turn]);
     }
   }
