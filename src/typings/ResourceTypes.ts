@@ -646,7 +646,7 @@ const allResources = [
   portscan,
   ncParka,
   cosplayYellowRay,
-  pillkeeperNC,
+  // pillkeeperNC,
   backupCopier,
   cosplayCopier,
   cargoShorts,
