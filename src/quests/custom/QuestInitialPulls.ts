@@ -45,7 +45,10 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
       .map((s) => Item.get(s))
       .filter((i) => availableAmount(i) + storageAmount(i) > 0);
 
-    if (mlItem.length > 0) {
+    if (
+      mlItem.length > 0 &&
+      (assumeUnstarted || mlItem.find((i) => availableAmount(i) > 0) == null)
+    ) {
       this.requiredPulls.push([mlItem[0], -30]);
     }
 
