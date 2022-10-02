@@ -348,7 +348,11 @@ export class GreyAdventurer {
     ) {
       doOrb = true;
 
-      if (adventure.orbStatus == OrbStatus.NOT_SET && adventure.quest == null) {
+      if (
+        adventure.orbStatus == OrbStatus.NOT_SET &&
+        adventure.quest == null &&
+        (toRun.location == null || toRun.location.combatQueue.length > 3)
+      ) {
         outfit.addBonus("+20 bonus Kramco Sausage-o-Matic&trade;");
       }
     }
