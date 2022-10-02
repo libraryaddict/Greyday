@@ -66,7 +66,7 @@ export class QuestL11Curses extends TaskInfo implements QuestInfo {
   shouldLookAtForcingNC(): boolean {
     const turns = this.delayForNextNC();
 
-    if (turns <= 0) {
+    if (turns <= 1) {
       return false;
     }
 
@@ -128,6 +128,13 @@ export class QuestL11Curses extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (
+      path.canUse(ResourceCategory.FORCE_NC) &&
+      path.getResource(ResourceCategory.FORCE_NC).primed()
+    ) {
+      return QuestStatus.READY;
+    }
+
     if (toInt(getProperty("hiddenBowlingAlleyProgress")) <= 1) {
       return QuestStatus.NOT_READY;
     }
@@ -174,7 +181,10 @@ export class QuestL11Curses extends TaskInfo implements QuestInfo {
   }
 
   attemptPrime(path: PossiblePath): boolean {
-    if (!path.canUse(ResourceCategory.FORCE_NC)) {
+    if (
+      !path.canUse(ResourceCategory.FORCE_NC) ||
+      !this.shouldLookAtForcingNC()
+    ) {
       return false;
     }
 
