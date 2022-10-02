@@ -27,8 +27,6 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   skill: Skill = Skill.get("Infinite Loop");
   instantKill: Item = Item.get("Flame orb");
   wish: Item = Item.get("Pocket Wish");
-  fax: PossiblePath;
-  pullWish: PossiblePath;
   pantsgiving: Item = Item.get("Pantsgiving");
   doctorsBag: Item = Item.get("Lil' Doctor&trade; bag");
   paths: PossiblePath[];
@@ -38,20 +36,37 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   }
 
   createPaths(assumeUnstarted: boolean): void {
-    this.fax = new PossiblePath(1).addFax(this.monster);
-    this.pullWish = new PossiblePath(1).addConsumablePull(this.wish);
+    this.paths = [];
+
+    const create = () => [
+      new PossiblePath(1).addFax(this.monster),
+      new PossiblePath(1).addConsumablePull(this.wish),
+    ];
 
     if (
       availableAmount(this.pantsgiving) + availableAmount(this.doctorsBag) ==
       0
     ) {
-      this.fax.add(ResourceCategory.YELLOW_RAY).addIgnored("Cosplay Saber");
-      this.pullWish.addConsumablePull(this.instantKill);
+      for (const path of create()) {
+        path.add(ResourceCategory.YELLOW_RAY).addIgnored("Cosplay Saber");
+
+        this.paths.push(path);
+      }
+
+      for (const path of create()) {
+        path.addConsumablePull(this.instantKill);
+
+        this.paths.push(path);
+      }
+    } else {
+      for (const path of create()) {
+        this.paths.push(path);
+      }
     }
   }
 
   getPossiblePaths(): PossiblePath[] {
-    return [this.fax, this.pullWish];
+    return this.paths;
   }
 
   status(path: PossiblePath): QuestStatus {
