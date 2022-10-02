@@ -116,6 +116,7 @@ export function getEncounters(
         continue;
       }
 
+      // TODO Really need to parse encounters without hardcoding this
       if (
         name == "Adjust your Parka" ||
         name == "Configure Your Unbreakable Umbrella"

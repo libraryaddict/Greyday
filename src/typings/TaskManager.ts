@@ -87,7 +87,13 @@ export class SimmedPath {
   }
 
   printInfo() {
-    const used: Map<string, [string, number, number][]> = new Map();
+    interface UsedEntry {
+      questName: string;
+      resourcesUsed: number;
+      turnsSaved: number;
+      path: PossiblePath;
+    }
+    const used: Map<string, UsedEntry[]> = new Map();
 
     for (const [quest, resource] of this.resourcesUsed) {
       const key = resource.name;
@@ -98,12 +104,21 @@ export class SimmedPath {
 
       const id = quest.getId();
 
-      let pair: [string, number, number] = used.get(key).find(([p]) => p == id);
+      let pair: UsedEntry = used.get(key).find((p) => p.questName == id);
 
       if (pair == null) {
-        const path = this.thisPath.find(([qu, pa]) => qu.getId() === id)[1];
+        const path = this.thisPath.find(
+          ([questInfo, possiblePath]) => questInfo.getId() === id
+        )[1];
 
-        used.get(key).push((pair = [id, 0, path.getAverageTurns()]));
+        used.get(key).push(
+          (pair = {
+            questName: id,
+            resourcesUsed: 0,
+            turnsSaved: path.getAverageTurns(),
+            path: path,
+          })
+        );
       }
 
       pair[1] = pair[1] + 1;
@@ -111,20 +126,25 @@ export class SimmedPath {
 
     let index1 = 0;
 
-    used.forEach((details, k) => {
+    used.forEach((details, resourceName) => {
       index1++;
 
+      const resourcesUsed = details
+        .map((d) => d.resourcesUsed)
+        .reduce((p, n) => p + n, 0);
+      const paths = details
+        .map(
+          (d, index) =>
+            `<font color='${(index + index1) % 2 == 0 ? "gray" : ""}'>${
+              d.questName
+            } x ${d.resourcesUsed} (${d.turnsSaved} advs)${
+              d.path.pulls.length > 0 ? ` (${d.path.pulls.join(", ")})` : ""
+            }</font>`
+        )
+        .join(", ");
+
       printHtml(
-        `<font color='blue'>${k} x ${details
-          .map(([, amount]) => amount)
-          .reduce((d1, d2) => d1 + d2, 0)}</font> => ${details
-          .map(
-            ([quest, amount, turns], index) =>
-              `<font color='${
-                (index + index1) % 2 == 0 ? "gray" : ""
-              }'>${quest} x ${amount} (${turns} advs)</font>`
-          )
-          .join(", ")}`,
+        `<font color='blue'>${resourceName} x ${resourcesUsed}</font> => ${paths}`,
         true
       );
     });
