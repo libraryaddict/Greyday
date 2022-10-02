@@ -121,7 +121,7 @@ export class SimmedPath {
         );
       }
 
-      pair[1] = pair[1] + 1;
+      pair.resourcesUsed++;
     }
 
     let index1 = 0;
