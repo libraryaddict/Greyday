@@ -171,6 +171,14 @@ export function getGreySettings(): GreySetting[] {
     default: "",
   };
 
+  const greyValueOfNC: GreySetting = {
+    name: "greyValueOfNonCombat",
+    description:
+      "Really only applicable for people that do garbo's Yachtzee, set this to an absurd value to never use it",
+    valid: (value) => /\d+/.test(value),
+    default: 0,
+  };
+
   const greyClipArt: GreySetting = {
     name: "greyClipArt",
     description:
@@ -208,6 +216,7 @@ export function getGreySettings(): GreySetting[] {
     greyVoteMonster,
     greySwitchWorkshed,
     greyClipArt,
+    greyValueOfNC,
   ];
 }
 

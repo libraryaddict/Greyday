@@ -199,7 +199,7 @@ const pillkeeper: Item = Item.get("Eight Days a Week Pill Keeper");
 const pillkeeperNC: SomeResource = {
   type: ResourceCategory.FORCE_NC,
   resource: "Pillkeeper",
-  worthInAftercore: 50000, // Lets just value it at a frost flower?
+  worthInAftercore: 70000, // Lets just value it at a frost flower?
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (props != null) {
       cliExecute("pillkeeper " + PillkeeperPill.FORCE_NC);
@@ -264,7 +264,7 @@ const parkaProp: string = "_parkaPrimed";
 const ncParka: SomeResource = {
   type: ResourceCategory.FORCE_NC,
   resource: "Parka: Force NC",
-  worthInAftercore: 0,
+  worthInAftercore: toInt(getProperty("greyValueOfNonCombat") || "0"),
   //available: () => haveSkill(torso) && availableAmount(parka) > 0,
   prepare: (outfit: GreyOutfit) => {
     if (outfit != null) {
