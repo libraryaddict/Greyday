@@ -228,21 +228,18 @@ class TempleChoices implements GreyChoices {
     }
 
     if (this.choices[0][0] != choiceNo) {
-      throw (
+      return null;
+      /*  throw (
         "Expected to be in choice " +
         this.choices[0][0] +
         " but instead was in choice " +
         choiceNo
-      );
+      );*/
     }
 
     const toReturn = this.choices[0][1];
     this.choices.splice(0, 1);
 
     return toReturn;
-  }
-
-  canAcceptPrimes(): boolean {
-    return false;
   }
 }
