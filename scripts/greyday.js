@@ -2653,6 +2653,7 @@ location)
           continue;
         }
 
+        // TODO Really need to parse encounters without hardcoding this
         if (
         name == "Adjust your Parka" ||
         name == "Configure Your Unbreakable Umbrella")
@@ -28202,6 +28203,12 @@ var SimmedPath = /*#__PURE__*/function () {
     } }, { key: "printInfo", value:
 
     function printInfo() {var _this = this;
+
+
+
+
+
+
       var used = new Map();var _iterator2 = TaskManager_createForOfIteratorHelper(
 
       this.resourcesUsed),_step2;try {var _loop = function _loop() {var _step2$value = TaskManager_slicedToArray(_step2.value, 2),quest = _step2$value[0],resource = _step2$value[1];
@@ -28213,12 +28220,21 @@ var SimmedPath = /*#__PURE__*/function () {
 
           var id = quest.getId();
 
-          var pair = used.get(key).find((_ref7) => {var _ref8 = TaskManager_slicedToArray(_ref7, 1),p = _ref8[0];return p == id;});
+          var pair = used.get(key).find((p) => p.questName == id);
 
           if (pair == null) {
-            var path = _this.thisPath.find((_ref9) => {var _ref10 = TaskManager_slicedToArray(_ref9, 2),qu = _ref10[0],pa = _ref10[1];return qu.getId() === id;})[1];
+            var path = _this.thisPath.find(
+            (_ref3) => {var _ref4 = TaskManager_slicedToArray(_ref3, 2),questInfo = _ref4[0],possiblePath = _ref4[1];return questInfo.getId() === id;})[
+            1];
 
-            used.get(key).push(pair = [id, 0, path.getAverageTurns()]);
+            used.get(key).push(
+            pair = {
+              questName: id,
+              resourcesUsed: 0,
+              turnsSaved: path.getAverageTurns(),
+              path: path });
+
+
           }
 
           pair[1] = pair[1] + 1;};for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {_loop();
@@ -28226,20 +28242,25 @@ var SimmedPath = /*#__PURE__*/function () {
 
       var index1 = 0;
 
-      used.forEach((details, k) => {
+      used.forEach((details, resourceName) => {
         index1++;
 
-        (0,external_kolmafia_namespaceObject.printHtml)("<font color='blue'>".concat(
-        k, " x ").concat(details.
-        map((_ref3) => {var _ref4 = TaskManager_slicedToArray(_ref3, 2),amount = _ref4[1];return amount;}).
-        reduce((d1, d2) => d1 + d2, 0), "</font> => ").concat(details.
+        var resourcesUsed = details.
+        map((d) => d.resourcesUsed).
+        reduce((p, n) => p + n, 0);
+        var paths = details.
         map(
-        (_ref5, index) => {var _ref6 = TaskManager_slicedToArray(_ref5, 3),quest = _ref6[0],amount = _ref6[1],turns = _ref6[2];return "<font color='".concat(
+        (d, index) => "<font color='".concat(
+        (index + index1) % 2 == 0 ? "gray" : "", "'>").concat(
+        d.questName, " x ").concat(
+        d.resourcesUsed, " (").concat(d.turnsSaved, " advs)").concat(
+        d.path.pulls.length > 0 ? " (".concat(d.path.pulls.join(", "), ")") : "", "</font>")).
 
-          (index + index1) % 2 == 0 ? "gray" : "", "'>").concat(
-          quest, " x ").concat(amount, " (").concat(turns, " advs)</font>");}).
 
-        join(", ")),
+        join(", ");
+
+        (0,external_kolmafia_namespaceObject.printHtml)("<font color='blue'>".concat(
+        resourceName, " x ").concat(resourcesUsed, "</font> => ").concat(paths),
         true);
 
       });
@@ -28265,7 +28286,7 @@ var SimmedPath = /*#__PURE__*/function () {
 
     function assignResources() {var _this2 = this;var _iterator3 = TaskManager_createForOfIteratorHelper(
       this.resourcesUsed),_step3;try {var _loop2 = function _loop2() {var _step3$value = TaskManager_slicedToArray(_step3.value, 2),quest = _step3$value[0],resource = _step3$value[1];
-          var _this2$thisPath$find = _this2.thisPath.find((_ref11) => {var _ref12 = TaskManager_slicedToArray(_ref11, 1),q = _ref12[0];return q === quest;}),_this2$thisPath$find2 = TaskManager_slicedToArray(_this2$thisPath$find, 2),path = _this2$thisPath$find2[1];
+          var _this2$thisPath$find = _this2.thisPath.find((_ref5) => {var _ref6 = TaskManager_slicedToArray(_ref5, 1),q = _ref6[0];return q === quest;}),_this2$thisPath$find2 = TaskManager_slicedToArray(_this2$thisPath$find, 2),path = _this2$thisPath$find2[1];
 
           path.resourcesAvailable.push(resource);};for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {_loop2();
         }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
@@ -28500,7 +28521,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
             getPossiblePaths().
             map((p) =>
             p.resourcesNeeded.map(
-            (_ref13) => {var _ref14 = TaskManager_slicedToArray(_ref13, 2),r = _ref14[0],amount = _ref14[1];return ResourceCategory[r] + " x " + amount;}));
+            (_ref7) => {var _ref8 = TaskManager_slicedToArray(_ref7, 2),r = _ref8[0],amount = _ref8[1];return ResourceCategory[r] + " x " + amount;}));
 
 
 
@@ -28510,7 +28531,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
         return null;
       }
 
-      allPaths.sort((_ref15, _ref16) => {var _ref17 = TaskManager_slicedToArray(_ref15, 2),_ref17$ = TaskManager_slicedToArray(_ref17[1], 1),p1 = _ref17$[0];var _ref18 = TaskManager_slicedToArray(_ref16, 2),_ref18$ = TaskManager_slicedToArray(_ref18[1], 1),p2 = _ref18$[0];
+      allPaths.sort((_ref9, _ref10) => {var _ref11 = TaskManager_slicedToArray(_ref9, 2),_ref11$ = TaskManager_slicedToArray(_ref11[1], 1),p1 = _ref11$[0];var _ref12 = TaskManager_slicedToArray(_ref10, 2),_ref12$ = TaskManager_slicedToArray(_ref12[1], 1),p2 = _ref12$[0];
         var cost1 = p1.getCostOfPath();
         var cost2 = p2.getCostOfPath();
 
@@ -28579,7 +28600,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
 
         }} catch (err) {_iterator11.e(err);} finally {_iterator11.f();}
 
-      possible.sort((_ref19, _ref20) => {var _ref21 = TaskManager_slicedToArray(_ref19, 3),meat1 = _ref21[2];var _ref22 = TaskManager_slicedToArray(_ref20, 3),meat2 = _ref22[2];return meat1 - meat2;});
+      possible.sort((_ref13, _ref14) => {var _ref15 = TaskManager_slicedToArray(_ref13, 3),meat1 = _ref15[2];var _ref16 = TaskManager_slicedToArray(_ref14, 3),meat2 = _ref16[2];return meat1 - meat2;});
 
       var tried = 0;
       var best;
@@ -28602,7 +28623,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
 
         addPath(simmed, quest, path);
 
-        resources.forEach((_ref23) => {var _ref24 = TaskManager_slicedToArray(_ref23, 3),quest = _ref24[0],resource = _ref24[1],amount = _ref24[2];
+        resources.forEach((_ref17) => {var _ref18 = TaskManager_slicedToArray(_ref17, 3),quest = _ref18[0],resource = _ref18[1],amount = _ref18[2];
           simmed.addUse(quest, resource, amount);
         });
 
@@ -31115,7 +31136,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "5e684a8";
+var lastCommitHash = "9cdbe4c";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
