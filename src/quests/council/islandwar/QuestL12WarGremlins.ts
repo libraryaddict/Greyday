@@ -205,7 +205,7 @@ class GremlinQuest implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    const outfit = new GreyOutfit().addBonus("-ML +1 DA +5 DR");
+    const outfit = new GreyOutfit().addBonus("-ML 70 MAX +1 DA +5 DR");
     outfit.hpWeight = 1;
 
     if (
