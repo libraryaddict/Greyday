@@ -138,7 +138,9 @@ export class SimmedPath {
             `<font color='${(index + index1) % 2 == 0 ? "gray" : ""}'>${
               d.questName
             } x ${d.resourcesUsed} (${d.turnsSaved} advs)${
-              d.path.pulls.length > 0 ? ` (${d.path.pulls.join(", ")})` : ""
+              resourceName == "Pull" && d.path.pulls.length > 0
+                ? ` (${d.path.pulls.join(", ")})`
+                : ""
             }</font>`
         )
         .join(", ");
