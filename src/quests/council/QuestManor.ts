@@ -96,7 +96,7 @@ export class QuestManor implements QuestInfo {
       run: () => {
         visitUrl("place.php?whichplace=manor2&action=manor2_ladys");
         greyAdv(this.ballroom);
-        visitUrl("place.php?whichplace=manor3&action=manor3_ladys");
+        // visitUrl("place.php?whichplace=manor3&action=manor3_ladys");
       },
     };
   }
