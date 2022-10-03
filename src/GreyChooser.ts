@@ -68,9 +68,9 @@ export enum ConsiderPriority {
   RANDOM_COMBAT_ABSORB, // When we're going here for the absorb but want +combat
   NOTHING_SPECIAL,
   BAD_COMBAT_RATE, // When we're running -/+ combat which isn't what we want
-  BAD_PREDICTION,
+  BAD_PREDICTION, // When the orb predicts something we don't want
   BAD_ABSORB, // When we'd have a chance to hit something we're not ready to absorb
-  BAD_ABSORB_PREDICTION,
+  BAD_ABSORB_PREDICTION, // When we'd hit an absorb that's useless to us
 }
 
 export interface FoundAdventure {

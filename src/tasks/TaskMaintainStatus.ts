@@ -1,5 +1,5 @@
 import {
-  availableAmount,
+  itemAmount,
   blackMarketAvailable,
   buy,
   cliExecute,
@@ -8,7 +8,6 @@ import {
   getProperty,
   haveEffect,
   Item,
-  itemAmount,
   myHp,
   myMaxhp,
   myMaxmp,
@@ -47,8 +46,7 @@ export class TaskMaintainStatus implements Task {
       item: Item.get("Psychokinetic energy blob"),
       mpRestored: 25,
       hpRestored: 0,
-      available: () =>
-        availableAmount(Item.get("Psychokinetic energy blob")) > 0,
+      available: () => itemAmount(Item.get("Psychokinetic energy blob")) > 0,
       price: 0,
     });
     this.restorers.push({
@@ -57,7 +55,7 @@ export class TaskMaintainStatus implements Task {
       hpRestored: 0,
       available: () =>
         dispensaryAvailable() ||
-        availableAmount(Item.get("Knob Goblin seltzer")) > 0,
+        itemAmount(Item.get("Knob Goblin seltzer")) > 0,
       price: 80,
     });
     this.restorers.push({
@@ -65,8 +63,7 @@ export class TaskMaintainStatus implements Task {
       mpRestored: 11,
       hpRestored: 0,
       available: () =>
-        blackMarketAvailable() ||
-        availableAmount(Item.get("Black cherry soda")) > 0,
+        blackMarketAvailable() || itemAmount(Item.get("Black cherry soda")) > 0,
       price: 80,
     });
     this.restorers.push({
@@ -82,7 +79,7 @@ export class TaskMaintainStatus implements Task {
       item: Item.get("Cast"),
       mpRestored: 0,
       hpRestored: 30,
-      available: () => availableAmount(Item.get("Cast")) > 0,
+      available: () => itemAmount(Item.get("Cast")) > 0,
       price: 0,
     });
 
@@ -112,7 +109,7 @@ export class TaskMaintainStatus implements Task {
 
     while (myMeat() > 100 && myHp() < desiredHp) {
       let restorer = this.restorers.find(
-        (r) => availableAmount(r.item) > 0 && r.hpRestored > 0
+        (r) => itemAmount(r.item) > 0 && r.hpRestored > 0
       );
 
       if (restorer == null) {
@@ -127,8 +124,8 @@ export class TaskMaintainStatus implements Task {
 
       let toUse = Math.ceil((desiredHp - myHp()) / restorer.hpRestored);
 
-      if (availableAmount(restorer.item) > 0) {
-        toUse = Math.min(toUse, availableAmount(restorer.item));
+      if (itemAmount(restorer.item) > 0) {
+        toUse = Math.min(toUse, itemAmount(restorer.item));
       } else {
         toUse = Math.min(Math.floor(myMeat() / restorer.price), toUse + 4);
 
@@ -166,7 +163,7 @@ export class TaskMaintainStatus implements Task {
 
     while (myMeat() > 100 && myMp() < desiredMp) {
       let restorer = this.restorers.find(
-        (r) => availableAmount(r.item) > 0 && r.mpRestored > 0
+        (r) => itemAmount(r.item) > 0 && r.mpRestored > 0
       );
 
       if (restorer == null) {
@@ -181,8 +178,8 @@ export class TaskMaintainStatus implements Task {
 
       let toUse = Math.ceil((desiredMp - myMp()) / restorer.mpRestored);
 
-      if (availableAmount(restorer.item) > 0) {
-        toUse = Math.min(toUse, availableAmount(restorer.item));
+      if (itemAmount(restorer.item) > 0) {
+        toUse = Math.min(toUse, itemAmount(restorer.item));
       } else {
         toUse = Math.min(Math.floor(myMeat() / restorer.price), toUse);
 
@@ -208,7 +205,7 @@ export class TaskMaintainStatus implements Task {
       }
     }
 
-    if (availableAmount(this.antidote) == 0 && myMeat() > 1_000) {
+    if (itemAmount(this.antidote) == 0 && myMeat() > 1_000) {
       buy(this.antidote);
     }
 
@@ -250,7 +247,7 @@ export function restoreHPTo(hp: number): boolean {
   }
 
   // If we already have that amount
-  if (hp <= myMp()) {
+  if (hp <= myHp()) {
     return true;
   }
 
