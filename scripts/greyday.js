@@ -30437,8 +30437,162 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
 
       this.check();
     } }]);return TaskColdMedicineCabinet;}();
+;// CONCATENATED MODULE: ./src/tasks/TaskAutumnaton.ts
+function TaskAutumnaton_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskAutumnaton_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskAutumnaton_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskAutumnaton_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskAutumnaton_arrayLikeToArray(o, minLen);}function TaskAutumnaton_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskAutumnaton_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskAutumnaton_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskAutumnaton_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskAutumnaton_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskAutumnaton_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskAutumnaton_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+var TaskAutumnaton = /*#__PURE__*/function () {
+
+
+
+
+  function TaskAutumnaton() {TaskAutumnaton_classCallCheck(this, TaskAutumnaton);TaskAutumnaton_defineProperty(this, "item", void 0);TaskAutumnaton_defineProperty(this, "skipFor", 0);TaskAutumnaton_defineProperty(this, "toGrab", void 0);
+    try {
+      this.item = external_kolmafia_namespaceObject.Item.get("Autumn-aton");
+    } catch (e) {
+      (0,external_kolmafia_namespaceObject.visitUrl)("desc_item.php?whichitem=174185886");
+      this.item = external_kolmafia_namespaceObject.Item.get("Autumn-aton");
+    }
+
+    this.createItems();
+  }TaskAutumnaton_createClass(TaskAutumnaton, [{ key: "run", value:
+
+    function run() {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.item) == 0) {
+        return;
+      }
+
+      if (this.skipFor-- > 0) {
+        return;
+      }
+
+      var validLocs;
+
+      var getValid = () => {
+        if (validLocs == null) {
+          validLocs = [];
+          var page = (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?pwd&whichitem=10954");
+          var match;
+
+          while ((match = page.match(/<option {2}value="(\d+)">/)) != null) {
+            page = page.replace(match[0], "");
+
+            validLocs.push((0,external_kolmafia_namespaceObject.toInt)(match[1]));
+          }
+        }
+
+        return validLocs;
+      };var _iterator = TaskAutumnaton_createForOfIteratorHelper(
+
+      this.toGrab),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var valid = _step.value;
+          if (valid.loc.turnsSpent <= 0) {
+            continue;
+          }
+
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(valid.item) >= valid.amount) {
+            continue;
+          }
+
+          if (valid.viable != null && !valid.viable()) {
+            continue;
+          }
+
+          if (!getValid().includes((0,external_kolmafia_namespaceObject.toInt)(valid.loc))) {
+            continue;
+          }
+
+          if (!(0,external_kolmafia_namespaceObject.handlingChoice)()) {
+            throw "Expected to be handling the aton choice";
+          }
+
+          if ((0,external_kolmafia_namespaceObject.lastChoice)() != 1483) {
+            throw "Expected to be in aton choice";
+          }
+
+          (0,external_kolmafia_namespaceObject.visitUrl)(
+          "choice.php?option=0&pwd&whichchoice=1483&heythereprogrammer=" +
+          (0,external_kolmafia_namespaceObject.toInt)(valid.loc));
+
+
+          if ((0,external_kolmafia_namespaceObject.handlingChoice)()) {
+            throw "Unexpectedly still handling a choice!";
+          }
+
+          return;
+        }
+
+        // Failed to find a place to go
+      } catch (err) {_iterator.e(err);} finally {_iterator.f();}this.skipFor = 5;
+
+      // If we are in the choice, just quit
+      if ((0,external_kolmafia_namespaceObject.handlingChoice)()) {
+        (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
+      }
+    } }, { key: "createItems", value:
+
+    function createItems() {
+      this.toGrab = [];
+
+      this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("The Penultimate Fantasy Airship"),
+        item: external_kolmafia_namespaceObject.Item.get("Mohawk Wig"),
+        amount: 1 });
+
+
+      this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("The Penultimate Fantasy Airship"),
+        item: external_kolmafia_namespaceObject.Item.get("Amulet of Extreme Plot Significance"),
+        amount: 1 });
+
+
+      this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("The Beanbat Chamber"),
+        item: external_kolmafia_namespaceObject.Item.get("Enchanted Bean"),
+        amount: 1,
+        viable: () => getQuestStatus("questL10Garbage") <= 0 });
+
+
+      this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("The Copperhead Club"),
+        item: external_kolmafia_namespaceObject.Item.get("Crappy Waiter Disguise"),
+        amount: 5 });
+
+
+      this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("The Goatlet"),
+        item: external_kolmafia_namespaceObject.Item.get("Goat Cheese"),
+        amount: 3,
+        viable: () => getQuestStatus("questL08Trapper") <= 1 });
+
+
+      this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("A Mob Of Zeppelin Protesters"),
+        item: external_kolmafia_namespaceObject.Item.get("cigarette lighter"),
+        amount: 10,
+        viable: () => getQuestStatus("questL11Ron") <= 1 });
+
+
+      this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("The Hidden Bowling Alley"),
+        item: external_kolmafia_namespaceObject.Item.get("bowling ball"),
+        amount: 5,
+        viable: () =>
+        (0,external_kolmafia_namespaceObject.getProperty)("questL11Spare") != "finished" &&
+        (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("bowling ball")) -
+        (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("hiddenBowlingAlleyProgress")) >
+        5 });
+
+
+      this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("The Haunted Library"),
+        item: external_kolmafia_namespaceObject.Item.get("tattered scrap of paper"),
+        amount: 300 });
+
+    } }]);return TaskAutumnaton;}();
 ;// CONCATENATED MODULE: ./src/GreyAdventurer.ts
 function GreyAdventurer_toConsumableArray(arr) {return GreyAdventurer_arrayWithoutHoles(arr) || GreyAdventurer_iterableToArray(arr) || GreyAdventurer_unsupportedIterableToArray(arr) || GreyAdventurer_nonIterableSpread();}function GreyAdventurer_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyAdventurer_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function GreyAdventurer_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return GreyAdventurer_arrayLikeToArray(arr);}function GreyAdventurer_slicedToArray(arr, i) {return GreyAdventurer_arrayWithHoles(arr) || GreyAdventurer_iterableToArrayLimit(arr, i) || GreyAdventurer_unsupportedIterableToArray(arr, i) || GreyAdventurer_nonIterableRest();}function GreyAdventurer_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyAdventurer_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function GreyAdventurer_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function GreyAdventurer_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyAdventurer_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyAdventurer_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyAdventurer_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyAdventurer_arrayLikeToArray(o, minLen);}function GreyAdventurer_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyAdventurer_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyAdventurer_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyAdventurer_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyAdventurer_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyAdventurer_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyAdventurer_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -30474,7 +30628,8 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
     new TaskFuelAsdon(),
     new TaskJuneCleaver(),
     new TaskBoomboxSwitch(),
-    new TaskEquipDistillery()
+    new TaskEquipDistillery(),
+    new TaskAutumnaton()
     //new TaskBountyHunter(),
     ]);GreyAdventurer_defineProperty(this, "freeRunners",
 
@@ -31164,7 +31319,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "79d1c77";
+var lastCommitHash = "7bd64ba";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
