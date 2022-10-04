@@ -7353,7 +7353,9 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
     external_kolmafia_namespaceObject.Familiar.get("Left-Hand Man"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "extingusherProp",
     "");QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "kramco",
     external_kolmafia_namespaceObject.Item.get("Kramco Sausage-o-Matic&trade;"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "paths",
-    []);QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "curse3",
+    []);QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "curse1",
+    external_kolmafia_namespaceObject.Effect.get("Once-Cursed"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "curse2",
+    external_kolmafia_namespaceObject.Effect.get("Twice-Cursed"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "curse3",
     external_kolmafia_namespaceObject.Effect.get("Thrice-Cursed"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "blur",
     external_kolmafia_namespaceObject.Monster.get("Blur"));return _this;}QuestL11DesertExplore_createClass(QuestL11DesertExplore, [{ key: "createPaths", value:
 
@@ -7439,7 +7441,13 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.haveEffect)(this.hydrated) == 0 && (0,external_kolmafia_namespaceObject.haveEffect)(this.curse3) > 0) {
+      if (
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.hydrated) == 0 &&
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.curse1) +
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.curse2) +
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.curse3) >
+      0)
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -7812,7 +7820,9 @@ var QuestL11DesertStoneRose = /*#__PURE__*/function () {function QuestL11DesertS
     external_kolmafia_namespaceObject.Monster.get("Blur"));QuestL11DesertStoneRose_defineProperty(this, "toAbsorb", void 0);QuestL11DesertStoneRose_defineProperty(this, "fam",
 
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL11DesertStoneRose_defineProperty(this, "swarm",
-    external_kolmafia_namespaceObject.Monster.get("Swarm of fire ants"));QuestL11DesertStoneRose_defineProperty(this, "curse3",
+    external_kolmafia_namespaceObject.Monster.get("Swarm of fire ants"));QuestL11DesertStoneRose_defineProperty(this, "curse1",
+    external_kolmafia_namespaceObject.Effect.get("Once-Cursed"));QuestL11DesertStoneRose_defineProperty(this, "curse2",
+    external_kolmafia_namespaceObject.Effect.get("Twice-Cursed"));QuestL11DesertStoneRose_defineProperty(this, "curse3",
     external_kolmafia_namespaceObject.Effect.get("Thrice-Cursed"));}QuestL11DesertStoneRose_createClass(QuestL11DesertStoneRose, [{ key: "getId", value:
 
     function getId() {
@@ -7834,7 +7844,13 @@ var QuestL11DesertStoneRose = /*#__PURE__*/function () {function QuestL11DesertS
         return QuestStatus.COMPLETED;
       }
 
-      if ((0,external_kolmafia_namespaceObject.haveEffect)(this.hydrated) == 0 && (0,external_kolmafia_namespaceObject.haveEffect)(this.curse3) > 0) {
+      if (
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.hydrated) == 0 &&
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.curse1) +
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.curse2) +
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.curse3) >
+      0)
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -7907,7 +7923,9 @@ var QuestL11DesertWormRide = /*#__PURE__*/function () {function QuestL11DesertWo
     external_kolmafia_namespaceObject.Item.get("Drum Machine"));QuestL11DesertWormRide_defineProperty(this, "oasis",
     external_kolmafia_namespaceObject.Location.get("Oasis"));QuestL11DesertWormRide_defineProperty(this, "toAbsorb", void 0);QuestL11DesertWormRide_defineProperty(this, "fam",
 
-    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL11DesertWormRide_defineProperty(this, "curse3",
+    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL11DesertWormRide_defineProperty(this, "curse1",
+    external_kolmafia_namespaceObject.Effect.get("Once-Cursed"));QuestL11DesertWormRide_defineProperty(this, "curse2",
+    external_kolmafia_namespaceObject.Effect.get("Twice-Cursed"));QuestL11DesertWormRide_defineProperty(this, "curse3",
     external_kolmafia_namespaceObject.Effect.get("Thrice-Cursed"));QuestL11DesertWormRide_defineProperty(this, "hydrated",
     external_kolmafia_namespaceObject.Effect.get("Ultrahydrated"));QuestL11DesertWormRide_defineProperty(this, "blur",
     external_kolmafia_namespaceObject.Monster.get("Blur"));}QuestL11DesertWormRide_createClass(QuestL11DesertWormRide, [{ key: "getId", value:
@@ -7946,7 +7964,13 @@ var QuestL11DesertWormRide = /*#__PURE__*/function () {function QuestL11DesertWo
       }
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.drum) == 0) {
-        if ((0,external_kolmafia_namespaceObject.haveEffect)(this.hydrated) == 0 && (0,external_kolmafia_namespaceObject.haveEffect)(this.curse3) > 0) {
+        if (
+        (0,external_kolmafia_namespaceObject.haveEffect)(this.hydrated) == 0 &&
+        (0,external_kolmafia_namespaceObject.haveEffect)(this.curse1) +
+        (0,external_kolmafia_namespaceObject.haveEffect)(this.curse2) +
+        (0,external_kolmafia_namespaceObject.haveEffect)(this.curse3) >
+        0)
+        {
           return QuestStatus.NOT_READY;
         }
 
@@ -24254,7 +24278,10 @@ var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom
     external_kolmafia_namespaceObject.Location.get("The Enormous Greater-Than Sign"));QuestDungeonsOfDoom_defineProperty(this, "plusSign",
     external_kolmafia_namespaceObject.Item.get("plus sign"));QuestDungeonsOfDoom_defineProperty(this, "teleportis",
     external_kolmafia_namespaceObject.Effect.get("Teleportitis"));QuestDungeonsOfDoom_defineProperty(this, "beatenUp",
-    external_kolmafia_namespaceObject.Effect.get("Beaten Up"));}QuestDungeonsOfDoom_createClass(QuestDungeonsOfDoom, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Effect.get("Beaten Up"));QuestDungeonsOfDoom_defineProperty(this, "curse1",
+    external_kolmafia_namespaceObject.Effect.get("Once-Cursed"));QuestDungeonsOfDoom_defineProperty(this, "curse2",
+    external_kolmafia_namespaceObject.Effect.get("Twice-Cursed"));QuestDungeonsOfDoom_defineProperty(this, "curse3",
+    external_kolmafia_namespaceObject.Effect.get("Thrice-Cursed"));}QuestDungeonsOfDoom_createClass(QuestDungeonsOfDoom, [{ key: "getId", value:
 
     function getId() {
       return "Misc / UnlockDungeonsOfDoom";
@@ -24295,6 +24322,15 @@ var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom
       }
 
       if (!hasNonCombatSkillsReady(false)) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.curse1) +
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.curse2) +
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.curse3) >
+      0)
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -30526,6 +30562,10 @@ var TaskAutumnaton = /*#__PURE__*/function () {
 
           if ((0,external_kolmafia_namespaceObject.availableChoiceOptions)()[1] != null) {
             (0,external_kolmafia_namespaceObject.print)("Beep Boop, now upgrading autumn-aton", "blue");
+            (0,external_kolmafia_namespaceObject.print)(
+            "Autumn-aton upgrade will: " + (0,external_kolmafia_namespaceObject.availableChoiceOptions)()[1],
+            "blue");
+
             (0,external_kolmafia_namespaceObject.visitUrl)("choice.php?option=1&pwd&whichchoice=1483" + (0,external_kolmafia_namespaceObject.toInt)(valid.loc));
           }
 
@@ -31345,7 +31385,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "a0faf25";
+var lastCommitHash = "39dc358";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
