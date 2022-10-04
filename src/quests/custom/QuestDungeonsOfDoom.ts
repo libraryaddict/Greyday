@@ -26,6 +26,9 @@ export class QuestDungeonsOfDoom implements QuestInfo {
   plusSign: Item = Item.get("plus sign");
   teleportis: Effect = Effect.get("Teleportitis");
   beatenUp: Effect = Effect.get("Beaten Up");
+  curse1: Effect = Effect.get("Once-Cursed");
+  curse2: Effect = Effect.get("Twice-Cursed");
+  curse3: Effect = Effect.get("Thrice-Cursed");
 
   getId(): QuestType {
     return "Misc / UnlockDungeonsOfDoom";
@@ -66,6 +69,15 @@ export class QuestDungeonsOfDoom implements QuestInfo {
     }
 
     if (!hasNonCombatSkillsReady(false)) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (
+      haveEffect(this.curse1) +
+        haveEffect(this.curse2) +
+        haveEffect(this.curse3) >
+      0
+    ) {
       return QuestStatus.NOT_READY;
     }
 

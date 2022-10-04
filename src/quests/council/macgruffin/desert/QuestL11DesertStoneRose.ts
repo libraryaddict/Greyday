@@ -30,6 +30,8 @@ export class QuestL11DesertStoneRose implements QuestInfo {
   toAbsorb: Monster[];
   fam: Familiar = Familiar.get("Grey Goose");
   swarm: Monster = Monster.get("Swarm of fire ants");
+  curse1: Effect = Effect.get("Once-Cursed");
+  curse2: Effect = Effect.get("Twice-Cursed");
   curse3: Effect = Effect.get("Thrice-Cursed");
 
   getId(): QuestType {
@@ -51,7 +53,13 @@ export class QuestL11DesertStoneRose implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (haveEffect(this.hydrated) == 0 && haveEffect(this.curse3) > 0) {
+    if (
+      haveEffect(this.hydrated) == 0 &&
+      haveEffect(this.curse1) +
+        haveEffect(this.curse2) +
+        haveEffect(this.curse3) >
+        0
+    ) {
       return QuestStatus.NOT_READY;
     }
 

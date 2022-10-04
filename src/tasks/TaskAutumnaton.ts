@@ -85,6 +85,10 @@ export class TaskAutumnaton implements Task {
 
       if (availableChoiceOptions()[1] != null) {
         print("Beep Boop, now upgrading autumn-aton", "blue");
+        print(
+          "Autumn-aton upgrade will: " + availableChoiceOptions()[1],
+          "blue"
+        );
         visitUrl("choice.php?option=1&pwd&whichchoice=1483" + toInt(valid.loc));
       }
 

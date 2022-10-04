@@ -60,6 +60,8 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
   extingusherProp: string = "";
   kramco: Item = Item.get("Kramco Sausage-o-Matic&trade;");
   paths: PossiblePath[] = [];
+  curse1: Effect = Effect.get("Once-Cursed");
+  curse2: Effect = Effect.get("Twice-Cursed");
   curse3: Effect = Effect.get("Thrice-Cursed");
   blur: Monster = Monster.get("Blur");
 
@@ -145,7 +147,13 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (haveEffect(this.hydrated) == 0 && haveEffect(this.curse3) > 0) {
+    if (
+      haveEffect(this.hydrated) == 0 &&
+      haveEffect(this.curse1) +
+        haveEffect(this.curse2) +
+        haveEffect(this.curse3) >
+        0
+    ) {
       return QuestStatus.NOT_READY;
     }
 

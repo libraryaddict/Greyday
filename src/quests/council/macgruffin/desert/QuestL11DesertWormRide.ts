@@ -28,6 +28,8 @@ export class QuestL11DesertWormRide implements QuestInfo {
   oasis: Location = Location.get("Oasis");
   toAbsorb: Monster[];
   fam: Familiar = Familiar.get("Grey Goose");
+  curse1: Effect = Effect.get("Once-Cursed");
+  curse2: Effect = Effect.get("Twice-Cursed");
   curse3: Effect = Effect.get("Thrice-Cursed");
   hydrated: Effect = Effect.get("Ultrahydrated");
   blur: Monster = Monster.get("Blur");
@@ -66,7 +68,13 @@ export class QuestL11DesertWormRide implements QuestInfo {
     }
 
     if (availableAmount(this.drum) == 0) {
-      if (haveEffect(this.hydrated) == 0 && haveEffect(this.curse3) > 0) {
+      if (
+        haveEffect(this.hydrated) == 0 &&
+        haveEffect(this.curse1) +
+          haveEffect(this.curse2) +
+          haveEffect(this.curse3) >
+          0
+      ) {
         return QuestStatus.NOT_READY;
       }
 
