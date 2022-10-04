@@ -120,6 +120,19 @@ export class TaskAutumnaton implements Task {
     this.toGrab = [];
 
     this.toGrab.push({
+      loc: Location.get("The Copperhead Club"),
+      item: Item.get("Crappy Waiter Disguise"),
+      amount: 5,
+    });
+
+    this.toGrab.push({
+      loc: Location.get("A Mob Of Zeppelin Protesters"),
+      item: Item.get("cigarette lighter"),
+      amount: 10,
+      viable: () => getQuestStatus("questL11Ron") <= 1,
+    });
+
+    this.toGrab.push({
       loc: Location.get("The Penultimate Fantasy Airship"),
       item: Item.get("Mohawk Wig"),
       amount: 1,
@@ -138,25 +151,12 @@ export class TaskAutumnaton implements Task {
       viable: () => getQuestStatus("questL10Garbage") <= 0,
     });
 
-    this.toGrab.push({
-      loc: Location.get("The Copperhead Club"),
-      item: Item.get("Crappy Waiter Disguise"),
-      amount: 5,
-    });
-
     /* this.toGrab.push({
       loc: Location.get("The Goatlet"),
       item: Item.get("Goat Cheese"),
       amount: 3,
       viable: () => getQuestStatus("questL08Trapper") <= 1,
     });*/
-
-    this.toGrab.push({
-      loc: Location.get("A Mob Of Zeppelin Protesters"),
-      item: Item.get("cigarette lighter"),
-      amount: 10,
-      viable: () => getQuestStatus("questL11Ron") <= 1,
-    });
 
     this.toGrab.push({
       loc: Location.get("The Hidden Bowling Alley"),
