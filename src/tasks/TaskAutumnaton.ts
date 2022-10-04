@@ -5,6 +5,8 @@ import {
   Item,
   lastChoice,
   Location,
+  myLocation,
+  print,
   toInt,
   visitUrl,
 } from "kolmafia";
@@ -55,7 +57,7 @@ export class TaskAutumnaton implements Task {
     };
 
     for (const valid of this.toGrab) {
-      if (valid.loc.turnsSpent <= 0) {
+      if (valid.loc.turnsSpent <= 0 || myLocation() == valid.loc) {
         continue;
       }
 
@@ -80,8 +82,13 @@ export class TaskAutumnaton implements Task {
       }
 
       visitUrl(
-        "choice.php?option=0&pwd&whichchoice=1483&heythereprogrammer=" +
+        "choice.php?option=2&pwd&whichchoice=1483&heythereprogrammer=" +
           toInt(valid.loc)
+      );
+
+      print(
+        `Sending Autumn-aton on a glorious quest to acquire ${valid.item} from ${valid.loc}`,
+        "blue"
       );
 
       if (handlingChoice()) {
