@@ -59,6 +59,7 @@ import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
 import { doColor, setUmbrella } from "./utils/GreyUtils";
 import { getPrimedResource } from "./utils/GreyLocations";
+import { TaskAutumnaton } from "./tasks/TaskAutumnaton";
 
 export class GreyAdventurer {
   goose: Familiar = Familiar.get("Grey Goose");
@@ -75,6 +76,7 @@ export class GreyAdventurer {
     new TaskJuneCleaver(),
     new TaskBoomboxSwitch(),
     new TaskEquipDistillery(),
+    new TaskAutumnaton(),
     //new TaskBountyHunter(),
   ];
   static currentAdventure: FoundAdventure;
