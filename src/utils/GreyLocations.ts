@@ -350,8 +350,21 @@ export function greyAdv(
       page = runChoice();
     }
 
-    if (page != null && page.includes("The phone in your doctor's bag rings")) {
-      visitUrl("main.php");
+    if (page != null) {
+      const match = page.match(/<!-- autumnback -->(\d+)/);
+
+      match;
+
+      if (match != null) {
+        print(
+          "Autumn-aton will be back in " + match[1] + " adventures..",
+          "gray"
+        );
+      }
+
+      if (page.includes("The phone in your doctor's bag rings")) {
+        visitUrl("main.php");
+      }
     }
   }
 }

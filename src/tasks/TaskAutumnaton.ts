@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  availableChoiceOptions,
   cliExecute,
   getProperty,
   handlingChoice,
@@ -80,6 +81,11 @@ export class TaskAutumnaton implements Task {
 
       if (lastChoice() != 1483) {
         throw "Expected to be in aton choice";
+      }
+
+      if (availableChoiceOptions()[1] != null) {
+        print("Beep Boop, now upgrading autumn-aton", "blue");
+        visitUrl("choice.php?option=1&pwd&whichchoice=1483" + toInt(valid.loc));
       }
 
       visitUrl(
