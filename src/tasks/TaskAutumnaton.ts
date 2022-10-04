@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  cliExecute,
   getProperty,
   handlingChoice,
   Item,
@@ -95,6 +96,8 @@ export class TaskAutumnaton implements Task {
         throw "Unexpectedly still handling a choice!";
       }
 
+      cliExecute("refresh inventory");
+
       return;
     }
 
@@ -135,12 +138,12 @@ export class TaskAutumnaton implements Task {
       amount: 5,
     });
 
-    this.toGrab.push({
+    /* this.toGrab.push({
       loc: Location.get("The Goatlet"),
       item: Item.get("Goat Cheese"),
       amount: 3,
       viable: () => getQuestStatus("questL08Trapper") <= 1,
-    });
+    });*/
 
     this.toGrab.push({
       loc: Location.get("A Mob Of Zeppelin Protesters"),
