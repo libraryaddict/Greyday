@@ -127,7 +127,7 @@ export class TaskAutumnaton implements Task {
       loc: Location.get("The Copperhead Club"),
       item: Item.get("Crappy Waiter Disguise"),
       amount: 5,
-      viable: () => getQuestStatus("questL11Shen") <= 6,
+      viable: () => getQuestStatus("questL11Shen") < 5,
     });
 
     this.toGrab.push({
