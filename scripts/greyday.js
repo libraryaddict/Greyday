@@ -1269,8 +1269,7 @@ var StrictMacro = /*#__PURE__*/(/* unused pure expression or super */ null && (f
 
 
 // We should use the category only to determine if a quest is asking for a resource type, but doesn't tell us if it supports a certain resource or not. Aka not implemented.
-var ResourceCategory;(function (ResourceCategory) {ResourceCategory[ResourceCategory["COPIER"] = 0] = "COPIER";ResourceCategory[ResourceCategory["OLFACT_COPIER"] = 1] = "OLFACT_COPIER";ResourceCategory[ResourceCategory["FAXER"] = 2] = "FAXER";ResourceCategory[ResourceCategory["CARGO_SHORTS"] = 3] = "CARGO_SHORTS";ResourceCategory[ResourceCategory["BANISHER"] = 4] = "BANISHER";ResourceCategory[ResourceCategory["YELLOW_RAY"] = 5] = "YELLOW_RAY";ResourceCategory[ResourceCategory["PULL"] = 6] = "PULL";ResourceCategory[ResourceCategory["ZAP"] = 7] = "ZAP";ResourceCategory[ResourceCategory["CLOVER"] = 8] = "CLOVER";ResourceCategory[ResourceCategory["POLAR_VORTEX"] = 9] = "POLAR_VORTEX";ResourceCategory[ResourceCategory["HUGS_AND_KISSES"] = 10] = "HUGS_AND_KISSES";ResourceCategory[ResourceCategory["FIRE_EXTINGUSHER_ZONE"] = 11] = "FIRE_EXTINGUSHER_ZONE";ResourceCategory[ResourceCategory["GLOVE_REPLACE"] = 12] = "GLOVE_REPLACE";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD"] = 13] = "DECK_OF_EVERY_CARD";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD_CHEAT"] = 14] = "DECK_OF_EVERY_CARD_CHEAT";ResourceCategory[ResourceCategory["CAT_HEIST"] = 15] = "CAT_HEIST";ResourceCategory[ResourceCategory["HOT_TUB"] = 16] = "HOT_TUB";ResourceCategory[ResourceCategory["INSTANT_KILL"] = 17] = "INSTANT_KILL";ResourceCategory[ResourceCategory["FORCE_NC"] = 18] = "FORCE_NC";ResourceCategory[ResourceCategory["FORCE_FIGHT"] = 19] = "FORCE_FIGHT";ResourceCategory[ResourceCategory["PILL_KEEPER"] = 20] = "PILL_KEEPER";})(ResourceCategory || (ResourceCategory = {}));
-
+var ResourceCategory;(function (ResourceCategory) {ResourceCategory[ResourceCategory["COPIER"] = 0] = "COPIER";ResourceCategory[ResourceCategory["OLFACT_COPIER"] = 1] = "OLFACT_COPIER";ResourceCategory[ResourceCategory["FAXER"] = 2] = "FAXER";ResourceCategory[ResourceCategory["CARGO_SHORTS"] = 3] = "CARGO_SHORTS";ResourceCategory[ResourceCategory["BANISHER"] = 4] = "BANISHER";ResourceCategory[ResourceCategory["YELLOW_RAY"] = 5] = "YELLOW_RAY";ResourceCategory[ResourceCategory["PULL"] = 6] = "PULL";ResourceCategory[ResourceCategory["ZAP"] = 7] = "ZAP";ResourceCategory[ResourceCategory["CLOVER"] = 8] = "CLOVER";ResourceCategory[ResourceCategory["POLAR_VORTEX"] = 9] = "POLAR_VORTEX";ResourceCategory[ResourceCategory["HUGS_AND_KISSES"] = 10] = "HUGS_AND_KISSES";ResourceCategory[ResourceCategory["FIRE_EXTINGUSHER_ZONE"] = 11] = "FIRE_EXTINGUSHER_ZONE";ResourceCategory[ResourceCategory["GLOVE_REPLACE"] = 12] = "GLOVE_REPLACE";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD"] = 13] = "DECK_OF_EVERY_CARD";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD_CHEAT"] = 14] = "DECK_OF_EVERY_CARD_CHEAT";ResourceCategory[ResourceCategory["CAT_HEIST"] = 15] = "CAT_HEIST";ResourceCategory[ResourceCategory["HOT_TUB"] = 16] = "HOT_TUB";ResourceCategory[ResourceCategory["FORCE_NC"] = 17] = "FORCE_NC";ResourceCategory[ResourceCategory["FORCE_FIGHT"] = 18] = "FORCE_FIGHT";ResourceCategory[ResourceCategory["PILL_KEEPER"] = 19] = "PILL_KEEPER";})(ResourceCategory || (ResourceCategory = {}));
 
 
 
@@ -1319,6 +1318,7 @@ var ResourceIds = [
 
 
 var PillkeeperPill;(function (PillkeeperPill) {PillkeeperPill["YELLOW_RAY"] = "explode";PillkeeperPill["DOUBLE_POTION"] = "extend";PillkeeperPill["FORCE_NC"] = "noncombat";PillkeeperPill["ALL_RES"] = "element";PillkeeperPill["DOUBLE_STATS"] = "stat";PillkeeperPill["FAM_WEIGHT"] = "familiar";PillkeeperPill["LUCKY"] = "lucky";PillkeeperPill["RANDOM_ADVENTURE"] = "random";})(PillkeeperPill || (PillkeeperPill = {}));
+
 
 
 
@@ -1536,8 +1536,9 @@ var yellowParka = {
   resource: "Yellow Ray",
   name: "Parka: Yellow Ray",
   available: () => (0,external_kolmafia_namespaceObject.availableAmount)(parka) > 0 && (0,external_kolmafia_namespaceObject.haveSkill)(torso),
+  freeTurn: true,
   resourcesUsed: 100,
-  worthInAftercore: -3000,
+  worthInAftercore: 0,
   prepare: (outfit, props) => {
     if (outfit != null) {
       outfit.addItem(parka);
@@ -1605,6 +1606,7 @@ var cosplayYellowRay = {
   type: ResourceCategory.YELLOW_RAY,
   resource: "Cosplay Saber",
   name: "Cosplay Saber: YR",
+  freeTurn: true,
   // If we have more than 60 pills, the saber is free. Otherwise it's worth 3k meat when its alien free day
   worthInAftercore:
   (0,external_kolmafia_namespaceObject.storageAmount)(external_kolmafia_namespaceObject.Item.get("distention pill")) > 60 ?
@@ -1654,6 +1656,7 @@ var cosplayCopier = {
 var cargoShorts = {
   type: ResourceCategory.CARGO_SHORTS,
   resource: "Cargo Shorts",
+  freeTurn: true,
   worthInAftercore: 30000, // Some sellable item
   prepare: () => {},
   pocket: function (_pocket) {function pocket(_x) {return _pocket.apply(this, arguments);}pocket.toString = function () {return _pocket.toString();};return pocket;}((pocket) => {
@@ -2183,6 +2186,10 @@ var PossiblePath = /*#__PURE__*/function () {
 
       resourcesUsed),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _step$value = _slicedToArray(_step.value, 2),res = _step$value[1];
           this.pathCost += res.worthInAftercore;
+
+          if (res.freeTurn == true) {
+            this.pathCost -= GreySettings.greyValueOfAdventure;
+          }
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
     } }, { key: "getAverageTurns", value:
 
@@ -2387,6 +2394,8 @@ var PossiblePath = /*#__PURE__*/function () {
 
     function addPull(item) {var chance = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
       this.pulls.push(item);
+
+      this.pulls.sort((i1, i2) => i1.name.localeCompare(i2.name));
 
       return this.addMaybe(ResourceCategory.PULL, chance);
     } }, { key: "addFax", value:
@@ -13010,7 +13019,7 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
         type.push(["Hippy", WarTag.DURING_WAR, YROutfit.YR_HIPPY, 3]);
       }
 
-      type.push(["Frat", WarTag.DURING_WAR, YROutfit.YR_FRAT, 3]);
+      type.push(["Frat", WarTag.DURING_WAR, YROutfit.YR_FRAT, 1]);
       type.push(["Frat", WarTag.DURING_WAR, null, fratNeeded.length * 6]);var _iterator2 = QuestL12FratOutfit_createForOfIteratorHelper(
 
       getAllCombinations(type, true)),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var combo = _step2.value;
@@ -28319,6 +28328,7 @@ var SimmedPath = /*#__PURE__*/function () {
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
 
       var index1 = 0;
+      var lines = [];
 
       used.forEach((details, resourceName) => {
         index1++;
@@ -28332,18 +28342,21 @@ var SimmedPath = /*#__PURE__*/function () {
         (index + index1) % 2 == 0 ? "gray" : "", "'>").concat(
         d.questName, " x ").concat(
         d.resourcesUsed, " (").concat(d.turnsSaved, " advs)").concat(
-        resourceName == "Pull" && d.path.pulls.length > 0 ? " (".concat(
-        d.path.pulls.join(", "), ")") :
+        resourceName == "Pull" && d.path.pulls.length > 0 ? " <font color='purple'>(".concat(
+        d.path.pulls.join(", "), ")</font>") :
         "", "</font>")).
 
 
         join(", ");
 
-        (0,external_kolmafia_namespaceObject.printHtml)("<font color='blue'>".concat(
-        resourceName, " x ").concat(resourcesUsed, "</font> => ").concat(paths),
-        true);
+        lines.push("<font color='blue'>".concat(
+        resourceName, " x ").concat(resourcesUsed, "</font> => ").concat(paths));
 
       });
+
+      lines.sort((l1, l2) => l1.localeCompare(l2));
+
+      lines.forEach((l) => (0,external_kolmafia_namespaceObject.printHtml)(l, true));
 
       var advs = this.getAdvs();
 
@@ -28421,6 +28434,10 @@ var SimmedPath = /*#__PURE__*/function () {
 
       this.resourcesUsed),_step5;try {for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {var resource = _step5.value;
           this.totalCost += resource[1].worthInAftercore * 1; //resource[2];
+
+          if (resource[1].freeTurn == true) {
+            this.totalCost -= GreySettings.greyValueOfAdventure;
+          }
         }} catch (err) {_iterator5.e(err);} finally {_iterator5.f();}
 
       return this.totalCost;
@@ -28667,7 +28684,11 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
           }
 
           var resourceCost = resources.
-          map((r) => r[1].worthInAftercore * r[2]).
+          map(
+          (r) =>
+          r[1].worthInAftercore * r[2] - (
+          r[1].freeTurn == true ? GreySettings.greyValueOfAdventure : 0)).
+
           reduce((p, n) => p + n, 0);
           var extraAdvsWorth =
           GreySettings.greyValueOfAdventure * (
@@ -31397,7 +31418,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "741be65";
+var lastCommitHash = "5f7f386";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
