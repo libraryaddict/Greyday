@@ -98,7 +98,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
       type.push(["Hippy", WarTag.DURING_WAR, YROutfit.YR_HIPPY, 3]);
     }
 
-    type.push(["Frat", WarTag.DURING_WAR, YROutfit.YR_FRAT, 3]);
+    type.push(["Frat", WarTag.DURING_WAR, YROutfit.YR_FRAT, 1]);
     type.push(["Frat", WarTag.DURING_WAR, null, fratNeeded.length * 6]);
 
     for (const combo of getAllCombinations(type, true)) {
