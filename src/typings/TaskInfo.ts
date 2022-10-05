@@ -332,6 +332,8 @@ export class PossiblePath {
   addPull(item: Item, chance: number = 1): PossiblePath {
     this.pulls.push(item);
 
+    this.pulls.sort((i1, i2) => i1.name.localeCompare(i2.name));
+
     return this.addMaybe(ResourceCategory.PULL, chance);
   }
 
