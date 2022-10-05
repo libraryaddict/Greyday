@@ -10,6 +10,7 @@ import {
   myLocation,
   print,
   toInt,
+  toItem,
   visitUrl,
 } from "kolmafia";
 import { getQuestStatus } from "../quests/Quests";
@@ -22,7 +23,7 @@ export class TaskAutumnaton implements Task {
 
   constructor() {
     visitUrl("desc_item.php?whichitem=174185886");
-    this.item = Item.get("Autumn-aton");
+    this.item = toItem(10954);
 
     this.createItems();
   }
