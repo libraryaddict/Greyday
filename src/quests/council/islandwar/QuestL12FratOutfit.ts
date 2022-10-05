@@ -164,12 +164,14 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
       }
     }
 
-    if (
-      path.hasTag(WarTag.BEFORE_WAR) &&
-      outfitPieces(this.hippyDisguise).find((i) => availableAmount(i) == 0) ==
-        null
-    ) {
-      path.removeTag(WarTag.BEFORE_WAR);
+    if (path.hasTag(WarTag.BEFORE_WAR)) {
+      if (haveOutfit(this.hippyDisguise)) {
+        path.removeTag(WarTag.BEFORE_WAR);
+      } else if (myLevel() >= 12) {
+        this.recalculateTime = true;
+
+        return QuestStatus.READY;
+      }
     }
 
     if (
