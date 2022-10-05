@@ -597,7 +597,7 @@ const zappable: SomeResource = {
 const catHeist: SomeResource = {
   type: ResourceCategory.CAT_HEIST,
   resource: "Cat Burglar Heist",
-  worthInAftercore: 0,
+  worthInAftercore: -500,
   prepare: () => {},
   doHeist: (item) => {
     if (

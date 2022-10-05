@@ -112,7 +112,7 @@ export class TaskAutumnaton implements Task {
     }
 
     // Failed to find a place to go
-    this.skipFor = 5;
+    this.skipFor = 3;
 
     // If we are in the choice, just quit
     if (handlingChoice()) {
@@ -180,6 +180,13 @@ export class TaskAutumnaton implements Task {
       loc: Location.get("The Haunted Library"),
       item: Item.get("tattered scrap of paper"),
       amount: 300,
+    });
+
+    this.toGrab.push({
+      loc: Location.get("Guano Junction"),
+      item: Item.get("sonar-in-a-biscuit"),
+      amount: 1,
+      viable: () => getQuestStatus("questL04Bat") <= 2,
     });
   }
 }

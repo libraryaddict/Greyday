@@ -281,7 +281,7 @@ export class GreySettings {
   static greyTuneMoonSpoon?: MoonSign;
   static greyDebug: boolean = toBoolean(getProperty("greyDebug") || "false");
   static greySkipPalindome: boolean;
-  static greyPullsLimit: number;
+  static greyPullsLimit: number = 20;
   static greyValueOfAdventure: number;
   static greyUseMummery: boolean;
   static greyVotingBooth: boolean;
