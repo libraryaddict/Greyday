@@ -123,6 +123,10 @@ export class PossiblePath {
 
     for (const [, res] of resourcesUsed) {
       this.pathCost += res.worthInAftercore;
+
+      if (res.freeTurn == true) {
+        this.pathCost -= GreySettings.greyValueOfAdventure;
+      }
     }
   }
 

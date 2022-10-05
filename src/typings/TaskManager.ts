@@ -125,6 +125,7 @@ export class SimmedPath {
     }
 
     let index1 = 0;
+    const lines: string[] = [];
 
     used.forEach((details, resourceName) => {
       index1++;
@@ -139,17 +140,20 @@ export class SimmedPath {
               d.questName
             } x ${d.resourcesUsed} (${d.turnsSaved} advs)${
               resourceName == "Pull" && d.path.pulls.length > 0
-                ? ` (${d.path.pulls.join(", ")})`
+                ? ` <font color='purple'>(${d.path.pulls.join(", ")})</font>`
                 : ""
             }</font>`
         )
         .join(", ");
 
-      printHtml(
-        `<font color='blue'>${resourceName} x ${resourcesUsed}</font> => ${paths}`,
-        true
+      lines.push(
+        `<font color='blue'>${resourceName} x ${resourcesUsed}</font> => ${paths}`
       );
     });
+
+    lines.sort((l1, l2) => l1.localeCompare(l2));
+
+    lines.forEach((l) => printHtml(l, true));
 
     const advs = this.getAdvs();
 
@@ -227,6 +231,10 @@ export class SimmedPath {
 
     for (const resource of this.resourcesUsed) {
       this.totalCost += resource[1].worthInAftercore * 1; //resource[2];
+
+      if (resource[1].freeTurn == true) {
+        this.totalCost -= GreySettings.greyValueOfAdventure;
+      }
     }
 
     return this.totalCost;
@@ -473,7 +481,11 @@ export class FigureOutPath {
       }
 
       const resourceCost = resources
-        .map((r) => r[1].worthInAftercore * r[2])
+        .map(
+          (r) =>
+            r[1].worthInAftercore * r[2] -
+            (r[1].freeTurn == true ? GreySettings.greyValueOfAdventure : 0)
+        )
         .reduce((p, n) => p + n, 0);
       const extraAdvsWorth =
         GreySettings.greyValueOfAdventure *

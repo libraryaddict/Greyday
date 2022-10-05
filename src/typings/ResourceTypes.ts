@@ -57,7 +57,6 @@ export enum ResourceCategory {
   DECK_OF_EVERY_CARD_CHEAT,
   CAT_HEIST,
   HOT_TUB,
-  INSTANT_KILL,
   FORCE_NC,
   FORCE_FIGHT,
   PILL_KEEPER,
@@ -106,6 +105,7 @@ export interface SomeResource {
   resource: ResourceId;
   name?: string;
   available?: () => boolean; // Some iotms might not be available, like parka and torso
+  freeTurn?: boolean; // If this saves a turn compared to the alternatives
   resourcesUsed?: number;
   worthInAftercore: number; // If used by garbo, how much profit would we miss out
   prepare: (outfit: GreyOutfit, props?: PropertyManager) => void;
@@ -306,8 +306,9 @@ const yellowParka: SomeResource = {
   resource: "Yellow Ray",
   name: "Parka: Yellow Ray",
   available: () => availableAmount(parka) > 0 && haveSkill(torso),
+  freeTurn: true,
   resourcesUsed: 100,
-  worthInAftercore: -3000,
+  worthInAftercore: 0,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addItem(parka);
@@ -375,6 +376,7 @@ const cosplayYellowRay: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
   resource: "Cosplay Saber",
   name: "Cosplay Saber: YR",
+  freeTurn: true,
   // If we have more than 60 pills, the saber is free. Otherwise it's worth 3k meat when its alien free day
   worthInAftercore:
     storageAmount(Item.get("distention pill")) > 60
@@ -424,6 +426,7 @@ const cosplayCopier: SomeResource = {
 const cargoShorts: SomeResource = {
   type: ResourceCategory.CARGO_SHORTS,
   resource: "Cargo Shorts",
+  freeTurn: true,
   worthInAftercore: 30000, // Some sellable item
   prepare: () => {},
   pocket: (pocket: number) => {
