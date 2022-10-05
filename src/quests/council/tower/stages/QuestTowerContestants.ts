@@ -82,6 +82,10 @@ export class QuestTowerContestants implements QuestInfo {
     return {
       location: null,
       run: () => {
+        if (match == null) {
+          throw "Unable to parse the contestants which we shall be fighting.";
+        }
+
         greyAdv(match[1]);
       },
     };
