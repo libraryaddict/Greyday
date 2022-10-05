@@ -21,12 +21,8 @@ export class TaskAutumnaton implements Task {
   toGrab: ValidItem[];
 
   constructor() {
-    try {
-      this.item = Item.get("Autumn-aton");
-    } catch (e) {
-      visitUrl("desc_item.php?whichitem=174185886");
-      this.item = Item.get("Autumn-aton");
-    }
+    visitUrl("desc_item.php?whichitem=174185886");
+    this.item = Item.get("Autumn-aton");
 
     this.createItems();
   }
