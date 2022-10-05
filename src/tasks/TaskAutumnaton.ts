@@ -89,7 +89,7 @@ export class TaskAutumnaton implements Task {
           "Autumn-aton upgrade will: " + availableChoiceOptions()[1],
           "blue"
         );
-        visitUrl("choice.php?option=1&pwd&whichchoice=1483" + toInt(valid.loc));
+        visitUrl("choice.php?option=1&pwd&whichchoice=1483");
       }
 
       visitUrl(
