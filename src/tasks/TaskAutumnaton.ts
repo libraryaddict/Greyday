@@ -23,7 +23,7 @@ export class TaskAutumnaton implements Task {
 
   constructor() {
     visitUrl("desc_item.php?whichitem=174185886");
-    this.item = toItem(10954);
+    this.item = Item.all().find((i) => i.descid == "174185886");
 
     this.createItems();
   }
