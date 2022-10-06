@@ -25,11 +25,14 @@ export class TaskAutumnaton implements Task {
     visitUrl("desc_item.php?whichitem=174185886");
     this.item = Item.all().find((i) => i.descid == "174185886");
 
+    if (!this.item.name.includes("aton")
+      this.item = null;
+
     this.createItems();
   }
 
   run(): void {
-    if (availableAmount(this.item) == 0) {
+    if (this.item == null || availableAmount(this.item) == 0) {
       return;
     }
 
