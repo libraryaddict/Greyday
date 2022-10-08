@@ -21337,7 +21337,7 @@ var QuestL9SmutOrcsCargoShorts = /*#__PURE__*/function (_TaskInfo) {QuestSmutOrc
       return false;
     } }]);return QuestL9SmutOrcsCargoShorts;}(TaskInfo);
 ;// CONCATENATED MODULE: ./src/quests/council/peaks/QuestL9SmutOrcs.ts
-function QuestL9SmutOrcs_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL9SmutOrcs_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestL9SmutOrcs_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL9SmutOrcs_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL9SmutOrcs_arrayLikeToArray(o, minLen);}function QuestL9SmutOrcs_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL9SmutOrcs_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL9SmutOrcs_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL9SmutOrcs_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL9SmutOrcs_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL9SmutOrcs_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL9SmutOrcs_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL9SmutOrcs_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL9SmutOrcs_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestL9SmutOrcs_slicedToArray(arr, i) {return QuestL9SmutOrcs_arrayWithHoles(arr) || QuestL9SmutOrcs_iterableToArrayLimit(arr, i) || QuestL9SmutOrcs_unsupportedIterableToArray(arr, i) || QuestL9SmutOrcs_nonIterableRest();}function QuestL9SmutOrcs_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestL9SmutOrcs_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL9SmutOrcs_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL9SmutOrcs_arrayLikeToArray(o, minLen);}function QuestL9SmutOrcs_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL9SmutOrcs_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function QuestL9SmutOrcs_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestL9SmutOrcs_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL9SmutOrcs_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL9SmutOrcs_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL9SmutOrcs_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL9SmutOrcs_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL9SmutOrcs_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -21371,7 +21371,8 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     "Ant Sickle",
     "Tiny bowler"].
     map((s) => external_kolmafia_namespaceObject.Item.get(s)));QuestL9SmutOrcs_defineProperty(this, "plastered",
-    external_kolmafia_namespaceObject.Monster.get("plastered frat orc"));}QuestL9SmutOrcs_createClass(SmutOrcs, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Monster.get("plastered frat orc"));QuestL9SmutOrcs_defineProperty(this, "noise",
+    external_kolmafia_namespaceObject.Skill.get("Grey Noise"));}QuestL9SmutOrcs_createClass(SmutOrcs, [{ key: "level", value:
 
     function level() {
       return 7;
@@ -21406,7 +21407,6 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
 
       if (
       status < 0 ||
-      !(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Grey Noise")) ||
       (0,external_kolmafia_namespaceObject.myMp)() < 15 ||
       !AbsorbsProvider.getAbsorbedMonsters().includes(this.plastered))
       {
@@ -21417,14 +21417,23 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         if (this.lastColdCheck < (0,external_kolmafia_namespaceObject.turnsPlayed)() - 5) {
           this.lastColdCheck = (0,external_kolmafia_namespaceObject.turnsPlayed)();
 
+          var compare = [];
+
           (0,external_kolmafia_namespaceObject.maximize)("cold dmg 10 min -ML 70 min -tie", true);
           var melee = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Cold Damage");
+          compare.push(["cold dmg", melee]);
 
-          (0,external_kolmafia_namespaceObject.maximize)("cold spell dmg 10 min -ML 70 min -tie", true);
-          var spell = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Cold Spell Damage");
+          if ((0,external_kolmafia_namespaceObject.haveSkill)(this.noise)) {
+            (0,external_kolmafia_namespaceObject.maximize)("cold spell dmg 10 min -ML 70 min -tie", true);
+            var spell = (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Cold Spell Damage");
 
-          this.hasEnoughCold = Math.max(melee, spell) >= 5;
-          this.lastColdMaximize = spell > melee ? "cold spell dmg" : "cold dmg";
+            compare.push(["cold spell dmg", spell]);
+          }
+
+          // Sort from highest to lowest
+          compare.sort((_ref, _ref2) => {var _ref3 = QuestL9SmutOrcs_slicedToArray(_ref, 2),c1 = _ref3[1];var _ref4 = QuestL9SmutOrcs_slicedToArray(_ref2, 2),c2 = _ref4[1];return c2 - c1;});
+          this.hasEnoughCold = compare[0][1] >= 5;
+          this.lastColdMaximize = compare[0][0];
         }
 
         if (!this.hasEnoughCold) {
@@ -31554,7 +31563,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "b2e8b88";
+var lastCommitHash = "f0bb89c";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
