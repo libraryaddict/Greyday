@@ -482,9 +482,6 @@ export function getResourcesChanged(
     }
 
     newSnapshot.resources.push(resource);
-    print(
-      "Removing " + resource.name + " x " + ResourceCategory[resource.type]
-    );
   });
 
   if (newSnapshot.resources.length > 0) {
