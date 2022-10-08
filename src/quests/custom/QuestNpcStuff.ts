@@ -461,16 +461,8 @@ class QuestMadBaker implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (getProperty("questM25Armorer") == "finished") {
-      return QuestStatus.COMPLETED;
-    }
-
-    if (getProperty("questM25Armorer") == "step4") {
-      return QuestStatus.READY;
-    }
-
     if (getProperty("questM25Armorer") != "unstarted") {
-      return QuestStatus.NOT_READY;
+      return QuestStatus.COMPLETED;
     }
 
     return QuestStatus.READY;
@@ -630,12 +622,8 @@ class QuestMeatSmith implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (getProperty("questM23Meatsmith") == "finished") {
+    if (getProperty("questM23Meatsmith") != "unstarted") {
       return QuestStatus.COMPLETED;
-    }
-
-    if (getProperty("questM23Meatsmith") == "started") {
-      return QuestStatus.NOT_READY; // Manual complete or not at all
     }
 
     return QuestStatus.READY;
