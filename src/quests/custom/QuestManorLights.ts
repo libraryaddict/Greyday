@@ -216,6 +216,11 @@ export class QuestManorLights implements QuestInfo {
           return;
         }
 
+        if (!handlingChoice() || !this.choices.includes(lastChoice())) {
+          greyAdv(null);
+          return;
+        }
+
         for (const i of steve[1]) {
           const url =
             "choice.php?pwd=&whichchoice=" + lastChoice() + "&option=" + i;
@@ -312,6 +317,11 @@ export class QuestManorLights implements QuestInfo {
         visitUrl("adventure.php?snarfblat=" + toInt(eliza[0]));
 
         if (!handlingChoice() && currentRound() == 0) {
+          return;
+        }
+
+        if (!handlingChoice() || !this.choices.includes(lastChoice())) {
+          greyAdv(null);
           return;
         }
 
