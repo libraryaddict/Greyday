@@ -454,10 +454,6 @@ export class GreyAdventurer {
 
       replaceWith.push(...this.adventureFinder.getRecommendedFamiliars());
 
-      if (toInt(getProperty("camelSpit")) < 100) {
-        replaceWith.push(Familiar.get("Melodramedary"));
-      }
-
       const robor: Familiar = Familiar.get("Robortender");
       const doRobor =
         getProperty("_roboDrinks").includes("drive-by shooting") &&
@@ -467,6 +463,7 @@ export class GreyAdventurer {
         haveFamiliar(robor) ? (doRobor ? "Robortender" : "") : "Hobomonkey",
         "Jumpsuited Hound Dog",
         "Pocket Professor",
+        toInt(getProperty("camelSpit")) < 100 ? "Melodramedary" : "",
       ]
         .filter((f) => f.length > 0)
         .map((f) => Familiar.get(f))
