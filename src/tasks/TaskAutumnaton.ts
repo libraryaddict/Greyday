@@ -181,6 +181,16 @@ export class TaskAutumnaton implements Task {
           5,
     });
 
+    // If we want a drum machine, have turned in stone rose, yet have not turned in drum machine..
+    this.toGrab.push({
+      loc: Location.get("The Oasis"),
+      item: Item.get("Drum Machine"),
+      amount: 1,
+      viable: () =>
+        (toInt(getProperty("gnasirProgress")) & 1) == 1 &&
+        (toInt(getProperty("gnasirProgress")) & 16) != 16,
+    });
+
     this.toGrab.push({
       loc: Location.get("The Haunted Library"),
       item: Item.get("tattered scrap of paper"),

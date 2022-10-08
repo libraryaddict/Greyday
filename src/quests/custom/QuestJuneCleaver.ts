@@ -11,6 +11,7 @@ import {
   maximize,
   turnsPlayed,
   haveEffect,
+  Effect,
 } from "kolmafia";
 import { greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
