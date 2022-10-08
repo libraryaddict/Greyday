@@ -6305,7 +6305,12 @@ var QuestL10GiantTop = /*#__PURE__*/function () {function QuestL10GiantTop() {Qu
     677);QuestL10GiantTop_defineProperty(this, "raverNC",
     676);QuestL10GiantTop_defineProperty(this, "punkNC",
     678);QuestL10GiantTop_defineProperty(this, "gothNC",
-    675);}QuestL10GiantTop_createClass(QuestL10GiantTop, [{ key: "run", value:
+    675);QuestL10GiantTop_defineProperty(this, "holeInSky",
+    new QuestTowerHoleInSkyUnlock());}QuestL10GiantTop_createClass(QuestL10GiantTop, [{ key: "getChildren", value:
+
+    function getChildren() {
+      return [this.holeInSky];
+    } }, { key: "run", value:
 
     function run() {
       var outfit = new GreyOutfit().setNoCombat();
@@ -6394,6 +6399,68 @@ var QuestL10GiantTop = /*#__PURE__*/function () {function QuestL10GiantTop() {Qu
     function getLocations() {
       return [this.loc];
     } }]);return QuestL10GiantTop;}();
+
+
+var QuestTowerHoleInSkyUnlock = /*#__PURE__*/function () {function QuestTowerHoleInSkyUnlock() {QuestL10GiantTop_classCallCheck(this, QuestTowerHoleInSkyUnlock);QuestL10GiantTop_defineProperty(this, "topFloor",
+    external_kolmafia_namespaceObject.Location.get(
+    "The Castle in the Clouds in the Sky (Top Floor)"));QuestL10GiantTop_defineProperty(this, "rocket",
+
+    external_kolmafia_namespaceObject.Item.get("steam-powered model rocketship"));QuestL10GiantTop_defineProperty(this, "copperFeel",
+    677);QuestL10GiantTop_defineProperty(this, "flavorOfARaver",
+    676);QuestL10GiantTop_defineProperty(this, "yeahPunkRock",
+    678);QuestL10GiantTop_defineProperty(this, "gothNC",
+    675);}QuestL10GiantTop_createClass(QuestTowerHoleInSkyUnlock, [{ key: "getId", value:
+
+    function getId() {
+      return "Council / Tower / Keys / HoleInSkyUnlock";
+    } }, { key: "level", value:
+
+    function level() {
+      return 8;
+    } }, { key: "status", value:
+
+    function status() {
+      if ((0,external_kolmafia_namespaceObject.getProperty)("questL10Garbage") != "finished") {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (
+      getQuestStatus("questL13Final") > 5 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.rocket) > 0)
+      {
+        return QuestStatus.COMPLETED;
+      }
+
+      return QuestStatus.READY;
+    } }, { key: "run", value:
+
+    function run() {
+      var outfit = new GreyOutfit().setNoCombat();
+
+      return {
+        location: this.topFloor,
+        outfit: outfit,
+        freeRun: () => true,
+        run: () => {
+          var props = new PropertyManager();
+
+          props.setChoice(this.copperFeel, 2); // Grab rocket
+          props.setChoice(this.gothNC, 4); // Crawl to steam
+          props.setChoice(this.yeahPunkRock, 3); // Crawl to steam
+          props.setChoice(this.flavorOfARaver, 4); // Crawl to punk
+
+          try {
+            greyAdv(this.topFloor, outfit);
+          } finally {
+            props.resetAll();
+          }
+        } };
+
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [];
+    } }]);return QuestTowerHoleInSkyUnlock;}();
 ;// CONCATENATED MODULE: ./src/quests/council/QuestL10Giants.ts
 function QuestL10Giants_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL10Giants_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL10Giants_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL10Giants_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL10Giants_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL10Giants_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -9600,7 +9667,8 @@ PossiblePathExtra = /*#__PURE__*/function (_PossiblePath) {QuestL11RonProtesters
 
 var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtesters_inherits(QuestL11RonProtesters, _TaskInfo);var _super2 = QuestL11RonProtesters_createSuper(QuestL11RonProtesters);function QuestL11RonProtesters() {var _this2;QuestL11RonProtesters_classCallCheck(this, QuestL11RonProtesters);for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {args[_key2] = arguments[_key2];}_this2 = _super2.call.apply(_super2, [this].concat(args));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "proLoc",
     external_kolmafia_namespaceObject.Location.get("A Mob Of Zeppelin Protesters"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "deck",
-    external_kolmafia_namespaceObject.Item.get("deck of lewd playing cards"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "lyrndHat",
+    external_kolmafia_namespaceObject.Item.get("deck of lewd playing cards"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "sleazeBook",
+    external_kolmafia_namespaceObject.Item.get("Disturbing Fanfic"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "lyrndHat",
     external_kolmafia_namespaceObject.Item.get("lynyrdskin cap"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "lyrndPants",
     external_kolmafia_namespaceObject.Item.get("lynyrdskin breeches"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "lyrndShirt",
     external_kolmafia_namespaceObject.Item.get("lynyrdskin tunic"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "lyrndCostume",
@@ -9624,7 +9692,8 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
     external_kolmafia_namespaceObject.Item.get("Jurassic Parka"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "clover",
     external_kolmafia_namespaceObject.Item.get("11-Leaf Clover"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "lucky",
     external_kolmafia_namespaceObject.Effect.get("Lucky!"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "paths",
-    []);QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "sleazeEquips",
+    []);QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "lefthandMan",
+    external_kolmafia_namespaceObject.Familiar.get("left-hand man"));QuestL11RonProtesters_defineProperty(QuestL11RonProtesters_assertThisInitialized(_this2), "sleazeEquips",
 
 
 
@@ -9920,12 +9989,15 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
       var runSleaze = this.getSleazeScares() >= this.getLynyrdScares();
       var str = runSleaze ?
       "Sleaze Spell Damage +Sleaze Damage" :
-      this.lyrndCostume.map((i) => "+equip " + i).join(" ");
+      this.lyrndCostume.map((i) => "+equip " + i).join(" ") + (
+      (0,external_kolmafia_namespaceObject.haveFamiliar)(this.lefthandMan) ? " +switch left-hand man" : "");
       var outfit = new GreyOutfit(str + " -tie");
 
       return {
         location: null,
         outfit: outfit,
+        familiar: (0,external_kolmafia_namespaceObject.haveFamiliar)(this.lefthandMan) ? this.lefthandMan : null,
+        disableFamOverride: (0,external_kolmafia_namespaceObject.haveFamiliar)(this.lefthandMan),
         run: () => {
           while (
           path.canUse(ResourceCategory.CLOVER) &&
@@ -10004,7 +10076,19 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
         outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");
       }
 
-      if (
+      var forceMan =
+      this.toAbsorb.length == 0 &&
+      (0,external_kolmafia_namespaceObject.haveFamiliar)(this.lefthandMan) &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) +
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.deck) +
+      Math.min(1, (0,external_kolmafia_namespaceObject.availableAmount)(this.sleazeBook)) >=
+      2;
+
+      if (forceMan) {
+        if ((0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) > 0) {
+          outfit.addItem(this.umbrella);
+        }
+      } else if (
       (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) > 0 &&
       !path.equips.includes(this.deck))
       {
@@ -10016,8 +10100,10 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
       return {
         location: this.proLoc,
         outfit: outfit,
-        olfaction: [this.cultist],
+        olfaction: forceMan ? null : [this.cultist],
         mayFreeRun: false,
+        familiar: forceMan ? this.lefthandMan : null,
+        disableFamOverride: forceMan,
         run: () => {
           var props = new PropertyManager();
 
@@ -15434,20 +15520,14 @@ function QuestStarKey_classCallCheck(instance, Constructor) {if (!(instance inst
 
 
 
-
 var QuestStarKey = /*#__PURE__*/function () {function QuestStarKey() {QuestStarKey_classCallCheck(this, QuestStarKey);QuestStarKey_defineProperty(this, "location",
     external_kolmafia_namespaceObject.Location.get("The Hole in the sky"));QuestStarKey_defineProperty(this, "rocket",
     external_kolmafia_namespaceObject.Item.get("steam-powered model rocketship"));QuestStarKey_defineProperty(this, "star",
     external_kolmafia_namespaceObject.Item.get("Star"));QuestStarKey_defineProperty(this, "map",
     external_kolmafia_namespaceObject.Item.get("Star Chart"));QuestStarKey_defineProperty(this, "line",
     external_kolmafia_namespaceObject.Item.get("Line"));QuestStarKey_defineProperty(this, "key",
-    external_kolmafia_namespaceObject.Item.get("Richard's star key"));QuestStarKey_defineProperty(this, "holeInSky",
-    new QuestTowerHoleInSkyUnlock());QuestStarKey_defineProperty(this, "toAbsorb", void 0);}QuestStarKey_createClass(QuestStarKey, [{ key: "getChildren", value:
+    external_kolmafia_namespaceObject.Item.get("Richard's star key"));QuestStarKey_defineProperty(this, "toAbsorb", void 0);}QuestStarKey_createClass(QuestStarKey, [{ key: "level", value:
 
-
-    function getChildren() {
-      return [this.holeInSky];
-    } }, { key: "level", value:
 
     function level() {
       return 8;
@@ -15526,68 +15606,6 @@ var QuestStarKey = /*#__PURE__*/function () {function QuestStarKey() {QuestStarK
     function getLocations() {
       return [this.location];
     } }]);return QuestStarKey;}();
-
-
-var QuestTowerHoleInSkyUnlock = /*#__PURE__*/function () {function QuestTowerHoleInSkyUnlock() {QuestStarKey_classCallCheck(this, QuestTowerHoleInSkyUnlock);QuestStarKey_defineProperty(this, "topFloor",
-    external_kolmafia_namespaceObject.Location.get(
-    "The Castle in the Clouds in the Sky (Top Floor)"));QuestStarKey_defineProperty(this, "rocket",
-
-    external_kolmafia_namespaceObject.Item.get("steam-powered model rocketship"));QuestStarKey_defineProperty(this, "copperFeel",
-    677);QuestStarKey_defineProperty(this, "flavorOfARaver",
-    676);QuestStarKey_defineProperty(this, "yeahPunkRock",
-    678);QuestStarKey_defineProperty(this, "gothNC",
-    675);}QuestStarKey_createClass(QuestTowerHoleInSkyUnlock, [{ key: "getId", value:
-
-    function getId() {
-      return "Council / Tower / Keys / HoleInSkyUnlock";
-    } }, { key: "level", value:
-
-    function level() {
-      return 8;
-    } }, { key: "status", value:
-
-    function status() {
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questL10Garbage") != "finished") {
-        return QuestStatus.NOT_READY;
-      }
-
-      if (
-      getQuestStatus("questL13Final") > 5 ||
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.rocket) > 0)
-      {
-        return QuestStatus.COMPLETED;
-      }
-
-      return QuestStatus.READY;
-    } }, { key: "run", value:
-
-    function run() {
-      var outfit = new GreyOutfit().setNoCombat();
-
-      return {
-        location: this.topFloor,
-        outfit: outfit,
-        freeRun: () => true,
-        run: () => {
-          var props = new PropertyManager();
-
-          props.setChoice(this.copperFeel, 2); // Grab rocket
-          props.setChoice(this.gothNC, 4); // Crawl to steam
-          props.setChoice(this.yeahPunkRock, 3); // Crawl to steam
-          props.setChoice(this.flavorOfARaver, 4); // Crawl to punk
-
-          try {
-            greyAdv(this.topFloor, outfit);
-          } finally {
-            props.resetAll();
-          }
-        } };
-
-    } }, { key: "getLocations", value:
-
-    function getLocations() {
-      return [];
-    } }]);return QuestTowerHoleInSkyUnlock;}();
 ;// CONCATENATED MODULE: ./src/quests/custom/QuestKeyStuffAbstract.ts
 function QuestKeyStuffAbstract_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestKeyStuffAbstract_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestKeyStuffAbstract_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestKeyStuffAbstract_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestKeyStuffAbstract_arrayLikeToArray(o, minLen);}function QuestKeyStuffAbstract_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestKeyStuffAbstract_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestKeyStuffAbstract_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestKeyStuffAbstract_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestKeyStuffAbstract_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestKeyStuffAbstract_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestKeyStuffAbstract_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestKeyStuffAbstract_setPrototypeOf(subClass, superClass);}function QuestKeyStuffAbstract_setPrototypeOf(o, p) {QuestKeyStuffAbstract_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestKeyStuffAbstract_setPrototypeOf(o, p);}function QuestKeyStuffAbstract_createSuper(Derived) {var hasNativeReflectConstruct = QuestKeyStuffAbstract_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestKeyStuffAbstract_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestKeyStuffAbstract_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestKeyStuffAbstract_possibleConstructorReturn(this, result);};}function QuestKeyStuffAbstract_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestKeyStuffAbstract_assertThisInitialized(self);}function QuestKeyStuffAbstract_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestKeyStuffAbstract_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestKeyStuffAbstract_getPrototypeOf(o) {QuestKeyStuffAbstract_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestKeyStuffAbstract_getPrototypeOf(o);}function QuestKeyStuffAbstract_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -18182,7 +18200,7 @@ var QuestL3Tavern = /*#__PURE__*/function () {function QuestL3Tavern() {QuestL3T
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.myLevel)() < 20) {
+      if ((0,external_kolmafia_namespaceObject.myLevel)() < 18) {
         return QuestStatus.FASTER_LATER;
       }
 
@@ -20277,7 +20295,7 @@ var QuestL8MountainGoats = /*#__PURE__*/function () {function QuestL8MountainGoa
       return getQuestStatus("questL08Trapper");
     } }]);return QuestL8MountainGoats;}();
 ;// CONCATENATED MODULE: ./src/quests/council/mountain/QuestL8MountainNinja.ts
-function QuestL8MountainNinja_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainNinja_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainNinja_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainNinja_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainNinja_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainNinja_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL8MountainNinja_toConsumableArray(arr) {return QuestL8MountainNinja_arrayWithoutHoles(arr) || QuestL8MountainNinja_iterableToArray(arr) || QuestL8MountainNinja_unsupportedIterableToArray(arr) || QuestL8MountainNinja_nonIterableSpread();}function QuestL8MountainNinja_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestL8MountainNinja_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL8MountainNinja_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL8MountainNinja_arrayLikeToArray(o, minLen);}function QuestL8MountainNinja_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function QuestL8MountainNinja_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return QuestL8MountainNinja_arrayLikeToArray(arr);}function QuestL8MountainNinja_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL8MountainNinja_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainNinja_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainNinja_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainNinja_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainNinja_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainNinja_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -20288,7 +20306,8 @@ function QuestL8MountainNinja_classCallCheck(instance, Constructor) {if (!(insta
 
 var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNinja() {QuestL8MountainNinja_classCallCheck(this, QuestL8MountainNinja);QuestL8MountainNinja_defineProperty(this, "ninja",
     external_kolmafia_namespaceObject.Location.get("Lair of the Ninja Snowmen"));QuestL8MountainNinja_defineProperty(this, "assassin",
-    external_kolmafia_namespaceObject.Monster.get("Ninja snowman assassin"));}QuestL8MountainNinja_createClass(QuestL8MountainNinja, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Monster.get("Ninja snowman assassin"));QuestL8MountainNinja_defineProperty(this, "canHitCombat", void 0);}QuestL8MountainNinja_createClass(QuestL8MountainNinja, [{ key: "getId", value:
+
 
     function getId() {
       return "Council / Ice / Ninjas";
@@ -20311,6 +20330,33 @@ var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNin
 
       if (status < MountainStatus.GET_OUTFIT) {
         return QuestStatus.NOT_READY;
+      }
+
+      if (
+      this.canHitCombat == null &&
+      QuestL8MountainNinja_toConsumableArray(Object.keys((0,external_kolmafia_namespaceObject.myEffects)())).
+      map((e) => (0,external_kolmafia_namespaceObject.toEffect)(e)).
+      find((e) => (0,external_kolmafia_namespaceObject.numericModifier)(e, "Combat Rate") != 0) == null)
+      {
+        (0,external_kolmafia_namespaceObject.maximize)("+combat -tie", true);
+
+        this.canHitCombat =
+        (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Combat Rate") >= 25;
+      } else if (this.canHitCombat === false) {
+        // If we're running +25 combat with no effects, then yes
+        this.canHitCombat =
+        (0,external_kolmafia_namespaceObject.numericModifier)("Combat Rate") >= 25 &&
+        QuestL8MountainNinja_toConsumableArray(Object.keys((0,external_kolmafia_namespaceObject.myEffects)())).
+        map((e) => (0,external_kolmafia_namespaceObject.toEffect)(e)).
+        find((e) => (0,external_kolmafia_namespaceObject.numericModifier)(e, "Combat Rate") > 0) == null;
+      }
+
+      if (hasNonCombatSkillActive()) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (this.canHitCombat || (0,external_kolmafia_namespaceObject.numericModifier)("Combat Rate") >= 25) {
+        return QuestStatus.READY;
       }
 
       // If we've reached snowman time but don't have the skill
@@ -26080,16 +26126,8 @@ QuestMadBaker = /*#__PURE__*/function () {function QuestMadBaker() {QuestNpcStuf
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questM25Armorer") == "finished") {
-        return QuestStatus.COMPLETED;
-      }
-
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questM25Armorer") == "step4") {
-        return QuestStatus.READY;
-      }
-
       if ((0,external_kolmafia_namespaceObject.getProperty)("questM25Armorer") != "unstarted") {
-        return QuestStatus.NOT_READY;
+        return QuestStatus.COMPLETED;
       }
 
       return QuestStatus.READY;
@@ -26249,12 +26287,8 @@ QuestMeatSmith = /*#__PURE__*/function () {function QuestMeatSmith() {QuestNpcSt
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questM23Meatsmith") == "finished") {
+      if ((0,external_kolmafia_namespaceObject.getProperty)("questM23Meatsmith") != "unstarted") {
         return QuestStatus.COMPLETED;
-      }
-
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questM23Meatsmith") == "started") {
-        return QuestStatus.NOT_READY; // Manual complete or not at all
       }
 
       return QuestStatus.READY;
@@ -27935,6 +27969,323 @@ function QuestRegistry_createForOfIteratorHelper(o, allowArrayLike) {var it = ty
 
 
 
+// We get one non-combat at goblin basement from jellyfish
+// Another non-combat at Black panther
+// Goblin only has one -combat to speak of, and its not really worth much?
+// Black is Car > Desert > Forest
+var order = [
+{ id: "Quests / Council" },
+
+{ id: "Council / Toot" },
+{ id: "Misc / Initial Pulls" },
+{ id: "Misc / InitialStart" },
+{ id: "Misc / PowerLeveling" },
+{ id: "Misc / FortuneExp" },
+{ id: "Misc / Ghost Buster" },
+
+{ id: "CombatLocket / SystemSweep" },
+{ id: "CombatLocket / InfiniteLoop" },
+{ id: "Misc / FamEquip" },
+{ id: "Misc / JuneCleaver" },
+
+{ id: "NPC / Meatsmith" },
+{ id: "NPC / GnomeSkills" },
+{ id: "NPC / Painter" }, // Takes up to 3 advs so meh, not quest relevant either. Only supported if user starts it
+{ id: "NPC / Untinkerer" },
+{ id: "NPC / Baker" },
+{ id: "NPC / Druggie" },
+{ id: "NPC / Knoll Mayor" },
+{ id: "NPC / Doctor" },
+{ id: "Misc / Purchases" },
+{ id: "Misc / FriarExp" },
+{ id: "Misc / Moonsign" },
+// These just make the absorbs prioritized higher
+{
+  id: "Absorbs / Knoll",
+  testValid: () => (0,external_kolmafia_namespaceObject.knollAvailable)() && GreySettings.greyTuneMoonSpoon != null },
+
+{
+  id: "Absorbs / Canadia",
+  testValid: () =>
+  (0,external_kolmafia_namespaceObject.canadiaAvailable)() && GreySettings.greyTuneMoonSpoon != null },
+
+{
+  id: "Absorbs / Gnomads",
+  testValid: () =>
+  (0,external_kolmafia_namespaceObject.gnomadsAvailable)() && GreySettings.greyTuneMoonSpoon != null },
+
+
+// We might want system sweep after all! This needs to be cleaned
+{ id: "Council / MacGruffin / HiddenCity / HiddenPark" },
+
+{ id: "Skills / Infinite Loop" },
+{ id: "Skills / System Sweep" },
+{ id: "Skills / Phase Shift" },
+{ id: "Skills / HPRegen" },
+{ id: "Skills / ScalingItem" },
+{ id: "Skills / ScalingMeat" },
+{ id: "Skills / DoubleNanovision" },
+{ id: "Misc / Short Cook Goose" },
+
+{ id: "Skills / ScalingDR" },
+{ id: "Skills / Conifer Polymers" },
+
+// Vines are free kills, why not prioritize them to unlock zones
+{ id: "Council / MacGruffin / HiddenCity / Vines" },
+
+{ id: "Misc / ManorLights" },
+{ id: "Misc / UnlockDungeonsOfDoom" },
+{ id: "Skills / MPRegen" },
+
+// We do this early so we can grab our hippy outfit asap
+{ id: "Boat / Junkyard" },
+{ id: "Boat / Vacation" },
+
+// Always try to buy access to the shore, 8-9 adventures spent trying to farm stuff up?
+{ id: "Council / MacGruffin / Shore" },
+{ id: "Misc / MeatCar" },
+{ id: "Misc / BugbearBakery" },
+
+// Get goblin done early so we can grab our first -combat skill
+{ id: "Council / Goblins / Outskirts" },
+{ id: "Council / Goblins / HaremOutfit" },
+
+{ id: "GoblinLabs / LabUnlock" },
+{ id: "GoblinLabs / MegUnlock" },
+
+{ id: "Council / MacGruffin / Vacation" },
+
+{ id: "Council / Larva" },
+
+{ id: "Council / Ice / Ore" },
+
+// Get this done early so we can start flyering
+{ id: "Council / War / Frat Outfit" },
+{ id: "Council / War / Start" },
+{ id: "Council / War / Flyers" },
+
+// OMG who cares about your stupid war
+{
+  id: "Council / War / Filthworms" },
+
+
+// We get +3 hot resist from raging bull
+// +3 stench resist from pine bat
+// And the other two skills are manor located
+{ id: "Manor / Chat" },
+{ id: "Manor / Kitchen" },
+{ id: "Manor / Billards" },
+{ id: "Manor / Bathroom" },
+{ id: "Manor / Gallery" },
+{ id: "Manor / Bedroom" },
+
+// Do the king cos he's lonely, also has 2k meat
+{ id: "Council / Goblins / King" },
+
+// Register these here, because we want to burn their backups in delay zones
+{
+  id: "Council / Tower / Keys / Heroes / FantasyBandit",
+  towerDelayed: true },
+
+{ id: "Council / War / Lobsters" },
+
+// Get friars done early so we can grab stuff from hell
+{ id: "Council / Friars / Heart" },
+{ id: "Council / Friars / Elbow" },
+{ id: "Council / Friars / Neck" },
+{ id: "Council / Friars / TurnIn" },
+
+{ id: "Misc / Latte / Fam Exp" },
+{ id: "Misc / Latte / Plus Combat" },
+
+// If we have the skill, then this doesn't need prioritizing as such
+{
+  id: "Council / MacGruffin / Black" },
+
+
+{ id: "Skills / Photonic Shroud" },
+{ id: "Misc / GrabZapWand" },
+
+// Meh
+{ id: "Council / MacGruffin / HiddenCity / Boss" },
+{ id: "Council / MacGruffin / Temple / Unlock" },
+{ id: "Council / MacGruffin / Temple / GrabWool" },
+{ id: "Council / MacGruffin / Temple / Nostril" },
+{ id: "Council / MacGruffin / Temple / HiddenCity" },
+
+// Now we do our bowling, we prioritize this because of special code that has the bowling ball with combat turns = 0
+// We also prioritize it for double nanovision
+{ id: "Council / MacGruffin / HiddenCity / BookOfMatches" },
+{ id: "Council / MacGruffin / HiddenCity / Bowling" },
+
+// Do library after we should have system sweep stuff
+{ id: "Manor / Library" },
+
+// Crypt does give us meat hmm
+{ id: "Council / Crypt / Gravy Boat Pull" },
+{ id: "Council / Crypt / Sprinters" },
+{ id: "Council / Crypt / Eyes" },
+
+{ id: "Council / Bats / Sonars" },
+{ id: "Council / Bats / UnlockLeft" },
+{ id: "Council / Bats / Boss" },
+
+// We've unlocked the left way, just do shen and hopefully we unlock right without actually burning extra turns
+{ id: "Council / MacGruffin / Shen / Meet" },
+{ id: "Council / MacGruffin / Shen / Bats" },
+{ id: "Council / MacGruffin / Shen / TurnIn" },
+
+// Unlock ninja tower
+{ id: "Council / Ice / Trapper" },
+{ id: "Council / Ice / Goats" },
+
+// Ninja power!
+{ id: "Council / MacGruffin / Shen / Ninjas" },
+
+// Try unlock right bats if not unlocked
+{ id: "Council / Bats / UnlockRight" },
+
+// Hunt for enchanted beans
+{ id: "Council / Beanstalk / EnchantedBean" },
+{ id: "Council / Beanstalk / Ship" },
+{ id: "Council / Beanstalk / Basement" },
+{ id: "Council / Beanstalk / Ground" },
+// We're now trying to do the top stuff yay
+{ id: "Council / Beanstalk / Top" },
+
+// If we still haven't unlocked from doing our top castle, lets try unlock our hole in sky
+{ id: "Council / Tower / Keys / HoleInSkyUnlock" },
+// Oh wow, hole in sky unlocked but still no boss. Lets just do it manually.
+{ id: "Council / MacGruffin / Shen / Giants" },
+{ id: "Council / Tower / Keys / Star", towerDelayed: true },
+
+{ id: "Council / MacGruffin / Ron / Crowd" },
+{ id: "Council / MacGruffin / Ron / Zepp" },
+
+// Palin needs Ron and Shen done
+{ id: "Council / MacGruffin / Palin / Book" },
+{ id: "Council / MacGruffin / Palin / WetStew" },
+{ id: "Council / MacGruffin / Palin / Boss" },
+{ id: "Skills / Piezoelectric Honk" },
+
+// Ninja needs +combat, so delay it until we've finished Shen and grabbed our +combat skill from Palin
+{ id: "Council / Ice / Ninjas" },
+// We earn a cold damage skill, so may as well. We also get meats
+{ id: "Council / Ice / Boss" },
+
+// Given we earn nothing but meat, delays for days
+{ id: "Council / Bats / UnlockBoss" },
+
+// We do shaman first to potentially grab extra accountant stuff
+{ id: "Council / MacGruffin / HiddenCity / Curses" },
+
+{ id: "Council / MacGruffin / HiddenCity / Accountants" },
+
+// Meh
+{ id: "Council / MacGruffin / HiddenCity / Doctor" },
+
+// Nothing interesting from desert and pyramid yawn
+{ id: "Council / MacGruffin / Desert / Compass" },
+
+{ id: "Council / MacGruffin / Desert / WormRide" },
+{ id: "Council / MacGruffin / Desert / Gnome" },
+{
+  id: "Council / MacGruffin / Desert / StoneRose" },
+
+{
+  id: "Council / MacGruffin / Desert / Explore" },
+
+
+// Unlock cellar
+{ id: "Council / MacGruffin / Manor / Ballroom" },
+{ id: "Council / MacGruffin / Manor / Recipe" },
+{ id: "Council / MacGruffin / Manor / Soda" },
+{ id: "Council / MacGruffin / Manor / Wine" },
+{ id: "Council / MacGruffin / Manor / Bomb" },
+{ id: "Council / MacGruffin / Manor / Boss" },
+
+// Nothing special from the top of the pyramid, but burn some turns here anyways
+{ id: "Council / MacGruffin / Pyramid / Top" },
+
+// Alright, unlock the control room and the undying man. And keep going until you have enough rats
+{ id: "Council / MacGruffin / Pyramid / Middle" },
+{ id: "Council / MacGruffin / Pyramid / Wheel" },
+
+// Given we earn nothing from crypt..
+{ id: "Council / Crypt / Rattling" },
+{ id: "Council / Crypt / DirtyMan" },
+{ id: "Council / Crypt / Boss" },
+
+{ id: "Skills / ColdDamage15" },
+{ id: "Skills / ColdDamage10" },
+
+// Given that we earn nothing from peaks, just delay it until we should've hit our max +cold damage
+{ id: "Council / Peaks / CargoShortsSmut" },
+{ id: "Council / Peaks / Orcs" },
+{ id: "Council / Peaks / OilPeak" },
+{ id: "Council / Peaks / TwinPeak" },
+{ id: "Council / Peaks / AbooPeak" },
+{ id: "Council / Peaks / Lord" },
+
+{ id: "Council / War / Gremlins" },
+{ id: "Council / War / Gremlins / Burning Barrel" },
+{ id: "Council / War / Gremlins / Abandoned Refrigerator" },
+{ id: "Council / War / Gremlins / Old Tires" },
+{ id: "Council / War / Gremlins / Rusted Car" },
+
+{ id: "Council / War / Boss" },
+
+// Tavern needs Larva done
+{ id: "Council / Tavern" },
+
+{ id: "Council / War / Battlefield" },
+
+{ id: "Council / MacGruffin / Pyramid / EdUndying" },
+
+// Alright, this run is just about over kids. Lets finish it.
+{ id: "Council / Tower / Contests", towerDelayed: true },
+{ id: "Council / Tower / Maze", towerDelayed: true },
+
+{
+  id: "Council / Tower / Keys / Heroes / Pull and Zap Keys",
+  towerDelayed: true },
+
+{ id: "Council / Tower / Keys / Heroes / ZapKeys", towerDelayed: true },
+{
+  id: "Council / Tower / Keys / Heroes / DailyDungeon",
+  towerDelayed: true },
+
+{
+  id: "Council / Tower / Keys / Heroes / DeckOfCards",
+  towerDelayed: true },
+
+{ id: "Council / Tower / Keys / Digital", towerDelayed: true },
+{ id: "Council / Tower / Keys / Skeleton", towerDelayed: true },
+
+{ id: "Council / War / Nuns" },
+
+// By the time we hit this, we should 100% have our keys
+{ id: "Council / Tower / KeyDoor", towerDelayed: true },
+
+{ id: "Council / Tower / WallOfSkin", towerDelayed: true },
+
+{ id: "Council / Tower / WallOfMeat", towerDelayed: true },
+
+{ id: "Council / Tower / WallOfBones", towerDelayed: true },
+
+{ id: "Council / Tower / Shadow", towerDelayed: true },
+{ id: "Council / Tower / Mirror", towerDelayed: true },
+{ id: "Council / Tower / NaughtyBoss", towerDelayed: true },
+
+{ id: "Absorbs / Hole in Sky" },
+{ id: "Absorbs / Canadia" },
+{ id: "Absorbs / Knoll" },
+{ id: "Absorbs / Gnomads" },
+{ id: "Absorbs / Palin" },
+{ id: "Absorbs / Irate Mariachi" },
+{ id: "Council / Tower / Keys / Heroes", towerDelayed: true }];
+
+
 var QuestRegistry = /*#__PURE__*/function () {
 
 
@@ -27967,6 +28318,13 @@ var QuestRegistry = /*#__PURE__*/function () {
           continue;
         }
 
+        if (
+        GreySettings.shouldAvoidTowerRequirements() &&
+        QuestRegistry.isTowerDelayed(_type))
+        {
+          continue;
+        }
+
         (0,external_kolmafia_namespaceObject.print)(
         "ERROR! No quest registered for the quest id '" + _type + "'",
         "red");
@@ -27985,6 +28343,13 @@ var QuestRegistry = /*#__PURE__*/function () {
         throw "Map already contains the quest '" + id + "'";
       }
 
+      if (
+      GreySettings.shouldAvoidTowerRequirements() &&
+      QuestRegistry.isTowerDelayed(questInfo.getId()))
+      {
+        return;
+      }
+
       this.map.set(id, questInfo);
       // TODO Add to map
 
@@ -27996,313 +28361,7 @@ var QuestRegistry = /*#__PURE__*/function () {
     } }, { key: "getQuestOrder", value:
 
     function getQuestOrder() {
-      // We get one non-combat at goblin basement from jellyfish
-      // Another non-combat at Black panther
-      // Goblin only has one -combat to speak of, and its not really worth much?
-      // Black is Car > Desert > Forest
-      var order = [
-      { id: "Quests / Council" },
-
-      { id: "Council / Toot" },
-      { id: "Misc / Initial Pulls" },
-      { id: "Misc / InitialStart" },
-      { id: "Misc / PowerLeveling" },
-      { id: "Misc / FortuneExp" },
-      { id: "Misc / Ghost Buster" },
-
-      { id: "CombatLocket / SystemSweep" },
-      { id: "CombatLocket / InfiniteLoop" },
-      { id: "Misc / FamEquip" },
-      { id: "Misc / JuneCleaver" },
-
-      { id: "NPC / Meatsmith" },
-      { id: "NPC / GnomeSkills" },
-      { id: "NPC / Painter" }, // Takes up to 3 advs so meh, not quest relevant either. Only supported if user starts it
-      { id: "NPC / Untinkerer" },
-      { id: "NPC / Baker" },
-      { id: "NPC / Druggie" },
-      { id: "NPC / Knoll Mayor" },
-      { id: "NPC / Doctor" },
-      { id: "Misc / Purchases" },
-      { id: "Misc / FriarExp" },
-      { id: "Misc / Moonsign" },
-      // These just make the absorbs prioritized higher
-      {
-        id: "Absorbs / Knoll",
-        testValid: () =>
-        (0,external_kolmafia_namespaceObject.knollAvailable)() && GreySettings.greyTuneMoonSpoon != null },
-
-      {
-        id: "Absorbs / Canadia",
-        testValid: () =>
-        (0,external_kolmafia_namespaceObject.canadiaAvailable)() && GreySettings.greyTuneMoonSpoon != null },
-
-      {
-        id: "Absorbs / Gnomads",
-        testValid: () =>
-        (0,external_kolmafia_namespaceObject.gnomadsAvailable)() && GreySettings.greyTuneMoonSpoon != null },
-
-
-      // We might want system sweep after all! This needs to be cleaned
-      { id: "Council / MacGruffin / HiddenCity / HiddenPark" },
-
-      { id: "Skills / Infinite Loop" },
-      { id: "Skills / System Sweep" },
-      { id: "Skills / Phase Shift" },
-      { id: "Skills / HPRegen" },
-      { id: "Skills / ScalingItem" },
-      { id: "Skills / ScalingMeat" },
-      { id: "Skills / DoubleNanovision" },
-      { id: "Misc / Short Cook Goose" },
-
-      { id: "Skills / ScalingDR" },
-      { id: "Skills / Conifer Polymers" },
-
-      // Vines are free kills, why not prioritize them to unlock zones
-      { id: "Council / MacGruffin / HiddenCity / Vines" },
-
-      { id: "Misc / ManorLights" },
-      { id: "Misc / UnlockDungeonsOfDoom" },
-      { id: "Skills / MPRegen" },
-
-      // We do this early so we can grab our hippy outfit asap
-      { id: "Boat / Junkyard" },
-      { id: "Boat / Vacation" },
-
-      // Always try to buy access to the shore, 8-9 adventures spent trying to farm stuff up?
-      { id: "Council / MacGruffin / Shore" },
-      { id: "Misc / MeatCar" },
-      { id: "Misc / BugbearBakery" },
-
-      // Get goblin done early so we can grab our first -combat skill
-      { id: "Council / Goblins / Outskirts" },
-      { id: "Council / Goblins / HaremOutfit" },
-
-      { id: "GoblinLabs / LabUnlock" },
-      { id: "GoblinLabs / MegUnlock" },
-
-      { id: "Council / MacGruffin / Vacation" },
-
-      { id: "Council / Larva" },
-
-      { id: "Council / Ice / Ore" },
-
-      // Get this done early so we can start flyering
-      { id: "Council / War / Frat Outfit" },
-      { id: "Council / War / Start" },
-      { id: "Council / War / Flyers" },
-
-      // OMG who cares about your stupid war
-      {
-        id: "Council / War / Filthworms" },
-
-
-      // We get +3 hot resist from raging bull
-      // +3 stench resist from pine bat
-      // And the other two skills are manor located
-      { id: "Manor / Chat" },
-      { id: "Manor / Kitchen" },
-      { id: "Manor / Billards" },
-      { id: "Manor / Bathroom" },
-      { id: "Manor / Gallery" },
-      { id: "Manor / Bedroom" },
-
-      // Do the king cos he's lonely, also has 2k meat
-      { id: "Council / Goblins / King" },
-
-      // Register these here, because we want to burn their backups in delay zones
-      { id: "Council / Tower / Keys / Heroes / FantasyBandit" },
-      { id: "Council / War / Lobsters" },
-
-      // Get friars done early so we can grab stuff from hell
-      { id: "Council / Friars / Heart" },
-      { id: "Council / Friars / Elbow" },
-      { id: "Council / Friars / Neck" },
-      { id: "Council / Friars / TurnIn" },
-
-      { id: "Misc / Latte / Fam Exp" },
-      { id: "Misc / Latte / Plus Combat" },
-
-      // If we have the skill, then this doesn't need prioritizing as such
-      {
-        id: "Council / MacGruffin / Black" },
-
-
-      { id: "Skills / Photonic Shroud" },
-      { id: "Misc / GrabZapWand" },
-
-      // Meh
-      { id: "Council / MacGruffin / HiddenCity / Boss" },
-      { id: "Council / MacGruffin / Temple / Unlock" },
-      { id: "Council / MacGruffin / Temple / GrabWool" },
-      { id: "Council / MacGruffin / Temple / Nostril" },
-      { id: "Council / MacGruffin / Temple / HiddenCity" },
-
-      // Now we do our bowling, we prioritize this because of special code that has the bowling ball with combat turns = 0
-      // We also prioritize it for double nanovision
-      { id: "Council / MacGruffin / HiddenCity / BookOfMatches" },
-      { id: "Council / MacGruffin / HiddenCity / Bowling" },
-
-      // Do library after we should have system sweep stuff
-      { id: "Manor / Library" },
-
-      // Crypt does give us meat hmm
-      { id: "Council / Crypt / Gravy Boat Pull" },
-      { id: "Council / Crypt / Sprinters" },
-      { id: "Council / Crypt / Eyes" },
-
-      { id: "Council / Bats / Sonars" },
-      { id: "Council / Bats / UnlockLeft" },
-      { id: "Council / Bats / Boss" },
-
-      // We've unlocked the left way, just do shen and hopefully we unlock right without actually burning extra turns
-      { id: "Council / MacGruffin / Shen / Meet" },
-      { id: "Council / MacGruffin / Shen / Bats" },
-      { id: "Council / MacGruffin / Shen / TurnIn" },
-
-      // Unlock ninja tower
-      { id: "Council / Ice / Trapper" },
-      { id: "Council / Ice / Goats" },
-
-      // Ninja power!
-      { id: "Council / MacGruffin / Shen / Ninjas" },
-
-      // Try unlock right bats if not unlocked
-      { id: "Council / Bats / UnlockRight" },
-
-      // Hunt for enchanted beans
-      { id: "Council / Beanstalk / EnchantedBean" },
-      { id: "Council / Beanstalk / Ship" },
-      { id: "Council / Beanstalk / Basement" },
-      { id: "Council / Beanstalk / Ground" },
-      // We're now trying to do the top stuff yay
-      { id: "Council / Beanstalk / Top" },
-
-      // If we still haven't unlocked from doing our top castle, lets try unlock our hole in sky
-      { id: "Council / Tower / Keys / HoleInSkyUnlock" },
-      // Oh wow, hole in sky unlocked but still no boss. Lets just do it manually.
-      { id: "Council / MacGruffin / Shen / Giants" },
-      { id: "Council / Tower / Keys / Star" },
-
-      { id: "Council / MacGruffin / Ron / Crowd" },
-      { id: "Council / MacGruffin / Ron / Zepp" },
-
-      // Palin needs Ron and Shen done
-      { id: "Council / MacGruffin / Palin / Book" },
-      { id: "Council / MacGruffin / Palin / WetStew" },
-      { id: "Council / MacGruffin / Palin / Boss" },
-      { id: "Skills / Piezoelectric Honk" },
-
-      // Ninja needs +combat, so delay it until we've finished Shen and grabbed our +combat skill from Palin
-      { id: "Council / Ice / Ninjas" },
-      // We earn a cold damage skill, so may as well. We also get meats
-      { id: "Council / Ice / Boss" },
-
-      // Given we earn nothing but meat, delays for days
-      { id: "Council / Bats / UnlockBoss" },
-
-      // We do shaman first to potentially grab extra accountant stuff
-      { id: "Council / MacGruffin / HiddenCity / Curses" },
-
-      { id: "Council / MacGruffin / HiddenCity / Accountants" },
-
-      // Meh
-      { id: "Council / MacGruffin / HiddenCity / Doctor" },
-
-      // Nothing interesting from desert and pyramid yawn
-      { id: "Council / MacGruffin / Desert / Compass" },
-
-      { id: "Council / MacGruffin / Desert / WormRide" },
-      { id: "Council / MacGruffin / Desert / Gnome" },
-      {
-        id: "Council / MacGruffin / Desert / StoneRose" },
-
-      {
-        id: "Council / MacGruffin / Desert / Explore" },
-
-
-      // Unlock cellar
-      { id: "Council / MacGruffin / Manor / Ballroom" },
-      { id: "Council / MacGruffin / Manor / Recipe" },
-      { id: "Council / MacGruffin / Manor / Soda" },
-      { id: "Council / MacGruffin / Manor / Wine" },
-      { id: "Council / MacGruffin / Manor / Bomb" },
-      { id: "Council / MacGruffin / Manor / Boss" },
-
-      // Nothing special from the top of the pyramid, but burn some turns here anyways
-      { id: "Council / MacGruffin / Pyramid / Top" },
-
-      // Alright, unlock the control room and the undying man. And keep going until you have enough rats
-      { id: "Council / MacGruffin / Pyramid / Middle" },
-      { id: "Council / MacGruffin / Pyramid / Wheel" },
-
-      // Given we earn nothing from crypt..
-      { id: "Council / Crypt / Rattling" },
-      { id: "Council / Crypt / DirtyMan" },
-      { id: "Council / Crypt / Boss" },
-
-      { id: "Skills / ColdDamage15" },
-      { id: "Skills / ColdDamage10" },
-
-      // Given that we earn nothing from peaks, just delay it until we should've hit our max +cold damage
-      { id: "Council / Peaks / CargoShortsSmut" },
-      { id: "Council / Peaks / Orcs" },
-      { id: "Council / Peaks / OilPeak" },
-      { id: "Council / Peaks / TwinPeak" },
-      { id: "Council / Peaks / AbooPeak" },
-      { id: "Council / Peaks / Lord" },
-
-      { id: "Council / War / Gremlins" },
-      { id: "Council / War / Gremlins / Burning Barrel" },
-      { id: "Council / War / Gremlins / Abandoned Refrigerator" },
-      { id: "Council / War / Gremlins / Old Tires" },
-      { id: "Council / War / Gremlins / Rusted Car" },
-
-      { id: "Council / War / Boss" },
-
-      // Tavern needs Larva done
-      { id: "Council / Tavern" },
-
-      { id: "Council / War / Battlefield" },
-
-      { id: "Council / MacGruffin / Pyramid / EdUndying" },
-
-      // Alright, this run is just about over kids. Lets finish it.
-      { id: "Council / Tower / Contests" },
-      { id: "Council / Tower / Maze" },
-
-      { id: "Council / Tower / Keys / Heroes / Pull and Zap Keys" },
-      { id: "Council / Tower / Keys / Heroes / ZapKeys" },
-      { id: "Council / Tower / Keys / Heroes / DailyDungeon" },
-      { id: "Council / Tower / Keys / Heroes / DeckOfCards" },
-      { id: "Council / Tower / Keys / Digital" },
-      { id: "Council / Tower / Keys / Skeleton" },
-
-      { id: "Council / War / Nuns" },
-
-      // By the time we hit this, we should 100% have our keys
-      { id: "Council / Tower / KeyDoor" },
-
-      { id: "Council / Tower / WallOfSkin" },
-
-      { id: "Council / Tower / WallOfMeat" },
-
-      { id: "Council / Tower / WallOfBones" },
-
-      { id: "Council / Tower / Shadow" },
-      { id: "Council / Tower / Mirror" },
-      { id: "Council / Tower / NaughtyBoss" },
-
-      { id: "Absorbs / Hole in Sky" },
-      { id: "Absorbs / Canadia" },
-      { id: "Absorbs / Knoll" },
-      { id: "Absorbs / Gnomads" },
-      { id: "Absorbs / Palin" },
-      { id: "Absorbs / Irate Mariachi" },
-      { id: "Council / Tower / Keys / Heroes" }];
-
-
-      var ordered = order.
+      var ordered = [].concat(order).
       filter((order) => order.testValid == null || order.testValid()).
       map((order) => order.id);
 
@@ -28323,6 +28382,12 @@ var QuestRegistry = /*#__PURE__*/function () {
         }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
 
       return quests;
+    } }], [{ key: "isTowerDelayed", value:
+
+    function isTowerDelayed(questType) {
+      return (
+        order.find((q) => q.id == questType && q.towerDelayed == true) != null);
+
     } }]);return QuestRegistry;}();
 ;// CONCATENATED MODULE: ./src/typings/TaskManager.ts
 function TaskManager_toConsumableArray(arr) {return TaskManager_arrayWithoutHoles(arr) || TaskManager_iterableToArray(arr) || TaskManager_unsupportedIterableToArray(arr) || TaskManager_nonIterableSpread();}function TaskManager_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskManager_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function TaskManager_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return TaskManager_arrayLikeToArray(arr);}function TaskManager_slicedToArray(arr, i) {return TaskManager_arrayWithHoles(arr) || TaskManager_iterableToArrayLimit(arr, i) || TaskManager_unsupportedIterableToArray(arr, i) || TaskManager_nonIterableRest();}function TaskManager_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskManager_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function TaskManager_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskManager_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskManager_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskManager_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskManager_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskManager_arrayLikeToArray(o, minLen);}function TaskManager_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskManager_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskManager_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskManager_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskManager_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskManager_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskManager_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} // The biggest failures are
@@ -31229,7 +31294,9 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
         // If we don't expect to be doing absorbs in the future..
         if (
         GreySettings.greyPrepareLevelingResources &&
-        (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) < 20)
+        (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) < 20 &&
+        (0,external_kolmafia_namespaceObject.absorbedMonsters)()["tomb asp"] == true &&
+        (0,external_kolmafia_namespaceObject.getProperty)("questL09Topping") == "finished")
         {
           AbsorbsProvider.remainingAdvAbsorbs =
           AbsorbsProvider.remainingAdvAbsorbs.filter(
@@ -31244,10 +31311,6 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
 
         replaceWith.push.apply(replaceWith, GreyAdventurer_toConsumableArray(this.adventureFinder.getRecommendedFamiliars()));
 
-        if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("camelSpit")) < 100) {
-          replaceWith.push(external_kolmafia_namespaceObject.Familiar.get("Melodramedary"));
-        }
-
         var robor = external_kolmafia_namespaceObject.Familiar.get("Robortender");
         var doRobor =
         (0,external_kolmafia_namespaceObject.getProperty)("_roboDrinks").includes("drive-by shooting") &&
@@ -31256,7 +31319,8 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
         var toLevelUp = [
         (0,external_kolmafia_namespaceObject.haveFamiliar)(robor) ? doRobor ? "Robortender" : "" : "Hobomonkey",
         "Jumpsuited Hound Dog",
-        "Pocket Professor"].
+        "Pocket Professor",
+        (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("camelSpit")) < 100 ? "Melodramedary" : ""].
 
         filter((f) => f.length > 0).
         map((f) => external_kolmafia_namespaceObject.Familiar.get(f)).
@@ -31563,7 +31627,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "f0bb89c";
+var lastCommitHash = "fcb02b6";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
