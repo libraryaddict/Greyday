@@ -69,6 +69,7 @@ export class SmutOrcs implements QuestInfo {
     "Tiny bowler",
   ].map((s) => Item.get(s));
   plastered: Monster = Monster.get("plastered frat orc");
+  noise: Skill = Skill.get("Grey Noise");
 
   level(): number {
     return 7;
@@ -103,7 +104,6 @@ export class SmutOrcs implements QuestInfo {
 
     if (
       status < 0 ||
-      !haveSkill(Skill.get("Grey Noise")) ||
       myMp() < 15 ||
       !AbsorbsProvider.getAbsorbedMonsters().includes(this.plastered)
     ) {
@@ -114,14 +114,23 @@ export class SmutOrcs implements QuestInfo {
       if (this.lastColdCheck < turnsPlayed() - 5) {
         this.lastColdCheck = turnsPlayed();
 
+        const compare: [string, number][] = [];
+
         maximize("cold dmg 10 min -ML 70 min -tie", true);
         const melee = numericModifier("Generated:_spec", "Cold Damage");
+        compare.push(["cold dmg", melee]);
 
-        maximize("cold spell dmg 10 min -ML 70 min -tie", true);
-        const spell = numericModifier("Generated:_spec", "Cold Spell Damage");
+        if (haveSkill(this.noise)) {
+          maximize("cold spell dmg 10 min -ML 70 min -tie", true);
+          const spell = numericModifier("Generated:_spec", "Cold Spell Damage");
 
-        this.hasEnoughCold = Math.max(melee, spell) >= 5;
-        this.lastColdMaximize = spell > melee ? "cold spell dmg" : "cold dmg";
+          compare.push(["cold spell dmg", spell]);
+        }
+
+        // Sort from highest to lowest
+        compare.sort(([, c1], [, c2]) => c2 - c1);
+        this.hasEnoughCold = compare[0][1] >= 5;
+        this.lastColdMaximize = compare[0][0];
       }
 
       if (!this.hasEnoughCold) {
