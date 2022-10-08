@@ -1,6 +1,7 @@
 import { availableAmount, Item, Location, print, visitUrl } from "kolmafia";
 import { greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
+import { deleteJunkKmails } from "../../utils/KmailUtils";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -97,6 +98,8 @@ export class QuestManor implements QuestInfo {
         visitUrl("place.php?whichplace=manor2&action=manor2_ladys");
         greyAdv(this.ballroom);
         // visitUrl("place.php?whichplace=manor3&action=manor3_ladys");
+
+        deleteJunkKmails();
       },
     };
   }
@@ -117,6 +120,8 @@ export class QuestManor implements QuestInfo {
         print("Lets chat up the old lady");
         visitUrl("place.php?whichplace=manor1&action=manor1_ladys");
         visitUrl("place.php?whichplace=manor2&action=manor2_ladys");
+
+        deleteJunkKmails();
       },
     };
   }

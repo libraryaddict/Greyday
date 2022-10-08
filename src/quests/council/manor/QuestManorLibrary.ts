@@ -16,6 +16,7 @@ import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { currentPredictions } from "../../../utils/GreyUtils";
+import { deleteJunkKmails } from "../../../utils/KmailUtils";
 import { Macro } from "../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../utils/Properties";
 import {
@@ -176,6 +177,8 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
 
         visitUrl("place.php?whichplace=manor1&action=manor1_ladys");
         visitUrl("place.php?whichplace=manor2&action=manor2_ladys");
+
+        deleteJunkKmails();
       },
     };
   }

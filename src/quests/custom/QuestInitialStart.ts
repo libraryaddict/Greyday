@@ -25,6 +25,7 @@ import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreySettings } from "../../utils/GreySettings";
+import { deleteJunkKmails } from "../../utils/KmailUtils";
 import { PropertyManager } from "../../utils/Properties";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -192,6 +193,8 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
           } finally {
             props.resetAll();
           }
+
+          deleteJunkKmails();
         }
 
         if (
