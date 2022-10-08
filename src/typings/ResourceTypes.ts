@@ -829,9 +829,18 @@ export function getResourcesLeft(
         return 0;
       }
 
-      return (
-        5 - (assumeUnused ? 0 : toInt(getProperty("_spikolodonSpikeUses")))
-      );
+      if (assumeUnused) {
+        return 5;
+      }
+
+      let spikesRemaining = 5 - toInt(getProperty("_spikolodonSpikeUses"));
+
+      // Don't count a primed resource as used yet!
+      if (toBoolean(getProperty(parkaProp))) {
+        spikesRemaining++;
+      }
+
+      return spikesRemaining;
     case "Pillkeeper":
       if (availableAmount(pillkeeper) == 0) {
         return 0;
@@ -848,10 +857,19 @@ export function getResourcesLeft(
         return 0;
       }
 
-      return (
-        3 -
-        (assumeUnused ? 0 : toInt(getProperty("_sourceTerminalPortscanUses")))
-      );
+      if (assumeUnused) {
+        return 3;
+      }
+
+      let scansRemaining =
+        3 - toInt(getProperty("_sourceTerminalPortscanUses"));
+
+      // If resource is primed, don't count this resource as done yet!
+      if (toBoolean(getProperty(portscanProp))) {
+        scansRemaining++;
+      }
+
+      return scansRemaining;
     default:
       throw "No idea what the resource " + resourceType + " is.";
   }

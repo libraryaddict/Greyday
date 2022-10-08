@@ -755,7 +755,6 @@ export class AdventureFinder {
 
     adv.run = () => {
       run();
-      primed.path.addUsedResource(primed.resource);
       primed.resource.unprime();
       resetPrimedResource();
     };

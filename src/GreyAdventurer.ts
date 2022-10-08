@@ -46,6 +46,7 @@ import { TaskSellCrap } from "./tasks/TaskSellCrap";
 import { TaskColdMedicineCabinet } from "./tasks/TaskMedicineCabinet";
 import {
   getResourcesLeft,
+  ResourceCategory,
   ResourceId,
   ResourceIds,
 } from "./typings/ResourceTypes";
@@ -168,13 +169,7 @@ export class GreyAdventurer {
         continue;
       }
 
-      if (
-        getPrimedResource() != null &&
-        getPrimedResource().resource.primed() &&
-        getPrimedResource().resource.resource == id
-      ) {
-        continue;
-      } else if (id == "Yellow Ray") {
+      if (id == "Yellow Ray") {
         continue;
       } else if (id == "Pull" && getResourcesLeft(id) > 50) {
         continue;
@@ -196,13 +191,25 @@ export class GreyAdventurer {
 
     print(
       `These resources were allowed to be used: ${snapshotBeforeRun.resources.map(
-        (r) => r.name + " (" + r.type + ", uses " + (r.resourcesUsed ?? 1) + ")"
+        (r) =>
+          r.name +
+          " (" +
+          ResourceCategory[r.type] +
+          ", uses " +
+          (r.resourcesUsed ?? 1) +
+          ")"
       )}`,
       "red"
     );
     print(
       `These resources were marked as used: ${changedBy.resources.map(
-        (r) => r.name + " (" + r.type + ", uses " + (r.resourcesUsed ?? 1) + ")"
+        (r) =>
+          r.name +
+          " (" +
+          ResourceCategory[r.type] +
+          ", uses " +
+          (r.resourcesUsed ?? 1) +
+          ")"
       )}`,
       "red"
     );
