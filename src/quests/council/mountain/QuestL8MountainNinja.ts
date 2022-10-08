@@ -9,8 +9,13 @@ import {
   haveSkill,
   Skill,
   Monster,
+  myEffects,
+  toEffect,
 } from "kolmafia";
-import { hasCombatSkillReady } from "../../../GreyAdventurer";
+import {
+  hasCombatSkillReady,
+  hasNonCombatSkillActive,
+} from "../../../GreyAdventurer";
 import { PossiblePath } from "../../../typings/TaskInfo";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -26,6 +31,7 @@ import { MountainStatus } from "../QuestL8IcePeak";
 export class QuestL8MountainNinja implements QuestInfo {
   ninja: Location = Location.get("Lair of the Ninja Snowmen");
   assassin: Monster = Monster.get("Ninja snowman assassin");
+  canHitCombat: boolean;
 
   getId(): QuestType {
     return "Council / Ice / Ninjas";
@@ -48,6 +54,33 @@ export class QuestL8MountainNinja implements QuestInfo {
 
     if (status < MountainStatus.GET_OUTFIT) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (
+      this.canHitCombat == null &&
+      [...Object.keys(myEffects())]
+        .map((e) => toEffect(e))
+        .find((e) => numericModifier(e, "Combat Rate") != 0) == null
+    ) {
+      maximize("+combat -tie", true);
+
+      this.canHitCombat =
+        numericModifier("Generated:_spec", "Combat Rate") >= 25;
+    } else if (this.canHitCombat === false) {
+      // If we're running +25 combat with no effects, then yes
+      this.canHitCombat =
+        numericModifier("Combat Rate") >= 25 &&
+        [...Object.keys(myEffects())]
+          .map((e) => toEffect(e))
+          .find((e) => numericModifier(e, "Combat Rate") > 0) == null;
+    }
+
+    if (hasNonCombatSkillActive()) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (this.canHitCombat || numericModifier("Combat Rate") >= 25) {
+      return QuestStatus.READY;
     }
 
     // If we've reached snowman time but don't have the skill
