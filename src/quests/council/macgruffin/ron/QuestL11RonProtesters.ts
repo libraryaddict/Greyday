@@ -2,9 +2,11 @@ import {
   availableAmount,
   Effect,
   equippedAmount,
+  Familiar,
   getProperty,
   gnomadsAvailable,
   haveEffect,
+  haveFamiliar,
   haveSkill,
   Item,
   Location,
@@ -45,6 +47,7 @@ class PossiblePathExtra extends PossiblePath {
 export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
   proLoc: Location = Location.get("A Mob Of Zeppelin Protesters");
   deck: Item = Item.get("deck of lewd playing cards");
+  sleazeBook: Item = Item.get("Disturbing Fanfic");
   lyrndHat: Item = Item.get("lynyrdskin cap");
   lyrndPants: Item = Item.get("lynyrdskin breeches");
   lyrndShirt: Item = Item.get("lynyrdskin tunic");
@@ -69,6 +72,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
   clover: Item = Item.get("11-Leaf Clover");
   lucky: Effect = Effect.get("Lucky!");
   paths: PossiblePath[] = [];
+  lefthandMan: Familiar = Familiar.get("left-hand man");
 
   // Possible paths.
   // We have sleaze, lynard, clovers
@@ -364,12 +368,15 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     const runSleaze = this.getSleazeScares() >= this.getLynyrdScares();
     const str = runSleaze
       ? "Sleaze Spell Damage +Sleaze Damage"
-      : this.lyrndCostume.map((i) => "+equip " + i).join(" ");
+      : this.lyrndCostume.map((i) => "+equip " + i).join(" ") +
+        (haveFamiliar(this.lefthandMan) ? " +switch left-hand man" : "");
     const outfit = new GreyOutfit(str + " -tie");
 
     return {
       location: null,
       outfit: outfit,
+      familiar: haveFamiliar(this.lefthandMan) ? this.lefthandMan : null,
+      disableFamOverride: haveFamiliar(this.lefthandMan),
       run: () => {
         while (
           path.canUse(ResourceCategory.CLOVER) &&
@@ -448,7 +455,19 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
       outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");
     }
 
-    if (
+    const forceMan =
+      this.toAbsorb.length == 0 &&
+      haveFamiliar(this.lefthandMan) &&
+      availableAmount(this.umbrella) +
+        availableAmount(this.deck) +
+        Math.min(1, availableAmount(this.sleazeBook)) >=
+        2;
+
+    if (forceMan) {
+      if (availableAmount(this.umbrella) > 0) {
+        outfit.addItem(this.umbrella);
+      }
+    } else if (
       availableAmount(this.umbrella) > 0 &&
       !path.equips.includes(this.deck)
     ) {
@@ -460,8 +479,10 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     return {
       location: this.proLoc,
       outfit: outfit,
-      olfaction: [this.cultist],
+      olfaction: forceMan ? null : [this.cultist],
       mayFreeRun: false,
+      familiar: forceMan ? this.lefthandMan : null,
+      disableFamOverride: forceMan,
       run: () => {
         const props = new PropertyManager();
 
