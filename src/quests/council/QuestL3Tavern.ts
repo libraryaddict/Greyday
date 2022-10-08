@@ -64,7 +64,7 @@ export class QuestL3Tavern implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (myLevel() < 20) {
+    if (myLevel() < 18) {
       return QuestStatus.FASTER_LATER;
     }
 

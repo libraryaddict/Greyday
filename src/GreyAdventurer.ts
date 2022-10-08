@@ -1,4 +1,5 @@
 import {
+  absorbedMonsters,
   availableAmount,
   bufferToFile,
   Effect,
@@ -13,6 +14,7 @@ import {
   itemAmount,
   Location,
   maximize,
+  Monster,
   myAscensions,
   myMeat,
   myMp,
@@ -439,7 +441,9 @@ export class GreyAdventurer {
       // If we don't expect to be doing absorbs in the future..
       if (
         GreySettings.greyPrepareLevelingResources &&
-        familiarWeight(this.goose) < 20
+        familiarWeight(this.goose) < 20 &&
+        absorbedMonsters()["tomb asp"] == true &&
+        getProperty("questL09Topping") == "finished"
       ) {
         AbsorbsProvider.remainingAdvAbsorbs =
           AbsorbsProvider.remainingAdvAbsorbs.filter(
