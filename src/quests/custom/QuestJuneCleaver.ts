@@ -10,6 +10,7 @@ import {
   equippedAmount,
   maximize,
   turnsPlayed,
+  haveEffect,
 } from "kolmafia";
 import { greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -19,6 +20,7 @@ import { QuestType } from "../QuestTypes";
 export class QuestJuneCleaver implements QuestInfo {
   warren: Location = Location.get("The Dire Warren");
   cleaver: Item = Item.get("June Cleaver");
+  teleportis: Effect = Effect.get("Teleportitis");
 
   getId(): QuestType {
     return "Misc / JuneCleaver";
@@ -39,6 +41,10 @@ export class QuestJuneCleaver implements QuestInfo {
   status(): QuestStatus {
     if (availableAmount(this.cleaver) == 0) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (haveEffect(this.teleportis) > 0) {
+      return QuestStatus.NOT_READY;
     }
 
     const fightsLeft = toInt(getProperty("_juneCleaverFightsLeft"));
