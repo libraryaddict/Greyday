@@ -2059,9 +2059,18 @@ resourceType)
         return 0;
       }
 
-      return (
-        5 - (assumeUnused ? 0 : (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_spikolodonSpikeUses"))));
+      if (assumeUnused) {
+        return 5;
+      }
 
+      var spikesRemaining = 5 - (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_spikolodonSpikeUses"));
+
+      // Don't count a primed resource as used yet!
+      if ((0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)(parkaProp))) {
+        spikesRemaining++;
+      }
+
+      return spikesRemaining;
     case "Pillkeeper":
       if ((0,external_kolmafia_namespaceObject.availableAmount)(pillkeeper) == 0) {
         return 0;
@@ -2078,10 +2087,19 @@ resourceType)
         return 0;
       }
 
-      return (
-        3 - (
-        assumeUnused ? 0 : (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_sourceTerminalPortscanUses"))));
+      if (assumeUnused) {
+        return 3;
+      }
 
+      var scansRemaining =
+      3 - (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_sourceTerminalPortscanUses"));
+
+      // If resource is primed, don't count this resource as done yet!
+      if ((0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)(portscanProp))) {
+        scansRemaining++;
+      }
+
+      return scansRemaining;
     default:
       throw "No idea what the resource " + resourceType + " is.";}
 
@@ -2545,9 +2563,6 @@ path)
     }
 
     newSnapshot.resources.push(resource);
-    (0,external_kolmafia_namespaceObject.print)(
-    "Removing " + resource.name + " x " + ResourceCategory[resource.type]);
-
   });
 
   if (newSnapshot.resources.length > 0) {
@@ -22206,6 +22221,65 @@ var QuestCouncil = /*#__PURE__*/function () {
     function getChildren() {
       return this.quests;
     } }]);return QuestCouncil;}();
+;// CONCATENATED MODULE: ./src/utils/KmailUtils.ts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getKmails() {var caller = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "GreyDay";
+  var buffer = (0,external_kolmafia_namespaceObject.visitUrl)(
+  "api.php?pwd&what=kmail&count=100&for=" + (0,external_kolmafia_namespaceObject.urlEncode)(caller));
+
+
+  var kmails = JSON.parse(buffer);
+
+  kmails.forEach((mail) => {
+    mail.delete = () => {
+      var del =
+      "messages.php?the_action=delete&box=Inbox&pwd&sel" + mail.id + "=on";
+
+      return (0,external_kolmafia_namespaceObject.visitUrl)(del).includes("1 message deleted.");
+    };
+  });
+
+  return kmails;
+}
+
+function isJunkKmail(kmail) {
+  return (
+    kmail.fromname == "Lady Spookyraven's Ghost" ||
+    kmail.fromname == "The Loathing Postal Service" &&
+    kmail.message.includes("telegram from Lady Spookyraven"));
+
+}
+
+function deleteJunkKmails() {
+  getKmails().forEach((mail) => {
+    if (!isJunkKmail(mail)) {
+      return;
+    }
+
+    (0,external_kolmafia_namespaceObject.print)("Deleting junk kmail from " + mail.fromname, "gray");
+
+    var state = mail.delete();
+
+    if (state) {
+      return;
+    }
+
+    (0,external_kolmafia_namespaceObject.print)("Failed to delete kmail.", "red");
+  });
+}
 ;// CONCATENATED MODULE: ./src/quests/council/manor/QuestManorBathroom.ts
 function QuestManorBathroom_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestManorBathroom_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestManorBathroom_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestManorBathroom_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestManorBathroom_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestManorBathroom_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -22999,6 +23073,7 @@ function QuestManorLibrary_classCallCheck(instance, Constructor) {if (!(instance
 
 
 
+
 var QuestManorLibrary = /*#__PURE__*/function (_TaskInfo) {QuestManorLibrary_inherits(QuestManorLibrary, _TaskInfo);var _super = QuestManorLibrary_createSuper(QuestManorLibrary);function QuestManorLibrary() {var _this;QuestManorLibrary_classCallCheck(this, QuestManorLibrary);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestManorLibrary_defineProperty(QuestManorLibrary_assertThisInitialized(_this), "library",
     external_kolmafia_namespaceObject.Location.get("The Haunted Library"));QuestManorLibrary_defineProperty(QuestManorLibrary_assertThisInitialized(_this), "killingJar",
     external_kolmafia_namespaceObject.Item.get("Killing Jar"));QuestManorLibrary_defineProperty(QuestManorLibrary_assertThisInitialized(_this), "key",
@@ -23149,6 +23224,8 @@ var QuestManorLibrary = /*#__PURE__*/function (_TaskInfo) {QuestManorLibrary_inh
 
           (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=manor1&action=manor1_ladys");
           (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=manor2&action=manor2_ladys");
+
+          deleteJunkKmails();
         } };
 
     } }, { key: "getLocations", value:
@@ -23158,6 +23235,7 @@ var QuestManorLibrary = /*#__PURE__*/function (_TaskInfo) {QuestManorLibrary_inh
     } }]);return QuestManorLibrary;}(TaskInfo);
 ;// CONCATENATED MODULE: ./src/quests/council/QuestManor.ts
 function QuestManor_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestManor_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestManor_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestManor_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestManor_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestManor_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -23251,6 +23329,8 @@ var QuestManor = /*#__PURE__*/function () {function QuestManor() {QuestManor_cla
           (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=manor2&action=manor2_ladys");
           greyAdv(this.ballroom);
           // visitUrl("place.php?whichplace=manor3&action=manor3_ladys");
+
+          deleteJunkKmails();
         } };
 
     } }, { key: "getLocations", value:
@@ -23271,6 +23351,8 @@ var QuestManor = /*#__PURE__*/function () {function QuestManor() {QuestManor_cla
           (0,external_kolmafia_namespaceObject.print)("Lets chat up the old lady");
           (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=manor1&action=manor1_ladys");
           (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=manor2&action=manor2_ladys");
+
+          deleteJunkKmails();
         } };
 
     } }]);return QuestManor;}();var
@@ -25149,6 +25231,7 @@ function QuestInitialStart_createForOfIteratorHelper(o, allowArrayLike) {var it 
 
 
 
+
 var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inherits(QuestInitialStart, _TaskInfo);var _super = QuestInitialStart_createSuper(QuestInitialStart);function QuestInitialStart() {var _this;QuestInitialStart_classCallCheck(this, QuestInitialStart);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestInitialStart_defineProperty(QuestInitialStart_assertThisInitialized(_this), "familiar",
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestInitialStart_defineProperty(QuestInitialStart_assertThisInitialized(_this), "equip",
     external_kolmafia_namespaceObject.Item.get("Grey Down Vest"));QuestInitialStart_defineProperty(QuestInitialStart_assertThisInitialized(_this), "desiredLevel", void 0);QuestInitialStart_defineProperty(QuestInitialStart_assertThisInitialized(_this), "weightRequired", void 0);QuestInitialStart_defineProperty(QuestInitialStart_assertThisInitialized(_this), "spaceBlanket",
@@ -25311,6 +25394,8 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
             } finally {
               props.resetAll();
             }
+
+            deleteJunkKmails();
           }
 
           if (
@@ -25339,7 +25424,8 @@ function QuestJuneCleaver_classCallCheck(instance, Constructor) {if (!(instance 
 
 var QuestJuneCleaver = /*#__PURE__*/function () {function QuestJuneCleaver() {QuestJuneCleaver_classCallCheck(this, QuestJuneCleaver);QuestJuneCleaver_defineProperty(this, "warren",
     external_kolmafia_namespaceObject.Location.get("The Dire Warren"));QuestJuneCleaver_defineProperty(this, "cleaver",
-    external_kolmafia_namespaceObject.Item.get("June Cleaver"));}QuestJuneCleaver_createClass(QuestJuneCleaver, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("June Cleaver"));QuestJuneCleaver_defineProperty(this, "teleportis",
+    external_kolmafia_namespaceObject.Effect.get("Teleportitis"));}QuestJuneCleaver_createClass(QuestJuneCleaver, [{ key: "getId", value:
 
     function getId() {
       return "Misc / JuneCleaver";
@@ -25360,6 +25446,10 @@ var QuestJuneCleaver = /*#__PURE__*/function () {function QuestJuneCleaver() {Qu
     function status() {
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.cleaver) == 0) {
         return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.haveEffect)(this.teleportis) > 0) {
+        return QuestStatus.NOT_READY;
       }
 
       var fightsLeft = (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverFightsLeft"));
@@ -29563,22 +29653,26 @@ var AdventureFinder = /*#__PURE__*/function () {
 
       }
 
-      primed.resource.unprime();
-      resetPrimedResource();
+      var adv = primed.quest.run(primed.path);
+      var run = adv.run;
+
+      adv.run = () => {
+        run();
+        primed.resource.unprime();
+        resetPrimedResource();
+      };
 
       var toReturn = {
         quest: primed.quest,
         path: primed.path,
         locationInfo: null,
-        adventure: primed.quest.run(primed.path),
+        adventure: adv,
         status: status,
         orbStatus: OrbStatus.IGNORED,
         considerPriority: ConsiderPriority.INSISTS_ON_BEING_DONE,
         mayFreeRun: false,
         freeRun: () => false };
 
-
-      primed.path.addUsedResource(primed.resource);
 
       return toReturn;
     }
@@ -30538,8 +30632,13 @@ var TaskAutumnaton = /*#__PURE__*/function () {
     (0,external_kolmafia_namespaceObject.visitUrl)("desc_item.php?whichitem=174185886");
     this.item = external_kolmafia_namespaceObject.Item.all().find((i) => i.descid == "174185886");
 
-    if (this.item == null || this.item.name == null || !this.item.name.includes("aton"))
-    this.item = null;
+    if (
+    this.item == null ||
+    this.item.name == null ||
+    !this.item.name.includes("aton"))
+    {
+      this.item = null;
+    }
 
     this.createItems();
   }TaskAutumnaton_createClass(TaskAutumnaton, [{ key: "run", value:
@@ -30689,6 +30788,16 @@ var TaskAutumnaton = /*#__PURE__*/function () {
         5 });
 
 
+      // If we want a drum machine, have turned in stone rose, yet have not turned in drum machine..
+      this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("The Oasis"),
+        item: external_kolmafia_namespaceObject.Item.get("Drum Machine"),
+        amount: 1,
+        viable: () =>
+        ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("gnasirProgress")) & 1) == 1 &&
+        ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("gnasirProgress")) & 16) != 16 });
+
+
       this.toGrab.push({
         loc: external_kolmafia_namespaceObject.Location.get("The Haunted Library"),
         item: external_kolmafia_namespaceObject.Item.get("tattered scrap of paper"),
@@ -30833,13 +30942,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
             continue;
           }
 
-          if (
-          getPrimedResource() != null &&
-          getPrimedResource().resource.primed() &&
-          getPrimedResource().resource.resource == id)
-          {
-            continue;
-          } else if (id == "Yellow Ray") {
+          if (id == "Yellow Ray") {
             continue;
           } else if (id == "Pull" && getResourcesLeft(id) > 50) {
             continue;
@@ -30861,13 +30964,25 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
 
       (0,external_kolmafia_namespaceObject.print)("These resources were allowed to be used: ".concat(
       snapshotBeforeRun.resources.map(
-      (r) => {var _r$resourcesUsed;return r.name + " (" + r.type + ", uses " + ((_r$resourcesUsed = r.resourcesUsed) !== null && _r$resourcesUsed !== void 0 ? _r$resourcesUsed : 1) + ")";})),
+      (r) => {var _r$resourcesUsed;return (
+          r.name +
+          " (" +
+          ResourceCategory[r.type] +
+          ", uses " + ((_r$resourcesUsed =
+          r.resourcesUsed) !== null && _r$resourcesUsed !== void 0 ? _r$resourcesUsed : 1) +
+          ")");})),
 
       "red");
 
       (0,external_kolmafia_namespaceObject.print)("These resources were marked as used: ".concat(
       changedBy.resources.map(
-      (r) => {var _r$resourcesUsed2;return r.name + " (" + r.type + ", uses " + ((_r$resourcesUsed2 = r.resourcesUsed) !== null && _r$resourcesUsed2 !== void 0 ? _r$resourcesUsed2 : 1) + ")";})),
+      (r) => {var _r$resourcesUsed2;return (
+          r.name +
+          " (" +
+          ResourceCategory[r.type] +
+          ", uses " + ((_r$resourcesUsed2 =
+          r.resourcesUsed) !== null && _r$resourcesUsed2 !== void 0 ? _r$resourcesUsed2 : 1) +
+          ")");})),
 
       "red");
 
@@ -31431,7 +31546,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "e4ce9ac";
+var lastCommitHash = "fcbf9ea";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
