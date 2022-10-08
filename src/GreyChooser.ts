@@ -750,22 +750,27 @@ export class AdventureFinder {
       );
     }
 
-    primed.resource.unprime();
-    resetPrimedResource();
+    const adv = primed.quest.run(primed.path);
+    const run = adv.run;
+
+    adv.run = () => {
+      run();
+      primed.path.addUsedResource(primed.resource);
+      primed.resource.unprime();
+      resetPrimedResource();
+    };
 
     const toReturn = {
       quest: primed.quest,
       path: primed.path,
       locationInfo: null,
-      adventure: primed.quest.run(primed.path),
+      adventure: adv,
       status: status,
       orbStatus: OrbStatus.IGNORED,
       considerPriority: ConsiderPriority.INSISTS_ON_BEING_DONE,
       mayFreeRun: false,
       freeRun: () => false,
     };
-
-    primed.path.addUsedResource(primed.resource);
 
     return toReturn;
   }
