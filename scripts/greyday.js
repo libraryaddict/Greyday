@@ -7381,7 +7381,8 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
     external_kolmafia_namespaceObject.Effect.get("Once-Cursed"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "curse2",
     external_kolmafia_namespaceObject.Effect.get("Twice-Cursed"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "curse3",
     external_kolmafia_namespaceObject.Effect.get("Thrice-Cursed"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "blur",
-    external_kolmafia_namespaceObject.Monster.get("Blur"));return _this;}QuestL11DesertExplore_createClass(QuestL11DesertExplore, [{ key: "createPaths", value:
+    external_kolmafia_namespaceObject.Monster.get("Blur"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "hooks",
+    external_kolmafia_namespaceObject.Item.get("worm-riding hooks"));return _this;}QuestL11DesertExplore_createClass(QuestL11DesertExplore, [{ key: "createPaths", value:
 
     function createPaths(assumeUnstarted) {
       this.paths = [];
@@ -7422,6 +7423,10 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
 
     function mustBeDone() {
       if ((0,external_kolmafia_namespaceObject.haveEffect)(this.hydrated) == 0 || this.getExploredRemaining() <= 0) {
+        return false;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.hooks) > 0) {
         return false;
       }
 
@@ -7942,6 +7947,7 @@ function QuestL11DesertWormRide_classCallCheck(instance, Constructor) {if (!(ins
 
 
 
+
 var QuestL11DesertWormRide = /*#__PURE__*/function () {function QuestL11DesertWormRide() {QuestL11DesertWormRide_classCallCheck(this, QuestL11DesertWormRide);QuestL11DesertWormRide_defineProperty(this, "hooks",
     external_kolmafia_namespaceObject.Item.get("worm-riding hooks"));QuestL11DesertWormRide_defineProperty(this, "drum",
     external_kolmafia_namespaceObject.Item.get("Drum Machine"));QuestL11DesertWormRide_defineProperty(this, "oasis",
@@ -8011,7 +8017,9 @@ var QuestL11DesertWormRide = /*#__PURE__*/function () {function QuestL11DesertWo
     } }, { key: "mustBeDone", value:
 
     function mustBeDone() {
-      return true;
+      var pred = currentPredictions();
+
+      return !pred.has(this.oasis) || pred.get(this.oasis) == this.blur;
     } }, { key: "free", value:
 
     function free() {
@@ -31546,7 +31554,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "fcbf9ea";
+var lastCommitHash = "b2e8b88";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
