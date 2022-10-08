@@ -383,6 +383,7 @@ export class QuestRegistry {
 
       if (
         GreySettings.shouldAvoidTowerRequirements() &&
+        !GreySettings.greyReachedTower &&
         QuestRegistry.isTowerDelayed(type)
       ) {
         continue;
@@ -408,6 +409,7 @@ export class QuestRegistry {
 
     if (
       GreySettings.shouldAvoidTowerRequirements() &&
+      !GreySettings.greyReachedTower &&
       QuestRegistry.isTowerDelayed(questInfo.getId())
     ) {
       return;
