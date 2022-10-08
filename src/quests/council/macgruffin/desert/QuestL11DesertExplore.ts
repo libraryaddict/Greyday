@@ -64,6 +64,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
   curse2: Effect = Effect.get("Twice-Cursed");
   curse3: Effect = Effect.get("Thrice-Cursed");
   blur: Monster = Monster.get("Blur");
+  hooks: Item = Item.get("worm-riding hooks");
 
   createPaths(assumeUnstarted: boolean) {
     this.paths = [];
@@ -104,6 +105,10 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
 
   mustBeDone(): boolean {
     if (haveEffect(this.hydrated) == 0 || this.getExploredRemaining() <= 0) {
+      return false;
+    }
+
+    if (availableAmount(this.hooks) > 0) {
       return false;
     }
 

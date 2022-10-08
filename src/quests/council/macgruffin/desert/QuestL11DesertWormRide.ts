@@ -14,6 +14,7 @@ import {
 } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { currentPredictions } from "../../../../utils/GreyUtils";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -91,7 +92,9 @@ export class QuestL11DesertWormRide implements QuestInfo {
   }
 
   mustBeDone(): boolean {
-    return true;
+    const pred = currentPredictions();
+
+    return !pred.has(this.oasis) || pred.get(this.oasis) == this.blur;
   }
 
   free(): boolean {
