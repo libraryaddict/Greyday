@@ -5489,7 +5489,11 @@ settings)
 
       if (match != null) {
         (0,external_kolmafia_namespaceObject.print)(
-        "Autumn-aton will be back in " + match[1] + " adventures..",
+        "Autumn-aton will be back from '" +
+        (0,external_kolmafia_namespaceObject.getProperty)("autumnatonQuestLocation") +
+        "' in " +
+        match[1] +
+        " adventures..",
         "gray");
 
       }
@@ -18824,7 +18828,7 @@ var QuestL5GoblinHarem = /*#__PURE__*/function (_TaskInfo) {QuestL5GoblinHarem_i
     function status(path) {
       if (
       (0,external_kolmafia_namespaceObject.outfitPieces)("knob Goblin Harem Girl Disguise").find(
-      (i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0) !=
+      (i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0) ==
       null)
       {
         return QuestStatus.COMPLETED;
@@ -20320,6 +20324,7 @@ function QuestL8MountainNinja_toConsumableArray(arr) {return QuestL8MountainNinj
 
 
 
+
 var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNinja() {QuestL8MountainNinja_classCallCheck(this, QuestL8MountainNinja);QuestL8MountainNinja_defineProperty(this, "ninja",
     external_kolmafia_namespaceObject.Location.get("Lair of the Ninja Snowmen"));QuestL8MountainNinja_defineProperty(this, "assassin",
     external_kolmafia_namespaceObject.Monster.get("Ninja snowman assassin"));QuestL8MountainNinja_defineProperty(this, "canHitCombat", void 0);}QuestL8MountainNinja_createClass(QuestL8MountainNinja, [{ key: "getId", value:
@@ -20354,7 +20359,7 @@ var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNin
       map((e) => (0,external_kolmafia_namespaceObject.toEffect)(e)).
       find((e) => (0,external_kolmafia_namespaceObject.numericModifier)(e, "Combat Rate") != 0) == null)
       {
-        (0,external_kolmafia_namespaceObject.maximize)("+combat -tie", true);
+        (0,external_kolmafia_namespaceObject.maximize)("+combat -acc3 -tie", true);
 
         this.canHitCombat =
         (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Combat Rate") >= 25;
@@ -20407,12 +20412,15 @@ var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNin
       }
 
       var outfit = new GreyOutfit().setPlusCombat();
+      outfit.initWeight = 0.5;
 
       return {
         location: this.ninja,
         outfit: outfit,
         freeRun: (monster) => monster != this.assassin,
         run: () => {
+          restoreHPTo(70);
+
           greyAdv(this.ninja, outfit);
         } };
 
@@ -21149,28 +21157,28 @@ var MurderHandler = /*#__PURE__*/function () {function MurderHandler() {QuestL9M
         return QuestStatus.COMPLETED;
       }
 
-      if (!hasNonCombatSkillsReady()) {
-        return QuestStatus.FASTER_LATER;
-      }
+      var status = hasNonCombatSkillsReady() ?
+      QuestStatus.READY :
+      QuestStatus.FASTER_LATER;
 
       if (this.needsStench() && (0,external_kolmafia_namespaceObject.elementalResistance)(external_kolmafia_namespaceObject.Element.get("stench")) >= 4) {
-        return QuestStatus.READY;
+        return status;
       }
 
       if (this.needsFood() && (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Gravitational Compression"))) {
-        return QuestStatus.READY;
+        return status;
       }
 
       if (this.needsJar()) {
         this.createJar();
 
         if (this.hasJar()) {
-          return QuestStatus.READY;
+          return status;
         }
       }
 
       if (this.needsInit()) {
-        return QuestStatus.READY;
+        return status;
       }
 
       return QuestStatus.NOT_READY;
@@ -21239,7 +21247,7 @@ var MurderHandler = /*#__PURE__*/function () {function MurderHandler() {QuestL9M
             } else if (this.needsJar() && this.hasJar()) {
               props.setChoice(606, 3);
             } else {
-              throw "Eh??";
+              throw "Eh?? We're at murder peak, but no idea what we're trying to do";
             }
 
             if ((0,external_kolmafia_namespaceObject.availableAmount)(this.rusty) > 0) {
@@ -21503,8 +21511,12 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         }
       }
 
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Shen") != "finished") {
+      if (getQuestStatus("questL11Black") <= 1) {
         return QuestStatus.FASTER_LATER;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Shen") != "finished") {
+        //return QuestStatus.FASTER_LATER;
       }
 
       if (this.isNCTime() && (0,external_kolmafia_namespaceObject.myMeat)() <= 1000) {
@@ -22049,6 +22061,10 @@ var OilHandler = /*#__PURE__*/function () {function OilHandler() {QuestL9OilPeak
     } }, { key: "status", value:
 
     function status() {
+      if ((0,external_kolmafia_namespaceObject.myHp)() < 120) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (
       !this.needsJar() &&
       this.getStatus() <= 0 &&
@@ -22100,11 +22116,15 @@ var OilHandler = /*#__PURE__*/function () {function OilHandler() {QuestL9OilPeak
         run: () => {
           this.doMonsterLevel();
           greyAdv(this.loc);
+          (0,external_kolmafia_namespaceObject.changeMcd)(0);
         } };
 
     } }, { key: "doMonsterLevel", value:
 
     function doMonsterLevel() {
+      (0,external_kolmafia_namespaceObject.changeMcd)(10);
+      (0,external_kolmafia_namespaceObject.maximize)("ML 50 MIN 51 MAX -tie", false);
+
       var level = (0,external_kolmafia_namespaceObject.numericModifier)("Monster Level");
 
       if (level >= 100) {
@@ -22143,9 +22163,14 @@ var OilHandler = /*#__PURE__*/function () {function OilHandler() {QuestL9OilPeak
         outfit: outfit,
         mayFreeRun: false,
         run: () => {
-          (0,external_kolmafia_namespaceObject.changeMcd)(10);
+          if ((0,external_kolmafia_namespaceObject.numericModifier)("Monster Level") < 100) {
+            (0,external_kolmafia_namespaceObject.changeMcd)(10);
+          }
 
-          if ((0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) > 0) {
+          if (
+          (0,external_kolmafia_namespaceObject.numericModifier)("Monster Level") < 100 &&
+          (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) > 0)
+          {
             setUmbrella(UmbrellaState.MONSTER_LEVEL);
             (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));
           }
@@ -31646,7 +31671,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "f8ea663";
+var lastCommitHash = "834e0c1";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
