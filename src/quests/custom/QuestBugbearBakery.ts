@@ -14,6 +14,7 @@ import {
   myMeat,
   cliExecute,
   haveSkill,
+  availableAmount,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -36,7 +37,8 @@ export class QuestBugbearBakery implements QuestInfo {
 
   status(): QuestStatus {
     if (
-      haveOutfit("Bugbear Costume") ||
+      outfitPieces("Bugbear Costume").find((i) => availableAmount(i) == 0) ==
+        null ||
       !knollAvailable() ||
       getWorkshed() != this.asdon
     ) {

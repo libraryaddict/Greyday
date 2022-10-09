@@ -1,9 +1,11 @@
 import {
+  availableAmount,
   canAdventure,
   getProperty,
   haveOutfit,
   Location,
   Monster,
+  outfitPieces,
   print,
 } from "kolmafia";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
@@ -47,7 +49,11 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
   }
 
   status(path: PossiblePath): QuestStatus {
-    if (haveOutfit("knob Goblin Harem Girl Disguise")) {
+    if (
+      outfitPieces("knob Goblin Harem Girl Disguise").find(
+        (i) => availableAmount(i) == 0
+      ) != null
+    ) {
       return QuestStatus.COMPLETED;
     }
 

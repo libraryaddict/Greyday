@@ -148,7 +148,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
   }
 
   status(path: PossiblePath): QuestStatus {
-    if (haveOutfit(this.fratDisguise)) {
+    if (this.haveOutfit(this.fratDisguise)) {
       return QuestStatus.COMPLETED;
     }
 
@@ -165,7 +165,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
     }
 
     if (path.hasTag(WarTag.BEFORE_WAR)) {
-      if (haveOutfit(this.hippyDisguise)) {
+      if (this.haveOutfit(this.hippyDisguise)) {
         path.removeTag(WarTag.BEFORE_WAR);
       } else if (myLevel() >= 12) {
         this.recalculateTime = true;
@@ -214,6 +214,14 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    // Doesn't meet stat requirements
+    if (
+      this.haveOutfit(this.hippyDisguise) &&
+      !haveOutfit(this.hippyDisguise)
+    ) {
+      return QuestStatus.NOT_READY;
+    }
+
     return QuestStatus.READY;
   }
 
@@ -246,7 +254,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
     }
 
     if (path.hasTag(WarTag.BEFORE_WAR)) {
-      if (haveOutfit(this.hippyDisguise) || myLevel() >= 12) {
+      if (this.haveOutfit(this.hippyDisguise) || myLevel() >= 12) {
         throw "Unable to grab hippy disguise, war has already started";
       }
 
@@ -262,7 +270,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
     const outfit = new GreyOutfit();
     outfit.setPlusCombat();
 
-    const grabbingHippyOutfit = !haveOutfit(this.hippyDisguise);
+    const grabbingHippyOutfit = !this.haveOutfit(this.hippyDisguise);
     const grabbingFratOutfit = !grabbingHippyOutfit;
 
     if (grabbingFratOutfit) {
@@ -376,11 +384,15 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
           props.resetAll();
         }
 
-        if (haveOutfit(this.hippyDisguise)) {
+        if (this.haveOutfit(this.hippyDisguise)) {
           path.removeTag(WarTag.BEFORE_WAR);
         }
       },
     };
+  }
+
+  haveOutfit(outfit: string): boolean {
+    return outfitPieces(outfit).find((i) => availableAmount(i) == 0) == null;
   }
 
   runFaxFight(path: PossiblePath): QuestAdventure {
@@ -422,7 +434,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
             throw "Expected to have finished combat!";
           }
 
-          if (!haveOutfit(this.fratDisguise)) {
+          if (!this.haveOutfit(this.fratDisguise)) {
             throw "Expected to have outfit!";
           }
         } finally {
