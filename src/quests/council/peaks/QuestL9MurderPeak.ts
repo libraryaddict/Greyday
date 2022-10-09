@@ -63,28 +63,28 @@ export class MurderHandler implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!hasNonCombatSkillsReady()) {
-      return QuestStatus.FASTER_LATER;
-    }
+    const status = hasNonCombatSkillsReady()
+      ? QuestStatus.READY
+      : QuestStatus.FASTER_LATER;
 
     if (this.needsStench() && elementalResistance(Element.get("stench")) >= 4) {
-      return QuestStatus.READY;
+      return status;
     }
 
     if (this.needsFood() && haveSkill(Skill.get("Gravitational Compression"))) {
-      return QuestStatus.READY;
+      return status;
     }
 
     if (this.needsJar()) {
       this.createJar();
 
       if (this.hasJar()) {
-        return QuestStatus.READY;
+        return status;
       }
     }
 
     if (this.needsInit()) {
-      return QuestStatus.READY;
+      return status;
     }
 
     return QuestStatus.NOT_READY;
@@ -153,7 +153,7 @@ export class MurderHandler implements QuestInfo {
           } else if (this.needsJar() && this.hasJar()) {
             props.setChoice(606, 3);
           } else {
-            throw "Eh??";
+            throw "Eh?? We're at murder peak, but no idea what we're trying to do";
           }
 
           if (availableAmount(this.rusty) > 0) {

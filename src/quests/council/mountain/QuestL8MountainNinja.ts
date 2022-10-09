@@ -11,11 +11,13 @@ import {
   Monster,
   myEffects,
   toEffect,
+  myHp,
 } from "kolmafia";
 import {
   hasCombatSkillReady,
   hasNonCombatSkillActive,
 } from "../../../GreyAdventurer";
+import { restoreHPTo } from "../../../tasks/TaskMaintainStatus";
 import { PossiblePath } from "../../../typings/TaskInfo";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -62,7 +64,7 @@ export class QuestL8MountainNinja implements QuestInfo {
         .map((e) => toEffect(e))
         .find((e) => numericModifier(e, "Combat Rate") != 0) == null
     ) {
-      maximize("+combat -tie", true);
+      maximize("+combat -acc3 -tie", true);
 
       this.canHitCombat =
         numericModifier("Generated:_spec", "Combat Rate") >= 25;
@@ -115,12 +117,15 @@ export class QuestL8MountainNinja implements QuestInfo {
     }
 
     const outfit = new GreyOutfit().setPlusCombat();
+    outfit.initWeight = 0.5;
 
     return {
       location: this.ninja,
       outfit: outfit,
       freeRun: (monster) => monster != this.assassin,
       run: () => {
+        restoreHPTo(70);
+
         greyAdv(this.ninja, outfit);
       },
     };

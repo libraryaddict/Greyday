@@ -52,7 +52,7 @@ export class TaskSellCrap implements Task {
       return;
     }
 
-    for (let i of this.autosells) {
+    for (const i of this.autosells) {
       if (itemAmount(i) == 0) {
         continue;
       }
@@ -60,7 +60,7 @@ export class TaskSellCrap implements Task {
       autosell(itemAmount(i), i);
     }
 
-    for (let i of this.autouse) {
+    for (const i of this.autouse) {
       if (itemAmount(i) == 0) {
         continue;
       }
@@ -68,7 +68,7 @@ export class TaskSellCrap implements Task {
       use(itemAmount(i), i);
     }
 
-    for (let i of this.junk) {
+    for (const i of this.junk) {
       if (itemAmount(i) <= 1) {
         continue;
       }

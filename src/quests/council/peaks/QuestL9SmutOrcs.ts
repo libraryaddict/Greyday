@@ -138,8 +138,12 @@ export class SmutOrcs implements QuestInfo {
       }
     }
 
-    if (getProperty("questL11Shen") != "finished") {
+    if (getQuestStatus("questL11Black") <= 1) {
       return QuestStatus.FASTER_LATER;
+    }
+
+    if (getProperty("questL11Shen") != "finished") {
+      //return QuestStatus.FASTER_LATER;
     }
 
     if (this.isNCTime() && myMeat() <= 1000) {

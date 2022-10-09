@@ -60,6 +60,10 @@ export class OilHandler implements QuestInfo {
   }
 
   status(): QuestStatus {
+    if (myHp() < 120) {
+      return QuestStatus.NOT_READY;
+    }
+
     if (
       !this.needsJar() &&
       this.getStatus() <= 0 &&
@@ -111,11 +115,15 @@ export class OilHandler implements QuestInfo {
       run: () => {
         this.doMonsterLevel();
         greyAdv(this.loc);
+        changeMcd(0);
       },
     };
   }
 
   doMonsterLevel() {
+    changeMcd(10);
+    maximize("ML 50 MIN 51 MAX -tie", false);
+
     const level = numericModifier("Monster Level");
 
     if (level >= 100) {
@@ -154,9 +162,14 @@ export class OilHandler implements QuestInfo {
       outfit: outfit,
       mayFreeRun: false,
       run: () => {
-        changeMcd(10);
+        if (numericModifier("Monster Level") < 100) {
+          changeMcd(10);
+        }
 
-        if (availableAmount(this.umbrella) > 0) {
+        if (
+          numericModifier("Monster Level") < 100 &&
+          availableAmount(this.umbrella) > 0
+        ) {
           setUmbrella(UmbrellaState.MONSTER_LEVEL);
           equip(Item.get("Unbreakable Umbrella"));
         }

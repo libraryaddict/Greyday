@@ -52,7 +52,7 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
     if (
       outfitPieces("knob Goblin Harem Girl Disguise").find(
         (i) => availableAmount(i) == 0
-      ) != null
+      ) == null
     ) {
       return QuestStatus.COMPLETED;
     }

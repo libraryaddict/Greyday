@@ -357,7 +357,11 @@ export function greyAdv(
 
       if (match != null) {
         print(
-          "Autumn-aton will be back in " + match[1] + " adventures..",
+          "Autumn-aton will be back from '" +
+            getProperty("autumnatonQuestLocation") +
+            "' in " +
+            match[1] +
+            " adventures..",
           "gray"
         );
       }
