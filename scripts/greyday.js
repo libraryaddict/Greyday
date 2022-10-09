@@ -13178,7 +13178,7 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
     } }, { key: "status", value:
 
     function status(path) {
-      if ((0,external_kolmafia_namespaceObject.haveOutfit)(this.fratDisguise)) {
+      if (this.haveOutfit(this.fratDisguise)) {
         return QuestStatus.COMPLETED;
       }
 
@@ -13195,7 +13195,7 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
       }
 
       if (path.hasTag(WarTag.BEFORE_WAR)) {
-        if ((0,external_kolmafia_namespaceObject.haveOutfit)(this.hippyDisguise)) {
+        if (this.haveOutfit(this.hippyDisguise)) {
           path.removeTag(WarTag.BEFORE_WAR);
         } else if ((0,external_kolmafia_namespaceObject.myLevel)() >= 12) {
           this.recalculateTime = true;
@@ -13244,6 +13244,14 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
         return QuestStatus.NOT_READY;
       }
 
+      // Doesn't meet stat requirements
+      if (
+      this.haveOutfit(this.hippyDisguise) &&
+      !(0,external_kolmafia_namespaceObject.haveOutfit)(this.hippyDisguise))
+      {
+        return QuestStatus.NOT_READY;
+      }
+
       return QuestStatus.READY;
     } }, { key: "run", value:
 
@@ -13276,7 +13284,7 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
       }
 
       if (path.hasTag(WarTag.BEFORE_WAR)) {
-        if ((0,external_kolmafia_namespaceObject.haveOutfit)(this.hippyDisguise) || (0,external_kolmafia_namespaceObject.myLevel)() >= 12) {
+        if (this.haveOutfit(this.hippyDisguise) || (0,external_kolmafia_namespaceObject.myLevel)() >= 12) {
           throw "Unable to grab hippy disguise, war has already started";
         }
 
@@ -13292,7 +13300,7 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
       var outfit = new GreyOutfit();
       outfit.setPlusCombat();
 
-      var grabbingHippyOutfit = !(0,external_kolmafia_namespaceObject.haveOutfit)(this.hippyDisguise);
+      var grabbingHippyOutfit = !this.haveOutfit(this.hippyDisguise);
       var grabbingFratOutfit = !grabbingHippyOutfit;
 
       if (grabbingFratOutfit) {
@@ -13406,11 +13414,15 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
             props.resetAll();
           }
 
-          if ((0,external_kolmafia_namespaceObject.haveOutfit)(this.hippyDisguise)) {
+          if (this.haveOutfit(this.hippyDisguise)) {
             path.removeTag(WarTag.BEFORE_WAR);
           }
         } };
 
+    } }, { key: "haveOutfit", value:
+
+    function haveOutfit(outfit) {
+      return (0,external_kolmafia_namespaceObject.outfitPieces)(outfit).find((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0) == null;
     } }, { key: "runFaxFight", value:
 
     function runFaxFight(path) {
@@ -13452,7 +13464,7 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
               throw "Expected to have finished combat!";
             }
 
-            if (!(0,external_kolmafia_namespaceObject.haveOutfit)(this.fratDisguise)) {
+            if (!this.haveOutfit(this.fratDisguise)) {
               throw "Expected to have outfit!";
             }
           } finally {
@@ -18810,7 +18822,11 @@ var QuestL5GoblinHarem = /*#__PURE__*/function (_TaskInfo) {QuestL5GoblinHarem_i
     } }, { key: "status", value:
 
     function status(path) {
-      if ((0,external_kolmafia_namespaceObject.haveOutfit)("knob Goblin Harem Girl Disguise")) {
+      if (
+      (0,external_kolmafia_namespaceObject.outfitPieces)("knob Goblin Harem Girl Disguise").find(
+      (i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0) !=
+      null)
+      {
         return QuestStatus.COMPLETED;
       }
 
@@ -24315,7 +24331,8 @@ var QuestBugbearBakery = /*#__PURE__*/function () {function QuestBugbearBakery()
 
     function status() {
       if (
-      (0,external_kolmafia_namespaceObject.haveOutfit)("Bugbear Costume") ||
+      (0,external_kolmafia_namespaceObject.outfitPieces)("Bugbear Costume").find((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0) ==
+      null ||
       !(0,external_kolmafia_namespaceObject.knollAvailable)() ||
       (0,external_kolmafia_namespaceObject.getWorkshed)() != this.asdon)
       {
@@ -31629,7 +31646,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "eb24554";
+var lastCommitHash = "f8ea663";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
