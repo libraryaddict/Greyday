@@ -60,7 +60,7 @@ export class OilHandler implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (myHp() < 120) {
+    if (myHp() < 90) {
       return QuestStatus.NOT_READY;
     }
 
