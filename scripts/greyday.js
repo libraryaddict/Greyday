@@ -21462,7 +21462,7 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         return false;
       }
 
-      return isGhostBustingTime(this.loc);
+      return this.getReadyToBuild() > 0 || isGhostBustingTime(this.loc);
     } }, { key: "status", value:
 
     function status() {
@@ -21470,6 +21470,10 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
 
       if (status > 0) {
         return QuestStatus.COMPLETED;
+      }
+
+      if (this.getReadyToBuild() > 0) {
+        return QuestStatus.READY;
       }
 
       if (isGhostBustingTime(this.loc) && !this.isNCTime()) {
@@ -21557,10 +21561,24 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     function getChasmRemaining() {
       var remaining = 30 - this.getChasmBuilt();
 
-      return remaining - Math.min(this.getFastenersHave(), this.getLumberHave());
+      return remaining - this.getReadyToBuild();
+    } }, { key: "getReadyToBuild", value:
+
+    function getReadyToBuild() {
+      return Math.min(this.getFastenersHave(), this.getLumberHave());
     } }, { key: "run", value:
 
     function run() {
+      if (this.getReadyToBuild() > 0) {
+        return {
+          location: null,
+          outfit: GreyOutfit.IGNORE_OUTFIT,
+          run: () => {
+            this.tryBuild();
+          }
+        };
+      }
+
       if (this.isNCTime()) {
         return this.tryNC();
       }
@@ -29336,6 +29354,10 @@ var AdventureFinder = /*#__PURE__*/function () {
             continue;
           }
 
+          if (loc == external_kolmafia_namespaceObject.Location.get("Oil Peak")) {
+            continue;
+          }
+
           var adv = {
             quest: null,
             path: null,
@@ -29919,11 +29941,12 @@ var AdventureFinder = /*#__PURE__*/function () {
           }
 
           (0,external_kolmafia_namespaceObject.print)(
-          quest.getId() +
-          " will be using " +
+          "This quest will attempt to prime " +
+          ResourceCategory[primed.resource.type] +
+          " (" +
           primed.resource.name +
-          " to try prime the resource " +
-          ResourceCategory[primed.resource.type],
+          ") on this adventure as requested by " +
+          primed.quest.getId(),
           "blue");
 
           return;
@@ -30018,18 +30041,22 @@ var AdventureFinder = /*#__PURE__*/function () {
           return m1 - m2;
         });
 
-        if (mustBeDone.length > 1 && mustBeDone[0][1] > 0) {
-          mustBeDone = mustBeDone.filter((_ref13) => {var _ref14 = GreyChooser_slicedToArray(_ref13, 1),a = _ref14[0];return a.quest.mustBeDone(true);});
+        if (
+        mustBeDone.length > 1 &&
+        mustBeDone[0][1] > 0 &&
+        mustBeDone.find((_ref13) => {var _ref14 = GreyChooser_slicedToArray(_ref13, 1),a = _ref14[0];return a.quest.mustBeDone(true);}) != null)
+        {
+          mustBeDone = mustBeDone.filter((_ref15) => {var _ref16 = GreyChooser_slicedToArray(_ref15, 1),a = _ref16[0];return a.quest.mustBeDone(true);});
         }
 
         if (
         mustBeDone[0][1] > 0 &&
-        mustBeDone.filter((_ref15) => {var _ref16 = GreyChooser_slicedToArray(_ref15, 2),m = _ref16[1];return m > 0;}).length > 1)
+        mustBeDone.filter((_ref17) => {var _ref18 = GreyChooser_slicedToArray(_ref17, 2),m = _ref18[1];return m > 0;}).length > 1)
         {
           (0,external_kolmafia_namespaceObject.print)(
           "Multiple quests demand to be done! " +
           mustBeDone.
-          filter((_ref17) => {var _ref18 = GreyChooser_slicedToArray(_ref17, 2),m = _ref18[1];return m > 0;}).
+          filter((_ref19) => {var _ref20 = GreyChooser_slicedToArray(_ref19, 2),m = _ref20[1];return m > 0;}).
           map((a) => a[0].quest.getId()).
           join(", "),
           "red");
@@ -30051,6 +30078,17 @@ var AdventureFinder = /*#__PURE__*/function () {
       }
 
       if (this.possibleAdventures.length > 0) {
+        var _adv2 = this.possibleAdventures[0];
+
+        // If we don't want to go here.. Then consider our user friendly fam trainer!
+        if (
+        _adv2.considerPriority >= ConsiderPriority.BAD_ABSORB &&
+        (0,external_kolmafia_namespaceObject.myMeat)() >= 1000 &&
+        (0,external_kolmafia_namespaceObject.myAdventures)() >= 20)
+        {
+          return new EmergencyTrainer();
+        }
+
         return this.possibleAdventures[0];
       }
 
@@ -30059,7 +30097,47 @@ var AdventureFinder = /*#__PURE__*/function () {
       "red");
 
       return null;
-    } }], [{ key: "recalculatePath", value: function recalculatePath() {AdventureFinder.instance.calculatePath();} }]);return AdventureFinder;}();GreyChooser_defineProperty(AdventureFinder, "instance", void 0);
+    } }], [{ key: "recalculatePath", value: function recalculatePath() {AdventureFinder.instance.calculatePath();} }]);return AdventureFinder;}();GreyChooser_defineProperty(AdventureFinder, "instance", void 0);var
+
+
+EmergencyTrainer = /*#__PURE__*/GreyChooser_createClass(function EmergencyTrainer() {GreyChooser_classCallCheck(this, EmergencyTrainer);GreyChooser_defineProperty(this, "locationInfo",
+  null);GreyChooser_defineProperty(this, "adventure",
+  {
+    location: null,
+    run: () => {
+      (0,external_kolmafia_namespaceObject.print)(
+      "Oh gosh! Grey Goose underperforming? No worries! Emergency trainer is on the case! We're going to slam them into the cake arena, and they'll come out looking for a fight!",
+      "blue");
+
+      var fam = external_kolmafia_namespaceObject.Familiar.get("Grey Goose");
+      (0,external_kolmafia_namespaceObject.useFamiliar)(fam);
+      (0,external_kolmafia_namespaceObject.maximize)("familiar experience -tie", false);
+
+      var turnsSpent = 0;
+
+      while ((0,external_kolmafia_namespaceObject.familiarWeight)(fam) < 6) {
+        if (turnsSpent >= 10) {
+          throw "Spent 10 turns training grey goose, but no progress was made.";
+        }
+
+        var exp = fam.experience;
+
+        turnsSpent++;
+        (0,external_kolmafia_namespaceObject.cliExecute)("train turns 1");
+
+        if (exp == fam.experience) {
+          throw "Expected goose to have gained exp, it didn't.";
+        }
+      }
+    }
+  });GreyChooser_defineProperty(this, "path",
+  null);GreyChooser_defineProperty(this, "quest",
+  null);GreyChooser_defineProperty(this, "status",
+  QuestStatus.READY);GreyChooser_defineProperty(this, "orbStatus",
+  OrbStatus.IGNORED);GreyChooser_defineProperty(this, "considerPriority",
+  ConsiderPriority.MUST_BE_DONE);GreyChooser_defineProperty(this, "mayFreeRun",
+  false);GreyChooser_defineProperty(this, "freeRun",
+  () => false);});
 ;// CONCATENATED MODULE: ./src/tasks/TaskBoomboxSwitch.ts
 function TaskBoomboxSwitch_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskBoomboxSwitch_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskBoomboxSwitch_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskBoomboxSwitch_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskBoomboxSwitch_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskBoomboxSwitch_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -30955,6 +31033,15 @@ var TaskAutumnaton = /*#__PURE__*/function () {
       });
 
       this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("The Smut Orc Logging Camp"),
+        item: external_kolmafia_namespaceObject.Item.get("Raging hardwood plank"),
+        amount: 10,
+        viable: () =>
+        getQuestStatus("questL09Topping") == 0 &&
+        (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("chasmBridgeProgress")) < 30
+      });
+
+      this.toGrab.push({
         loc: external_kolmafia_namespaceObject.Location.get("The Haunted Library"),
         item: external_kolmafia_namespaceObject.Item.get("tattered scrap of paper"),
         amount: 300
@@ -31701,7 +31788,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "b95383c";
+var lastCommitHash = "45b37f5";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -31722,7 +31809,7 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
     "libraryaddict-Greyday-release");}GreyYouMain_createClass(GreyYouMain, [{ key: "isRevisionPass", value:
 
     function isRevisionPass() {
-      var required = 26718;
+      var required = 26829;
 
       if ((0,external_kolmafia_namespaceObject.getRevision)() > 0 && (0,external_kolmafia_namespaceObject.getRevision)() < required) {
         (0,external_kolmafia_namespaceObject.print)("Please update your mafia. You are using ".concat(
