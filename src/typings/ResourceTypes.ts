@@ -389,7 +389,7 @@ const cosplayYellowRay: SomeResource = {
       outfit.addItem(cosplaySaber);
     }
     if (props != null) {
-      props.setChoice(1387, 3);
+      props.setChoiceProperty(1387, 3);
     }
   },
   macro: () => Macro.skill(Skill.get("Use The Force")),
@@ -411,13 +411,18 @@ const cosplayCopier: SomeResource = {
   type: ResourceCategory.OLFACT_COPIER,
   resource: "Cosplay Saber",
   name: "Cosplay Saber: Friends",
-  worthInAftercore: 3000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
+  worthInAftercore:
+    storageAmount(Item.get("distention pill")) > 60
+      ? -100
+      : modifierEval("G") >= 4
+      ? 3000
+      : 0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addItem(cosplaySaber);
     }
     if (props != null) {
-      props.setChoice(1387, 2);
+      props.setChoiceProperty(1387, 2);
     }
   },
   macro: () => Macro.skill(Skill.get("Use The Force")),
@@ -539,13 +544,18 @@ const cosplayBanisher: SomeResource = {
   type: ResourceCategory.BANISHER,
   resource: "Cosplay Saber",
   name: "Cosplay Saber: Banish",
-  worthInAftercore: 3000, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
+  worthInAftercore:
+    storageAmount(Item.get("distention pill")) > 60
+      ? -100
+      : modifierEval("G") >= 4
+      ? 3000
+      : 0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addItem(cosplaySaber);
     }
     if (outfit != null) {
-      props.setChoice(1387, 3);
+      props.setChoiceProperty(1387, 1);
     }
   },
   macro: () => Macro.skill(Skill.get("Use The Force")),

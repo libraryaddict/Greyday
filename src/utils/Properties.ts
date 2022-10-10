@@ -18,6 +18,12 @@ export class PropertyManager {
     }
   }
 
+  setChoiceProperty(choice: number, value: number) {
+    this.setChoice(choice, value);
+
+    setProperty("choiceAdventure" + choice, value.toString());
+  }
+
   setChoice(choice: number, value: number) {
     const combo: [number, number] = [choice, value];
 

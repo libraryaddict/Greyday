@@ -527,6 +527,7 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       run: () => {
         let macro: Macro;
         const props = new PropertyManager();
+        const uses = getProperty("_saberForceUses");
 
         if (copier != null) {
           copier.prepare(null, props);
@@ -553,6 +554,12 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
             outfit,
             new AdventureSettings().setStartOfFightMacro(macro)
           );
+
+          if (copier != null && uses != getProperty("_saberForceUses")) {
+            if (this.getFriendsRemaining() <= 0) {
+              throw "Used the force, but no friends? Something went wrong!";
+            }
+          }
         } finally {
           props.resetAll();
         }
