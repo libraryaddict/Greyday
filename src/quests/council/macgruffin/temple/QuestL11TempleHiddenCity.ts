@@ -90,6 +90,10 @@ export class QuestL11TempleHiddenCity implements QuestInfo {
     // Script should run the banana solver
     this.choices.runChoice(125, 3); // Unlock city
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }
 
 class TempleChoices implements GreyChoices {
