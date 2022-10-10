@@ -59,7 +59,7 @@ export class OilHandler implements QuestInfo {
   }
 
   level(): number {
-    return 9;
+    return 17;
   }
 
   status(): QuestStatus {
