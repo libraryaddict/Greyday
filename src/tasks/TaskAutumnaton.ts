@@ -146,14 +146,14 @@ export class TaskAutumnaton implements Task {
       loc: Location.get("The Penultimate Fantasy Airship"),
       item: Item.get("Mohawk Wig"),
       amount: 1,
-      viable: () => getQuestStatus("questL10Garbage") <= 9,
+      viable: () => getQuestStatus("questL10Garbage") < 9,
     });
 
     this.toGrab.push({
       loc: Location.get("The Penultimate Fantasy Airship"),
       item: Item.get("Amulet of Extreme Plot Significance"),
       amount: 1,
-      viable: () => getQuestStatus("questL10Garbage") <= 6,
+      viable: () => getQuestStatus("questL10Garbage") < 6,
     });
 
     this.toGrab.push({

@@ -158,10 +158,7 @@ export class OilHandler implements QuestInfo {
   }
 
   free(): boolean {
-    return (
-      this.loc.turnsSpent == 0 ||
-      (this.getPressureLeft() <= 0 && !toBoolean(getProperty("oilPeakLit")))
-    );
+    return this.getPressureLeft() <= 0 && !toBoolean(getProperty("oilPeakLit"));
   }
 
   getPressureLeft(): number {

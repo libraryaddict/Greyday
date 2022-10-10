@@ -107,15 +107,17 @@ export class QuestL11ShenTurnIn implements QuestInfo {
       outfit.setItemDrops();
     }
 
-    const usingRobo =
+    const fishHuntTime =
       haveFamiliar(this.robor) &&
       !isBanished(this.penguin) &&
       this.toAbsorb.length == 0;
+    const roboTime =
+      fishHuntTime && currentPredictions().get(this.shenClub) == this.penguin;
 
     return {
       location: this.shenClub,
       outfit: outfit,
-      familiar: usingRobo ? this.robor : null,
+      familiar: roboTime ? this.robor : null,
       olfaction: haveFamiliar(this.robor) ? [this.penguin] : null,
       mayFreeRun: false,
       run: () => {
@@ -125,16 +127,8 @@ export class QuestL11ShenTurnIn implements QuestInfo {
           }
         }
 
-        if (usingRobo && availableAmount(this.ball) > 0) {
-          if (
-            !currentPredictions().has(this.shenClub) ||
-            currentPredictions().get(this.shenClub) == this.penguin
-          ) {
-            equip(this.ball);
-          } else if (equippedAmount(this.ball) > 0) {
-            equip(Slot.get("familiar"), Item.get("None"));
-          }
-        } else if (
+        if (
+          !roboTime &&
           this.toAbsorb.length == 0 &&
           DelayBurners.isTryingForDupeableGoblin()
         ) {
