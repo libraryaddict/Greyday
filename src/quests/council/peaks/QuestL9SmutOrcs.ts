@@ -88,7 +88,7 @@ export class SmutOrcs implements QuestInfo {
       return false;
     }
 
-    return isGhostBustingTime(this.loc);
+    return this.getReadyToBuild() > 0 || isGhostBustingTime(this.loc);
   }
 
   status(): QuestStatus {
@@ -96,6 +96,10 @@ export class SmutOrcs implements QuestInfo {
 
     if (status > 0) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (this.getReadyToBuild() > 0) {
+      return QuestStatus.READY;
     }
 
     if (isGhostBustingTime(this.loc) && !this.isNCTime()) {
@@ -183,10 +187,24 @@ export class SmutOrcs implements QuestInfo {
   getChasmRemaining() {
     const remaining = 30 - this.getChasmBuilt();
 
-    return remaining - Math.min(this.getFastenersHave(), this.getLumberHave());
+    return remaining - this.getReadyToBuild();
+  }
+
+  getReadyToBuild(): number {
+    return Math.min(this.getFastenersHave(), this.getLumberHave());
   }
 
   run(): QuestAdventure {
+    if (this.getReadyToBuild() > 0) {
+      return {
+        location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
+        run: () => {
+          this.tryBuild();
+        },
+      };
+    }
+
     if (this.isNCTime()) {
       return this.tryNC();
     }

@@ -192,6 +192,15 @@ export class TaskAutumnaton implements Task {
     });
 
     this.toGrab.push({
+      loc: Location.get("The Smut Orc Logging Camp"),
+      item: Item.get("Raging hardwood plank"),
+      amount: 10,
+      viable: () =>
+        getQuestStatus("questL09Topping") == 0 &&
+        toInt(getProperty("chasmBridgeProgress")) < 30,
+    });
+
+    this.toGrab.push({
       loc: Location.get("The Haunted Library"),
       item: Item.get("tattered scrap of paper"),
       amount: 300,
