@@ -21,6 +21,8 @@ import {
   Familiar,
   Slot,
   Effect,
+  print,
+  toBoolean,
 } from "kolmafia";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -38,6 +40,7 @@ export class OilHandler implements QuestInfo {
   loc: Location = Location.get("Oil Peak");
   crude: Item = Item.get("Bubblin' Crude");
   umbrella: Item = Item.get("Unbreakable Umbrella");
+  baron: Monster = Monster.get("Oil Baron");
 
   getId(): QuestType {
     return "Council / Peaks / OilPeak";
@@ -96,9 +99,7 @@ export class OilHandler implements QuestInfo {
   }
 
   needsAbsorb(): boolean {
-    return !AbsorbsProvider.getReabsorbedMonsters().includes(
-      Monster.get("Oil Baron")
-    );
+    return !AbsorbsProvider.getReabsorbedMonsters().includes(this.baron);
   }
 
   isReady(): boolean {
@@ -113,9 +114,14 @@ export class OilHandler implements QuestInfo {
     return {
       location: this.loc,
       run: () => {
+        print("Now doing a special adventure for Oil Baron absorb!", "blue");
         this.doMonsterLevel();
         greyAdv(this.loc);
         changeMcd(0);
+
+        if (this.needsAbsorb()) {
+          throw "We spent a turn trying to grab the absorb for oil baron! This didn't work..";
+        }
       },
     };
   }
@@ -147,7 +153,32 @@ export class OilHandler implements QuestInfo {
     }
   }
 
+  mustBeDone(): boolean {
+    return this.free();
+  }
+
+  free(): boolean {
+    return (
+      this.loc.turnsSpent == 0 ||
+      (this.getPressureLeft() <= 0 && !toBoolean(getProperty("oilPeakLit")))
+    );
+  }
+
+  getPressureLeft(): number {
+    return toFloat(getProperty("oilPeakProgress"));
+  }
+
   run(): QuestAdventure {
+    if (this.free()) {
+      return {
+        location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
+        run: () => {
+          greyAdv(this.loc);
+        },
+      };
+    }
+
     if (this.needsAbsorb()) {
       return this.doAbsorb();
     }
