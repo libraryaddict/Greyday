@@ -28,7 +28,7 @@ export function getKmails(caller: string = "GreyDay"): Kmail[] {
     };
   });
 
-  return kmails;
+  return kmails.filter((k) => k.type == "normal");
 }
 
 export function isJunkKmail(kmail: Kmail) {

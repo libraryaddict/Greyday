@@ -236,7 +236,8 @@ export class QuestL11Curses extends TaskInfo implements QuestInfo {
         (monster != this.accountant || !needFiles) &&
         (monster != this.shaman || !needCurses),
       run: () => {
-        print("Next curse NC in " + this.delayForNextNC());
+        print("Next curse NC in " + this.delayForNextNC(), "gray");
+
         const props = new PropertyManager();
 
         if (haveEffect(this.curse3)) {
