@@ -287,8 +287,9 @@ export class SmutOrcs implements QuestInfo {
       run: () => {
         const props = new PropertyManager();
         let outfits = this.getBestBlechOutfit();
+        const need = Math.min(14, this.getChasmRemaining());
 
-        if (outfits[0][2] < 14) {
+        if (outfits[0][2] < need) {
           const mox = outfits.find((o) => o[0] == 3);
           const extraRes =
             (haveEffect(this.paintRes) == 0 ? 1 : 0) +
