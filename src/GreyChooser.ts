@@ -2,6 +2,7 @@ import {
   appearanceRates,
   availableAmount,
   canAdventure,
+  cliExecute,
   Effect,
   Familiar,
   familiarWeight,
@@ -12,16 +13,19 @@ import {
   isBanished,
   Item,
   Location,
+  maximize,
   Monster,
   myAdventures,
   myBasestat,
   myLevel,
+  myMeat,
   myMp,
   print,
   printHtml,
   Skill,
   Stat,
   toInt,
+  useFamiliar,
 } from "kolmafia";
 import {
   hasCombatSkillActive,
@@ -274,6 +278,10 @@ export class AdventureFinder {
         ) == null &&
           details.expectedTurnsProfit < 0)
       ) {
+        continue;
+      }
+
+      if (loc == Location.get("Oil Peak")) {
         continue;
       }
 
@@ -860,11 +868,12 @@ export class AdventureFinder {
       }
 
       print(
-        quest.getId() +
-          " will be using " +
+        "This quest will attempt to prime " +
+          ResourceCategory[primed.resource.type] +
+          " (" +
           primed.resource.name +
-          " to try prime the resource " +
-          ResourceCategory[primed.resource.type],
+          ") on this adventure as requested by " +
+          primed.quest.getId(),
         "blue"
       );
       return;
@@ -959,7 +968,11 @@ export class AdventureFinder {
         return m1 - m2;
       });
 
-      if (mustBeDone.length > 1 && mustBeDone[0][1] > 0) {
+      if (
+        mustBeDone.length > 1 &&
+        mustBeDone[0][1] > 0 &&
+        mustBeDone.find(([a]) => a.quest.mustBeDone(true)) != null
+      ) {
         mustBeDone = mustBeDone.filter(([a]) => a.quest.mustBeDone(true));
       }
 
@@ -992,6 +1005,17 @@ export class AdventureFinder {
     }
 
     if (this.possibleAdventures.length > 0) {
+      const adv = this.possibleAdventures[0];
+
+      // If we don't want to go here.. Then consider our user friendly fam trainer!
+      if (
+        adv.considerPriority >= ConsiderPriority.BAD_ABSORB &&
+        myMeat() >= 1000 &&
+        myAdventures() >= 20
+      ) {
+        return new EmergencyTrainer();
+      }
+
       return this.possibleAdventures[0];
     }
 
@@ -1001,4 +1025,44 @@ export class AdventureFinder {
     );
     return null;
   }
+}
+
+class EmergencyTrainer implements FoundAdventure {
+  locationInfo: AbsorbDetails = null;
+  adventure: QuestAdventure = {
+    location: null,
+    run: () => {
+      print(
+        "Oh gosh! Grey Goose underperforming? No worries! Emergency trainer is on the case! We're going to slam them into the cake arena, and they'll come out looking for a fight!",
+        "blue"
+      );
+      const fam = Familiar.get("Grey Goose");
+      useFamiliar(fam);
+      maximize("familiar experience -tie", false);
+
+      let turnsSpent = 0;
+
+      while (familiarWeight(fam) < 6) {
+        if (turnsSpent >= 10) {
+          throw "Spent 10 turns training grey goose, but no progress was made.";
+        }
+
+        const exp = fam.experience;
+
+        turnsSpent++;
+        cliExecute("train turns 1");
+
+        if (exp == fam.experience) {
+          throw "Expected goose to have gained exp, it didn't.";
+        }
+      }
+    },
+  };
+  path?: PossiblePath = null;
+  quest?: QuestInfo = null;
+  status: QuestStatus = QuestStatus.READY;
+  orbStatus: OrbStatus = OrbStatus.IGNORED;
+  considerPriority: ConsiderPriority = ConsiderPriority.MUST_BE_DONE;
+  mayFreeRun: boolean = false;
+  freeRun = () => false;
 }
