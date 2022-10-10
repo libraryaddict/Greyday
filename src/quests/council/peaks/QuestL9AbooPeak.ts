@@ -14,6 +14,7 @@ import {
   myHp,
   myLevel,
   print,
+  toBoolean,
   toInt,
   use,
 } from "kolmafia";
@@ -208,11 +209,18 @@ export class ABooHandler implements QuestInfo {
   }
 
   mustBeDone(): boolean {
-    return this.canUseClue();
+    return this.free() || this.canUseClue();
   }
 
   canAcceptPrimes(): boolean {
     return false;
+  }
+
+  free(): boolean {
+    return (
+      toBoolean(getProperty("booPeakLit")) &&
+      toInt(getProperty("booPeakProgress")) == 0
+    );
   }
 
   status(): QuestStatus {
