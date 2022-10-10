@@ -128,11 +128,11 @@ export class OilHandler implements QuestInfo {
 
   doMonsterLevel() {
     changeMcd(10);
-    maximize("ML 50 MIN 51 MAX -tie", false);
+    maximize("ML 50 MIN 51 MAX -tie -equip unbreakable umbrella", false);
 
     const level = numericModifier("Monster Level");
 
-    if (level >= 100) {
+    if (level >= 99) {
       throw "Need to lower your monster level, TODO!";
     }
 
