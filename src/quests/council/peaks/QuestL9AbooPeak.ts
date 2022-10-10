@@ -50,7 +50,7 @@ export class ABooHandler implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    if (availableAmount(this.clue) > 0) {
+    if (availableAmount(this.clue) > 0 && this.getProgress() > 0) {
       return this.runClue();
     }
 
