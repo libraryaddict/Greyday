@@ -23,6 +23,7 @@ import {
 } from "kolmafia";
 import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
+import { doFortuneTeller } from "../../utils/GreyClan";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreySettings } from "../../utils/GreySettings";
 import { deleteJunkKmails } from "../../utils/KmailUtils";
@@ -183,6 +184,8 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
           const props = new PropertyManager();
           props.setProperty("grabCloversSoftcore", "true");
           props.setProperty("grabCloversHardcore", "true");
+
+          doFortuneTeller();
 
           try {
             if (breakfastScript == "") {

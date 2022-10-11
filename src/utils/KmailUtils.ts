@@ -1,4 +1,5 @@
 import { visitUrl, urlEncode, print } from "kolmafia";
+import { GreySettings } from "./GreySettings";
 
 export interface Kmail {
   id: string;
@@ -31,15 +32,30 @@ export function getKmails(caller: string = "GreyDay"): Kmail[] {
   return kmails.filter((k) => k.type == "normal");
 }
 
-export function isJunkKmail(kmail: Kmail) {
-  return (
+function isJunkKmail(kmail: Kmail) {
+  if (
     kmail.fromname == "Lady Spookyraven's Ghost" ||
     (kmail.fromname == "The Loathing Postal Service" &&
       kmail.message.includes("telegram from Lady Spookyraven"))
-  );
+  ) {
+    return true;
+  }
+
+  if (
+    kmail.fromname.toLowerCase() == "cheesefax" &&
+    kmail.message.includes("completed your relationship fortune test!")
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 export function deleteJunkKmails() {
+  if (!GreySettings.greyDeleteKmails) {
+    return;
+  }
+
   getKmails().forEach((mail) => {
     if (!isJunkKmail(mail)) {
       return;

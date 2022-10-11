@@ -10,6 +10,7 @@ import {
   toItem,
   toString,
 } from "kolmafia";
+import { doFortuneTeller, getAvailableClans } from "./GreyClan";
 
 export type GreySetting = {
   name: string;
@@ -98,15 +99,7 @@ export function getGreySettings(): GreySetting[] {
     description:
       "When true, will delete kmails from spooky lady and fortune teller",
     valid: (value) => value == "true" || value == "false",
-    default: false,
-  };
-
-  const doFortuneTeller: GreySetting = {
-    name: "greyFortuneTeller",
-    description:
-      "If set to true, will complete the requirements for the Steel Margarita +5 Liver drink. There is different scenarios for this, but this is best used with towerbreaking and ronin escaping. It will attempt to use the no-trades previously acquired.",
-    valid: (value) => value == "true" || value == "false",
-    default: false,
+    default: true,
   };
 
   const useMummery: GreySetting = {
@@ -143,14 +136,6 @@ export function getGreySettings(): GreySetting[] {
       "How many pulls the script can use, if this is too low then you're going to have a bad time. 20 means the script can use up to 20 pulls, leaving 0 remaining.",
     valid: (value) => /\d+/.test(value),
     default: 20,
-  };
-
-  const greyBountyHunter: GreySetting = {
-    name: "greyBountyHunting",
-    description:
-      "Should the script pick up bounties that are likely to be collected along the way? Provides no advantage or disadvantage and you likely don't need it, is also slow. Every few days = one token slow.",
-    valid: (value) => value == "true" || value == "false",
-    default: false,
   };
 
   const greyVoteMonster: GreySetting = {
@@ -199,6 +184,25 @@ export function getGreySettings(): GreySetting[] {
     default: "Grey Goose",
   };
 
+  const greyVIPClan: GreySetting = {
+    name: "greyVIPClan",
+    description:
+      "The name of the clan we will use to execute Fax Requests, and switch to for other VIP functions if they are not available in our current clan. Set to empty to disable all VIP usage, even the yellow rockets..",
+    valid: (value) =>
+      [...getAvailableClans().values()].find(
+        (s) => s.toLowerCase() == value.toLowerCase()
+      ) != null,
+    default: "Bonus Adventures From Hell",
+  };
+
+  const greyFortuneTeller: GreySetting = {
+    name: "greyFortuneTeller",
+    description:
+      "If the script should use fortune teller if possible. Will grab: Prank Item, then Potion, then Psychic Equipment",
+    valid: (value) => value == "true" || value == "false",
+    default: true,
+  };
+
   return [
     //greyBountyHunter,
     towerBreak,
@@ -217,6 +221,9 @@ export function getGreySettings(): GreySetting[] {
     greySwitchWorkshed,
     greyClipArt,
     greyValueOfNC,
+    greyVIPClan,
+    deleteKmails,
+    greyFortuneTeller,
   ];
 }
 
@@ -288,6 +295,9 @@ export class GreySettings {
   static greyBountyHunting: boolean;
   static greySwitchWorkshed: string;
   static greyClipArt: string;
+  static greyVIPClan: string;
+  static greyFortuneTeller: boolean;
+  static greyDeleteKmails: boolean;
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

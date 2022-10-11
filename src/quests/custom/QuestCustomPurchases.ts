@@ -8,6 +8,7 @@ import {
   retrieveItem,
   visitUrl,
 } from "kolmafia";
+import { canUseFireworks, runFireworks } from "../../utils/GreyClan";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -18,7 +19,6 @@ export class QuestCustomPurchases implements QuestInfo {
   stealth: Item = Item.get("Xiblaxian stealth cowl");
   firePlusCombat: Item = Item.get("sombrero-mounted sparkler");
   pack: Item = Item.get("protonic accelerator pack");
-  fireworksClan: boolean;
 
   getId(): QuestType {
     return "Misc / Purchases";
@@ -29,22 +29,14 @@ export class QuestCustomPurchases implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (getProperty("_fireworksShopHatBought") == "true") {
+    if (
+      getProperty("_fireworksShopHatBought") == "true" ||
+      !canUseFireworks()
+    ) {
       return QuestStatus.COMPLETED;
     }
 
     if (myMeat() <= 3000) {
-      return QuestStatus.NOT_READY;
-    }
-
-    if (this.fireworksClan == null) {
-      visitUrl("clan_viplounge.php");
-      const page = visitUrl("clan_viplounge.php?action=fwshop&whichfloor=2");
-
-      this.fireworksClan = page.includes("<b>A Furtive Fireworks Fellow</b>");
-    }
-
-    if (!this.fireworksClan) {
       return QuestStatus.NOT_READY;
     }
 
@@ -56,19 +48,22 @@ export class QuestCustomPurchases implements QuestInfo {
       location: null,
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
-        let toBuy = this.popper;
+        runFireworks(() => {
+          let toBuy = this.popper;
 
-        if (
-          availableAmount(this.stealth) > 0 ||
-          availableAmount(this.silent) > 0 ||
-          availableAmount(this.pack) > 0
-        ) {
-          toBuy = this.firePlusCombat;
-        }
+          if (
+            availableAmount(this.stealth) > 0 ||
+            availableAmount(this.silent) > 0 ||
+            availableAmount(this.pack) > 0
+          ) {
+            toBuy = this.firePlusCombat;
+          }
 
-        print("Now trying to buy " + toBuy);
-        retrieveItem(toBuy);
-        //          buy(item);
+          visitUrl("clan_viplounge.php?action=fwshop&whichfloor=2");
+          print("Now trying to buy " + toBuy);
+          retrieveItem(toBuy);
+          //          buy(item);
+        });
       },
     };
   }

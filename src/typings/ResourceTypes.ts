@@ -1,12 +1,9 @@
 import {
   availableAmount,
-  canFaxbot,
-  chatPrivate,
   cliExecute,
   currentRound,
   Effect,
   Familiar,
-  faxbot,
   getCampground,
   getProperty,
   haveEffect,
@@ -31,8 +28,13 @@ import {
   turnsPlayed,
   urlEncode,
   visitUrl,
-  wait,
 } from "kolmafia";
+import {
+  canUseFaxMachine,
+  canUseFireworks,
+  getFax,
+  isVIPDisabled,
+} from "../utils/GreyClan";
 import { GreyOutfit } from "../utils/GreyOutfitter";
 import { GreySettings } from "../utils/GreySettings";
 import { Macro } from "../utils/MacroBuilder";
@@ -325,7 +327,6 @@ const yellowParka: SomeResource = {
 };
 
 const rocket: Item = Item.get("Yellow Rocket");
-const vipInvitation: Item = Item.get("Clan VIP Lounge key");
 
 const yellowRocket: SomeResource = {
   type: ResourceCategory.YELLOW_RAY,
@@ -333,7 +334,7 @@ const yellowRocket: SomeResource = {
   name: "Yellow Rocket",
   worthInAftercore: 250, // Cost of a yellow rocket
   resourcesUsed: 75,
-  available: () => availableAmount(vipInvitation) > 0,
+  available: () => canUseFireworks(),
   prepare: () => {
     if (itemAmount(rocket) == 0) {
       cliExecute("acquire yellow rocket");
@@ -445,44 +446,13 @@ const faxMachine: SomeResource = {
   resource: "Fax Machine",
   worthInAftercore: 20000, // Embezzler
   prepare: () => {},
+  available: () => canUseFaxMachine(),
   fax: (monster: Monster) => {
     if (getProperty("_photocopyUsed") != "false") {
       throw "The fax was already used!";
     }
 
-    print("Now trying to fax " + monster.name, "blue");
-
-    const hasReceivedFax = () => {
-      if (availableAmount(Item.get(`photocopied monster`)) == 0) {
-        cliExecute("fax receive");
-      }
-
-      if (
-        getProperty("photocopyMonster").toLowerCase() ==
-        monster.name.toLowerCase()
-      ) {
-        return true;
-      }
-
-      cliExecute("fax send");
-      return false;
-    };
-
-    if (!hasReceivedFax()) {
-      chatPrivate("cheesefax", monster.name);
-
-      for (let i = 0; i < 3; i++) {
-        wait(10);
-
-        if (hasReceivedFax()) {
-          break;
-        }
-      }
-
-      if (!hasReceivedFax()) {
-        throw new Error("Failed to acquire photocopied " + monster);
-      }
-    }
+    getFax(monster);
 
     visitUrl("inv_use.php?which=3&whichitem=4873&pwd");
   },
@@ -810,10 +780,11 @@ export function getResourcesLeft(
 
       return Math.min(fightsRemaining, wishesAvailable);
     case "Fax Machine":
-      return availableAmount(vipInvitation) > 0 &&
-        (assumeUnused || getProperty("_photocopyUsed") == "false")
-        ? 1
-        : 0;
+      if (!canUseFaxMachine()) {
+        return 0;
+      }
+
+      return assumeUnused || getProperty("_photocopyUsed") == "false" ? 1 : 0;
     case "Cat Burglar Heist":
       return haveFamiliar(Familiar.get("Cat Burglar"))
         ? assumeUnused
@@ -821,7 +792,7 @@ export function getResourcesLeft(
           : 1 - toInt(getProperty("_catBurglarHeistsComplete"))
         : 0;
     case "Hot Tub":
-      if (availableAmount(vipInvitation) == 0) {
+      if (isVIPDisabled()) {
         return 0;
       }
 

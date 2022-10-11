@@ -264,7 +264,7 @@ export class FigureOutPath {
   getPaths(quests: QuestInfo[], assumeUnstarted: boolean = false): SimmedPath {
     print(
       "Now calculating resources.. " +
-        (GreySettings.greyBreakAtTower && !assumeUnstarted
+        (GreySettings.greyBreakAtTower
           ? ""
           : "As you're not breaking at tower, this might take a while..")
     );
