@@ -45,8 +45,261 @@ __webpack_require__.d(__webpack_exports__, {
 
 ;// CONCATENATED MODULE: external "kolmafia"
 const external_kolmafia_namespaceObject = require("kolmafia");
+;// CONCATENATED MODULE: ./src/utils/GreyClan.ts
+function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return _arrayLikeToArray(arr);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function _createClass(Constructor, protoProps, staticProps) {if (protoProps) _defineProperties(Constructor.prototype, protoProps);if (staticProps) _defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+var vipInvitation = external_kolmafia_namespaceObject.Item.get("Clan VIP Lounge key");
+var fireworks = external_kolmafia_namespaceObject.Item.get("Clan Underground fireworks shop");
+var fortune = external_kolmafia_namespaceObject.Item.get("Clan Carnival Game");
+var faxMachine = external_kolmafia_namespaceObject.Item.get("deluxe fax machine");
+var bonusAdvFromHell = 90485;
+var faxOnline = (0,external_kolmafia_namespaceObject.isOnline)("CheeseFax");
+
+var availableClans;var
+
+ClanSwitcher = /*#__PURE__*/function () {function ClanSwitcher() {_classCallCheck(this, ClanSwitcher);_defineProperty(this, "origClan",
+    (0,external_kolmafia_namespaceObject.getClanId)());}_createClass(ClanSwitcher, [{ key: "joinClan", value:
+
+    function joinClan(id) {
+      if ((0,external_kolmafia_namespaceObject.getClanId)() == id) {
+        return true;
+      }
+
+      var page = (0,external_kolmafia_namespaceObject.visitUrl)(
+      "showclan.php?recruiter=1&whichclan=" +
+      id +
+      "&pwd&whichclan=" +
+      id +
+      "&action=joinclan&apply=Apply+to+this+Clan&confirm=on");
+
+
+      var success = page.includes("clanhalltop.gif");
+
+      if (success) {
+        (0,external_kolmafia_namespaceObject.print)("Switched to clan " + (0,external_kolmafia_namespaceObject.getClanName)(), "gray");
+      } else {
+        (0,external_kolmafia_namespaceObject.print)("Failed to switch clans! Unable to switch to clan ID " + id, "red");
+      }
+
+      return success;
+    } }, { key: "restoreClan", value:
+
+    function restoreClan() {
+      if (this.origClan == (0,external_kolmafia_namespaceObject.getClanId)()) {
+        return;
+      }
+
+      this.joinClan(this.origClan);
+    } }]);return ClanSwitcher;}();
+
+
+function getDefaultClan() {
+  if (GreySettings.greyVIPClan.trim().length == 0) {
+    return null;
+  }
+
+  return _toConsumableArray(getAvailableClans()).find(
+  (_ref) => {var _ref2 = _slicedToArray(_ref, 2),v = _ref2[1];return v.toLowerCase() == GreySettings.greyVIPClan.toLowerCase();})[
+  0];
+}
+
+function runInClan(clanId, func) {
+  var switcher = new ClanSwitcher();
+
+  try {
+    var result = switcher.joinClan(clanId);
+
+    if (!result) {
+      return;
+    }
+
+    func();
+  } finally {
+    switcher.restoreClan();
+  }
+}
+
+function getAvailableClans() {
+  if (availableClans != null) {
+    return availableClans;
+  }
+
+  var page = (0,external_kolmafia_namespaceObject.visitUrl)("clan_signup.php");
+
+  availableClans = new Map();
+  var match;
+
+  while (
+  (match = page.match(
+  /option +value=(\d+)>([^<>]*)<\/option>(?!.*name=whichclan>)/)) !=
+  null)
+  {
+    page = page.replace(match[0], "");
+
+    availableClans.set((0,external_kolmafia_namespaceObject.toInt)(match[1]), match[2]);
+  }
+
+  return availableClans;
+}
+
+function getFax(monster) {
+  if (isVIPDisabled()) {
+    throw "VIP was disabled, but function fax was still called";
+  }
+
+  if (!canAccessClan(getDefaultClan()) || !(0,external_kolmafia_namespaceObject.isOnline)("cheesefax")) {
+    throw (
+      "Cannot access fax machine, clan accessible? " +
+      canAccessClan(getDefaultClan()) +
+      ". CheeseFax online? " +
+      (0,external_kolmafia_namespaceObject.isOnline)("cheesefax"));
+
+  }
+
+  runInClan(getDefaultClan(), () => {
+    if (!canUseFaxMachine()) {
+      throw "Expected to be find fax machine in the clan " + (0,external_kolmafia_namespaceObject.getClanName)();
+    }
+
+    (0,external_kolmafia_namespaceObject.print)("Now trying to fax " + monster.name, "blue");
+
+    var hasReceivedFax = () => {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("photocopied monster")) == 0) {
+        (0,external_kolmafia_namespaceObject.cliExecute)("fax receive");
+      }
+
+      if (
+      (0,external_kolmafia_namespaceObject.getProperty)("photocopyMonster").toLowerCase() ==
+      monster.name.toLowerCase())
+      {
+        return true;
+      }
+
+      (0,external_kolmafia_namespaceObject.cliExecute)("fax send");
+      return false;
+    };
+
+    if (!hasReceivedFax()) {
+      (0,external_kolmafia_namespaceObject.chatPrivate)("cheesefax", monster.name);
+
+      for (var i = 0; i < 3; i++) {
+        (0,external_kolmafia_namespaceObject.wait)(10);
+
+        if (hasReceivedFax()) {
+          break;
+        }
+      }
+
+      if (!hasReceivedFax()) {
+        throw new Error("Failed to acquire photocopied " + monster);
+      }
+    }
+  });
+}
+
+function runFireworks(request) {
+  runInClan(getClanToUse(fireworks), () => {
+    if (!canUseFireworks()) {
+      throw "Expected to be find fireworks shop in the clan " + (0,external_kolmafia_namespaceObject.getClanName)();
+    }
+
+    request();
+  });
+}
+
+function doFortuneTeller() {
+  if (isVIPDisabled() || !GreySettings.greyFortuneTeller) {
+    return;
+  }
+
+  var consultsUsed = () => (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_clanFortuneConsultUses"));
+
+  if (consultsUsed() >= 3) {
+    return;
+  }
+
+  var bot = "cheesefax";
+
+  if (!(0,external_kolmafia_namespaceObject.isOnline)(bot)) {
+    (0,external_kolmafia_namespaceObject.print)("Oh dear, can't do fortune teller as CheeseFax is offline");
+    return;
+  }
+
+  (0,external_kolmafia_namespaceObject.print)("Now performing hocus pocus with the Fortune Teller", "blue");
+
+  runInClan(bonusAdvFromHell, () => {
+    if ((0,external_kolmafia_namespaceObject.getClanLounge)()[fortune.name] == null) {
+      throw "Expected to be find fortune teller in the clan " + (0,external_kolmafia_namespaceObject.getClanName)();
+    }
+
+    while (consultsUsed() < 3) {
+      // We want the first result to be compatible
+      // The second result is incompatible, as its worth more
+      // The last result is compatible, as it has nicer equips
+
+      var consultString =
+      consultsUsed() == 1 ? "a b c" : "pizza batman thick";
+
+      (0,external_kolmafia_namespaceObject.cliExecute)("fortune " + bot + " " + consultString);
+
+      if (consultsUsed() < 3) {
+        (0,external_kolmafia_namespaceObject.waitq)(3);
+      }
+    }
+  });
+
+  (0,external_kolmafia_namespaceObject.print)("Done with fortune telling.", "blue");
+}
+
+function hasVIPInvitation() {
+  return (0,external_kolmafia_namespaceObject.availableAmount)(vipInvitation) > 0;
+}
+
+function canAccessClan(clanId) {
+  if (clanId == null) {
+    return false;
+  }
+
+  return clanId == (0,external_kolmafia_namespaceObject.getClanId)() || getAvailableClans().has(clanId);
+}
+
+function canUseFireworks() {
+  return hasVIPInvitation() && canUse(fireworks);
+}
+
+function canUseFaxMachine() {
+  return (
+    hasVIPInvitation() &&
+    !isVIPDisabled() &&
+    canUse(faxMachine) &&
+    canAccessClan(getDefaultClan()) &&
+    faxOnline);
+
+}
+
+function canUse(vipItem) {
+  return getClanToUse(vipItem) != null;
+}
+
+function getClanToUse(vipItem) {
+  if ((0,external_kolmafia_namespaceObject.getClanLounge)()[vipItem.name] != null) {
+    return (0,external_kolmafia_namespaceObject.getClanId)();
+  }
+
+  if (canAccessClan(getDefaultClan()) && getDefaultClan() != (0,external_kolmafia_namespaceObject.getClanId)()) {
+    return getDefaultClan();
+  }
+
+  return null;
+}
+
+function isVIPDisabled() {
+  return !hasVIPInvitation() || GreySettings.greyVIPClan.length == 0;
+}
 ;// CONCATENATED MODULE: ./src/utils/GreySettings.ts
-function _createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function _createClass(Constructor, protoProps, staticProps) {if (protoProps) _defineProperties(Constructor.prototype, protoProps);if (staticProps) _defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function _createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreySettings_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreySettings_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreySettings_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreySettings_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreySettings_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreySettings_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreySettings_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreySettings_toConsumableArray(arr) {return GreySettings_arrayWithoutHoles(arr) || GreySettings_iterableToArray(arr) || GreySettings_unsupportedIterableToArray(arr) || GreySettings_nonIterableSpread();}function GreySettings_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreySettings_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreySettings_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreySettings_arrayLikeToArray(o, minLen);}function GreySettings_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function GreySettings_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return GreySettings_arrayLikeToArray(arr);}function GreySettings_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}
+
 
 
 
@@ -135,15 +388,7 @@ function getGreySettings() {
     description:
     "When true, will delete kmails from spooky lady and fortune teller",
     valid: (value) => value == "true" || value == "false",
-    default: false
-  };
-
-  var doFortuneTeller = {
-    name: "greyFortuneTeller",
-    description:
-    "If set to true, will complete the requirements for the Steel Margarita +5 Liver drink. There is different scenarios for this, but this is best used with towerbreaking and ronin escaping. It will attempt to use the no-trades previously acquired.",
-    valid: (value) => value == "true" || value == "false",
-    default: false
+    default: true
   };
 
   var useMummery = {
@@ -180,14 +425,6 @@ function getGreySettings() {
     "How many pulls the script can use, if this is too low then you're going to have a bad time. 20 means the script can use up to 20 pulls, leaving 0 remaining.",
     valid: (value) => /\d+/.test(value),
     default: 20
-  };
-
-  var greyBountyHunter = {
-    name: "greyBountyHunting",
-    description:
-    "Should the script pick up bounties that are likely to be collected along the way? Provides no advantage or disadvantage and you likely don't need it, is also slow. Every few days = one token slow.",
-    valid: (value) => value == "true" || value == "false",
-    default: false
   };
 
   var greyVoteMonster = {
@@ -236,6 +473,25 @@ function getGreySettings() {
     default: "Grey Goose"
   };
 
+  var greyVIPClan = {
+    name: "greyVIPClan",
+    description:
+    "The name of the clan we will use to execute Fax Requests, and switch to for other VIP functions if they are not available in our current clan. Set to empty to disable all VIP usage, even the yellow rockets..",
+    valid: (value) =>
+    GreySettings_toConsumableArray(getAvailableClans().values()).find(
+    (s) => s.toLowerCase() == value.toLowerCase()) !=
+    null,
+    default: "Bonus Adventures From Hell"
+  };
+
+  var greyFortuneTeller = {
+    name: "greyFortuneTeller",
+    description:
+    "If the script should use fortune teller if possible. Will grab: Prank Item, then Potion, then Psychic Equipment",
+    valid: (value) => value == "true" || value == "false",
+    default: true
+  };
+
   return [
   //greyBountyHunter,
   towerBreak,
@@ -253,7 +509,10 @@ function getGreySettings() {
   greyVoteMonster,
   greySwitchWorkshed,
   greyClipArt,
-  greyValueOfNC];
+  greyValueOfNC,
+  greyVIPClan,
+  deleteKmails,
+  greyFortuneTeller];
 
 }
 
@@ -300,7 +559,10 @@ function getMoonZone() {var sign = arguments.length > 0 && arguments[0] !== unde
 
 var spoon = external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon");
 
-var GreySettings = /*#__PURE__*/function () {function GreySettings() {_classCallCheck(this, GreySettings);}_createClass(GreySettings, null, [{ key: "isHardcoreMode", value:
+var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettings_classCallCheck(this, GreySettings);}GreySettings_createClass(GreySettings, null, [{ key: "isHardcoreMode", value:
+
+
+
 
 
 
@@ -376,7 +638,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {_classCall
 
           GreySettings[setting.name] = prop;
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
-    } }]);return GreySettings;}();_defineProperty(GreySettings, "hardcoreMode", false);_defineProperty(GreySettings, "speedRunMode", false);_defineProperty(GreySettings, "adventuresBeforeAbort", 8);_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);_defineProperty(GreySettings, "usefulSkillsWeight", 6);_defineProperty(GreySettings, "handySkillsWeight", 0.5);_defineProperty(GreySettings, "greyBreakAtTower", void 0);_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));_defineProperty(GreySettings, "greyDailyDungeon", void 0);_defineProperty(GreySettings, "greyDailyMalware", void 0);_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);_defineProperty(GreySettings, "greyFantasyBandits", void 0);_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));_defineProperty(GreySettings, "greySkipPalindome", void 0);_defineProperty(GreySettings, "greyPullsLimit", 20);_defineProperty(GreySettings, "greyValueOfAdventure", void 0);_defineProperty(GreySettings, "greyUseMummery", void 0);_defineProperty(GreySettings, "greyVotingBooth", void 0);_defineProperty(GreySettings, "greyBountyHunting", void 0);_defineProperty(GreySettings, "greySwitchWorkshed", void 0);_defineProperty(GreySettings, "greyClipArt", void 0);
+    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings, "greyDeleteKmails", void 0);
 ;// CONCATENATED MODULE: ./src/quests/Quests.ts
 
 
@@ -451,7 +713,7 @@ function getQuestStatus(property) {
   }
 }
 ;// CONCATENATED MODULE: ./src/utils/MacroBuilder.ts
-function _get() {if (typeof Reflect !== "undefined" && Reflect.get) {_get = Reflect.get.bind();} else {_get = function _get(target, property, receiver) {var base = _superPropBase(target, property);if (!base) return;var desc = Object.getOwnPropertyDescriptor(base, property);if (desc.get) {return desc.get.call(arguments.length < 3 ? target : receiver);}return desc.value;};}return _get.apply(this, arguments);}function _superPropBase(object, property) {while (!Object.prototype.hasOwnProperty.call(object, property)) {object = _getPrototypeOf(object);if (object === null) break;}return object;}function MacroBuilder_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = MacroBuilder_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || MacroBuilder_unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function MacroBuilder_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return MacroBuilder_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return MacroBuilder_arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return MacroBuilder_arrayLikeToArray(arr);}function MacroBuilder_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function MacroBuilder_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function MacroBuilder_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function MacroBuilder_createClass(Constructor, protoProps, staticProps) {if (protoProps) MacroBuilder_defineProperties(Constructor.prototype, protoProps);if (staticProps) MacroBuilder_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function MacroBuilder_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) _setPrototypeOf(subClass, superClass);}function _createSuper(Derived) {var hasNativeReflectConstruct = _isNativeReflectConstruct();return function _createSuperInternal() {var Super = _getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = _getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return _possibleConstructorReturn(this, result);};}function _possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return _assertThisInitialized(self);}function _assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function _wrapNativeSuper(Class) {var _cache = typeof Map === "function" ? new Map() : undefined;_wrapNativeSuper = function _wrapNativeSuper(Class) {if (Class === null || !_isNativeFunction(Class)) return Class;if (typeof Class !== "function") {throw new TypeError("Super expression must either be null or a function");}if (typeof _cache !== "undefined") {if (_cache.has(Class)) return _cache.get(Class);_cache.set(Class, Wrapper);}function Wrapper() {return _construct(Class, arguments, _getPrototypeOf(this).constructor);}Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });return _setPrototypeOf(Wrapper, Class);};return _wrapNativeSuper(Class);}function _construct(Parent, args, Class) {if (_isNativeReflectConstruct()) {_construct = Reflect.construct.bind();} else {_construct = function _construct(Parent, args, Class) {var a = [null];a.push.apply(a, args);var Constructor = Function.bind.apply(Parent, a);var instance = new Constructor();if (Class) _setPrototypeOf(instance, Class.prototype);return instance;};}return _construct.apply(null, arguments);}function _isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function _isNativeFunction(fn) {return Function.toString.call(fn).indexOf("[native code]") !== -1;}function _setPrototypeOf(o, p) {_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return _setPrototypeOf(o, p);}function _getPrototypeOf(o) {_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return _getPrototypeOf(o);}
+function _get() {if (typeof Reflect !== "undefined" && Reflect.get) {_get = Reflect.get.bind();} else {_get = function _get(target, property, receiver) {var base = _superPropBase(target, property);if (!base) return;var desc = Object.getOwnPropertyDescriptor(base, property);if (desc.get) {return desc.get.call(arguments.length < 3 ? target : receiver);}return desc.value;};}return _get.apply(this, arguments);}function _superPropBase(object, property) {while (!Object.prototype.hasOwnProperty.call(object, property)) {object = _getPrototypeOf(object);if (object === null) break;}return object;}function MacroBuilder_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = MacroBuilder_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function MacroBuilder_toConsumableArray(arr) {return MacroBuilder_arrayWithoutHoles(arr) || MacroBuilder_iterableToArray(arr) || MacroBuilder_unsupportedIterableToArray(arr) || MacroBuilder_nonIterableSpread();}function MacroBuilder_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function MacroBuilder_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return MacroBuilder_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return MacroBuilder_arrayLikeToArray(o, minLen);}function MacroBuilder_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function MacroBuilder_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return MacroBuilder_arrayLikeToArray(arr);}function MacroBuilder_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function MacroBuilder_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function MacroBuilder_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function MacroBuilder_createClass(Constructor, protoProps, staticProps) {if (protoProps) MacroBuilder_defineProperties(Constructor.prototype, protoProps);if (staticProps) MacroBuilder_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function MacroBuilder_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) _setPrototypeOf(subClass, superClass);}function _createSuper(Derived) {var hasNativeReflectConstruct = _isNativeReflectConstruct();return function _createSuperInternal() {var Super = _getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = _getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return _possibleConstructorReturn(this, result);};}function _possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return _assertThisInitialized(self);}function _assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function _wrapNativeSuper(Class) {var _cache = typeof Map === "function" ? new Map() : undefined;_wrapNativeSuper = function _wrapNativeSuper(Class) {if (Class === null || !_isNativeFunction(Class)) return Class;if (typeof Class !== "function") {throw new TypeError("Super expression must either be null or a function");}if (typeof _cache !== "undefined") {if (_cache.has(Class)) return _cache.get(Class);_cache.set(Class, Wrapper);}function Wrapper() {return _construct(Class, arguments, _getPrototypeOf(this).constructor);}Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });return _setPrototypeOf(Wrapper, Class);};return _wrapNativeSuper(Class);}function _construct(Parent, args, Class) {if (_isNativeReflectConstruct()) {_construct = Reflect.construct.bind();} else {_construct = function _construct(Parent, args, Class) {var a = [null];a.push.apply(a, args);var Constructor = Function.bind.apply(Parent, a);var instance = new Constructor();if (Class) _setPrototypeOf(instance, Class.prototype);return instance;};}return _construct.apply(null, arguments);}function _isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function _isNativeFunction(fn) {return Function.toString.call(fn).indexOf("[native code]") !== -1;}function _setPrototypeOf(o, p) {_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return _setPrototypeOf(o, p);}function _getPrototypeOf(o) {_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return _getPrototypeOf(o);}
 
 var MACRO_NAME = "Script Autoattack Macro";
 /**
@@ -600,11 +862,11 @@ var Macro = /*#__PURE__*/function () {function Macro() {MacroBuilder_classCallCh
      * @returns {Macro} This object itself.
      */
     function step() {var _ref;for (var _len = arguments.length, nextSteps = new Array(_len), _key = 0; _key < _len; _key++) {nextSteps[_key] = arguments[_key];}
-      var nextStepsStrings = (_ref = []).concat.apply(_ref, _toConsumableArray(
+      var nextStepsStrings = (_ref = []).concat.apply(_ref, MacroBuilder_toConsumableArray(
       nextSteps.map((x) => x instanceof Macro ? x.components : [x])));
 
-      this.components = [].concat(_toConsumableArray(
-      this.components), _toConsumableArray(
+      this.components = [].concat(MacroBuilder_toConsumableArray(
+      this.components), MacroBuilder_toConsumableArray(
       nextStepsStrings.filter((s) => s.length > 0)));
 
       return this;
@@ -915,7 +1177,7 @@ var Macro = /*#__PURE__*/function () {function Macro() {MacroBuilder_classCallCh
      * @returns {Macro} This object itself.
      */ }, { key: "skill", value:
     function skill() {for (var _len2 = arguments.length, skills = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {skills[_key2] = arguments[_key2];}
-      return this.step.apply(this, _toConsumableArray(
+      return this.step.apply(this, MacroBuilder_toConsumableArray(
       skills.map((skill) => {
         return "skill ".concat(skillBallsMacroName(skill));
       })));
@@ -940,7 +1202,7 @@ var Macro = /*#__PURE__*/function () {function Macro() {MacroBuilder_classCallCh
      * @returns {Macro} This object itself.
      */
     function trySkill() {for (var _len3 = arguments.length, skills = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {skills[_key3] = arguments[_key3];}
-      return this.step.apply(this, _toConsumableArray(
+      return this.step.apply(this, MacroBuilder_toConsumableArray(
       skills.map((skill) => {
         return Macro.if_("hasskill ".concat(
         skillBallsMacroName(skill)),
@@ -968,7 +1230,7 @@ var Macro = /*#__PURE__*/function () {function Macro() {MacroBuilder_classCallCh
      * @returns {Macro} This object itself.
      */
     function trySkillRepeat() {for (var _len4 = arguments.length, skills = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {skills[_key4] = arguments[_key4];}
-      return this.step.apply(this, _toConsumableArray(
+      return this.step.apply(this, MacroBuilder_toConsumableArray(
       skills.map((skill) => {
         return Macro.if_("hasskill ".concat(
         skillBallsMacroName(skill)),
@@ -996,7 +1258,7 @@ var Macro = /*#__PURE__*/function () {function Macro() {MacroBuilder_classCallCh
      * @returns {Macro} This object itself.
      */
     function item() {for (var _len5 = arguments.length, items = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {items[_key5] = arguments[_key5];}
-      return this.step.apply(this, _toConsumableArray(
+      return this.step.apply(this, MacroBuilder_toConsumableArray(
       items.map((itemOrItems) => {
         return "use ".concat(itemOrItemsBallsMacroName(itemOrItems));
       })));
@@ -1021,7 +1283,7 @@ var Macro = /*#__PURE__*/function () {function Macro() {MacroBuilder_classCallCh
      * @returns {Macro} This object itself.
      */
     function tryItem() {for (var _len6 = arguments.length, items = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {items[_key6] = arguments[_key6];}
-      return this.step.apply(this, _toConsumableArray(
+      return this.step.apply(this, MacroBuilder_toConsumableArray(
       items.map((item) => {
         return Macro.if_(
         itemOrItemsBallsMacroPredicate(item), "use ".concat(
@@ -1099,7 +1361,7 @@ var Macro = /*#__PURE__*/function () {function Macro() {MacroBuilder_classCallCh
     /**
      * Create a new macro starting with an ifNotHolidayWanderer step.
      * @param macro The macro to place inside the if_ statement
-     */ }], [{ key: "load", value: function load() {var _this;return (_this = new this()).step.apply(_this, _toConsumableArray((0,external_kolmafia_namespaceObject.getProperty)(Macro.SAVED_MACRO_PROPERTY).split(";")));} /**
+     */ }], [{ key: "load", value: function load() {var _this;return (_this = new this()).step.apply(_this, MacroBuilder_toConsumableArray((0,external_kolmafia_namespaceObject.getProperty)(Macro.SAVED_MACRO_PROPERTY).split(";")));} /**
      * Clear the saved macro in the Mafia property.
      */ }, { key: "clearSaved", value: function clearSaved() {(0,external_kolmafia_namespaceObject.removeProperty)(Macro.SAVED_MACRO_PROPERTY);} }, { key: "step", value: function step() {var _this2;return (_this2 = new this()).step.apply(_this2, arguments);} }, { key: "clearAutoAttackMacros", value: function clearAutoAttackMacros() {var _iterator = MacroBuilder_createForOfIteratorHelper(Macro.cachedAutoAttacks.keys()),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _Macro$cachedMacroIds;var name = _step.value;var id = (_Macro$cachedMacroIds = Macro.cachedMacroIds.get(name)) !== null && _Macro$cachedMacroIds !== void 0 ? _Macro$cachedMacroIds : getMacroId(name);(0,external_kolmafia_namespaceObject.visitUrl)("account_combatmacros.php?macroid=".concat(id, "&action=edit&what=Delete&confirm=1"));Macro.cachedAutoAttacks.delete(name);}} catch (err) {_iterator.e(err);} finally {_iterator.f();}} }, { key: "abort", value: function abort() {return new this().abort();} }, { key: "runaway", value: function runaway() {return new this().runaway();} }, { key: "if_", value: function if_(condition, ifTrue) {return new this().if_(condition, ifTrue);} /**
      * Create a new macro with an "if" statement.
@@ -1262,6 +1524,7 @@ var StrictMacro = /*#__PURE__*/(/* unused pure expression or super */ null && (f
       return (_this12 = new this()).trySkillRepeat.apply(_this12, arguments);
     } }]);return StrictMacro;}(Macro)));
 ;// CONCATENATED MODULE: ./src/typings/ResourceTypes.ts
+
 
 
 
@@ -1555,7 +1818,6 @@ var yellowParka = {
 };
 
 var rocket = external_kolmafia_namespaceObject.Item.get("Yellow Rocket");
-var vipInvitation = external_kolmafia_namespaceObject.Item.get("Clan VIP Lounge key");
 
 var yellowRocket = {
   type: ResourceCategory.YELLOW_RAY,
@@ -1563,7 +1825,7 @@ var yellowRocket = {
   name: "Yellow Rocket",
   worthInAftercore: 250, // Cost of a yellow rocket
   resourcesUsed: 75,
-  available: () => (0,external_kolmafia_namespaceObject.availableAmount)(vipInvitation) > 0,
+  available: () => canUseFireworks(),
   prepare: () => {
     if ((0,external_kolmafia_namespaceObject.itemAmount)(rocket) == 0) {
       (0,external_kolmafia_namespaceObject.cliExecute)("acquire yellow rocket");
@@ -1670,49 +1932,18 @@ var cargoShorts = {
   })
 };
 
-var faxMachine = {
+var ResourceTypes_faxMachine = {
   type: ResourceCategory.FAXER,
   resource: "Fax Machine",
   worthInAftercore: 20000, // Embezzler
   prepare: () => {},
+  available: () => canUseFaxMachine(),
   fax: (monster) => {
     if ((0,external_kolmafia_namespaceObject.getProperty)("_photocopyUsed") != "false") {
       throw "The fax was already used!";
     }
 
-    (0,external_kolmafia_namespaceObject.print)("Now trying to fax " + monster.name, "blue");
-
-    var hasReceivedFax = () => {
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("photocopied monster")) == 0) {
-        (0,external_kolmafia_namespaceObject.cliExecute)("fax receive");
-      }
-
-      if (
-      (0,external_kolmafia_namespaceObject.getProperty)("photocopyMonster").toLowerCase() ==
-      monster.name.toLowerCase())
-      {
-        return true;
-      }
-
-      (0,external_kolmafia_namespaceObject.cliExecute)("fax send");
-      return false;
-    };
-
-    if (!hasReceivedFax()) {
-      (0,external_kolmafia_namespaceObject.chatPrivate)("cheesefax", monster.name);
-
-      for (var i = 0; i < 3; i++) {
-        (0,external_kolmafia_namespaceObject.wait)(10);
-
-        if (hasReceivedFax()) {
-          break;
-        }
-      }
-
-      if (!hasReceivedFax()) {
-        throw new Error("Failed to acquire photocopied " + monster);
-      }
-    }
+    getFax(monster);
 
     (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?which=3&whichitem=4873&pwd");
   }
@@ -1893,7 +2124,7 @@ cosplayYellowRay,
 backupCopier,
 cosplayCopier,
 cargoShorts,
-faxMachine,
+ResourceTypes_faxMachine,
 combatLocket,
 wishFaxer,
 cosplayBanisher,
@@ -2040,10 +2271,11 @@ resourceType)
 
       return Math.min(fightsRemaining, wishesAvailable);
     case "Fax Machine":
-      return (0,external_kolmafia_namespaceObject.availableAmount)(vipInvitation) > 0 && (
-      assumeUnused || (0,external_kolmafia_namespaceObject.getProperty)("_photocopyUsed") == "false") ?
-      1 :
-      0;
+      if (!canUseFaxMachine()) {
+        return 0;
+      }
+
+      return assumeUnused || (0,external_kolmafia_namespaceObject.getProperty)("_photocopyUsed") == "false" ? 1 : 0;
     case "Cat Burglar Heist":
       return (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Cat Burglar")) ?
       assumeUnused ?
@@ -2051,7 +2283,7 @@ resourceType)
       1 - (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_catBurglarHeistsComplete")) :
       0;
     case "Hot Tub":
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(vipInvitation) == 0) {
+      if (isVIPDisabled()) {
         return 0;
       }
 
@@ -2115,7 +2347,7 @@ resourceType)
 
 }
 ;// CONCATENATED MODULE: ./src/typings/TaskInfo.ts
-function TaskInfo_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) TaskInfo_setPrototypeOf(subClass, superClass);}function TaskInfo_setPrototypeOf(o, p) {TaskInfo_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return TaskInfo_setPrototypeOf(o, p);}function TaskInfo_createSuper(Derived) {var hasNativeReflectConstruct = TaskInfo_isNativeReflectConstruct();return function _createSuperInternal() {var Super = TaskInfo_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = TaskInfo_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return TaskInfo_possibleConstructorReturn(this, result);};}function TaskInfo_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return TaskInfo_assertThisInitialized(self);}function TaskInfo_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function TaskInfo_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function TaskInfo_getPrototypeOf(o) {TaskInfo_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return TaskInfo_getPrototypeOf(o);}function TaskInfo_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskInfo_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || TaskInfo_unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskInfo_toConsumableArray(arr) {return TaskInfo_arrayWithoutHoles(arr) || TaskInfo_iterableToArray(arr) || TaskInfo_unsupportedIterableToArray(arr) || TaskInfo_nonIterableSpread();}function TaskInfo_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskInfo_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskInfo_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskInfo_arrayLikeToArray(o, minLen);}function TaskInfo_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function TaskInfo_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return TaskInfo_arrayLikeToArray(arr);}function TaskInfo_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskInfo_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function TaskInfo_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskInfo_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskInfo_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskInfo_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskInfo_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}
+function TaskInfo_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) TaskInfo_setPrototypeOf(subClass, superClass);}function TaskInfo_setPrototypeOf(o, p) {TaskInfo_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return TaskInfo_setPrototypeOf(o, p);}function TaskInfo_createSuper(Derived) {var hasNativeReflectConstruct = TaskInfo_isNativeReflectConstruct();return function _createSuperInternal() {var Super = TaskInfo_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = TaskInfo_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return TaskInfo_possibleConstructorReturn(this, result);};}function TaskInfo_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return TaskInfo_assertThisInitialized(self);}function TaskInfo_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function TaskInfo_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function TaskInfo_getPrototypeOf(o) {TaskInfo_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return TaskInfo_getPrototypeOf(o);}function TaskInfo_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskInfo_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function TaskInfo_slicedToArray(arr, i) {return TaskInfo_arrayWithHoles(arr) || TaskInfo_iterableToArrayLimit(arr, i) || TaskInfo_unsupportedIterableToArray(arr, i) || TaskInfo_nonIterableRest();}function TaskInfo_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskInfo_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function TaskInfo_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskInfo_toConsumableArray(arr) {return TaskInfo_arrayWithoutHoles(arr) || TaskInfo_iterableToArray(arr) || TaskInfo_unsupportedIterableToArray(arr) || TaskInfo_nonIterableSpread();}function TaskInfo_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskInfo_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskInfo_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskInfo_arrayLikeToArray(o, minLen);}function TaskInfo_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function TaskInfo_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return TaskInfo_arrayLikeToArray(arr);}function TaskInfo_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskInfo_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function TaskInfo_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskInfo_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskInfo_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskInfo_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskInfo_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}
 
 
 
@@ -2164,7 +2396,7 @@ var ResourcesSnapshot = /*#__PURE__*/function () {function ResourcesSnapshot() {
 
       join(", ");
       var resMap = TaskInfo_toConsumableArray(this.resourceMap).map(
-      (_ref2) => {var _ref3 = _slicedToArray(_ref2, 2),id = _ref3[0],amount = _ref3[1];return id + " x " + amount;});
+      (_ref2) => {var _ref3 = TaskInfo_slicedToArray(_ref2, 2),id = _ref3[0],amount = _ref3[1];return id + " x " + amount;});
 
       var unused = this.unused.join(", ");
 
@@ -2212,7 +2444,7 @@ var PossiblePath = /*#__PURE__*/function () {
     function setRoughPathCost(resourcesUsed) {
       this.pathCost = this.miscMeat;var _iterator = TaskInfo_createForOfIteratorHelper(
 
-        resourcesUsed),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _step$value = _slicedToArray(_step.value, 2),res = _step$value[1];
+        resourcesUsed),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _step$value = TaskInfo_slicedToArray(_step.value, 2),res = _step$value[1];
           this.pathCost += res.worthInAftercore;
 
           if (res.freeTurn == true) {
@@ -2243,7 +2475,7 @@ var PossiblePath = /*#__PURE__*/function () {
       var path = new PossiblePath(this.advsSavedMin, this.advsSavedMax);
       path.resourcesNeeded = TaskInfo_toConsumableArray(
       this.resourcesNeeded.map(
-      (_ref4) => {var _ref5 = _slicedToArray(_ref4, 2),v1 = _ref5[0],v2 = _ref5[1];return [v1, v2];}));
+      (_ref4) => {var _ref5 = TaskInfo_slicedToArray(_ref4, 2),v1 = _ref5[0],v2 = _ref5[1];return [v1, v2];}));
 
 
       path.resourceUsed = TaskInfo_toConsumableArray(this.resourceUsed);
@@ -22415,6 +22647,7 @@ var QuestCouncil = /*#__PURE__*/function () {
 
 
 
+
 function getKmails() {var caller = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "GreyDay";
   var buffer = (0,external_kolmafia_namespaceObject.visitUrl)(
   "api.php?pwd&what=kmail&count=100&for=" + (0,external_kolmafia_namespaceObject.urlEncode)(caller));
@@ -22435,14 +22668,29 @@ function getKmails() {var caller = arguments.length > 0 && arguments[0] !== unde
 }
 
 function isJunkKmail(kmail) {
-  return (
-    kmail.fromname == "Lady Spookyraven's Ghost" ||
-    kmail.fromname == "The Loathing Postal Service" &&
-    kmail.message.includes("telegram from Lady Spookyraven"));
+  if (
+  kmail.fromname == "Lady Spookyraven's Ghost" ||
+  kmail.fromname == "The Loathing Postal Service" &&
+  kmail.message.includes("telegram from Lady Spookyraven"))
+  {
+    return true;
+  }
 
+  if (
+  kmail.fromname.toLowerCase() == "cheesefax" &&
+  kmail.message.includes("completed your relationship fortune test!"))
+  {
+    return true;
+  }
+
+  return false;
 }
 
 function deleteJunkKmails() {
+  if (!GreySettings.greyDeleteKmails) {
+    return;
+  }
+
   getKmails().forEach((mail) => {
     if (!isJunkKmail(mail)) {
       return;
@@ -24487,13 +24735,13 @@ function QuestCustomPurchases_classCallCheck(instance, Constructor) {if (!(insta
 
 
 
+
 var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchases() {QuestCustomPurchases_classCallCheck(this, QuestCustomPurchases);QuestCustomPurchases_defineProperty(this, "popper",
     external_kolmafia_namespaceObject.Item.get("Porkpie-mounted popper"));QuestCustomPurchases_defineProperty(this, "silent",
     external_kolmafia_namespaceObject.Item.get("Silent Beret"));QuestCustomPurchases_defineProperty(this, "stealth",
     external_kolmafia_namespaceObject.Item.get("Xiblaxian stealth cowl"));QuestCustomPurchases_defineProperty(this, "firePlusCombat",
     external_kolmafia_namespaceObject.Item.get("sombrero-mounted sparkler"));QuestCustomPurchases_defineProperty(this, "pack",
-    external_kolmafia_namespaceObject.Item.get("protonic accelerator pack"));QuestCustomPurchases_defineProperty(this, "fireworksClan", void 0);}QuestCustomPurchases_createClass(QuestCustomPurchases, [{ key: "getId", value:
-
+    external_kolmafia_namespaceObject.Item.get("protonic accelerator pack"));}QuestCustomPurchases_createClass(QuestCustomPurchases, [{ key: "getId", value:
 
     function getId() {
       return "Misc / Purchases";
@@ -24504,22 +24752,14 @@ var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchas
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.getProperty)("_fireworksShopHatBought") == "true") {
+      if (
+      (0,external_kolmafia_namespaceObject.getProperty)("_fireworksShopHatBought") == "true" ||
+      !canUseFireworks())
+      {
         return QuestStatus.COMPLETED;
       }
 
       if ((0,external_kolmafia_namespaceObject.myMeat)() <= 3000) {
-        return QuestStatus.NOT_READY;
-      }
-
-      if (this.fireworksClan == null) {
-        (0,external_kolmafia_namespaceObject.visitUrl)("clan_viplounge.php");
-        var page = (0,external_kolmafia_namespaceObject.visitUrl)("clan_viplounge.php?action=fwshop&whichfloor=2");
-
-        this.fireworksClan = page.includes("<b>A Furtive Fireworks Fellow</b>");
-      }
-
-      if (!this.fireworksClan) {
         return QuestStatus.NOT_READY;
       }
 
@@ -24531,19 +24771,22 @@ var QuestCustomPurchases = /*#__PURE__*/function () {function QuestCustomPurchas
         location: null,
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
-          var toBuy = this.popper;
+          runFireworks(() => {
+            var toBuy = this.popper;
 
-          if (
-          (0,external_kolmafia_namespaceObject.availableAmount)(this.stealth) > 0 ||
-          (0,external_kolmafia_namespaceObject.availableAmount)(this.silent) > 0 ||
-          (0,external_kolmafia_namespaceObject.availableAmount)(this.pack) > 0)
-          {
-            toBuy = this.firePlusCombat;
-          }
+            if (
+            (0,external_kolmafia_namespaceObject.availableAmount)(this.stealth) > 0 ||
+            (0,external_kolmafia_namespaceObject.availableAmount)(this.silent) > 0 ||
+            (0,external_kolmafia_namespaceObject.availableAmount)(this.pack) > 0)
+            {
+              toBuy = this.firePlusCombat;
+            }
 
-          (0,external_kolmafia_namespaceObject.print)("Now trying to buy " + toBuy);
-          (0,external_kolmafia_namespaceObject.retrieveItem)(toBuy);
-          //          buy(item);
+            (0,external_kolmafia_namespaceObject.visitUrl)("clan_viplounge.php?action=fwshop&whichfloor=2");
+            (0,external_kolmafia_namespaceObject.print)("Now trying to buy " + toBuy);
+            (0,external_kolmafia_namespaceObject.retrieveItem)(toBuy);
+            //          buy(item);
+          });
         }
       };
     } }, { key: "getLocations", value:
@@ -25412,6 +25655,7 @@ function QuestInitialStart_createForOfIteratorHelper(o, allowArrayLike) {var it 
 
 
 
+
 var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inherits(QuestInitialStart, _TaskInfo);var _super = QuestInitialStart_createSuper(QuestInitialStart);function QuestInitialStart() {var _this;QuestInitialStart_classCallCheck(this, QuestInitialStart);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestInitialStart_defineProperty(QuestInitialStart_assertThisInitialized(_this), "familiar",
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestInitialStart_defineProperty(QuestInitialStart_assertThisInitialized(_this), "equip",
     external_kolmafia_namespaceObject.Item.get("Grey Down Vest"));QuestInitialStart_defineProperty(QuestInitialStart_assertThisInitialized(_this), "desiredLevel", void 0);QuestInitialStart_defineProperty(QuestInitialStart_assertThisInitialized(_this), "weightRequired", void 0);QuestInitialStart_defineProperty(QuestInitialStart_assertThisInitialized(_this), "spaceBlanket",
@@ -25564,6 +25808,8 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
             var props = new PropertyManager();
             props.setProperty("grabCloversSoftcore", "true");
             props.setProperty("grabCloversHardcore", "true");
+
+            doFortuneTeller();
 
             try {
               if (breakfastScript == "") {
@@ -28764,7 +29010,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
     function getPaths(quests) {var _this3 = this;var assumeUnstarted = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       (0,external_kolmafia_namespaceObject.print)(
       "Now calculating resources.. " + (
-      GreySettings.greyBreakAtTower && !assumeUnstarted ?
+      GreySettings.greyBreakAtTower ?
       "" :
       "As you're not breaking at tower, this might take a while.."));
 
@@ -31811,7 +32057,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "5fe7cb9";
+var lastCommitHash = "36bb3f4";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
