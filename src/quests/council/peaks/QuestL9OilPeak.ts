@@ -111,15 +111,23 @@ export class OilHandler implements QuestInfo {
   }
 
   doAbsorb(): QuestAdventure {
+    const doneFirst =
+      this.loc.turnsSpent > 0 ||
+      this.loc.noncombatQueue.includes(
+        "Pushin' Down on Me, Pushin' Down on You"
+      );
+
     return {
       location: this.loc,
       run: () => {
-        print("Now doing a special adventure for Oil Baron absorb!", "blue");
+        if (!doneFirst) {
+          print("Now doing a special adventure for Oil Baron absorb!", "blue");
+        }
         this.doMonsterLevel();
         greyAdv(this.loc);
         changeMcd(0);
 
-        if (this.needsAbsorb()) {
+        if (this.needsAbsorb() && !doneFirst) {
           throw "We spent a turn trying to grab the absorb for oil baron! This didn't work..";
         }
       },
