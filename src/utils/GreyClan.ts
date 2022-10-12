@@ -237,6 +237,14 @@ export function canUseFireworks(): boolean {
   return hasVIPInvitation() && canUse(fireworks);
 }
 
+export function canUseFortuneBuff(): boolean {
+  return hasVIPInvitation() && canUse(fortune);
+}
+
+export function useFortuneBuff(func: () => void) {
+  runInClan(getClanToUse(fortune), func);
+}
+
 export function canUseFaxMachine(): boolean {
   return (
     hasVIPInvitation() &&

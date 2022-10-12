@@ -334,7 +334,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
           }
 
           greyAdv(loc, outfit, settings);
-        } catch {
+        } finally {
           props.resetAll();
         }
       },

@@ -10,6 +10,11 @@ import {
   myAscensions,
   toInt,
 } from "kolmafia";
+import {
+  canUseFortuneBuff,
+  doFortuneTeller,
+  useFortuneBuff,
+} from "../../utils/GreyClan";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -27,7 +32,7 @@ export class QuestFortuneExp implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (getProperty("_clanFortuneBuffUsed") == "true") {
+    if (getProperty("_clanFortuneBuffUsed") == "true" || !canUseFortuneBuff()) {
       return QuestStatus.COMPLETED;
     }
 
@@ -47,7 +52,7 @@ export class QuestFortuneExp implements QuestInfo {
       location: null,
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
-        cliExecute("fortune buff familiar");
+        useFortuneBuff(() => cliExecute("fortune buff familiar"));
       },
     };
   }
