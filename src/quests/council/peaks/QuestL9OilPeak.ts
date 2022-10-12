@@ -120,14 +120,14 @@ export class OilHandler implements QuestInfo {
     return {
       location: this.loc,
       run: () => {
-        if (!doneFirst) {
+        if (doneFirst) {
           print("Now doing a special adventure for Oil Baron absorb!", "blue");
         }
         this.doMonsterLevel();
         greyAdv(this.loc);
         changeMcd(0);
 
-        if (this.needsAbsorb() && !doneFirst) {
+        if (this.needsAbsorb() && doneFirst) {
           throw "We spent a turn trying to grab the absorb for oil baron! This didn't work..";
         }
       },
