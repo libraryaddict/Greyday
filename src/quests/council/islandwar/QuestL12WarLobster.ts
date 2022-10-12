@@ -436,12 +436,20 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
           macro = Macro.if_(this.monster, copier.macro());
         }
 
+        const uses = getProperty("_saberForceUses");
+
         try {
           greyAdv(
             this.loc,
             outfit,
             new AdventureSettings().setStartOfFightMacro(macro)
           );
+
+          if (uses != getProperty("_saberForceUses")) {
+            if (this.getFriendsRemaining() <= 0) {
+              throw "Used the force, but no friends? Something went wrong!";
+            }
+          }
         } finally {
           props.resetAll();
         }
@@ -556,7 +564,7 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
             new AdventureSettings().setStartOfFightMacro(macro)
           );
 
-          if (copier != null && uses != getProperty("_saberForceUses")) {
+          if (uses != getProperty("_saberForceUses")) {
             if (this.getFriendsRemaining() <= 0) {
               throw "Used the force, but no friends? Something went wrong!";
             }
