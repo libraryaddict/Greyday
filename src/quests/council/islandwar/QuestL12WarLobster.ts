@@ -200,6 +200,12 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
   }
 
   status(path?: PossiblePath): QuestStatus {
+    const status = this.getStatus(path);
+
+    if (getProperty("sidequestLighthouseCompleted") != "none") {
+      return status;
+    }
+
     if (
       path != null &&
       path.canUse(ResourceCategory.FORCE_FIGHT) &&
@@ -207,8 +213,6 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
     ) {
       return QuestStatus.READY;
     }
-
-    const status = this.getStatus(path);
 
     if (status == null) {
       if (!path.canUse(ResourceCategory.FORCE_FIGHT)) {
@@ -221,9 +225,6 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
     return status;
   }
 
-  /**
-   * Lazy code, if we return null, then we want to run this task but only if its a primed
-   */
   getStatus(path: PossiblePath): QuestStatus {
     if (getProperty("sidequestLighthouseCompleted") != "none") {
       return QuestStatus.COMPLETED;
