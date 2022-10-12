@@ -63,6 +63,7 @@ import { GreySettings } from "./utils/GreySettings";
 import { doColor, setUmbrella } from "./utils/GreyUtils";
 import { getPrimedResource } from "./utils/GreyLocations";
 import { TaskAutumnaton } from "./tasks/TaskAutumnaton";
+import { handledChoices } from "./utils/Properties";
 
 export class GreyAdventurer {
   goose: Familiar = Familiar.get("Grey Goose");
@@ -572,8 +573,21 @@ export class GreyAdventurer {
       const turn = turnsPlayed();
 
       try {
+        const choices = handledChoices.join(",");
+
         GreyAdventurer.currentAdventure = adventure;
         toRun.run();
+
+        const afterChoices = handledChoices.join(",");
+
+        if (choices != afterChoices) {
+          throw (
+            "Expected handled choices to be the same after the adenture was run! Previously: " +
+            choices +
+            ", now: " +
+            afterChoices
+          );
+        }
       } finally {
         GreyAdventurer.currentAdventure = null;
 
