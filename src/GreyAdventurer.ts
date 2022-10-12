@@ -580,12 +580,16 @@ export class GreyAdventurer {
 
         const afterChoices = handledChoices.join(",");
 
-        if (choices != afterChoices) {
+        if (
+          choices != afterChoices &&
+          getProperty("greyIgnoreErrors") != "true"
+        ) {
           throw (
             "Expected handled choices to be the same after the adenture was run! Previously: " +
             choices +
             ", now: " +
-            afterChoices
+            afterChoices +
+            ". To ignore this, set 'greyIgnoreErrors' to 'true'"
           );
         }
       } finally {
