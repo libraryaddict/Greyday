@@ -1,6 +1,5 @@
 import {
   availableAmount,
-  bufferToFile,
   chatPrivate,
   cliExecute,
   getClanId,
@@ -188,16 +187,17 @@ export function doFortuneTeller() {
     return;
   }
 
-  const bot: string = "cheesefax";
+  const bot: string = "CheeseFax";
+  const fortuneClan: number = bonusAdvFromHell;
 
   if (!isOnline(bot)) {
-    print("Oh dear, can't do fortune teller as CheeseFax is offline");
+    print(`Oh dear, can't do fortune teller as ${bot} is offline`);
     return;
   }
 
   print("Now performing hocus pocus with the Fortune Teller", "blue");
 
-  runInClan(bonusAdvFromHell, () => {
+  runInClan(fortuneClan, () => {
     if (getClanLounge()[fortune.name] == null) {
       throw "Expected to be find fortune teller in the clan " + getClanName();
     }
