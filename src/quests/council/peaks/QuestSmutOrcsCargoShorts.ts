@@ -23,23 +23,22 @@ import { QuestType } from "../../QuestTypes";
 
 export class QuestL9SmutOrcsCargoShorts extends TaskInfo implements QuestInfo {
   shorts: Item = Item.get("Cargo Cultist Shorts");
-  pathShorts: PossiblePath = new PossiblePath(-5).add(
-    ResourceCategory.CARGO_SHORTS
-  );
-  pathNoShorts: PossiblePath = new PossiblePath(0);
   paths: PossiblePath[];
 
   createPaths(assumeUnstarted: boolean) {
+    const pathShorts = new PossiblePath(-5).add(ResourceCategory.CARGO_SHORTS);
+    const noShorts = new PossiblePath(0);
+
     if (availableAmount(this.shorts) == 0) {
-      this.paths = [this.pathNoShorts];
+      this.paths = [noShorts];
       return;
     }
 
-    this.paths = [this.pathNoShorts, this.pathShorts];
+    this.paths = [noShorts, pathShorts];
   }
 
   getPossiblePaths(): PossiblePath[] {
-    return [this.pathShorts, this.pathNoShorts];
+    return this.paths;
   }
 
   getId(): QuestType {
