@@ -81,8 +81,13 @@ export class QuestL8MountainNinja implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    const qStatus =
+      getQuestStatus("questL11Shen") < 4
+        ? QuestStatus.FASTER_LATER
+        : QuestStatus.READY;
+
     if (this.canHitCombat || numericModifier("Combat Rate") >= 25) {
-      return QuestStatus.READY;
+      return qStatus;
     }
 
     // If we've reached snowman time but don't have the skill
@@ -94,7 +99,7 @@ export class QuestL8MountainNinja implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    return QuestStatus.READY;
+    return qStatus;
   }
 
   getStatus(): MountainStatus {
