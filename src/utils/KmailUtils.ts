@@ -42,7 +42,8 @@ function isJunkKmail(kmail: Kmail) {
   }
 
   if (
-    kmail.fromname.toLowerCase() == "cheesefax" &&
+    (kmail.fromname.toLowerCase() == "cheesefax" ||
+      kmail.fromname.toLowerCase() == "averagechat") &&
     kmail.message.includes("completed your relationship fortune test!")
   ) {
     return true;
