@@ -62,26 +62,6 @@ export class AbsorbsProvider {
     );
   }
 
-  getUsefulSkills(): Map<Skill, string> {
-    if (getProperty("questL13Final") != "unstarted") {
-      return new Map();
-    }
-
-    return new Map(
-      [
-        //["Conifer Polymers", "3 Stench Resist"],
-        //["Clammy Microcilia", "2 Stench Resist"],
-        //["Cooling Tubules", "10 Cold Damage"],
-        ["Cryocurrency", "5 Cold Damage"],
-        // ["Ire Proof", "+3 Hot Resist"],
-        // ["Snow-Cooling System", "+15 Cold Dmg"],
-        ["Cooling Tubules", "+10 Cold Dmg"],
-        //["Innuendo Circuitry", "+15 Sleaze Damage"],
-        // ["Procgen Ribaldry", "10 Sleaze Damage"],
-      ].map((s) => [toSkill(s[0]), s[1]])
-    );
-  }
-
   getMustHaveSkills(): Map<Skill, string> {
     if (getProperty("questL13Final") != "unstarted") {
       return new Map();
@@ -155,12 +135,6 @@ export class AbsorbsProvider {
   ): AbsorbDetails {
     const skills = this.getMustHaveSkills();
 
-    if (!GreySettings.speedRunMode) {
-      for (const entry of this.getUsefulSkills()) {
-        skills.set(entry[0], entry[1]);
-      }
-    }
-
     const absorbs = monsters
       .map((m) => AbsorbsProvider.getAbsorb(m))
       .filter((a) => {
@@ -225,15 +199,12 @@ export class AbsorbsProvider {
 
   generateWeights(skills: Map<Absorb, string>): number {
     let weight = 0;
-    const handy = this.getUsefulSkills();
     const mustHave = this.getMustHaveSkills();
 
     for (const k of skills.keys()) {
       let w = 0;
 
-      if (!GreySettings.speedRunMode && handy.has(k.skill)) {
-        //   w = GreySettings.handySkillsWeight;
-      } else if (mustHave.has(k.skill)) {
+      if (mustHave.has(k.skill)) {
         w = GreySettings.usefulSkillsWeight;
       } else {
         continue;
@@ -251,12 +222,6 @@ export class AbsorbsProvider {
     includeSkills: boolean = true
   ): AbsorbDetails {
     const skills = this.getMustHaveSkills();
-
-    if (!GreySettings.speedRunMode) {
-      for (const entry of this.getUsefulSkills()) {
-        skills.set(entry[0], entry[1]);
-      }
-    }
 
     // for (let entry of this.getRolloverAdvs()) {
     //   skills.set(entry[0], entry[1]);
@@ -377,10 +342,6 @@ export class AbsorbsProvider {
 
   getOnlyUsefulAbsorbs(absorbs: Absorb[]) {
     const usefulSkills: Skill[] = [...this.getMustHaveSkills().keys()];
-
-    if (!GreySettings.speedRunMode) {
-      usefulSkills.push(...this.getUsefulSkills().keys());
-    }
 
     return absorbs.filter((a) => {
       return (

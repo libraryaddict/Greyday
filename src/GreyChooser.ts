@@ -45,6 +45,7 @@ import {
   AbsorbsProvider,
   AbsorbDetails,
   Reabsorbed,
+  Absorb,
 } from "./utils/GreyAbsorber";
 import {
   AdventureSettings,
@@ -67,6 +68,7 @@ export enum ConsiderPriority {
   INSISTS_ON_BEING_DONE,
   MUST_BE_DONE,
   ORB_ABSORB, // When we have an orb ready to absorb
+  ORB_ABSORB_OTHER, // When we have an orb ready to absorb
   ORB_OTHER, // When we have an orb that's not an absorb
   RANDOM_ABSORB, // When we're going here for the absorb
   RANDOM_COMBAT_ABSORB, // When we're going here for the absorb but want +combat
@@ -334,8 +336,7 @@ export class AdventureFinder {
 
     if (
       absorb.skill != null &&
-      (this.absorbs.getUsefulSkills().has(absorb.skill) ||
-        this.absorbs.getMustHaveSkills().has(absorb.skill))
+      this.absorbs.getMustHaveSkills().has(absorb.skill)
     ) {
       return false;
     }
@@ -383,23 +384,22 @@ export class AdventureFinder {
           adv.orbStatus = OrbStatus.READY;
           adv.mayFreeRun = false;
 
-          const absorb = this.absorbs.getAbsorb(prediction);
+          const absorb: Absorb = this.absorbs.getAbsorb(prediction);
+          const advAbsorb: boolean = absorb != null && absorb.adventures > 0;
+          const defeat: Reabsorbed = this.defeated.get(prediction);
 
           if (
-            absorb != null &&
-            absorb.adventures > 0 &&
-            (!this.defeated.has(prediction) ||
-              (this.defeated.get(prediction) == Reabsorbed.NOT_REABSORBED &&
-                absorbTime))
+            advAbsorb &&
+            (defeat == null ||
+              (defeat == Reabsorbed.NOT_REABSORBED && absorbTime))
           ) {
-            if (
-              this.defeated.get(prediction) == Reabsorbed.NOT_REABSORBED ||
-              absorbTime
-            ) {
+            if (defeat == Reabsorbed.NOT_REABSORBED || absorbTime) {
               adv.considerPriority = ConsiderPriority.ORB_ABSORB;
             } else {
               adv.considerPriority = ConsiderPriority.BAD_ABSORB_PREDICTION;
             }
+          } else if (defeat == null) {
+            adv.considerPriority = ConsiderPriority.ORB_ABSORB_OTHER;
           } else {
             adv.considerPriority = ConsiderPriority.ORB_OTHER;
           }

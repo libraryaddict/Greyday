@@ -373,7 +373,9 @@ export class GreyAdventurer {
     const wantToAbsorb: boolean =
       adventure.locationInfo != null &&
       adventure.locationInfo.turnsToGain > 0 &&
-      (!doOrb || adventure.considerPriority != ConsiderPriority.ORB_OTHER);
+      (!doOrb ||
+        (adventure.considerPriority != ConsiderPriority.ORB_OTHER &&
+          adventure.considerPriority != ConsiderPriority.ORB_ABSORB_OTHER));
     const gooseReplaceable =
       !wantToAbsorb && this.adventureFinder.hasEnoughGooseWeight();
     const canDoMagGlass: boolean =
