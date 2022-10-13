@@ -5,6 +5,7 @@ import {
   itemAmount,
   myMeat,
   print,
+  pullsRemaining,
   putCloset,
   use,
 } from "kolmafia";
@@ -61,7 +62,11 @@ export class TaskSellCrap implements Task {
     const count = availableAmount(this.teachersPen);
 
     if (count > 1) {
-      if (count > 2 && itemAmount(this.teachersPen) > 0) {
+      if (
+        count > 2 &&
+        itemAmount(this.teachersPen) > 0 &&
+        pullsRemaining() >= 0
+      ) {
         print(
           "Selling a Teacher's Pen because Irrat is too lazy to handle too much accessories with +fam exp"
         );
