@@ -67,15 +67,7 @@ export class MurderHandler implements QuestInfo {
       ? QuestStatus.READY
       : QuestStatus.FASTER_LATER;
 
-    if (this.needsStench() && elementalResistance(Element.get("stench")) >= 4) {
-      return status;
-    }
-
-    if (this.needsFood() && haveSkill(Skill.get("Gravitational Compression"))) {
-      return status;
-    }
-
-    if (this.needsJar()) {
+    if (this.questNeedsJar()) {
       this.createJar();
 
       if (this.hasJar()) {
@@ -83,7 +75,21 @@ export class MurderHandler implements QuestInfo {
       }
     }
 
-    if (this.needsInit()) {
+    if (
+      this.questNeedsStenchRes() &&
+      elementalResistance(Element.get("stench")) >= 4
+    ) {
+      return status;
+    }
+
+    if (
+      this.questNeedsFood() &&
+      haveSkill(Skill.get("Gravitational Compression"))
+    ) {
+      return status;
+    }
+
+    if (this.questNeedsInit()) {
       return status;
     }
 
@@ -106,19 +112,16 @@ export class MurderHandler implements QuestInfo {
       }
     }
 
-    if (this.needsInit() && !haveSkill(Skill.get("Overclocking"))) {
-      outfit.addItem(Item.get("Backup Camera")).addBonus("+init");
-    }
-
-    if (this.needsFood()) {
-      outfit.itemDropWeight = 4;
-    }
-
     this.createJar();
 
-    if (this.needsStench()) {
-      outfit.addItem(Item.get("Unwrapped knock-off retro superhero cape"));
-      outfit.addBonus("+2 stench res");
+    if (this.questNeedsJar() && this.hasJar()) {
+      // Empty
+    } else if (this.questNeedsStenchRes()) {
+      outfit.addBonus("+2 stench res 4 min 4 max");
+    } else if (this.questNeedsFood()) {
+      outfit.addBonus("+item drop 50 min");
+    } else if (this.questNeedsInit()) {
+      outfit.addBonus("+init 40 min");
     }
 
     return {
@@ -128,9 +131,9 @@ export class MurderHandler implements QuestInfo {
       run: () => {
         const props = new PropertyManager();
         //cliExecute("retrocape vampire hold");
-        if (getProperty("backupCameraMode") != "init") {
+        /* if (getProperty("backupCameraMode") != "init") {
           cliExecute("backupcamera init");
-        }
+        }*/
 
         props.setChoice(1056, 1);
         props.setChoice(604, 1);
@@ -141,19 +144,26 @@ export class MurderHandler implements QuestInfo {
         props.setChoice(616, 1);
 
         try {
-          if (this.needsInit() && numericModifier("initiative") >= 40) {
-            props.setChoice(606, 4);
-          } else if (this.needsFood() && itemDropModifier() >= 50) {
-            props.setChoice(606, 2);
+          if (this.questNeedsJar() && this.hasJar()) {
+            props.setChoice(606, 3);
           } else if (
-            this.needsStench() &&
+            this.questNeedsStenchRes() &&
             elementalResistance(Element.get("stench")) >= 4
           ) {
             props.setChoice(606, 1);
-          } else if (this.needsJar() && this.hasJar()) {
-            props.setChoice(606, 3);
+          } else if (this.questNeedsFood() && itemDropModifier() >= 50) {
+            props.setChoice(606, 2);
+          } else if (
+            this.questNeedsInit() &&
+            numericModifier("initiative") >= 40
+          ) {
+            props.setChoice(606, 4);
           } else {
-            throw "Eh?? We're at murder peak, but no idea what we're trying to do";
+            throw `Eh?? We're at murder peak, but we don't match the criteria for any of the choices. Jar? ${this.questNeedsJar()}, ${this.hasJar()}, Stench Res? ${this.questNeedsStenchRes()}, ${elementalResistance(
+              Element.get("stench")
+            )}, , food? ${this.questNeedsFood()} ${itemDropModifier()}, Init? ${this.questNeedsInit()} ${numericModifier(
+              "initiative"
+            )}. Maybe you need stench res, but the script can't find it for you?`;
           }
 
           if (availableAmount(this.rusty) > 0) {
@@ -187,7 +197,11 @@ export class MurderHandler implements QuestInfo {
   }
 
   createJar() {
-    if (this.hasJar() || !this.needsJar() || availableAmount(this.crude) < 12) {
+    if (
+      this.hasJar() ||
+      !this.questNeedsJar() ||
+      availableAmount(this.crude) < 12
+    ) {
       return;
     }
 
@@ -198,19 +212,19 @@ export class MurderHandler implements QuestInfo {
     return toInt(getProperty("twinPeakProgress"));
   }
 
-  needsStench(): boolean {
+  questNeedsStenchRes(): boolean {
     return (this.getMurderStatus() & 1) == 0;
   }
 
-  needsFood(): boolean {
+  questNeedsFood(): boolean {
     return (this.getMurderStatus() & 2) == 0;
   }
 
-  needsJar(): boolean {
+  questNeedsJar(): boolean {
     return (this.getMurderStatus() & 4) == 0;
   }
 
-  needsInit(): boolean {
+  questNeedsInit(): boolean {
     return this.getMurderStatus() == 7;
   }
 }

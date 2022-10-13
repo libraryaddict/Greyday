@@ -43,6 +43,20 @@ export class GreyOutfit {
     this.setWeights();
   }
 
+  /**
+   * Checks if the user defined a bonus weight. If so, discards our own.
+   */
+  hasBonus(name: string): boolean {
+    return (
+      this.bonusWeights.find((s) =>
+        s
+          .toLowerCase()
+          .replace(/^[^a-z]+/, "")
+          .startsWith(name)
+      ) != null
+    );
+  }
+
   getUmbrella(): UmbrellaState {
     if (this.umbrellaSetting == null) {
       if (this.minusCombatWeight > 0) {
@@ -168,45 +182,45 @@ export class GreyOutfit {
 
     const modifiers: string[] = [];
 
-    if (this.famExpWeight > 0) {
+    if (this.famExpWeight > 0 && !this.hasBonus("familiar exp")) {
       modifiers.push("+" + this.famExpWeight + " familiar experience");
     }
 
-    if (this.itemDropWeight > 0) {
+    if (this.itemDropWeight > 0 && !this.hasBonus("item drop")) {
       modifiers.push("+" + this.itemDropWeight + " item drop");
     }
 
-    if (this.meatDropWeight > 0) {
+    if (this.meatDropWeight > 0 && !this.hasBonus("meat drop")) {
       modifiers.push("+" + this.meatDropWeight + " meat drop");
     }
 
-    if (this.hpWeight > 0) {
+    if (this.hpWeight > 0 && !this.hasBonus("hp")) {
       modifiers.push("+" + this.hpWeight + " hp");
     }
 
-    if (this.hpRegenWeight > 0) {
+    if (this.hpRegenWeight > 0 && !this.hasBonus("hp regen")) {
       modifiers.push("+" + this.hpRegenWeight + " hp regen");
     }
 
-    if (this.mpWeight > 0) {
+    if (this.mpWeight > 0 && !this.hasBonus("mp")) {
       modifiers.push("+" + this.mpWeight + " mp");
     }
 
-    if (this.mpRegenWeight > 0) {
+    if (this.mpRegenWeight > 0 && !this.hasBonus("mp regen")) {
       modifiers.push("+" + this.mpRegenWeight + " mp regen");
     }
 
-    if (this.initWeight > 0) {
+    if (this.initWeight > 0 && !this.hasBonus("init")) {
       modifiers.push("+" + this.initWeight + " init");
     }
 
-    if (this.plusCombatWeight > 0) {
+    if (this.plusCombatWeight > 0 && !this.hasBonus("combat")) {
       modifiers.push(
         "+" + this.plusCombatWeight + " combat " + this.combatCap + " MAX"
       );
     }
 
-    if (this.minusCombatWeight > 0) {
+    if (this.minusCombatWeight > 0 && !this.hasBonus("combat")) {
       modifiers.push(
         "-" + this.minusCombatWeight + " combat " + this.combatCap + " MAX"
       );
@@ -220,7 +234,7 @@ export class GreyOutfit {
       modifiers.push(pair);
     }
 
-    if (!this.allowChampBottle) {
+    if (!this.allowChampBottle && !this.hasBonus("equip broken champagne")) {
       modifiers.push("-equip broken champagne bottle");
     }
 
