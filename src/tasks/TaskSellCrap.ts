@@ -1,4 +1,11 @@
-import { autosell, Item, itemAmount, myMeat, use } from "kolmafia";
+import {
+  autosell,
+  availableAmount,
+  Item,
+  itemAmount,
+  myMeat,
+  use,
+} from "kolmafia";
 import { Task } from "./Tasks";
 
 export class TaskSellCrap implements Task {
@@ -46,6 +53,12 @@ export class TaskSellCrap implements Task {
     "Shiny Stones",
     "Briefcase",
   ].map((s) => Item.get(s));
+
+  constructor() {
+    if (availableAmount(Item.get("June Cleaver")) > 0) {
+      this.junk.push(Item.get("Autumn leaf pendant"));
+    }
+  }
 
   run(): void {
     if (myMeat() > 15000) {
