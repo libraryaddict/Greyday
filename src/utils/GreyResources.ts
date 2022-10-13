@@ -117,14 +117,27 @@ export class GreyPulls {
       if (myMeat() > myStorageMeat()) {
         buy(item, 1, maxCost);
       } else {
-        buyUsingStorage(item, 1, maxCost);
+        GreyPulls.buyWithStorage(item, maxCost);
       }
+    }
+  }
+
+  private static buyWithStorage(item: Item, maxCost: number) {
+    const prop = "autoBuyPriceLimit";
+    const prev = getProperty(prop);
+
+    try {
+      setProperty(prop, maxCost.toString());
+
+      buyUsingStorage(item, 1, maxCost);
+    } finally {
+      setProperty(prop, prev);
     }
   }
 
   static tryPull(item: Item, maxCost: number = 30_000) {
     if (storageAmount(item) == 0) {
-      buyUsingStorage(item, 1, maxCost);
+      GreyPulls.buyWithStorage(item, maxCost);
     }
 
     if (storageAmount(item) == 0) {
