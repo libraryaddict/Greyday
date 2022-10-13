@@ -4,6 +4,7 @@ import {
   Item,
   itemAmount,
   myMeat,
+  print,
   use,
 } from "kolmafia";
 import { Task } from "./Tasks";
@@ -53,14 +54,28 @@ export class TaskSellCrap implements Task {
     "Shiny Stones",
     "Briefcase",
   ].map((s) => Item.get(s));
-
-  constructor() {
-    if (availableAmount(Item.get("June Cleaver")) > 0) {
-      this.junk.push(Item.get("Autumn leaf pendant"));
-    }
-  }
+  teachersPen: Item = Item.get("Teacher's Pen");
+  leafPendant: Item = Item.get("Autumn leaf pendant");
 
   run(): void {
+    const count = availableAmount(this.teachersPen);
+
+    if (count > 1) {
+      if (itemAmount(this.leafPendant) > 0) {
+        print(
+          "Selling a leaf pendant because Irrat is too lazy to handle too much accessories with +fam exp"
+        );
+        autosell(this.leafPendant, itemAmount(this.leafPendant));
+      }
+
+      if (count > 2 && itemAmount(this.teachersPen) > 0) {
+        print(
+          "Selling a Teacher's Pen because Irrat is too lazy to handle too much accessories with +fam exp"
+        );
+        autosell(this.teachersPen, 1);
+      }
+    }
+
     if (myMeat() > 15000) {
       return;
     }
