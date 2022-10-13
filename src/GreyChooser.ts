@@ -398,7 +398,12 @@ export class AdventureFinder {
             } else {
               adv.considerPriority = ConsiderPriority.BAD_ABSORB_PREDICTION;
             }
-          } else if (defeat == null) {
+          } else if (
+            absorb != null &&
+            absorb.skill != null &&
+            this.absorbs.getMustHaveSkills().has(absorb.skill) &&
+            defeat == null
+          ) {
             adv.considerPriority = ConsiderPriority.ORB_ABSORB_OTHER;
           } else {
             adv.considerPriority = ConsiderPriority.ORB_OTHER;
