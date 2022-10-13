@@ -53,20 +53,30 @@ export class SimmedPath {
       return false;
     }
 
+    const resources: [string, string, number][] = [];
+
+    unused[1].resourcesAvailable.forEach((r) => {
+      let res = resources.find(
+        ([r1, r2]) => r1 == r.name && r2 == ResourceCategory[r.type]
+      );
+
+      if (res == null) {
+        res = [r.name, ResourceCategory[r.type], 0];
+        resources.push(res);
+      }
+
+      res[2] += 1;
+    });
+
     print(
       unused[0].getId() +
-        " reports that it has resources left over despite being finished. Resources: " +
-        unused[1].resourcesAvailable.map(
-          (r) =>
-            r.name +
-            " x " +
-            ResourceCategory[r.type] +
-            " (Uses " +
-            (r.resourcesUsed ?? 1) +
-            ")"
+        " reports that it has resources left over despite being finished. This is not an error. Resources: " +
+        resources.map(
+          (name, type, uses) => name + " x " + type + " (Uses " + uses + ")"
         ),
       "red"
     );
+
     print(
       "Used resources: " +
         unused[1].resourceUsed.map((r) => ResourceCategory[r]).join(", ")
