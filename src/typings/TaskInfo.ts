@@ -120,11 +120,14 @@ export class PossiblePath {
 
   setRoughPathCost(resourcesUsed: [QuestInfo, SomeResource, number][]) {
     this.pathCost = this.miscMeat;
+    let hitFree = false;
 
     for (const [, res] of resourcesUsed) {
       this.pathCost += res.worthInAftercore;
 
-      if (res.freeTurn == true) {
+      if (!hitFree && res.freeTurn == true) {
+        hitFree = true;
+
         this.pathCost -= GreySettings.greyValueOfAdventure;
       }
     }
