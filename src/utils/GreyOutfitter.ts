@@ -18,6 +18,8 @@ import { UmbrellaState } from "./GreyUtils";
 export class GreyOutfit {
   static IGNORE_OUTFIT: any = "Ignore Outfit";
   private allowChampBottle: boolean = false;
+  private static teachersPen: Item = Item.get("Teacher's Pen");
+  private static leafPendant: Item = Item.get("Autumn leaf pendant");
   famExpWeight: number = 30;
   itemDropWeight: number = 0.3;
   meatDropWeight: number = 0.1;
@@ -80,8 +82,16 @@ export class GreyOutfit {
         this.addBonus("+4.5 bonus powerful glove");
       }
     }
+
     if (availableAmount(Item.get("Camp Scout Backpack")) > 0) {
       this.addBonus("+1 bonus camp scout backpack");
+    }
+
+    if (
+      availableAmount(GreyOutfit.teachersPen) > 1 &&
+      availableAmount(GreyOutfit.leafPendant) > 0
+    ) {
+      this.addBonus("-equip " + GreyOutfit.leafPendant.name);
     }
 
     this.addBonus("-equip screwing pooch");

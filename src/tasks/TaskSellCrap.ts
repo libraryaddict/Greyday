@@ -5,6 +5,7 @@ import {
   itemAmount,
   myMeat,
   print,
+  putCloset,
   use,
 } from "kolmafia";
 import { Task } from "./Tasks";
@@ -55,19 +56,11 @@ export class TaskSellCrap implements Task {
     "Briefcase",
   ].map((s) => Item.get(s));
   teachersPen: Item = Item.get("Teacher's Pen");
-  leafPendant: Item = Item.get("Autumn leaf pendant");
 
   run(): void {
     const count = availableAmount(this.teachersPen);
 
     if (count > 1) {
-      if (itemAmount(this.leafPendant) > 0) {
-        print(
-          "Selling a leaf pendant because Irrat is too lazy to handle too much accessories with +fam exp"
-        );
-        autosell(this.leafPendant, itemAmount(this.leafPendant));
-      }
-
       if (count > 2 && itemAmount(this.teachersPen) > 0) {
         print(
           "Selling a Teacher's Pen because Irrat is too lazy to handle too much accessories with +fam exp"
