@@ -19,6 +19,7 @@ import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { GreyPulls } from "../../../utils/GreyResources";
+import { GreySettings } from "../../../utils/GreySettings";
 import { getAllCombinations } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../utils/Properties";
@@ -148,6 +149,8 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
   }
 
   status(path: PossiblePath): QuestStatus {
+    GreySettings.greyHippyMode = false;
+
     if (this.haveOutfit(this.fratDisguise)) {
       return QuestStatus.COMPLETED;
     }
@@ -173,6 +176,8 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
         return QuestStatus.READY;
       }
     }
+
+    GreySettings.greyHippyMode = path.hasTag(WarTag.BEFORE_WAR);
 
     if (
       path.canUse(ResourceCategory.YELLOW_RAY) &&

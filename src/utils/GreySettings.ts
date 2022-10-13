@@ -298,6 +298,7 @@ export class GreySettings {
   static greyVIPClan: string;
   static greyFortuneTeller: boolean;
   static greyDeleteKmails: boolean;
+  static greyHippyMode: boolean = false;
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();
@@ -328,7 +329,7 @@ export class GreySettings {
    * If we aim to collect a hippy outfit
    */
   static isHippyMode(): boolean {
-    return this.isHardcoreMode();
+    return this.greyHippyMode || this.isHardcoreMode();
   }
 
   static shouldAvoidTowerRequirements(): boolean {
