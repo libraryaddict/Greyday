@@ -919,6 +919,13 @@ export class AdventureFinder {
         return a1.orbStatus - a2.orbStatus;
       }
 
+      if (
+        a1.quest?.getId() == "Council / MacGruffin / Black" ||
+        a2.quest?.getId() == "Council / MacGruffin / Black"
+      ) {
+        return a1.quest?.getId() == "Council / MacGruffin / Black" ? -1 : 1;
+      }
+
       const banished1: number =
         a1.adventure.location != null
           ? Object.keys(getLocationMonsters(a1.adventure.location)).filter(
