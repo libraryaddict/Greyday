@@ -751,10 +751,18 @@ export function getResourcesLeft(
         ? 15 - (assumeUnused ? 0 : toInt(getProperty("_deckCardsDrawn")))
         : 0;
     case "Zap Wand":
-      return Math.max(
-        0,
-        2 - (assumeUnused ? 0 : toInt(getProperty("_zapCount")))
-      );
+      if (!GreySettings.greyGrabZapWand) {
+        return 0;
+      }
+
+      const zaps = toInt(getProperty("_zapCount"));
+
+      // Blew up
+      if (!assumeUnused && zaps < 0) {
+        return 0;
+      }
+
+      return Math.max(0, 2 - (assumeUnused ? 0 : zaps));
     case "Cosplay Saber":
       return availableAmount(cosplaySaber) > 0
         ? 5 - (assumeUnused ? 0 : toInt(getProperty("_saberForceUses")))

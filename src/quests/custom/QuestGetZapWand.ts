@@ -23,6 +23,7 @@ import {
   QuestStatus,
 } from "../Quests";
 import { QuestType } from "../QuestTypes";
+import { GreySettings } from "../../utils/GreySettings";
 
 export class QuestGetZapWand implements QuestInfo {
   realDung: Location = Location.get("The Dungeons of Doom");
@@ -54,7 +55,11 @@ export class QuestGetZapWand implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (this.shouldHaveWand() || this.getWand() != null) {
+    if (
+      !GreySettings.greyGrabZapWand ||
+      this.shouldHaveWand() ||
+      this.getWand() != null
+    ) {
       return QuestStatus.COMPLETED;
     }
 

@@ -203,6 +203,14 @@ export function getGreySettings(): GreySetting[] {
     default: true,
   };
 
+  const greyGrabZapWand: GreySetting = {
+    name: "greyGrabZapWand",
+    description:
+      "Should the script grab the zap wand? This generally adds another 5-6 turns to the run",
+    valid: (value) => value == "true" || value == "false",
+    default: false,
+  };
+
   return [
     //greyBountyHunter,
     towerBreak,
@@ -224,6 +232,7 @@ export function getGreySettings(): GreySetting[] {
     greyVIPClan,
     deleteKmails,
     greyFortuneTeller,
+    greyGrabZapWand,
   ];
 }
 
@@ -299,6 +308,7 @@ export class GreySettings {
   static greyFortuneTeller: boolean;
   static greyDeleteKmails: boolean;
   static greyHippyMode: boolean = false;
+  static greyGrabZapWand: boolean;
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

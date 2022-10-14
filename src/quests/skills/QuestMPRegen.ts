@@ -34,6 +34,7 @@ import {
   QuestStatus,
 } from "../Quests";
 import { QuestType } from "../QuestTypes";
+import { GreySettings } from "../../utils/GreySettings";
 
 export class QuestMPRegen implements QuestInfo {
   realDung: Location = Location.get("The Dungeons of Doom");
@@ -104,9 +105,12 @@ export class QuestMPRegen implements QuestInfo {
 
   run(): QuestAdventure {
     const outfit = new GreyOutfit();
-    const seekingWand = this.getWand() == null && myMeat() >= 5000;
+    const seekingWand =
+      GreySettings.greyGrabZapWand &&
+      this.getWand() == null &&
+      myMeat() >= 5000;
 
-    if (this.getWand() == null) {
+    if (seekingWand) {
       outfit.setNoCombat();
     } else {
       outfit.plusCombatWeight = 1;
