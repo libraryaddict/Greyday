@@ -501,6 +501,14 @@ function getGreySettings() {
     default: true
   };
 
+  var greyGrabZapWand = {
+    name: "greyGrabZapWand",
+    description:
+    "Should the script grab the zap wand? This generally adds another 5-6 turns to the run",
+    valid: (value) => value == "true" || value == "false",
+    default: false
+  };
+
   return [
   //greyBountyHunter,
   towerBreak,
@@ -521,7 +529,8 @@ function getGreySettings() {
   greyValueOfNC,
   greyVIPClan,
   deleteKmails,
-  greyFortuneTeller];
+  greyFortuneTeller,
+  greyGrabZapWand];
 
 }
 
@@ -569,6 +578,7 @@ function getMoonZone() {var sign = arguments.length > 0 && arguments[0] !== unde
 var spoon = external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon");
 
 var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettings_classCallCheck(this, GreySettings);}GreySettings_createClass(GreySettings, null, [{ key: "isHardcoreMode", value:
+
 
 
 
@@ -648,7 +658,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
 
           GreySettings[setting.name] = prop;
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
-    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings, "greyHippyMode", false);
+    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings, "greyHippyMode", false);GreySettings_defineProperty(GreySettings, "greyGrabZapWand", void 0);
 ;// CONCATENATED MODULE: ./src/quests/Quests.ts
 
 
@@ -2252,10 +2262,18 @@ resourceType)
       15 - (assumeUnused ? 0 : (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_deckCardsDrawn"))) :
       0;
     case "Zap Wand":
-      return Math.max(
-      0,
-      2 - (assumeUnused ? 0 : (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_zapCount"))));
+      if (!GreySettings.greyGrabZapWand) {
+        return 0;
+      }
 
+      var zaps = (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_zapCount"));
+
+      // Blew up
+      if (!assumeUnused && zaps < 0) {
+        return 0;
+      }
+
+      return Math.max(0, 2 - (assumeUnused ? 0 : zaps));
     case "Cosplay Saber":
       return (0,external_kolmafia_namespaceObject.availableAmount)(cosplaySaber) > 0 ?
       5 - (assumeUnused ? 0 : (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_saberForceUses"))) :
@@ -25109,6 +25127,7 @@ function QuestGetZapWand_classCallCheck(instance, Constructor) {if (!(instance i
 
 
 
+
 var QuestGetZapWand = /*#__PURE__*/function () {function QuestGetZapWand() {QuestGetZapWand_classCallCheck(this, QuestGetZapWand);QuestGetZapWand_defineProperty(this, "realDung",
     external_kolmafia_namespaceObject.Location.get("The Dungeons of Doom"));QuestGetZapWand_defineProperty(this, "deadMimic",
     external_kolmafia_namespaceObject.Item.get("dead mimic"));QuestGetZapWand_defineProperty(this, "plusSign",
@@ -25139,7 +25158,11 @@ var QuestGetZapWand = /*#__PURE__*/function () {function QuestGetZapWand() {Ques
     } }, { key: "status", value:
 
     function status() {
-      if (this.shouldHaveWand() || this.getWand() != null) {
+      if (
+      !GreySettings.greyGrabZapWand ||
+      this.shouldHaveWand() ||
+      this.getWand() != null)
+      {
         return QuestStatus.COMPLETED;
       }
 
@@ -27056,6 +27079,7 @@ function QuestMPRegen_classCallCheck(instance, Constructor) {if (!(instance inst
 
 
 
+
 var QuestMPRegen = /*#__PURE__*/function () {function QuestMPRegen() {QuestMPRegen_classCallCheck(this, QuestMPRegen);QuestMPRegen_defineProperty(this, "realDung",
     external_kolmafia_namespaceObject.Location.get("The Dungeons of Doom"));QuestMPRegen_defineProperty(this, "none",
     external_kolmafia_namespaceObject.Item.get("None"));QuestMPRegen_defineProperty(this, "deadMimic",
@@ -27125,9 +27149,12 @@ var QuestMPRegen = /*#__PURE__*/function () {function QuestMPRegen() {QuestMPReg
 
     function run() {
       var outfit = new GreyOutfit();
-      var seekingWand = this.getWand() == null && (0,external_kolmafia_namespaceObject.myMeat)() >= 5000;
+      var seekingWand =
+      GreySettings.greyGrabZapWand &&
+      this.getWand() == null &&
+      (0,external_kolmafia_namespaceObject.myMeat)() >= 5000;
 
-      if (this.getWand() == null) {
+      if (seekingWand) {
         outfit.setNoCombat();
       } else {
         outfit.plusCombatWeight = 1;
@@ -32175,7 +32202,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "9155fd6";
+var lastCommitHash = "e4b816f";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
