@@ -38,6 +38,7 @@ import {
   QuestInfo,
   QuestStatus,
 } from "./quests/Quests";
+import { QuestType } from "./quests/QuestTypes";
 import { ResourceCategory } from "./typings/ResourceTypes";
 import { PossiblePath } from "./typings/TaskInfo";
 import { FigureOutPath, SimmedPath } from "./typings/TaskManager";
@@ -909,6 +910,11 @@ export class AdventureFinder {
       status == OrbStatus.IGNORED ? OrbStatus.NOT_SET : status;
     const compareFreeRuns = toInt(getProperty("_navelRunaways")) > 0;
     const levelingGoose = familiarWeight(this.goose) >= 6;
+    const prioritize: QuestType[] = [
+      "Council / MacGruffin / Black",
+      "Skills / MPRegen",
+      "Skills / ScalingItem",
+    ];
 
     this.possibleAdventures.sort((a1, a2) => {
       if (a1.considerPriority != a2.considerPriority) {
@@ -919,11 +925,11 @@ export class AdventureFinder {
         return a1.orbStatus - a2.orbStatus;
       }
 
-      if (
-        a1.quest?.getId() == "Council / MacGruffin / Black" ||
-        a2.quest?.getId() == "Council / MacGruffin / Black"
-      ) {
-        return a1.quest?.getId() == "Council / MacGruffin / Black" ? -1 : 1;
+      const p1 = prioritize.includes(a1.quest?.getId()) ? -1 : 1;
+      const p2 = prioritize.includes(a2.quest?.getId()) ? -1 : 1;
+
+      if (p1 != p2) {
+        return p1 - p2;
       }
 
       const banished1: number =
