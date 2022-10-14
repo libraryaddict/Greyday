@@ -29489,6 +29489,7 @@ function GreyChooser_toConsumableArray(arr) {return GreyChooser_arrayWithoutHole
 
 
 
+
 var OrbStatus;(function (OrbStatus) {OrbStatus[OrbStatus["READY"] = 0] = "READY";OrbStatus[OrbStatus["NOT_SET"] = 1] = "NOT_SET";OrbStatus[OrbStatus["IGNORED"] = 2] = "IGNORED";OrbStatus[OrbStatus["NEEDS_RESET"] = 3] = "NEEDS_RESET";})(OrbStatus || (OrbStatus = {}));
 
 
@@ -30341,6 +30342,11 @@ var AdventureFinder = /*#__PURE__*/function () {
       status == OrbStatus.IGNORED ? OrbStatus.NOT_SET : status;
       var compareFreeRuns = (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_navelRunaways")) > 0;
       var levelingGoose = (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= 6;
+      var prioritize = [
+      "Council / MacGruffin / Black",
+      "Skills / MPRegen",
+      "Skills / ScalingItem"];
+
 
       this.possibleAdventures.sort((a1, a2) => {var _a1$quest, _a2$quest;
         if (a1.considerPriority != a2.considerPriority) {
@@ -30351,11 +30357,11 @@ var AdventureFinder = /*#__PURE__*/function () {
           return a1.orbStatus - a2.orbStatus;
         }
 
-        if (
-        ((_a1$quest = a1.quest) === null || _a1$quest === void 0 ? void 0 : _a1$quest.getId()) == "Council / MacGruffin / Black" ||
-        ((_a2$quest = a2.quest) === null || _a2$quest === void 0 ? void 0 : _a2$quest.getId()) == "Council / MacGruffin / Black")
-        {var _a1$quest2;
-          return ((_a1$quest2 = a1.quest) === null || _a1$quest2 === void 0 ? void 0 : _a1$quest2.getId()) == "Council / MacGruffin / Black" ? -1 : 1;
+        var p1 = prioritize.includes((_a1$quest = a1.quest) === null || _a1$quest === void 0 ? void 0 : _a1$quest.getId()) ? -1 : 1;
+        var p2 = prioritize.includes((_a2$quest = a2.quest) === null || _a2$quest === void 0 ? void 0 : _a2$quest.getId()) ? -1 : 1;
+
+        if (p1 != p2) {
+          return p1 - p2;
         }
 
         var banished1 =
@@ -32209,7 +32215,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "b0af2bd";
+var lastCommitHash = "6ff73d6";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
