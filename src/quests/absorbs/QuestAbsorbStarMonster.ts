@@ -108,4 +108,8 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
   getAbsorbs(): Monster[] {
     return [this.getMonster()];
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

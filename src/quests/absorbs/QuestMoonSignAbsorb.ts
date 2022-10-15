@@ -177,4 +177,8 @@ export abstract class QuestMoonSignAbsorb
 
     return getMoonZone(GreySettings.greyTuneMoonSpoon) == this.moonZone;
   }
+
+  canAcceptPrimes(): boolean {
+    return false;
+  }
 }

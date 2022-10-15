@@ -269,10 +269,11 @@ export class AdventureFinder {
       this.possibleAdventures.push(adv);
     }
 
-    for (const [loc, details] of this.absorbs.getExtraAdventures(
-      this.defeated,
-      true
-    )) {
+    const nonQuests = this.absorbs.getExtraAdventures(this.defeated, true);
+
+    nonQuests.sort(([, a1], [, a2]) => a2.weight - a1.weight);
+
+    for (const [loc, details] of nonQuests) {
       if (
         this.questLocations.includes(loc) ||
         !canAdventure(loc) ||
@@ -914,6 +915,7 @@ export class AdventureFinder {
       "Council / MacGruffin / Black",
       "Skills / MPRegen",
       "Skills / ScalingItem",
+      "Council / War / Filthworms",
     ];
 
     this.possibleAdventures.sort((a1, a2) => {
