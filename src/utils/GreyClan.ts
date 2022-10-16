@@ -67,9 +67,15 @@ function getDefaultClan(): number {
     return null;
   }
 
-  return [...getAvailableClans()].find(
+  const clanInfo = [...getAvailableClans()].find(
     ([, v]) => v.toLowerCase() == GreySettings.greyVIPClan.toLowerCase()
-  )[0];
+  );
+
+  if (clanInfo == null) {
+    return null;
+  }
+
+  return clanInfo[0];
 }
 
 function runInClan(clanId: number, func: () => void) {

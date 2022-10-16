@@ -229,7 +229,7 @@ export class SmutOrcs implements QuestInfo {
       }
 
       if (availableAmount(Item.get("Logging Hatchet")) > 0) {
-        outfit.addItem(Item.get("Logging Hatchet"));
+        outfit.addItem(Item.get("Logging Hatchet"), 100);
       }
     }
 
@@ -238,7 +238,7 @@ export class SmutOrcs implements QuestInfo {
       this.getChasmRemaining() > this.getFastenersHave()
     ) {
       if (availableAmount(Item.get("Loadstone")) > 0) {
-        outfit.addItem(Item.get("Loadstone"));
+        outfit.addItem(Item.get("Loadstone"), 100);
       }
     }
 
