@@ -331,6 +331,7 @@ class GreyYouMain {
       const props = new PropertyManager();
       props.setProperty("autoSatisfyWithNPCs", "true");
       props.setProperty("autoSatisfyWithCoinmasters", "true");
+      props.setProperty("requireBoxServants", "false");
 
       const autoAttack = getAutoAttack();
 

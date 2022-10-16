@@ -482,14 +482,14 @@ export class GreyRequirements {
     add(
       Type.FREE,
       Item.get("HOA regulation book"),
-      "Prefered over Space Trip safety headphones for the +2 res, saves 20? turns, especially on smut orcs",
+      "Prefered over Space Trip safety headphones for the +2 res, saves 20? turns, especially on smut orcs. Very minor difference which one you have.",
       Required.VERY_USEFUL
     );
 
     add(
       Type.FREE,
       Item.get("Space Trip safety headphones"),
-      "HOA regulation book is used instead when available, but this still saves 20? turns, especially on smut orcs",
+      "HOA regulation book is used instead when available, but this still saves 20? turns, especially on smut orcs. Very minor difference which one you have.",
       Required.VERY_USEFUL
     );
 
