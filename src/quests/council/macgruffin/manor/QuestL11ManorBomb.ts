@@ -1,6 +1,5 @@
 import {
   Location,
-  Familiar,
   Item,
   itemAmount,
   Monster,
@@ -10,7 +9,6 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
-import { PropertyManager } from "../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -61,13 +59,10 @@ export class QuestL11ManorBomb implements QuestInfo {
       return {
         location: null,
         run: () => {
-          const props = new PropertyManager();
-          props.setProperty("requireBoxServants", "false");
+          cliExecute("create Unstable Fulminate");
 
-          try {
-            cliExecute("create Unstable Fulminate");
-          } finally {
-            props.resetAll();
+          if (availableAmount(this.unstable) == 0) {
+            throw "Expected to have created " + this.unstable + " but failed";
           }
         },
       };
