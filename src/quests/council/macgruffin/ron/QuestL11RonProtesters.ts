@@ -84,6 +84,12 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     this.parka,
   ];
 
+  getOutfit(): Item[] {
+    return this.lyrndCostume.filter(
+      (i) => i != this.lyrndShirt || haveSkill(this.torsoAwareness)
+    );
+  }
+
   getRelation(id: QuestType): TaskRelation {
     if (id == "Council / Peaks / Orcs" && !haveSkill(this.smutSleazeSkill)) {
       return TaskRelation.WAIT_FOR;
@@ -340,7 +346,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     return (
       3 +
       (availableAmount(this.musk) + haveEffect(this.musky) > 0 ? 3 : 0) +
-      this.lyrndCostume.filter((i) => availableAmount(i) > 0).length * 5
+      this.getOutfit().filter((i) => availableAmount(i) > 0).length * 5
     );
   }
 
@@ -368,7 +374,10 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     const runSleaze = this.getSleazeScares() >= this.getLynyrdScares();
     const str = runSleaze
       ? "Sleaze Spell Damage +Sleaze Damage"
-      : this.lyrndCostume.map((i) => "+equip " + i).join(" ") +
+      : this.getOutfit()
+          .filter((i) => availableAmount(i) > 0)
+          .map((i) => "+equip " + i)
+          .join(" ") +
         (haveFamiliar(this.lefthandMan) ? " +switch left-hand man" : "");
     const outfit = new GreyOutfit(str + " -tie");
 
