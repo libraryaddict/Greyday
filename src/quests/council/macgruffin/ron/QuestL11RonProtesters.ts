@@ -123,7 +123,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
       "Clover",
     ];
 
-    if (availableAmount(this.spoon) == 0 && !gnomadsAvailable()) {
+    if (!this.willHaveShirt()) {
       allPossible = allPossible.filter((i) => i != this.lyrndShirt);
     }
 
@@ -271,14 +271,17 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     );
   }
 
-  waitingForShirt(): boolean {
+  willHaveShirt(): boolean {
     return (
-      !haveSkill(this.torsoAwareness) &&
-      (gnomadsAvailable() ||
-        (availableAmount(this.spoon) > 0 &&
-          getMoonZone(GreySettings.greyTuneMoonSpoon) == "Gnomad" &&
-          getProperty("moonTuned") != "true"))
+      gnomadsAvailable() ||
+      (availableAmount(this.spoon) > 0 &&
+        getMoonZone(GreySettings.greyTuneMoonSpoon) == "Gnomad" &&
+        getProperty("moonTuned") != "true")
     );
+  }
+
+  waitingForShirt(): boolean {
+    return !haveSkill(this.torsoAwareness) && this.willHaveShirt();
   }
 
   getId(): QuestType {
