@@ -516,7 +516,7 @@ class QuestUntinker implements QuestInfo {
   }
 
   level(): number {
-    return 1;
+    return 4;
   }
 
   free(): boolean {
