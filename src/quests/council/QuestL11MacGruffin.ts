@@ -29,6 +29,7 @@ import { QuestL11Temple } from "./macgruffin/QuestL11Temple";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 import { QuestL11ShoreAccess } from "./macgruffin/QuestL11VacationAccess";
+import { GreyOutfit } from "../../utils/GreyOutfitter";
 
 export class QuestL11MacGruffin implements QuestInfo {
   questInfo: QuestInfo[] = [];
@@ -87,6 +88,7 @@ export class QuestL11MacGruffin implements QuestInfo {
   run(): QuestAdventure {
     return {
       location: null,
+      outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         if (availableAmount(this.diary) == 0) {
           if (availableAmount(this.forged) == 0) {
@@ -96,6 +98,10 @@ export class QuestL11MacGruffin implements QuestInfo {
             }
 
             retrieveItem(this.forged);
+
+            if (availableAmount(this.forged) == 0) {
+              throw this.forged + " wasn't acquired!";
+            }
           }
 
           const props = new PropertyManager();
@@ -104,6 +110,14 @@ export class QuestL11MacGruffin implements QuestInfo {
             props.setChoice(793, 1);
 
             greyAdv(Location.get("The Shore, Inc. Travel Agency"));
+
+            if (availableAmount(this.diary) == 0) {
+              throw (
+                "Unexpectably, " +
+                this.diary +
+                " was not available! Try refresh inventory? Maybe we don't have forged documents"
+              );
+            }
           } finally {
             props.resetAll();
           }

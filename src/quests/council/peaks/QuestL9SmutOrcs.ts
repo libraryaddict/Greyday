@@ -242,7 +242,7 @@ export class SmutOrcs implements QuestInfo {
       }
     }
 
-    outfit.addBonus("+100 " + this.lastColdMaximize + " 5 min 5 max");
+    outfit.addBonus("+100000 " + this.lastColdMaximize + " 5 min 5 max");
 
     return {
       location: this.loc,
