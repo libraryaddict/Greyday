@@ -338,6 +338,8 @@ class GreyYouMain {
 
       const props = new PropertyManager();
       props.setProperty("autoSatisfyWithNPCs", "true");
+      props.setProperty("autoSatisfyWithMall", "true");
+      props.setProperty("autoSatisfyWithStorage", "true");
       props.setProperty("autoSatisfyWithCoinmasters", "true");
       props.setProperty("requireBoxServants", "false");
 
