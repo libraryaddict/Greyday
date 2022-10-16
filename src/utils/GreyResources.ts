@@ -3,6 +3,7 @@ import {
   buy,
   buyUsingStorage,
   cliExecute,
+  closetAmount,
   Familiar,
   getLocketMonsters,
   getProperty,
@@ -267,7 +268,7 @@ export class GreyRequirements {
       unsupported: boolean = false
     ) => {
       if (name instanceof Item) {
-        owns = availableAmount(name) + storageAmount(name) > 0;
+        owns = itemAmount(name) + closetAmount(name) + storageAmount(name) > 0;
         name = name.name;
       }
 
