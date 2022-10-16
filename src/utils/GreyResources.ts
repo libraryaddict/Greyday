@@ -4,6 +4,7 @@ import {
   buyUsingStorage,
   cliExecute,
   closetAmount,
+  displayAmount,
   Familiar,
   getLocketMonsters,
   getProperty,
@@ -19,6 +20,7 @@ import {
   printHtml,
   pullsRemaining,
   setProperty,
+  shopAmount,
   storageAmount,
   toBoolean,
   toInt,
@@ -261,7 +263,7 @@ export class GreyRequirements {
     const required: [Type, string, string, Required, boolean][] = [];
     const add = (
       type: Type,
-      name: string | Item,
+      name: string | Item | Familiar,
       desc: string,
       e: Required,
       owns?: boolean,
@@ -270,6 +272,25 @@ export class GreyRequirements {
       if (name instanceof Item) {
         owns = itemAmount(name) + closetAmount(name) + storageAmount(name) > 0;
         name = name.name;
+      } else if (name instanceof Familiar) {
+        owns = haveFamiliar(name);
+
+        const hatchling = name.hatchling;
+
+        if (
+          !owns &&
+          storageAmount(hatchling) +
+            itemAmount(hatchling) +
+            closetAmount(hatchling) +
+            displayAmount(hatchling) +
+            shopAmount(hatchling) >
+            0
+        ) {
+          desc +=
+            "- <u>You do have the hatchling " + hatchling + " though..</u>";
+        }
+
+        name = "" + name;
       }
 
       if (unsupported) {
@@ -281,10 +302,9 @@ export class GreyRequirements {
 
     add(
       Type.IOTM,
-      "Grey Goose",
+      Familiar.get("Grey Goose"),
       "Without this, Grey You isn't really feasible",
-      Required.MUST,
-      haveFamiliar(Familiar.get("Grey Goose"))
+      Required.MUST
     );
 
     add(
@@ -377,10 +397,9 @@ export class GreyRequirements {
 
     add(
       Type.FREE,
-      "Gelatinous Cubeling",
+      Familiar.get("Gelatinous Cubeling"),
       "Saves about 10 turns if you're not doing a tower break",
-      Required.VERY_USEFUL,
-      haveFamiliar(Familiar.get("Gelatinous Cubeling"))
+      Required.VERY_USEFUL
     );
 
     add(
@@ -506,14 +525,6 @@ export class GreyRequirements {
 
     add(
       Type.IOTM,
-      "Shorter-Order Cook",
-      "Great for tower killing and provides an absorb at the start of your run",
-      Required.USEFUL,
-      haveFamiliar(Familiar.get("Shorter-Order Cook"))
-    );
-
-    add(
-      Type.IOTM,
       Item.get("Fourth of May Cosplay Saber"),
       "Great for faster lobsterfrogmen, ele res checks and for 1-2 yellow rays!",
       Required.USEFUL
@@ -567,26 +578,23 @@ export class GreyRequirements {
 
     add(
       Type.IOTM,
-      "Shorter-Order Cook",
-      "Gives an initial boost to start, skip 6-8 leveling turns!",
-      Required.USEFUL,
-      haveFamiliar(Familiar.get("Shorter-Order Cook"))
+      Familiar.get("Shorter-Order Cook"),
+      "Gives an initial boost to start, skip 6-8 leveling turns! Also great for tower killing!",
+      Required.USEFUL
     );
 
     add(
       Type.IOTM,
-      "Melodramedary",
+      Familiar.get("Melodramedary"),
       "Saves 3 adventures for desert!",
-      Required.MINOR,
-      haveFamiliar(Familiar.get("Melodramedary"))
+      Required.MINOR
     );
 
     add(
       Type.IOTM,
-      "Cat Burglar",
+      Familiar.get("Cat Burglar"),
       "Only used rarely, generally not worth picking up but does sometimes save 20k of resources in meat!",
-      Required.MINOR,
-      haveFamiliar(Familiar.get("Cat Burglar"))
+      Required.MINOR
     );
 
     add(
@@ -606,10 +614,9 @@ export class GreyRequirements {
 
     add(
       Type.IOTM,
-      "XO Skeleton",
+      Familiar.get("XO Skeleton"),
       "Used for its pickpocket, just saves a polar vortex for the well kitted players",
-      Required.MINOR,
-      haveFamiliar(Familiar.get("XO Skeleton"))
+      Required.MINOR
     );
 
     add(
@@ -642,7 +649,8 @@ export class GreyRequirements {
       "Voting Booth",
       "Iotm for voting, +3 hot res, +25% moxie buff, has interaction with powerful glove for lobsterfrogman, and gives 3 free delay burns",
       Required.MINOR,
-      toBoolean(getProperty("voteAlways"))
+      toBoolean(getProperty("voteAlways")),
+      true
     );
 
     required.sort(([t1, r1], [t2, r2]) =>
