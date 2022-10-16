@@ -93,15 +93,13 @@ export function getAvailableClans(): Map<number, string> {
     return availableClans;
   }
 
-  let page = visitUrl("clan_signup.php");
+  let page = visitUrl("clan_signup.php?place=managewhitelists");
 
   availableClans = new Map();
   let match: string[];
 
   while (
-    (match = page.match(
-      /option +value=(\d+)>([^<>]*)<\/option>(?!.*name=whichclan>)/
-    )) != null
+    (match = page.match(/o=(\d+) +class=nounder><b>([^<>]*)<\/b>/)) != null
   ) {
     page = page.replace(match[0], "");
 
@@ -221,7 +219,7 @@ export function doFortuneTeller() {
   print("Done with fortune telling.", "blue");
 }
 
-function hasVIPInvitation(): boolean {
+export function hasVIPInvitation(): boolean {
   return availableAmount(vipInvitation) > 0;
 }
 
@@ -230,7 +228,14 @@ function canAccessClan(clanId: number): boolean {
     return false;
   }
 
-  return clanId == getClanId() || getAvailableClans().has(clanId);
+  return (
+    clanId == getClanId() ||
+    (hasWhitelistToCurrentClan() && getAvailableClans().has(clanId))
+  );
+}
+
+export function hasWhitelistToCurrentClan(): boolean {
+  return getClanId() < 0 || getAvailableClans().has(getClanId());
 }
 
 export function canUseFireworks(): boolean {

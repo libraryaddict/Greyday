@@ -29,6 +29,7 @@ import { GreyAdventurer } from "./GreyAdventurer";
 import { getQuestStatus } from "./quests/Quests";
 import { FigureOutPath } from "./typings/TaskManager";
 import { AbsorbsProvider } from "./utils/GreyAbsorber";
+import { hasVIPInvitation, hasWhitelistToCurrentClan } from "./utils/GreyClan";
 import { GreyRequirements } from "./utils/GreyResources";
 import { getGreySettings, GreySettings } from "./utils/GreySettings";
 import { GreyTimings } from "./utils/GreyTimings";
@@ -265,6 +266,13 @@ class GreyYouMain {
     if (getProperty("greyBreakAtTower") == "") {
       print(
         "The 'greyBreakAtTower' setting has not been set, the script will break when it reaches the tower.",
+        "red"
+      );
+    }
+
+    if (hasVIPInvitation() && !hasWhitelistToCurrentClan()) {
+      print(
+        "Do you not have a whitelist to your current clan, some VIP Invitation stuff will not work. You should ask for a whitelist so this script can switch clans as required.",
         "red"
       );
     }
