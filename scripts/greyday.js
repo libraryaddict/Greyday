@@ -9999,8 +9999,14 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
     (0,external_kolmafia_namespaceObject.availableAmount)(_this2.sweatpants) > 0 ?
     _this2.sweatpants :
     external_kolmafia_namespaceObject.Item.get("Transparent pants"),
-    _this2.parka]);return _this2;}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "getRelation", value:
+    _this2.parka]);return _this2;}QuestL11RonProtesters_createClass(QuestL11RonProtesters, [{ key: "getOutfit", value:
 
+
+    function getOutfit() {
+      return this.lyrndCostume.filter(
+      (i) => i != this.lyrndShirt || (0,external_kolmafia_namespaceObject.haveSkill)(this.torsoAwareness));
+
+    } }, { key: "getRelation", value:
 
     function getRelation(id) {
       if (id == "Council / Peaks / Orcs" && !(0,external_kolmafia_namespaceObject.haveSkill)(this.smutSleazeSkill)) {
@@ -10258,7 +10264,7 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
       return (
         3 + (
         (0,external_kolmafia_namespaceObject.availableAmount)(this.musk) + (0,external_kolmafia_namespaceObject.haveEffect)(this.musky) > 0 ? 3 : 0) +
-        this.lyrndCostume.filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0).length * 5);
+        this.getOutfit().filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0).length * 5);
 
     } }, { key: "getSleazeScares", value:
 
@@ -10286,7 +10292,10 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
       var runSleaze = this.getSleazeScares() >= this.getLynyrdScares();
       var str = runSleaze ?
       "Sleaze Spell Damage +Sleaze Damage" :
-      this.lyrndCostume.map((i) => "+equip " + i).join(" ") + (
+      this.getOutfit().
+      filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0).
+      map((i) => "+equip " + i).
+      join(" ") + (
       (0,external_kolmafia_namespaceObject.haveFamiliar)(this.lefthandMan) ? " +switch left-hand man" : "");
       var outfit = new GreyOutfit(str + " -tie");
 
@@ -32256,7 +32265,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "5fa2015";
+var lastCommitHash = "8b94c04";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
