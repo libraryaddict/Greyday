@@ -59,6 +59,7 @@ export class QuestCustomPurchases implements QuestInfo {
             toBuy = this.firePlusCombat;
           }
 
+          visitUrl("clan_viplounge.php");
           visitUrl("clan_viplounge.php?action=fwshop&whichfloor=2");
           print("Now trying to buy " + toBuy);
           retrieveItem(toBuy);
