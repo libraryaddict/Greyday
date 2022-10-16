@@ -21479,7 +21479,10 @@ var MurderHandler = /*#__PURE__*/function () {function MurderHandler() {QuestL9M
     "bearpig topiary animal",
     "elephant (meatcar?) topiary animal",
     "spider (duck?) topiary animal"].
-    map((s) => external_kolmafia_namespaceObject.Monster.get(s)));}QuestL9MurderPeak_createClass(MurderHandler, [{ key: "getId", value:
+    map((s) => external_kolmafia_namespaceObject.Monster.get(s)));QuestL9MurderPeak_defineProperty(this, "skill",
+    external_kolmafia_namespaceObject.Skill.get("Conifer Polymers"));QuestL9MurderPeak_defineProperty(this, "hasRes",
+    false);QuestL9MurderPeak_defineProperty(this, "resCheckIn",
+    0);}QuestL9MurderPeak_createClass(MurderHandler, [{ key: "getId", value:
 
     function getId() {
       return "Council / Peaks / TwinPeak";
@@ -21515,13 +21518,6 @@ var MurderHandler = /*#__PURE__*/function () {function MurderHandler() {QuestL9M
       }
 
       if (
-      this.questNeedsStenchRes() &&
-      (0,external_kolmafia_namespaceObject.elementalResistance)(external_kolmafia_namespaceObject.Element.get("stench")) >= 4)
-      {
-        return status;
-      }
-
-      if (
       this.questNeedsFood() &&
       (0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Gravitational Compression")))
       {
@@ -21530,6 +21526,20 @@ var MurderHandler = /*#__PURE__*/function () {function MurderHandler() {QuestL9M
 
       if (this.questNeedsInit()) {
         return status;
+      }
+
+      if (this.questNeedsStenchRes()) {
+        if (!this.hasRes && this.resCheckIn < (0,external_kolmafia_namespaceObject.turnsPlayed)()) {
+          this.resCheckIn = (0,external_kolmafia_namespaceObject.turnsPlayed)() + 5;
+
+          (0,external_kolmafia_namespaceObject.maximize)("stench res -tie", true);
+          this.hasRes =
+          (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Stench Resistance") >= 4;
+        }
+
+        if (this.hasRes) {
+          return status;
+        }
       }
 
       return QuestStatus.NOT_READY;
@@ -21555,12 +21565,12 @@ var MurderHandler = /*#__PURE__*/function () {function MurderHandler() {QuestL9M
 
       if (this.questNeedsJar() && this.hasJar()) {
         // Empty
-      } else if (this.questNeedsStenchRes()) {
-        outfit.addBonus("+2 stench res 4 min 4 max");
       } else if (this.questNeedsFood()) {
         outfit.addBonus("+item drop 50 min");
       } else if (this.questNeedsInit()) {
         outfit.addBonus("+init 40 min");
+      } else if (this.questNeedsStenchRes()) {
+        outfit.addBonus("+2 stench res 4 min 4 max");
       }
 
       return {
@@ -27418,6 +27428,78 @@ var QuestSkillColdDamage10 = /*#__PURE__*/function () {function QuestSkillColdDa
     function getLocations() {
       return [this.location];
     } }]);return QuestSkillColdDamage10;}();
+;// CONCATENATED MODULE: ./src/quests/skills/QuestSkillConiferPolymers.ts
+function QuestSkillConiferPolymers_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestSkillConiferPolymers_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestSkillConiferPolymers_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestSkillConiferPolymers_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestSkillConiferPolymers_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestSkillConiferPolymers_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+var QuestSkillConiferPolymers = /*#__PURE__*/function () {function QuestSkillConiferPolymers() {QuestSkillConiferPolymers_classCallCheck(this, QuestSkillConiferPolymers);QuestSkillConiferPolymers_defineProperty(this, "location",
+    external_kolmafia_namespaceObject.Location.get("The Bat Hole Entrance"));QuestSkillConiferPolymers_defineProperty(this, "monster",
+    external_kolmafia_namespaceObject.Monster.get("Pine Bat"));QuestSkillConiferPolymers_defineProperty(this, "skill",
+    external_kolmafia_namespaceObject.Skill.get("Conifer Polymers"));QuestSkillConiferPolymers_defineProperty(this, "hasRes",
+    false);QuestSkillConiferPolymers_defineProperty(this, "nextCheck",
+    0);}QuestSkillConiferPolymers_createClass(QuestSkillConiferPolymers, [{ key: "getId", value:
+
+    function getId() {
+      return "Skills / Conifer Polymers";
+    } }, { key: "level", value:
+
+    function level() {
+      return 7;
+    } }, { key: "status", value:
+
+    function status() {
+      if (getQuestStatus("questL09Topping") < 1) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (this.hasRes || (0,external_kolmafia_namespaceObject.haveSkill)(this.skill)) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.turnsPlayed)() >= this.nextCheck) {
+        this.nextCheck = (0,external_kolmafia_namespaceObject.turnsPlayed)() + 5;
+        (0,external_kolmafia_namespaceObject.maximize)("stench res -tie", true);
+        this.hasRes =
+        (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Stench Resistance") >= 4;
+      }
+
+      if (getQuestStatus("questM20Necklace") > 0) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if (!(0,external_kolmafia_namespaceObject.canAdventure)(this.location)) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.READY;
+    } }, { key: "run", value:
+
+    function run() {
+      var outfit = new GreyOutfit();
+
+      if (this.location.combatPercent < 100) {
+        outfit.setPlusCombat();
+      }
+
+      return {
+        location: this.location,
+        outfit: outfit,
+        orbs: [this.monster],
+        run: () => {
+          var settings = new AdventureSettings();
+          settings.addNoBanish(this.monster);
+
+          greyAdv(this.location, outfit, settings);
+        }
+      };
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return [this.location];
+    } }]);return QuestSkillConiferPolymers;}();
 ;// CONCATENATED MODULE: ./src/quests/skills/QuestSkillDoubleNanovision.ts
 function QuestSkillDoubleNanovision_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestSkillDoubleNanovision_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestSkillDoubleNanovision_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestSkillDoubleNanovision_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestSkillDoubleNanovision_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestSkillDoubleNanovision_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -27615,7 +27697,7 @@ var QuestSkillRegistry = /*#__PURE__*/function () {
     this.children.push(new QuestSkillColdDamage15());
     this.children.push(new QuestSkillColdDamage10());
     this.children.push(new QuestSkillDoubleNanovision());
-    //  this.children.push(new QuestSkillConiferPolymers());
+    this.children.push(new QuestSkillConiferPolymers());
   }QuestSkillRegistry_createClass(QuestSkillRegistry, [{ key: "addSkill", value:
 
     function addSkill(questType, valid, skill) {
@@ -32268,7 +32350,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "5897ccb";
+var lastCommitHash = "e07060b";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
