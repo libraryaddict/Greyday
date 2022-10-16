@@ -3578,6 +3578,25 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
         if (name instanceof external_kolmafia_namespaceObject.Item) {
           owns = (0,external_kolmafia_namespaceObject.itemAmount)(name) + (0,external_kolmafia_namespaceObject.closetAmount)(name) + (0,external_kolmafia_namespaceObject.storageAmount)(name) > 0;
           name = name.name;
+        } else if (name instanceof external_kolmafia_namespaceObject.Familiar) {
+          owns = (0,external_kolmafia_namespaceObject.haveFamiliar)(name);
+
+          var hatchling = name.hatchling;
+
+          if (
+          !owns &&
+          (0,external_kolmafia_namespaceObject.storageAmount)(hatchling) +
+          (0,external_kolmafia_namespaceObject.itemAmount)(hatchling) +
+          (0,external_kolmafia_namespaceObject.closetAmount)(hatchling) +
+          (0,external_kolmafia_namespaceObject.displayAmount)(hatchling) +
+          (0,external_kolmafia_namespaceObject.shopAmount)(hatchling) >
+          0)
+          {
+            desc +=
+            "- <u>You do have the hatchling " + hatchling + " though..</u>";
+          }
+
+          name = "" + name;
         }
 
         if (unsupported) {
@@ -3589,10 +3608,9 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
       add(
       Type.IOTM,
-      "Grey Goose",
+      external_kolmafia_namespaceObject.Familiar.get("Grey Goose"),
       "Without this, Grey You isn't really feasible",
-      Required.MUST,
-      (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")));
+      Required.MUST);
 
 
       add(
@@ -3685,10 +3703,9 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
       add(
       Type.FREE,
-      "Gelatinous Cubeling",
+      external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling"),
       "Saves about 10 turns if you're not doing a tower break",
-      Required.VERY_USEFUL,
-      (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling")));
+      Required.VERY_USEFUL);
 
 
       add(
@@ -3814,14 +3831,6 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
       add(
       Type.IOTM,
-      "Shorter-Order Cook",
-      "Great for tower killing and provides an absorb at the start of your run",
-      Required.USEFUL,
-      (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Shorter-Order Cook")));
-
-
-      add(
-      Type.IOTM,
       external_kolmafia_namespaceObject.Item.get("Fourth of May Cosplay Saber"),
       "Great for faster lobsterfrogmen, ele res checks and for 1-2 yellow rays!",
       Required.USEFUL);
@@ -3875,26 +3884,23 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
       add(
       Type.IOTM,
-      "Shorter-Order Cook",
-      "Gives an initial boost to start, skip 6-8 leveling turns!",
-      Required.USEFUL,
-      (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Shorter-Order Cook")));
+      external_kolmafia_namespaceObject.Familiar.get("Shorter-Order Cook"),
+      "Gives an initial boost to start, skip 6-8 leveling turns! Also great for tower killing!",
+      Required.USEFUL);
 
 
       add(
       Type.IOTM,
-      "Melodramedary",
+      external_kolmafia_namespaceObject.Familiar.get("Melodramedary"),
       "Saves 3 adventures for desert!",
-      Required.MINOR,
-      (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Melodramedary")));
+      Required.MINOR);
 
 
       add(
       Type.IOTM,
-      "Cat Burglar",
+      external_kolmafia_namespaceObject.Familiar.get("Cat Burglar"),
       "Only used rarely, generally not worth picking up but does sometimes save 20k of resources in meat!",
-      Required.MINOR,
-      (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Cat Burglar")));
+      Required.MINOR);
 
 
       add(
@@ -3914,10 +3920,9 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
 
       add(
       Type.IOTM,
-      "XO Skeleton",
+      external_kolmafia_namespaceObject.Familiar.get("XO Skeleton"),
       "Used for its pickpocket, just saves a polar vortex for the well kitted players",
-      Required.MINOR,
-      (0,external_kolmafia_namespaceObject.haveFamiliar)(external_kolmafia_namespaceObject.Familiar.get("XO Skeleton")));
+      Required.MINOR);
 
 
       add(
@@ -3950,7 +3955,8 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
       "Voting Booth",
       "Iotm for voting, +3 hot res, +25% moxie buff, has interaction with powerful glove for lobsterfrogman, and gives 3 free delay burns",
       Required.MINOR,
-      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("voteAlways")));
+      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("voteAlways")),
+      true);
 
 
       required.sort((_ref, _ref2) => {var _ref3 = GreyResources_slicedToArray(_ref, 2),t1 = _ref3[0],r1 = _ref3[1];var _ref4 = GreyResources_slicedToArray(_ref2, 2),t2 = _ref4[0],r2 = _ref4[1];return (
@@ -32225,7 +32231,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "b9cdef0";
+var lastCommitHash = "9234b1a";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
