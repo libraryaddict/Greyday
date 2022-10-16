@@ -549,9 +549,9 @@ export class AdventureFinder {
 
       if (
         !allQuests &&
-        (q.level() == 1 ||
-          q.level() * (haveSkill(Skill.get("Infinite Loop")) ? 1 : 6) >
-            myBasestat(Stat.get("Moxie")))
+        q.level() != 1 &&
+        q.level() * (haveSkill(Skill.get("Infinite Loop")) ? 1 : 6) >
+          myBasestat(Stat.get("Moxie"))
       ) {
         return;
       }
