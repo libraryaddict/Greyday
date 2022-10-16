@@ -1,4 +1,13 @@
-import { Location, Skill, haveSkill, Monster, canAdventure } from "kolmafia";
+import {
+  Location,
+  Skill,
+  haveSkill,
+  Monster,
+  canAdventure,
+  turnsPlayed,
+  maximize,
+  numericModifier,
+} from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import {
@@ -13,19 +22,31 @@ export class QuestSkillConiferPolymers implements QuestInfo {
   location: Location = Location.get("The Bat Hole Entrance");
   monster: Monster = Monster.get("Pine Bat");
   skill: Skill = Skill.get("Conifer Polymers");
+  hasRes: boolean = false;
+  nextCheck: number = 0;
 
   getId(): QuestType {
     return "Skills / Conifer Polymers";
   }
 
   level(): number {
-    return 4;
+    return 7;
   }
 
   status(): QuestStatus {
-    //if (haveSkill(this.skill))
-    {
+    if (getQuestStatus("questL09Topping") < 1) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (this.hasRes || haveSkill(this.skill)) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (turnsPlayed() >= this.nextCheck) {
+      this.nextCheck = turnsPlayed() + 5;
+      maximize("stench res -tie", true);
+      this.hasRes =
+        numericModifier("Generated:_spec", "Stench Resistance") >= 4;
     }
 
     if (getQuestStatus("questM20Necklace") > 0) {

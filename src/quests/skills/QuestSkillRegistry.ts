@@ -87,7 +87,7 @@ export class QuestSkillRegistry implements QuestInfo {
     this.children.push(new QuestSkillColdDamage15());
     this.children.push(new QuestSkillColdDamage10());
     this.children.push(new QuestSkillDoubleNanovision());
-    //  this.children.push(new QuestSkillConiferPolymers());
+    this.children.push(new QuestSkillConiferPolymers());
   }
 
   addSkill(questType: QuestType, valid?: () => boolean, skill?: Skill) {

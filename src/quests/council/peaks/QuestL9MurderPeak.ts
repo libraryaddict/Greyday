@@ -17,6 +17,8 @@ import {
   Monster,
   visitUrl,
   itemDrops,
+  maximize,
+  turnsPlayed,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
@@ -41,6 +43,9 @@ export class MurderHandler implements QuestInfo {
     "elephant (meatcar?) topiary animal",
     "spider (duck?) topiary animal",
   ].map((s) => Monster.get(s));
+  skill: Skill = Skill.get("Conifer Polymers");
+  hasRes: boolean = false;
+  resCheckIn: number = 0;
 
   getId(): QuestType {
     return "Council / Peaks / TwinPeak";
@@ -76,13 +81,6 @@ export class MurderHandler implements QuestInfo {
     }
 
     if (
-      this.questNeedsStenchRes() &&
-      elementalResistance(Element.get("stench")) >= 4
-    ) {
-      return status;
-    }
-
-    if (
       this.questNeedsFood() &&
       haveSkill(Skill.get("Gravitational Compression"))
     ) {
@@ -91,6 +89,20 @@ export class MurderHandler implements QuestInfo {
 
     if (this.questNeedsInit()) {
       return status;
+    }
+
+    if (this.questNeedsStenchRes()) {
+      if (!this.hasRes && this.resCheckIn < turnsPlayed()) {
+        this.resCheckIn = turnsPlayed() + 5;
+
+        maximize("stench res -tie", true);
+        this.hasRes =
+          numericModifier("Generated:_spec", "Stench Resistance") >= 4;
+      }
+
+      if (this.hasRes) {
+        return status;
+      }
     }
 
     return QuestStatus.NOT_READY;
@@ -116,12 +128,12 @@ export class MurderHandler implements QuestInfo {
 
     if (this.questNeedsJar() && this.hasJar()) {
       // Empty
-    } else if (this.questNeedsStenchRes()) {
-      outfit.addBonus("+2 stench res 4 min 4 max");
     } else if (this.questNeedsFood()) {
       outfit.addBonus("+item drop 50 min");
     } else if (this.questNeedsInit()) {
       outfit.addBonus("+init 40 min");
+    } else if (this.questNeedsStenchRes()) {
+      outfit.addBonus("+2 stench res 4 min 4 max");
     }
 
     return {
