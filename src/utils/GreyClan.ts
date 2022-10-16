@@ -99,7 +99,9 @@ export function getAvailableClans(): Map<number, string> {
   let match: string[];
 
   while (
-    (match = page.match(/o=(\d+) +class=nounder><b>([^<>]*)<\/b>/)) != null
+    (match = page.match(
+      /option +value=(\d+)>([^<>]*)<\/option>(?!.*name=whichclan>)/
+    )) != null
   ) {
     page = page.replace(match[0], "");
 
