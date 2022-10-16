@@ -56,6 +56,7 @@ const poisonousMonsters: Monster[] = [
   "Dodecapede",
   "Quantum Mechanic",
   "Protagonist",
+  "ninja snowman assassin",
 ].map((s) => Monster.get(s));
 
 export function greyDuringFightMacro(settings: AdventureSettings): Macro {
@@ -157,8 +158,7 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
 
   if (
     /*toInt(getProperty("flyeredML")) <= 10000 && */ monster.baseHp < 300 &&
-    myHp() > 120 &&
-    monster.rawAttack < Math.min(200, myHp() * 0.8) &&
+    monster.rawAttack < Math.min(200, myHp() * 0.9) &&
     !monster.attributes.includes("FREE") &&
     !poisonousMonsters.includes(monster)
   ) {
