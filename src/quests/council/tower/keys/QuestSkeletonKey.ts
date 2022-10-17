@@ -51,6 +51,10 @@ export class QuestSkeletonKey implements QuestInfo {
       }
     }
 
+    if (pullsRemaining() == -1) {
+      return QuestStatus.READY;
+    }
+
     if (!canAdventure(this.location)) {
       return QuestStatus.NOT_READY;
     }

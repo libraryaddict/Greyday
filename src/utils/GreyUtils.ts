@@ -9,6 +9,7 @@ import {
   Location,
   Monster,
   myFamiliar,
+  print,
   retrieveItem,
   sessionLogs,
   toInt,
@@ -17,6 +18,7 @@ import {
   turnsPlayed,
   visitUrl,
 } from "kolmafia";
+import { GreySettings } from "./GreySettings";
 
 export enum UmbrellaState {
   MONSTER_LEVEL = "broken",
@@ -147,6 +149,18 @@ const ballProp = () =>
 
 let lastBallCheck: number = 0;
 const crystalBall: Item = Item.get("miniature crystal ball");
+
+/*function doToasterGaze(location: Location) {
+  if (!canToasterGaze(location) || availableAmount(crystalBall) == 0) {
+    return;
+  }
+
+  visitUrl("adventure.php?snarfblat=355");
+  visitUrl("choice.php?pwd&whichchoice=793&option=4");
+  lastBallCheck = -1;
+  currentPredictions();
+}*/
+
 /**
  * Returns a map of locations, and the monsters predicted.
  *
@@ -157,13 +171,33 @@ export function currentPredictions(): Map<Location, Monster> {
     return new Map();
   }
 
+  const sortedPonder = () => {
+    const ponder = ballProp().map(([, a1, a2]) => a2 + ":" + a1);
+
+    ponder.sort((a1, a2) => a1.localeCompare(a2));
+
+    return ponder.join("|");
+  };
+
   let predictions = ballProp();
 
   if (lastBallCheck != turnsPlayed()) {
+    const sorted = sortedPonder();
+
     visitUrl("inventory.php?ponder=1", false);
 
     lastBallCheck = turnsPlayed();
     predictions = ballProp();
+
+    if (GreySettings.greyDebug && sorted != sortedPonder()) {
+      print(
+        "Looks like pondering updated some bad mafia logic! Previously: " +
+          sorted +
+          ", now: " +
+          sortedPonder,
+        "red"
+      );
+    }
   }
 
   return new Map(

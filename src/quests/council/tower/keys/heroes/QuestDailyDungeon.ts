@@ -75,7 +75,9 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
 
     // We don't need to do malware
     if (!mustDoMalware) {
-      this.paths.push(new PossiblePath(4));
+      this.paths.push(
+        new PossiblePath(4).addMeat(historicalPrice(this.malware) * 1.2)
+      );
     }
 
     if (mustNeverDoMalware) {
@@ -118,7 +120,7 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
         ? mallPrice(this.malware)
         : historicalPrice(this.malware);
 
-    return itemPrice > malwarePrice && malwarePrice < 40000;
+    return itemPrice * 1.5 > malwarePrice && malwarePrice < 60000;
   }
 
   hasFamiliarRecommendation(): Familiar {
