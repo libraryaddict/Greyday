@@ -2865,6 +2865,7 @@ path)
 ;// CONCATENATED MODULE: ./src/utils/GreyUtils.ts
 function GreyUtils_slicedToArray(arr, i) {return GreyUtils_arrayWithHoles(arr) || GreyUtils_iterableToArrayLimit(arr, i) || GreyUtils_unsupportedIterableToArray(arr, i) || GreyUtils_nonIterableRest();}function GreyUtils_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyUtils_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function GreyUtils_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function GreyUtils_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyUtils_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyUtils_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyUtils_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyUtils_arrayLikeToArray(o, minLen);}function GreyUtils_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}
 
+
 var UmbrellaState;(function (UmbrellaState) {UmbrellaState["MONSTER_LEVEL"] = "broken";UmbrellaState["DAMAGE_REDUCTION_SHIELD"] = "forward";UmbrellaState["ITEM_DROPS"] = "bucket";UmbrellaState["WEAPON_DAMAGE"] = "pitchfork";UmbrellaState["SPELL_DAMAGE"] = "twirling";UmbrellaState["MINUS_COMBAT"] = "cocoon";})(UmbrellaState || (UmbrellaState = {}));
 
 
@@ -2994,6 +2995,18 @@ map(
 
 var lastBallCheck = 0;
 var crystalBall = external_kolmafia_namespaceObject.Item.get("miniature crystal ball");
+
+/*function doToasterGaze(location: Location) {
+  if (!canToasterGaze(location) || availableAmount(crystalBall) == 0) {
+    return;
+  }
+
+  visitUrl("adventure.php?snarfblat=355");
+  visitUrl("choice.php?pwd&whichchoice=793&option=4");
+  lastBallCheck = -1;
+  currentPredictions();
+}*/
+
 /**
  * Returns a map of locations, and the monsters predicted.
  *
@@ -3004,17 +3017,37 @@ function currentPredictions() {
     return new Map();
   }
 
+  var sortedPonder = () => {
+    var ponder = ballProp().map((_ref3) => {var _ref4 = GreyUtils_slicedToArray(_ref3, 3),a1 = _ref4[1],a2 = _ref4[2];return a2 + ":" + a1;});
+
+    ponder.sort((a1, a2) => a1.localeCompare(a2));
+
+    return ponder.join("|");
+  };
+
   var predictions = ballProp();
 
   if (lastBallCheck != (0,external_kolmafia_namespaceObject.turnsPlayed)()) {
+    var sorted = sortedPonder();
+
     (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?ponder=1", false);
 
     lastBallCheck = (0,external_kolmafia_namespaceObject.turnsPlayed)();
     predictions = ballProp();
+
+    if (GreySettings.greyDebug && sorted != sortedPonder()) {
+      (0,external_kolmafia_namespaceObject.print)(
+      "Looks like pondering updated some bad mafia logic! Previously: " +
+      sorted +
+      ", now: " +
+      sortedPonder,
+      "red");
+
+    }
   }
 
   return new Map(
-  predictions.map((_ref3) => {var _ref4 = GreyUtils_slicedToArray(_ref3, 3),location = _ref4[1],monster = _ref4[2];return [location, monster];}));
+  predictions.map((_ref5) => {var _ref6 = GreyUtils_slicedToArray(_ref5, 3),location = _ref6[1],monster = _ref6[2];return [location, monster];}));
 
 
   /*// If a prediction should've been expired by mafia, ponder because something is wrong.
@@ -15810,6 +15843,10 @@ var QuestSkeletonKey = /*#__PURE__*/function () {function QuestSkeletonKey() {Qu
         }
       }
 
+      if ((0,external_kolmafia_namespaceObject.pullsRemaining)() == -1) {
+        return QuestStatus.READY;
+      }
+
       if (!(0,external_kolmafia_namespaceObject.canAdventure)(this.location)) {
         return QuestStatus.NOT_READY;
       }
@@ -16120,7 +16157,9 @@ var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inh
 
       // We don't need to do malware
       if (!mustDoMalware) {
-        this.paths.push(new PossiblePath(4));
+        this.paths.push(
+        new PossiblePath(4).addMeat((0,external_kolmafia_namespaceObject.historicalPrice)(this.malware) * 1.2));
+
       }
 
       if (mustNeverDoMalware) {
@@ -16163,7 +16202,7 @@ var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inh
       (0,external_kolmafia_namespaceObject.mallPrice)(this.malware) :
       (0,external_kolmafia_namespaceObject.historicalPrice)(this.malware);
 
-      return itemPrice > malwarePrice && malwarePrice < 40000;
+      return itemPrice * 1.5 > malwarePrice && malwarePrice < 60000;
     } }, { key: "hasFamiliarRecommendation", value:
 
     function hasFamiliarRecommendation() {
@@ -32350,7 +32389,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "e07060b";
+var lastCommitHash = "8a43cd2";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
