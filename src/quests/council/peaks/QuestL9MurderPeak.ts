@@ -160,7 +160,7 @@ export class MurderHandler implements QuestInfo {
             props.setChoice(606, 3);
           } else if (
             this.questNeedsStenchRes() &&
-            elementalResistance(Element.get("stench")) >= 4
+            numericModifier("Stench Resistance") >= 4
           ) {
             props.setChoice(606, 1);
           } else if (this.questNeedsFood() && itemDropModifier() >= 50) {
@@ -171,8 +171,8 @@ export class MurderHandler implements QuestInfo {
           ) {
             props.setChoice(606, 4);
           } else {
-            throw `Eh?? We're at murder peak, but we don't match the criteria for any of the choices. Jar? ${this.questNeedsJar()}, ${this.hasJar()}, Stench Res? ${this.questNeedsStenchRes()}, ${elementalResistance(
-              Element.get("stench")
+            throw `Eh?? We're at murder peak, but we don't match the criteria for any of the choices. Jar? ${this.questNeedsJar()}, ${this.hasJar()}, Stench Res? ${this.questNeedsStenchRes()}, ${numericModifier(
+              "Stench Resistance"
             )}, , food? ${this.questNeedsFood()} ${itemDropModifier()}, Init? ${this.questNeedsInit()} ${numericModifier(
               "initiative"
             )}. Maybe you need stench res, but the script can't find it for you?`;

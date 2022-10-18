@@ -277,6 +277,20 @@ class GreyYouMain {
       );
     }
 
+    if (
+      GreySettings.greyValueOfAdventure < 1000 &&
+      getProperty("greyValueOfAdventure") == ""
+    ) {
+      print(
+        "Your value of a grey adventure is low.. It claims you value each adventure at " +
+          GreySettings.greyValueOfAdventure +
+          ", which means you'd be happier if you could trade each adventure for " +
+          GreySettings.greyValueOfAdventure +
+          " meat than run that adventure yourself. You can set `greyValueOfAdventure` if your valueOfAdventure is correct.",
+        "red"
+      );
+    }
+
     this.adventures = new GreyAdventurer();
     const s = command.split(" ");
 

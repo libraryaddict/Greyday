@@ -51,7 +51,7 @@ export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
     }
 
     return (
-      availableAmount(this.token) +
+      itemAmount(this.token) +
       (pullsRemaining() == -1 ? storageAmount(this.token) : 0)
     );
   }

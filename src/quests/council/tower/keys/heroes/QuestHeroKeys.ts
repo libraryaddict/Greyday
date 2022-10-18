@@ -1,4 +1,13 @@
-import { Location, Item, availableAmount, print, getProperty } from "kolmafia";
+import {
+  Location,
+  Item,
+  availableAmount,
+  print,
+  getProperty,
+  itemAmount,
+  pullsRemaining,
+  storageAmount,
+} from "kolmafia";
 import {
   PossibleMultiPath,
   PossiblePath,
@@ -40,11 +49,19 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
     this.quests.push(new QuestPullAndZapKeys());
   }
 
-  getMissingKeys(): number {
+  getTokensAvailable(): number {
     return (
+      itemAmount(this.token) +
+      (pullsRemaining() == -1 ? storageAmount(this.token) : 0)
+    );
+  }
+
+  getMissingKeys(): number {
+    return Math.max(
+      0,
       3 -
-      (availableAmount(this.token) +
-        this.keys.filter((i) => availableAmount(i) > 0).length)
+        (this.getTokensAvailable() +
+          this.keys.filter((i) => availableAmount(i) > 0).length)
     );
   }
 

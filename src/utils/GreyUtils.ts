@@ -194,7 +194,7 @@ export function currentPredictions(): Map<Location, Monster> {
         "Looks like pondering updated some bad mafia logic! Previously: " +
           sorted +
           ", now: " +
-          sortedPonder,
+          sortedPonder(),
         "red"
       );
     }
