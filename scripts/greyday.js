@@ -3040,7 +3040,7 @@ function currentPredictions() {
       "Looks like pondering updated some bad mafia logic! Previously: " +
       sorted +
       ", now: " +
-      sortedPonder,
+      sortedPonder(),
       "red");
 
     }
@@ -16918,13 +16918,21 @@ var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(Qu
     _this2.quests.push(new QuestFantasyBandit());
     _this2.quests.push(new QuestPackOfCardsKey());
     _this2.quests.push(new QuestPullAndZapKeys());return _this2;
-  }QuestHeroKeys_createClass(QuestHeroKeys, [{ key: "getMissingKeys", value:
+  }QuestHeroKeys_createClass(QuestHeroKeys, [{ key: "getTokensAvailable", value:
+
+    function getTokensAvailable() {
+      return (
+        (0,external_kolmafia_namespaceObject.itemAmount)(this.token) + (
+        (0,external_kolmafia_namespaceObject.pullsRemaining)() == -1 ? (0,external_kolmafia_namespaceObject.storageAmount)(this.token) : 0));
+
+    } }, { key: "getMissingKeys", value:
 
     function getMissingKeys() {
-      return (
-        3 - (
-        (0,external_kolmafia_namespaceObject.availableAmount)(this.token) +
-        this.keys.filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0).length));
+      return Math.max(
+      0,
+      3 - (
+      this.getTokensAvailable() +
+      this.keys.filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0).length));
 
     } }, { key: "createPaths", value:
 
@@ -17128,7 +17136,7 @@ var QuestTowerKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestTowerKe
       }
 
       return (
-        (0,external_kolmafia_namespaceObject.availableAmount)(this.token) + (
+        (0,external_kolmafia_namespaceObject.itemAmount)(this.token) + (
         (0,external_kolmafia_namespaceObject.pullsRemaining)() == -1 ? (0,external_kolmafia_namespaceObject.storageAmount)(this.token) : 0));
 
     } }, { key: "isReadyToRedeemTokens", value:
@@ -21636,7 +21644,7 @@ var MurderHandler = /*#__PURE__*/function () {function MurderHandler() {QuestL9M
               props.setChoice(606, 3);
             } else if (
             this.questNeedsStenchRes() &&
-            (0,external_kolmafia_namespaceObject.elementalResistance)(external_kolmafia_namespaceObject.Element.get("stench")) >= 4)
+            (0,external_kolmafia_namespaceObject.numericModifier)("Stench Resistance") >= 4)
             {
               props.setChoice(606, 1);
             } else if (this.questNeedsFood() && (0,external_kolmafia_namespaceObject.itemDropModifier)() >= 50) {
@@ -21647,8 +21655,8 @@ var MurderHandler = /*#__PURE__*/function () {function MurderHandler() {QuestL9M
             {
               props.setChoice(606, 4);
             } else {
-              throw "Eh?? We're at murder peak, but we don't match the criteria for any of the choices. Jar? ".concat(this.questNeedsJar(), ", ").concat(this.hasJar(), ", Stench Res? ").concat(this.questNeedsStenchRes(), ", ").concat((0,external_kolmafia_namespaceObject.elementalResistance)(
-              external_kolmafia_namespaceObject.Element.get("stench")), ", , food? ").concat(
+              throw "Eh?? We're at murder peak, but we don't match the criteria for any of the choices. Jar? ".concat(this.questNeedsJar(), ", ").concat(this.hasJar(), ", Stench Res? ").concat(this.questNeedsStenchRes(), ", ").concat((0,external_kolmafia_namespaceObject.numericModifier)(
+              "Stench Resistance"), ", , food? ").concat(
               this.questNeedsFood(), " ").concat((0,external_kolmafia_namespaceObject.itemDropModifier)(), ", Init? ").concat(this.questNeedsInit(), " ").concat((0,external_kolmafia_namespaceObject.numericModifier)(
               "initiative"), ". Maybe you need stench res, but the script can't find it for you?");
 
@@ -32389,7 +32397,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "8a43cd2";
+var lastCommitHash = "f40234a";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -32640,6 +32648,20 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
       if (hasVIPInvitation() && !hasWhitelistToCurrentClan()) {
         (0,external_kolmafia_namespaceObject.print)(
         "Do you not have a whitelist to your current clan, some VIP Invitation stuff will not work. You should ask for a whitelist so this script can switch clans as required.",
+        "red");
+
+      }
+
+      if (
+      GreySettings.greyValueOfAdventure < 1000 &&
+      (0,external_kolmafia_namespaceObject.getProperty)("greyValueOfAdventure") == "")
+      {
+        (0,external_kolmafia_namespaceObject.print)(
+        "Your value of a grey adventure is low.. It claims you value each adventure at " +
+        GreySettings.greyValueOfAdventure +
+        ", which means you'd be happier if you could trade each adventure for " +
+        GreySettings.greyValueOfAdventure +
+        " meat than run that adventure yourself. You can set `greyValueOfAdventure` if your valueOfAdventure is correct.",
         "red");
 
       }
