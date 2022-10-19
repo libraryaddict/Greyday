@@ -129,11 +129,11 @@ export class MurderHandler implements QuestInfo {
     if (this.questNeedsJar() && this.hasJar()) {
       // Empty
     } else if (this.questNeedsFood()) {
-      outfit.addWeight("item drop", 1, 50);
+      outfit.addWeight("item drop", 100, 50, 50);
     } else if (this.questNeedsInit()) {
-      outfit.addWeight("init", 1, 40);
+      outfit.addWeight("init", 100, 40, 40);
     } else if (this.questNeedsStenchRes()) {
-      outfit.addWeight("stench res", 2, 4, 4);
+      outfit.addWeight("stench res", 1000, 4, 4);
     }
 
     return {
