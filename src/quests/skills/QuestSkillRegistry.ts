@@ -8,6 +8,7 @@ import {
   Item,
   myAscensions,
   toInt,
+  haveSkill,
 } from "kolmafia";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { getLocations } from "../../utils/GreyLocations";
@@ -99,6 +100,10 @@ export class QuestSkillRegistry implements QuestInfo {
 
     if (skill == Skill.get("None")) {
       throw "There's no skill found for " + questType;
+    }
+
+    if (haveSkill(skill)) {
+      return;
     }
 
     let location: Location;
