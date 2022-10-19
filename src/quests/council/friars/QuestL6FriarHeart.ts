@@ -86,7 +86,7 @@ export class QuestL6FriarHeart implements QuestInfo {
     const outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
     if (this.shouldWearLatte()) {
-      outfit.addItem(this.latte);
+      outfit.addWeight(this.latte);
     }
 
     return {

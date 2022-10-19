@@ -45,7 +45,7 @@ export class QuestL11PalinAbsorbs implements QuestInfo {
 
   run(): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addItem(this.talisman);
+    outfit.addWeight(this.talisman);
 
     return {
       location: this.palindome,

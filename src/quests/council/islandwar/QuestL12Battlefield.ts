@@ -106,9 +106,9 @@ export class QuestL12Battlefield implements QuestInfo {
 
   run(): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addItem(Item.get("Beer Helmet"));
-    outfit.addItem(Item.get("distressed denim pants"));
-    outfit.addItem(Item.get("bejeweled pledge pin"));
+    outfit.addWeight(Item.get("Beer Helmet"));
+    outfit.addWeight(Item.get("distressed denim pants"));
+    outfit.addWeight(Item.get("bejeweled pledge pin"));
 
     let fam: Familiar = null;
 
@@ -131,7 +131,7 @@ export class QuestL12Battlefield implements QuestInfo {
     }
 
     if (fam == this.goose && familiarWeight(this.goose) >= 6) {
-      outfit.addBonus("+50 bonus mafia thumb ring");
+      outfit.addWeight(Item.get("Mafia Thumb Ring"), 50);
     }
 
     return {

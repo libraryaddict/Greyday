@@ -49,7 +49,7 @@ export class QuestL6LattePlusCombat implements QuestInfo {
 
   run(): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addItem(this.latte);
+    outfit.addWeight(this.latte);
 
     return {
       outfit: outfit,

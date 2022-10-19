@@ -14,6 +14,7 @@ import {
 } from "kolmafia";
 import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
+import { canGreyAdventure } from "../../../../utils/GreyUtils";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -63,7 +64,7 @@ export class QuestL11DesertStoneRose implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (status < 0 || !canAdventure(this.oasis)) {
+    if (status < 0 || !canGreyAdventure(this.oasis)) {
       return QuestStatus.NOT_READY;
     }
 

@@ -56,11 +56,11 @@ export abstract class CryptL7Template implements QuestInfo {
   abstract getProperty(): string;
 
   addRetroSword(outfit: GreyOutfit = new GreyOutfit()): GreyOutfit {
-    outfit.addItem(this.gravyboat, 99999);
+    outfit.addWeight(this.gravyboat, 99999);
 
     if (availableAmount(this.cape) > 0) {
-      outfit.addItem(this.getSword(), 99999);
-      outfit.addBonus("-back");
+      outfit.addWeight(this.getSword(), 99999);
+      outfit.addExtra("-back");
     }
 
     return outfit;

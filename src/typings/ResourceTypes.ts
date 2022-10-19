@@ -133,7 +133,7 @@ const gloveReplace: SomeResource = {
   worthInAftercore: 22000,
   resourcesUsed: 10,
   prepare: (outfit: GreyOutfit) =>
-    outfit != null ? outfit.addItem(glove) : null,
+    outfit != null ? outfit.addWeight(glove) : null,
   macro: () => Macro.skill(Skill.get("CHEAT CODE: Replace Enemy")),
 };
 
@@ -172,7 +172,7 @@ const extingusherPolar: SomeResource = {
   resourcesUsed: 10,
   worthInAftercore: 1500, // Tattered paper cost and assume free run
   prepare: (outfit: GreyOutfit) =>
-    outfit != null ? outfit.addItem(extingusher) : null,
+    outfit != null ? outfit.addWeight(extingusher) : null,
   macro: () => Macro.skill(Skill.get("Fire Extinguisher: Polar Vortex")),
 };
 
@@ -184,7 +184,7 @@ const extingusherZoneSpecific: SomeResource = {
   worthInAftercore: 3000, // Tattered paper cost x 2
   prepare: (outfit: GreyOutfit) =>
     outfit != null
-      ? outfit.addItem(extingusher).addBonus("-equip smoke ball")
+      ? outfit.addWeight(extingusher).addExtra("-equip smoke ball")
       : null,
   macro: () => Macro.skill(Skill.get("Fire Extinguisher: Zone Specific")),
 };
@@ -270,7 +270,7 @@ const ncParka: SomeResource = {
   //available: () => haveSkill(torso) && availableAmount(parka) > 0,
   prepare: (outfit: GreyOutfit) => {
     if (outfit != null) {
-      outfit.addItem(parka);
+      outfit.addWeight(parka);
     } else {
       cliExecute("parka spikolodon");
     }
@@ -313,7 +313,7 @@ const yellowParka: SomeResource = {
   worthInAftercore: 0,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
-      outfit.addItem(parka);
+      outfit.addWeight(parka);
     }
 
     if (props != null) {
@@ -360,7 +360,7 @@ const retroRay: SomeResource = {
   resourcesUsed: 100,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
-      outfit.addItem(retrocape);
+      outfit.addWeight(retrocape);
     }
 
     if (props != null) {
@@ -387,7 +387,7 @@ const cosplayYellowRay: SomeResource = {
       : 0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
-      outfit.addItem(cosplaySaber);
+      outfit.addWeight(cosplaySaber);
     }
     if (props != null) {
       props.setChoiceProperty(1387, 3);
@@ -404,7 +404,7 @@ const backupCopier: SomeResource = {
   resource: "Backup Camera",
   worthInAftercore: 20000, // Embezzler
   prepare: (outfit: GreyOutfit) =>
-    outfit != null ? outfit.addItem(backupCamera) : null,
+    outfit != null ? outfit.addWeight(backupCamera) : null,
   macro: () => Macro.skill(Skill.get("Back-Up to your Last Enemy")),
 };
 
@@ -420,7 +420,7 @@ const cosplayCopier: SomeResource = {
       : 0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
-      outfit.addItem(cosplaySaber);
+      outfit.addWeight(cosplaySaber);
     }
     if (props != null) {
       props.setChoiceProperty(1387, 2);
@@ -522,7 +522,7 @@ const cosplayBanisher: SomeResource = {
       : 0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
-      outfit.addItem(cosplaySaber);
+      outfit.addWeight(cosplaySaber);
     }
     if (outfit != null) {
       props.setChoiceProperty(1387, 1);

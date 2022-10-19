@@ -106,7 +106,7 @@ export class QuestL11Curses extends TaskInfo implements QuestInfo {
       return false;
     }
 
-    const delay = this.delayForNextNC() + 1;
+    const delay = this.delayForNextNC() + 4;
 
     return turns <= delay;
   }

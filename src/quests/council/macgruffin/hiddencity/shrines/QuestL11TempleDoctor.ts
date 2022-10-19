@@ -63,7 +63,7 @@ export class QuestL11Doctor implements QuestInfo {
         continue;
       }
 
-      outfit.addItem(i);
+      outfit.addWeight(i);
     }
 
     return {

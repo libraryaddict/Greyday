@@ -1,6 +1,7 @@
 import { Location, Monster, Skill, haveSkill, canAdventure } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
+import { canGreyAdventure } from "../../utils/GreyUtils";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
@@ -41,7 +42,7 @@ export class QuestSkillAbstract implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!canAdventure(this.location)) {
+    if (!canGreyAdventure(this.location)) {
       return QuestStatus.NOT_READY;
     }
 

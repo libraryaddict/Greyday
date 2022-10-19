@@ -215,7 +215,8 @@ export class SmutOrcs implements QuestInfo {
   tryCombat(): QuestAdventure {
     // max -ml, max cold dmg, raise item drop finally
     const outfit = new GreyOutfit();
-    outfit.addBonus("-5 ML");
+    outfit.addWeight("ML", -5);
+    outfit.addWeight(this.lastColdMaximize, 100_000, 5, 5);
     outfit.setItemDrops();
 
     if (
@@ -229,7 +230,7 @@ export class SmutOrcs implements QuestInfo {
       }
 
       if (availableAmount(Item.get("Logging Hatchet")) > 0) {
-        outfit.addItem(Item.get("Logging Hatchet"), 100);
+        outfit.addWeight(Item.get("Logging Hatchet"), 100);
       }
     }
 
@@ -238,11 +239,9 @@ export class SmutOrcs implements QuestInfo {
       this.getChasmRemaining() > this.getFastenersHave()
     ) {
       if (availableAmount(Item.get("Loadstone")) > 0) {
-        outfit.addItem(Item.get("Loadstone"), 100);
+        outfit.addWeight(Item.get("Loadstone"), 100);
       }
     }
-
-    outfit.addBonus("+100000 " + this.lastColdMaximize + " 5 min 5 max");
 
     return {
       location: this.loc,

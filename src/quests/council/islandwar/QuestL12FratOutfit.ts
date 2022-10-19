@@ -279,7 +279,7 @@ export class QuestL12FratOutfit extends TaskInfo implements QuestInfo {
     const grabbingFratOutfit = !grabbingHippyOutfit;
 
     if (grabbingFratOutfit) {
-      outfit.addBonus("+outfit " + this.hippyDisguise);
+      outfit.addExtra("+outfit " + this.hippyDisguise);
     }
 
     let yellowRay = path.getResource(ResourceCategory.YELLOW_RAY);

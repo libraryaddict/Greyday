@@ -41,7 +41,7 @@ export class QuestL10GiantTop implements QuestInfo {
     const outfit = new GreyOutfit().setNoCombat();
 
     if (availableAmount(this.wig) > 0) {
-      outfit.addItem(this.wig);
+      outfit.addWeight(this.wig);
     }
 
     return {

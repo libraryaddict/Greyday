@@ -22,6 +22,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
+import { canGreyAdventure } from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -197,7 +198,7 @@ export class QuestManorLights implements QuestInfo {
 
     if (getProperty("_juneCleaverFightsLeft") == "0") {
       if (fight) {
-        outfit.addBonus("-equip june cleaver");
+        outfit.addIgnored(Item.get("June Cleaver"));
       } else {
         equip(Slot.get("weapon"), Item.get("None"));
       }
@@ -275,7 +276,7 @@ export class QuestManorLights implements QuestInfo {
     if (this.shouldDoSteve() && (!this.isSteveFight() || this.finishLights)) {
       const steve = this.getSteve();
 
-      if (canAdventure(steve[0])) {
+      if (canGreyAdventure(steve[0])) {
         return this.doSteve();
       }
     }
@@ -283,7 +284,7 @@ export class QuestManorLights implements QuestInfo {
     if (this.isElizaReady() && (!this.isElizaFight() || this.finishLights)) {
       const eliza = this.getEliza();
 
-      if (canAdventure(eliza[0])) {
+      if (canGreyAdventure(eliza[0])) {
         return this.doEliza();
       }
     }
@@ -361,7 +362,7 @@ export class QuestManorLights implements QuestInfo {
     if (this.isElizaReady()) {
       const eliza = this.getEliza();
 
-      if (canAdventure(eliza[0])) {
+      if (canGreyAdventure(eliza[0])) {
         return true;
       }
     }
@@ -369,7 +370,7 @@ export class QuestManorLights implements QuestInfo {
     if (this.shouldDoSteve()) {
       const steve = this.getSteve();
 
-      if (canAdventure(steve[0])) {
+      if (canGreyAdventure(steve[0])) {
         return true;
       }
     }

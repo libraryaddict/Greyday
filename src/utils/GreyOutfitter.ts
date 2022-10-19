@@ -15,6 +15,13 @@ import { getQuestStatus } from "../quests/Quests";
 import { GreySettings } from "./GreySettings";
 import { UmbrellaState } from "./GreyUtils";
 
+interface MaximizerWeight {
+  item: Item | string;
+  weight: number;
+  min?: number;
+  max?: number;
+}
+
 export class GreyOutfit {
   static IGNORE_OUTFIT: any = "Ignore Outfit";
   private allowChampBottle: boolean = false;
@@ -30,8 +37,8 @@ export class GreyOutfit {
   initWeight: number = 0.05;
   plusCombatWeight: number = 0;
   minusCombatWeight: number = 0;
-  itemsWeight: [Item, number][] = [];
-  bonusWeights: string[] = [];
+  bonusWeights: MaximizerWeight[] = [];
+  extra: string[] = [];
   overrideMaximizer: string;
   umbrellaSetting: UmbrellaState;
   /**
@@ -48,13 +55,15 @@ export class GreyOutfit {
   /**
    * Checks if the user defined a bonus weight. If so, discards our own.
    */
-  hasBonus(name: string): boolean {
+  hasExtra(name: string): boolean {
     return (
-      this.bonusWeights.find((s) =>
-        s
-          .toLowerCase()
-          .replace(/^[^a-z]+/, "")
-          .startsWith(name)
+      this.bonusWeights.find(
+        (s) =>
+          !(s.item instanceof Item) &&
+          s.item
+            .toLowerCase()
+            .replace(/^[^a-z]+/, "")
+            .startsWith(name)
       ) != null
     );
   }
@@ -73,28 +82,28 @@ export class GreyOutfit {
   }
 
   setWeights() {
-    this.addBonus("+20 bonus lucky gold ring");
-    this.addBonus("+19 bonus mafia thumb ring");
+    this.addWeight(Item.get("lucky gold ring"), 20);
+    this.addWeight(Item.get("mafia thumb ring"), 19);
 
     if (getQuestStatus("questL13Final") <= 5) {
       if (availableAmount(Item.get("powerful glove")) > 0) {
-        this.addBonus("-4 bonus hewn moon-rune spoon");
-        this.addBonus("+4.5 bonus powerful glove");
+        this.addWeight(Item.get("hewn moon-rune spoon"), -4);
+        this.addWeight(Item.get("Powerful Glove"), 4.5);
       }
     }
 
     if (availableAmount(Item.get("Camp Scout Backpack")) > 0) {
-      this.addBonus("+1 bonus camp scout backpack");
+      this.addWeight(Item.get("camp scout backpack"));
     }
 
     if (
       availableAmount(GreyOutfit.teachersPen) > 1 &&
       availableAmount(GreyOutfit.leafPendant) > 0
     ) {
-      this.addBonus("-equip " + GreyOutfit.leafPendant.name);
+      this.addIgnored(GreyOutfit.leafPendant);
     }
 
-    this.addBonus("-equip screwing pooch");
+    this.addExtra("-equip screwing pooch");
 
     if (myLevel() > 15) {
       this.initWeight = 0.001;
@@ -131,17 +140,68 @@ export class GreyOutfit {
     // Setup weights according to w/e passives I have
   }
 
-  addBonus(message: string): GreyOutfit {
-    this.bonusWeights.push(message);
+  addIgnored(item: Item): GreyOutfit {
+    return this.addExtra("-equip " + item.name);
+  }
+
+  addExtra(extra: string): GreyOutfit {
+    this.extra.push(extra);
 
     return this;
   }
 
-  addItem(item: Item, weight: number = 999999): GreyOutfit {
-    if (weight < 999999 || availableAmount(item) == 0) {
-      this.itemsWeight.push([item, weight]);
+  addWeight(
+    item: Item | string,
+    weight?: number,
+    min?: number,
+    max?: number
+  ): GreyOutfit {
+    weight = weight != null ? weight : item instanceof Item ? 999_999 : 1;
+
+    if (!(item instanceof Item)) {
+      item = item.toLowerCase();
+      item = item
+        .replace(" exp", " experience")
+        .replace(" dmg", " damage")
+        .replace(/ res$/, " resistance")
+        .replace(/ mox$/, " moxie")
+        .replace(/ mys$/, " mysticality")
+        .replace(/ mus$/, " muscle");
+    }
+
+    if (
+      weight < 999999 ||
+      !(item instanceof Item) ||
+      availableAmount(item) == 0
+    ) {
+      const existing = this.bonusWeights.find((m) => m.item === item);
+
+      if (existing != null) {
+        if (existing.weight >= 0 == weight >= 0) {
+          existing.weight += weight;
+
+          if (min != null) {
+            existing.min = Math.max(existing.min ?? 0, min);
+          }
+
+          if (max != null) {
+            existing.max = Math.max(existing.max ?? 0, max);
+          }
+        } else {
+          existing.weight = weight;
+          existing.min = min;
+          existing.max = max;
+        }
+      } else {
+        this.bonusWeights.push({
+          item: item,
+          weight: weight,
+          min: min,
+          max: max,
+        });
+      }
     } else {
-      this.addBonus("+equip " + item.name);
+      this.addExtra("+equip " + item.name);
     }
 
     return this;
@@ -192,59 +252,66 @@ export class GreyOutfit {
 
     const modifiers: string[] = [];
 
-    if (this.famExpWeight > 0 && !this.hasBonus("familiar exp")) {
+    if (this.famExpWeight > 0 && !this.hasExtra("familiar exp")) {
       modifiers.push("+" + this.famExpWeight + " familiar experience");
     }
 
-    if (this.itemDropWeight > 0 && !this.hasBonus("item drop")) {
+    if (this.itemDropWeight > 0 && !this.hasExtra("item drop")) {
       modifiers.push("+" + this.itemDropWeight + " item drop");
     }
 
-    if (this.meatDropWeight > 0 && !this.hasBonus("meat drop")) {
+    if (this.meatDropWeight > 0 && !this.hasExtra("meat drop")) {
       modifiers.push("+" + this.meatDropWeight + " meat drop");
     }
 
-    if (this.hpWeight > 0 && !this.hasBonus("hp")) {
+    if (this.hpWeight > 0 && !this.hasExtra("hp")) {
       modifiers.push("+" + this.hpWeight + " hp");
     }
 
-    if (this.hpRegenWeight > 0 && !this.hasBonus("hp regen")) {
+    if (this.hpRegenWeight > 0 && !this.hasExtra("hp regen")) {
       modifiers.push("+" + this.hpRegenWeight + " hp regen");
     }
 
-    if (this.mpWeight > 0 && !this.hasBonus("mp")) {
+    if (this.mpWeight > 0 && !this.hasExtra("mp")) {
       modifiers.push("+" + this.mpWeight + " mp");
     }
 
-    if (this.mpRegenWeight > 0 && !this.hasBonus("mp regen")) {
+    if (this.mpRegenWeight > 0 && !this.hasExtra("mp regen")) {
       modifiers.push("+" + this.mpRegenWeight + " mp regen");
     }
 
-    if (this.initWeight > 0 && !this.hasBonus("init")) {
+    if (this.initWeight > 0 && !this.hasExtra("init")) {
       modifiers.push("+" + this.initWeight + " init");
     }
 
-    if (this.plusCombatWeight > 0 && !this.hasBonus("combat")) {
+    if (this.plusCombatWeight > 0 && !this.hasExtra("combat")) {
       modifiers.push(
         "+" + this.plusCombatWeight + " combat " + this.combatCap + " MAX"
       );
     }
 
-    if (this.minusCombatWeight > 0 && !this.hasBonus("combat")) {
+    if (this.minusCombatWeight > 0 && !this.hasExtra("combat")) {
       modifiers.push(
         "-" + this.minusCombatWeight + " combat " + this.combatCap + " MAX"
       );
     }
 
-    for (const pair of this.itemsWeight) {
-      modifiers.push("+" + pair[1] + " bonus " + pair[0]);
+    for (const weight of this.bonusWeights) {
+      modifiers.push(
+        (weight.weight >= 0 ? "+" + weight.weight : weight.weight) +
+          " " +
+          (weight.item instanceof Item ? "bonus " : "") +
+          weight.item +
+          (weight.min != null ? " " + weight.min + " MIN" : "") +
+          (weight.max != null ? " " + weight.max + " MAX" : "")
+      );
     }
 
-    for (const pair of this.bonusWeights) {
-      modifiers.push(pair);
+    for (const extra of this.extra) {
+      modifiers.push(extra);
     }
 
-    if (!this.allowChampBottle && !this.hasBonus("equip broken champagne")) {
+    if (!this.allowChampBottle && !this.hasExtra("equip broken champagne")) {
       modifiers.push("-equip broken champagne bottle");
     }
 

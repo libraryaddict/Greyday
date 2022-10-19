@@ -98,15 +98,15 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
 
   run(path: PossiblePath): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addBonus("+10 init");
-    outfit.addBonus("-ml");
+    outfit.addWeight("init", 10);
+    outfit.addWeight("ML", -1);
     outfit.hpRegenWeight = 1;
     outfit.mpRegenWeight = 1;
 
     if (availableAmount(this.doctorsBag) > 0) {
-      outfit.addItem(this.doctorsBag);
+      outfit.addWeight(this.doctorsBag);
     } else if (availableAmount(this.pantsgiving) > 0) {
-      outfit.addItem(this.pantsgiving);
+      outfit.addWeight(this.pantsgiving);
     } else if (path.canUse(ResourceCategory.YELLOW_RAY)) {
       path.getResource(ResourceCategory.YELLOW_RAY).prepare(outfit);
     }

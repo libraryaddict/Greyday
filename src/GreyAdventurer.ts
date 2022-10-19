@@ -346,9 +346,9 @@ export class GreyAdventurer {
     const outfit = toRun.outfit;
 
     if (toRun.location == Location.get("Inside the Palindome")) {
-      outfit.addItem(Item.get("Talisman o' Namsilat"));
+      outfit.addWeight(Item.get("Talisman o' Namsilat"));
     } else if (toRun.location == Location.get("The Icy Peak")) {
-      outfit.addBonus("+5 cold res 5 min");
+      outfit.addWeight("cold res", 5, 5);
     }
 
     let doOrb: boolean = false;
@@ -365,7 +365,7 @@ export class GreyAdventurer {
         adventure.quest == null &&
         (toRun.location == null || toRun.location.combatQueue.length > 3)
       ) {
-        outfit.addBonus("+20 bonus Kramco Sausage-o-Matic&trade;");
+        outfit.addWeight(Item.get("Kramco Sausage-o-Matic&trade;"), 20);
       }
     }
 
@@ -395,18 +395,18 @@ export class GreyAdventurer {
         bonus = 100;
       }
 
-      outfit.addBonus(`+${bonus} bonus cursed magnifying glass`);
+      outfit.addWeight(Item.get("cursed magnifying glass"), bonus);
     } else if (
       toInt(getProperty("cursedMagnifyingGlassCount")) == 13 &&
       outfit.minusCombatWeight < 0
     ) {
-      outfit.addBonus(`-50 bonus cursed magnifying glass`);
+      outfit.addWeight(Item.get("cursed magnifying glass"), -50);
     } else if (toInt(getProperty("_voidFreeFights")) >= 5) {
-      outfit.addBonus(`-30 bonus cursed magnifying glass`);
+      outfit.addWeight(Item.get("cursed magnifying glass"), -30);
     }
 
     if (adventure.considerPriority == ConsiderPriority.ORB_ABSORB) {
-      outfit.addBonus("-equip Carnivorous potted plant");
+      outfit.addIgnored(Item.get("Carnivorous potted plant"));
     }
 
     if (toInt(getProperty("scrapbookCharges")) < 100) {
@@ -420,16 +420,16 @@ export class GreyAdventurer {
         }
       }
 
-      outfit.addBonus("+" + bonus + " bonus familiar scrapbook");
+      outfit.addWeight(Item.get("familiar scrapbook"), bonus);
     }
 
     const sweat = toInt(getProperty("sweat"));
 
     if (sweat < 100 && outfit.itemDropWeight < 1) {
-      outfit.addBonus(`+${sweat < 5 ? 16 : 8} bonus designer sweatpants`);
+      outfit.addWeight(Item.get("designer sweatpants"), sweat < 5 ? 16 : 8);
     }
 
-    outfit.addBonus("+1 bonus june cleaver");
+    outfit.addWeight(Item.get("june cleaver"), 1);
 
     let powerLevelGoose: boolean = false;
 
@@ -489,7 +489,7 @@ export class GreyAdventurer {
       (toRun.familiar == null && gooseReplaceable) ||
       familiar == Familiar.get("Melodramedary")
     ) {
-      outfit.addBonus("+10 bonus june cleaver");
+      outfit.addWeight(Item.get("june cleaver"), 10);
     }
 
     if (
@@ -499,7 +499,7 @@ export class GreyAdventurer {
       const item = this.freeRunners.find((i) => availableAmount(i) > 0);
 
       if (item != null) {
-        outfit.addBonus("+12 bonus " + item.name);
+        outfit.addWeight(item, 12);
       }
     }
 

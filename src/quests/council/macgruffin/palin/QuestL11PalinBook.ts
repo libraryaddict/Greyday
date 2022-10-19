@@ -143,7 +143,7 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
   turnInStuff(path: PossiblePath): QuestAdventure {
     return {
       location: null,
-      outfit: new GreyOutfit().addItem(this.talisman),
+      outfit: new GreyOutfit().addWeight(this.talisman),
       run: () => {
         use(this.loveBook1);
         visitUrl("place.php?whichplace=palindome&action=pal_drlabel");
@@ -193,7 +193,7 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
 
     // No NCs to be hit other than quest so no need to +combat
 
-    outfit.addItem(this.talisman);
+    outfit.addWeight(this.talisman);
 
     return {
       outfit: outfit,

@@ -126,9 +126,9 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
 
   run(path: PossiblePath): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addItem(Item.get("Beer Helmet"));
-    outfit.addItem(Item.get("distressed denim pants"));
-    outfit.addItem(Item.get("bejeweled pledge pin"));
+    outfit.addWeight(Item.get("Beer Helmet"));
+    outfit.addWeight(Item.get("distressed denim pants"));
+    outfit.addWeight(Item.get("bejeweled pledge pin"));
 
     const nc = path.getResource(ResourceCategory.FORCE_NC);
 
@@ -139,7 +139,7 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
         availableAmount(this.umbrella) > 0 &&
         !DelayBurners.isDelayBurnerReady()
       ) {
-        outfit.addItem(this.umbrella);
+        outfit.addWeight(this.umbrella);
       }
     }
 

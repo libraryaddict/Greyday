@@ -9,6 +9,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreySettings } from "../../utils/GreySettings";
+import { canGreyAdventure } from "../../utils/GreyUtils";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -41,7 +42,7 @@ export class QuestSkillColdDamage15 implements QuestInfo {
 
     if (
       getProperty("questL08Trapper") != "finished" ||
-      !canAdventure(this.location)
+      !canGreyAdventure(this.location)
     ) {
       return QuestStatus.NOT_READY;
     }
@@ -86,7 +87,7 @@ export class QuestSkillColdDamage10 implements QuestInfo {
 
     if (
       getQuestStatus("questL08Trapper") < 3 ||
-      !canAdventure(this.location) ||
+      !canGreyAdventure(this.location) ||
       !GreySettings.isHardcoreMode()
     ) {
       return QuestStatus.NOT_READY;

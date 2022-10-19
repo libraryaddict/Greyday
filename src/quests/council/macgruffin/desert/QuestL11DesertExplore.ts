@@ -32,7 +32,10 @@ import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
-import { currentPredictions } from "../../../../utils/GreyUtils";
+import {
+  canGreyAdventure,
+  currentPredictions,
+} from "../../../../utils/GreyUtils";
 import { Macro } from "../../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../../utils/Properties";
 import {
@@ -114,7 +117,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
 
     if (
       this.toAbsorb.length == 0 &&
-      canAdventure(this.oasis) &&
+      canGreyAdventure(this.oasis) &&
       getProperty("_gnasirAvailable") == "true" &&
       this.wantsGnomeRose() &&
       availableAmount(this.rose) == 0 &&
@@ -192,7 +195,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
 
     if (resource == null && (pred == null || !this.toAbsorb.includes(pred))) {
       if (
-        canAdventure(this.oasis) &&
+        canGreyAdventure(this.oasis) &&
         haveEffect(this.hydrated) == 0 &&
         this.getExploredRemaining() > 3
       ) {
@@ -207,15 +210,15 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
     }
 
     const outfit = new GreyOutfit();
-    outfit.addItem(this.compass); // Compass
-    outfit.addItem(this.knife);
+    outfit.addWeight(this.compass); // Compass
+    outfit.addWeight(this.knife);
 
     if (resource != null) {
       resource.prepare(outfit);
     }
 
     if (this.toAbsorb.length > 0) {
-      outfit.addBonus("-equip " + this.kramco.name);
+      outfit.addIgnored(this.kramco);
     }
 
     const crystalBall: Map<Location, Monster> = currentPredictions();

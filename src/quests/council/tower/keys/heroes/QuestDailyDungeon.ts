@@ -84,15 +84,13 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
       return;
     }
 
-    const pulledMalware =
-      availableAmount(this.malware) > 0 ||
-      toBoolean(getProperty("_dailyDungeonMalwareUsed"));
+    const usedMalware = toBoolean(getProperty("_dailyDungeonMalwareUsed"));
 
     const malwarePath = new PossiblePath(4);
 
     this.paths.push(malwarePath);
 
-    if (!assumeUnstarted && pulledMalware) {
+    if (!assumeUnstarted && usedMalware) {
       return;
     }
 
@@ -204,7 +202,7 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
 
   run(path: PossiblePath): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addItem(this.ring);
+    outfit.addWeight(this.ring);
 
     return {
       outfit: outfit,

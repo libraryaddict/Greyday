@@ -181,9 +181,9 @@ export class Quest12WarNuns implements QuestInfo {
 
   run(): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addItem(Item.get("Beer Helmet"));
-    outfit.addItem(Item.get("distressed denim pants"));
-    outfit.addItem(Item.get("bejeweled pledge pin"));
+    outfit.addWeight(Item.get("Beer Helmet"));
+    outfit.addWeight(Item.get("distressed denim pants"));
+    outfit.addWeight(Item.get("bejeweled pledge pin"));
     outfit.meatDropWeight = 10;
 
     return {

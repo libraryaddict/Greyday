@@ -48,8 +48,8 @@ export class CryptL7Rattling extends CryptL7Template {
         outfit.setNoCombat();
       }
       outfit.umbrellaSetting = UmbrellaState.MONSTER_LEVEL;
-      outfit.addBonus("+4 ML");
-      outfit.addBonus("-equip " + this.kramco.name);
+      outfit.addWeight("ML", 4);
+      outfit.addIgnored(this.kramco);
     }
 
     return {

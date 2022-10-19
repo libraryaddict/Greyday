@@ -11,6 +11,7 @@ import {
 } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
+import { canGreyAdventure } from "../../../../utils/GreyUtils";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -55,7 +56,7 @@ export class QuestSkeletonKey implements QuestInfo {
       return QuestStatus.READY;
     }
 
-    if (!canAdventure(this.location)) {
+    if (!canGreyAdventure(this.location)) {
       return QuestStatus.NOT_READY;
     }
 

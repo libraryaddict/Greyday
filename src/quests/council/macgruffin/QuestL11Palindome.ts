@@ -54,8 +54,8 @@ export class QuestL11Palin implements QuestInfo {
 
   run(): QuestAdventure {
     const outfit = new GreyOutfit()
-      .addItem(this.talisman)
-      .addItem(this.megagem);
+      .addWeight(this.talisman)
+      .addWeight(this.megagem);
 
     return {
       outfit: outfit,

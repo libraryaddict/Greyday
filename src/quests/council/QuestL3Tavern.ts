@@ -108,18 +108,24 @@ export class QuestL3Tavern implements QuestInfo {
       if (getProperty("pyramidBombUsed") != "true") {
         outfit.setPlusCombat();
         outfit.umbrellaSetting = UmbrellaState.MONSTER_LEVEL;
-        outfit.addBonus("+10 ML");
-        outfit.addBonus("-offhand");
+        outfit.addWeight("ML", 10);
+        outfit.addExtra("-offhand");
 
         // Boost our damage
         if (myLevel() < 16) {
-          outfit.addBonus("+mox");
+          outfit.addWeight("mox");
         }
       } else {
         outfit.setNoCombat();
-        outfit.addBonus(
-          "+hot dmg +hot spell dmg +cold dmg +cold spell dmg +spooky dmg +spooky spell dmg +stench dmg +stench spell dmg"
-        );
+        outfit
+          .addWeight("hot dmg")
+          .addWeight("hot spell dmg")
+          .addWeight("cold dmg")
+          .addWeight("cold spell dmg")
+          .addWeight("spooky dmg")
+          .addWeight("spooky spell dmg")
+          .addWeight("stench dmg")
+          .addWeight("stench spell dmg");
       }
     }
 

@@ -86,7 +86,7 @@ export class QuestL2SpookyLarva implements QuestInfo {
       : new GreyOutfit();
 
     if (this.shouldWearLatte()) {
-      outfit.addItem(this.latte);
+      outfit.addWeight(this.latte);
     }
 
     if (this.location.turnsSpent >= 5) {

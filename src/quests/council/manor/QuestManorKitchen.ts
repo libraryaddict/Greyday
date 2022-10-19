@@ -128,7 +128,8 @@ export class QuestManorKitchen implements QuestInfo {
     const outfit = new GreyOutfit();
 
     if (toInt(getProperty("manorDrawerCount")) < 20) {
-      outfit.addBonus("+10 hot res 9 max").addBonus("+10 stench res 9 max");
+      outfit.addWeight("hot res", 10, null, 9);
+      outfit.addWeight("stench res", 10, null, 9);
     }
 
     return {

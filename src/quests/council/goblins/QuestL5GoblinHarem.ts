@@ -12,6 +12,7 @@ import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { canGreyAdventure } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../utils/Properties";
 import {
@@ -67,7 +68,7 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (!canAdventure(this.harem)) {
+    if (!canGreyAdventure(this.harem)) {
       return QuestStatus.NOT_READY;
     }
 

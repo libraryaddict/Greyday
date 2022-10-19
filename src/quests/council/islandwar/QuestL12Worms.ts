@@ -197,10 +197,10 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
   run(path: PossiblePath): QuestAdventure {
     if (itemAmount(this.heart) > 0) {
       const outfit = new GreyOutfit();
-      outfit.addItem(Item.get("Beer Helmet"));
-      outfit.addItem(Item.get("distressed denim pants"));
-      outfit.addItem(Item.get("bejeweled pledge pin"));
-      outfit.addBonus("-tie");
+      outfit.addWeight(Item.get("Beer Helmet"));
+      outfit.addWeight(Item.get("distressed denim pants"));
+      outfit.addWeight(Item.get("bejeweled pledge pin"));
+      outfit.addExtra("-tie");
 
       return {
         outfit: outfit,

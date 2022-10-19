@@ -160,7 +160,8 @@ export class QuestTowerShadow extends TaskInfo implements QuestInfo {
 
     const outfit = new GreyOutfit();
     outfit.hpWeight = 0;
-    outfit.addBonus("+500 init 151 max +100 hp 500 max");
+    outfit.addWeight("init", 500, null, 151);
+    outfit.addWeight("hp", 100, null, 500);
 
     return {
       familiar: this.potato,

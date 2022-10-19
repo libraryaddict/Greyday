@@ -68,8 +68,8 @@ export class QuestL11ManorBomb implements QuestInfo {
       };
     }
 
-    const outfit = new GreyOutfit().addItem(this.unstable);
-    outfit.addBonus("+5 ML 81 max");
+    const outfit = new GreyOutfit().addWeight(this.unstable);
+    outfit.addWeight("ML", 5, null, 81);
     //outfit.plusMonsterLevelWeight = 5;
 
     return {

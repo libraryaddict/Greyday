@@ -43,7 +43,7 @@ export class QuestL11ShenGiants implements QuestInfo {
     }
 
     if (availableAmount(this.wig) > 0) {
-      outfit.addItem(this.wig);
+      outfit.addWeight(this.wig);
     }
 
     return {

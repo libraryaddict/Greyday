@@ -509,7 +509,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
 
   doFaxers(path: PossiblePath): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addBonus("+DA +DR -ML");
+    outfit.addWeight("DA").addWeight("DR").addWeight("ML", -1);
 
     if (path.canUse(ResourceCategory.POLAR_VORTEX) > 0) {
       path.getResource(ResourceCategory.POLAR_VORTEX).prepare(outfit);

@@ -161,7 +161,7 @@ export class QuestL11Bowling implements QuestInfo {
     const outfit = new GreyOutfit();
 
     if (this.getProgress() >= 5 && availableAmount(this.bowlingBall) > 0) {
-      outfit.addBonus("+max 0.1 elemental dmg");
+      outfit.addWeight("elemental dmg", 1, null, 0.1);
     } else {
       outfit.setItemDrops();
     }

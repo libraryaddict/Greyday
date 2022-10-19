@@ -66,8 +66,7 @@ export class QuestLocketSystemSweep implements QuestInfo {
 
   run(path: PossiblePath): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addBonus("+init");
-    outfit.addBonus("-ml");
+    outfit.addWeight("init").addWeight("ML", -1);
 
     return {
       location: null,

@@ -97,10 +97,10 @@ export class WarGremlins implements QuestInfo {
 
   visitJunkman(): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addItem(Item.get("Beer Helmet"));
-    outfit.addItem(Item.get("distressed denim pants"));
-    outfit.addItem(Item.get("bejeweled pledge pin"));
-    outfit.addBonus("-tie");
+    outfit.addWeight(Item.get("Beer Helmet"));
+    outfit.addWeight(Item.get("distressed denim pants"));
+    outfit.addWeight(Item.get("bejeweled pledge pin"));
+    outfit.addExtra("-tie");
 
     return {
       outfit: outfit,
@@ -205,14 +205,17 @@ class GremlinQuest implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    const outfit = new GreyOutfit().addBonus("-ML 70 MAX +1 DA +5 DR");
+    const outfit = new GreyOutfit()
+      .addWeight("ML", -1, null, -70)
+      .addWeight("DA")
+      .addWeight("DR", 5);
     outfit.hpWeight = 1;
 
     if (
       availableAmount(this.pants) > 0 &&
       currentPredictions().get(this.loc) != this.monster
     ) {
-      outfit.addBonus("+equip " + this.pants.name);
+      outfit.addWeight(this.pants);
     }
 
     const macro2 = Macro.if_(

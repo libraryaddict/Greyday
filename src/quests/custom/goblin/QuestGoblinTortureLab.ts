@@ -1,6 +1,7 @@
 import { canAdventure, getProperty, Location } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { canGreyAdventure } from "../../../utils/GreyUtils";
 import { QuestInfo, QuestStatus, QuestAdventure } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -17,12 +18,12 @@ export class QuestGoblinTortureLab implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (canAdventure(this.megL3)) {
+    if (canGreyAdventure(this.megL3)) {
       return QuestStatus.COMPLETED;
     }
 
     if (
-      !canAdventure(this.lab) ||
+      !canGreyAdventure(this.lab) ||
       getProperty("questL05Goblin") != "finished"
     ) {
       return QuestStatus.NOT_READY;

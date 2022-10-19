@@ -1,6 +1,7 @@
 import { Location, Familiar, getProperty, canAdventure } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { canGreyAdventure } from "../../../utils/GreyUtils";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
@@ -17,7 +18,7 @@ export class QuestGoblinTortureHarem implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (canAdventure(this.lab)) {
+    if (canGreyAdventure(this.lab)) {
       return QuestStatus.COMPLETED;
     }
 

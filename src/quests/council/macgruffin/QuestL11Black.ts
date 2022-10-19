@@ -119,23 +119,24 @@ export class QuestL11Black extends TaskInfo implements QuestInfo {
     if (!ncTime) {
       outfit.setPlusCombat();
       outfit.combatCap = 5;
-      outfit.addBonus("+3 init 50 max");
+      outfit.addWeight("init", 3, null, 50);
     }
 
     if (availableAmount(this.boots) > 0) {
       if (!ncTime) {
-        outfit.addItem(this.boots);
+        outfit.addWeight(this.boots);
       }
     } else if (availableAmount(this.blackberry) <= 1) {
       outfit.setItemDrops();
-      outfit.addBonus("+0.1 booze drop +0.1 food drop");
+
+      outfit.addWeight("booze drop", 0.1).addWeight("food drop", 0.1);
     }
 
     if (this.shouldWearLatte()) {
-      outfit.addItem(this.latte);
+      outfit.addWeight(this.latte);
     }
 
-    outfit.addBonus("+moxie -ml");
+    outfit.addWeight("moxie").addWeight("ml", -1);
 
     let fam: Familiar;
 

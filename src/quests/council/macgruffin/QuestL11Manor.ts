@@ -15,6 +15,7 @@ import { QuestL11ManorBoss } from "./manor/QuestL11ManorBoss";
 import { QuestL11ManorRecipe } from "./manor/QuestL11ManorRecipe";
 import { QuestL11ManorSoda } from "./manor/QuestL11ManorSoda";
 import { QuestL11ManorWine } from "./manor/QuestL11ManorWine";
+import { canGreyAdventure } from "../../../utils/GreyUtils";
 
 export class QuestL11Manor implements QuestInfo {
   ballroom: Location = Location.get("The Haunted Ballroom");
@@ -47,7 +48,7 @@ export class QuestL11Manor implements QuestInfo {
   status(): QuestStatus {
     const status = getQuestStatus("questL11Manor");
 
-    if (status < 0 || !canAdventure(this.ballroom)) {
+    if (status < 0 || !canGreyAdventure(this.ballroom)) {
       return QuestStatus.NOT_READY;
     }
 

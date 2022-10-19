@@ -134,7 +134,7 @@ export class QuestDigitalKey implements QuestInfo {
     }
 
     const outfit = new GreyOutfit().setItemDrops();
-    outfit.addItem(this.transfomer);
+    outfit.addWeight(this.transfomer);
     const settings = new AdventureSettings();
     settings.addNoBanish(Monster.get("Blooper"));
     settings.addNoBanish(Monster.get("Buzzy Beetle"));

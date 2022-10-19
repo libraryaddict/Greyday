@@ -96,8 +96,8 @@ export class QuestFantasyBandit extends TaskInfo implements QuestInfo {
 
     const outfit = new GreyOutfit();
     // Try avoid exp stuff being added cos we're not running a fam
-    outfit.addBonus("-100 familiar exp");
-    outfit.addItem(this.equip);
+    outfit.addWeight("familiar exp", -100);
+    outfit.addWeight(this.equip);
 
     return {
       location: this.location,

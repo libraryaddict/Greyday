@@ -56,7 +56,11 @@ import {
 } from "./utils/GreyLocations";
 import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
-import { currentPredictions, doColor } from "./utils/GreyUtils";
+import {
+  canGreyAdventure,
+  currentPredictions,
+  doColor,
+} from "./utils/GreyUtils";
 
 export enum OrbStatus {
   READY,
@@ -276,7 +280,7 @@ export class AdventureFinder {
     for (const [loc, details] of nonQuests) {
       if (
         this.questLocations.includes(loc) ||
-        !canAdventure(loc) ||
+        !canGreyAdventure(loc) ||
         ([...details.skills.keys()].find((s) =>
           this.absorbs.getMustHaveSkills().has(s.skill)
         ) == null &&
@@ -831,7 +835,7 @@ export class AdventureFinder {
       (outfit == GreyOutfit.IGNORE_OUTFIT ||
         //outfit.plusCombatWeight > 0 ||
         //  outfit.minusCombatWeight > 0 ||
-        outfit.itemsWeight.length > 0)
+        outfit.bonusWeights.length > 0)
     ) {
       return;
     }

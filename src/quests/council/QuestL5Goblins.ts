@@ -56,8 +56,8 @@ export class QuestL5Goblin implements QuestInfo {
 
   run(): QuestAdventure {
     const outfit = new GreyOutfit()
-      .addItem(Item.get("Knob Goblin harem pants"))
-      .addItem(Item.get("Knob Goblin harem veil"));
+      .addWeight(Item.get("Knob Goblin harem pants"))
+      .addWeight(Item.get("Knob Goblin harem veil"));
 
     return {
       location: Location.get("Throne Room"),

@@ -315,9 +315,9 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
 
   turnInQuest(): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addItem(Item.get("Beer Helmet"));
-    outfit.addItem(Item.get("distressed denim pants"));
-    outfit.addItem(Item.get("bejeweled pledge pin"));
+    outfit.addWeight(Item.get("Beer Helmet"));
+    outfit.addWeight(Item.get("distressed denim pants"));
+    outfit.addWeight(Item.get("bejeweled pledge pin"));
 
     return {
       location: null,
@@ -382,7 +382,7 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
 
   runBackup(path: PossiblePath): QuestAdventure {
     const outfit = new GreyOutfit();
-    outfit.addBonus("-ML");
+    outfit.addWeight("ML", -1);
 
     const copierResource = path.getResource(ResourceCategory.COPIER);
     copierResource.prepare(outfit);
@@ -418,7 +418,7 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       copier != null;
 
     const outfit = new GreyOutfit();
-    outfit.addBonus("-ML");
+    outfit.addWeight("ML", -1);
 
     if (makeMoreFriends) {
       copier.prepare(outfit);
@@ -516,13 +516,13 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       gloveReplace.prepare(outfit);
 
       if (primed == null) {
-        outfit.addItem(this.getMonsterReplacer());
+        outfit.addWeight(this.getMonsterReplacer());
       }
     } else {
       outfit.setPlusCombat();
     }
 
-    outfit.addBonus("-ML");
+    outfit.addWeight("ML", -1);
 
     const copier = path.getResource(ResourceCategory.OLFACT_COPIER);
 

@@ -197,7 +197,7 @@ export class QuestManorBillards extends TaskInfo implements QuestInfo {
       }
 
       if (this.elementalSkills.find((s) => haveSkill(s)) == null) {
-        outfit.addBonus("+10 elemental dmg 1 min 1 max");
+        outfit.addWeight("elemental dmg", 10, 1, 1);
       }
 
       if (
@@ -212,7 +212,7 @@ export class QuestManorBillards extends TaskInfo implements QuestInfo {
       }
     }
 
-    outfit.addItem(this.cue);
+    outfit.addWeight(this.cue);
 
     const mustHitGhost =
       this.toAbsorb.includes(this.ghost) ||
@@ -229,8 +229,8 @@ export class QuestManorBillards extends TaskInfo implements QuestInfo {
         : null;
 
     if (fam != null) {
-      outfit.addBonus("+switch " + this.lefthandMan);
-      outfit.addBonus("+equip " + this.umbrella);
+      outfit.addExtra("+switch " + this.lefthandMan);
+      outfit.addWeight(this.umbrella);
     }
 
     return {

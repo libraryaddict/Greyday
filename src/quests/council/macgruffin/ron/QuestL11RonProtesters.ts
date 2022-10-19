@@ -461,10 +461,10 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
 
     const outfit = new GreyOutfit().setNoCombat().setNoCombat().setItemDrops();
 
-    path.equips.forEach((i) => outfit.addItem(i));
+    path.equips.forEach((i) => outfit.addWeight(i));
 
     if (sleazeScares * 2 >= lynyrdScares) {
-      outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");
+      outfit.addWeight("sleaze dmg", 2).addWeight("sleaze spell dmg", 2);
     }
 
     const forceMan =
@@ -477,13 +477,13 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
 
     if (forceMan) {
       if (availableAmount(this.umbrella) > 0) {
-        outfit.addItem(this.umbrella);
+        outfit.addWeight(this.umbrella);
       }
     } else if (
       availableAmount(this.umbrella) > 0 &&
       !path.equips.includes(this.deck)
     ) {
-      outfit.addItem(this.umbrella);
+      outfit.addWeight(this.umbrella);
     }
 
     // TODO Run left hand man?

@@ -14,6 +14,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
+import { canGreyAdventure } from "../../utils/GreyUtils";
 import { Macro } from "../../utils/MacroBuilder";
 import {
   getQuestStatus,
@@ -125,7 +126,7 @@ export class QuestTrapGhost implements QuestInfo {
 
     const loc = this.getLocation();
 
-    if (!canAdventure(loc)) {
+    if (!canGreyAdventure(loc)) {
       return QuestStatus.NOT_READY;
     }
 
@@ -140,7 +141,7 @@ export class QuestTrapGhost implements QuestInfo {
     const outfit = getGhostBustingOutfit();
 
     if (this.isReady() && this.getLocation() == this.icyPeak) {
-      outfit.addBonus("+10 cold res 5 min");
+      outfit.addWeight("cold res", 10, 5);
     }
 
     return {
@@ -175,12 +176,12 @@ const pack: Item = Item.get("protonic accelerator pack");
 export function getGhostBustingOutfit(): GreyOutfit {
   const outfit = new GreyOutfit();
 
-  outfit.addItem(pack);
+  outfit.addWeight(pack);
 
   if (availableAmount(sweatpants) > 0) {
-    outfit.addItem(sweatpants);
+    outfit.addWeight(sweatpants);
   } else {
-    outfit.addBonus("+DA +DR");
+    outfit.addWeight("DA").addWeight("DR");
   }
 
   return outfit;

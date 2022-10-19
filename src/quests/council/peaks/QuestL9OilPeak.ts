@@ -189,9 +189,9 @@ export class OilHandler implements QuestInfo {
     }
 
     const outfit = new GreyOutfit().setItemDrops();
-    outfit.addBonus("+2 ML 100 MAX");
+    outfit.addWeight("ML", 2, null, 100);
     outfit.umbrellaSetting = UmbrellaState.MONSTER_LEVEL;
-    outfit.addBonus("-offhand");
+    outfit.addExtra("-offhand");
 
     return {
       location: this.loc,

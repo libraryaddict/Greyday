@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  canAdventure,
   cliExecute,
   Familiar,
   familiarEquippedEquipment,
@@ -288,4 +289,15 @@ export function hasPulled(item: Item): boolean {
   return getProperty("_roninStoragePulls")
     .split(",")
     .includes(toInt(item).toString());
+}
+
+export function canGreyAdventure(location: Location): boolean {
+  if (
+    location.zone == "Pandamonium" &&
+    getProperty("questL06Friar") != "finished"
+  ) {
+    return false;
+  }
+
+  return canAdventure(location);
 }
