@@ -75,6 +75,10 @@ export class QuestL11ShrineVines implements QuestInfo {
   }
 
   lianaCleared(loc: Location) {
+    if (loc.noncombatQueue.includes("Legend of the Temple in the Hidden Cit")) {
+      return true;
+    }
+
     //need to check the combat names due to wanderers
     //we are assuming victory. you could have potentially fought liana without machete and then ran away. but you we are assuming you didn't
     let dense_liana_defeated = 0;
