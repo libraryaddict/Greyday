@@ -1657,7 +1657,7 @@ var gloveReplace = {
   worthInAftercore: 22000,
   resourcesUsed: 10,
   prepare: (outfit) =>
-  outfit != null ? outfit.addItem(glove) : null,
+  outfit != null ? outfit.addWeight(glove) : null,
   macro: () => Macro.skill(external_kolmafia_namespaceObject.Skill.get("CHEAT CODE: Replace Enemy"))
 };
 
@@ -1696,7 +1696,7 @@ var extingusherPolar = {
   resourcesUsed: 10,
   worthInAftercore: 1500, // Tattered paper cost and assume free run
   prepare: (outfit) =>
-  outfit != null ? outfit.addItem(extingusher) : null,
+  outfit != null ? outfit.addWeight(extingusher) : null,
   macro: () => Macro.skill(external_kolmafia_namespaceObject.Skill.get("Fire Extinguisher: Polar Vortex"))
 };
 
@@ -1708,7 +1708,7 @@ var extingusherZoneSpecific = {
   worthInAftercore: 3000, // Tattered paper cost x 2
   prepare: (outfit) =>
   outfit != null ?
-  outfit.addItem(extingusher).addBonus("-equip smoke ball") :
+  outfit.addWeight(extingusher).addExtra("-equip smoke ball") :
   null,
   macro: () => Macro.skill(external_kolmafia_namespaceObject.Skill.get("Fire Extinguisher: Zone Specific"))
 };
@@ -1794,7 +1794,7 @@ var ncParka = {
   //available: () => haveSkill(torso) && availableAmount(parka) > 0,
   prepare: (outfit) => {
     if (outfit != null) {
-      outfit.addItem(parka);
+      outfit.addWeight(parka);
     } else {
       (0,external_kolmafia_namespaceObject.cliExecute)("parka spikolodon");
     }
@@ -1837,7 +1837,7 @@ var yellowParka = {
   worthInAftercore: 0,
   prepare: (outfit, props) => {
     if (outfit != null) {
-      outfit.addItem(parka);
+      outfit.addWeight(parka);
     }
 
     if (props != null) {
@@ -1884,7 +1884,7 @@ var retroRay = {
   resourcesUsed: 100,
   prepare: (outfit, props) => {
     if (outfit != null) {
-      outfit.addItem(retrocape);
+      outfit.addWeight(retrocape);
     }
 
     if (props != null) {
@@ -1911,7 +1911,7 @@ var cosplayYellowRay = {
   0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit, props) => {
     if (outfit != null) {
-      outfit.addItem(cosplaySaber);
+      outfit.addWeight(cosplaySaber);
     }
     if (props != null) {
       props.setChoiceProperty(1387, 3);
@@ -1928,7 +1928,7 @@ var backupCopier = {
   resource: "Backup Camera",
   worthInAftercore: 20000, // Embezzler
   prepare: (outfit) =>
-  outfit != null ? outfit.addItem(backupCamera) : null,
+  outfit != null ? outfit.addWeight(backupCamera) : null,
   macro: () => Macro.skill(external_kolmafia_namespaceObject.Skill.get("Back-Up to your Last Enemy"))
 };
 
@@ -1944,7 +1944,7 @@ var cosplayCopier = {
   0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit, props) => {
     if (outfit != null) {
-      outfit.addItem(cosplaySaber);
+      outfit.addWeight(cosplaySaber);
     }
     if (props != null) {
       props.setChoiceProperty(1387, 2);
@@ -2046,7 +2046,7 @@ var cosplayBanisher = {
   0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit, props) => {
     if (outfit != null) {
-      outfit.addItem(cosplaySaber);
+      outfit.addWeight(cosplaySaber);
     }
     if (outfit != null) {
       props.setChoiceProperty(1387, 1);
@@ -3135,8 +3135,26 @@ function hasPulled(item) {
   split(",").
   includes((0,external_kolmafia_namespaceObject.toInt)(item).toString());
 }
+
+function canGreyAdventure(location) {
+  if (
+  location.zone == "Pandamonium" &&
+  (0,external_kolmafia_namespaceObject.getProperty)("questL06Friar") != "finished")
+  {
+    return false;
+  }
+
+  return (0,external_kolmafia_namespaceObject.canAdventure)(location);
+}
 ;// CONCATENATED MODULE: ./src/utils/GreyOutfitter.ts
 function GreyOutfitter_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyOutfitter_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyOutfitter_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyOutfitter_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyOutfitter_arrayLikeToArray(o, minLen);}function GreyOutfitter_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyOutfitter_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyOutfitter_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyOutfitter_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyOutfitter_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyOutfitter_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyOutfitter_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
+
+
+
+
+
+
 
 
 
@@ -3165,7 +3183,7 @@ var GreyOutfit = /*#__PURE__*/function () {
    */
 
 
-  function GreyOutfit() {var string = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;GreyOutfitter_classCallCheck(this, GreyOutfit);GreyOutfitter_defineProperty(this, "allowChampBottle", false);GreyOutfitter_defineProperty(this, "famExpWeight", 30);GreyOutfitter_defineProperty(this, "itemDropWeight", 0.3);GreyOutfitter_defineProperty(this, "meatDropWeight", 0.1);GreyOutfitter_defineProperty(this, "hpWeight", 0.001);GreyOutfitter_defineProperty(this, "hpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "mpWeight", 0.001);GreyOutfitter_defineProperty(this, "mpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "initWeight", 0.05);GreyOutfitter_defineProperty(this, "plusCombatWeight", 0);GreyOutfitter_defineProperty(this, "minusCombatWeight", 0);GreyOutfitter_defineProperty(this, "itemsWeight", []);GreyOutfitter_defineProperty(this, "bonusWeights", []);GreyOutfitter_defineProperty(this, "overrideMaximizer", void 0);GreyOutfitter_defineProperty(this, "umbrellaSetting", void 0);GreyOutfitter_defineProperty(this, "combatCap", 25);
+  function GreyOutfit() {var string = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;GreyOutfitter_classCallCheck(this, GreyOutfit);GreyOutfitter_defineProperty(this, "allowChampBottle", false);GreyOutfitter_defineProperty(this, "famExpWeight", 30);GreyOutfitter_defineProperty(this, "itemDropWeight", 0.3);GreyOutfitter_defineProperty(this, "meatDropWeight", 0.1);GreyOutfitter_defineProperty(this, "hpWeight", 0.001);GreyOutfitter_defineProperty(this, "hpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "mpWeight", 0.001);GreyOutfitter_defineProperty(this, "mpRegenWeight", 0.01);GreyOutfitter_defineProperty(this, "initWeight", 0.05);GreyOutfitter_defineProperty(this, "plusCombatWeight", 0);GreyOutfitter_defineProperty(this, "minusCombatWeight", 0);GreyOutfitter_defineProperty(this, "bonusWeights", []);GreyOutfitter_defineProperty(this, "extra", []);GreyOutfitter_defineProperty(this, "overrideMaximizer", void 0);GreyOutfitter_defineProperty(this, "umbrellaSetting", void 0);GreyOutfitter_defineProperty(this, "combatCap", 25);
     this.overrideMaximizer = string;
 
     this.setWeights();
@@ -3173,11 +3191,13 @@ var GreyOutfit = /*#__PURE__*/function () {
 
   /**
    * Checks if the user defined a bonus weight. If so, discards our own.
-   */GreyOutfitter_createClass(GreyOutfit, [{ key: "hasBonus", value:
-    function hasBonus(name) {
+   */GreyOutfitter_createClass(GreyOutfit, [{ key: "hasExtra", value:
+    function hasExtra(name) {
       return (
-        this.bonusWeights.find((s) =>
-        s.
+        this.bonusWeights.find(
+        (s) =>
+        !(s.item instanceof external_kolmafia_namespaceObject.Item) &&
+        s.item.
         toLowerCase().
         replace(/^[^a-z]+/, "").
         startsWith(name)) !=
@@ -3199,28 +3219,28 @@ var GreyOutfit = /*#__PURE__*/function () {
     } }, { key: "setWeights", value:
 
     function setWeights() {
-      this.addBonus("+20 bonus lucky gold ring");
-      this.addBonus("+19 bonus mafia thumb ring");
+      this.addWeight(external_kolmafia_namespaceObject.Item.get("lucky gold ring"), 20);
+      this.addWeight(external_kolmafia_namespaceObject.Item.get("mafia thumb ring"), 19);
 
       if (getQuestStatus("questL13Final") <= 5) {
         if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("powerful glove")) > 0) {
-          this.addBonus("-4 bonus hewn moon-rune spoon");
-          this.addBonus("+4.5 bonus powerful glove");
+          this.addWeight(external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"), -4);
+          this.addWeight(external_kolmafia_namespaceObject.Item.get("Powerful Glove"), 4.5);
         }
       }
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Camp Scout Backpack")) > 0) {
-        this.addBonus("+1 bonus camp scout backpack");
+        this.addWeight(external_kolmafia_namespaceObject.Item.get("camp scout backpack"));
       }
 
       if (
       (0,external_kolmafia_namespaceObject.availableAmount)(GreyOutfit.teachersPen) > 1 &&
       (0,external_kolmafia_namespaceObject.availableAmount)(GreyOutfit.leafPendant) > 0)
       {
-        this.addBonus("-equip " + GreyOutfit.leafPendant.name);
+        this.addIgnored(GreyOutfit.leafPendant);
       }
 
-      this.addBonus("-equip screwing pooch");
+      this.addExtra("-equip screwing pooch");
 
       if ((0,external_kolmafia_namespaceObject.myLevel)() > 15) {
         this.initWeight = 0.001;
@@ -3255,19 +3275,70 @@ var GreyOutfit = /*#__PURE__*/function () {
         this.famExpWeight = 100;
       }
       // Setup weights according to w/e passives I have
-    } }, { key: "addBonus", value:
+    } }, { key: "addIgnored", value:
 
-    function addBonus(message) {
-      this.bonusWeights.push(message);
+    function addIgnored(item) {
+      return this.addExtra("-equip " + item.name);
+    } }, { key: "addExtra", value:
+
+    function addExtra(extra) {
+      this.extra.push(extra);
 
       return this;
-    } }, { key: "addItem", value:
+    } }, { key: "addWeight", value:
 
-    function addItem(item) {var weight = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 999999;
-      if (weight < 999999 || (0,external_kolmafia_namespaceObject.availableAmount)(item) == 0) {
-        this.itemsWeight.push([item, weight]);
+    function addWeight(
+    item,
+    weight,
+    min,
+    max)
+    {
+      weight = weight != null ? weight : item instanceof external_kolmafia_namespaceObject.Item ? 999999 : 1;
+
+      if (!(item instanceof external_kolmafia_namespaceObject.Item)) {
+        item = item.toLowerCase();
+        item = item.
+        replace(" exp", " experience").
+        replace(" dmg", " damage").
+        replace(/ res$/, " resistance").
+        replace(/ mox$/, " moxie").
+        replace(/ mys$/, " mysticality").
+        replace(/ mus$/, " muscle");
+      }
+
+      if (
+      weight < 999999 ||
+      !(item instanceof external_kolmafia_namespaceObject.Item) ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(item) == 0)
+      {
+        var existing = this.bonusWeights.find((m) => m.item === item);
+
+        if (existing != null) {
+          if (existing.weight >= 0 == weight >= 0) {
+            existing.weight += weight;
+
+            if (min != null) {var _existing$min;
+              existing.min = Math.max((_existing$min = existing.min) !== null && _existing$min !== void 0 ? _existing$min : 0, min);
+            }
+
+            if (max != null) {var _existing$max;
+              existing.max = Math.max((_existing$max = existing.max) !== null && _existing$max !== void 0 ? _existing$max : 0, max);
+            }
+          } else {
+            existing.weight = weight;
+            existing.min = min;
+            existing.max = max;
+          }
+        } else {
+          this.bonusWeights.push({
+            item: item,
+            weight: weight,
+            min: min,
+            max: max
+          });
+        }
       } else {
-        this.addBonus("+equip " + item.name);
+        this.addExtra("+equip " + item.name);
       }
 
       return this;
@@ -3318,59 +3389,66 @@ var GreyOutfit = /*#__PURE__*/function () {
 
       var modifiers = [];
 
-      if (this.famExpWeight > 0 && !this.hasBonus("familiar exp")) {
+      if (this.famExpWeight > 0 && !this.hasExtra("familiar exp")) {
         modifiers.push("+" + this.famExpWeight + " familiar experience");
       }
 
-      if (this.itemDropWeight > 0 && !this.hasBonus("item drop")) {
+      if (this.itemDropWeight > 0 && !this.hasExtra("item drop")) {
         modifiers.push("+" + this.itemDropWeight + " item drop");
       }
 
-      if (this.meatDropWeight > 0 && !this.hasBonus("meat drop")) {
+      if (this.meatDropWeight > 0 && !this.hasExtra("meat drop")) {
         modifiers.push("+" + this.meatDropWeight + " meat drop");
       }
 
-      if (this.hpWeight > 0 && !this.hasBonus("hp")) {
+      if (this.hpWeight > 0 && !this.hasExtra("hp")) {
         modifiers.push("+" + this.hpWeight + " hp");
       }
 
-      if (this.hpRegenWeight > 0 && !this.hasBonus("hp regen")) {
+      if (this.hpRegenWeight > 0 && !this.hasExtra("hp regen")) {
         modifiers.push("+" + this.hpRegenWeight + " hp regen");
       }
 
-      if (this.mpWeight > 0 && !this.hasBonus("mp")) {
+      if (this.mpWeight > 0 && !this.hasExtra("mp")) {
         modifiers.push("+" + this.mpWeight + " mp");
       }
 
-      if (this.mpRegenWeight > 0 && !this.hasBonus("mp regen")) {
+      if (this.mpRegenWeight > 0 && !this.hasExtra("mp regen")) {
         modifiers.push("+" + this.mpRegenWeight + " mp regen");
       }
 
-      if (this.initWeight > 0 && !this.hasBonus("init")) {
+      if (this.initWeight > 0 && !this.hasExtra("init")) {
         modifiers.push("+" + this.initWeight + " init");
       }
 
-      if (this.plusCombatWeight > 0 && !this.hasBonus("combat")) {
+      if (this.plusCombatWeight > 0 && !this.hasExtra("combat")) {
         modifiers.push(
         "+" + this.plusCombatWeight + " combat " + this.combatCap + " MAX");
 
       }
 
-      if (this.minusCombatWeight > 0 && !this.hasBonus("combat")) {
+      if (this.minusCombatWeight > 0 && !this.hasExtra("combat")) {
         modifiers.push(
         "-" + this.minusCombatWeight + " combat " + this.combatCap + " MAX");
 
       }var _iterator = GreyOutfitter_createForOfIteratorHelper(
 
-        this.itemsWeight),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var pair = _step.value;
-          modifiers.push("+" + pair[1] + " bonus " + pair[0]);
+        this.bonusWeights),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var weight = _step.value;
+          modifiers.push(
+          (weight.weight >= 0 ? "+" + weight.weight : weight.weight) +
+          " " + (
+          weight.item instanceof external_kolmafia_namespaceObject.Item ? "bonus " : "") +
+          weight.item + (
+          weight.min != null ? " " + weight.min + " MIN" : "") + (
+          weight.max != null ? " " + weight.max + " MAX" : ""));
+
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}var _iterator2 = GreyOutfitter_createForOfIteratorHelper(
 
-        this.bonusWeights),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var _pair = _step2.value;
-          modifiers.push(_pair);
+        this.extra),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var extra = _step2.value;
+          modifiers.push(extra);
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
 
-      if (!this.allowChampBottle && !this.hasBonus("equip broken champagne")) {
+      if (!this.allowChampBottle && !this.hasExtra("equip broken champagne")) {
         modifiers.push("-equip broken champagne bottle");
       }
 
@@ -6650,7 +6728,7 @@ var QuestL10GiantTop = /*#__PURE__*/function () {function QuestL10GiantTop() {Qu
       var outfit = new GreyOutfit().setNoCombat();
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.wig) > 0) {
-        outfit.addItem(this.wig);
+        outfit.addWeight(this.wig);
       }
 
       return {
@@ -7562,23 +7640,24 @@ var QuestL11Black = /*#__PURE__*/function (_TaskInfo) {QuestL11Black_inherits(Qu
       if (!ncTime) {
         outfit.setPlusCombat();
         outfit.combatCap = 5;
-        outfit.addBonus("+3 init 50 max");
+        outfit.addWeight("init", 3, null, 50);
       }
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.boots) > 0) {
         if (!ncTime) {
-          outfit.addItem(this.boots);
+          outfit.addWeight(this.boots);
         }
       } else if ((0,external_kolmafia_namespaceObject.availableAmount)(this.blackberry) <= 1) {
         outfit.setItemDrops();
-        outfit.addBonus("+0.1 booze drop +0.1 food drop");
+
+        outfit.addWeight("booze drop", 0.1).addWeight("food drop", 0.1);
       }
 
       if (this.shouldWearLatte()) {
-        outfit.addItem(this.latte);
+        outfit.addWeight(this.latte);
       }
 
-      outfit.addBonus("+moxie -ml");
+      outfit.addWeight("moxie").addWeight("ml", -1);
 
       var fam;
 
@@ -7833,7 +7912,7 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
 
       if (
       this.toAbsorb.length == 0 &&
-      (0,external_kolmafia_namespaceObject.canAdventure)(this.oasis) &&
+      canGreyAdventure(this.oasis) &&
       (0,external_kolmafia_namespaceObject.getProperty)("_gnasirAvailable") == "true" &&
       this.wantsGnomeRose() &&
       (0,external_kolmafia_namespaceObject.availableAmount)(this.rose) == 0 && (
@@ -7911,7 +7990,7 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
 
       if (resource == null && (pred == null || !this.toAbsorb.includes(pred))) {
         if (
-        (0,external_kolmafia_namespaceObject.canAdventure)(this.oasis) &&
+        canGreyAdventure(this.oasis) &&
         (0,external_kolmafia_namespaceObject.haveEffect)(this.hydrated) == 0 &&
         this.getExploredRemaining() > 3)
         {
@@ -7926,15 +8005,15 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
       }
 
       var outfit = new GreyOutfit();
-      outfit.addItem(this.compass); // Compass
-      outfit.addItem(this.knife);
+      outfit.addWeight(this.compass); // Compass
+      outfit.addWeight(this.knife);
 
       if (resource != null) {
         resource.prepare(outfit);
       }
 
       if (this.toAbsorb.length > 0) {
-        outfit.addBonus("-equip " + this.kramco.name);
+        outfit.addIgnored(this.kramco);
       }
 
       var crystalBall = currentPredictions();
@@ -8243,6 +8322,7 @@ function QuestL11DesertStoneRose_classCallCheck(instance, Constructor) {if (!(in
 
 
 
+
 var QuestL11DesertStoneRose = /*#__PURE__*/function () {function QuestL11DesertStoneRose() {QuestL11DesertStoneRose_classCallCheck(this, QuestL11DesertStoneRose);QuestL11DesertStoneRose_defineProperty(this, "hydrated",
     external_kolmafia_namespaceObject.Effect.get("Ultrahydrated"));QuestL11DesertStoneRose_defineProperty(this, "oasis",
     external_kolmafia_namespaceObject.Location.get("Oasis"));QuestL11DesertStoneRose_defineProperty(this, "rose",
@@ -8284,7 +8364,7 @@ var QuestL11DesertStoneRose = /*#__PURE__*/function () {function QuestL11DesertS
         return QuestStatus.NOT_READY;
       }
 
-      if (status < 0 || !(0,external_kolmafia_namespaceObject.canAdventure)(this.oasis)) {
+      if (status < 0 || !canGreyAdventure(this.oasis)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -8572,8 +8652,8 @@ var QuestL11ManorBomb = /*#__PURE__*/function () {function QuestL11ManorBomb() {
         };
       }
 
-      var outfit = new GreyOutfit().addItem(this.unstable);
-      outfit.addBonus("+5 ML 81 max");
+      var outfit = new GreyOutfit().addWeight(this.unstable);
+      outfit.addWeight("ML", 5, null, 81);
       //outfit.plusMonsterLevelWeight = 5;
 
       return {
@@ -8847,6 +8927,7 @@ function QuestL11Manor_classCallCheck(instance, Constructor) {if (!(instance ins
 
 
 
+
 var QuestL11Manor = /*#__PURE__*/function () {
 
 
@@ -8878,7 +8959,7 @@ var QuestL11Manor = /*#__PURE__*/function () {
     function status() {
       var status = getQuestStatus("questL11Manor");
 
-      if (status < 0 || !(0,external_kolmafia_namespaceObject.canAdventure)(this.ballroom)) {
+      if (status < 0 || !canGreyAdventure(this.ballroom)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -9026,6 +9107,7 @@ function QuestTrapGhost_classCallCheck(instance, Constructor) {if (!(instance in
 
 
 
+
 var QuestTrapGhost = /*#__PURE__*/function () {function QuestTrapGhost() {QuestTrapGhost_classCallCheck(this, QuestTrapGhost);QuestTrapGhost_defineProperty(this, "pack",
     external_kolmafia_namespaceObject.Item.get("protonic accelerator pack"));QuestTrapGhost_defineProperty(this, "sweatpants",
     external_kolmafia_namespaceObject.Item.get("Designer Sweatpants"));QuestTrapGhost_defineProperty(this, "gallery",
@@ -9128,7 +9210,7 @@ var QuestTrapGhost = /*#__PURE__*/function () {function QuestTrapGhost() {QuestT
 
       var loc = this.getLocation();
 
-      if (!(0,external_kolmafia_namespaceObject.canAdventure)(loc)) {
+      if (!canGreyAdventure(loc)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -9143,7 +9225,7 @@ var QuestTrapGhost = /*#__PURE__*/function () {function QuestTrapGhost() {QuestT
       var outfit = getGhostBustingOutfit();
 
       if (this.isReady() && this.getLocation() == this.icyPeak) {
-        outfit.addBonus("+10 cold res 5 min");
+        outfit.addWeight("cold res", 10, 5);
       }
 
       return {
@@ -9178,12 +9260,12 @@ var pack = external_kolmafia_namespaceObject.Item.get("protonic accelerator pack
 function getGhostBustingOutfit() {
   var outfit = new GreyOutfit();
 
-  outfit.addItem(pack);
+  outfit.addWeight(pack);
 
   if ((0,external_kolmafia_namespaceObject.availableAmount)(sweatpants) > 0) {
-    outfit.addItem(sweatpants);
+    outfit.addWeight(sweatpants);
   } else {
-    outfit.addBonus("+DA +DR");
+    outfit.addWeight("DA").addWeight("DR");
   }
 
   return outfit;
@@ -9338,7 +9420,7 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
     function turnInStuff(path) {
       return {
         location: null,
-        outfit: new GreyOutfit().addItem(this.talisman),
+        outfit: new GreyOutfit().addWeight(this.talisman),
         run: () => {
           (0,external_kolmafia_namespaceObject.use)(this.loveBook1);
           (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=palindome&action=pal_drlabel");
@@ -9388,7 +9470,7 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
 
       // No NCs to be hit other than quest so no need to +combat
 
-      outfit.addItem(this.talisman);
+      outfit.addWeight(this.talisman);
 
       return {
         outfit: outfit,
@@ -9505,8 +9587,8 @@ var QuestL11Palin = /*#__PURE__*/function () {
 
     function run() {
       var outfit = new GreyOutfit().
-      addItem(this.talisman).
-      addItem(this.megagem);
+      addWeight(this.talisman).
+      addWeight(this.megagem);
 
       return {
         outfit: outfit,
@@ -10412,10 +10494,10 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
 
       var outfit = new GreyOutfit().setNoCombat().setNoCombat().setItemDrops();
 
-      path.equips.forEach((i) => outfit.addItem(i));
+      path.equips.forEach((i) => outfit.addWeight(i));
 
       if (sleazeScares * 2 >= lynyrdScares) {
-        outfit.addBonus("+2 sleaze dmg +2 sleaze spell dmg");
+        outfit.addWeight("sleaze dmg", 2).addWeight("sleaze spell dmg", 2);
       }
 
       var forceMan =
@@ -10428,13 +10510,13 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
 
       if (forceMan) {
         if ((0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) > 0) {
-          outfit.addItem(this.umbrella);
+          outfit.addWeight(this.umbrella);
         }
       } else if (
       (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) > 0 &&
       !path.equips.includes(this.deck))
       {
-        outfit.addItem(this.umbrella);
+        outfit.addWeight(this.umbrella);
       }
 
       // TODO Run left hand man?
@@ -10621,7 +10703,7 @@ var QuestL11ShenGiants = /*#__PURE__*/function () {function QuestL11ShenGiants()
       }
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.wig) > 0) {
-        outfit.addItem(this.wig);
+        outfit.addWeight(this.wig);
       }
 
       return {
@@ -11169,7 +11251,7 @@ var QuestL11Bowling = /*#__PURE__*/function () {function QuestL11Bowling() {Ques
       var outfit = new GreyOutfit();
 
       if (this.getProgress() >= 5 && (0,external_kolmafia_namespaceObject.availableAmount)(this.bowlingBall) > 0) {
-        outfit.addBonus("+max 0.1 elemental dmg");
+        outfit.addWeight("elemental dmg", 1, null, 0.1);
       } else {
         outfit.setItemDrops();
       }
@@ -11695,7 +11777,7 @@ var QuestL11Curses = /*#__PURE__*/function (_TaskInfo) {QuestL11TempleCurses_inh
         return false;
       }
 
-      var delay = this.delayForNextNC() + 1;
+      var delay = this.delayForNextNC() + 4;
 
       return turns <= delay;
     } }, { key: "canRun", value:
@@ -11934,7 +12016,7 @@ var QuestL11Doctor = /*#__PURE__*/function () {function QuestL11Doctor() {QuestL
             continue;
           }
 
-          outfit.addItem(i);
+          outfit.addWeight(i);
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
 
       return {
@@ -12060,7 +12142,7 @@ var QuestL11ShrineVines = /*#__PURE__*/function () {function QuestL11ShrineVines
       var outfit;
 
       if (adv[2]) {
-        outfit = new GreyOutfit().addItem(this.machete);
+        outfit = new GreyOutfit().addWeight(this.machete);
       } else {
         outfit = GreyOutfit.IGNORE_OUTFIT;
       }
@@ -13306,9 +13388,9 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
 
     function run() {
       var outfit = new GreyOutfit();
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
 
       var fam = null;
 
@@ -13331,7 +13413,7 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
       }
 
       if (fam == this.goose && (0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) >= 6) {
-        outfit.addBonus("+50 bonus mafia thumb ring");
+        outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Mafia Thumb Ring"), 50);
       }
 
       return {
@@ -13665,7 +13747,7 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
       var grabbingFratOutfit = !grabbingHippyOutfit;
 
       if (grabbingFratOutfit) {
-        outfit.addBonus("+outfit " + this.hippyDisguise);
+        outfit.addExtra("+outfit " + this.hippyDisguise);
       }
 
       var yellowRay = path.getResource(ResourceCategory.YELLOW_RAY);
@@ -13999,9 +14081,9 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
 
     function run() {
       var outfit = new GreyOutfit();
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
       outfit.meatDropWeight = 10;
 
       return {
@@ -14203,9 +14285,9 @@ var QuestL12StartWar = /*#__PURE__*/function (_TaskInfo) {QuestL12StartWar_inher
 
     function run(path) {
       var outfit = new GreyOutfit();
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
 
       var nc = path.getResource(ResourceCategory.FORCE_NC);
 
@@ -14216,7 +14298,7 @@ var QuestL12StartWar = /*#__PURE__*/function (_TaskInfo) {QuestL12StartWar_inher
         (0,external_kolmafia_namespaceObject.availableAmount)(this.umbrella) > 0 &&
         !DelayBurners.isDelayBurnerReady())
         {
-          outfit.addItem(this.umbrella);
+          outfit.addWeight(this.umbrella);
         }
       }
 
@@ -14301,9 +14383,9 @@ var QuestL12WarBoss = /*#__PURE__*/function () {function QuestL12WarBoss() {Ques
 
     function run() {
       var outfit = new GreyOutfit();
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
 
       return {
         outfit: outfit,
@@ -14543,10 +14625,10 @@ var WarGremlins = /*#__PURE__*/function () {
 
     function visitJunkman() {
       var outfit = new GreyOutfit();
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
-      outfit.addBonus("-tie");
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
+      outfit.addExtra("-tie");
 
       return {
         outfit: outfit,
@@ -14651,14 +14733,17 @@ GremlinQuest = /*#__PURE__*/function () {
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().addBonus("-ML 70 MAX +1 DA +5 DR");
+      var outfit = new GreyOutfit().
+      addWeight("ML", -1, null, -70).
+      addWeight("DA").
+      addWeight("DR", 5);
       outfit.hpWeight = 1;
 
       if (
       (0,external_kolmafia_namespaceObject.availableAmount)(this.pants) > 0 &&
       currentPredictions().get(this.loc) != this.monster)
       {
-        outfit.addBonus("+equip " + this.pants.name);
+        outfit.addWeight(this.pants);
       }
 
       var macro2 = Macro.if_(
@@ -14988,9 +15073,9 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
 
     function turnInQuest() {
       var outfit = new GreyOutfit();
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
-      outfit.addItem(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
 
       return {
         location: null,
@@ -15055,7 +15140,7 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
 
     function runBackup(path) {
       var outfit = new GreyOutfit();
-      outfit.addBonus("-ML");
+      outfit.addWeight("ML", -1);
 
       var copierResource = path.getResource(ResourceCategory.COPIER);
       copierResource.prepare(outfit);
@@ -15091,7 +15176,7 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
       copier != null;
 
       var outfit = new GreyOutfit();
-      outfit.addBonus("-ML");
+      outfit.addWeight("ML", -1);
 
       if (makeMoreFriends) {
         copier.prepare(outfit);
@@ -15189,13 +15274,13 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
         gloveReplace.prepare(outfit);
 
         if (primed == null) {
-          outfit.addItem(this.getMonsterReplacer());
+          outfit.addWeight(this.getMonsterReplacer());
         }
       } else {
         outfit.setPlusCombat();
       }
 
-      outfit.addBonus("-ML");
+      outfit.addWeight("ML", -1);
 
       var copier = path.getResource(ResourceCategory.OLFACT_COPIER);
 
@@ -15464,10 +15549,10 @@ var QuestL12Worms = /*#__PURE__*/function (_TaskInfo) {QuestL12Worms_inherits(Qu
     function run(path) {var _resource, _resource2;
       if ((0,external_kolmafia_namespaceObject.itemAmount)(this.heart) > 0) {
         var _outfit = new GreyOutfit();
-        _outfit.addItem(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
-        _outfit.addItem(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
-        _outfit.addItem(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
-        _outfit.addBonus("-tie");
+        _outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Beer Helmet"));
+        _outfit.addWeight(external_kolmafia_namespaceObject.Item.get("distressed denim pants"));
+        _outfit.addWeight(external_kolmafia_namespaceObject.Item.get("bejeweled pledge pin"));
+        _outfit.addExtra("-tie");
 
         return {
           outfit: _outfit,
@@ -15775,7 +15860,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       }
 
       var outfit = new GreyOutfit().setItemDrops();
-      outfit.addItem(this.transfomer);
+      outfit.addWeight(this.transfomer);
       var settings = new AdventureSettings();
       settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Blooper"));
       settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Buzzy Beetle"));
@@ -15806,6 +15891,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
     } }]);return QuestDigitalKey;}();
 ;// CONCATENATED MODULE: ./src/quests/council/tower/keys/QuestSkeletonKey.ts
 function QuestSkeletonKey_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestSkeletonKey_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestSkeletonKey_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestSkeletonKey_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestSkeletonKey_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestSkeletonKey_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -15847,7 +15933,7 @@ var QuestSkeletonKey = /*#__PURE__*/function () {function QuestSkeletonKey() {Qu
         return QuestStatus.READY;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.canAdventure)(this.location)) {
+      if (!canGreyAdventure(this.location)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -16166,15 +16252,13 @@ var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inh
         return;
       }
 
-      var pulledMalware =
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.malware) > 0 ||
-      (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_dailyDungeonMalwareUsed"));
+      var usedMalware = (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_dailyDungeonMalwareUsed"));
 
       var malwarePath = new PossiblePath(4);
 
       this.paths.push(malwarePath);
 
-      if (!assumeUnstarted && pulledMalware) {
+      if (!assumeUnstarted && usedMalware) {
         return;
       }
 
@@ -16286,7 +16370,7 @@ var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inh
 
     function run(path) {
       var outfit = new GreyOutfit();
-      outfit.addItem(this.ring);
+      outfit.addWeight(this.ring);
 
       return {
         outfit: outfit,
@@ -16413,8 +16497,8 @@ var QuestFantasyBandit = /*#__PURE__*/function (_TaskInfo) {QuestFantasyBandits_
 
       var outfit = new GreyOutfit();
       // Try avoid exp stuff being added cos we're not running a fam
-      outfit.addBonus("-100 familiar exp");
-      outfit.addItem(this.equip);
+      outfit.addWeight("familiar exp", -100);
+      outfit.addWeight(this.equip);
 
       return {
         location: this.location,
@@ -17958,7 +18042,8 @@ var QuestTowerShadow = /*#__PURE__*/function (_TaskInfo) {QuestTowerShadow_inher
 
       var outfit = new GreyOutfit();
       outfit.hpWeight = 0;
-      outfit.addBonus("+500 init 151 max +100 hp 500 max");
+      outfit.addWeight("init", 500, null, 151);
+      outfit.addWeight("hp", 100, null, 500);
 
       return {
         familiar: this.potato,
@@ -18500,7 +18585,7 @@ var QuestL2SpookyLarva = /*#__PURE__*/function () {function QuestL2SpookyLarva()
       new GreyOutfit();
 
       if (this.shouldWearLatte()) {
-        outfit.addItem(this.latte);
+        outfit.addWeight(this.latte);
       }
 
       if (this.location.turnsSpent >= 5) {
@@ -18647,18 +18732,24 @@ var QuestL3Tavern = /*#__PURE__*/function () {function QuestL3Tavern() {QuestL3T
         if ((0,external_kolmafia_namespaceObject.getProperty)("pyramidBombUsed") != "true") {
           outfit.setPlusCombat();
           outfit.umbrellaSetting = UmbrellaState.MONSTER_LEVEL;
-          outfit.addBonus("+10 ML");
-          outfit.addBonus("-offhand");
+          outfit.addWeight("ML", 10);
+          outfit.addExtra("-offhand");
 
           // Boost our damage
           if ((0,external_kolmafia_namespaceObject.myLevel)() < 16) {
-            outfit.addBonus("+mox");
+            outfit.addWeight("mox");
           }
         } else {
           outfit.setNoCombat();
-          outfit.addBonus(
-          "+hot dmg +hot spell dmg +cold dmg +cold spell dmg +spooky dmg +spooky spell dmg +stench dmg +stench spell dmg");
-
+          outfit.
+          addWeight("hot dmg").
+          addWeight("hot spell dmg").
+          addWeight("cold dmg").
+          addWeight("cold spell dmg").
+          addWeight("spooky dmg").
+          addWeight("spooky spell dmg").
+          addWeight("stench dmg").
+          addWeight("stench spell dmg");
         }
       }
 
@@ -19186,6 +19277,7 @@ function QuestL5GoblinHarem_createForOfIteratorHelper(o, allowArrayLike) {var it
 
 
 
+
 var QuestL5GoblinHarem = /*#__PURE__*/function (_TaskInfo) {QuestL5GoblinHarem_inherits(QuestL5GoblinHarem, _TaskInfo);var _super = QuestL5GoblinHarem_createSuper(QuestL5GoblinHarem);function QuestL5GoblinHarem() {var _this;QuestL5GoblinHarem_classCallCheck(this, QuestL5GoblinHarem);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL5GoblinHarem_defineProperty(QuestL5GoblinHarem_assertThisInitialized(_this), "harem",
     external_kolmafia_namespaceObject.Location.get("Cobb's Knob Harem"));QuestL5GoblinHarem_defineProperty(QuestL5GoblinHarem_assertThisInitialized(_this), "toAbsorb", void 0);QuestL5GoblinHarem_defineProperty(QuestL5GoblinHarem_assertThisInitialized(_this), "haremGirl",
 
@@ -19231,7 +19323,7 @@ var QuestL5GoblinHarem = /*#__PURE__*/function (_TaskInfo) {QuestL5GoblinHarem_i
         return QuestStatus.COMPLETED;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.canAdventure)(this.harem)) {
+      if (!canGreyAdventure(this.harem)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -19356,8 +19448,8 @@ var QuestL5Goblin = /*#__PURE__*/function () {function QuestL5Goblin() {QuestL5G
 
     function run() {
       var outfit = new GreyOutfit().
-      addItem(external_kolmafia_namespaceObject.Item.get("Knob Goblin harem pants")).
-      addItem(external_kolmafia_namespaceObject.Item.get("Knob Goblin harem veil"));
+      addWeight(external_kolmafia_namespaceObject.Item.get("Knob Goblin harem pants")).
+      addWeight(external_kolmafia_namespaceObject.Item.get("Knob Goblin harem veil"));
 
       return {
         location: external_kolmafia_namespaceObject.Location.get("Throne Room"),
@@ -19459,7 +19551,7 @@ var QuestL6FriarElbow = /*#__PURE__*/function () {function QuestL6FriarElbow() {
       var outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
       if (this.shouldWearLatte()) {
-        outfit.addItem(this.latte);
+        outfit.addWeight(this.latte);
       }
 
       return {
@@ -19616,7 +19708,7 @@ var QuestL6FriarHeart = /*#__PURE__*/function () {function QuestL6FriarHeart() {
       var outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
       if (this.shouldWearLatte()) {
-        outfit.addItem(this.latte);
+        outfit.addWeight(this.latte);
       }
 
       return {
@@ -19724,7 +19816,7 @@ var QuestL6FriarNeck = /*#__PURE__*/function () {function QuestL6FriarNeck() {Qu
       var outfit = new GreyOutfit().setNoCombat().setNoCombat();
 
       if (this.shouldWearLatte()) {
-        outfit.addItem(this.latte);
+        outfit.addWeight(this.latte);
       }
 
       return {
@@ -19801,7 +19893,7 @@ var QuestL6LatteFamExp = /*#__PURE__*/function () {function QuestL6LatteFamExp()
 
     function run() {
       var outfit = new GreyOutfit();
-      outfit.addItem(this.latte);
+      outfit.addWeight(this.latte);
 
       return {
         outfit: outfit,
@@ -19856,7 +19948,7 @@ var QuestL6LattePlusCombat = /*#__PURE__*/function () {function QuestL6LattePlus
 
     function run() {
       var outfit = new GreyOutfit();
-      outfit.addItem(this.latte);
+      outfit.addWeight(this.latte);
 
       return {
         outfit: outfit,
@@ -19997,11 +20089,11 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
 
 
     function addRetroSword() {var outfit = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new GreyOutfit();
-      outfit.addItem(this.gravyboat, 99999);
+      outfit.addWeight(this.gravyboat, 99999);
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.cape) > 0) {
-        outfit.addItem(this.getSword(), 99999);
-        outfit.addBonus("-back");
+        outfit.addWeight(this.getSword(), 99999);
+        outfit.addExtra("-back");
       }
 
       return outfit;
@@ -20307,8 +20399,8 @@ var CryptL7Rattling = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptRatt
           outfit.setNoCombat();
         }
         outfit.umbrellaSetting = UmbrellaState.MONSTER_LEVEL;
-        outfit.addBonus("+4 ML");
-        outfit.addBonus("-equip " + this.kramco.name);
+        outfit.addWeight("ML", 4);
+        outfit.addIgnored(this.kramco);
       }
 
       return {
@@ -20551,7 +20643,7 @@ var QuestL8MountainBoss = /*#__PURE__*/function () {function QuestL8MountainBoss
     } }, { key: "run", value:
 
     function run() {
-      var outfit = new GreyOutfit().addBonus("+10 cold res 5 min 5 max");
+      var outfit = new GreyOutfit().addWeight("cold res", 10, 5, 5);
 
       return {
         location: this.peak,
@@ -21308,7 +21400,7 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
 
     function doFaxers(path) {
       var outfit = new GreyOutfit();
-      outfit.addBonus("+DA +DR -ML");
+      outfit.addWeight("DA").addWeight("DR").addWeight("ML", -1);
 
       if (path.canUse(ResourceCategory.POLAR_VORTEX) > 0) {
         path.getResource(ResourceCategory.POLAR_VORTEX).prepare(outfit);
@@ -21613,11 +21705,11 @@ var MurderHandler = /*#__PURE__*/function () {function MurderHandler() {QuestL9M
       if (this.questNeedsJar() && this.hasJar()) {
         // Empty
       } else if (this.questNeedsFood()) {
-        outfit.addBonus("+item drop 50 min");
+        outfit.addWeight("item drop", 1, 50);
       } else if (this.questNeedsInit()) {
-        outfit.addBonus("+init 40 min");
+        outfit.addWeight("init", 1, 40);
       } else if (this.questNeedsStenchRes()) {
-        outfit.addBonus("+2 stench res 4 min 4 max");
+        outfit.addWeight("stench res", 2, 4, 4);
       }
 
       return {
@@ -22003,7 +22095,8 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     function tryCombat() {
       // max -ml, max cold dmg, raise item drop finally
       var outfit = new GreyOutfit();
-      outfit.addBonus("-5 ML");
+      outfit.addWeight("ML", -5);
+      outfit.addWeight(this.lastColdMaximize, 100000, 5, 5);
       outfit.setItemDrops();
 
       if (
@@ -22017,7 +22110,7 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         }
 
         if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Logging Hatchet")) > 0) {
-          outfit.addItem(external_kolmafia_namespaceObject.Item.get("Logging Hatchet"), 100);
+          outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Logging Hatchet"), 100);
         }
       }
 
@@ -22026,11 +22119,9 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
       this.getChasmRemaining() > this.getFastenersHave())
       {
         if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Loadstone")) > 0) {
-          outfit.addItem(external_kolmafia_namespaceObject.Item.get("Loadstone"), 100);
+          outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Loadstone"), 100);
         }
       }
-
-      outfit.addBonus("+100000 " + this.lastColdMaximize + " 5 min 5 max");
 
       return {
         location: this.loc,
@@ -22396,9 +22487,10 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
     } }, { key: "createOutfit", value:
 
     function createOutfit() {
-      var outfit = new GreyOutfit().addBonus(
-      "+40 cold res +40 spooky res -10 ML");
-
+      var outfit = new GreyOutfit().
+      addWeight("cold res", 40).
+      addWeight("spooky res", 40).
+      addWeight("ml", -10);
       outfit.hpWeight = 2;
 
       return outfit;
@@ -22629,9 +22721,9 @@ var OilHandler = /*#__PURE__*/function () {function OilHandler() {QuestL9OilPeak
       }
 
       var outfit = new GreyOutfit().setItemDrops();
-      outfit.addBonus("+2 ML 100 MAX");
+      outfit.addWeight("ML", 2, null, 100);
       outfit.umbrellaSetting = UmbrellaState.MONSTER_LEVEL;
-      outfit.addBonus("-offhand");
+      outfit.addExtra("-offhand");
 
       return {
         location: this.loc,
@@ -23307,7 +23399,7 @@ var QuestManorBillards = /*#__PURE__*/function (_TaskInfo) {QuestManorBillards_i
         }
 
         if (this.elementalSkills.find((s) => (0,external_kolmafia_namespaceObject.haveSkill)(s)) == null) {
-          outfit.addBonus("+10 elemental dmg 1 min 1 max");
+          outfit.addWeight("elemental dmg", 10, 1, 1);
         }
 
         if (
@@ -23322,7 +23414,7 @@ var QuestManorBillards = /*#__PURE__*/function (_TaskInfo) {QuestManorBillards_i
         }
       }
 
-      outfit.addItem(this.cue);
+      outfit.addWeight(this.cue);
 
       var mustHitGhost =
       this.toAbsorb.includes(this.ghost) ||
@@ -23339,8 +23431,8 @@ var QuestManorBillards = /*#__PURE__*/function (_TaskInfo) {QuestManorBillards_i
       null;
 
       if (fam != null) {
-        outfit.addBonus("+switch " + this.lefthandMan);
-        outfit.addBonus("+equip " + this.umbrella);
+        outfit.addExtra("+switch " + this.lefthandMan);
+        outfit.addWeight(this.umbrella);
       }
 
       return {
@@ -23616,7 +23708,8 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
       var outfit = new GreyOutfit();
 
       if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("manorDrawerCount")) < 20) {
-        outfit.addBonus("+10 hot res 9 max").addBonus("+10 stench res 9 max");
+        outfit.addWeight("hot res", 10, null, 9);
+        outfit.addWeight("stench res", 10, null, 9);
       }
 
       return {
@@ -24070,6 +24163,7 @@ function QuestManorLights_slicedToArray(arr, i) {return QuestManorLights_arrayWi
 
 
 
+
 var QuestManorLights = /*#__PURE__*/function () {
 
 
@@ -24241,7 +24335,7 @@ var QuestManorLights = /*#__PURE__*/function () {
 
       if ((0,external_kolmafia_namespaceObject.getProperty)("_juneCleaverFightsLeft") == "0") {
         if (fight) {
-          outfit.addBonus("-equip june cleaver");
+          outfit.addIgnored(external_kolmafia_namespaceObject.Item.get("June Cleaver"));
         } else {
           (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Slot.get("weapon"), external_kolmafia_namespaceObject.Item.get("None"));
         }
@@ -24319,7 +24413,7 @@ var QuestManorLights = /*#__PURE__*/function () {
       if (this.shouldDoSteve() && (!this.isSteveFight() || this.finishLights)) {
         var steve = this.getSteve();
 
-        if ((0,external_kolmafia_namespaceObject.canAdventure)(steve[0])) {
+        if (canGreyAdventure(steve[0])) {
           return this.doSteve();
         }
       }
@@ -24327,7 +24421,7 @@ var QuestManorLights = /*#__PURE__*/function () {
       if (this.isElizaReady() && (!this.isElizaFight() || this.finishLights)) {
         var eliza = this.getEliza();
 
-        if ((0,external_kolmafia_namespaceObject.canAdventure)(eliza[0])) {
+        if (canGreyAdventure(eliza[0])) {
           return this.doEliza();
         }
       }
@@ -24405,7 +24499,7 @@ var QuestManorLights = /*#__PURE__*/function () {
       if (this.isElizaReady()) {
         var eliza = this.getEliza();
 
-        if ((0,external_kolmafia_namespaceObject.canAdventure)(eliza[0])) {
+        if (canGreyAdventure(eliza[0])) {
           return true;
         }
       }
@@ -24413,7 +24507,7 @@ var QuestManorLights = /*#__PURE__*/function () {
       if (this.shouldDoSteve()) {
         var steve = this.getSteve();
 
-        if ((0,external_kolmafia_namespaceObject.canAdventure)(steve[0])) {
+        if (canGreyAdventure(steve[0])) {
           return true;
         }
       }
@@ -24745,6 +24839,7 @@ function QuestGoblinTortureHarem_classCallCheck(instance, Constructor) {if (!(in
 
 
 
+
 var QuestGoblinTortureHarem = /*#__PURE__*/function () {function QuestGoblinTortureHarem() {QuestGoblinTortureHarem_classCallCheck(this, QuestGoblinTortureHarem);QuestGoblinTortureHarem_defineProperty(this, "harem",
     external_kolmafia_namespaceObject.Location.get("Cobb's Knob Harem"));QuestGoblinTortureHarem_defineProperty(this, "lab",
     external_kolmafia_namespaceObject.Location.get("Cobb's Knob Laboratory"));}QuestGoblinTortureHarem_createClass(QuestGoblinTortureHarem, [{ key: "getId", value:
@@ -24758,7 +24853,7 @@ var QuestGoblinTortureHarem = /*#__PURE__*/function () {function QuestGoblinTort
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.canAdventure)(this.lab)) {
+      if (canGreyAdventure(this.lab)) {
         return QuestStatus.COMPLETED;
       }
 
@@ -24791,6 +24886,7 @@ function QuestGoblinTortureLab_classCallCheck(instance, Constructor) {if (!(inst
 
 
 
+
 var QuestGoblinTortureLab = /*#__PURE__*/function () {function QuestGoblinTortureLab() {QuestGoblinTortureLab_classCallCheck(this, QuestGoblinTortureLab);QuestGoblinTortureLab_defineProperty(this, "lab",
     external_kolmafia_namespaceObject.Location.get("Cobb's Knob Laboratory"));QuestGoblinTortureLab_defineProperty(this, "megL3",
     external_kolmafia_namespaceObject.Location.get("Menagerie Level 3"));}QuestGoblinTortureLab_createClass(QuestGoblinTortureLab, [{ key: "getLocations", value:
@@ -24804,12 +24900,12 @@ var QuestGoblinTortureLab = /*#__PURE__*/function () {function QuestGoblinTortur
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.canAdventure)(this.megL3)) {
+      if (canGreyAdventure(this.megL3)) {
         return QuestStatus.COMPLETED;
       }
 
       if (
-      !(0,external_kolmafia_namespaceObject.canAdventure)(this.lab) ||
+      !canGreyAdventure(this.lab) ||
       (0,external_kolmafia_namespaceObject.getProperty)("questL05Goblin") != "finished")
       {
         return QuestStatus.NOT_READY;
@@ -27081,15 +27177,15 @@ var QuestLocketInfiniteLoop = /*#__PURE__*/function (_TaskInfo) {QuestLocketInfi
 
     function run(path) {
       var outfit = new GreyOutfit();
-      outfit.addBonus("+10 init");
-      outfit.addBonus("-ml");
+      outfit.addWeight("init", 10);
+      outfit.addWeight("ML", -1);
       outfit.hpRegenWeight = 1;
       outfit.mpRegenWeight = 1;
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.doctorsBag) > 0) {
-        outfit.addItem(this.doctorsBag);
+        outfit.addWeight(this.doctorsBag);
       } else if ((0,external_kolmafia_namespaceObject.availableAmount)(this.pantsgiving) > 0) {
-        outfit.addItem(this.pantsgiving);
+        outfit.addWeight(this.pantsgiving);
       } else if (path.canUse(ResourceCategory.YELLOW_RAY)) {
         path.getResource(ResourceCategory.YELLOW_RAY).prepare(outfit);
       }
@@ -27305,6 +27401,7 @@ function QuestSkillAbstract_classCallCheck(instance, Constructor) {if (!(instanc
 
 
 
+
 var QuestSkillAbstract = /*#__PURE__*/function () {
 
 
@@ -27342,7 +27439,7 @@ var QuestSkillAbstract = /*#__PURE__*/function () {
         return QuestStatus.COMPLETED;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.canAdventure)(this.location)) {
+      if (!canGreyAdventure(this.location)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -27383,6 +27480,7 @@ function QuestSkillColdDamage_classCallCheck(instance, Constructor) {if (!(insta
 
 
 
+
 var QuestSkillColdDamage15 = /*#__PURE__*/function () {function QuestSkillColdDamage15() {QuestSkillColdDamage_classCallCheck(this, QuestSkillColdDamage15);QuestSkillColdDamage_defineProperty(this, "skill",
     external_kolmafia_namespaceObject.Skill.get("Snow-Cooling System"));QuestSkillColdDamage_defineProperty(this, "monster",
     external_kolmafia_namespaceObject.Monster.get("Snow Queen"));QuestSkillColdDamage_defineProperty(this, "location",
@@ -27407,7 +27505,7 @@ var QuestSkillColdDamage15 = /*#__PURE__*/function () {function QuestSkillColdDa
 
       if (
       (0,external_kolmafia_namespaceObject.getProperty)("questL08Trapper") != "finished" ||
-      !(0,external_kolmafia_namespaceObject.canAdventure)(this.location))
+      !canGreyAdventure(this.location))
       {
         return QuestStatus.NOT_READY;
       }
@@ -27452,7 +27550,7 @@ var QuestSkillColdDamage10 = /*#__PURE__*/function () {function QuestSkillColdDa
 
       if (
       getQuestStatus("questL08Trapper") < 3 ||
-      !(0,external_kolmafia_namespaceObject.canAdventure)(this.location) ||
+      !canGreyAdventure(this.location) ||
       !GreySettings.isHardcoreMode())
       {
         return QuestStatus.NOT_READY;
@@ -27477,6 +27575,7 @@ var QuestSkillColdDamage10 = /*#__PURE__*/function () {function QuestSkillColdDa
     } }]);return QuestSkillColdDamage10;}();
 ;// CONCATENATED MODULE: ./src/quests/skills/QuestSkillConiferPolymers.ts
 function QuestSkillConiferPolymers_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestSkillConiferPolymers_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestSkillConiferPolymers_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestSkillConiferPolymers_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestSkillConiferPolymers_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestSkillConiferPolymers_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -27517,7 +27616,7 @@ var QuestSkillConiferPolymers = /*#__PURE__*/function () {function QuestSkillCon
         return QuestStatus.COMPLETED;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.canAdventure)(this.location)) {
+      if (!canGreyAdventure(this.location)) {
         return QuestStatus.NOT_READY;
       }
 
@@ -27881,7 +27980,7 @@ var QuestL11PalinAbsorbs = /*#__PURE__*/function () {function QuestL11PalinAbsor
 
     function run() {
       var outfit = new GreyOutfit();
-      outfit.addItem(this.talisman);
+      outfit.addWeight(this.talisman);
 
       return {
         location: this.palindome,
@@ -29887,7 +29986,7 @@ var AdventureFinder = /*#__PURE__*/function () {
         nonQuests),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var _step2$value = GreyChooser_slicedToArray(_step2.value, 2),loc = _step2$value[0],details = _step2$value[1];
           if (
           this.questLocations.includes(loc) ||
-          !(0,external_kolmafia_namespaceObject.canAdventure)(loc) ||
+          !canGreyAdventure(loc) ||
           GreyChooser_toConsumableArray(details.skills.keys()).find((s) =>
           this.absorbs.getMustHaveSkills().has(s.skill)) ==
           null &&
@@ -30442,7 +30541,7 @@ var AdventureFinder = /*#__PURE__*/function () {
       outfit == GreyOutfit.IGNORE_OUTFIT ||
       //outfit.plusCombatWeight > 0 ||
       //  outfit.minusCombatWeight > 0 ||
-      outfit.itemsWeight.length > 0))
+      outfit.bonusWeights.length > 0))
       {
         return;
       }
@@ -31949,9 +32048,9 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       var outfit = toRun.outfit;
 
       if (toRun.location == external_kolmafia_namespaceObject.Location.get("Inside the Palindome")) {
-        outfit.addItem(external_kolmafia_namespaceObject.Item.get("Talisman o' Namsilat"));
+        outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Talisman o' Namsilat"));
       } else if (toRun.location == external_kolmafia_namespaceObject.Location.get("The Icy Peak")) {
-        outfit.addBonus("+5 cold res 5 min");
+        outfit.addWeight("cold res", 5, 5);
       }
 
       var doOrb = false;
@@ -31968,7 +32067,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
         adventure.quest == null && (
         toRun.location == null || toRun.location.combatQueue.length > 3))
         {
-          outfit.addBonus("+20 bonus Kramco Sausage-o-Matic&trade;");
+          outfit.addWeight(external_kolmafia_namespaceObject.Item.get("Kramco Sausage-o-Matic&trade;"), 20);
         }
       }
 
@@ -31998,18 +32097,18 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
           bonus = 100;
         }
 
-        outfit.addBonus("+".concat(bonus, " bonus cursed magnifying glass"));
+        outfit.addWeight(external_kolmafia_namespaceObject.Item.get("cursed magnifying glass"), bonus);
       } else if (
       (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("cursedMagnifyingGlassCount")) == 13 &&
       outfit.minusCombatWeight < 0)
       {
-        outfit.addBonus("-50 bonus cursed magnifying glass");
+        outfit.addWeight(external_kolmafia_namespaceObject.Item.get("cursed magnifying glass"), -50);
       } else if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_voidFreeFights")) >= 5) {
-        outfit.addBonus("-30 bonus cursed magnifying glass");
+        outfit.addWeight(external_kolmafia_namespaceObject.Item.get("cursed magnifying glass"), -30);
       }
 
       if (adventure.considerPriority == ConsiderPriority.ORB_ABSORB) {
-        outfit.addBonus("-equip Carnivorous potted plant");
+        outfit.addIgnored(external_kolmafia_namespaceObject.Item.get("Carnivorous potted plant"));
       }
 
       if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("scrapbookCharges")) < 100) {
@@ -32023,16 +32122,16 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
           }
         }
 
-        outfit.addBonus("+" + _bonus + " bonus familiar scrapbook");
+        outfit.addWeight(external_kolmafia_namespaceObject.Item.get("familiar scrapbook"), _bonus);
       }
 
       var sweat = (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("sweat"));
 
       if (sweat < 100 && outfit.itemDropWeight < 1) {
-        outfit.addBonus("+".concat(sweat < 5 ? 16 : 8, " bonus designer sweatpants"));
+        outfit.addWeight(external_kolmafia_namespaceObject.Item.get("designer sweatpants"), sweat < 5 ? 16 : 8);
       }
 
-      outfit.addBonus("+1 bonus june cleaver");
+      outfit.addWeight(external_kolmafia_namespaceObject.Item.get("june cleaver"), 1);
 
       var powerLevelGoose = false;
 
@@ -32092,7 +32191,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       toRun.familiar == null && gooseReplaceable ||
       familiar == external_kolmafia_namespaceObject.Familiar.get("Melodramedary"))
       {
-        outfit.addBonus("+10 bonus june cleaver");
+        outfit.addWeight(external_kolmafia_namespaceObject.Item.get("june cleaver"), 10);
       }
 
       if (
@@ -32102,7 +32201,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
         var item = this.freeRunners.find((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0);
 
         if (item != null) {
-          outfit.addBonus("+12 bonus " + item.name);
+          outfit.addWeight(item, 12);
         }
       }
 
@@ -32397,7 +32496,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "f40234a";
+var lastCommitHash = "a33c240";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
