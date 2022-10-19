@@ -4,7 +4,6 @@ import {
   myHp,
   availableAmount,
   getProperty,
-  canAdventure,
   myLevel,
   totalTurnsPlayed,
   maximize,
@@ -32,6 +31,7 @@ export class QuestTrapGhost implements QuestInfo {
   palindome: Location = Location.get("Inside the Palindome");
   smutOrcs: Location = Location.get("The Smut Orc Logging Camp");
   spookyForest: Location = Location.get("The Spooky Forest");
+  talisman: Item = Item.get("Talisman o' Namsilat");
   hasColdRes: boolean;
   lastColdResCheck: number;
 
@@ -142,6 +142,8 @@ export class QuestTrapGhost implements QuestInfo {
 
     if (this.isReady() && this.getLocation() == this.icyPeak) {
       outfit.addWeight("cold res", 10, 5);
+    } else if (this.isReady() && this.getLocation() == this.palindome) {
+      outfit.addWeight(this.talisman);
     }
 
     return {
