@@ -151,8 +151,8 @@ const ballProp = () =>
 let lastBallCheck: number = 0;
 const crystalBall: Item = Item.get("miniature crystal ball");
 
-/*function doToasterGaze(location: Location) {
-  if (!canToasterGaze(location) || availableAmount(crystalBall) == 0) {
+export function doToasterGaze() {
+  if (availableAmount(crystalBall) == 0) {
     return;
   }
 
@@ -160,7 +160,7 @@ const crystalBall: Item = Item.get("miniature crystal ball");
   visitUrl("choice.php?pwd&whichchoice=793&option=4");
   lastBallCheck = -1;
   currentPredictions();
-}*/
+}
 
 /**
  * Returns a map of locations, and the monsters predicted.
