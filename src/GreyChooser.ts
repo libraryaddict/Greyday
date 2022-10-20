@@ -835,7 +835,7 @@ export class AdventureFinder {
       (outfit == GreyOutfit.IGNORE_OUTFIT ||
         //outfit.plusCombatWeight > 0 ||
         //  outfit.minusCombatWeight > 0 ||
-        outfit.extra.find((e) => e.startsWith("equip")) != null)
+        outfit.extra.find((e) => e.startsWith("+equip")) != null)
     ) {
       return;
     }
