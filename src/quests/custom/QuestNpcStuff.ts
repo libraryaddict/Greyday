@@ -532,6 +532,10 @@ class QuestUntinker implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (toInt(getProperty("lastCouncilVisit")) < 4) {
+      return QuestStatus.NOT_READY;
+    }
+
     if (getProperty("questM01Untinker") == "unstarted") {
       return QuestStatus.READY;
     }
