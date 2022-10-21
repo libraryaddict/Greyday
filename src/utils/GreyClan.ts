@@ -79,6 +79,10 @@ function getDefaultClan(): number {
 }
 
 function runInClan(clanId: number, func: () => void) {
+  if (!hasWhitelistToCurrentClan() && getClanId() != clanId) {
+    throw "Attempted to switch clans, but we don't have WL to our current clan!";
+  }
+
   const switcher = new ClanSwitcher();
 
   try {
@@ -195,6 +199,19 @@ export function doFortuneTeller() {
 
   const bot: string = "CheeseFax";
   const fortuneClan: number = bonusAdvFromHell;
+
+  if (!canAccessClan(fortuneClan)) {
+    print("Oh dear, can't access the clan for Fortune Telling", "red");
+    return;
+  }
+
+  if (getClanId() != fortuneClan && !hasWhitelistToCurrentClan()) {
+    print(
+      "Oh dear, we don't have whitelist to current clan. Skipping fortune telling",
+      "red"
+    );
+    return;
+  }
 
   if (!isOnline(bot)) {
     print(`Oh dear, can't do fortune teller as ${bot} is offline`);
