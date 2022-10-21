@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  cliExecute,
   currentRound,
   equippedAmount,
   getProperty,
@@ -29,6 +30,7 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   wish: Item = Item.get("Pocket Wish");
   pantsgiving: Item = Item.get("Pantsgiving");
   doctorsBag: Item = Item.get("Lil' Doctor&trade; bag");
+  cape: Item = Item.get("Unwrapped knock-off retro superhero cape");
   paths: PossiblePath[];
 
   level(): number {
@@ -103,6 +105,10 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
     outfit.hpRegenWeight = 1;
     outfit.mpRegenWeight = 1;
 
+    if (availableAmount(this.cape) > 0) {
+      outfit.addWeight(this.cape);
+    }
+
     if (availableAmount(this.doctorsBag) > 0) {
       outfit.addWeight(this.doctorsBag);
     } else if (availableAmount(this.pantsgiving) > 0) {
@@ -115,7 +121,9 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
       location: null,
       outfit: outfit,
       run: () => {
-        if (numericModifier("Initiative") <= 40) {
+        if (equippedAmount(this.cape) > 0) {
+          cliExecute("retrocape heck hold"); // Make sure we try a stunner
+        } else if (numericModifier("Initiative") <= 40) {
           throw "Initiative is 40 or less, aborting to be safe as we can't be sure you'd get the jump.";
         }
 
