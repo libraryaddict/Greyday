@@ -832,10 +832,10 @@ export class AdventureFinder {
 
     if (
       outfit != null &&
-      (outfit == GreyOutfit.IGNORE_OUTFIT ||
-        //outfit.plusCombatWeight > 0 ||
-        //  outfit.minusCombatWeight > 0 ||
-        outfit.extra.find((e) => e.startsWith("+equip")) != null)
+      outfit == GreyOutfit.IGNORE_OUTFIT
+      //outfit.plusCombatWeight > 0 ||
+      //  outfit.minusCombatWeight > 0 ||
+      //   ||  outfit.extra.find((e) => e.startsWith("+equip")) != null
     ) {
       return;
     }
@@ -922,6 +922,7 @@ export class AdventureFinder {
       "Skills / ScalingItem",
       "Council / War / Filthworms",
     ];
+    const prioritize2: QuestType[] = ["Manor / Kitchen"];
 
     this.possibleAdventures.sort((a1, a2) => {
       if (a1.considerPriority != a2.considerPriority) {
@@ -932,8 +933,8 @@ export class AdventureFinder {
         return a1.orbStatus - a2.orbStatus;
       }
 
-      const p1 = prioritize.includes(a1.quest?.getId()) ? -1 : 1;
-      const p2 = prioritize.includes(a2.quest?.getId()) ? -1 : 1;
+      let p1 = prioritize.includes(a1.quest?.getId()) ? -1 : 1;
+      let p2 = prioritize.includes(a2.quest?.getId()) ? -1 : 1;
 
       if (p1 != p2) {
         return p1 - p2;
@@ -959,11 +960,18 @@ export class AdventureFinder {
       }
 
       if ((a1.quest == null) != (a2.quest == null)) {
-        return a1.quest == null ? 1 : -1;
+        return a1.quest != null ? 1 : -1;
       }
 
       if (a1.status != a2.status) {
         return a1.status - a2.status;
+      }
+
+      p1 = prioritize2.includes(a1.quest?.getId()) ? -1 : 1;
+      p2 = prioritize2.includes(a2.quest?.getId()) ? -1 : 1;
+
+      if (p1 != p2) {
+        return p1 - p2;
       }
 
       if (compareFreeRuns && a1.mayFreeRun != a2.mayFreeRun) {
