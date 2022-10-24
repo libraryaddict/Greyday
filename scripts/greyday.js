@@ -495,7 +495,7 @@ function getGreySettings() {
   var greyClipArt = {
     name: "greyClipArt",
     description:
-    "A comma seperated list of familiar names you'd like us to use Tome of Clip Art on if we have the iotm",
+    "A comma seperated list of familiar names you'd like Greyday to summon and use Familiar Jacks on if you have Tome of Clip Art",
     valid: (value) => {
       return (
         value.
@@ -5643,7 +5643,7 @@ resource)
   }
 
   if (resource.primed()) {
-    throw "This resource is already primed";
+    throw "This resource ".concat(resource.name, " is already primed. For now, either use the primed resource or run \"greyday unprime\" to ignore that");
   }
 
   if (quest.status(path) == QuestStatus.COMPLETED) {
@@ -19087,10 +19087,12 @@ function QuestL4BatsRight_classCallCheck(instance, Constructor) {if (!(instance 
 
 
 
+
 var QuestL4BatsRight = /*#__PURE__*/function () {function QuestL4BatsRight() {QuestL4BatsRight_classCallCheck(this, QuestL4BatsRight);QuestL4BatsRight_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("The Beanbat Chamber"));QuestL4BatsRight_defineProperty(this, "bean",
     external_kolmafia_namespaceObject.Item.get("Enchanted Bean"));QuestL4BatsRight_defineProperty(this, "monster",
-    external_kolmafia_namespaceObject.Monster.get("beanbat"));}QuestL4BatsRight_createClass(QuestL4BatsRight, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Monster.get("beanbat"));QuestL4BatsRight_defineProperty(this, "toAbsorb", void 0);}QuestL4BatsRight_createClass(QuestL4BatsRight, [{ key: "getId", value:
+
 
     function getId() {
       return "Council / Bats / UnlockBoss";
@@ -19112,6 +19114,14 @@ var QuestL4BatsRight = /*#__PURE__*/function () {function QuestL4BatsRight() {Qu
       }
 
       if (getQuestStatus("questL04Bat") < 2) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if (
+      this.toAbsorb.length == 0 &&
+      (0,external_kolmafia_namespaceObject.getProperty)("autumnatonQuestLocation") == this.loc.toString() &&
+      currentPredictions().get(this.loc) != this.monster)
+      {
         return QuestStatus.NOT_READY;
       }
 
@@ -25647,8 +25657,6 @@ function isJunkYardBoatApproach() {
 }
 ;// CONCATENATED MODULE: ./src/quests/custom/QuestGrabBoatVacation.ts
 function QuestGrabBoatVacation_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestGrabBoatVacation_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestGrabBoatVacation_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestGrabBoatVacation_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestGrabBoatVacation_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestGrabBoatVacation_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
-
-
 
 
 
@@ -32535,9 +32543,10 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "f970357";
+var lastCommitHash = "04c8de7";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -32722,6 +32731,20 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
         return;
       }
 
+      if (command == "unprime") {var _iterator2 = GreyYouMain_createForOfIteratorHelper(
+          getResources()),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var resource = _step2.value;
+            if (resource.primed == null || !resource.primed()) {
+              continue;
+            }
+
+            resource.unprime();
+            (0,external_kolmafia_namespaceObject.print)("Unprimed " + resource.name);
+          }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+
+        (0,external_kolmafia_namespaceObject.print)("Unprimed resources.", "blue");
+        return;
+      }
+
       if (
       command != "absorbs" &&
       command != "run" &&
@@ -32734,9 +32757,9 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
       }
 
       var settings = getGreySettings();
-      var invalid = false;var _iterator2 = GreyYouMain_createForOfIteratorHelper(
+      var invalid = false;var _iterator3 = GreyYouMain_createForOfIteratorHelper(
 
-        settings),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var setting = _step2.value;
+        settings),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var setting = _step3.value;
           var val = (0,external_kolmafia_namespaceObject.getProperty)(setting.name);
 
           if (val == "" || setting.valid(val)) {
@@ -32750,7 +32773,7 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
           setting.name +
           " =</font></font>");
 
-        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+        }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
 
       if (invalid) {
         return;
@@ -32920,15 +32943,15 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
 
           var greyPulls = (0,external_kolmafia_namespaceObject.getProperty)("_greyPulls").
           split(",").
-          filter((s) => s.length > 0);var _iterator3 = GreyYouMain_createForOfIteratorHelper(
+          filter((s) => s.length > 0);var _iterator4 = GreyYouMain_createForOfIteratorHelper(
 
-            extraPulls),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var p = _step3.value;
+            extraPulls),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var p = _step4.value;
               if (greyPulls.includes(p)) {
                 continue;
               }
 
               greyPulls.push(p);
-            }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+            }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
 
           if (greyPulls.length > 0) {
             (0,external_kolmafia_namespaceObject.setProperty)("_greyPulls", greyPulls.join(","));
