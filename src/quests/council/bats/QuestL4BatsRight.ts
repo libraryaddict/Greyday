@@ -5,9 +5,11 @@ import {
   Item,
   use,
   Monster,
+  getProperty,
 } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { currentPredictions } from "../../../utils/GreyUtils";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -20,6 +22,7 @@ export class QuestL4BatsRight implements QuestInfo {
   loc: Location = Location.get("The Beanbat Chamber");
   bean: Item = Item.get("Enchanted Bean");
   monster: Monster = Monster.get("beanbat");
+  toAbsorb: Monster[];
 
   getId(): QuestType {
     return "Council / Bats / UnlockBoss";
@@ -41,6 +44,14 @@ export class QuestL4BatsRight implements QuestInfo {
     }
 
     if (getQuestStatus("questL04Bat") < 2) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (
+      this.toAbsorb.length == 0 &&
+      getProperty("autumnatonQuestLocation") == this.loc.toString() &&
+      currentPredictions().get(this.loc) != this.monster
+    ) {
       return QuestStatus.NOT_READY;
     }
 

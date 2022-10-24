@@ -86,7 +86,7 @@ export function setPrimedResource(
   }
 
   if (resource.primed()) {
-    throw "This resource is already primed";
+    throw `This resource ${resource.name} is already primed. For now, either use the primed resource or run "greyday unprime" to ignore that`;
   }
 
   if (quest.status(path) == QuestStatus.COMPLETED) {

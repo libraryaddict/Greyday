@@ -1,6 +1,5 @@
 import {
   Location,
-  Familiar,
   availableAmount,
   cliExecute,
   getProperty,
@@ -9,26 +8,17 @@ import {
   retrieveItem,
   toInt,
   use,
-  gnomadsAvailable,
   myAdventures,
   myMeat,
   runChoice,
   visitUrl,
   myLevel,
-  closetAmount,
-  takeCloset,
-  haveSkill,
   Skill,
-  familiarWeight,
-  Monster,
-  itemAmount,
   haveEffect,
   Effect,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
-import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { greyAdv } from "../../utils/GreyLocations";
-import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreySettings } from "../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";

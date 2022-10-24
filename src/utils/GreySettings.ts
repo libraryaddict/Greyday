@@ -167,7 +167,7 @@ export function getGreySettings(): GreySetting[] {
   const greyClipArt: GreySetting = {
     name: "greyClipArt",
     description:
-      "A comma seperated list of familiar names you'd like us to use Tome of Clip Art on if we have the iotm",
+      "A comma seperated list of familiar names you'd like Greyday to summon and use Familiar Jacks on if you have Tome of Clip Art",
     valid: (value) => {
       return (
         value

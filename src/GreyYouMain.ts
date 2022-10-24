@@ -27,6 +27,7 @@ import {
 } from "kolmafia";
 import { GreyAdventurer } from "./GreyAdventurer";
 import { getQuestStatus } from "./quests/Quests";
+import { getResources } from "./typings/ResourceTypes";
 import { FigureOutPath } from "./typings/TaskManager";
 import { AbsorbsProvider } from "./utils/GreyAbsorber";
 import { hasVIPInvitation, hasWhitelistToCurrentClan } from "./utils/GreyClan";
@@ -206,6 +207,20 @@ class GreyYouMain {
 
     if (command == "settings") {
       this.doSettings();
+      return;
+    }
+
+    if (command == "unprime") {
+      for (const resource of getResources()) {
+        if (resource.primed == null || !resource.primed()) {
+          continue;
+        }
+
+        resource.unprime();
+        print("Unprimed " + resource.name);
+      }
+
+      print("Unprimed resources.", "blue");
       return;
     }
 
