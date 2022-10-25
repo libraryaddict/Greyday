@@ -961,12 +961,12 @@ export class AdventureFinder {
         return banished2 - banished1;
       }
 
-      if ((a1.quest == null) != (a2.quest == null)) {
-        return a1.quest != null ? 1 : -1;
-      }
-
       if (a1.status != a2.status) {
         return a1.status - a2.status;
+      }
+
+      if ((a1.quest == null) != (a2.quest == null)) {
+        return a1.quest != null ? 1 : -1;
       }
 
       p1 = prioritize2.includes(a1.quest?.getId()) ? -1 : 1;
