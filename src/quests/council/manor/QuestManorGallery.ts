@@ -82,7 +82,7 @@ export class ManorGallery implements QuestInfo {
     outfit.setNoCombat();
 
     return {
-      location: this.location,
+      location: isGhostBustingTime(this.location) ? null : this.location,
       outfit: outfit,
       freeRun: () => true,
       run: () => {

@@ -197,7 +197,7 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
 
     return {
       outfit: outfit,
-      location: this.palindome,
+      location: isGhostBustingTime(this.palindome) ? null : this.palindome,
       orbs: orbs,
       mayFreeRun: true,
       freeRun: (monster) => !orbs.includes(monster),

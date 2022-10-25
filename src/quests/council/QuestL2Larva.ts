@@ -94,7 +94,7 @@ export class QuestL2SpookyLarva implements QuestInfo {
     }
 
     return {
-      location: this.location,
+      location: isGhostBustingTime(this.location) ? null : this.location,
       outfit: outfit,
       forcedFight: isGhostBustingTime(this.location)
         ? [0, this.headless]

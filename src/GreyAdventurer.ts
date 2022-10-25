@@ -16,6 +16,7 @@ import {
   maximize,
   Monster,
   myAscensions,
+  myFamiliar,
   myMeat,
   myMp,
   print,
@@ -603,7 +604,8 @@ export class GreyAdventurer {
           let buffer = fileToBuffer(name);
 
           if (buffer == "") {
-            buffer = "# Turns Played\tQuest ID\tLocation\tTurns Taken";
+            buffer =
+              "# Turns Played\tQuest ID\tLocation\tTurns Taken\tFamiliar";
           }
 
           const id = adventure.quest ? adventure.quest.getId() : "Non-Quest";
@@ -612,7 +614,7 @@ export class GreyAdventurer {
 
           buffer += `\n${turnsPlayed()}\t${id}\t${toRun.location}\t${
             turnsPlayed() - turn
-          }`;
+          }\t${myFamiliar().name}`;
 
           bufferToFile(buffer.toString(), name);
         }

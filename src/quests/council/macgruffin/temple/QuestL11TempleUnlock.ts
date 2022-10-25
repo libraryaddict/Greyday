@@ -167,7 +167,7 @@ export class QuestL11TempleUnlock implements QuestInfo {
     }
 
     return {
-      location: this.spookyLoc,
+      location: isGhostBustingTime(this.spookyLoc) ? null : this.spookyLoc,
       outfit: outfit,
       freeRun: () => true,
       run: () => {

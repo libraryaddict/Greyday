@@ -25,6 +25,7 @@ import { PossiblePath, TaskInfo } from "../../../../../typings/TaskInfo";
 import { ResourceCategory } from "../../../../../typings/ResourceTypes";
 import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
 import { AdventureFinder } from "../../../../../GreyChooser";
+import { currentPredictions } from "../../../../../utils/GreyUtils";
 
 export class QuestL11Curses extends TaskInfo implements QuestInfo {
   curse1: Effect = Effect.get("Once-Cursed");
@@ -106,9 +107,16 @@ export class QuestL11Curses extends TaskInfo implements QuestInfo {
       return false;
     }
 
-    const delay = this.delayForNextNC() + 4;
+    const delay = this.delayForNextNC();
+    const hasGracePeriod = delay < turns;
+    const mayAsWellResetOrb =
+      hasGracePeriod && currentPredictions().has(this.apartment);
 
-    return turns <= delay;
+    if (!haveEffect(this.curse3) && mayAsWellResetOrb) {
+      return false;
+    }
+
+    return turns <= delay + 4;
   }
 
   canRun(): boolean {
