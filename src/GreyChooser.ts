@@ -834,10 +834,11 @@ export class AdventureFinder {
     const outfit = adventure.adventure.outfit;
 
     if (
-      (outfit != null && outfit == GreyOutfit.IGNORE_OUTFIT) ||
-      //outfit.plusCombatWeight > 0 ||
-      //  outfit.minusCombatWeight > 0 ||
-      outfit.extra.find((e) => e.startsWith("+equip")) != null
+      outfit != null &&
+      (outfit == GreyOutfit.IGNORE_OUTFIT ||
+        //outfit.plusCombatWeight > 0 ||
+        //  outfit.minusCombatWeight > 0 ||
+        outfit.extra.find((e) => e.startsWith("+equip")) != null)
     ) {
       return;
     }
