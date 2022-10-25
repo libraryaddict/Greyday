@@ -963,7 +963,7 @@ export class AdventureFinder {
       }
 
       if ((a1.quest == null) != (a2.quest == null)) {
-        return a1.quest != null ? 1 : -1;
+        return a1.quest == null ? 1 : -1;
       }
 
       if (a1.status != a2.status) {
