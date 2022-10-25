@@ -10,8 +10,10 @@ import {
   getProperty,
   haveEffect,
   haveSkill,
+  historicalPrice,
   isBanished,
   Item,
+  itemAmount,
   Location,
   maximize,
   Monster,
@@ -25,6 +27,7 @@ import {
   Skill,
   Stat,
   toInt,
+  use,
   useFamiliar,
 } from "kolmafia";
 import {
@@ -1071,6 +1074,26 @@ class EmergencyTrainer implements FoundAdventure {
       );
       const fam = Familiar.get("Grey Goose");
       useFamiliar(fam);
+
+      const chow = Item.get("Ghost Dog Chow");
+
+      if (
+        itemAmount(chow) > 0 &&
+        historicalPrice(chow) * 2 < GreySettings.greyValueOfAdventure
+      ) {
+        print("Oh gosh! Ghost Dog Chow is on the menu!", "blue");
+
+        while (familiarWeight(fam) < 6 && itemAmount(chow) > 0) {
+          use(chow);
+        }
+
+        if (familiarWeight(fam) >= 6) {
+          return;
+        }
+
+        print("Unfortunately Ghost Dog Chow wasn't enough!", "blue");
+      }
+
       maximize("familiar experience -tie", false);
 
       let turnsSpent = 0;
