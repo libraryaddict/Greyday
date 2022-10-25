@@ -1,9 +1,11 @@
 import {
   availableAmount,
   getProperty,
+  haveSkill,
   Item,
   Location,
   Monster,
+  Skill,
 } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../../../Quests";
 import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
@@ -22,6 +24,7 @@ export class QuestL11Doctor implements QuestInfo {
   loc: Location = Location.get("The Hidden Hospital");
   surgeon: Monster = Monster.get("pygmy witch surgeon");
   shirt: Item = Item.get("Surgical apron");
+  torso: Skill = Skill.get("Torso Awareness");
 
   getLocations(): Location[] {
     return [this.loc];
@@ -58,6 +61,10 @@ export class QuestL11Doctor implements QuestInfo {
     let seekingOutfit: boolean = false;
 
     for (const i of this.equips) {
+      if (i == this.shirt && !haveSkill(this.torso)) {
+        continue;
+      }
+
       if (availableAmount(i) == 0) {
         seekingOutfit = true;
         continue;
