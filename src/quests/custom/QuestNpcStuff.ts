@@ -77,7 +77,7 @@ class QuestDoctor implements QuestInfo {
   }
 
   level(): number {
-    return 5;
+    return 1;
   }
 
   free(): boolean {
@@ -91,6 +91,10 @@ class QuestDoctor implements QuestInfo {
   status(): QuestStatus {
     if (getProperty("questM24Doc") != "unstarted") {
       return QuestStatus.COMPLETED;
+    }
+
+    if (toInt(getProperty("lastCouncilVisit")) < 1) {
+      return QuestStatus.NOT_READY;
     }
 
     return QuestStatus.READY;
