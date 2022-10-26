@@ -231,5 +231,8 @@ export function getBackupChoices(): [number, number][] {
   choices(1106, 3); //Dog chow
   choices(1107, myMeat() < 6000 ? 3 : 1); // Meat or tennis ball
 
+  // Gingerbread city
+  choices(1215, 1); // Set the clock forward
+
   return backupChoices;
 }
