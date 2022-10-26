@@ -116,6 +116,7 @@ export class QuestManorKitchen implements QuestInfo {
     }
 
     if (
+      haveEffect(effectModifier(this.candleBuff, "Effect")) == 0 &&
       !haveSkill(this.stenchResist) &&
       !AbsorbsProvider.getReabsorbedMonsters().includes(this.albinoBat) &&
       myLevel() < 12
