@@ -18,7 +18,12 @@ import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { GreySettings } from "../../../utils/GreySettings";
 import { Macro } from "../../../utils/MacroBuilder";
-import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
+import {
+  getQuestStatus,
+  QuestAdventure,
+  QuestInfo,
+  QuestStatus,
+} from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 
 export class QuestL12Battlefield implements QuestInfo {
@@ -91,6 +96,13 @@ export class QuestL12Battlefield implements QuestInfo {
 
     if (defeated >= 1000) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (
+      getQuestStatus("questL11Pyramid") == 3 &&
+      getProperty("pyramidBombUsed") == "true"
+    ) {
+      return QuestStatus.READY;
     }
 
     return QuestStatus.FASTER_LATER;
