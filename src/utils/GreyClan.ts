@@ -126,12 +126,14 @@ export function getFax(monster: Monster) {
     throw "VIP was disabled, but function fax was still called";
   }
 
-  if (!canAccessClan(getDefaultClan()) || !isOnline("cheesefax")) {
+  const faxbot = "CheeseFax";
+
+  if (!canAccessClan(getDefaultClan()) || !isOnline(faxbot)) {
     throw (
       "Cannot access fax machine, clan accessible? " +
       canAccessClan(getDefaultClan()) +
       ". CheeseFax online? " +
-      isOnline("cheesefax")
+      isOnline(faxbot)
     );
   }
 
@@ -159,19 +161,28 @@ export function getFax(monster: Monster) {
     };
 
     if (!hasReceivedFax()) {
-      chatPrivate("cheesefax", monster.name);
+      for (let i = 0; i < 6; i++) {
+        // We might have missed it or overrode it
+        if (i % 3 == 0) {
+          chatPrivate(faxbot, monster.name);
+        }
 
-      for (let i = 0; i < 3; i++) {
         wait(10);
 
         if (hasReceivedFax()) {
-          break;
+          return;
         }
       }
+    }
 
-      if (!hasReceivedFax()) {
-        throw new Error("Failed to acquire photocopied " + monster);
-      }
+    if (!hasReceivedFax()) {
+      throw new Error(
+        "Failed to acquire photocopied " +
+          monster +
+          ", assuming " +
+          faxbot +
+          " is online you probably just missed the fax. Try running the script again."
+      );
     }
   });
 }

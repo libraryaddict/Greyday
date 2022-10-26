@@ -431,12 +431,18 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   }
 
   isHeistable(): boolean {
-    return (
-      toInt(getProperty("_catBurglarCharge")) >= 11 &&
-      Object.keys(heistTargets()).find(
-        (k) => k.toLowerCase() == "mountain man"
-      ) != null
+    if (toInt(getProperty("_catBurglarCharge")) < 11) {
+      return false;
+    }
+
+    const foundOre = Object.keys(heistTargets()).find(
+      (k) => k.toLowerCase() == "mountain man"
     );
+
+    // Get out of the choice
+    visitUrl("main.php");
+
+    return foundOre != null;
   }
 
   run(path: PossiblePath): QuestAdventure {
