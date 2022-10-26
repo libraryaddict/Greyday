@@ -1574,7 +1574,7 @@ var StrictMacro = /*#__PURE__*/(/* unused pure expression or super */ null && (f
       return (_this12 = new this()).trySkillRepeat.apply(_this12, arguments);
     } }]);return StrictMacro;}(Macro)));
 ;// CONCATENATED MODULE: ./src/typings/ResourceTypes.ts
-
+function ResourceTypes_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function ResourceTypes_createClass(Constructor, protoProps, staticProps) {if (protoProps) ResourceTypes_defineProperties(Constructor.prototype, protoProps);if (staticProps) ResourceTypes_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function ResourceTypes_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function ResourceTypes_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -1582,7 +1582,8 @@ var StrictMacro = /*#__PURE__*/(/* unused pure expression or super */ null && (f
 
 
 // We should use the category only to determine if a quest is asking for a resource type, but doesn't tell us if it supports a certain resource or not. Aka not implemented.
-var ResourceCategory;(function (ResourceCategory) {ResourceCategory[ResourceCategory["COPIER"] = 0] = "COPIER";ResourceCategory[ResourceCategory["OLFACT_COPIER"] = 1] = "OLFACT_COPIER";ResourceCategory[ResourceCategory["FAXER"] = 2] = "FAXER";ResourceCategory[ResourceCategory["CARGO_SHORTS"] = 3] = "CARGO_SHORTS";ResourceCategory[ResourceCategory["BANISHER"] = 4] = "BANISHER";ResourceCategory[ResourceCategory["YELLOW_RAY"] = 5] = "YELLOW_RAY";ResourceCategory[ResourceCategory["PULL"] = 6] = "PULL";ResourceCategory[ResourceCategory["ZAP"] = 7] = "ZAP";ResourceCategory[ResourceCategory["CLOVER"] = 8] = "CLOVER";ResourceCategory[ResourceCategory["POLAR_VORTEX"] = 9] = "POLAR_VORTEX";ResourceCategory[ResourceCategory["HUGS_AND_KISSES"] = 10] = "HUGS_AND_KISSES";ResourceCategory[ResourceCategory["FIRE_EXTINGUSHER_ZONE"] = 11] = "FIRE_EXTINGUSHER_ZONE";ResourceCategory[ResourceCategory["GLOVE_REPLACE"] = 12] = "GLOVE_REPLACE";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD"] = 13] = "DECK_OF_EVERY_CARD";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD_CHEAT"] = 14] = "DECK_OF_EVERY_CARD_CHEAT";ResourceCategory[ResourceCategory["CAT_HEIST"] = 15] = "CAT_HEIST";ResourceCategory[ResourceCategory["HOT_TUB"] = 16] = "HOT_TUB";ResourceCategory[ResourceCategory["FORCE_NC"] = 17] = "FORCE_NC";ResourceCategory[ResourceCategory["FORCE_FIGHT"] = 18] = "FORCE_FIGHT";ResourceCategory[ResourceCategory["PILL_KEEPER"] = 19] = "PILL_KEEPER";})(ResourceCategory || (ResourceCategory = {}));
+var ResourceCategory;(function (ResourceCategory) {ResourceCategory[ResourceCategory["COPIER"] = 0] = "COPIER";ResourceCategory[ResourceCategory["OLFACT_COPIER"] = 1] = "OLFACT_COPIER";ResourceCategory[ResourceCategory["FAXER"] = 2] = "FAXER";ResourceCategory[ResourceCategory["CARGO_SHORTS"] = 3] = "CARGO_SHORTS";ResourceCategory[ResourceCategory["BANISHER"] = 4] = "BANISHER";ResourceCategory[ResourceCategory["YELLOW_RAY"] = 5] = "YELLOW_RAY";ResourceCategory[ResourceCategory["PULL"] = 6] = "PULL";ResourceCategory[ResourceCategory["ZAP"] = 7] = "ZAP";ResourceCategory[ResourceCategory["CLOVER"] = 8] = "CLOVER";ResourceCategory[ResourceCategory["POLAR_VORTEX"] = 9] = "POLAR_VORTEX";ResourceCategory[ResourceCategory["HUGS_AND_KISSES"] = 10] = "HUGS_AND_KISSES";ResourceCategory[ResourceCategory["FIRE_EXTINGUSHER_ZONE"] = 11] = "FIRE_EXTINGUSHER_ZONE";ResourceCategory[ResourceCategory["GLOVE_REPLACE"] = 12] = "GLOVE_REPLACE";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD"] = 13] = "DECK_OF_EVERY_CARD";ResourceCategory[ResourceCategory["DECK_OF_EVERY_CARD_CHEAT"] = 14] = "DECK_OF_EVERY_CARD_CHEAT";ResourceCategory[ResourceCategory["CAT_HEIST"] = 15] = "CAT_HEIST";ResourceCategory[ResourceCategory["HOT_TUB"] = 16] = "HOT_TUB";ResourceCategory[ResourceCategory["FORCE_NC"] = 17] = "FORCE_NC";ResourceCategory[ResourceCategory["FORCE_FIGHT"] = 18] = "FORCE_FIGHT";ResourceCategory[ResourceCategory["PILL_KEEPER"] = 19] = "PILL_KEEPER";ResourceCategory[ResourceCategory["WANDERERS"] = 20] = "WANDERERS";})(ResourceCategory || (ResourceCategory = {}));
+
 
 
 
@@ -1627,16 +1628,13 @@ var ResourceIds = [
 "Parka: Force NC",
 "Pillkeeper",
 "Portscan",
-"Hugs and Kisses"];
+"Hugs and Kisses",
+"Autumn-aton",
+"Digitize",
+"Romantic Arrow"];
 
 
-var PillkeeperPill;(function (PillkeeperPill) {PillkeeperPill["YELLOW_RAY"] = "explode";PillkeeperPill["DOUBLE_POTION"] = "extend";PillkeeperPill["FORCE_NC"] = "noncombat";PillkeeperPill["ALL_RES"] = "element";PillkeeperPill["DOUBLE_STATS"] = "stat";PillkeeperPill["FAM_WEIGHT"] = "familiar";PillkeeperPill["LUCKY"] = "lucky";PillkeeperPill["RANDOM_ADVENTURE"] = "random";})(PillkeeperPill || (PillkeeperPill = {}));
-
-
-
-
-
-
+var PillkeeperPill;(function (PillkeeperPill) {PillkeeperPill["YELLOW_RAY"] = "explode";PillkeeperPill["DOUBLE_POTION"] = "extend";PillkeeperPill["FORCE_NC"] = "noncombat";PillkeeperPill["ALL_RES"] = "element";PillkeeperPill["DOUBLE_STATS"] = "stat";PillkeeperPill["FAM_WEIGHT"] = "familiar";PillkeeperPill["LUCKY"] = "lucky";PillkeeperPill["RANDOM_ADVENTURE"] = "random";})(PillkeeperPill || (PillkeeperPill = {}));var
 
 
 
@@ -1663,6 +1661,35 @@ var PillkeeperPill;(function (PillkeeperPill) {PillkeeperPill["YELLOW_RAY"] = "e
 
 
 
+
+
+
+
+
+
+
+
+ResourceValues = /*#__PURE__*/ResourceTypes_createClass(function ResourceValues() {ResourceTypes_classCallCheck(this, ResourceValues);});ResourceTypes_defineProperty(ResourceValues, "EmbezzlerValue",
+20000);ResourceTypes_defineProperty(ResourceValues, "CloverValue",
+22000);ResourceTypes_defineProperty(ResourceValues, "forcedDropValue",
+5000);ResourceTypes_defineProperty(ResourceValues, "PillkeeperValue",
+70000);ResourceTypes_defineProperty(ResourceValues, "ForcedNCValue",
+(0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("greyValueOfNonCombat") || "0"));ResourceTypes_defineProperty(ResourceValues, "PullValue",
+(0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("greyValueOfPull") || "0"));ResourceTypes_defineProperty(ResourceValues, "CosplaySaberValue",
+
+
+
+(0,external_kolmafia_namespaceObject.storageAmount)(external_kolmafia_namespaceObject.Item.get("distention pill")) > 60 ?
+-100 :
+(0,external_kolmafia_namespaceObject.modifierEval)("G") >= 4 ?
+3000 :
+0);ResourceTypes_defineProperty(ResourceValues, "CargoShortsValue",
+30000);ResourceTypes_defineProperty(ResourceValues, "DeckOfCardsValue",
+2000);ResourceTypes_defineProperty(ResourceValues, "ZapWandValue",
+15000);ResourceTypes_defineProperty(ResourceValues, "CatBurglarHeistValue",
+-500);ResourceTypes_defineProperty(ResourceValues, "ChateauPaintingValue",
+5000);ResourceTypes_defineProperty(ResourceValues, "HotTubValue",
+0);
 
 
 var glove = external_kolmafia_namespaceObject.Item.get("Powerful Glove");
@@ -1671,7 +1698,7 @@ var gloveReplace = {
   type: ResourceCategory.GLOVE_REPLACE,
   resource: "Powerful Glove",
   name: "Powerful Glove: Replace",
-  worthInAftercore: 22000,
+  worthInAftercore: ResourceValues.EmbezzlerValue,
   resourcesUsed: 10,
   prepare: (outfit) =>
   outfit != null ? outfit.addWeight(glove) : null,
@@ -1681,7 +1708,7 @@ var gloveReplace = {
 var clover = {
   type: ResourceCategory.CLOVER,
   resource: "Clover",
-  worthInAftercore: 22000, // How much we could sell a clover for
+  worthInAftercore: ResourceValues.CloverValue, // How much we could sell a clover for
   prepare: () => {}
 };
 
@@ -1690,7 +1717,7 @@ var xoFam = external_kolmafia_namespaceObject.Familiar.get("XO Skeleton");
 var hugsAndKisses = {
   type: ResourceCategory.HUGS_AND_KISSES,
   resource: "Hugs and Kisses",
-  worthInAftercore: 1500,
+  worthInAftercore: ResourceValues.forcedDropValue,
   familiar: xoFam,
   prepare: () => null,
   macro: () => {
@@ -1711,7 +1738,7 @@ var extingusherPolar = {
   resource: "Fire Extingusher",
   name: "Fire Extingusher: Polar Vortex",
   resourcesUsed: 10,
-  worthInAftercore: 1500, // Tattered paper cost and assume free run
+  worthInAftercore: ResourceValues.forcedDropValue, // Tattered paper cost and assume free run
   prepare: (outfit) =>
   outfit != null ? outfit.addWeight(extingusher) : null,
   macro: () => Macro.skill(external_kolmafia_namespaceObject.Skill.get("Fire Extinguisher: Polar Vortex"))
@@ -1722,7 +1749,7 @@ var extingusherZoneSpecific = {
   resource: "Fire Extingusher",
   name: "Fire Extingusher: Spray Down Zone",
   resourcesUsed: 20,
-  worthInAftercore: 3000, // Tattered paper cost x 2
+  worthInAftercore: ResourceValues.forcedDropValue * 2, // Tattered paper cost x 2
   prepare: (outfit) =>
   outfit != null ?
   outfit.addWeight(extingusher).addExtra("-equip smoke ball") :
@@ -1733,7 +1760,7 @@ var extingusherZoneSpecific = {
 var pull = {
   type: ResourceCategory.PULL,
   resource: "Pull",
-  worthInAftercore: (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("greyValueOfPull") || "0"), // This doesn't cost us anything to use
+  worthInAftercore: ResourceValues.PullValue, // This doesn't cost us anything to use
   prepare: () => {}
 };
 
@@ -1742,7 +1769,7 @@ var pillkeeper = external_kolmafia_namespaceObject.Item.get("Eight Days a Week P
 var pillkeeperNC = {
   type: ResourceCategory.FORCE_NC,
   resource: "Pillkeeper",
-  worthInAftercore: 70000, // Lets just value it at a frost flower?
+  worthInAftercore: ResourceValues.PillkeeperValue, // Lets just value it at a frost flower?
   prepare: (outfit, props) => {
     if (props != null) {
       (0,external_kolmafia_namespaceObject.cliExecute)("pillkeeper " + PillkeeperPill.FORCE_NC);
@@ -1807,7 +1834,7 @@ var parkaProp = "_parkaPrimed";
 var ncParka = {
   type: ResourceCategory.FORCE_NC,
   resource: "Parka: Force NC",
-  worthInAftercore: (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("greyValueOfNonCombat") || "0"),
+  worthInAftercore: ResourceValues.ForcedNCValue,
   //available: () => haveSkill(torso) && availableAmount(parka) > 0,
   prepare: (outfit) => {
     if (outfit != null) {
@@ -1842,6 +1869,57 @@ var ncParka = {
     (0,external_kolmafia_namespaceObject.print)("Failed to launch spikolodon spikes for some reason..", "red");
     return false;
   }
+};
+
+var digitizer = {
+  type: ResourceCategory.WANDERERS,
+  resource: "Digitize",
+  name: "Source Terminal: Digitize",
+  worthInAftercore: ResourceValues.EmbezzlerValue * 3,
+  prepare: (outfit) => {
+    if (outfit == null) {
+      return;
+    }
+
+    if (
+    (
+    (0,external_kolmafia_namespaceObject.getProperty)("sourceTerminalEducate1") +
+    (0,external_kolmafia_namespaceObject.getProperty)("sourceTerminalEducate2")).
+    includes("digitize.edu"))
+    {
+      return;
+    }
+
+    (0,external_kolmafia_namespaceObject.cliExecute)("terminal educate digitize.edu");
+    (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
+  },
+  macro: () => Macro.skill("Digitize")
+};
+
+var renimatedReanimator = external_kolmafia_namespaceObject.Familiar.get("Reanimated Reanimator");
+var obtuseAngel = external_kolmafia_namespaceObject.Familiar.get("Obtuse Angel");
+
+var reanimatedWanderer = {
+  type: ResourceCategory.WANDERERS,
+  resource: "Romantic Arrow",
+  name: "Reanimated Reanimator: Wanderer Copier",
+  worthInAftercore: ResourceValues.EmbezzlerValue * 3,
+  familiar: renimatedReanimator,
+  prepare: () => null,
+  macro: () => Macro.skill(external_kolmafia_namespaceObject.Skill.get("Wink At")),
+  available: () => (0,external_kolmafia_namespaceObject.haveFamiliar)(renimatedReanimator)
+};
+
+var obtuseAngelWanderer = {
+  type: ResourceCategory.WANDERERS,
+  resource: "Romantic Arrow",
+  name: "Obtuse Angel: Wanderer Copier",
+  worthInAftercore: ResourceValues.EmbezzlerValue * 3,
+  familiar: obtuseAngel,
+  prepare: () => null,
+  macro: () => Macro.skill(external_kolmafia_namespaceObject.Skill.get("Fire a badly romantic arrow")),
+  available: () =>
+  !(0,external_kolmafia_namespaceObject.haveFamiliar)(renimatedReanimator) && (0,external_kolmafia_namespaceObject.haveFamiliar)(obtuseAngel)
 };
 
 var yellowParka = {
@@ -1919,13 +1997,7 @@ var cosplayYellowRay = {
   resource: "Cosplay Saber",
   name: "Cosplay Saber: YR",
   freeTurn: true,
-  // If we have more than 60 pills, the saber is free. Otherwise it's worth 3k meat when its alien free day
-  worthInAftercore:
-  (0,external_kolmafia_namespaceObject.storageAmount)(external_kolmafia_namespaceObject.Item.get("distention pill")) > 60 ?
-  -100 :
-  (0,external_kolmafia_namespaceObject.modifierEval)("G") >= 4 ?
-  3000 :
-  0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
+  worthInAftercore: ResourceValues.CosplaySaberValue,
   prepare: (outfit, props) => {
     if (outfit != null) {
       outfit.addWeight(cosplaySaber);
@@ -1943,7 +2015,7 @@ var backupCamera = external_kolmafia_namespaceObject.Item.get("Backup Camera");
 var backupCopier = {
   type: ResourceCategory.COPIER,
   resource: "Backup Camera",
-  worthInAftercore: 20000, // Embezzler
+  worthInAftercore: ResourceValues.EmbezzlerValue, // Embezzler
   prepare: (outfit) =>
   outfit != null ? outfit.addWeight(backupCamera) : null,
   macro: () => Macro.skill(external_kolmafia_namespaceObject.Skill.get("Back-Up to your Last Enemy"))
@@ -1953,12 +2025,7 @@ var cosplayCopier = {
   type: ResourceCategory.OLFACT_COPIER,
   resource: "Cosplay Saber",
   name: "Cosplay Saber: Friends",
-  worthInAftercore:
-  (0,external_kolmafia_namespaceObject.storageAmount)(external_kolmafia_namespaceObject.Item.get("distention pill")) > 60 ?
-  -100 :
-  (0,external_kolmafia_namespaceObject.modifierEval)("G") >= 4 ?
-  3000 :
-  0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
+  worthInAftercore: ResourceValues.CosplaySaberValue,
   prepare: (outfit, props) => {
     if (outfit != null) {
       outfit.addWeight(cosplaySaber);
@@ -1974,7 +2041,7 @@ var cargoShorts = {
   type: ResourceCategory.CARGO_SHORTS,
   resource: "Cargo Shorts",
   freeTurn: true,
-  worthInAftercore: 30000, // Some sellable item
+  worthInAftercore: ResourceValues.CargoShortsValue, // Some sellable item
   prepare: () => {},
   pocket: function (_pocket) {function pocket(_x) {return _pocket.apply(this, arguments);}pocket.toString = function () {return _pocket.toString();};return pocket;}((pocket) => {
     (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?action=pocket");
@@ -1985,7 +2052,7 @@ var cargoShorts = {
 var ResourceTypes_faxMachine = {
   type: ResourceCategory.FAXER,
   resource: "Fax Machine",
-  worthInAftercore: 20000, // Embezzler
+  worthInAftercore: ResourceValues.EmbezzlerValue, // Embezzler
   prepare: () => {},
   available: () => canUseFaxMachine(),
   fax: (monster) => {
@@ -2002,7 +2069,7 @@ var ResourceTypes_faxMachine = {
 var combatLocket = {
   type: ResourceCategory.FAXER,
   resource: "Combat Locket",
-  worthInAftercore: 20000, // Embezzler
+  worthInAftercore: ResourceValues.EmbezzlerValue, // Embezzler
   prepare: () => {},
   fax: (monster) => {
     (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?reminisce=1", false);
@@ -2055,12 +2122,7 @@ var cosplayBanisher = {
   type: ResourceCategory.BANISHER,
   resource: "Cosplay Saber",
   name: "Cosplay Saber: Banish",
-  worthInAftercore:
-  (0,external_kolmafia_namespaceObject.storageAmount)(external_kolmafia_namespaceObject.Item.get("distention pill")) > 60 ?
-  -100 :
-  (0,external_kolmafia_namespaceObject.modifierEval)("G") >= 4 ?
-  3000 :
-  0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
+  worthInAftercore: ResourceValues.CosplaySaberValue, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit, props) => {
     if (outfit != null) {
       outfit.addWeight(cosplaySaber);
@@ -2090,7 +2152,7 @@ var asdon = {
 var deckOfEveryCard = {
   type: ResourceCategory.DECK_OF_EVERY_CARD,
   resource: "Deck of Every Card",
-  worthInAftercore: 2000,
+  worthInAftercore: ResourceValues.DeckOfCardsValue,
   prepare: () => {},
   pickCard: (card) => {
     if (card != null) {
@@ -2105,7 +2167,7 @@ var deckOfEveryCardCheat = {
   type: ResourceCategory.DECK_OF_EVERY_CARD_CHEAT,
   resource: "Deck of Every Card",
   name: "Deck of Every Card: Cheat",
-  worthInAftercore: 20000, // Worth 20k, 20k and 10k (Blue mana x2, then misc)
+  worthInAftercore: ResourceValues.DeckOfCardsValue * 10, // Worth 20k, 20k and 10k (Blue mana x2, then misc)
   resourcesUsed: 5,
   prepare: () => {},
   pickCard: (card) => (0,external_kolmafia_namespaceObject.cliExecute)("cheat ".concat(card))
@@ -2114,14 +2176,14 @@ var deckOfEveryCardCheat = {
 var zappable = {
   type: ResourceCategory.ZAP,
   resource: "Zap Wand",
-  worthInAftercore: 15000,
+  worthInAftercore: ResourceValues.ZapWandValue,
   prepare: () => {}
 };
 
 var catHeist = {
   type: ResourceCategory.CAT_HEIST,
   resource: "Cat Burglar Heist",
-  worthInAftercore: -500,
+  worthInAftercore: ResourceValues.CatBurglarHeistValue,
   prepare: () => {},
   doHeist: (item) => {
     if (
@@ -2143,7 +2205,7 @@ var catHeist = {
 var chateauPainting = {
   type: ResourceCategory.FAXER,
   resource: "Chateau Painting",
-  worthInAftercore: 5000,
+  worthInAftercore: ResourceValues.ChateauPaintingValue,
   prepare: () => {},
   fax: (monster) => {
     if ((0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.getProperty)("chateauMonster")) != monster) {
@@ -2155,7 +2217,7 @@ var chateauPainting = {
 var hottub = {
   type: ResourceCategory.HOT_TUB,
   resource: "Hot Tub",
-  worthInAftercore: 0,
+  worthInAftercore: ResourceValues.HotTubValue,
   prepare: () => {}
 };
 
@@ -2187,7 +2249,10 @@ catHeist,
 hottub,
 retroRay,
 chateauPainting,
-hugsAndKisses].
+hugsAndKisses,
+digitizer,
+reanimatedWanderer,
+obtuseAngelWanderer].
 
 map((r) => {var _r$name;
   r.name = (_r$name = r.name) !== null && _r$name !== void 0 ? _r$name : r.resource;
@@ -2204,6 +2269,17 @@ function getResources()
   }
 
   return allResources.filter((r) => r.available == null || r.available());
+}
+
+/**
+ * If this resource is something that changes with turns used
+ */
+function isTurnCounter(resource) {
+  return (
+    resource == "Bowling Ball" ||
+    resource == "Yellow Ray" ||
+    resource == "Autumn-aton");
+
 }
 
 function getResourcesLeft(
@@ -2400,6 +2476,31 @@ resourceType)
       }
 
       return scansRemaining;
+    case "Autumn-aton":
+      return 0;
+    case "Digitize":
+      if (
+      !sourceTerminal ||
+      !(0,external_kolmafia_namespaceObject.getProperty)("sourceTerminalEducateKnown").includes("digitize.edu"))
+      {
+        return 0;
+      }
+
+      if (assumeUnused) {
+        return 3;
+      }
+
+      return 3 - (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_sourceTerminalDigitizeMonsterCount"));
+    case "Romantic Arrow":
+      if (!(0,external_kolmafia_namespaceObject.haveFamiliar)(renimatedReanimator) || !(0,external_kolmafia_namespaceObject.haveFamiliar)(obtuseAngel)) {
+        return 0;
+      }
+
+      if (assumeUnused) {
+        return 1;
+      }
+
+      return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_badlyRomanticArrows"));
     default:
       throw "No idea what the resource " + resourceType + " is.";}
 
@@ -32592,7 +32693,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "c8b3c40";
+var lastCommitHash = "c960f1a";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
