@@ -111,7 +111,7 @@ export class QuestManorKitchen implements QuestInfo {
       (getQuestStatus("questL11Black") <= 2 || myMeat() < 1200) &&
       !this.hasEnoughRes()
     ) {
-      return QuestStatus.FASTER_LATER;
+      //     return QuestStatus.FASTER_LATER;
     }
 
     if (
