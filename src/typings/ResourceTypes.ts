@@ -62,6 +62,7 @@ export enum ResourceCategory {
   FORCE_NC,
   FORCE_FIGHT,
   PILL_KEEPER,
+  WANDERERS,
 }
 
 export const ResourceIds = [
@@ -87,6 +88,9 @@ export const ResourceIds = [
   "Pillkeeper",
   "Portscan",
   "Hugs and Kisses",
+  "Autumn-aton",
+  "Digitize",
+  "Romantic Arrow",
 ] as const;
 
 export enum PillkeeperPill {
@@ -124,13 +128,36 @@ export interface SomeResource {
   unprime?: () => void; // Must be called after a resource has been used
 }
 
+class ResourceValues {
+  static EmbezzlerValue = 20000;
+  static CloverValue = 22000;
+  static forcedDropValue = 5000;
+  static PillkeeperValue = 70000;
+  static ForcedNCValue = toInt(getProperty("greyValueOfNonCombat") || "0");
+  static PullValue = toInt(getProperty("greyValueOfPull") || "0");
+  // If we have more than 60 pills, the saber is free. Otherwise it's worth 3k meat when its alien free day
+  // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
+  static CosplaySaberValue =
+    storageAmount(Item.get("distention pill")) > 60
+      ? -100
+      : modifierEval("G") >= 4
+      ? 3000
+      : 0;
+  static CargoShortsValue = 30000;
+  static DeckOfCardsValue = 2000;
+  static ZapWandValue = 15000;
+  static CatBurglarHeistValue = -500;
+  static ChateauPaintingValue = 5000;
+  static HotTubValue = 0;
+}
+
 const glove = Item.get("Powerful Glove");
 
 const gloveReplace: SomeResource = {
   type: ResourceCategory.GLOVE_REPLACE,
   resource: "Powerful Glove",
   name: "Powerful Glove: Replace",
-  worthInAftercore: 22000,
+  worthInAftercore: ResourceValues.EmbezzlerValue,
   resourcesUsed: 10,
   prepare: (outfit: GreyOutfit) =>
     outfit != null ? outfit.addWeight(glove) : null,
@@ -140,7 +167,7 @@ const gloveReplace: SomeResource = {
 const clover: SomeResource = {
   type: ResourceCategory.CLOVER,
   resource: "Clover",
-  worthInAftercore: 22000, // How much we could sell a clover for
+  worthInAftercore: ResourceValues.CloverValue, // How much we could sell a clover for
   prepare: () => {},
 };
 
@@ -149,7 +176,7 @@ const xoFam = Familiar.get("XO Skeleton");
 const hugsAndKisses: SomeResource = {
   type: ResourceCategory.HUGS_AND_KISSES,
   resource: "Hugs and Kisses",
-  worthInAftercore: 1500,
+  worthInAftercore: ResourceValues.forcedDropValue,
   familiar: xoFam,
   prepare: () => null,
   macro: () => {
@@ -170,7 +197,7 @@ const extingusherPolar: SomeResource = {
   resource: "Fire Extingusher",
   name: "Fire Extingusher: Polar Vortex",
   resourcesUsed: 10,
-  worthInAftercore: 1500, // Tattered paper cost and assume free run
+  worthInAftercore: ResourceValues.forcedDropValue, // Tattered paper cost and assume free run
   prepare: (outfit: GreyOutfit) =>
     outfit != null ? outfit.addWeight(extingusher) : null,
   macro: () => Macro.skill(Skill.get("Fire Extinguisher: Polar Vortex")),
@@ -181,7 +208,7 @@ const extingusherZoneSpecific: SomeResource = {
   resource: "Fire Extingusher",
   name: "Fire Extingusher: Spray Down Zone",
   resourcesUsed: 20,
-  worthInAftercore: 3000, // Tattered paper cost x 2
+  worthInAftercore: ResourceValues.forcedDropValue * 2, // Tattered paper cost x 2
   prepare: (outfit: GreyOutfit) =>
     outfit != null
       ? outfit.addWeight(extingusher).addExtra("-equip smoke ball")
@@ -192,7 +219,7 @@ const extingusherZoneSpecific: SomeResource = {
 const pull: SomeResource = {
   type: ResourceCategory.PULL,
   resource: "Pull",
-  worthInAftercore: toInt(getProperty("greyValueOfPull") || "0"), // This doesn't cost us anything to use
+  worthInAftercore: ResourceValues.PullValue, // This doesn't cost us anything to use
   prepare: () => {},
 };
 
@@ -201,7 +228,7 @@ const pillkeeper: Item = Item.get("Eight Days a Week Pill Keeper");
 const pillkeeperNC: SomeResource = {
   type: ResourceCategory.FORCE_NC,
   resource: "Pillkeeper",
-  worthInAftercore: 70000, // Lets just value it at a frost flower?
+  worthInAftercore: ResourceValues.PillkeeperValue, // Lets just value it at a frost flower?
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (props != null) {
       cliExecute("pillkeeper " + PillkeeperPill.FORCE_NC);
@@ -266,7 +293,7 @@ const parkaProp: string = "_parkaPrimed";
 const ncParka: SomeResource = {
   type: ResourceCategory.FORCE_NC,
   resource: "Parka: Force NC",
-  worthInAftercore: toInt(getProperty("greyValueOfNonCombat") || "0"),
+  worthInAftercore: ResourceValues.ForcedNCValue,
   //available: () => haveSkill(torso) && availableAmount(parka) > 0,
   prepare: (outfit: GreyOutfit) => {
     if (outfit != null) {
@@ -301,6 +328,57 @@ const ncParka: SomeResource = {
     print("Failed to launch spikolodon spikes for some reason..", "red");
     return false;
   },
+};
+
+const digitizer: SomeResource = {
+  type: ResourceCategory.WANDERERS,
+  resource: "Digitize",
+  name: "Source Terminal: Digitize",
+  worthInAftercore: ResourceValues.EmbezzlerValue * 3,
+  prepare: (outfit) => {
+    if (outfit == null) {
+      return;
+    }
+
+    if (
+      (
+        getProperty("sourceTerminalEducate1") +
+        getProperty("sourceTerminalEducate2")
+      ).includes("digitize.edu")
+    ) {
+      return;
+    }
+
+    cliExecute("terminal educate digitize.edu");
+    visitUrl("main.php");
+  },
+  macro: () => Macro.skill("Digitize"),
+};
+
+const renimatedReanimator = Familiar.get("Reanimated Reanimator");
+const obtuseAngel = Familiar.get("Obtuse Angel");
+
+const reanimatedWanderer: SomeResource = {
+  type: ResourceCategory.WANDERERS,
+  resource: "Romantic Arrow",
+  name: "Reanimated Reanimator: Wanderer Copier",
+  worthInAftercore: ResourceValues.EmbezzlerValue * 3,
+  familiar: renimatedReanimator,
+  prepare: () => null,
+  macro: () => Macro.skill(Skill.get("Wink At")),
+  available: () => haveFamiliar(renimatedReanimator),
+};
+
+const obtuseAngelWanderer: SomeResource = {
+  type: ResourceCategory.WANDERERS,
+  resource: "Romantic Arrow",
+  name: "Obtuse Angel: Wanderer Copier",
+  worthInAftercore: ResourceValues.EmbezzlerValue * 3,
+  familiar: obtuseAngel,
+  prepare: () => null,
+  macro: () => Macro.skill(Skill.get("Fire a badly romantic arrow")),
+  available: () =>
+    !haveFamiliar(renimatedReanimator) && haveFamiliar(obtuseAngel),
 };
 
 const yellowParka: SomeResource = {
@@ -378,13 +456,7 @@ const cosplayYellowRay: SomeResource = {
   resource: "Cosplay Saber",
   name: "Cosplay Saber: YR",
   freeTurn: true,
-  // If we have more than 60 pills, the saber is free. Otherwise it's worth 3k meat when its alien free day
-  worthInAftercore:
-    storageAmount(Item.get("distention pill")) > 60
-      ? -100
-      : modifierEval("G") >= 4
-      ? 3000
-      : 0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
+  worthInAftercore: ResourceValues.CosplaySaberValue,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addWeight(cosplaySaber);
@@ -402,7 +474,7 @@ const backupCamera: Item = Item.get("Backup Camera");
 const backupCopier: SomeResource = {
   type: ResourceCategory.COPIER,
   resource: "Backup Camera",
-  worthInAftercore: 20000, // Embezzler
+  worthInAftercore: ResourceValues.EmbezzlerValue, // Embezzler
   prepare: (outfit: GreyOutfit) =>
     outfit != null ? outfit.addWeight(backupCamera) : null,
   macro: () => Macro.skill(Skill.get("Back-Up to your Last Enemy")),
@@ -412,12 +484,7 @@ const cosplayCopier: SomeResource = {
   type: ResourceCategory.OLFACT_COPIER,
   resource: "Cosplay Saber",
   name: "Cosplay Saber: Friends",
-  worthInAftercore:
-    storageAmount(Item.get("distention pill")) > 60
-      ? -100
-      : modifierEval("G") >= 4
-      ? 3000
-      : 0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
+  worthInAftercore: ResourceValues.CosplaySaberValue,
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addWeight(cosplaySaber);
@@ -433,7 +500,7 @@ const cargoShorts: SomeResource = {
   type: ResourceCategory.CARGO_SHORTS,
   resource: "Cargo Shorts",
   freeTurn: true,
-  worthInAftercore: 30000, // Some sellable item
+  worthInAftercore: ResourceValues.CargoShortsValue, // Some sellable item
   prepare: () => {},
   pocket: (pocket: number) => {
     visitUrl("inventory.php?action=pocket");
@@ -444,7 +511,7 @@ const cargoShorts: SomeResource = {
 const faxMachine: SomeResource = {
   type: ResourceCategory.FAXER,
   resource: "Fax Machine",
-  worthInAftercore: 20000, // Embezzler
+  worthInAftercore: ResourceValues.EmbezzlerValue, // Embezzler
   prepare: () => {},
   available: () => canUseFaxMachine(),
   fax: (monster: Monster) => {
@@ -461,7 +528,7 @@ const faxMachine: SomeResource = {
 const combatLocket: SomeResource = {
   type: ResourceCategory.FAXER,
   resource: "Combat Locket",
-  worthInAftercore: 20000, // Embezzler
+  worthInAftercore: ResourceValues.EmbezzlerValue, // Embezzler
   prepare: () => {},
   fax: (monster: Monster) => {
     visitUrl("inventory.php?reminisce=1", false);
@@ -514,12 +581,7 @@ const cosplayBanisher: SomeResource = {
   type: ResourceCategory.BANISHER,
   resource: "Cosplay Saber",
   name: "Cosplay Saber: Banish",
-  worthInAftercore:
-    storageAmount(Item.get("distention pill")) > 60
-      ? -100
-      : modifierEval("G") >= 4
-      ? 3000
-      : 0, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
+  worthInAftercore: ResourceValues.CosplaySaberValue, // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
   prepare: (outfit: GreyOutfit, props: PropertyManager) => {
     if (outfit != null) {
       outfit.addWeight(cosplaySaber);
@@ -549,7 +611,7 @@ const asdon: SomeResource = {
 const deckOfEveryCard: SomeResource = {
   type: ResourceCategory.DECK_OF_EVERY_CARD,
   resource: "Deck of Every Card",
-  worthInAftercore: 2000,
+  worthInAftercore: ResourceValues.DeckOfCardsValue,
   prepare: () => {},
   pickCard: (card: string) => {
     if (card != null) {
@@ -564,7 +626,7 @@ const deckOfEveryCardCheat: SomeResource = {
   type: ResourceCategory.DECK_OF_EVERY_CARD_CHEAT,
   resource: "Deck of Every Card",
   name: "Deck of Every Card: Cheat",
-  worthInAftercore: 20000, // Worth 20k, 20k and 10k (Blue mana x2, then misc)
+  worthInAftercore: ResourceValues.DeckOfCardsValue * 10, // Worth 20k, 20k and 10k (Blue mana x2, then misc)
   resourcesUsed: 5,
   prepare: () => {},
   pickCard: (card: string) => cliExecute(`cheat ${card}`),
@@ -573,14 +635,14 @@ const deckOfEveryCardCheat: SomeResource = {
 const zappable: SomeResource = {
   type: ResourceCategory.ZAP,
   resource: "Zap Wand",
-  worthInAftercore: 15000,
+  worthInAftercore: ResourceValues.ZapWandValue,
   prepare: () => {},
 };
 
 const catHeist: SomeResource = {
   type: ResourceCategory.CAT_HEIST,
   resource: "Cat Burglar Heist",
-  worthInAftercore: -500,
+  worthInAftercore: ResourceValues.CatBurglarHeistValue,
   prepare: () => {},
   doHeist: (item) => {
     if (
@@ -602,7 +664,7 @@ const catHeist: SomeResource = {
 const chateauPainting: SomeResource = {
   type: ResourceCategory.FAXER,
   resource: "Chateau Painting",
-  worthInAftercore: 5000,
+  worthInAftercore: ResourceValues.ChateauPaintingValue,
   prepare: () => {},
   fax: (monster: Monster) => {
     if (toMonster(getProperty("chateauMonster")) != monster) {
@@ -614,7 +676,7 @@ const chateauPainting: SomeResource = {
 const hottub: SomeResource = {
   type: ResourceCategory.HOT_TUB,
   resource: "Hot Tub",
-  worthInAftercore: 0,
+  worthInAftercore: ResourceValues.HotTubValue,
   prepare: () => {},
 };
 
@@ -647,6 +709,9 @@ const allResources = [
   retroRay,
   chateauPainting,
   hugsAndKisses,
+  digitizer,
+  reanimatedWanderer,
+  obtuseAngelWanderer,
 ]
   .map((r) => {
     r.name = r.name ?? r.resource;
@@ -663,6 +728,17 @@ export function getResources(
   }
 
   return allResources.filter((r) => r.available == null || r.available());
+}
+
+/**
+ * If this resource is something that changes with turns used
+ */
+export function isTurnCounter(resource: ResourceId): boolean {
+  return (
+    resource == "Bowling Ball" ||
+    resource == "Yellow Ray" ||
+    resource == "Autumn-aton"
+  );
 }
 
 export function getResourcesLeft(
@@ -859,6 +935,31 @@ export function getResourcesLeft(
       }
 
       return scansRemaining;
+    case "Autumn-aton":
+      return 0;
+    case "Digitize":
+      if (
+        !sourceTerminal ||
+        !getProperty("sourceTerminalEducateKnown").includes("digitize.edu")
+      ) {
+        return 0;
+      }
+
+      if (assumeUnused) {
+        return 3;
+      }
+
+      return 3 - toInt(getProperty("_sourceTerminalDigitizeMonsterCount"));
+    case "Romantic Arrow":
+      if (!haveFamiliar(renimatedReanimator) || !haveFamiliar(obtuseAngel)) {
+        return 0;
+      }
+
+      if (assumeUnused) {
+        return 1;
+      }
+
+      return toInt(getProperty("_badlyRomanticArrows"));
     default:
       throw "No idea what the resource " + resourceType + " is.";
   }
