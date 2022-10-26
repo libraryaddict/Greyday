@@ -614,7 +614,7 @@ export class GreyAdventurer {
 
           buffer += `\n${turnsPlayed()}\t${id}\t${toRun.location}\t${
             turnsPlayed() - turn
-          }\t${myFamiliar().name}`;
+          }\t${myFamiliar()}`;
 
           bufferToFile(buffer.toString(), name);
         }

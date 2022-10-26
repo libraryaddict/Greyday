@@ -920,9 +920,11 @@ export class AdventureFinder {
     const compareFreeRuns = toInt(getProperty("_navelRunaways")) > 0;
     const levelingGoose = familiarWeight(this.goose) >= 6;
     const prioritize: QuestType[] = [
-      "Council / MacGruffin / Black",
+      "Council / War / Start",
+      "Council / War / Frat Outfit",
       "Skills / MPRegen",
       "Skills / ScalingItem",
+      "Council / MacGruffin / Black",
       "Council / War / Filthworms",
     ];
     const prioritize2: QuestType[] = ["Manor / Kitchen"];
@@ -936,11 +938,12 @@ export class AdventureFinder {
         return a1.orbStatus - a2.orbStatus;
       }
 
-      let p1 = prioritize.includes(a1.quest?.getId()) ? -1 : 1;
-      let p2 = prioritize.includes(a2.quest?.getId()) ? -1 : 1;
+      let p1 = prioritize.indexOf(a1.quest?.getId());
+      let p2 = prioritize.indexOf(a2.quest?.getId());
 
+      // Where the lower the index, the less we prioritize it
       if (p1 != p2) {
-        return p1 - p2;
+        return p2 - p1;
       }
 
       const banished1: number =
