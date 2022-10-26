@@ -15,6 +15,7 @@ import {
   Location,
   maximize,
   Monster,
+  myLevel,
   myMeat,
   myTurncount,
   numericModifier,
@@ -116,7 +117,8 @@ export class QuestManorKitchen implements QuestInfo {
 
     if (
       !haveSkill(this.stenchResist) &&
-      !AbsorbsProvider.getReabsorbedMonsters().includes(this.albinoBat)
+      !AbsorbsProvider.getReabsorbedMonsters().includes(this.albinoBat) &&
+      myLevel() < 12
     ) {
       return QuestStatus.FASTER_LATER;
     }

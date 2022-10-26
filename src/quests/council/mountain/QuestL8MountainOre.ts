@@ -154,10 +154,21 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
       if (!combo.includes(ResourceCategory.FAXER)) {
         // Remove combinations that require a mountain man
         if (
-          combo.includes(ResourceCategory.CAT_HEIST) ||
           combo.includes(ResourceCategory.COPIER) ||
           combo.includes(ResourceCategory.POLAR_VORTEX) ||
           combo.includes(ResourceCategory.YELLOW_RAY)
+        ) {
+          continue;
+        }
+
+        // If the combo requires a cat heist, and a heist cannot be performed
+        if (
+          combo.includes(ResourceCategory.CAT_HEIST) &&
+          (assumeUnstarted ||
+            needOres != 1 ||
+            !this.isHeistReady() ||
+            this.hasHeistedAlready() ||
+            !this.isHeistable())
         ) {
           continue;
         }
