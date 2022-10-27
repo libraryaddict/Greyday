@@ -18554,14 +18554,19 @@ var QuestL1Toot = /*#__PURE__*/function (_TaskInfo) {QuestL1Toot_inherits(QuestL
     external_kolmafia_namespaceObject.Item.get("Deck of Every Card"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "ring",
     external_kolmafia_namespaceObject.Item.get("Gold Wedding Ring"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "gold",
     external_kolmafia_namespaceObject.Item.get("1,970 Carat Gold"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "mickyCard",
-    external_kolmafia_namespaceObject.Item.get("1952 Mickey Mantle card"));return _this;}QuestL1Toot_createClass(QuestL1Toot, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("1952 Mickey Mantle card"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "letter",
+    external_kolmafia_namespaceObject.Item.get("Letter from King Ralph XI"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "sack",
+    external_kolmafia_namespaceObject.Item.get("pork elf goodies sack"));return _this;}QuestL1Toot_createClass(QuestL1Toot, [{ key: "level", value:
 
     function level() {
       return 1;
     } }, { key: "status", value:
 
     function status() {
-      if ((0,external_kolmafia_namespaceObject.getProperty)("questM05Toot") == "finished") {
+      if (
+      (0,external_kolmafia_namespaceObject.getProperty)("questM05Toot") == "finished" &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.letter) + (0,external_kolmafia_namespaceObject.availableAmount)(this.sack) == 0)
+      {
         return QuestStatus.COMPLETED;
       }
 
@@ -18585,29 +18590,27 @@ var QuestL1Toot = /*#__PURE__*/function (_TaskInfo) {QuestL1Toot_inherits(QuestL
 
       if (hasEnoughMeat) {
         this.paths.push(new PossiblePath(0));
-      } else {
-        if (
-        assumeUnstarted ||
-        !(0,external_kolmafia_namespaceObject.getProperty)("_deckCardsSeen").includes("Mickey"))
-        {
-          this.paths.push(
-          new PossiblePath(0).add(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT));
-
-        }
-
-        if (!assumeUnstarted && GreySettings.isHardcoreMode()) {
-          this.paths.push(this.sellGems = new PossiblePath(20));
-        }
-
-        if (
-        assumeUnstarted && (0,external_kolmafia_namespaceObject.availableAmount)(this.ring) > 0 ||
-        (0,external_kolmafia_namespaceObject.storageAmount)(this.ring) > 0)
-        {
-          this.paths.push(new PossiblePath(0).addPull(this.ring));
-        }
-
-        this.paths.push(new PossiblePath(0).addPull(this.gold).addMeat(10000));
+        return;
       }
+
+      if (assumeUnstarted || !(0,external_kolmafia_namespaceObject.getProperty)("_deckCardsSeen").includes("Mickey")) {
+        this.paths.push(
+        new PossiblePath(0).add(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT));
+
+      }
+
+      if (!assumeUnstarted && GreySettings.isHardcoreMode()) {
+        this.paths.push(this.sellGems = new PossiblePath(20));
+      }
+
+      if (
+      assumeUnstarted && (0,external_kolmafia_namespaceObject.availableAmount)(this.ring) > 0 ||
+      (0,external_kolmafia_namespaceObject.storageAmount)(this.ring) > 0)
+      {
+        this.paths.push(new PossiblePath(0).addPull(this.ring));
+      }
+
+      this.paths.push(new PossiblePath(0).addPull(this.gold).addMeat(10000));
     } }, { key: "getPossiblePaths", value:
 
     function getPossiblePaths() {
@@ -18619,10 +18622,18 @@ var QuestL1Toot = /*#__PURE__*/function (_TaskInfo) {QuestL1Toot_inherits(QuestL
         location: null,
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
-          (0,external_kolmafia_namespaceObject.council)();
-          (0,external_kolmafia_namespaceObject.visitUrl)("tutorial.php?action=toot");
-          (0,external_kolmafia_namespaceObject.use)(external_kolmafia_namespaceObject.Item.get("Letter from King Ralph XI"));
-          (0,external_kolmafia_namespaceObject.use)(external_kolmafia_namespaceObject.Item.get("pork elf goodies sack"));
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(this.letter) == 0) {
+            (0,external_kolmafia_namespaceObject.council)();
+            (0,external_kolmafia_namespaceObject.visitUrl)("tutorial.php?action=toot");
+          }
+
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(this.letter) > 0) {
+            (0,external_kolmafia_namespaceObject.use)(this.letter);
+          }
+
+          if ((0,external_kolmafia_namespaceObject.availableAmount)(this.sack) > 0) {
+            (0,external_kolmafia_namespaceObject.use)(this.sack);
+          }
 
           if (path.canUse(ResourceCategory.PULL)) {
             GreyPulls.tryPull(path.pulls[0]);
@@ -29728,6 +29739,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
             p.advsSavedMax = mostAdvsCouldveUsed[1] - p.advsSavedMax;
           });
 
+          // We want the cheapest paths to go first
           paths.sort((p1, p2) => {
             var cost1 = p1.getCostOfPath();
             var cost2 = p2.getCostOfPath();
@@ -29776,9 +29788,17 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
         return null;
       }
 
-      allPaths.sort((_ref11, _ref12) => {var _ref13 = TaskManager_slicedToArray(_ref11, 2),_ref13$ = TaskManager_slicedToArray(_ref13[1], 1),p1 = _ref13$[0];var _ref14 = TaskManager_slicedToArray(_ref12, 2),_ref14$ = TaskManager_slicedToArray(_ref14[1], 1),p2 = _ref14$[0];
-        var cost1 = p1.getCostOfPath();
-        var cost2 = p2.getCostOfPath();
+      // We want the most expensive paths to go first, the cheapest paths are always the first in each path
+      allPaths.sort((_ref11, _ref12) => {var _ref13 = TaskManager_slicedToArray(_ref11, 2),paths1 = _ref13[1];var _ref14 = TaskManager_slicedToArray(_ref12, 2),paths2 = _ref14[1];
+        if (
+        paths1.length != paths2.length &&
+        Math.min(paths1.length, paths2.length) == 1)
+        {
+          return paths1.length - paths2.length;
+        }
+
+        var cost1 = paths1[0].getCostOfPath();
+        var cost2 = paths2[0].getCostOfPath();
 
         if (cost1 == cost2) {
           return 0;
@@ -29851,7 +29871,6 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
 
       possible.sort((_ref15, _ref16) => {var _ref17 = TaskManager_slicedToArray(_ref15, 3),meat1 = _ref17[2];var _ref18 = TaskManager_slicedToArray(_ref16, 3),meat2 = _ref18[2];return meat1 - meat2;});
 
-      var tried = 0;
       var best;
       var addPath = (
       simmed,
@@ -29865,7 +29884,9 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
         } else {
           simmed.thisPath.push([quest, path]);
         }
-      };var _loop6 = function _loop6() {
+      };
+
+      var tried = 0;var _loop6 = function _loop6() {
 
         var _possible$_i = TaskManager_slicedToArray(_possible[_i2], 2),path = _possible$_i[0],resources = _possible$_i[1];
         var simmed = currentPath.clone();
@@ -32764,7 +32785,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "6bce83d";
+var lastCommitHash = "ee0ff80";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
