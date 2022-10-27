@@ -1,6 +1,5 @@
 import {
   Location,
-  Familiar,
   availableAmount,
   maximize,
   numericModifier,
@@ -11,16 +10,21 @@ import {
   Monster,
   myEffects,
   toEffect,
-  myHp,
+  print,
 } from "kolmafia";
 import {
   hasCombatSkillReady,
   hasNonCombatSkillActive,
 } from "../../../GreyAdventurer";
 import { restoreHPTo } from "../../../tasks/TaskMaintainStatus";
-import { PossiblePath } from "../../../typings/TaskInfo";
+import { ResourceCategory } from "../../../typings/ResourceTypes";
+import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import {
+  currentPredictions,
+  getAllCombinations,
+} from "../../../utils/GreyUtils";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -29,11 +33,83 @@ import {
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { MountainStatus } from "../QuestL8IcePeak";
+import { GreyPulls } from "../../../utils/GreyResources";
+import { AdventureFinder } from "../../../GreyChooser";
 
-export class QuestL8MountainNinja implements QuestInfo {
+export class QuestL8MountainNinja extends TaskInfo implements QuestInfo {
   ninja: Location = Location.get("Lair of the Ninja Snowmen");
   assassin: Monster = Monster.get("Ninja snowman assassin");
   canHitCombat: boolean;
+  outfit: Item[] = ["Ninja rope", "Ninja Crampons", "Ninja Carabiner"].map(
+    (s) => Item.get(s)
+  );
+  paths: PossiblePath[];
+  willNeedRecalculate = false;
+
+  createPaths(assumeUnstarted: boolean) {
+    this.paths = [];
+    this.willNeedRecalculate =
+      assumeUnstarted || getQuestStatus("questL11Shen") < 4;
+
+    const itemsNeeded = assumeUnstarted
+      ? this.outfit
+      : this.outfit.filter((i) => availableAmount(i) == 0);
+
+    if (itemsNeeded.length == 0) {
+      this.paths.push(new PossiblePath(0));
+      return;
+    }
+
+    // Lets work on the assumpsion that the player will definitely hit +25 at some point
+    // Encounter rate is [Combat] / 200
+    // So +25 is 12.5%
+    const combatRate = 25;
+
+    const getTurnsToEncounter = (turns: number) => {
+      return Math.min(11, Math.ceil(1 / (combatRate / 200 + turns * 0.015)));
+    };
+
+    const plan = [];
+
+    for (let i = 0; i < itemsNeeded.length; i++) {
+      let turns = getTurnsToEncounter(8 * (1 + i));
+
+      // If we have spent less than 11 turns here, adjust the turns needed downwards
+      // Shen will come here..
+      if (i == 0 && (assumeUnstarted || this.ninja.turnsSpent < 11)) {
+        turns = Math.min(
+          11 - Math.max(assumeUnstarted ? 0 : this.ninja.turnsSpent, 6)
+        );
+      }
+
+      plan.push(turns);
+      plan.push(itemsNeeded[i]);
+    }
+
+    for (const combo of getAllCombinations(plan)) {
+      if (combo.length != itemsNeeded.length) {
+        continue;
+      }
+
+      const plan = new PossiblePath(
+        combo.filter((c) => typeof c == "number").reduce((a, b) => a + b, 0)
+      );
+
+      for (const item of combo) {
+        if (typeof item == "number") {
+          continue;
+        }
+
+        plan.addPull(item);
+      }
+
+      this.paths.push(plan);
+    }
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
 
   getId(): QuestType {
     return "Council / Ice / Ninjas";
@@ -47,14 +123,14 @@ export class QuestL8MountainNinja implements QuestInfo {
     return false;
   }
 
-  status(): QuestStatus {
+  status(path: PossiblePath): QuestStatus {
     const status = this.getStatus();
 
     if (status > MountainStatus.GET_OUTFIT) {
       return QuestStatus.COMPLETED;
     }
 
-    if (status < MountainStatus.GET_OUTFIT) {
+    if (status < MountainStatus.GET_OUTFIT || path == null) {
       return QuestStatus.NOT_READY;
     }
 
@@ -81,10 +157,27 @@ export class QuestL8MountainNinja implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    const qStatus =
-      getQuestStatus("questL11Shen") < 4
-        ? QuestStatus.FASTER_LATER
-        : QuestStatus.READY;
+    const outfitNeeded = this.outfit.filter((i) => availableAmount(i) == 0);
+
+    if (outfitNeeded.length == 0) {
+      return QuestStatus.READY;
+    }
+
+    const shenTime = getQuestStatus("questL11Shen") < 4;
+
+    if (this.willNeedRecalculate != shenTime) {
+      return QuestStatus.READY;
+    }
+
+    if (
+      shenTime &&
+      outfitNeeded.length <= path.canUse(ResourceCategory.PULL) &&
+      !currentPredictions().has(this.ninja)
+    ) {
+      return QuestStatus.NOT_READY;
+    }
+
+    const qStatus = shenTime ? QuestStatus.FASTER_LATER : QuestStatus.READY;
 
     if (this.canHitCombat || numericModifier("Combat Rate") >= 25) {
       return qStatus;
@@ -106,9 +199,27 @@ export class QuestL8MountainNinja implements QuestInfo {
     return getQuestStatus("questL08Trapper");
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
+    if (
+      this.willNeedRecalculate &&
+      getQuestStatus("questL11Shen") >= 4 &&
+      path != null &&
+      path.canUse(ResourceCategory.PULL)
+    ) {
+      return {
+        location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
+        run: () => {
+          this.willNeedRecalculate = false;
+          AdventureFinder.recalculatePath();
+        },
+      };
+    }
+
+    const outfitNeeded = this.outfit.filter((i) => availableAmount(i) == 0);
+
     // See if we can unlock peak yet
-    if (this.getOutfit().find((i) => availableAmount(i) == 0) == null) {
+    if (outfitNeeded.length == 0 || path == null) {
       return {
         location: null,
         run: () => {
@@ -117,6 +228,26 @@ export class QuestL8MountainNinja implements QuestInfo {
           }
 
           visitUrl("place.php?whichplace=mclargehuge&action=cloudypeak");
+        },
+      };
+    }
+
+    const shenTime = getQuestStatus("questL11Shen") < 4;
+
+    if (
+      outfitNeeded.length <= path.canUse(ResourceCategory.PULL) &&
+      !shenTime
+    ) {
+      return {
+        location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
+        run: () => {
+          const pulls = path.canUse(ResourceCategory.PULL);
+
+          for (let i = 0; i < pulls; i++) {
+            GreyPulls.tryPull(outfitNeeded[i]);
+            path.addUsed(ResourceCategory.PULL);
+          }
         },
       };
     }
@@ -138,11 +269,5 @@ export class QuestL8MountainNinja implements QuestInfo {
 
   getLocations(): Location[] {
     return [this.ninja];
-  }
-
-  getOutfit(): Item[] {
-    return ["Ninja rope", "Ninja Crampons", "Ninja Carabiner"].map((i) =>
-      Item.get(i)
-    );
   }
 }

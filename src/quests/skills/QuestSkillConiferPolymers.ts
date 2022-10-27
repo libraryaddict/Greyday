@@ -35,11 +35,11 @@ export class QuestSkillConiferPolymers implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (getQuestStatus("questL09Topping") < 1) {
-      return QuestStatus.NOT_READY;
+    if (this.hasRes || haveSkill(this.skill)) {
+      return QuestStatus.COMPLETED;
     }
 
-    if (this.hasRes || haveSkill(this.skill)) {
+    if (getQuestStatus("questM20Necklace") > 0) {
       return QuestStatus.COMPLETED;
     }
 
@@ -50,8 +50,8 @@ export class QuestSkillConiferPolymers implements QuestInfo {
         numericModifier("Generated:_spec", "Stench Resistance") >= 4;
     }
 
-    if (getQuestStatus("questM20Necklace") > 0) {
-      return QuestStatus.COMPLETED;
+    if (getQuestStatus("questL09Topping") < 1) {
+      return QuestStatus.NOT_READY;
     }
 
     if (!canGreyAdventure(this.location)) {
