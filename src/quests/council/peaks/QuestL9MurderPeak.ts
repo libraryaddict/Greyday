@@ -181,11 +181,7 @@ export class MurderHandler implements QuestInfo {
             )}. Maybe you need stench res, but the script can't find it for you?`;
           }
 
-          if (
-            availableAmount(this.rusty) > 0 &&
-            (equippedAmount(this.orb) == 0 ||
-              !currentPredictions().has(this.loc))
-          ) {
+          if (availableAmount(this.rusty) > 0) {
             const predictions = getProperty("crystalBallPredictions").split(
               "|"
             );
@@ -196,7 +192,8 @@ export class MurderHandler implements QuestInfo {
                 "&ajax=1"
             );
 
-            if (equippedAmount(this.orb) > 0) {
+            if (availableAmount(this.orb) > 0) {
+              visitUrl("inventory.php?ponder=1", false);
               const newPredictions = getProperty("crystalBallPredictions")
                 .split("|")
                 .map((s) => {
@@ -207,7 +204,7 @@ export class MurderHandler implements QuestInfo {
                     return s;
                   }
 
-                  return turnsPlayed() - 1 + s.substring(s.indexOf(":") + 1);
+                  return turnsPlayed() - 1 + s.substring(s.indexOf(":"));
                 });
 
               setProperty("crystalBallPredictions", newPredictions.join("|"));
