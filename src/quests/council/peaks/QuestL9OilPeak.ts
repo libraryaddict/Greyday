@@ -123,7 +123,9 @@ export class OilHandler implements QuestInfo {
         if (doneFirst) {
           print("Now doing a special adventure for Oil Baron absorb!", "blue");
         }
+
         this.doMonsterLevel();
+
         greyAdv(this.loc);
         changeMcd(0);
 
@@ -136,7 +138,13 @@ export class OilHandler implements QuestInfo {
 
   doMonsterLevel() {
     changeMcd(10);
-    maximize("ML 50 MIN 51 MAX -tie -equip unbreakable umbrella", false);
+    maximize(
+      "ML 50 MIN 51 MAX -tie -equip unbreakable umbrella" +
+        (getProperty("cursedMagnifyingGlassCount") == "13"
+          ? "-equip Cursed magnifying glass"
+          : ""),
+      false
+    );
 
     const level = numericModifier("Monster Level");
 
