@@ -112,7 +112,7 @@ export class QuestL11Black extends TaskInfo implements QuestInfo {
 
   run(path: PossiblePath): QuestAdventure {
     const ncIn = this.forcedNCIn();
-    const ncTime = ncIn == 0;
+    const ncTime = ncIn <= 0;
 
     const outfit = new GreyOutfit();
 

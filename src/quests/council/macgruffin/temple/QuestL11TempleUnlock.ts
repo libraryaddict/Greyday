@@ -157,6 +157,10 @@ export class QuestL11TempleUnlock implements QuestInfo {
     return isGhostBustingTime(this.spookyLoc);
   }
 
+  canAcceptPrimes(): boolean {
+    return !isGhostBustingTime(this.spookyLoc);
+  }
+
   run(): QuestAdventure {
     const outfit = isGhostBustingTime(this.spookyLoc)
       ? getGhostBustingOutfit()

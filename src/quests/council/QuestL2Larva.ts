@@ -139,6 +139,10 @@ export class QuestL2SpookyLarva implements QuestInfo {
     };
   }
 
+  canAcceptPrimes(): boolean {
+    return !this.mustBeDone();
+  }
+
   mustBeDone(): boolean {
     return isGhostBustingTime(this.location);
   }
