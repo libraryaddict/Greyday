@@ -129,9 +129,9 @@ export interface SomeResource {
 }
 
 class ResourceValues {
-  static EmbezzlerValue = 20000;
+  static EmbezzlerValue = 19000;
   static CloverValue = 22000;
-  static forcedDropValue = 5000;
+  static forcedDropValue = 4000;
   static PillkeeperValue = 70000;
   static ForcedNCValue = toInt(getProperty("greyValueOfNonCombat") || "0");
   static PullValue = toInt(getProperty("greyValueOfPull") || "0");
