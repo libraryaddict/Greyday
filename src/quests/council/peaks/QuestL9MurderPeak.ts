@@ -4,23 +4,21 @@ import {
   Skill,
   availableAmount,
   Location,
-  cliExecute,
-  use,
   create,
   toInt,
   getProperty,
-  elementalResistance,
-  Element,
   numericModifier,
   itemDropModifier,
-  print,
   Monster,
   visitUrl,
   itemDrops,
   maximize,
   turnsPlayed,
-  equippedAmount,
   setProperty,
+  myMeat,
+  haveEffect,
+  Effect,
+  use,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
@@ -49,6 +47,8 @@ export class MurderHandler implements QuestInfo {
   hasRes: boolean = false;
   resCheckIn: number = 0;
   orb: Item = Item.get("miniature crystal ball");
+  canOfPaint: Item = Item.get("Can of black paint");
+  paintEffect: Effect = Effect.get("Red Door Syndrome");
 
   getId(): QuestType {
     return "Council / Peaks / TwinPeak";
@@ -95,12 +95,17 @@ export class MurderHandler implements QuestInfo {
     }
 
     if (this.questNeedsStenchRes()) {
+      if (getQuestStatus("questL11Black") <= 2 || myMeat() < 1200) {
+        return QuestStatus.NOT_READY;
+      }
+
       if (!this.hasRes && this.resCheckIn < turnsPlayed()) {
         this.resCheckIn = turnsPlayed() + 5;
 
         maximize("stench res -tie", true);
         this.hasRes =
-          numericModifier("Generated:_spec", "Stench Resistance") >= 4;
+          numericModifier("Generated:_spec", "Stench Resistance") >=
+          (haveEffect(this.paintEffect) ? 4 : 2);
       }
 
       if (this.hasRes) {
@@ -163,9 +168,17 @@ export class MurderHandler implements QuestInfo {
             props.setChoice(606, 3);
           } else if (
             this.questNeedsStenchRes() &&
-            numericModifier("Stench Resistance") >= 4
+            numericModifier("Stench Resistance") >=
+              (haveEffect(this.paintEffect) ? 4 : 2)
           ) {
             props.setChoice(606, 1);
+
+            if (
+              numericModifier("Stench Resistance") < 4 &&
+              haveEffect(this.paintEffect) == 0
+            ) {
+              use(this.canOfPaint);
+            }
           } else if (this.questNeedsFood() && itemDropModifier() >= 50) {
             props.setChoice(606, 2);
           } else if (
