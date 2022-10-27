@@ -19,6 +19,8 @@ import {
   itemDrops,
   maximize,
   turnsPlayed,
+  equippedAmount,
+  setProperty,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
@@ -46,6 +48,7 @@ export class MurderHandler implements QuestInfo {
   skill: Skill = Skill.get("Conifer Polymers");
   hasRes: boolean = false;
   resCheckIn: number = 0;
+  orb: Item = Item.get("miniature crystal ball");
 
   getId(): QuestType {
     return "Council / Peaks / TwinPeak";
@@ -133,7 +136,7 @@ export class MurderHandler implements QuestInfo {
     } else if (this.questNeedsInit()) {
       outfit.addWeight("init", 100, 40, 40);
     } else if (this.questNeedsStenchRes()) {
-      outfit.addWeight("stench res", 1000, 4, 4);
+      outfit.addWeight("stench res", 1000000, 4, 4);
     }
 
     return {
@@ -178,12 +181,37 @@ export class MurderHandler implements QuestInfo {
             )}. Maybe you need stench res, but the script can't find it for you?`;
           }
 
-          if (availableAmount(this.rusty) > 0) {
+          if (
+            availableAmount(this.rusty) > 0 &&
+            (equippedAmount(this.orb) == 0 ||
+              !currentPredictions().has(this.loc))
+          ) {
+            const predictions = getProperty("crystalBallPredictions").split(
+              "|"
+            );
+
             greyAdv(
               "inv_use.php?pwd=&which=3&whichitem=" +
                 toInt(this.rusty) +
                 "&ajax=1"
             );
+
+            if (equippedAmount(this.orb) > 0) {
+              const newPredictions = getProperty("crystalBallPredictions")
+                .split("|")
+                .map((s) => {
+                  if (
+                    !s.startsWith(turnsPlayed() + ":Twin Peak:") ||
+                    predictions.includes(s)
+                  ) {
+                    return s;
+                  }
+
+                  return turnsPlayed() - 1 + s.substring(s.indexOf(":") + 1);
+                });
+
+              setProperty("crystalBallPredictions", newPredictions.join("|"));
+            }
           } else {
             const settings = new AdventureSettings();
 
