@@ -20982,7 +20982,7 @@ var QuestL8MountainGoats = /*#__PURE__*/function () {function QuestL8MountainGoa
       return getQuestStatus("questL08Trapper");
     } }]);return QuestL8MountainGoats;}();
 ;// CONCATENATED MODULE: ./src/quests/council/mountain/QuestL8MountainNinja.ts
-function QuestL8MountainNinja_toConsumableArray(arr) {return QuestL8MountainNinja_arrayWithoutHoles(arr) || QuestL8MountainNinja_iterableToArray(arr) || QuestL8MountainNinja_unsupportedIterableToArray(arr) || QuestL8MountainNinja_nonIterableSpread();}function QuestL8MountainNinja_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestL8MountainNinja_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL8MountainNinja_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL8MountainNinja_arrayLikeToArray(o, minLen);}function QuestL8MountainNinja_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function QuestL8MountainNinja_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return QuestL8MountainNinja_arrayLikeToArray(arr);}function QuestL8MountainNinja_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL8MountainNinja_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainNinja_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainNinja_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainNinja_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainNinja_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainNinja_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL8MountainNinja_toConsumableArray(arr) {return QuestL8MountainNinja_arrayWithoutHoles(arr) || QuestL8MountainNinja_iterableToArray(arr) || QuestL8MountainNinja_unsupportedIterableToArray(arr) || QuestL8MountainNinja_nonIterableSpread();}function QuestL8MountainNinja_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestL8MountainNinja_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function QuestL8MountainNinja_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return QuestL8MountainNinja_arrayLikeToArray(arr);}function QuestL8MountainNinja_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL8MountainNinja_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestL8MountainNinja_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL8MountainNinja_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL8MountainNinja_arrayLikeToArray(o, minLen);}function QuestL8MountainNinja_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL8MountainNinja_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainNinja_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainNinja_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainNinja_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainNinja_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainNinja_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainNinja_setPrototypeOf(subClass, superClass);}function QuestL8MountainNinja_setPrototypeOf(o, p) {QuestL8MountainNinja_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainNinja_setPrototypeOf(o, p);}function QuestL8MountainNinja_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainNinja_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainNinja_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainNinja_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainNinja_possibleConstructorReturn(this, result);};}function QuestL8MountainNinja_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainNinja_assertThisInitialized(self);}function QuestL8MountainNinja_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainNinja_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainNinja_getPrototypeOf(o) {QuestL8MountainNinja_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainNinja_getPrototypeOf(o);}function QuestL8MountainNinja_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -20992,10 +20992,84 @@ function QuestL8MountainNinja_toConsumableArray(arr) {return QuestL8MountainNinj
 
 
 
-var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNinja() {QuestL8MountainNinja_classCallCheck(this, QuestL8MountainNinja);QuestL8MountainNinja_defineProperty(this, "ninja",
-    external_kolmafia_namespaceObject.Location.get("Lair of the Ninja Snowmen"));QuestL8MountainNinja_defineProperty(this, "assassin",
-    external_kolmafia_namespaceObject.Monster.get("Ninja snowman assassin"));QuestL8MountainNinja_defineProperty(this, "canHitCombat", void 0);}QuestL8MountainNinja_createClass(QuestL8MountainNinja, [{ key: "getId", value:
 
+
+
+
+var QuestL8MountainNinja = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainNinja_inherits(QuestL8MountainNinja, _TaskInfo);var _super = QuestL8MountainNinja_createSuper(QuestL8MountainNinja);function QuestL8MountainNinja() {var _this;QuestL8MountainNinja_classCallCheck(this, QuestL8MountainNinja);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL8MountainNinja_defineProperty(QuestL8MountainNinja_assertThisInitialized(_this), "ninja",
+    external_kolmafia_namespaceObject.Location.get("Lair of the Ninja Snowmen"));QuestL8MountainNinja_defineProperty(QuestL8MountainNinja_assertThisInitialized(_this), "assassin",
+    external_kolmafia_namespaceObject.Monster.get("Ninja snowman assassin"));QuestL8MountainNinja_defineProperty(QuestL8MountainNinja_assertThisInitialized(_this), "canHitCombat", void 0);QuestL8MountainNinja_defineProperty(QuestL8MountainNinja_assertThisInitialized(_this), "outfit",
+
+    ["Ninja rope", "Ninja Crampons", "Ninja Carabiner"].map(
+    (s) => external_kolmafia_namespaceObject.Item.get(s)));QuestL8MountainNinja_defineProperty(QuestL8MountainNinja_assertThisInitialized(_this), "paths", void 0);QuestL8MountainNinja_defineProperty(QuestL8MountainNinja_assertThisInitialized(_this), "willNeedRecalculate",
+
+
+    false);return _this;}QuestL8MountainNinja_createClass(QuestL8MountainNinja, [{ key: "createPaths", value:
+
+    function createPaths(assumeUnstarted) {
+      this.paths = [];
+      this.willNeedRecalculate =
+      assumeUnstarted || getQuestStatus("questL11Shen") < 4;
+
+      var itemsNeeded = assumeUnstarted ?
+      this.outfit :
+      this.outfit.filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0);
+
+      if (itemsNeeded.length == 0) {
+        this.paths.push(new PossiblePath(0));
+        return;
+      }
+
+      // Lets work on the assumpsion that the player will definitely hit +25 at some point
+      // Encounter rate is [Combat] / 200
+      // So +25 is 12.5%
+      var combatRate = 25;
+
+      var getTurnsToEncounter = (turns) => {
+        return Math.min(11, Math.ceil(1 / (combatRate / 200 + turns * 0.015)));
+      };
+
+      var plan = [];
+
+      for (var i = 0; i < itemsNeeded.length; i++) {
+        var turns = getTurnsToEncounter(8 * (1 + i));
+
+        // If we have spent less than 11 turns here, adjust the turns needed downwards
+        // Shen will come here..
+        if (i == 0 && (assumeUnstarted || this.ninja.turnsSpent < 11)) {
+          turns = Math.min(
+          11 - Math.max(assumeUnstarted ? 0 : this.ninja.turnsSpent, 6));
+
+        }
+
+        plan.push(turns);
+        plan.push(itemsNeeded[i]);
+      }var _iterator = QuestL8MountainNinja_createForOfIteratorHelper(
+
+        getAllCombinations(plan)),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var combo = _step.value;
+          if (combo.length != itemsNeeded.length) {
+            continue;
+          }
+
+          var _plan = new PossiblePath(
+          combo.filter((c) => typeof c == "number").reduce((a, b) => a + b, 0));var _iterator2 = QuestL8MountainNinja_createForOfIteratorHelper(
+
+
+            combo),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var item = _step2.value;
+              if (typeof item == "number") {
+                continue;
+              }
+
+              _plan.addPull(item);
+            }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+
+          this.paths.push(_plan);
+        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+    } }, { key: "getPossiblePaths", value:
+
+    function getPossiblePaths() {
+      return this.paths;
+    } }, { key: "getId", value:
 
     function getId() {
       return "Council / Ice / Ninjas";
@@ -21009,14 +21083,14 @@ var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNin
       return false;
     } }, { key: "status", value:
 
-    function status() {
+    function status(path) {
       var status = this.getStatus();
 
       if (status > MountainStatus.GET_OUTFIT) {
         return QuestStatus.COMPLETED;
       }
 
-      if (status < MountainStatus.GET_OUTFIT) {
+      if (status < MountainStatus.GET_OUTFIT || path == null) {
         return QuestStatus.NOT_READY;
       }
 
@@ -21043,10 +21117,27 @@ var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNin
         return QuestStatus.NOT_READY;
       }
 
-      var qStatus =
-      getQuestStatus("questL11Shen") < 4 ?
-      QuestStatus.FASTER_LATER :
-      QuestStatus.READY;
+      var outfitNeeded = this.outfit.filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0);
+
+      if (outfitNeeded.length == 0) {
+        return QuestStatus.READY;
+      }
+
+      var shenTime = getQuestStatus("questL11Shen") < 4;
+
+      if (this.willNeedRecalculate != shenTime) {
+        return QuestStatus.READY;
+      }
+
+      if (
+      shenTime &&
+      outfitNeeded.length <= path.canUse(ResourceCategory.PULL) &&
+      !currentPredictions().has(this.ninja))
+      {
+        return QuestStatus.NOT_READY;
+      }
+
+      var qStatus = shenTime ? QuestStatus.FASTER_LATER : QuestStatus.READY;
 
       if (this.canHitCombat || (0,external_kolmafia_namespaceObject.numericModifier)("Combat Rate") >= 25) {
         return qStatus;
@@ -21068,9 +21159,27 @@ var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNin
       return getQuestStatus("questL08Trapper");
     } }, { key: "run", value:
 
-    function run() {
+    function run(path) {
+      if (
+      this.willNeedRecalculate &&
+      getQuestStatus("questL11Shen") >= 4 &&
+      path != null &&
+      path.canUse(ResourceCategory.PULL))
+      {
+        return {
+          location: null,
+          outfit: GreyOutfit.IGNORE_OUTFIT,
+          run: () => {
+            this.willNeedRecalculate = false;
+            AdventureFinder.recalculatePath();
+          }
+        };
+      }
+
+      var outfitNeeded = this.outfit.filter((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0);
+
       // See if we can unlock peak yet
-      if (this.getOutfit().find((i) => (0,external_kolmafia_namespaceObject.availableAmount)(i) == 0) == null) {
+      if (outfitNeeded.length == 0 || path == null) {
         return {
           location: null,
           run: () => {
@@ -21079,6 +21188,26 @@ var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNin
             }
 
             (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=mclargehuge&action=cloudypeak");
+          }
+        };
+      }
+
+      var shenTime = getQuestStatus("questL11Shen") < 4;
+
+      if (
+      outfitNeeded.length <= path.canUse(ResourceCategory.PULL) &&
+      !shenTime)
+      {
+        return {
+          location: null,
+          outfit: GreyOutfit.IGNORE_OUTFIT,
+          run: () => {
+            var pulls = path.canUse(ResourceCategory.PULL);
+
+            for (var i = 0; i < pulls; i++) {
+              GreyPulls.tryPull(outfitNeeded[i]);
+              path.addUsed(ResourceCategory.PULL);
+            }
           }
         };
       }
@@ -21100,13 +21229,7 @@ var QuestL8MountainNinja = /*#__PURE__*/function () {function QuestL8MountainNin
 
     function getLocations() {
       return [this.ninja];
-    } }, { key: "getOutfit", value:
-
-    function getOutfit() {
-      return ["Ninja rope", "Ninja Crampons", "Ninja Carabiner"].map((i) =>
-      external_kolmafia_namespaceObject.Item.get(i));
-
-    } }]);return QuestL8MountainNinja;}();
+    } }]);return QuestL8MountainNinja;}(TaskInfo);
 ;// CONCATENATED MODULE: ./src/quests/council/mountain/QuestL8MountainOre.ts
 function QuestL8MountainOre_toConsumableArray(arr) {return QuestL8MountainOre_arrayWithoutHoles(arr) || QuestL8MountainOre_iterableToArray(arr) || QuestL8MountainOre_unsupportedIterableToArray(arr) || QuestL8MountainOre_nonIterableSpread();}function QuestL8MountainOre_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestL8MountainOre_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function QuestL8MountainOre_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return QuestL8MountainOre_arrayLikeToArray(arr);}function QuestL8MountainOre_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL8MountainOre_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestL8MountainOre_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL8MountainOre_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL8MountainOre_arrayLikeToArray(o, minLen);}function QuestL8MountainOre_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL8MountainOre_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL8MountainOre_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL8MountainOre_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL8MountainOre_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL8MountainOre_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL8MountainOre_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL8MountainOre_setPrototypeOf(subClass, superClass);}function QuestL8MountainOre_setPrototypeOf(o, p) {QuestL8MountainOre_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL8MountainOre_setPrototypeOf(o, p);}function QuestL8MountainOre_createSuper(Derived) {var hasNativeReflectConstruct = QuestL8MountainOre_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL8MountainOre_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL8MountainOre_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL8MountainOre_possibleConstructorReturn(this, result);};}function QuestL8MountainOre_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL8MountainOre_assertThisInitialized(self);}function QuestL8MountainOre_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL8MountainOre_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL8MountainOre_getPrototypeOf(o) {QuestL8MountainOre_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL8MountainOre_getPrototypeOf(o);}function QuestL8MountainOre_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -27863,11 +27986,11 @@ var QuestSkillConiferPolymers = /*#__PURE__*/function () {function QuestSkillCon
     } }, { key: "status", value:
 
     function status() {
-      if (getQuestStatus("questL09Topping") < 1) {
-        return QuestStatus.NOT_READY;
+      if (this.hasRes || (0,external_kolmafia_namespaceObject.haveSkill)(this.skill)) {
+        return QuestStatus.COMPLETED;
       }
 
-      if (this.hasRes || (0,external_kolmafia_namespaceObject.haveSkill)(this.skill)) {
+      if (getQuestStatus("questM20Necklace") > 0) {
         return QuestStatus.COMPLETED;
       }
 
@@ -27878,8 +28001,8 @@ var QuestSkillConiferPolymers = /*#__PURE__*/function () {function QuestSkillCon
         (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", "Stench Resistance") >= 4;
       }
 
-      if (getQuestStatus("questM20Necklace") > 0) {
-        return QuestStatus.COMPLETED;
+      if (getQuestStatus("questL09Topping") < 1) {
+        return QuestStatus.NOT_READY;
       }
 
       if (!canGreyAdventure(this.location)) {
@@ -32808,7 +32931,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "2727b0a";
+var lastCommitHash = "fd0e882";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
