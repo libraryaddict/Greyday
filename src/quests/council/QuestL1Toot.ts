@@ -2,7 +2,6 @@ import {
   autosell,
   availableAmount,
   council,
-  Familiar,
   getProperty,
   Item,
   itemAmount,
@@ -11,7 +10,6 @@ import {
   storageAmount,
   toBoolean,
   use,
-  useFamiliar,
   visitUrl,
 } from "kolmafia";
 import { ResourceCategory } from "../../typings/ResourceTypes";
@@ -34,13 +32,18 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
   ring: Item = Item.get("Gold Wedding Ring");
   gold: Item = Item.get("1,970 Carat Gold");
   mickyCard: Item = Item.get("1952 Mickey Mantle card");
+  letter = Item.get("Letter from King Ralph XI");
+  sack = Item.get("pork elf goodies sack");
 
   level(): number {
     return 1;
   }
 
   status(): QuestStatus {
-    if (getProperty("questM05Toot") == "finished") {
+    if (
+      getProperty("questM05Toot") == "finished" &&
+      availableAmount(this.letter) + availableAmount(this.sack) == 0
+    ) {
       return QuestStatus.COMPLETED;
     }
 
@@ -64,29 +67,27 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
 
     if (hasEnoughMeat) {
       this.paths.push(new PossiblePath(0));
-    } else {
-      if (
-        assumeUnstarted ||
-        !getProperty("_deckCardsSeen").includes("Mickey")
-      ) {
-        this.paths.push(
-          new PossiblePath(0).add(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT)
-        );
-      }
-
-      if (!assumeUnstarted && GreySettings.isHardcoreMode()) {
-        this.paths.push((this.sellGems = new PossiblePath(20)));
-      }
-
-      if (
-        (assumeUnstarted && availableAmount(this.ring) > 0) ||
-        storageAmount(this.ring) > 0
-      ) {
-        this.paths.push(new PossiblePath(0).addPull(this.ring));
-      }
-
-      this.paths.push(new PossiblePath(0).addPull(this.gold).addMeat(10000));
+      return;
     }
+
+    if (assumeUnstarted || !getProperty("_deckCardsSeen").includes("Mickey")) {
+      this.paths.push(
+        new PossiblePath(0).add(ResourceCategory.DECK_OF_EVERY_CARD_CHEAT)
+      );
+    }
+
+    if (!assumeUnstarted && GreySettings.isHardcoreMode()) {
+      this.paths.push((this.sellGems = new PossiblePath(20)));
+    }
+
+    if (
+      (assumeUnstarted && availableAmount(this.ring) > 0) ||
+      storageAmount(this.ring) > 0
+    ) {
+      this.paths.push(new PossiblePath(0).addPull(this.ring));
+    }
+
+    this.paths.push(new PossiblePath(0).addPull(this.gold).addMeat(10000));
   }
 
   getPossiblePaths(): PossiblePath[] {
@@ -98,10 +99,18 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
       location: null,
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
-        council();
-        visitUrl("tutorial.php?action=toot");
-        use(Item.get("Letter from King Ralph XI"));
-        use(Item.get("pork elf goodies sack"));
+        if (availableAmount(this.letter) == 0) {
+          council();
+          visitUrl("tutorial.php?action=toot");
+        }
+
+        if (availableAmount(this.letter) > 0) {
+          use(this.letter);
+        }
+
+        if (availableAmount(this.sack) > 0) {
+          use(this.sack);
+        }
 
         if (path.canUse(ResourceCategory.PULL)) {
           GreyPulls.tryPull(path.pulls[0]);

@@ -387,6 +387,7 @@ export class FigureOutPath {
         p.advsSavedMax = mostAdvsCouldveUsed[1] - p.advsSavedMax;
       });
 
+      // We want the cheapest paths to go first
       paths.sort((p1, p2) => {
         const cost1 = p1.getCostOfPath();
         const cost2 = p2.getCostOfPath();
@@ -435,9 +436,17 @@ export class FigureOutPath {
       return null;
     }
 
-    allPaths.sort(([, [p1]], [, [p2]]) => {
-      const cost1 = p1.getCostOfPath();
-      const cost2 = p2.getCostOfPath();
+    // We want the most expensive paths to go first, the cheapest paths are always the first in each path
+    allPaths.sort(([, paths1], [, paths2]) => {
+      if (
+        paths1.length != paths2.length &&
+        Math.min(paths1.length, paths2.length) == 1
+      ) {
+        return paths1.length - paths2.length;
+      }
+
+      const cost1 = paths1[0].getCostOfPath();
+      const cost2 = paths2[0].getCostOfPath();
 
       if (cost1 == cost2) {
         return 0;
@@ -510,7 +519,6 @@ export class FigureOutPath {
 
     possible.sort(([, , meat1], [, , meat2]) => meat1 - meat2);
 
-    let tried = 0;
     let best: SimmedPath;
     const addPath = (
       simmed: SimmedPath,
@@ -525,6 +533,8 @@ export class FigureOutPath {
         simmed.thisPath.push([quest, path]);
       }
     };
+
+    let tried = 0;
 
     for (const [path, resources] of possible) {
       let simmed = currentPath.clone();
