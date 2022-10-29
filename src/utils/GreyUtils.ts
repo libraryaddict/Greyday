@@ -2,13 +2,16 @@ import {
   availableAmount,
   canAdventure,
   cliExecute,
+  Effect,
   Familiar,
   familiarEquippedEquipment,
   getLocketMonsters,
   getProperty,
+  haveEffect,
   Item,
   Location,
   Monster,
+  myAscensions,
   myFamiliar,
   print,
   retrieveItem,
@@ -148,18 +151,32 @@ const ballProp = () =>
         ]
     );
 
-let lastBallCheck: number = 0;
+let lastToasterGaze: number = 0;
+let lastEncounter: number = 0;
 const crystalBall: Item = Item.get("miniature crystal ball");
+const teleportis = Effect.get("Teleportitis");
 
 export function doToasterGaze() {
-  if (availableAmount(crystalBall) == 0) {
+  if (
+    availableAmount(crystalBall) == 0 ||
+    turnsPlayed() == lastToasterGaze ||
+    toInt(getProperty("lastDesertUnlock")) < myAscensions() ||
+    haveEffect(teleportis) > 0
+  ) {
     return;
   }
 
+  if (ballProp().find(([turn]) => turn < turnsPlayed()) == null) {
+    return;
+  }
+
+  print(
+    "As if infected, your legs bring you to the beach where you feel compelled to toastergaze. A light slap brings you out of it, Gausie lectures you on the dangers of toast. But that's not right, you wanted the toaster...",
+    "blue"
+  );
   visitUrl("adventure.php?snarfblat=355");
   visitUrl("choice.php?pwd&whichchoice=793&option=4");
-  lastBallCheck = -1;
-  currentPredictions();
+  lastToasterGaze = turnsPlayed();
 }
 
 /**
@@ -172,63 +189,19 @@ export function currentPredictions(): Map<Location, Monster> {
     return new Map();
   }
 
-  const sortedPonder = () => {
-    const ponder = ballProp().map(([, a1, a2]) => a2 + ":" + a1);
-
-    ponder.sort((a1, a2) => a1.localeCompare(a2));
-
-    return ponder.join("|");
-  };
-
   let predictions = ballProp();
 
-  if (lastBallCheck != turnsPlayed()) {
-    const sorted = sortedPonder();
+  if (lastEncounter != turnsPlayed()) {
+    lastEncounter = turnsPlayed();
 
     visitUrl("inventory.php?ponder=1", false);
 
-    lastBallCheck = turnsPlayed();
     predictions = ballProp();
-
-    if (GreySettings.greyDebug && sorted != sortedPonder()) {
-      print(
-        "Looks like pondering updated some bad mafia logic! Previously: " +
-          sorted +
-          ", now: " +
-          sortedPonder(),
-        "red"
-      );
-    }
   }
 
   return new Map(
     predictions.map(([, location, monster]) => [location, monster])
   );
-
-  /*// If a prediction should've been expired by mafia, ponder because something is wrong.
-  if (predictions.find(([turn]) => turn + 2 <= myTurncount())) {
-    visitUrl("inventory.php?ponder=1", false);
-
-    predictions = ballProp();
-  }
-
-  // The alternative is to make the 'gottenLastTurn' always return true if the predicted turns is smaller than turns
-
-  const gottenLastTurn = (predictedTurns: number, turns: number) =>
-    predictedTurns < turns;
-  const gottenThisTurn = (predictedTurns: number, turns: number) =>
-    predictedTurns === turns;
-
-  return new Map(
-    predictions
-      .filter(
-        ([turncount]) =>
-          gottenLastTurn(turncount, myTurncount()) ||
-          (showPredictionsNotAboutToExpire &&
-            gottenThisTurn(turncount, myTurncount()))
-      )
-      .map(([, location, monster]) => [location, monster])
-  );*/
 }
 export function getAllCombinations<Type>(
   valuesArray: Type[],

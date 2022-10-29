@@ -63,6 +63,7 @@ import {
   canGreyAdventure,
   currentPredictions,
   doColor,
+  doToasterGaze,
 } from "./utils/GreyUtils";
 
 export enum OrbStatus {
@@ -358,7 +359,28 @@ export class AdventureFinder {
     const absorbTime = this.hasEnoughGooseWeight();
 
     if (availableAmount(crystalBall) > 0) {
-      const preds = currentPredictions();
+      let preds = currentPredictions();
+
+      const advsWithPredictions = this.possibleAdventures.filter(
+        (a) =>
+          a.adventure.orbs != null &&
+          a.adventure.orbs.length > 0 &&
+          preds.has(a.adventure.location)
+      );
+
+      // If we have no adventures that like their predictions
+      // And an adventure that dislikes their prediction..
+      if (
+        advsWithPredictions.find((a) =>
+          a.adventure.orbs.includes(preds.get(a.adventure.location))
+        ) == null &&
+        advsWithPredictions.find(
+          (a) => !a.adventure.orbs.includes(preds.get(a.adventure.location))
+        ) != null
+      ) {
+        doToasterGaze();
+        preds = currentPredictions();
+      }
 
       for (const adv of this.possibleAdventures) {
         if (
@@ -978,6 +1000,10 @@ export class AdventureFinder {
 
       if (p1 != p2) {
         return p1 - p2;
+      }
+
+      if ((a1.adventure.location == null) != (a2.adventure.location == null)) {
+        return a1.adventure.location == null ? -1 : 1;
       }
 
       if (compareFreeRuns && a1.mayFreeRun != a2.mayFreeRun) {
