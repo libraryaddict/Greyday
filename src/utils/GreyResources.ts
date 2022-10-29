@@ -510,7 +510,7 @@ export class GreyRequirements {
     add(
       Type.IOTM,
       "Mayday Contract",
-      "Gives a nice +combat cape and starting 5k meat boost",
+      "Gives a nice +combat cape and starting 5k meat boost, meat boost is extremely minor if you use a pull instead.",
       Required.USEFUL,
       toBoolean(getProperty("hasMaydayContract"))
     );
