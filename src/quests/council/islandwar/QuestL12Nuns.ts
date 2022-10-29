@@ -34,6 +34,9 @@ export class Quest12WarNuns implements QuestInfo {
   lep: Familiar = Familiar.get("Leprechaun");
   hobo: Familiar = Familiar.get("Hobo Monkey");
   robor: Familiar = Familiar.get("Robortender");
+  tot: Familiar = Familiar.get("Trick-or-Treating Tot");
+  item: Item = Item.get("li'l pirate costume");
+
   hotness: Item = Item.get("Mick's IcyVapoHotness Inhaler");
   effect: Effect = effectModifier(this.hotness, "Effect");
   winkles: Effect = Effect.get("Winklered");
@@ -65,6 +68,10 @@ export class Quest12WarNuns implements QuestInfo {
   }
 
   getFamiliarToUse(allownNull: boolean): Familiar {
+    if (haveFamiliar(this.tot) && availableAmount(this.item) > 0) {
+      return this.tot;
+    }
+
     if (
       haveFamiliar(this.robor) &&
       (this.hasMeatBooze() || this.hasDrunkMeat())
@@ -85,6 +92,10 @@ export class Quest12WarNuns implements QuestInfo {
 
   hasFamiliarRecommendation(): Familiar {
     const toLevel: Familiar = this.getFamiliarToUse(true);
+
+    if (toLevel == this.tot) {
+      return;
+    }
 
     if (toLevel != null && familiarWeight(toLevel) < 20) {
       return toLevel;
@@ -186,11 +197,17 @@ export class Quest12WarNuns implements QuestInfo {
     outfit.addWeight(Item.get("bejeweled pledge pin"));
     outfit.meatDropWeight = 10;
 
+    const fam = this.getFamiliarToUse(false);
+
+    if (fam == this.tot) {
+      outfit.addWeight(this.item);
+    }
+
     return {
-      familiar: this.getFamiliarToUse(false),
+      familiar: fam,
       location: this.loc,
       outfit: outfit,
-      disableFamOverride: this.getFamiliarToUse(false) != null,
+      disableFamOverride: fam != null,
       run: () => {
         if (this.getMeat() == 0) {
           this.visitNuns();

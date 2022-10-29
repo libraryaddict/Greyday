@@ -46,7 +46,6 @@ const order: QuestOrder[] = [
   { id: "Misc / FortuneExp" },
   { id: "Misc / Ghost Buster" },
 
-  { id: "CombatLocket / SystemSweep" },
   { id: "CombatLocket / InfiniteLoop" },
   { id: "Misc / FamEquip" },
   { id: "Misc / JuneCleaver" },
@@ -101,7 +100,6 @@ const order: QuestOrder[] = [
   { id: "Skills / MPRegen" },
 
   // We do this early so we can grab our hippy outfit asap
-  { id: "Boat / Junkyard" },
   { id: "Boat / Vacation" },
 
   // Always try to buy access to the shore, 8-9 adventures spent trying to farm stuff up?
@@ -168,6 +166,7 @@ const order: QuestOrder[] = [
 
   { id: "Skills / Photonic Shroud" },
   { id: "Misc / GrabZapWand" },
+  { id: "Misc / Tot Pirate" },
 
   // Meh
   { id: "Council / MacGruffin / HiddenCity / Boss" },

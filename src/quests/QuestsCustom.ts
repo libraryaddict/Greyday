@@ -10,7 +10,6 @@ import { QuestDungeonsOfDoom } from "./custom/QuestDungeonsOfDoom";
 import { QuestFamiliarEquip } from "./custom/QuestFamiliarEquip";
 import { QuestFortuneExp } from "./custom/QuestFortuneExp";
 import { QuestGetZapWand } from "./custom/QuestGetZapWand";
-import { QuestGrabBoatJunkyard } from "./custom/QuestGrabBoatJunkyard";
 import { QuestGrabBoatVacation } from "./custom/QuestGrabBoatVacation";
 import { QuestInitialPulls } from "./custom/QuestInitialPulls";
 import { QuestInitialStart } from "./custom/QuestInitialStart";
@@ -27,6 +26,7 @@ import { QuestL11PalinAbsorbs } from "./absorbs/QuestL11PalinAbsorbs";
 import { QuestAbsorbIrateMariachi as QuestAbsorbIrateMariachi } from "./absorbs/QuestAbsorbIrateMariachi";
 import { QuestTrapGhost } from "./custom/QuestTrapGhost";
 import { QuestShortOrderExpLevel } from "./custom/QuestShortOrderCookLevel";
+import { QuestTotPirate } from "./custom/QuestTotPirate";
 
 export class QuestsCustom implements QuestInfo {
   // This is a wrapper class around some of our custom routing goals. Like combat locket or so.
@@ -45,7 +45,6 @@ export class QuestsCustom implements QuestInfo {
     this.quests.push(new QuestNPCStuff());
     this.quests.push(new QuestCustomPurchases());
     this.quests.push(new QuestGrabBoatVacation());
-    this.quests.push(new QuestGrabBoatJunkyard());
     this.quests.push(new QuestSkillRegistry());
     this.quests.push(new QuestFamiliarEquip());
     this.quests.push(new QuestFortuneExp());
@@ -61,6 +60,7 @@ export class QuestsCustom implements QuestInfo {
     this.quests.push(new QuestJuneCleaver());
     this.quests.push(new QuestTrapGhost());
     this.quests.push(new QuestShortOrderExpLevel());
+    this.quests.push(new QuestTotPirate());
   }
 
   level(): number {

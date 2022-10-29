@@ -22,7 +22,6 @@ import { greyAdv } from "../../utils/GreyLocations";
 import { GreySettings } from "../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
-import { isJunkYardBoatApproach } from "./QuestGrabBoatJunkyard";
 
 export class QuestGrabBoatVacation implements QuestInfo {
   junkKey: Item = Item.get("funky junk key");
@@ -52,10 +51,6 @@ export class QuestGrabBoatVacation implements QuestInfo {
 
     if (this.hasBoat()) {
       return QuestStatus.COMPLETED;
-    }
-
-    if (isJunkYardBoatApproach()) {
-      //    return QuestStatus.NOT_READY;
     }
 
     if (!this.hasDesertAccess()) {
@@ -137,7 +132,7 @@ export class QuestGrabBoatVacation implements QuestInfo {
       return false;
     }
 
-    if (myLevel() == 11 && !isJunkYardBoatApproach()) {
+    if (myLevel() == 11) {
       return true;
     }
 

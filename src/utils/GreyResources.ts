@@ -26,30 +26,6 @@ import {
   toInt,
   use,
 } from "kolmafia";
-import { GreySettings } from "./GreySettings";
-
-export function getBanishers() {
-  // Scrapbook
-  // Bowl a curveball
-  // Middle finger ring
-  // Grey You banisher skill
-}
-
-export function getYellowRays() {
-  // Yellow Rocket
-  // 9 Volt battery
-}
-
-export function getSniffers() {
-  // Nosy Nose fam
-}
-
-export function getCopiers() {
-  // Backup Camera
-  // Cloning Kit
-  // Combat Locket
-  // 4-D camera
-}
 
 export class GreyPulls {
   static pullFratWarOutfit() {

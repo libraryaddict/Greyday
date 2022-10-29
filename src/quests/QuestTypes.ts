@@ -209,12 +209,10 @@ const QuestMisc = [
   "Misc / Short Cook Goose",
   "Misc / Latte / Fam Exp",
   "Misc / Latte / Plus Combat",
+  "Misc / Tot Pirate",
 ] as const;
-const QuestCombatLocket = [
-  "CombatLocket / SystemSweep",
-  "CombatLocket / InfiniteLoop",
-] as const;
-const QuestIslandUnlock = ["Boat / Junkyard", "Boat / Vacation"] as const;
+const QuestCombatLocket = ["CombatLocket / InfiniteLoop"] as const;
+const QuestIslandUnlock = ["Boat / Vacation"] as const;
 const QuestCouncil = [
   "Quests / Council",
   ...QuestToot,
