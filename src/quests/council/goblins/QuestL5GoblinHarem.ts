@@ -12,7 +12,7 @@ import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { canGreyAdventure } from "../../../utils/GreyUtils";
+import { canGreyAdventure, currentPredictions } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../utils/Properties";
 import {
@@ -97,12 +97,16 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
       outfit.setItemDrops();
     }
 
+    const pred = currentPredictions().get(this.harem);
+
     return {
       location: this.harem,
       outfit: outfit,
-      orbs: path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE)
-        ? null
-        : [this.haremGirl],
+      orbs:
+        (pred == null || !this.toAbsorb.includes(pred)) &&
+        path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE)
+          ? null
+          : [this.haremGirl, ...this.toAbsorb],
       mayFreeRun: true,
       freeRun: (monster) => monster != this.haremGirl,
       run: () => {

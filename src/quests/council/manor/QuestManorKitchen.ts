@@ -50,6 +50,7 @@ export class QuestManorKitchen implements QuestInfo {
   scaleShirt: Item = Item.get("blessed rustproof +2 gray dragon scale mail");
   telegram: Item = Item.get("Telegram from Lady Spookyraven");
   candleBuff: Item = Item.get("rainbow glitter candle");
+  maydayEffect: Effect = Effect.get("Ready to Survive");
 
   getId(): QuestType {
     return "Manor / Kitchen";
@@ -117,6 +118,7 @@ export class QuestManorKitchen implements QuestInfo {
 
     if (
       haveEffect(effectModifier(this.candleBuff, "Effect")) == 0 &&
+      haveEffect(this.maydayEffect) == 0 &&
       !haveSkill(this.stenchResist) &&
       !AbsorbsProvider.getReabsorbedMonsters().includes(this.albinoBat) &&
       myLevel() < 12
