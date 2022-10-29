@@ -3122,18 +3122,32 @@ map(
 
 
 
-var lastBallCheck = 0;
+var lastToasterGaze = 0;
+var lastEncounter = 0;
 var crystalBall = external_kolmafia_namespaceObject.Item.get("miniature crystal ball");
+var teleportis = external_kolmafia_namespaceObject.Effect.get("Teleportitis");
 
 function doToasterGaze() {
-  if (availableAmount(crystalBall) == 0) {
+  if (
+  (0,external_kolmafia_namespaceObject.availableAmount)(crystalBall) == 0 ||
+  (0,external_kolmafia_namespaceObject.turnsPlayed)() == lastToasterGaze ||
+  (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("lastDesertUnlock")) < (0,external_kolmafia_namespaceObject.myAscensions)() ||
+  (0,external_kolmafia_namespaceObject.haveEffect)(teleportis) > 0)
+  {
     return;
   }
 
-  visitUrl("adventure.php?snarfblat=355");
-  visitUrl("choice.php?pwd&whichchoice=793&option=4");
-  lastBallCheck = -1;
-  currentPredictions();
+  if (ballProp().find((_ref3) => {var _ref4 = GreyUtils_slicedToArray(_ref3, 1),turn = _ref4[0];return turn < (0,external_kolmafia_namespaceObject.turnsPlayed)();}) == null) {
+    return;
+  }
+
+  (0,external_kolmafia_namespaceObject.print)(
+  "As if infected, your legs bring you to the beach where you feel compelled to toastergaze. A light slap brings you out of it, Gausie lectures you on the dangers of toast. But that's not right, you wanted the toaster...",
+  "blue");
+
+  (0,external_kolmafia_namespaceObject.visitUrl)("adventure.php?snarfblat=355");
+  (0,external_kolmafia_namespaceObject.visitUrl)("choice.php?pwd&whichchoice=793&option=4");
+  lastToasterGaze = (0,external_kolmafia_namespaceObject.turnsPlayed)();
 }
 
 /**
@@ -3146,62 +3160,18 @@ function currentPredictions() {
     return new Map();
   }
 
-  var sortedPonder = () => {
-    var ponder = ballProp().map((_ref3) => {var _ref4 = GreyUtils_slicedToArray(_ref3, 3),a1 = _ref4[1],a2 = _ref4[2];return a2 + ":" + a1;});
-
-    ponder.sort((a1, a2) => a1.localeCompare(a2));
-
-    return ponder.join("|");
-  };
-
   var predictions = ballProp();
 
-  if (lastBallCheck != (0,external_kolmafia_namespaceObject.turnsPlayed)()) {
-    var sorted = sortedPonder();
+  if (lastEncounter != (0,external_kolmafia_namespaceObject.turnsPlayed)()) {
+    lastEncounter = (0,external_kolmafia_namespaceObject.turnsPlayed)();
 
     (0,external_kolmafia_namespaceObject.visitUrl)("inventory.php?ponder=1", false);
 
-    lastBallCheck = (0,external_kolmafia_namespaceObject.turnsPlayed)();
     predictions = ballProp();
-
-    if (GreySettings.greyDebug && sorted != sortedPonder()) {
-      (0,external_kolmafia_namespaceObject.print)(
-      "Looks like pondering updated some bad mafia logic! Previously: " +
-      sorted +
-      ", now: " +
-      sortedPonder(),
-      "red");
-
-    }
   }
 
   return new Map(
   predictions.map((_ref5) => {var _ref6 = GreyUtils_slicedToArray(_ref5, 3),location = _ref6[1],monster = _ref6[2];return [location, monster];}));
-
-
-  /*// If a prediction should've been expired by mafia, ponder because something is wrong.
-  if (predictions.find(([turn]) => turn + 2 <= myTurncount())) {
-    visitUrl("inventory.php?ponder=1", false);
-     predictions = ballProp();
-  }
-   // The alternative is to make the 'gottenLastTurn' always return true if the predicted turns is smaller than turns
-   const gottenLastTurn = (predictedTurns: number, turns: number) =>
-    predictedTurns < turns;
-  const gottenThisTurn = (predictedTurns: number, turns: number) =>
-    predictedTurns === turns;
-   return new Map(
-    predictions
-      .filter(
-        ([turncount]) =>
-          gottenLastTurn(turncount, myTurncount()) ||
-          (showPredictionsNotAboutToExpire &&
-            gottenThisTurn(turncount, myTurncount()))
-      )
-      .map(([, location, monster]) => [location, monster])
-  );*/
-
-
-
 
 }
 function getAllCombinations(
@@ -4069,7 +4039,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
       add(
       Type.IOTM,
       "Mayday Contract",
-      "Gives a nice +combat cape and starting 5k meat boost",
+      "Gives a nice +combat cape and starting 5k meat boost, meat boost is extremely minor if you use a pull instead.",
       Required.USEFUL,
       (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("hasMaydayContract")));
 
@@ -19455,7 +19425,7 @@ var QuestL5GoblinOutskirts = /*#__PURE__*/function () {function QuestL5GoblinOut
       return [this.location];
     } }]);return QuestL5GoblinOutskirts;}();
 ;// CONCATENATED MODULE: ./src/quests/council/goblins/QuestL5GoblinHarem.ts
-function QuestL5GoblinHarem_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL5GoblinHarem_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestL5GoblinHarem_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL5GoblinHarem_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL5GoblinHarem_arrayLikeToArray(o, minLen);}function QuestL5GoblinHarem_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL5GoblinHarem_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL5GoblinHarem_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL5GoblinHarem_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL5GoblinHarem_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL5GoblinHarem_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL5GoblinHarem_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL5GoblinHarem_setPrototypeOf(subClass, superClass);}function QuestL5GoblinHarem_setPrototypeOf(o, p) {QuestL5GoblinHarem_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL5GoblinHarem_setPrototypeOf(o, p);}function QuestL5GoblinHarem_createSuper(Derived) {var hasNativeReflectConstruct = QuestL5GoblinHarem_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL5GoblinHarem_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL5GoblinHarem_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL5GoblinHarem_possibleConstructorReturn(this, result);};}function QuestL5GoblinHarem_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL5GoblinHarem_assertThisInitialized(self);}function QuestL5GoblinHarem_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL5GoblinHarem_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL5GoblinHarem_getPrototypeOf(o) {QuestL5GoblinHarem_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL5GoblinHarem_getPrototypeOf(o);}function QuestL5GoblinHarem_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestL5GoblinHarem_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL5GoblinHarem_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function QuestL5GoblinHarem_toConsumableArray(arr) {return QuestL5GoblinHarem_arrayWithoutHoles(arr) || QuestL5GoblinHarem_iterableToArray(arr) || QuestL5GoblinHarem_unsupportedIterableToArray(arr) || QuestL5GoblinHarem_nonIterableSpread();}function QuestL5GoblinHarem_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestL5GoblinHarem_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL5GoblinHarem_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL5GoblinHarem_arrayLikeToArray(o, minLen);}function QuestL5GoblinHarem_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function QuestL5GoblinHarem_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return QuestL5GoblinHarem_arrayLikeToArray(arr);}function QuestL5GoblinHarem_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL5GoblinHarem_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL5GoblinHarem_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestL5GoblinHarem_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL5GoblinHarem_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL5GoblinHarem_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL5GoblinHarem_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL5GoblinHarem_setPrototypeOf(subClass, superClass);}function QuestL5GoblinHarem_setPrototypeOf(o, p) {QuestL5GoblinHarem_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL5GoblinHarem_setPrototypeOf(o, p);}function QuestL5GoblinHarem_createSuper(Derived) {var hasNativeReflectConstruct = QuestL5GoblinHarem_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL5GoblinHarem_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL5GoblinHarem_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL5GoblinHarem_possibleConstructorReturn(this, result);};}function QuestL5GoblinHarem_possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL5GoblinHarem_assertThisInitialized(self);}function QuestL5GoblinHarem_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL5GoblinHarem_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL5GoblinHarem_getPrototypeOf(o) {QuestL5GoblinHarem_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL5GoblinHarem_getPrototypeOf(o);}function QuestL5GoblinHarem_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -19540,12 +19510,16 @@ var QuestL5GoblinHarem = /*#__PURE__*/function (_TaskInfo) {QuestL5GoblinHarem_i
         outfit.setItemDrops();
       }
 
+      var pred = currentPredictions().get(this.harem);
+
       return {
         location: this.harem,
         outfit: outfit,
-        orbs: path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE) ?
-        null :
-        [this.haremGirl],
+        orbs:
+        (pred == null || !this.toAbsorb.includes(pred)) &&
+        path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE) ?
+        null : [
+        this.haremGirl].concat(QuestL5GoblinHarem_toConsumableArray(this.toAbsorb)),
         mayFreeRun: true,
         freeRun: (monster) => monster != this.haremGirl,
         run: () => {
@@ -24002,7 +23976,8 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
     external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"));QuestManorKitchen_defineProperty(this, "scaleShirt",
     external_kolmafia_namespaceObject.Item.get("blessed rustproof +2 gray dragon scale mail"));QuestManorKitchen_defineProperty(this, "telegram",
     external_kolmafia_namespaceObject.Item.get("Telegram from Lady Spookyraven"));QuestManorKitchen_defineProperty(this, "candleBuff",
-    external_kolmafia_namespaceObject.Item.get("rainbow glitter candle"));}QuestManorKitchen_createClass(QuestManorKitchen, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Item.get("rainbow glitter candle"));QuestManorKitchen_defineProperty(this, "maydayEffect",
+    external_kolmafia_namespaceObject.Effect.get("Ready to Survive"));}QuestManorKitchen_createClass(QuestManorKitchen, [{ key: "getId", value:
 
     function getId() {
       return "Manor / Kitchen";
@@ -24070,6 +24045,7 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
 
       if (
       (0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(this.candleBuff, "Effect")) == 0 &&
+      (0,external_kolmafia_namespaceObject.haveEffect)(this.maydayEffect) == 0 &&
       !(0,external_kolmafia_namespaceObject.haveSkill)(this.stenchResist) &&
       !AbsorbsProvider.getReabsorbedMonsters().includes(this.albinoBat) &&
       (0,external_kolmafia_namespaceObject.myLevel)() < 12)
@@ -30464,7 +30440,28 @@ var AdventureFinder = /*#__PURE__*/function () {
       var absorbTime = this.hasEnoughGooseWeight();
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(GreyChooser_crystalBall) > 0) {
-        var preds = currentPredictions();var _iterator5 = GreyChooser_createForOfIteratorHelper(
+        var preds = currentPredictions();
+
+        var advsWithPredictions = this.possibleAdventures.filter(
+        (a) =>
+        a.adventure.orbs != null &&
+        a.adventure.orbs.length > 0 &&
+        preds.has(a.adventure.location));
+
+
+        // If we have no adventures that like their predictions
+        // And an adventure that dislikes their prediction..
+        if (
+        advsWithPredictions.find((a) =>
+        a.adventure.orbs.includes(preds.get(a.adventure.location))) ==
+        null &&
+        advsWithPredictions.find(
+        (a) => !a.adventure.orbs.includes(preds.get(a.adventure.location))) !=
+        null)
+        {
+          doToasterGaze();
+          preds = currentPredictions();
+        }var _iterator5 = GreyChooser_createForOfIteratorHelper(
 
           this.possibleAdventures),_step5;try {var _loop2 = function _loop2() {var adv = _step5.value;
             if (
@@ -31084,6 +31081,10 @@ var AdventureFinder = /*#__PURE__*/function () {
 
         if (p1 != p2) {
           return p1 - p2;
+        }
+
+        if (a1.adventure.location == null != (a2.adventure.location == null)) {
+          return a1.adventure.location == null ? -1 : 1;
         }
 
         if (compareFreeRuns && a1.mayFreeRun != a2.mayFreeRun) {
@@ -32931,7 +32932,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "4ee7051";
+var lastCommitHash = "1cf34de";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
