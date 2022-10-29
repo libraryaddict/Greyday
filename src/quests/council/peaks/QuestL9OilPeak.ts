@@ -141,7 +141,7 @@ export class OilHandler implements QuestInfo {
     maximize(
       "ML 50 MIN 51 MAX -tie -equip unbreakable umbrella" +
         (getProperty("cursedMagnifyingGlassCount") == "13"
-          ? "-equip Cursed magnifying glass"
+          ? " -equip Cursed magnifying glass"
           : ""),
       false
     );
