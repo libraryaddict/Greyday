@@ -52,7 +52,7 @@ const scriptsConfig = merge(
 // handle the file creating the greyday UI html file
 const otherRelayConfig = merge(
   {
-    entry: "./src/relay/relay_Greyday.ts",
+    entry: "./src/relay/relay_greyday.ts",
     output: {
       path: path.join(__dirname, "./built/relay/"),
       filename: "relay_Greyday.js",
