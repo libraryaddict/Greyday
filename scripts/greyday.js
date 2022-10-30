@@ -24189,19 +24189,27 @@ var QuestManorLibrary = /*#__PURE__*/function (_TaskInfo) {QuestManorLibrary_inh
         return QuestStatus.FASTER_LATER;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.sweep) || !(0,external_kolmafia_namespaceObject.haveSkill)(this.nano)) {
+      if (
+      !(0,external_kolmafia_namespaceObject.haveSkill)(this.sweep) ||
+      this.wantsKillingJar() && !(0,external_kolmafia_namespaceObject.haveSkill)(this.nano))
+      {
         return QuestStatus.FASTER_LATER;
       }
 
       return QuestStatus.READY;
+    } }, { key: "wantsKillingJar", value:
+
+    function wantsKillingJar() {
+      return (
+        this.wantsGnomeKillingJar() &&
+        (0,external_kolmafia_namespaceObject.availableAmount)(this.killingJar) == 0 &&
+        getQuestStatus("questL11Desert") <= 0);
+
     } }, { key: "run", value:
 
     function run(path) {
       var outfit = new GreyOutfit();
-      var wantJar =
-      this.wantsGnomeKillingJar() &&
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.killingJar) == 0 &&
-      getQuestStatus("questL11Desert") <= 0;
+      var wantJar = this.wantsKillingJar();
       var banishLibrarian = !wantJar && !(0,external_kolmafia_namespaceObject.isBanished)(this.librarian);
       var resource = wantJar ?
       path.getResource(ResourceCategory.YELLOW_RAY) :
@@ -24215,8 +24223,9 @@ var QuestManorLibrary = /*#__PURE__*/function (_TaskInfo) {QuestManorLibrary_inh
         if (resource != null) {
           resource.prepare(outfit);
         } else if (
+        !path.canUse(ResourceCategory.YELLOW_RAY) && (
         !currentPredictions().has(this.library) ||
-        currentPredictions().get(this.library) == this.librarian)
+        currentPredictions().get(this.library) == this.librarian))
         {
           outfit.setItemDrops().setChampagneBottle();
         }
@@ -24549,7 +24558,7 @@ var QuestManorLights = /*#__PURE__*/function () {
 
 
 
-  function QuestManorLights() {QuestManorLights_classCallCheck(this, QuestManorLights);QuestManorLights_defineProperty(this, "choices", [890, 891, 892, 893, 894, 895, 896, 897, 898, 899, 900, 901, 902, 903]);QuestManorLights_defineProperty(this, "elizibeth", [[external_kolmafia_namespaceObject.Location.get("The Haunted Storage Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Laundry Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Bathroom"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Kitchen"), 4], [external_kolmafia_namespaceObject.Location.get("The Haunted Library"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Ballroom"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Gallery"), 4]]);QuestManorLights_defineProperty(this, "stephen", [[external_kolmafia_namespaceObject.Location.get("The Haunted Bedroom"), [1, 3, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Nursery"), [1, 2, 2, 1, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Conservatory"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Billiards"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Wine Cellar"), [1, 2, 2, 3]], [external_kolmafia_namespaceObject.Location.get("The Haunted Boiler Room"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Laboratory"), [1, 1, 3, 1, 1]]]);QuestManorLights_defineProperty(this, "elizabethRewards", [external_kolmafia_namespaceObject.Item.get("Elizabeth's Dollie"), external_kolmafia_namespaceObject.Item.get("Elizabeth's paintbrush")]);QuestManorLights_defineProperty(this, "stephsRewards", [external_kolmafia_namespaceObject.Item.get("Stephen's lab coat"), external_kolmafia_namespaceObject.Item.get("Stephen's secret formula")]);QuestManorLights_defineProperty(this, "goose", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestManorLights_defineProperty(this, "teleportis", external_kolmafia_namespaceObject.Effect.get("Teleportitis"));QuestManorLights_defineProperty(this, "finishLights", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFinishManorLights")));var _iterator = QuestManorLights_createForOfIteratorHelper(
+  function QuestManorLights() {QuestManorLights_classCallCheck(this, QuestManorLights);QuestManorLights_defineProperty(this, "choices", [890, 891, 892, 893, 894, 895, 896, 897, 898, 899, 900, 901, 902, 903]);QuestManorLights_defineProperty(this, "elizibeth", [[external_kolmafia_namespaceObject.Location.get("The Haunted Storage Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Laundry Room"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Bathroom"), 3], [external_kolmafia_namespaceObject.Location.get("The Haunted Kitchen"), 4], [external_kolmafia_namespaceObject.Location.get("The Haunted Library"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Ballroom"), 2], [external_kolmafia_namespaceObject.Location.get("The Haunted Gallery"), 4]]);QuestManorLights_defineProperty(this, "stephen", [[external_kolmafia_namespaceObject.Location.get("The Haunted Bedroom"), [1, 3, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Nursery"), [1, 2, 2, 1, 1]], [external_kolmafia_namespaceObject.Location.get("The Haunted Conservatory"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Billiards Room"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Wine Cellar"), [1, 2, 2, 3]], [external_kolmafia_namespaceObject.Location.get("The Haunted Boiler Room"), [1, 2, 2]], [external_kolmafia_namespaceObject.Location.get("The Haunted Laboratory"), [1, 1, 3, 1, 1]]]);QuestManorLights_defineProperty(this, "elizabethRewards", [external_kolmafia_namespaceObject.Item.get("Elizabeth's Dollie"), external_kolmafia_namespaceObject.Item.get("Elizabeth's paintbrush")]);QuestManorLights_defineProperty(this, "stephsRewards", [external_kolmafia_namespaceObject.Item.get("Stephen's lab coat"), external_kolmafia_namespaceObject.Item.get("Stephen's secret formula")]);QuestManorLights_defineProperty(this, "goose", external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestManorLights_defineProperty(this, "teleportis", external_kolmafia_namespaceObject.Effect.get("Teleportitis"));QuestManorLights_defineProperty(this, "finishLights", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyFinishManorLights")));var _iterator = QuestManorLights_createForOfIteratorHelper(
       this.choices),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var choice = _step.value;
         var prop = "choiceAdventure" + choice;
 
@@ -32803,7 +32812,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "d2d556d";
+var lastCommitHash = "f07f0c3";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
