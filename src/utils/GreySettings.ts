@@ -5,6 +5,8 @@ import {
   inHardcore,
   Item,
   mySign,
+  propertyExists,
+  setProperty,
   toBoolean,
   toInt,
   toItem,
@@ -16,16 +18,24 @@ export type GreySetting = {
   name: string;
   description: string;
   valid: (value: string) => boolean;
+  viableSettings?: [string, string][] | string[];
   default: unknown;
   viable?: boolean;
 };
 
+export type SettingTriBoolean = "Best Judgement" | "Always" | "Never";
+
 export function getGreySettings(): GreySetting[] {
+  const isBoolean = (str: string) => str == "true" || str == "false";
+  const triBoolean: SettingTriBoolean[] = ["Best Judgement", "Always", "Never"];
+  const isTriBoolean = (str: string) =>
+    triBoolean.includes(str as SettingTriBoolean);
+
   const towerBreak: GreySetting = {
     name: "greyBreakAtTower",
     description:
       "Should the script halt when it reaches the tower? False by default. Useful as continuing after breaking ronin takes less turns. This will change the behavior of the script to skip some zones.",
-    valid: (value) => value == "true" || value == "false",
+    valid: isBoolean,
     default: true,
   };
 
@@ -35,6 +45,13 @@ export function getGreySettings(): GreySetting[] {
       "If set, will use the rune moon spoon (if owned) to change moon signs to the requested moon sign when done with tasks in the current moon sign.",
     valid: (value) =>
       moonSigns.find((s) => s.toLowerCase() == value.toLowerCase()) != null,
+    viableSettings: [
+      ["Don't Tune", ""],
+      ...(moonSigns.map((sign) => [getMoonZone(sign) + " - " + sign, sign]) as [
+        string,
+        string
+      ][]),
+    ],
     default: null,
   };
 
@@ -42,7 +59,7 @@ export function getGreySettings(): GreySetting[] {
     name: "greyFinishManorLights",
     description:
       "The script will do the hidden manor lights quest, but should it fight Elizabeth & Stephen at the end? (Garbo does fight Stephen for meat)",
-    valid: (value) => value == "true" || value == "false",
+    valid: isBoolean,
     default: false,
   };
 
@@ -50,31 +67,52 @@ export function getGreySettings(): GreySetting[] {
     name: "greyEnablePvP",
     description:
       "Should the script enable PvP at the start of the run? This doesn't actually make much difference vs enabling it later as there's no pvp generation, unless you have robortender.",
-    valid: (value) => value == "true" || value == "false",
+    valid: isBoolean,
     default: false,
   };
+
+  for (const str of ["greyDailyMalware"]) {
+    if (!propertyExists(str)) {
+      continue;
+    }
+
+    const val = getProperty(str);
+
+    if (triBoolean.includes(val as SettingTriBoolean)) {
+      continue;
+    }
+
+    if (val == "true") {
+      setProperty(str, "Always");
+    } else if (val == "false") {
+      setProperty(str, "Never");
+    } else {
+      setProperty(str, "Best Judgement");
+    }
+  }
 
   const dailyMalware: GreySetting = {
     name: "greyDailyMalware",
     description:
-      "If we do daily dungeon, how should we treat daily malware? If not set, will use best judgement. If true, will always use malware or avoid if malware is unavailable. If false will never use malware.",
-    valid: (value) => value == "true" || value == "false",
-    default: null,
+      "If we do daily dungeon, how should we treat daily malware? Set to 'Always' 'Never' or 'Best Judgement'",
+    valid: isTriBoolean,
+    viableSettings: triBoolean,
+    default: "Best Judgement",
   };
 
   const dailyDungeon: GreySetting = {
     name: "greyDailyDungeon",
     description:
       "Should the script always do daily dungeon, even when there is no need to? Eg, tower break. Useful in conjunction with greyDailyMalware",
-    valid: (value) => value == "true" || value == "false",
-    default: false,
+    valid: isBoolean,
+    default: true,
   };
 
   const levelingResources: GreySetting = {
     name: "greyPrepareLevelingResources",
     description:
       "If this is set to true, script will attempt to prepare resources that are useful for power leveling. Namely familiar scrapbook and raise goose weight.",
-    valid: (value) => value == "true" || value == "false",
+    valid: isBoolean,
     default: true,
   };
 
@@ -82,7 +120,7 @@ export function getGreySettings(): GreySetting[] {
     name: "greySkipPalindome",
     description:
       "If set to true, will not complete palindome. This is only useful if you intend to burn turns on UR farming, and you're recommended to save at least 80 turns minumum to resume the script. To resume, this will need to be set to false.",
-    valid: (value) => value == "true" || value == "false",
+    valid: isBoolean,
     default: false,
   };
 
@@ -90,7 +128,7 @@ export function getGreySettings(): GreySetting[] {
     name: "greyAzazelSteelMargarita",
     description:
       "If set to true, will complete the requirements for the Steel Margarita +5 Liver drink. There is different scenarios for this, but this is best used with towerbreaking and ronin escaping. It will attempt to use the no-trades previously acquired.",
-    valid: (value) => value == "true" || value == "false",
+    valid: isBoolean,
     default: false,
   };
 
@@ -98,7 +136,7 @@ export function getGreySettings(): GreySetting[] {
     name: "greyDeleteKmails",
     description:
       "When true, will delete kmails from spooky lady and fortune teller",
-    valid: (value) => value == "true" || value == "false",
+    valid: isBoolean,
     default: true,
   };
 
@@ -106,7 +144,7 @@ export function getGreySettings(): GreySetting[] {
     name: "greyUseMummery",
     description:
       "If set to true, will set grey goose to use MP restoring. This is enabled by default as there isn't really a reason not to.",
-    valid: (value) => value == "true" || value == "false",
+    valid: isBoolean,
     default: true,
     viable: availableAmount(Item.get("mumming trunk")) > 0,
   };
@@ -142,7 +180,7 @@ export function getGreySettings(): GreySetting[] {
     name: "greyVotingBooth",
     description:
       "If you own the voting booth, by default will not vote as aftercore voting can be better",
-    valid: (value) => value == "true" || value == "false",
+    valid: isBoolean,
     default: false,
   };
 
@@ -189,6 +227,7 @@ export function getGreySettings(): GreySetting[] {
     description:
       "The name of the clan we will use to execute Fax Requests, and switch to for other VIP functions if they are not available in our current clan. Set to empty to disable all VIP usage, even the yellow rockets..",
     valid: (value) =>
+      value.length == 0 ||
       [...getAvailableClans().values()].find(
         (s) => s.toLowerCase() == value.toLowerCase()
       ) != null,
@@ -199,7 +238,7 @@ export function getGreySettings(): GreySetting[] {
     name: "greyFortuneTeller",
     description:
       "If the script should use fortune teller if possible. Will grab: Prank Item, then Potion, then Psychic Equipment",
-    valid: (value) => value == "true" || value == "false",
+    valid: isBoolean,
     default: true,
   };
 
@@ -207,36 +246,35 @@ export function getGreySettings(): GreySetting[] {
     name: "greyGrabZapWand",
     description:
       "Should the script grab the zap wand? This generally adds another 5-6 turns to the run",
-    valid: (value) => value == "true" || value == "false",
+    valid: isBoolean,
     default: false,
   };
 
   return [
     //greyBountyHunter,
     towerBreak,
-    moonTune,
     manorLights,
     pvpEnable,
     dailyDungeon,
-    dailyMalware,
     levelingResources,
-    skipPalindome,
-    greySavePulls,
-    grayAdventureValue,
-    useMummery,
-    greyPullValue,
-    greyVoteMonster,
-    greySwitchWorkshed,
-    greyClipArt,
-    greyValueOfNC,
-    greyVIPClan,
     deleteKmails,
     greyFortuneTeller,
     greyGrabZapWand,
+    skipPalindome,
+    useMummery,
+    moonTune,
+    dailyMalware,
+    greySavePulls,
+    grayAdventureValue,
+    greyValueOfNC,
+    greyPullValue,
+    greySwitchWorkshed,
+    greyClipArt,
+    greyVIPClan,
   ];
 }
 
-export const moonSigns: string[] = [
+export const moonSigns: MoonSign[] = [
   "Mongoose",
   "Wallaby",
   "Vole",
@@ -291,7 +329,7 @@ export class GreySettings {
     getProperty("_greyReachedTower")
   );
   static greyDailyDungeon: boolean;
-  static greyDailyMalware: "true" | "false" | null;
+  static greyDailyMalware: SettingTriBoolean;
   static greyPrepareLevelingResources: boolean;
   static greyFantasyBandits: boolean;
   static greyTuneMoonSpoon?: MoonSign;
@@ -357,8 +395,6 @@ export class GreySettings {
       } else if (typeof setting.default == "number") {
         prop = toInt(prop as string);
       }
-
-      GreySettings[setting.name] = prop;
     }
   }
 }

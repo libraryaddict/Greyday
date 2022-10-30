@@ -173,11 +173,12 @@ export function doToasterGaze() {
   }
 
   print(
-    "As if infected, your legs bring you to the beach where you feel compelled to toastergaze. A light slap brings you out of it, Gausie lectures you on the dangers of toast. But that's not right, you wanted the toaster...",
+    "As if infected, your legs bring you to the beach where you feel compelled to toastergaze. A light slap brings you out of it, Gausie lectures you on the dangers of toast. But that's not right, you can see a mountain of toast in their displaycase..",
     "blue"
   );
   greyAdv("adventure.php?snarfblat=355");
   lastToasterGaze = turnsPlayed();
+  visitUrl("inventory.php?ponder=1", false);
 }
 
 /**

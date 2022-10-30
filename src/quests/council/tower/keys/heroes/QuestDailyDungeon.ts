@@ -63,8 +63,8 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
       return;
     }
 
-    const mustDoMalware = GreySettings.greyDailyMalware == "true";
-    const mustNeverDoMalware = GreySettings.greyDailyMalware == "false";
+    const mustDoMalware = GreySettings.greyDailyMalware == "Always";
+    const mustNeverDoMalware = GreySettings.greyDailyMalware == "Never";
 
     if (mustDoMalware && GreySettings.isHardcoreMode()) {
       this.paths = null;
@@ -106,8 +106,11 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
       return false;
     }
 
-    if (GreySettings.greyDailyMalware != null) {
-      return toBoolean(GreySettings.greyDailyMalware);
+    if (
+      GreySettings.greyDailyMalware != null &&
+      GreySettings.greyDailyMalware != "Best Judgement"
+    ) {
+      return GreySettings.greyDailyMalware == "Always";
     }
 
     const key = GreyPulls.getPullableKeys()[0];
@@ -153,7 +156,7 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
       GreySettings.shouldAvoidTowerRequirements() &&
       !GreySettings.greyReachedTower
     ) {
-      if (GreySettings.greyDailyMalware) {
+      if (GreySettings.greyDailyMalware != "Never") {
         if (GreySettings.greyReachedTower) {
           return QuestStatus.READY;
         }

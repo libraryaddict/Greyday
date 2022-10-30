@@ -15,6 +15,7 @@ import {
   print,
   printHtml,
   pullsRemaining,
+  removeProperty,
   setAutoAttack,
   setProperty,
   svnAtHead,
@@ -472,6 +473,12 @@ class GreyYouMain {
       print("The script will continue when you run the script again.");
 
       printEndOfRun();
+      return true;
+    }
+
+    if (getProperty("greyday_interrupt") == "true") {
+      removeProperty("greyday_interrupt");
+      print("Interrupt requested as per relay page", "red");
       return true;
     }
 

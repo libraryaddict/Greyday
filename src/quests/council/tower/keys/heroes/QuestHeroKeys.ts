@@ -120,7 +120,7 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
     const shouldDoDaily =
       GreySettings.greyDailyDungeon &&
       (assumeUnstarted || getProperty("dailyDungeonDone") != "true") &&
-      (GreySettings.greyDailyMalware != "true" ||
+      (GreySettings.greyDailyMalware != "Always" ||
         assumeUnstarted ||
         !GreySettings.isHardcoreMode());
 
@@ -174,7 +174,7 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
       if (
         hittingMalware &&
         keysGiven - 1 == keysNeeded &&
-        GreySettings.greyDailyMalware == null
+        GreySettings.greyDailyMalware == "Best Judgement"
       ) {
         continue;
       }
