@@ -103,19 +103,27 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
       return QuestStatus.FASTER_LATER;
     }
 
-    if (!haveSkill(this.sweep) || !haveSkill(this.nano)) {
+    if (
+      !haveSkill(this.sweep) ||
+      (this.wantsKillingJar() && !haveSkill(this.nano))
+    ) {
       return QuestStatus.FASTER_LATER;
     }
 
     return QuestStatus.READY;
   }
 
-  run(path: PossiblePath): QuestAdventure {
-    const outfit = new GreyOutfit();
-    const wantJar =
+  wantsKillingJar(): boolean {
+    return (
       this.wantsGnomeKillingJar() &&
       availableAmount(this.killingJar) == 0 &&
-      getQuestStatus("questL11Desert") <= 0;
+      getQuestStatus("questL11Desert") <= 0
+    );
+  }
+
+  run(path: PossiblePath): QuestAdventure {
+    const outfit = new GreyOutfit();
+    const wantJar = this.wantsKillingJar();
     const banishLibrarian = !wantJar && !isBanished(this.librarian);
     let resource = wantJar
       ? path.getResource(ResourceCategory.YELLOW_RAY)
@@ -129,8 +137,9 @@ export class QuestManorLibrary extends TaskInfo implements QuestInfo {
       if (resource != null) {
         resource.prepare(outfit);
       } else if (
-        !currentPredictions().has(this.library) ||
-        currentPredictions().get(this.library) == this.librarian
+        !path.canUse(ResourceCategory.YELLOW_RAY) &&
+        (!currentPredictions().has(this.library) ||
+          currentPredictions().get(this.library) == this.librarian)
       ) {
         outfit.setItemDrops().setChampagneBottle();
       }

@@ -45,7 +45,7 @@ export class QuestManorLights implements QuestInfo {
     [Location.get("The Haunted Bedroom"), [1, 3, 1]],
     [Location.get("The Haunted Nursery"), [1, 2, 2, 1, 1]],
     [Location.get("The Haunted Conservatory"), [1, 2, 2]],
-    [Location.get("The Haunted Billiards"), [1, 2, 2]],
+    [Location.get("The Haunted Billiards Room"), [1, 2, 2]],
     [Location.get("The Haunted Wine Cellar"), [1, 2, 2, 3]],
     [Location.get("The Haunted Boiler Room"), [1, 2, 2]],
     [Location.get("The Haunted Laboratory"), [1, 1, 3, 1, 1]],
