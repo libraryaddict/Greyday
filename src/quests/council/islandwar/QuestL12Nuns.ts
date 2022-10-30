@@ -68,7 +68,11 @@ export class Quest12WarNuns implements QuestInfo {
   }
 
   getFamiliarToUse(allownNull: boolean): Familiar {
-    if (haveFamiliar(this.tot) && availableAmount(this.item) > 0) {
+    if (
+      !allownNull &&
+      haveFamiliar(this.tot) &&
+      availableAmount(this.item) > 0
+    ) {
       return this.tot;
     }
 

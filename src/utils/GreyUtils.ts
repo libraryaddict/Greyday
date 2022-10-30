@@ -22,6 +22,7 @@ import {
   turnsPlayed,
   visitUrl,
 } from "kolmafia";
+import { getPrimedResource, greyAdv } from "./GreyLocations";
 import { GreySettings } from "./GreySettings";
 
 export enum UmbrellaState {
@@ -161,12 +162,13 @@ export function doToasterGaze() {
     availableAmount(crystalBall) == 0 ||
     turnsPlayed() == lastToasterGaze ||
     toInt(getProperty("lastDesertUnlock")) < myAscensions() ||
-    haveEffect(teleportis) > 0
+    haveEffect(teleportis) > 0 ||
+    (getPrimedResource() != null && getPrimedResource().resource.primed())
   ) {
     return;
   }
 
-  if (ballProp().find(([turn]) => turn < turnsPlayed()) == null) {
+  if (ballProp().find(([turn]) => turn + 1 < turnsPlayed()) == null) {
     return;
   }
 
@@ -174,8 +176,7 @@ export function doToasterGaze() {
     "As if infected, your legs bring you to the beach where you feel compelled to toastergaze. A light slap brings you out of it, Gausie lectures you on the dangers of toast. But that's not right, you wanted the toaster...",
     "blue"
   );
-  visitUrl("adventure.php?snarfblat=355");
-  visitUrl("choice.php?pwd&whichchoice=793&option=4");
+  greyAdv("adventure.php?snarfblat=355");
   lastToasterGaze = turnsPlayed();
 }
 
