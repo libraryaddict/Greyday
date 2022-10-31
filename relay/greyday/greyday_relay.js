@@ -617,11 +617,6 @@ function Setting(props) {
 
 
 
-
-
-
-
-
 function App(_ref) {var settings = _ref.settings,notifications = _ref.notifications;
   var preferences = settings.map(function (setting) {return /*#__PURE__*/(
       react.createElement(components_Setting, {
@@ -657,7 +652,12 @@ function App(_ref) {var settings = _ref.settings,notifications = _ref.notificati
       value: "Interrupt Greyday",
       onClick: onInterruptClicked }), /*#__PURE__*/
 
-    react.createElement("input", { id: "greydayInterrupt", type: "hidden", name: "greyday_interrupt" }), /*#__PURE__*/
+    react.createElement("input", {
+      id: "greydayInterrupt",
+      type: "hidden",
+      name: "greyday_interrupt",
+      value: "false" }), /*#__PURE__*/
+
     react.createElement("table", null, preferences), /*#__PURE__*/
     react.createElement("input", { className: "save", type: "submit", value: "Save Changes" }))));
 

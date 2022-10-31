@@ -40,7 +40,8 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
   "main": () => (/* binding */ main),
-  "printEndOfRun": () => (/* binding */ printEndOfRun)
+  "printEndOfRun": () => (/* binding */ printEndOfRun),
+  "shouldGreydayStop": () => (/* binding */ shouldGreydayStop)
 });
 
 ;// CONCATENATED MODULE: external "kolmafia"
@@ -32122,6 +32123,7 @@ function GreyAdventurer_toConsumableArray(arr) {return GreyAdventurer_arrayWitho
 
 
 
+
 var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAdventurer_classCallCheck(this, GreyAdventurer);GreyAdventurer_defineProperty(this, "goose",
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));GreyAdventurer_defineProperty(this, "adventureFinder",
     new AdventureFinder());GreyAdventurer_defineProperty(this, "goTime", void 0);GreyAdventurer_defineProperty(this, "tasks",
@@ -32157,6 +32159,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       }
 
       this.adventureFinder.start();
+
       var goodAdventure = this.adventureFinder.findGoodVisit();
 
       this.adventureFinder.printStatus(this.adventureFinder.possibleAdventures);
@@ -32173,6 +32176,11 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       }
 
       this.printMessage(goodAdventure);
+
+      if (shouldGreydayStop()) {
+        return false;
+      }
+
       this.runAdventure(goodAdventure);
 
       var changed =
@@ -32852,7 +32860,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "354b1e3";
+var lastCommitHash = "30730ec";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -33214,7 +33222,7 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
           turnsRunAsFar < turns && (0,external_kolmafia_namespaceObject.haveEffect)(effect) - lastBeaten != 3;
           turnsRunAsFar++)
           {
-            if (this.shouldReturn()) {
+            if (shouldGreydayStop()) {
               return;
             }
 
@@ -33284,36 +33292,44 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
         (0,external_kolmafia_namespaceObject.print)("Done running", "blue");
         return;
       }
-    } }, { key: "shouldReturn", value:
-
-    function shouldReturn() {
-      if (
-      GreySettings.greyBreakAtTower &&
-      (0,external_kolmafia_namespaceObject.getProperty)(this.reachedTower) != "true" &&
-      getQuestStatus("questL13Final") >= 0)
-      {
-        (0,external_kolmafia_namespaceObject.setProperty)(this.reachedTower, "true");
-        (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=nstower");
-
-        (0,external_kolmafia_namespaceObject.print)(
-        "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
-        "blue");
-
-        (0,external_kolmafia_namespaceObject.print)("The script will continue when you run the script again.");
-
-        printEndOfRun();
-        return true;
-      }
-
-      if ((0,external_kolmafia_namespaceObject.getProperty)("greyday_interrupt") == "true") {
-        (0,external_kolmafia_namespaceObject.removeProperty)("greyday_interrupt");
-        (0,external_kolmafia_namespaceObject.print)("Interrupt requested as per relay page", "red");
-        return true;
-      }
-
-      return false;
     } }]);return GreyYouMain;}();
 
+
+var stopped = false;
+
+function shouldGreydayStop() {
+  if (stopped) {
+    return stopped;
+  }
+
+  if (
+  GreySettings.greyBreakAtTower &&
+  (0,external_kolmafia_namespaceObject.getProperty)(this.reachedTower) != "true" &&
+  getQuestStatus("questL13Final") >= 0)
+  {
+    (0,external_kolmafia_namespaceObject.setProperty)(this.reachedTower, "true");
+    (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=nstower");
+
+    (0,external_kolmafia_namespaceObject.print)(
+    "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
+    "blue");
+
+    (0,external_kolmafia_namespaceObject.print)("The script will continue when you run the script again.");
+
+    printEndOfRun();
+    stopped = true;
+    return true;
+  }
+
+  if ((0,external_kolmafia_namespaceObject.getProperty)("greyday_interrupt") == "true") {
+    (0,external_kolmafia_namespaceObject.setProperty)("greyday_interrupt", "false");
+    (0,external_kolmafia_namespaceObject.print)("Interrupt requested as per relay page", "red");
+    stopped = true;
+    return true;
+  }
+
+  return false;
+}
 
 function printEndOfRun() {
   var pulls = (0,external_kolmafia_namespaceObject.getProperty)("_greyPulls").
