@@ -15,6 +15,7 @@ import {
   Location,
   maximize,
   Monster,
+  myAdventures,
   myAscensions,
   myFamiliar,
   myMeat,
@@ -35,7 +36,7 @@ import {
   FoundAdventure,
   OrbStatus,
 } from "./GreyChooser";
-import { QuestAdventure, QuestStatus } from "./quests/Quests";
+import { getQuestStatus, QuestAdventure, QuestStatus } from "./quests/Quests";
 import { TaskBoomboxSwitch } from "./tasks/TaskBoomboxSwitch";
 import { TaskCouncil } from "./tasks/TaskCouncil";
 import { TaskEater } from "./tasks/TaskEater";
@@ -108,7 +109,24 @@ export class GreyAdventurer {
     this.adventureFinder.printStatus(this.adventureFinder.possibleAdventures);
 
     if (goodAdventure == null) {
-      print("Failed, should have printed an error..", "gray");
+      if (getQuestStatus("questL13Final") > 11) {
+        print("You've defeated the NS and saved the day!", "blue");
+
+        if (myAdventures() > 40) {
+          print(
+            "Caution! Burn your adventures! You have more than 40 adventures! Breaking the prism will reset them to 40!",
+            "red"
+          );
+        } else {
+          print(
+            "Break the prism and become that class you were always meant to be!",
+            "blue"
+          );
+        }
+      } else {
+        print("Failed, should have printed an error..", "gray");
+      }
+
       return false;
     }
 
