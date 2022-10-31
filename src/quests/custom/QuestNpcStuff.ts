@@ -346,6 +346,9 @@ class QuestGnomeTrainer extends TaskInfo implements QuestInfo {
 
         if (haveSkill(this.torso) && path.canUse(ResourceCategory.PULL)) {
           GreyPulls.tryPull(this.shirt);
+        }
+
+        if (skill == this.torso) {
           AdventureFinder.recalculatePath();
         }
       },
