@@ -41,7 +41,6 @@ import { lastCommitHash } from "./_git_commit";
 
 class GreyYouMain {
   adventures: GreyAdventurer;
-  private reachedTower: string = "_greyReachedTower";
   svn_name = "libraryaddict-Greyday-branches-release";
   git_name = "libraryaddict-Greyday-release";
 
@@ -459,6 +458,7 @@ class GreyYouMain {
 }
 
 let stopped = false;
+const reachedTower: string = "_greyReachedTower";
 
 export function shouldGreydayStop(): boolean {
   if (stopped) {
@@ -467,10 +467,10 @@ export function shouldGreydayStop(): boolean {
 
   if (
     GreySettings.greyBreakAtTower &&
-    getProperty(this.reachedTower) != "true" &&
+    getProperty(reachedTower) != "true" &&
     getQuestStatus("questL13Final") >= 0
   ) {
-    setProperty(this.reachedTower, "true");
+    setProperty(reachedTower, "true");
     visitUrl("place.php?whichplace=nstower");
 
     print(
