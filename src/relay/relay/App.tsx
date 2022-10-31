@@ -42,7 +42,12 @@ function App({ settings, notifications }: Data): JSX.Element {
   };
 
   const updatedPreferences = notifications.map((notification) => (
-    <div className="notification">{notification}</div>
+    <div
+      className="notification"
+      onAnimationEnd={(e) => e.currentTarget.remove()}
+    >
+      {notification}
+    </div>
   ));
 
   return (
