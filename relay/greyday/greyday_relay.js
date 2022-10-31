@@ -639,7 +639,12 @@ function App(_ref) {var settings = _ref.settings,notifications = _ref.notificati
   };
 
   var updatedPreferences = notifications.map(function (notification) {return /*#__PURE__*/(
-      react.createElement("div", { className: "notification" }, notification));});
+      react.createElement("div", {
+        className: "notification",
+        onAnimationEnd: function onAnimationEnd(e) {return e.currentTarget.remove();} },
+
+      notification));
+  });
 
 
   return /*#__PURE__*/(
