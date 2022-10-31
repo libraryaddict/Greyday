@@ -385,7 +385,7 @@ class GreyYouMain {
           turnsRunAsFar < turns && haveEffect(effect) - lastBeaten != 3;
           turnsRunAsFar++
         ) {
-          if (this.shouldReturn()) {
+          if (shouldGreydayStop()) {
             return;
           }
 
@@ -456,34 +456,42 @@ class GreyYouMain {
       return;
     }
   }
+}
 
-  shouldReturn(): boolean {
-    if (
-      GreySettings.greyBreakAtTower &&
-      getProperty(this.reachedTower) != "true" &&
-      getQuestStatus("questL13Final") >= 0
-    ) {
-      setProperty(this.reachedTower, "true");
-      visitUrl("place.php?whichplace=nstower");
+let stopped = false;
 
-      print(
-        "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
-        "blue"
-      );
-      print("The script will continue when you run the script again.");
-
-      printEndOfRun();
-      return true;
-    }
-
-    if (getProperty("greyday_interrupt") == "true") {
-      removeProperty("greyday_interrupt");
-      print("Interrupt requested as per relay page", "red");
-      return true;
-    }
-
-    return false;
+export function shouldGreydayStop(): boolean {
+  if (stopped) {
+    return stopped;
   }
+
+  if (
+    GreySettings.greyBreakAtTower &&
+    getProperty(this.reachedTower) != "true" &&
+    getQuestStatus("questL13Final") >= 0
+  ) {
+    setProperty(this.reachedTower, "true");
+    visitUrl("place.php?whichplace=nstower");
+
+    print(
+      "We've reached the tower! Now aborting script as set by preference 'greyBreakAtTower'!",
+      "blue"
+    );
+    print("The script will continue when you run the script again.");
+
+    printEndOfRun();
+    stopped = true;
+    return true;
+  }
+
+  if (getProperty("greyday_interrupt") == "true") {
+    setProperty("greyday_interrupt", "false");
+    print("Interrupt requested as per relay page", "red");
+    stopped = true;
+    return true;
+  }
+
+  return false;
 }
 
 export function printEndOfRun() {

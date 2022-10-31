@@ -72,7 +72,7 @@ const otherRelayConfig = merge(
   sharedConfig
 );
 
-// handle the react files used in the garbo html file
+// handle the react files used in the greyday html file
 const relayConfig = merge(
   {
     entry: "./src/relay/relay/index.tsx",

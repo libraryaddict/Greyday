@@ -16,11 +16,6 @@ export type Data = {
   notifications: string[];
 };
 
-export type UpdatedSetting = {
-  name: string;
-  value: string;
-};
-
 declare global {
   function getData(callback: (data: Data) => void): void;
 }
@@ -60,7 +55,12 @@ function App({ settings, notifications }: Data): JSX.Element {
           value="Interrupt Greyday"
           onClick={onInterruptClicked}
         />
-        <input id="greydayInterrupt" type="hidden" name="greyday_interrupt" />
+        <input
+          id="greydayInterrupt"
+          type="hidden"
+          name="greyday_interrupt"
+          value="false"
+        />
         <table>{preferences}</table>
         <input className="save" type="submit" value="Save Changes" />
       </form>

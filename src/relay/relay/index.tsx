@@ -1,7 +1,7 @@
 import * as ReactDOM from "react-dom";
 import * as React from "react";
-import App, { Data } from "./App";
 import ".//css/App.scss";
+import App, { Data } from "./App";
 
 getData((data: Data) => {
   ReactDOM.render(

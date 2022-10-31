@@ -65,6 +65,7 @@ import { doColor, setUmbrella } from "./utils/GreyUtils";
 import { getPrimedResource } from "./utils/GreyLocations";
 import { TaskAutumnaton } from "./tasks/TaskAutumnaton";
 import { handledChoices } from "./utils/Properties";
+import { shouldGreydayStop } from "./GreyYouMain";
 
 export class GreyAdventurer {
   goose: Familiar = Familiar.get("Grey Goose");
@@ -101,6 +102,7 @@ export class GreyAdventurer {
     }
 
     this.adventureFinder.start();
+
     const goodAdventure: FoundAdventure = this.adventureFinder.findGoodVisit();
 
     this.adventureFinder.printStatus(this.adventureFinder.possibleAdventures);
@@ -117,6 +119,11 @@ export class GreyAdventurer {
     }
 
     this.printMessage(goodAdventure);
+
+    if (shouldGreydayStop()) {
+      return false;
+    }
+
     this.runAdventure(goodAdventure);
 
     const changed =

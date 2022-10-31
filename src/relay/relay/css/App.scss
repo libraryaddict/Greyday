@@ -17,6 +17,7 @@ $speed: 0.4s;
 }
 
 #notificationsContainer {
+  pointer-events: none;
   position: absolute;
   width: 100%;
   z-index: 999;
@@ -40,6 +41,7 @@ input.interrupt {
   background-color: #f1948a;
   color: darkred;
   margin: 10px 0px;
+  cursor: pointer;
 }
 
 input.interrupt:hover {
@@ -68,7 +70,8 @@ input[type="submit"] {
   color: #00529b;
   padding: 7px 60px;
   animation: 2s fadeOut 5s 1 forwards;
-  cursor: pointer;
+  cursor: default;
+  pointer-events: auto;
 }
 
 @keyframes fadeOut {
