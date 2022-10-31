@@ -395,6 +395,8 @@ export class GreySettings {
       } else if (typeof setting.default == "number") {
         prop = toInt(prop as string);
       }
+
+      GreySettings[setting.name] = prop;
     }
   }
 }
