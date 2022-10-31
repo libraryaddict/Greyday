@@ -93,7 +93,7 @@ export class GreyOutfit {
     }
 
     if (availableAmount(Item.get("Camp Scout Backpack")) > 0) {
-      this.addWeight(Item.get("camp scout backpack"));
+      this.addWeight(Item.get("camp scout backpack"), 6000);
     }
 
     if (

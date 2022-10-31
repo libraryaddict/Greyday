@@ -33,7 +33,9 @@ export function main(): void {
     }
 
     if (getProperty(field).toString() !== fields[field]) {
-      notifications.push(`${field} changed to ${fields[field]}`);
+      notifications.push(
+        `${field} changed from ${getProperty(field)} to ${fields[field]}`
+      );
 
       setProperty(field, fields[field]);
     }

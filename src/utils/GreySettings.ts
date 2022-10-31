@@ -207,17 +207,23 @@ export function getGreySettings(): GreySetting[] {
     description:
       "A comma seperated list of familiar names you'd like Greyday to summon and use Familiar Jacks on if you have Tome of Clip Art",
     valid: (value) => {
-      return (
-        value
-          .split(",")
-          .find(
-            (s) =>
-              s.length != 0 &&
-              Familiar.all().find(
-                (f) => f.toString().toLowerCase() == s.toLowerCase()
-              ) == null
-          ) == null
-      );
+      for (const s of value.split(",").map((s) => s.trim())) {
+        if (s.length == 0) {
+          continue;
+        }
+
+        const fam = Familiar.all().find(
+          (f) => f.toString().toLowerCase() == s.toLowerCase()
+        );
+
+        if (fam != null) {
+          continue;
+        }
+
+        return false;
+      }
+
+      return true;
     },
     default: "Grey Goose",
   };
