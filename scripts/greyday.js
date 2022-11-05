@@ -5405,25 +5405,25 @@ var GreyClovers = /*#__PURE__*/function () {function GreyClovers() {GreyResource
 
 var GreyVortex = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {function GreyVortex() {GreyResources_classCallCheck(this, GreyVortex);}GreyResources_createClass(GreyVortex, null, [{ key: "doBatCave", value:
     function doBatCave() {
+
       // 20
     } }, { key: "doHarem", value:
-
     function doHarem() {
+
       // 20
     } }, { key: "doHiddenTemple", value:
-
     function doHiddenTemple() {
+
       // 20
     } }, { key: "doSmutOrcs", value:
-
     function doSmutOrcs() {
+
       // 20
     } }, { key: "doCrypt", value:
-
     function doCrypt() {
+
       // 20
     } }]);return GreyVortex;}()));
-
 
 var GreyCombatLocket = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {function GreyCombatLocket() {GreyResources_classCallCheck(this, GreyCombatLocket);}GreyResources_createClass(GreyCombatLocket, null, [{ key: "doSystemSweep", value:
     function doSystemSweep() {} }, { key: "doInfiniteLoop", value:
@@ -7175,14 +7175,14 @@ function getCurrentLatteFlavors() {
     var flav = getEnum(flavors[i]);
 
     if (flav == LatteFlavor.UNKNOWN) {
+
+
+
+
       /* print(
         "Unknown Latte Flavor " + flavors[i] + "! Cautiously continuing..",
         "gray"
-      );*/
-    }
-
-    flavors[i] = flav;
-  }
+      );*/}flavors[i] = flav;}
 
   (0,external_kolmafia_namespaceObject.setProperty)(
   "_latteFlavors",
@@ -10491,9 +10491,9 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
       (0,external_kolmafia_namespaceObject.availableAmount)(this.starChart) == 0 &&
       !GreySettings.shouldAvoidTowerRequirements())
       {
+
         //   return QuestStatus.NOT_READY;
       }
-
       if (
       !(0,external_kolmafia_namespaceObject.haveSkill)(this.smutSleazeSkill) &&
       getQuestStatus("questL09Topping") < 1)
@@ -12891,9 +12891,9 @@ var QuestL11TempleUnlock = /*#__PURE__*/function () {function QuestL11TempleUnlo
       }
 
       if ((0,external_kolmafia_namespaceObject.getProperty)("questM16Temple") == "unstarted") {
+
         //   return QuestStatus.NOT_READY;
       }
-
       if (this.isDelayBurning()) {
         if (DelayBurners.isDelayBurnerReady()) {
           return QuestStatus.READY;
@@ -15432,11 +15432,11 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
 
       if (primed != null) {
         if (!primed.primed()) {
+
+
           // Need to handle primed better, like resumes..
           //   throw "Unable to run lobster fights, we're supposed to prime it but it isn't primed!";
-        }
-
-        if (gloveReplace == null) {
+        }if (gloveReplace == null) {
           throw "Unable to run lobster fights, we're forcing a fight but don't have a replacer!";
         }
       }
@@ -16649,9 +16649,9 @@ var QuestFantasyBandit = /*#__PURE__*/function (_TaskInfo) {QuestFantasyBandits_
       // If last monster is sheep, then we'd need to do a fax and 3 copies = 4
       // If last monster is bandit, then we'd need to do 4 copies
       for (var i = fightsRemaining; i < 4; i++) {
+
         //  this.path.addUsed(ResourceCategory.COPIER);
-      }
-    } }, { key: "grabFantasyGem", value:
+      }} }, { key: "grabFantasyGem", value:
 
     function grabFantasyGem() {var _this2 = this;
       return {
@@ -17009,13 +17009,13 @@ var QuestPullAndZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestPu
       }
 
       if (this.getViableKeyCount() >= 3) {
+
         //    return QuestStatus.COMPLETED;
       }
-
       if (this.getOwnedZappables().length > 0) {
+
         //   return QuestStatus.COMPLETED;
       }
-
       return QuestStatus.READY;
     } }, { key: "run", value:
 
@@ -20488,9 +20488,9 @@ var CryptL7DirtyMan = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptDirt
 
     function cryptStatus() {
       if (!(0,external_kolmafia_namespaceObject.haveSkill)(this.banisher)) {
+
         // return QuestStatus.FASTER_LATER;
       }
-
       return QuestStatus.READY;
     } }, { key: "getId", value:
 
@@ -22058,9 +22058,9 @@ var MurderHandler = /*#__PURE__*/function () {function MurderHandler() {QuestL9M
       this.createJar();
 
       if (this.questNeedsJar() && this.hasJar()) {
+
         // Empty
-      } else if (this.questNeedsFood()) {
-        outfit.addWeight("item drop", 100, 50, 50);
+      } else if (this.questNeedsFood()) {outfit.addWeight("item drop", 100, 50, 50);
       } else if (this.questNeedsInit()) {
         outfit.addWeight("init", 100, 40, 40);
       } else if (this.questNeedsStenchRes()) {
@@ -22412,9 +22412,9 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
       }
 
       if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Shen") != "finished") {
+
         //return QuestStatus.FASTER_LATER;
       }
-
       if (this.isNCTime() && (0,external_kolmafia_namespaceObject.myMeat)() <= 1000) {
         return QuestStatus.FASTER_LATER;
       }
@@ -24085,9 +24085,9 @@ var QuestManorKitchen = /*#__PURE__*/function () {function QuestManorKitchen() {
       (getQuestStatus("questL11Black") <= 2 || (0,external_kolmafia_namespaceObject.myMeat)() < 1200) &&
       !this.hasEnoughRes())
       {
+
         //     return QuestStatus.FASTER_LATER;
       }
-
       if (
       (0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(this.candleBuff, "Effect")) == 0 &&
       (0,external_kolmafia_namespaceObject.haveEffect)(this.maydayEffect) == 0 &&
@@ -29856,7 +29856,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
           return 0;
         }
 
-        return cost2 - cost1;
+        return cost1 - cost2;
       });
 
       var simmedPath = this.doAttempt(
@@ -32886,7 +32886,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "6dabc52";
+var lastCommitHash = "a71b950";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
