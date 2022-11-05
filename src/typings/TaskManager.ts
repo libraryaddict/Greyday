@@ -452,7 +452,7 @@ export class FigureOutPath {
         return 0;
       }
 
-      return cost2 - cost1;
+      return cost1 - cost2;
     });
 
     const simmedPath = this.doAttempt(
