@@ -484,6 +484,10 @@ export class GreyAdventurer {
         }
       }
 
+      if (GreySettings.greyCookbatRecipe && !hasCookbatRecipe()) {
+        replaceWith.push(Familiar.get("Cookbookbat"));
+      }
+
       replaceWith.push(...this.adventureFinder.getRecommendedFamiliars());
 
       const robor: Familiar = Familiar.get("Robortender");
@@ -492,9 +496,6 @@ export class GreyAdventurer {
         familiarWeight(robor) < 20;
 
       const toLevelUp = [
-        GreySettings.greyCookbatRecipe && !hasCookbatRecipe()
-          ? "Cookbookbat"
-          : "",
         haveFamiliar(robor) ? (doRobor ? "Robortender" : "") : "Hobomonkey",
         "Jumpsuited Hound Dog",
         "Pocket Professor",
