@@ -1,4 +1,4 @@
-import { getProperty, min, setProperty, toInt } from "kolmafia";
+import { getProperty, setProperty, toInt } from "kolmafia";
 
 export class GreyTimings {
   prop: string = "_greyScriptTimings";

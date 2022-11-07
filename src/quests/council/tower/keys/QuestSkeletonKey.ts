@@ -1,12 +1,10 @@
 import {
   Location,
   Item,
-  retrieveItem,
   availableAmount,
   getProperty,
   myMeat,
   pullsRemaining,
-  canAdventure,
   cliExecute,
 } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";

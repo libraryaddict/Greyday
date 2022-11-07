@@ -1,4 +1,4 @@
-import { Location, Monster, Skill, haveSkill, canAdventure } from "kolmafia";
+import { Location, Monster, Skill, haveSkill } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { canGreyAdventure } from "../../utils/GreyUtils";

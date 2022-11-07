@@ -236,6 +236,8 @@ export function doFortuneTeller() {
       throw "Expected to be find fortune teller in the clan " + getClanName();
     }
 
+    let failed = 0;
+
     while (consultsUsed() < 3) {
       // We want the first result to be compatible
       // The second result is incompatible, as its worth more
@@ -244,10 +246,26 @@ export function doFortuneTeller() {
       const consultString =
         consultsUsed() == 1 ? "a b c" : "pizza batman thick";
 
+      const consults = consultsUsed();
       cliExecute("fortune " + bot + " " + consultString);
 
+      if (consults == consultsUsed() && failed++ > 3) {
+        print(
+          "Going to ask " +
+            bot +
+            " for a fax so they join " +
+            getClanName() +
+            "...",
+          "gray"
+        );
+
+        chatPrivate(bot, "fax mountain man");
+        waitq(10);
+        failed = -2;
+      }
+
       if (consultsUsed() < 3) {
-        waitq(3);
+        waitq(4);
       }
     }
   });

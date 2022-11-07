@@ -60,7 +60,7 @@ export class TaskBoomboxSwitch implements Task {
       return;
     }
 
-    let requiredMeat =
+    const requiredMeat =
       1000 +
       (this.isForgedRequired() ? 6000 : 0) +
       (this.isZapWandRequired() ? 5000 : 0);

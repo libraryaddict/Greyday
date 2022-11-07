@@ -1,4 +1,4 @@
-import { availableAmount, Familiar, Item, Location, use } from "kolmafia";
+import { availableAmount, Item, Location, use } from "kolmafia";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { PropertyManager } from "../../../utils/Properties";

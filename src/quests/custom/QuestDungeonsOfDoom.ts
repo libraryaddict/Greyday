@@ -1,6 +1,5 @@
 import {
   Location,
-  Familiar,
   Item,
   Effect,
   haveEffect,
@@ -13,13 +12,11 @@ import {
   myLevel,
   cliExecute,
 } from "kolmafia";
-import { PropertyManager } from "../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
-import { DelayBurners } from "../../iotms/delayburners/DelayBurners";
 
 export class QuestDungeonsOfDoom implements QuestInfo {
   bend: Location = Location.get("The Enormous Greater-Than Sign");

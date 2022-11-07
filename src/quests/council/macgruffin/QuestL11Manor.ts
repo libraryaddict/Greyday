@@ -1,4 +1,4 @@
-import { canAdventure, getProperty, Location } from "kolmafia";
+import { getProperty, Location } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { greyAdv } from "../../../utils/GreyLocations";

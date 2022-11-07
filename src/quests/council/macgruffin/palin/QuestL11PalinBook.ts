@@ -7,7 +7,6 @@ import {
   Monster,
   myMaxhp,
   myMeat,
-  print,
   toInt,
   use,
   visitUrl,

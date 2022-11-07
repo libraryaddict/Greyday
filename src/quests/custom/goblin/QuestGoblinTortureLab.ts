@@ -1,4 +1,4 @@
-import { canAdventure, getProperty, Location } from "kolmafia";
+import { getProperty, Location } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { canGreyAdventure } from "../../../utils/GreyUtils";

@@ -12,7 +12,6 @@ import {
   Location,
   Monster,
   numericModifier,
-  print,
   Skill,
   storageAmount,
   toInt,

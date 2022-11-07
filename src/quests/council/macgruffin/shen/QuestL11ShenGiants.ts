@@ -1,6 +1,5 @@
 import {
   Location,
-  Familiar,
   availableAmount,
   council,
   equippedAmount,

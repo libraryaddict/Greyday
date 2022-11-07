@@ -4,11 +4,7 @@ import {
   Item,
   availableAmount,
   getZapWand,
-  toInt,
-  visitUrl,
   zap,
-  Familiar,
-  Monster,
 } from "kolmafia";
 import { ResourceCategory } from "../../../../../typings/ResourceTypes";
 import { PossiblePath } from "../../../../../typings/TaskInfo";

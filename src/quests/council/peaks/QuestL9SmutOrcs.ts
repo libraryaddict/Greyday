@@ -34,7 +34,6 @@ import { Macro } from "../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../utils/Properties";
 import {
   isGhostBustingTime,
-  shouldAvoidGhosts,
 } from "../../custom/QuestTrapGhost";
 import {
   getQuestStatus,

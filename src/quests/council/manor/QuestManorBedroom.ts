@@ -7,10 +7,8 @@ import {
   visitUrl,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
-import {
-  hasNonCombatSkillActive,
-  hasNonCombatSkillsReady,
-} from "../../../GreyAdventurer";
+
+
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
@@ -20,7 +18,6 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
-import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 
 export class ManorBedroom implements QuestInfo {

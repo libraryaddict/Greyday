@@ -1,25 +1,11 @@
 import {
-  adv1,
-  availableAmount,
   council,
   Familiar,
   familiarWeight,
   getProperty,
-  Item,
-  itemAmount,
   Location,
-  Monster,
-  myHash,
-  myLevel,
-  print,
-  toInt,
-  visit,
-  visitUrl,
 } from "kolmafia";
-import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
-import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
-import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { Macro } from "../../../utils/MacroBuilder";
+import { greyAdv } from "../../../utils/GreyLocations";
 import {
   getQuestStatus,
   QuestAdventure,

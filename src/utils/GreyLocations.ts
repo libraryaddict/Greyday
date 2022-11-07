@@ -1,6 +1,5 @@
 import {
   availableChoiceOptions,
-  choiceFollowsFight,
   cliExecute,
   currentRound,
   equippedAmount,
@@ -13,7 +12,6 @@ import {
   lastMonster,
   Location,
   Monster,
-  myLevel,
   print,
   toBoolean,
   toInt,

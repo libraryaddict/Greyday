@@ -1,24 +1,25 @@
 import * as React from "react";
 import { useState } from "react";
-import { SettingProp } from "../App";
+import { SettingProp } from "../types/Types";
 
-function BooleanInput(props: SettingProp): JSX.Element {
+function BooleanInput({ setting }: { setting: SettingProp }): JSX.Element {
   const [value, setValue] = useState(
-    (props.value == "" ? props.default : props.value) === "true"
+    (setting.value == "" ? setting.default : setting.value) === "true"
   );
 
   return (
     <label className="checkcontainer">
       <input
         type="hidden"
-        name={props.name}
+        name={setting.name}
         value={value.toString()}
-        data-default={props.default}
+        data-default={setting.default}
       />
       <div
         className="toggle-track"
         onClick={() => {
           setValue(!value);
+          setting.value = (!value).toString();
         }}
       >
         <span className="toggle-indicator">

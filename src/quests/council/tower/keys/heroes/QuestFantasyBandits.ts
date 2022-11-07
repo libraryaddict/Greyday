@@ -25,7 +25,6 @@ import { ResourceCategory } from "../../../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
-import { GreySettings } from "../../../../../utils/GreySettings";
 import { Macro } from "../../../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../../../utils/Properties";
 

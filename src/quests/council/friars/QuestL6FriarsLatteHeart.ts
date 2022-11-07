@@ -3,10 +3,7 @@ import {
   Item,
   availableAmount,
   getProperty,
-  Familiar,
-  Monster,
 } from "kolmafia";
-import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { hasUnlockedLatteFlavor, LatteFlavor } from "../../../utils/LatteUtils";

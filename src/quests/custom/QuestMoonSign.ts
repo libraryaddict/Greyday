@@ -1,6 +1,5 @@
 import {
   Location,
-  Familiar,
   Monster,
   getProperty,
   Item,
@@ -15,7 +14,6 @@ import {
   gnomadsAvailable,
   canadiaAvailable,
   cliExecute,
-  userConfirm,
 } from "kolmafia";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { GreyOutfit } from "../../utils/GreyOutfitter";

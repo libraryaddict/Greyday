@@ -1,9 +1,7 @@
 import {
   Location,
-  Familiar,
   availableAmount,
   Item,
-  use,
   Monster,
   getProperty,
 } from "kolmafia";

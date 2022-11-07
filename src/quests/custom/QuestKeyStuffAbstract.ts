@@ -3,14 +3,9 @@ import {
   getRelated,
   availableAmount,
   getProperty,
-  use,
-  print,
-  Monster,
-  toInt,
 } from "kolmafia";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { GreySettings } from "../../utils/GreySettings";
-import { canCombatLocket } from "../../utils/GreyUtils";
 
 export abstract class QuestKeyStuffAbstract extends TaskInfo {
   keys: Item[] = ["Boris's key", "Sneaky Pete's key", "Jarlsberg's key"].map(

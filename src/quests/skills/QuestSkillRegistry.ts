@@ -1,6 +1,5 @@
 import {
   Location,
-  Familiar,
   Skill,
   Monster,
   availableAmount,

@@ -1,6 +1,5 @@
 import {
   availableAmount,
-  cliExecute,
   Familiar,
   getProperty,
   Item,
@@ -8,14 +7,11 @@ import {
   Location,
   Monster,
   myLevel,
-  print,
-  toJson,
   use,
   useFamiliar,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../../GreyAdventurer";
 import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
-import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { GreyChoices } from "../../../../utils/GreyChoices";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";

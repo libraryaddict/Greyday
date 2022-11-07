@@ -15,7 +15,6 @@ import {
   Item,
   itemAmount,
   lastMonster,
-  Location,
   Monster,
   monsterElement,
   myAdventures,
@@ -32,10 +31,9 @@ import {
   Stat,
   use,
 } from "kolmafia";
-import { FoundAdventure } from "../GreyChooser";
 import { BanishType, getBanished, hasBanished } from "./Banishers";
 import { AbsorbsProvider } from "./GreyAbsorber";
-import { AdventureSettings, runPrimedResource } from "./GreyLocations";
+import { AdventureSettings } from "./GreyLocations";
 import { GreyOutfit } from "./GreyOutfitter";
 import { GreySettings } from "./GreySettings";
 import { currentPredictions } from "./GreyUtils";

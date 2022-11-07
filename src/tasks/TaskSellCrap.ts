@@ -6,7 +6,6 @@ import {
   myMeat,
   print,
   pullsRemaining,
-  putCloset,
   use,
 } from "kolmafia";
 import { Task } from "./Tasks";

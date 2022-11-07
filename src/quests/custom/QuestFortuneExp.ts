@@ -12,7 +12,6 @@ import {
 } from "kolmafia";
 import {
   canUseFortuneBuff,
-  doFortuneTeller,
   useFortuneBuff,
 } from "../../utils/GreyClan";
 import { GreyOutfit } from "../../utils/GreyOutfitter";

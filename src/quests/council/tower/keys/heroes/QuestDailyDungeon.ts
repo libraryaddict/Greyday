@@ -4,7 +4,6 @@ import {
   equippedAmount,
   Familiar,
   getProperty,
-  getRelated,
   haveFamiliar,
   historicalAge,
   historicalPrice,
@@ -12,13 +11,10 @@ import {
   itemAmount,
   Location,
   mallPrice,
-  Monster,
-  print,
   pullsRemaining,
   toBoolean,
 } from "kolmafia";
 import {
-  getResources,
   ResourceCategory,
 } from "../../../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../../../typings/TaskInfo";

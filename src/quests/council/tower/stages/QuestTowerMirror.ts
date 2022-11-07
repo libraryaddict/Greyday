@@ -1,20 +1,15 @@
 import {
-  myHp,
-  myMaxhp,
-  cliExecute,
   Location,
   Item,
   Monster,
   availableAmount,
   use,
   retrieveItem,
-  maximize,
   pullsRemaining,
 } from "kolmafia";
 import { PropertyManager } from "../../../../utils/Properties";
 import { greyAdv, AdventureSettings } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
-import { Macro } from "../../../../utils/MacroBuilder";
 import {
   getQuestStatus,
   QuestAdventure,

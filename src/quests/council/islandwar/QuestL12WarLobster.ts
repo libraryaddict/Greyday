@@ -9,9 +9,6 @@ import {
   Monster,
   myAdventures,
   myLevel,
-  print,
-  setProperty,
-  toBoolean,
   toInt,
   toMonster,
   totalTurnsPlayed,
@@ -26,10 +23,8 @@ import {
   setPrimedResource,
 } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { GreySettings } from "../../../utils/GreySettings";
 import {
   getAllCombinations,
-  getBackupsRemaining,
 } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../utils/Properties";

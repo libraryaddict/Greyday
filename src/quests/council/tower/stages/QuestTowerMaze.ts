@@ -1,4 +1,4 @@
-import { Location, Familiar, visitUrl, runChoice } from "kolmafia";
+import { Location, visitUrl, runChoice } from "kolmafia";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
   getQuestStatus,

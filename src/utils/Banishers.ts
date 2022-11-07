@@ -18,7 +18,7 @@ import {
 } from "kolmafia";
 
 export function hasBanished(location: Location, banish: BanishType): boolean {
-  let banished = getBanished().filter((b) => b.banisher.type == banish);
+  const banished = getBanished().filter((b) => b.banisher.type == banish);
 
   if (banish.length == 0) {
     return false;
@@ -28,7 +28,7 @@ export function hasBanished(location: Location, banish: BanishType): boolean {
     return true;
   }
 
-  for (let mob of Object.keys(getLocationMonsters(location)).map((m) =>
+  for (const mob of Object.keys(getLocationMonsters(location)).map((m) =>
     Monster.get(m)
   )) {
     if (banished.filter((b) => b.monster == mob).length == 0) {
@@ -119,18 +119,18 @@ export interface BanishProvider {
 }
 
 export function getBanished(): Banish[] {
-  let prop: string[] = getProperty("banishedMonsters").split(":");
-  let banishes: Banish[] = [];
-  let banishers = getBanishers();
+  const prop: string[] = getProperty("banishedMonsters").split(":");
+  const banishes: Banish[] = [];
+  const banishers = getBanishers();
 
   for (let i = 0; i + 2 < prop.length; i += 3) {
-    let monsterName = toMonster(prop[i]);
-    let banisherName = prop[i + 1];
-    let turnBanished = toInt(prop[i + 2]);
+    const monsterName = toMonster(prop[i]);
+    const banisherName = prop[i + 1];
+    const turnBanished = toInt(prop[i + 2]);
 
-    let banisher = new Banish();
+    const banisher = new Banish();
     banisher.monster = monsterName;
-    let banishType =
+    const banishType =
       BanishType[getEnumKeyByEnumValue(BanishType, banisherName)];
     banisher.banisher = banishers.find((b) => b.type == banishType);
     banisher.turnBanished = turnBanished;
@@ -147,7 +147,7 @@ export function getBanished(): Banish[] {
 }
 
 export function getEnumKeyByEnumValue(myEnum, enumValue: string) {
-  let keys = Object.keys(myEnum).filter((x) => myEnum[x] == enumValue);
+  const keys = Object.keys(myEnum).filter((x) => myEnum[x] == enumValue);
 
   return keys.length > 0 ? keys[0] : null;
 }
@@ -182,22 +182,22 @@ export class BanishManager {
   }
 
   getTotalCost(banisher: Banisher, turnsToSpend: number) {
-    let cost = mallPrice(banisher.item);
+    const cost = mallPrice(banisher.item);
 
     if (banisher.turnsBanish == -1) {
       return cost;
     }
 
-    let itemsToBuy = Math.ceil(turnsToSpend / banisher.turnsBanish);
+    const itemsToBuy = Math.ceil(turnsToSpend / banisher.turnsBanish);
 
     return cost * itemsToBuy;
   }
 
   getMonsterLocations(monster: Monster): Location[] {
-    let locations: Location[] = [];
+    const locations: Location[] = [];
 
-    for (let location of Location.all()) {
-      let monsters = this.getMonstersAtLocation(location);
+    for (const location of Location.all()) {
+      const monsters = this.getMonstersAtLocation(location);
 
       if (!monsters.includes(monster)) {
         continue;
@@ -225,7 +225,7 @@ export class BanishManager {
 }
 
 function getBanishers(): Banisher[] {
-  let banishers: [BanishType, string, number][] = [
+  const banishers: [BanishType, string, number][] = [
     [BanishType.HUMAN_MUSK, "Human Musk", -1],
     [BanishType.BE_A_MIND_MASTER, "Daily Affirmation: Be a Mind Master", 80],
     [BanishType.TENNIS_BALL, "Tennis Ball", 30],
@@ -236,7 +236,7 @@ function getBanishers(): Banisher[] {
   ];
 
   return banishers.map((b) => {
-    let banish = new Banisher();
+    const banish = new Banisher();
     banish.item = toItem(b[1]);
     banish.turnsBanish = b[2];
     banish.type = b[0];

@@ -1,4 +1,4 @@
-import { getProperty, print, setProperty, toString } from "kolmafia";
+import { getProperty, print, setProperty } from "kolmafia";
 
 export const handledChoices: [number, number][] = [];
 

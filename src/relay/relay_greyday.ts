@@ -3,17 +3,21 @@ import {
   getProperty,
   propertyExists,
   setProperty,
+  write,
   writeln,
 } from "kolmafia";
-import { getGreySettings } from "../utils/GreySettings";
+import { getResourceSettings } from "../typings/ResourceTypes";
+import { getGreySettings, GreySettingType } from "../utils/GreySettings";
 
-type SettingProp = {
+export type SettingProp = {
+  setting?: GreySettingType;
   name: string;
   description: string;
   default: string;
+  originally: string;
   value: string;
   type: string;
-  dropdown?: [string, string][];
+  dropdown: [string, string][];
   viable?: boolean; // If this is viable to the user in question
 };
 
@@ -21,6 +25,13 @@ export function main(): void {
   const notifications: string[] = [];
   // handle updating values
   const fields = formFields();
+
+  if (fields["api"] != null) {
+    const returns = eval(fields["api"]) || "";
+
+    write(returns + (returns ? "" : " "));
+    return;
+  }
 
   Object.keys(fields).forEach((field) => {
     if (field === "relay") {
@@ -44,7 +55,7 @@ export function main(): void {
   const settings: SettingProp[] = [];
 
   // load user perferences into json object to pass to react
-  for (const setting of getGreySettings()) {
+  for (const setting of [...getResourceSettings(), ...getGreySettings()]) {
     let dropdowns: [string, string][];
 
     if (setting.viableSettings != null) {
@@ -59,10 +70,12 @@ export function main(): void {
     }
 
     const prop: SettingProp = {
+      setting: setting.setting,
       name: setting.name,
       description: setting.description,
       default: setting.default == null ? "" : setting.default.toString(),
       value: getProperty(setting.name),
+      originally: getProperty(setting.name),
       dropdown: dropdowns,
       viable: setting.viable != false,
       type: typeof setting.default,

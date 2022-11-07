@@ -16,7 +16,6 @@ import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { QuestType } from "../QuestTypes";
 import { DelayBurners } from "../../iotms/delayburners/DelayBurners";
-import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { hasUnlockedLatteFlavor, LatteFlavor } from "../../utils/LatteUtils";
 import {
   getGhostBustingMacro,

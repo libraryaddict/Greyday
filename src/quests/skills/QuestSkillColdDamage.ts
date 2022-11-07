@@ -1,11 +1,9 @@
 import {
   Location,
-  Familiar,
   Skill,
   Monster,
   haveSkill,
   getProperty,
-  canAdventure,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreySettings } from "../../utils/GreySettings";

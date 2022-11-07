@@ -11,7 +11,7 @@ $track-background: $light;
 $focus-ring: 0px 0px 0px 2px $dark;
 $speed: 0.4s;
 
-#garbageCollectorContainer {
+#greydayContainer {
   margin: 1rem;
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -28,7 +28,7 @@ img {
   margin: auto;
 }
 
-input.stringPreference {
+input.stringcontainer {
   background-color: $light;
   border-radius: 5px;
   border: 1px solid $dark;
@@ -163,7 +163,7 @@ td {
   transition: opacity $speed ease-in-out;
 }
 
-.greydayDropdown {
+.dropdowncontainer {
   padding: 8px 16px;
   border: 1px solid transparent;
   border-color: black;
@@ -184,4 +184,42 @@ input[value="true"] + .toggle-track .toggle-indicator {
     border-radius: 0;
     background-color: red;
   }
+}
+
+.topBar {
+  display: flex;
+}
+
+.tabEntry {
+  margin-right: 10px;
+  border-radius: 10px;
+  background-color: #333333;
+}
+
+.tabEntry a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 6px;
+  text-decoration: none;
+}
+
+.tabEntry a[aria-current="page"] {
+  background-color: #00529b;
+  border-radius: 10px;
+}
+
+.tabEntry a:hover[aria-current="page"] {
+  background-color: #002c53;
+  border-radius: 10px;
+}
+
+.tabEntry a:hover {
+  background-color: #111111;
+  border-radius: 10px;
+}
+
+.unimplemented {
+  font-size: xx-large;
+  color: red;
 }

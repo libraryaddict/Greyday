@@ -3,10 +3,8 @@ import {
   Monster,
   availableAmount,
   myMeat,
-  getProperty,
   Location,
   retrieveItem,
-  Familiar,
 } from "kolmafia";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";

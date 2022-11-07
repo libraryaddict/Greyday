@@ -1,26 +1,27 @@
 import * as React from "react";
-import { SettingProp } from "../App";
+import { SettingProp } from "../types/Types";
 import BooleanInput from "./BooleanInput";
 import DropdownInput from "./DropdownInput";
 
-function Setting(props: SettingProp): JSX.Element {
+function Setting({ setting }: { setting: SettingProp }): JSX.Element {
   return (
     <tr id="userPreference">
-      <td>{props.name}</td>
+      <td>{setting.name}</td>
       <td>
-        {props.type === "boolean" ? (
-          <BooleanInput {...props} />
-        ) : props.dropdown != null ? (
-          <DropdownInput {...props} />
+        {setting.type === "boolean" ? (
+          <BooleanInput setting={setting} />
+        ) : setting.dropdown != null ? (
+          <DropdownInput setting={setting} />
         ) : (
           <input
-            className="stringPreference"
-            name={props.name}
-            defaultValue={props.value}
+            className="stringcontainer"
+            name={setting.name}
+            defaultValue={setting.value}
+            onChange={(e) => (setting.value = e.target.value)}
           />
         )}
       </td>
-      <td>{props.description}</td>
+      <td>{setting.description}</td>
     </tr>
   );
 }

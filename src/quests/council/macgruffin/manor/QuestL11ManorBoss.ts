@@ -1,6 +1,5 @@
-import { Location, Familiar, visitUrl, Skill } from "kolmafia";
+import { Location, Skill } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
-import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
 import {
   getQuestStatus,
@@ -22,7 +21,7 @@ export class QuestL11ManorBoss implements QuestInfo {
   }
 
   status(): QuestStatus {
-    let status = getQuestStatus("questL11Manor");
+    const status = getQuestStatus("questL11Manor");
 
     if (status < 3) {
       return QuestStatus.NOT_READY;

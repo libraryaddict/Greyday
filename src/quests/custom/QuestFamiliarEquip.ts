@@ -4,14 +4,9 @@ import {
   availableAmount,
   familiarWeight,
   cliExecute,
-  equip,
-  equippedAmount,
   maximize,
-  myAdventures,
   myMeat,
   useFamiliar,
-  autosell,
-  use,
   Item,
 } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";

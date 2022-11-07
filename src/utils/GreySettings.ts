@@ -10,11 +10,13 @@ import {
   toBoolean,
   toInt,
   toItem,
-  toString,
 } from "kolmafia";
-import { doFortuneTeller, getAvailableClans } from "./GreyClan";
+import { getAvailableClans } from "./GreyClan";
+
+export type GreySettingType = "main" | "values";
 
 export type GreySetting = {
+  setting?: GreySettingType;
   name: string;
   description: string;
   valid: (value: string) => boolean;
@@ -256,6 +258,14 @@ export function getGreySettings(): GreySetting[] {
     default: false,
   };
 
+  const greyCookbat: GreySetting = {
+    name: "greyCookbatRecipe",
+    description:
+      "Should the script try to use the cookbat to drop a recipe when no familiar is needed? This detects a recipe in inventory to know if one dropped, removing it will make it think none dropped",
+    valid: isBoolean,
+    default: true,
+  };
+
   return [
     //greyBountyHunter,
     towerBreak,
@@ -268,6 +278,7 @@ export function getGreySettings(): GreySetting[] {
     greyGrabZapWand,
     skipPalindome,
     useMummery,
+    greyCookbat,
     moonTune,
     dailyMalware,
     greySavePulls,
@@ -277,7 +288,11 @@ export function getGreySettings(): GreySetting[] {
     greySwitchWorkshed,
     greyClipArt,
     greyVIPClan,
-  ];
+  ].map((s) => {
+    s.setting = "main";
+
+    return s;
+  });
 }
 
 export const moonSigns: MoonSign[] = [
@@ -353,6 +368,7 @@ export class GreySettings {
   static greyDeleteKmails: boolean;
   static greyHippyMode: boolean = false;
   static greyGrabZapWand: boolean;
+  static greyCookbatRecipe: boolean;
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

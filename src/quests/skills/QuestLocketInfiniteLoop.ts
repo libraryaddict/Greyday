@@ -14,7 +14,11 @@ import {
   print,
   Skill,
 } from "kolmafia";
-import { getResources, ResourceCategory } from "../../typings/ResourceTypes";
+import {
+  getResources,
+  getResourcesLeft,
+  ResourceCategory,
+} from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreyPulls } from "../../utils/GreyResources";
@@ -40,10 +44,15 @@ export class QuestLocketInfiniteLoop extends TaskInfo implements QuestInfo {
   createPaths(assumeUnstarted: boolean): void {
     this.paths = [];
 
-    const create = () => [
-      new PossiblePath(1).addFax(this.monster),
-      new PossiblePath(1).addConsumablePull(this.wish),
-    ];
+    const create = () => {
+      const res = [new PossiblePath(1).addFax(this.monster)];
+
+      if (getResourcesLeft("Wish") == 0) {
+        res.push(new PossiblePath(1).addConsumablePull(this.wish));
+      }
+
+      return res;
+    };
 
     if (
       availableAmount(this.pantsgiving) + availableAmount(this.doctorsBag) ==

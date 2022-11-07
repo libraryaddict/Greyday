@@ -1,12 +1,5 @@
 import {
-  council,
-  Familiar,
-  getProperty,
   Location,
-  maximize,
-  myLevel,
-  toInt,
-  visitUrl,
 } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestTowerKeys } from "./tower/stages/QuestTowerKeys";

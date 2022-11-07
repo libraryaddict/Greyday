@@ -6,18 +6,15 @@ import {
   haveFamiliar,
   Item,
   Location,
-  myFamiliar,
   print,
-  Skill,
   toInt,
   useFamiliar,
 } from "kolmafia";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
-import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
+import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { GreySettings } from "../../../utils/GreySettings";
-import { Macro } from "../../../utils/MacroBuilder";
 import {
   getQuestStatus,
   QuestAdventure,

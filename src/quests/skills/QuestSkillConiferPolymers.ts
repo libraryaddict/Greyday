@@ -3,7 +3,6 @@ import {
   Skill,
   haveSkill,
   Monster,
-  canAdventure,
   turnsPlayed,
   maximize,
   numericModifier,

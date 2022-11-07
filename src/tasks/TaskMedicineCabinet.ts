@@ -1,12 +1,10 @@
 import {
   availableAmount,
-  Familiar,
   getProperty,
   getWorkshed,
   handlingChoice,
   Item,
   lastChoice,
-  Location,
   print,
   runChoice,
   setProperty,

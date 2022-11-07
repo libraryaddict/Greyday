@@ -1,10 +1,8 @@
 import {
   Location,
   Item,
-  availableAmount,
   getProperty,
   toInt,
-  visitUrl,
   pullsRemaining,
   getZapWand,
   zap,

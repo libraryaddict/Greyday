@@ -1,7 +1,6 @@
 import {
   absorbedMonsters,
   availableAmount,
-  canAdventure,
   Effect,
   Familiar,
   familiarWeight,

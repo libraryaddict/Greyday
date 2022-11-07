@@ -18,7 +18,6 @@ import {
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
-import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { GreySettings } from "../../../utils/GreySettings";
 
 export class QuestL10GiantGround implements QuestInfo {

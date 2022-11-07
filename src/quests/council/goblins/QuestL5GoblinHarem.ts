@@ -1,12 +1,8 @@
 import {
   availableAmount,
-  canAdventure,
-  getProperty,
-  haveOutfit,
   Location,
   Monster,
   outfitPieces,
-  print,
 } from "kolmafia";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";

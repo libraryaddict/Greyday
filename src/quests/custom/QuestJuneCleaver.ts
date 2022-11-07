@@ -1,12 +1,9 @@
 import {
   Location,
-  Familiar,
-  Monster,
   Item,
   availableAmount,
   toInt,
   getProperty,
-  equip,
   equippedAmount,
   maximize,
   turnsPlayed,

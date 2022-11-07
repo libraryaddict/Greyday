@@ -13,7 +13,6 @@ import {
   myMaxmp,
   myMeat,
   myMp,
-  print,
   Skill,
   toInt,
   useSkill,

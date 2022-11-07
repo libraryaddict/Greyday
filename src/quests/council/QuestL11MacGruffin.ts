@@ -1,20 +1,13 @@
 import {
-  adv1,
   availableAmount,
-  cliExecute,
-  council,
   getProperty,
   Item,
   Location,
   myAscensions,
-  myLevel,
   myMeat,
-  print,
   retrieveItem,
-  runChoice,
   toInt,
   use,
-  visitUrl,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { greyAdv } from "../../utils/GreyLocations";

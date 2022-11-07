@@ -450,9 +450,9 @@ export class Macro {
     ifTrue: string | Macro,
     ifFalse?: string | Macro
   ): this {
-    if (condition) return this.step(ifTrue);
-    else if (ifFalse) return this.step(ifFalse);
-    else return this;
+    if (condition) {return this.step(ifTrue);}
+    else if (ifFalse) {return this.step(ifFalse);}
+    else {return this;}
   }
 
   /**
@@ -692,8 +692,8 @@ export function adventureMacro(loc: Location, macro: Macro): void {
   setAutoAttack(0);
   try {
     adv1(loc, 0, "");
-    while (inMultiFight()) runCombat();
-    if (choiceFollowsFight()) visitUrl("choice.php");
+    while (inMultiFight()) {runCombat();}
+    if (choiceFollowsFight()) {visitUrl("choice.php");}
   } finally {
     Macro.clearSaved();
   }
@@ -719,8 +719,8 @@ export function adventureMacroAuto(
   nextMacro.save();
   try {
     adv1(loc, 0, "");
-    while (inMultiFight()) runCombat();
-    if (choiceFollowsFight()) visitUrl("choice.php");
+    while (inMultiFight()) {runCombat();}
+    if (choiceFollowsFight()) {visitUrl("choice.php");}
   } finally {
     Macro.clearSaved();
   }

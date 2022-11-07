@@ -7,7 +7,7 @@
 // 6. Paths that are a one and done, but the quest can still be done
 // 7. Quests that are optional, but entirely depend on the path being picked. We can either provide a dummy path, or something else
 
-import { print, printHtml, toJson } from "kolmafia";
+import { print, printHtml } from "kolmafia";
 import { QuestInfo, QuestStatus } from "../quests/Quests";
 import { GreySettings } from "../utils/GreySettings";
 import {

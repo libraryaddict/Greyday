@@ -8,20 +8,16 @@ import {
   haveFamiliar,
   haveSkill,
   hippyStoneBroken,
-  inHardcore,
   Item,
   Location,
-  Monster,
   myFamiliar,
   print,
-  setProperty,
   Skill,
   toBoolean,
   use,
   useFamiliar,
   visitUrl,
 } from "kolmafia";
-import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { doFortuneTeller } from "../../utils/GreyClan";
 import { GreyOutfit } from "../../utils/GreyOutfitter";

@@ -11,7 +11,6 @@ import {
   knollAvailable,
   Location,
   Monster,
-  mySign,
   Skill,
 } from "kolmafia";
 import { ResourceCategory } from "../../typings/ResourceTypes";
@@ -22,7 +21,6 @@ import {
   MoonZone,
   GreySettings,
   getMoonZone,
-  MoonSign,
 } from "../../utils/GreySettings";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";

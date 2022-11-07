@@ -6,7 +6,6 @@ import {
   Item,
   Location,
   Monster,
-  print,
   Skill,
   toInt,
   visitUrl,

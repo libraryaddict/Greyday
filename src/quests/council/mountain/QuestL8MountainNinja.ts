@@ -10,7 +10,6 @@ import {
   Monster,
   myEffects,
   toEffect,
-  print,
 } from "kolmafia";
 import {
   hasCombatSkillReady,

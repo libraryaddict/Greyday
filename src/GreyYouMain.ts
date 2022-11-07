@@ -8,6 +8,7 @@ import {
   gitExists,
   handlingChoice,
   haveEffect,
+  isBanished,
   Item,
   myAdventures,
   myPath,
@@ -15,7 +16,6 @@ import {
   print,
   printHtml,
   pullsRemaining,
-  removeProperty,
   setAutoAttack,
   setProperty,
   svnAtHead,
@@ -23,8 +23,8 @@ import {
   toInt,
   toItem,
   turnsPlayed,
-  userConfirm,
   visitUrl,
+  waitq,
 } from "kolmafia";
 import { GreyAdventurer } from "./GreyAdventurer";
 import { getQuestStatus } from "./quests/Quests";
@@ -45,7 +45,7 @@ class GreyYouMain {
   git_name = "libraryaddict-Greyday-release";
 
   isRevisionPass(): boolean {
-    const required = 26829;
+    const required = 26902;
 
     if (getRevision() > 0 && getRevision() < required) {
       print(
@@ -198,6 +198,19 @@ class GreyYouMain {
     if (command == "" || command == "help") {
       this.doHelp();
       return;
+    }
+
+    const banishedAbsorbs = AbsorbsProvider.loadAbsorbs(true).filter((absorb) =>
+      isBanished(absorb.monster)
+    );
+
+    if (banishedAbsorbs.length > 0) {
+      print(
+        "Please note that the following has been banished, if this is a persistant banish (Eg, Ice House). Then we cannot absorb said monster. Monsters: " +
+          banishedAbsorbs.map((a) => a.monster).join(", "),
+        "red"
+      );
+      waitq(1);
     }
 
     if (command.includes("require")) {

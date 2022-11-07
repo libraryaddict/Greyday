@@ -1,7 +1,6 @@
 import {
   appearanceRates,
   availableAmount,
-  canAdventure,
   cliExecute,
   Effect,
   Familiar,

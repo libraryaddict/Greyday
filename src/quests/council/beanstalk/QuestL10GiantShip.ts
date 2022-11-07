@@ -17,7 +17,6 @@ import {
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
-import { PossiblePath } from "../../../typings/TaskInfo";
 
 export class QuestL10GiantShip implements QuestInfo {
   modelShip: Item = Item.get("Model airship");

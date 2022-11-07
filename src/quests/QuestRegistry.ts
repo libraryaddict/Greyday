@@ -1,23 +1,15 @@
 import {
-  availableAmount,
   canadiaAvailable,
-  Effect,
   gnomadsAvailable,
-  haveEffect,
-  haveSkill,
-  Item,
   knollAvailable,
-  myLevel,
-  myMeat,
   print,
-  Skill,
 } from "kolmafia";
 import { GreySettings } from "../utils/GreySettings";
 import { QuestCouncil } from "./council/QuestCouncil";
 import { QuestManor } from "./council/QuestManor";
 import { QuestCar } from "./custom/QuestCar";
 import { QuestManorLights } from "./custom/QuestManorLights";
-import { getQuestStatus, QuestInfo } from "./Quests";
+import { QuestInfo } from "./Quests";
 import { QuestsCustom } from "./QuestsCustom";
 import { QuestType, QuestTypeArray } from "./QuestTypes";
 

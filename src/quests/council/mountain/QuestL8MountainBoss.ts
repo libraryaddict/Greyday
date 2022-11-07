@@ -1,4 +1,4 @@
-import { Location, Familiar, council, visitUrl, myMeat } from "kolmafia";
+import { Location, council, visitUrl, myMeat } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {

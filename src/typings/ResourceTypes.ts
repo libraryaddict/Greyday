@@ -36,7 +36,7 @@ import {
   isVIPDisabled,
 } from "../utils/GreyClan";
 import { GreyOutfit } from "../utils/GreyOutfitter";
-import { GreySettings } from "../utils/GreySettings";
+import { GreySetting, GreySettings } from "../utils/GreySettings";
 import { Macro } from "../utils/MacroBuilder";
 import { PropertyManager } from "../utils/Properties";
 
@@ -128,10 +128,117 @@ export interface SomeResource {
   unprime?: () => void; // Must be called after a resource has been used
 }
 
+type ResourceValue = {
+  valueName: string;
+  description: string;
+  dynamic?: boolean;
+};
+
+export function getResourceSettings(): GreySetting[] {
+  return getResourceValues().map((res) => {
+    const setting: GreySetting = {
+      setting: "values",
+      name: "greyValue_" + res.valueName,
+      description: res.description,
+      valid: (s) => /\d+/.test(s),
+      default: ResourceValues[res.valueName + "Value"],
+    };
+
+    return setting;
+  });
+}
+
+export function getResourceValues(): ResourceValue[] {
+  const embezzler: ResourceValue = {
+    valueName: "Embezzler",
+    description: "How much meat this resource would give from embezzlers",
+  };
+
+  const cloverValue: ResourceValue = {
+    valueName: "Clover",
+    description: "How much meat you could sell an 11-leaf clover for",
+  };
+
+  const forcedNC: ResourceValue = {
+    valueName: "ForcedNC",
+    description: "How much meat each forced non-combat (Parka) is worth",
+  };
+
+  const forcedDrop: ResourceValue = {
+    valueName: "ForcedDrop",
+    description: "How much meat you could earn from each forced drop",
+  };
+
+  const pillkeeper: ResourceValue = {
+    valueName: "Pillkeeper",
+    description: "How much meat you'd earn from the free pillkeeper use",
+  };
+
+  const pull: ResourceValue = {
+    valueName: "Pull",
+    description: "How much each pull is worth to the player in meat",
+  };
+
+  const cosplay: ResourceValue = {
+    valueName: "CosplaySaber",
+    description:
+      "How much meat each cosplay saber use is worth, normally calculated by pills remaining",
+    dynamic: true,
+  };
+
+  const shorts: ResourceValue = {
+    valueName: "CargoShorts",
+    description: "How much meat an item from Cargo Shorts is worth",
+  };
+
+  const deckOfCards: ResourceValue = {
+    valueName: "DeckOfCards",
+    description:
+      "With 15 uses, a cheat using 5, how much each use is worth in meat",
+  };
+
+  const zap: ResourceValue = {
+    valueName: "ZapWand",
+    description: "How much each zap is worth in meat",
+  };
+
+  const burglar: ResourceValue = {
+    valueName: "CatBurglarHeist",
+    description: "How much a cat burglar heist is worth in meat",
+  };
+
+  const chateauPainting: ResourceValue = {
+    valueName: "ChateauPainting",
+    description:
+      "How much Chateau Painting is worth in meat, not sure why this is an option given it'll only consider the painting if it's a fax it wants",
+  };
+
+  const hotTub: ResourceValue = {
+    valueName: "HotTub",
+    description: "How much each hot tub usage is worth to you",
+  };
+
+  return [
+    embezzler,
+    cloverValue,
+    forcedNC,
+    pillkeeper,
+    forcedDrop,
+    pull,
+    cosplay,
+    shorts,
+    deckOfCards,
+    zap,
+    burglar,
+    chateauPainting,
+    hotTub,
+  ];
+}
+
 class ResourceValues {
   static EmbezzlerValue = 19000;
   static CloverValue = 22000;
-  static forcedDropValue = 4000;
+  static ForcedDropValue = 4000;
   static PillkeeperValue = 70000;
   static ForcedNCValue = toInt(getProperty("greyValueOfNonCombat") || "0");
   static PullValue = toInt(getProperty("greyValueOfPull") || "0");
@@ -176,7 +283,7 @@ const xoFam = Familiar.get("XO Skeleton");
 const hugsAndKisses: SomeResource = {
   type: ResourceCategory.HUGS_AND_KISSES,
   resource: "Hugs and Kisses",
-  worthInAftercore: ResourceValues.forcedDropValue,
+  worthInAftercore: ResourceValues.ForcedDropValue,
   familiar: xoFam,
   prepare: () => null,
   macro: () => {
@@ -197,7 +304,7 @@ const extingusherPolar: SomeResource = {
   resource: "Fire Extingusher",
   name: "Fire Extingusher: Polar Vortex",
   resourcesUsed: 10,
-  worthInAftercore: ResourceValues.forcedDropValue, // Tattered paper cost and assume free run
+  worthInAftercore: ResourceValues.ForcedDropValue, // Tattered paper cost and assume free run
   prepare: (outfit: GreyOutfit) =>
     outfit != null ? outfit.addWeight(extingusher) : null,
   macro: () => Macro.skill(Skill.get("Fire Extinguisher: Polar Vortex")),
@@ -208,7 +315,7 @@ const extingusherZoneSpecific: SomeResource = {
   resource: "Fire Extingusher",
   name: "Fire Extingusher: Spray Down Zone",
   resourcesUsed: 20,
-  worthInAftercore: ResourceValues.forcedDropValue * 2, // Tattered paper cost x 2
+  worthInAftercore: ResourceValues.ForcedDropValue * 2, // Tattered paper cost x 2
   prepare: (outfit: GreyOutfit) =>
     outfit != null
       ? outfit.addWeight(extingusher).addExtra("-equip smoke ball")

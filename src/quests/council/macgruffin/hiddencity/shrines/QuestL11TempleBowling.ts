@@ -1,9 +1,6 @@
 import {
-  adv1,
   availableAmount,
-  cliExecute,
   closetAmount,
-  council,
   Effect,
   Familiar,
   familiarWeight,
@@ -16,7 +13,6 @@ import {
   Location,
   Monster,
   myAscensions,
-  myLevel,
   myMeat,
   putCloset,
   retrieveItem,
@@ -31,7 +27,6 @@ import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
 import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
 import { Macro } from "../../../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../../../utils/Properties";
-import { GreyPulls } from "../../../../../utils/GreyResources";
 import { QuestType } from "../../../../QuestTypes";
 
 export class QuestL11Bowling implements QuestInfo {

@@ -11,8 +11,6 @@ import {
 } from "kolmafia";
 import { PossiblePath } from "../../../typings/TaskInfo";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { GreyPulls } from "../../../utils/GreyResources";
-import { GreySettings } from "../../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { CryptStatus } from "../QuestL7Crypt";

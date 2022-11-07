@@ -3,7 +3,6 @@ import {
   Familiar,
   familiarWeight,
   Item,
-  print,
   Slot,
 } from "kolmafia";
 import { DelayBurner } from "./DelayBurnerAbstract";
@@ -25,7 +24,7 @@ export class DelayBurners {
       new DelayBurningCursedMagnifyingGlass(),
     ].filter((d) => d.isViable());
 
-    for (let delay of this.delays) {
+    for (const delay of this.delays) {
       delay.doSetup();
     }
 
@@ -37,7 +36,7 @@ export class DelayBurners {
   }
 
   static isTryingForDupeableGoblin(): boolean {
-    let fam = Familiar.get("Grey Goose");
+    const fam = Familiar.get("Grey Goose");
     return (
       familiarWeight(fam) >= 6 &&
       familiarWeight(fam) < 9 &&
@@ -46,7 +45,7 @@ export class DelayBurners {
   }
 
   static getReadyDelayBurner(freeOnly: boolean = false): DelayBurner {
-    let burner = this.getDelayBurner(freeOnly);
+    const burner = this.getDelayBurner(freeOnly);
 
     if (burner == null || burner.readyIn() > 0) {
       return null;
@@ -56,13 +55,13 @@ export class DelayBurners {
   }
 
   static isDelayBurnerReady(freeOnly: boolean = false): boolean {
-    let burner = this.getDelayBurner(freeOnly);
+    const burner = this.getDelayBurner(freeOnly);
 
     return burner != null && burner.readyIn() <= 0;
   }
 
   static tryReplaceCombats(maxTurnsWasted: number = 10): Slot[] {
-    let delays = this.getDelays()
+    const delays = this.getDelays()
       .filter((d) => d.isViable() && d.isViableAsCombatReplacer())
       .sort((d1, d2) => d1.readyIn() - d2.readyIn());
 
@@ -86,7 +85,7 @@ export class DelayBurners {
   }
 
   private static getDelayBurner(freeOnly: boolean = false): DelayBurner {
-    let delays = this.getDelays()
+    const delays = this.getDelays()
       .filter((d) => d.isViable() && (d.isFree() || freeOnly))
       .sort((d1, d2) => d1.readyIn() - d2.readyIn());
 

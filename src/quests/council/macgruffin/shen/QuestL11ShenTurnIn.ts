@@ -1,8 +1,6 @@
 import {
   availableAmount,
   Effect,
-  equip,
-  equippedAmount,
   Familiar,
   getProperty,
   haveEffect,
@@ -14,7 +12,6 @@ import {
   Monster,
   refreshStatus,
   Skill,
-  Slot,
   use,
   useFamiliar,
 } from "kolmafia";

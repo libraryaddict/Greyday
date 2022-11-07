@@ -6,11 +6,10 @@ import {
   Monster,
   use,
 } from "kolmafia";
-import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { PropertyManager } from "../../../utils/Properties";
-import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
+import { QuestAdventure, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { CryptL7Template } from "./CryptTemplate";
 

@@ -6,7 +6,6 @@ import {
   itemAmount,
   Location,
   sell,
-  Slot,
   storageAmount,
   toInt,
   toSlot,

@@ -1,20 +1,15 @@
 import {
   Location,
-  Familiar,
-  toInt,
   getProperty,
-  myAscensions,
   Skill,
   haveSkill,
   Item,
-  availableAmount,
   itemAmount,
   putCloset,
   Monster,
   isBanished,
 } from "kolmafia";
 import { greyAdv } from "../../utils/GreyLocations";
-import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 

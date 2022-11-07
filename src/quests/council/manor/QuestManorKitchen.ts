@@ -3,7 +3,6 @@ import {
   cliExecute,
   Effect,
   effectModifier,
-  Familiar,
   getFuel,
   getProperty,
   getWorkshed,
@@ -11,20 +10,18 @@ import {
   haveEffect,
   haveSkill,
   Item,
-  knollAvailable,
   Location,
   maximize,
   Monster,
   myLevel,
   myMeat,
-  myTurncount,
   numericModifier,
   Skill,
   toInt,
   totalTurnsPlayed,
   use,
 } from "kolmafia";
-import { AbsorbsProvider, Reabsorbed } from "../../../utils/GreyAbsorber";
+import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { getMoonZone, GreySettings } from "../../../utils/GreySettings";

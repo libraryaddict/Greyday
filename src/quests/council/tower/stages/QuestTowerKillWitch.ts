@@ -1,19 +1,10 @@
 import {
   Location,
-  Familiar,
   visitUrl,
   print,
-  getProperty,
-  turnsPlayed,
-  myAdventures,
-  Item,
-  toItem,
-  toInt,
 } from "kolmafia";
 import { printEndOfRun } from "../../../../GreyYouMain";
-import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
-import { GreySettings } from "../../../../utils/GreySettings";
 import { Macro } from "../../../../utils/MacroBuilder";
 import {
   getQuestStatus,

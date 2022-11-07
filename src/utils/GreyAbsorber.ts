@@ -2,11 +2,14 @@ import {
   absorbedMonsters,
   appearanceRates,
   availableAmount,
+  currentRound,
   Familiar,
   familiarWeight,
+  fightFollowsChoice,
   fileToBuffer,
   getMonsters,
   getProperty,
+  handlingChoice,
   haveSkill,
   isBanished,
   Item,
@@ -14,11 +17,12 @@ import {
   Monster,
   print,
   printHtml,
-  pullsRemaining,
+  setProperty,
   Skill,
   toInt,
   toMonster,
   toSkill,
+  visitUrl,
 } from "kolmafia";
 import { getQuestStatus } from "../quests/Quests";
 import { getLocations } from "./GreyLocations";
@@ -33,6 +37,18 @@ export class Absorb {
   mox: number = 0;
   hp: number = 0;
   mp: number = 0;
+}
+
+if (
+  currentRound() == 0 &&
+  !handlingChoice() &&
+  !fightFollowsChoice() &&
+  !fightFollowsChoice()
+) {
+  if (getProperty("_checkedIcehouse") != "true") {
+    visitUrl("museum.php?action=icehouse");
+    setProperty("_checkedIcehouse", "true");
+  }
 }
 
 export class AbsorbsProvider {
@@ -364,58 +380,60 @@ export class AbsorbsProvider {
     return null;
   }
 
-  static loadAbsorbs(): Absorb[] {
-    if (AbsorbsProvider.allAbsorbs != null) {
-      return AbsorbsProvider.allAbsorbs.filter((a) => !isBanished(a.monster));
-    }
+  static loadAbsorbs(includeBanished: boolean = false): Absorb[] {
+    if (AbsorbsProvider.allAbsorbs == null) {
+      AbsorbsProvider.allAbsorbs = [];
 
-    AbsorbsProvider.allAbsorbs = [];
+      for (const line of fileToBuffer("data/grey_you_data.txt").split("\n")) {
+        const spl = line.replace("\r", "").split("\t");
 
-    for (const line of fileToBuffer("data/grey_you_data.txt").split("\n")) {
-      const spl = line.replace("\r", "").split("\t");
-
-      if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {
-        continue;
-      }
-
-      const mons = toMonster(spl[0]);
-
-      if (mons == Monster.get("None")) {
-        print("Unknown " + spl[0]);
-        continue;
-      }
-
-      const absorb = new Absorb();
-      absorb.monster = mons;
-
-      if (spl[1].endsWith("adventures")) {
-        absorb.adventures = toInt(spl[1].substring(0, spl[1].lastIndexOf(" ")));
-      } else if (spl[1].endsWith("muscle")) {
-        absorb.mus = toInt(spl[1].substring(0, spl[1].lastIndexOf(" ")));
-      } else if (spl[1].endsWith("mysticality")) {
-        absorb.mys = toInt(spl[1].substring(0, spl[1].lastIndexOf(" ")));
-      } else if (spl[1].endsWith("moxie")) {
-        absorb.mox = toInt(spl[1].substring(0, spl[1].lastIndexOf(" ")));
-      } else if (spl[1].endsWith("maximum hp")) {
-        absorb.hp = toInt(spl[1].substring(0, spl[1].indexOf(" ")));
-      } else if (spl[1].endsWith("maximum mp")) {
-        absorb.mp = toInt(spl[1].substring(0, spl[1].indexOf(" ")));
-      } else {
-        absorb.skill = toSkill(spl[1]);
-
-        if (absorb.skill == Skill.get("None")) {
-          throw "Unknown line '" + spl[1] + "' in absorb data";
+        if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {
+          continue;
         }
+
+        const mons = toMonster(spl[0]);
+
+        if (mons == Monster.get("None")) {
+          print("Unknown " + spl[0]);
+          continue;
+        }
+
+        const absorb = new Absorb();
+        absorb.monster = mons;
+
+        if (spl[1].endsWith("adventures")) {
+          absorb.adventures = toInt(
+            spl[1].substring(0, spl[1].lastIndexOf(" "))
+          );
+        } else if (spl[1].endsWith("muscle")) {
+          absorb.mus = toInt(spl[1].substring(0, spl[1].lastIndexOf(" ")));
+        } else if (spl[1].endsWith("mysticality")) {
+          absorb.mys = toInt(spl[1].substring(0, spl[1].lastIndexOf(" ")));
+        } else if (spl[1].endsWith("moxie")) {
+          absorb.mox = toInt(spl[1].substring(0, spl[1].lastIndexOf(" ")));
+        } else if (spl[1].endsWith("maximum hp")) {
+          absorb.hp = toInt(spl[1].substring(0, spl[1].indexOf(" ")));
+        } else if (spl[1].endsWith("maximum mp")) {
+          absorb.mp = toInt(spl[1].substring(0, spl[1].indexOf(" ")));
+        } else {
+          absorb.skill = toSkill(spl[1]);
+
+          if (absorb.skill == Skill.get("None")) {
+            throw "Unknown line '" + spl[1] + "' in absorb data";
+          }
+        }
+
+        AbsorbsProvider.allAbsorbs.push(absorb);
       }
 
-      AbsorbsProvider.allAbsorbs.push(absorb);
+      this.remainingAdvAbsorbs = AbsorbsProvider.allAbsorbs
+        .filter((a) => a.adventures > 0)
+        .map((a) => a.monster);
     }
 
-    this.remainingAdvAbsorbs = AbsorbsProvider.allAbsorbs
-      .filter((a) => a.adventures > 0)
-      .map((a) => a.monster);
-
-    return AbsorbsProvider.allAbsorbs.filter((a) => !isBanished(a.monster));
+    return AbsorbsProvider.allAbsorbs.filter(
+      (a) => includeBanished || !isBanished(a.monster)
+    );
   }
 
   getAbsorbedMonstersFromInstance(): Map<Monster, Reabsorbed> {

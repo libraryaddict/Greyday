@@ -12,18 +12,20 @@ import {
   Location,
   Monster,
   myAscensions,
+  myClass,
   myFamiliar,
   print,
   retrieveItem,
   sessionLogs,
+  toEffect,
   toInt,
+  toItem,
   toLocation,
   toMonster,
   turnsPlayed,
   visitUrl,
 } from "kolmafia";
 import { getPrimedResource, greyAdv } from "./GreyLocations";
-import { GreySettings } from "./GreySettings";
 
 export enum UmbrellaState {
   MONSTER_LEVEL = "broken",
@@ -153,7 +155,7 @@ const ballProp = () =>
     );
 
 let lastToasterGaze: number = 0;
-let lastEncounter: number = 0;
+let lastPonder: number = 0;
 const crystalBall: Item = Item.get("miniature crystal ball");
 const teleportis = Effect.get("Teleportitis");
 
@@ -178,6 +180,7 @@ export function doToasterGaze() {
   );
   greyAdv("adventure.php?snarfblat=355");
   lastToasterGaze = turnsPlayed();
+  lastPonder = turnsPlayed();
   visitUrl("inventory.php?ponder=1", false);
 }
 
@@ -193,18 +196,28 @@ export function currentPredictions(): Map<Location, Monster> {
 
   let predictions = ballProp();
 
-  if (lastEncounter != turnsPlayed()) {
-    lastEncounter = turnsPlayed();
+  if (lastPonder != turnsPlayed()) {
+    const expectedExpire =
+      predictions.find(
+        ([turn, loc]) =>
+          turn + 1 < turnsPlayed() &&
+          loc != toLocation(getProperty("lastAdventure"))
+      ) != null;
 
-    visitUrl("inventory.php?ponder=1", false);
+    if (expectedExpire) {
+      lastPonder = turnsPlayed();
 
-    predictions = ballProp();
+      visitUrl("inventory.php?ponder=1", false);
+
+      predictions = ballProp();
+    }
   }
 
   return new Map(
     predictions.map(([, location, monster]) => [location, monster])
   );
 }
+
 export function getAllCombinations<Type>(
   valuesArray: Type[],
   uniquesOnly: boolean = true
@@ -275,4 +288,41 @@ export function canGreyAdventure(location: Location): boolean {
   }
 
   return canAdventure(location);
+}
+
+/**
+ * Returns the list of effects from helmet in order of when you'd acquire them
+ */
+export function getDaylightShavingsBuffs(): Effect[] {
+  let lastBeardBuff = toInt(getProperty("lastBeardBuff"));
+
+  if (lastBeardBuff > 0) {
+    lastBeardBuff -= 2665;
+  }
+
+  lastBeardBuff = ((toInt(myClass()) % 6) + lastBeardBuff) % 11;
+
+  const effects: Effect[] = [];
+
+  for (let i = 0; i < 11; i++) {
+    const num = 2666 + ((lastBeardBuff + i) % 11);
+    const effect = toEffect(toInt(num));
+
+    effects.push(effect);
+  }
+
+  return effects;
+}
+
+export function isDaylightShavingBuffReady(): boolean {
+  return getDaylightShavingsBuffs().find((e) => haveEffect(e) > 1) == null;
+}
+
+const bookbatRecipes: Item[] = [
+  10979, 10980, 10981, 10982, 10983, 10984, 10985, 10986, 10987, 10993, 10994,
+  10995, 10996, 10997, 10999,
+].map((i) => toItem(i));
+
+export function hasCookbatRecipe(): boolean {
+  return bookbatRecipes.find((i) => availableAmount(i) > 0) != null;
 }

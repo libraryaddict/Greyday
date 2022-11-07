@@ -1,4 +1,4 @@
-import { Location, Familiar, Monster } from "kolmafia";
+import { Location, Monster } from "kolmafia";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {

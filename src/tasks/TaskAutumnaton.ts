@@ -10,7 +10,6 @@ import {
   myLocation,
   print,
   toInt,
-  toItem,
   visitUrl,
 } from "kolmafia";
 import { getQuestStatus } from "../quests/Quests";

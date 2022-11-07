@@ -17,7 +17,6 @@ import {
   toBoolean,
   haveEffect,
   Effect,
-  canAdventure,
   handlingChoice,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";

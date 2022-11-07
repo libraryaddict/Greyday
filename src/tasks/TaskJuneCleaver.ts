@@ -3,7 +3,6 @@ import {
   getProperty,
   Item,
   myLevel,
-  myMeat,
   setProperty,
   toInt,
 } from "kolmafia";

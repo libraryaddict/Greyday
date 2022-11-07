@@ -8,7 +8,6 @@ import {
   Monster,
   print,
   toMonster,
-  totalTurnsPlayed,
   use,
   useFamiliar,
 } from "kolmafia";

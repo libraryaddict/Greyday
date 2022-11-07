@@ -1,4 +1,4 @@
-import { getProperty, print, setProperty, toInt, visitUrl } from "kolmafia";
+import { getProperty, setProperty, toInt, visitUrl } from "kolmafia";
 
 export enum LatteFlavor {
   FAM_EXP = "vitamins",

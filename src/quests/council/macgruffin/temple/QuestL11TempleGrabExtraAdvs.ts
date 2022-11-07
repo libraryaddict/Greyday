@@ -1,11 +1,8 @@
 import {
   Location,
-  Familiar,
   Item,
   availableAmount,
   use,
-  cliExecute,
-  print,
 } from "kolmafia";
 import { GreyChoices } from "../../../../utils/GreyChoices";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";

@@ -6,7 +6,6 @@ import {
   equip,
   Item,
   Slot,
-  print,
 } from "kolmafia";
 import { DelayBurner } from "./DelayBurnerAbstract";
 

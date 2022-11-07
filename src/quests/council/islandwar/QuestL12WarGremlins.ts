@@ -12,7 +12,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { currentPredictions, UmbrellaState } from "../../../utils/GreyUtils";
+import { currentPredictions } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";

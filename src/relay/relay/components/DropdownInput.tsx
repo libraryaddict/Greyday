@@ -1,15 +1,17 @@
 import * as React from "react";
-import { SettingProp } from "../App";
+import { SettingProp } from "../types/Types";
 
-function DropdownInput(props: SettingProp): JSX.Element {
+function DropdownInput({ setting }: { setting: SettingProp }): JSX.Element {
   return (
-    <select className="greydayDropdown" name={props.name}>
-      {props.dropdown.map(([display, value]) => {
+    <select
+      className="dropdowncontainer"
+      name={setting.name}
+      defaultValue={setting.value}
+      onChange={(e) => (setting.value = e.target.value)}
+    >
+      {setting.dropdown.map(([display, value]) => {
         return (
-          <option
-            value={value}
-            selected={value.toLowerCase() == props.value.toLowerCase()}
-          >
+          <option key={value} value={value}>
             {display}
           </option>
         );

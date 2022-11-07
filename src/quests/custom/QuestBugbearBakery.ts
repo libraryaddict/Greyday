@@ -1,13 +1,9 @@
 import {
   Location,
-  Familiar,
   Monster,
-  haveOutfit,
   Item,
   getWorkshed,
   isBanished,
-  Effect,
-  haveEffect,
   Skill,
   knollAvailable,
   outfitPieces,

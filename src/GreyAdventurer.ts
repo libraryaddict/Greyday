@@ -14,7 +14,6 @@ import {
   itemAmount,
   Location,
   maximize,
-  Monster,
   myAdventures,
   myAscensions,
   myFamiliar,
@@ -62,7 +61,7 @@ import {
 import { AbsorbsProvider, Reabsorbed } from "./utils/GreyAbsorber";
 import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
-import { doColor, setUmbrella } from "./utils/GreyUtils";
+import { doColor, hasCookbatRecipe, setUmbrella } from "./utils/GreyUtils";
 import { getPrimedResource } from "./utils/GreyLocations";
 import { TaskAutumnaton } from "./tasks/TaskAutumnaton";
 import { handledChoices } from "./utils/Properties";
@@ -493,6 +492,9 @@ export class GreyAdventurer {
         familiarWeight(robor) < 20;
 
       const toLevelUp = [
+        GreySettings.greyCookbatRecipe && !hasCookbatRecipe()
+          ? "Cookbookbat"
+          : "",
         haveFamiliar(robor) ? (doRobor ? "Robortender" : "") : "Hobomonkey",
         "Jumpsuited Hound Dog",
         "Pocket Professor",

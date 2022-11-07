@@ -6,14 +6,13 @@ import {
   Item,
   Location,
   Monster,
-  toInt,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { currentPredictions, UmbrellaState } from "../../../utils/GreyUtils";
 import { PropertyManager } from "../../../utils/Properties";
-import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
+import { QuestAdventure, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
 import { CryptStatus } from "../QuestL7Crypt";
 import { CryptL7Template } from "./CryptTemplate";

@@ -1,11 +1,9 @@
 import {
   availableAmount,
-  Familiar,
   getProperty,
   Item,
   Location,
   Monster,
-  print,
 } from "kolmafia";
 import { ResourceCategory } from "../../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";

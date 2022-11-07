@@ -1,6 +1,5 @@
 import {
   availableAmount,
-  Familiar,
   getProperty,
   gnomadsAvailable,
   haveSkill,
@@ -8,10 +7,8 @@ import {
   knollAvailable,
   lastChoice,
   Location,
-  Monster,
   myAscensions,
   myMeat,
-  print,
   runChoice,
   setProperty,
   Skill,
@@ -19,7 +16,6 @@ import {
   use,
   visitUrl,
 } from "kolmafia";
-import { GreyAdventurer } from "../../GreyAdventurer";
 import { AdventureFinder } from "../../GreyChooser";
 import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";

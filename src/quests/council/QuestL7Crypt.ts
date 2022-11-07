@@ -1,16 +1,10 @@
 import {
-  adv1,
   availableAmount,
-  buy,
-  cliExecute,
   council,
   getProperty,
   Item,
   Location,
-  myLevel,
   myMeat,
-  retrieveItem,
-  toInt,
   use,
 } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";

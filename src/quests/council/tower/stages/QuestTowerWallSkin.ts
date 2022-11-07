@@ -1,10 +1,7 @@
 import {
   availableAmount,
   cliExecute,
-  Effect,
   Familiar,
-  getProperty,
-  haveEffect,
   haveFamiliar,
   Item,
   Location,
@@ -13,7 +10,6 @@ import {
   myHp,
   myMaxhp,
   numericModifier,
-  toInt,
   turnsPlayed,
   useFamiliar,
 } from "kolmafia";

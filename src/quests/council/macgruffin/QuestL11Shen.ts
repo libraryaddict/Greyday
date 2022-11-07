@@ -1,16 +1,6 @@
 import {
-  adv1,
-  availableAmount,
-  council,
-  Effect,
-  getProperty,
-  haveEffect,
   Item,
   Location,
-  myLevel,
-  toInt,
-  toItem,
-  use,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv } from "../../../utils/GreyLocations";

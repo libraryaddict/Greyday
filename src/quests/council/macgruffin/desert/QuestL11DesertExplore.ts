@@ -1,7 +1,5 @@
 import {
-  absorbedMonsters,
   availableAmount,
-  canAdventure,
   Effect,
   equip,
   equippedAmount,
