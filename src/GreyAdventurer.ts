@@ -484,11 +484,11 @@ export class GreyAdventurer {
         }
       }
 
+      replaceWith.push(...this.adventureFinder.getRecommendedFamiliars());
+
       if (GreySettings.greyCookbatRecipe && !hasCookbatRecipe()) {
         replaceWith.push(Familiar.get("Cookbookbat"));
       }
-
-      replaceWith.push(...this.adventureFinder.getRecommendedFamiliars());
 
       const robor: Familiar = Familiar.get("Robortender");
       const doRobor =
