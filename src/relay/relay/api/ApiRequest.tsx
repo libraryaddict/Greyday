@@ -30,7 +30,16 @@ export async function setProperty(
 
 export function saveSettings(properties: SettingProp[]): Promise<string> {
   return setProperties(
-    properties.map((prop) => [prop.name, prop.value.trim()])
+    properties
+      .filter((p) => {
+        if (p.savedValue === p.value) {
+          return false;
+        }
+
+        p.savedValue = p.value;
+        return true;
+      })
+      .map((prop) => [prop.name, prop.value.trim()])
   );
 }
 

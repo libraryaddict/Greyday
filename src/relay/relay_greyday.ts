@@ -14,7 +14,7 @@ export type SettingProp = {
   name: string;
   description: string;
   default: string;
-  originally: string;
+  savedValue: string;
   value: string;
   type: string;
   dropdown: [string, string][];
@@ -75,7 +75,7 @@ export function main(): void {
       description: setting.description,
       default: setting.default == null ? "" : setting.default.toString(),
       value: getProperty(setting.name),
-      originally: getProperty(setting.name),
+      savedValue: getProperty(setting.name),
       dropdown: dropdowns,
       viable: setting.viable != false,
       type: typeof setting.default,
@@ -83,6 +83,10 @@ export function main(): void {
 
     if (!propertyExists(prop.name) || !setting.valid(prop.value)) {
       prop.value = setting.default + "";
+
+      if (!propertyExists(prop.name)) {
+        prop.savedValue = prop.value;
+      }
     }
 
     settings.push(prop);

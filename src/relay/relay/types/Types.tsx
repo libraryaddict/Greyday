@@ -5,7 +5,7 @@ export type SettingProp = {
   name: string;
   description: string;
   default: string;
-  originally: string;
+  savedValue: string;
   value: string;
   type: string;
   dropdown: [string, string][];
