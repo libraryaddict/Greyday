@@ -10,7 +10,7 @@ The following commands are supported.
 
 `greyday sim` - Prepares to run grey you, without running it
 
-`greyday settings` - Prepares to run grey you, without running it
+`greyday settings` - Prepares to run grey you, without running it - Use the relay page instead!
 
 `greyday required` - Checks your stuff and tells you what you're lacking or not.
 
