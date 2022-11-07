@@ -17,6 +17,7 @@ import {
   print,
   retrieveItem,
   sessionLogs,
+  setProperty,
   toEffect,
   toInt,
   toItem,
@@ -323,6 +324,18 @@ const bookbatRecipes: Item[] = [
   10995, 10996, 10997, 10999,
 ].map((i) => toItem(i));
 
+const recipeProp = "_droppedCookbatRecipe";
+
 export function hasCookbatRecipe(): boolean {
-  return bookbatRecipes.find((i) => availableAmount(i) > 0) != null;
+  if (getProperty(recipeProp) == "true") {
+    return true;
+  }
+
+  const hasRecipe = bookbatRecipes.find((i) => availableAmount(i) > 0) != null;
+
+  if (hasRecipe) {
+    setProperty(recipeProp, "true");
+  }
+
+  return hasRecipe;
 }
