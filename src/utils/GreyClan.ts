@@ -161,13 +161,13 @@ export function getFax(monster: Monster) {
     };
 
     if (!hasReceivedFax()) {
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i <= 6; i++) {
         // We might have missed it or overrode it
         if (i % 3 == 0) {
           chatPrivate(faxbot, monster.name);
         }
 
-        wait(10);
+        wait(10 + i);
 
         if (hasReceivedFax()) {
           return;
