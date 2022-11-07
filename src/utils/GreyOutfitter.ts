@@ -22,6 +22,8 @@ interface MaximizerWeight {
   max?: number;
 }
 
+const goose = Familiar.get("Grey Goose");
+
 export class GreyOutfit {
   static IGNORE_OUTFIT: any = "Ignore Outfit";
   private allowChampBottle: boolean = false;
@@ -253,7 +255,16 @@ export class GreyOutfit {
     const modifiers: string[] = [];
 
     if (this.famExpWeight > 0 && !this.hasExtra("familiar exp")) {
-      modifiers.push("+" + this.famExpWeight + " familiar experience");
+      let mod = "+" + this.famExpWeight + " familiar experience";
+
+      if (familiarWeight(goose) < 6) {
+        // Subtract 1 as we gain a minimum of 1 exp per fight
+        const expToReabsorb = 36 - 1 - goose.experience;
+
+        mod += " " + expToReabsorb + " MAX";
+      }
+
+      modifiers.push(mod);
     }
 
     if (this.itemDropWeight > 0 && !this.hasExtra("item drop")) {
