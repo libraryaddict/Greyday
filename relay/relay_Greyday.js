@@ -2032,13 +2032,13 @@ function getFax(monster) {
     };
 
     if (!hasReceivedFax()) {
-      for (var i = 0; i < 6; i++) {
+      for (var i = 0; i <= 6; i++) {
         // We might have missed it or overrode it
         if (i % 3 == 0) {
           (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.chatPrivate)(faxbot, monster.name);
         }
 
-        (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.wait)(10);
+        (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.wait)(10 + i);
 
         if (hasReceivedFax()) {
           return;
