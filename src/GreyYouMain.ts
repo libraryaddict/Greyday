@@ -112,7 +112,10 @@ class GreyYouMain {
   doHelp() {
     printHtml(centerText("======================================"));
     print("help - Shows this message", "blue");
-    print("settings - Show the settings", "blue");
+    print(
+      "settings - Show the settings (You should use the relay page instead!)",
+      "blue"
+    );
     print("required - Prints off a series of requirements.", "blue");
     print(
       "resources - A debug command that predicts what resources it would try to use in Grey You using your current settings",
