@@ -11,6 +11,7 @@ import {
   haveEffect,
   haveFamiliar,
   haveSkill,
+  historicalPrice,
   Item,
   Location,
   print,
@@ -23,6 +24,7 @@ import {
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { GreySettings } from "../../../utils/GreySettings";
 import { Macro } from "../../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
@@ -43,6 +45,7 @@ export class Quest12WarNuns implements QuestInfo {
   asdonMartin: Item = Item.get("Asdon Martin keyfob");
   driving: Effect = Effect.get("Driving Observantly");
   savingsBond: Item = Item.get("Savings bond");
+  autumnDollar: Item = Item.get("Autumn Dollar");
 
   fishHead: Item = Item.get("Fish Head");
   boxedWine: Item = Item.get("Boxed Wine");
@@ -282,6 +285,15 @@ export class Quest12WarNuns implements QuestInfo {
       haveEffect(effectModifier(this.savingsBond, "Effect")) == 0
     ) {
       use(this.savingsBond);
+    }
+
+    if (
+      GreySettings.greyValueOfAdventure * 1.3 >
+        historicalPrice(this.autumnDollar) &&
+      availableAmount(this.autumnDollar) > 0 &&
+      haveEffect(effectModifier(this.autumnDollar, "Effect")) == 0
+    ) {
+      use(this.autumnDollar);
     }
   }
 

@@ -17,6 +17,7 @@ import {
   propertyExists,
   setProperty,
   toInt,
+  toJson,
   visitUrl,
   wait,
   waitq,
@@ -112,7 +113,8 @@ function runInClan(clanId: number, func: () => void) {
 }
 
 function loadWhitelists(): Map<number, string> {
-  const prop = "_whitelistedClans";
+  const prop = "_clansWhitelisted";
+
   availableClans = new Map();
 
   if (!propertyExists(prop)) {
@@ -140,14 +142,14 @@ function loadWhitelists(): Map<number, string> {
 
     setProperty(
       prop,
-      [...availableClans].map(([id, name]) => id + ">" + name).join(">>")
+      toJson([...availableClans].map(([k, v]) => [k.toString(), v]))
     );
   } else {
     const data = getProperty(prop);
 
-    for (const [id, name] of data.split(">>").map((s) => s.split(">"))) {
-      availableClans.set(toInt(id), name);
-    }
+    availableClans = new Map(
+      (JSON.parse(data) as [string, string][]).map(([k, v]) => [toInt(k), v])
+    );
   }
 
   return availableClans;
