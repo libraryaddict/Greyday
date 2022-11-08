@@ -1,5 +1,6 @@
 import { Location } from "kolmafia";
 import { greyAdv } from "../../../utils/GreyLocations";
+import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -42,6 +43,7 @@ export class QuestL4BatsLeft implements QuestInfo {
 
   run(): QuestAdventure {
     return {
+      outfit: new GreyOutfit().addWeight("Stench Res", 100, null, 1),
       location: this.location,
       run: () => {
         greyAdv(this.location);

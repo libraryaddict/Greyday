@@ -58,6 +58,7 @@ export class QuestL4BatsBoss implements QuestInfo {
   run(): QuestAdventure {
     const outfit = new GreyOutfit();
     outfit.meatDropWeight = 2;
+    outfit.addWeight("Stench Res", 100, null, 1);
 
     return {
       location: this.loc,

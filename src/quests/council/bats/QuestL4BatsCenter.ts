@@ -5,8 +5,11 @@ import {
   getProperty,
   Item,
   Location,
+  maximize,
   Monster,
+  numericModifier,
   Skill,
+  turnsPlayed,
   use,
 } from "kolmafia";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
@@ -27,6 +30,8 @@ export class QuestL4BatsCenter extends TaskInfo implements QuestInfo {
   goose: Familiar = Familiar.get("Grey Goose");
   paths: PossiblePath[] = [];
   vampBat: Monster = Monster.get("vampire bat");
+  hasStenchRes: boolean = false;
+  lastStenchCheck: number;
 
   createPaths(assumeUnstarted: boolean) {
     this.paths = [];
@@ -66,6 +71,21 @@ export class QuestL4BatsCenter extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (!this.hasStenchRes) {
+      if (
+        this.lastStenchCheck == null ||
+        this.lastStenchCheck + 10 < turnsPlayed()
+      ) {
+        maximize("Stench Res -tie", true);
+        this.hasStenchRes =
+          numericModifier("Generated:_spec", "Stench Resistance") > 0;
+      }
+
+      if (!this.hasStenchRes) {
+        return QuestStatus.NOT_READY;
+      }
+    }
+
     if (familiarWeight(this.goose) >= 6) {
       return QuestStatus.FASTER_LATER;
     }
@@ -83,6 +103,8 @@ export class QuestL4BatsCenter extends TaskInfo implements QuestInfo {
     } else {
       outfit.setItemDrops();
     }
+
+    outfit.addWeight("Stench Res", 100, null, 1);
 
     return {
       outfit: outfit,
