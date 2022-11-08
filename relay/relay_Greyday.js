@@ -2007,12 +2007,9 @@ function getFax(monster) {
   var faxbot = "CheeseFax";
 
   if (!canAccessClan(getDefaultClan()) || !(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.isOnline)(faxbot)) {
-    throw (
-      "Cannot access fax machine, clan accessible? " +
-      canAccessClan(getDefaultClan()) +
-      ". CheeseFax online? " +
-      (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.isOnline)(faxbot));
-
+    throw "Cannot access fax machine, clan accessible? ".concat(canAccessClan(
+    getDefaultClan()), ". ").concat(
+    faxbot, " online? ").concat((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.isOnline)(faxbot));
   }
 
   runInClan(getDefaultClan(), function () {
@@ -2464,17 +2461,23 @@ function getGreySettings() {
     "default": "Grey Goose"
   };
 
+  var viableClans = [
+  ["Don't use VIP Invitation", ""]].concat(_toConsumableArray(
+  _toConsumableArray((0,_GreyClan__WEBPACK_IMPORTED_MODULE_1__/* .getAvailableClans */ .Q5)().values()).map(function (s) {return [s, s];})));
+
+
   var greyVIPClan = {
     name: "greyVIPClan",
     description:
-    "The name of the clan we will use to execute Fax Requests, and switch to for other VIP functions if they are not available in our current clan. Set to empty to disable all VIP usage, even the yellow rockets..",
+    "The name of the clan we will use to execute Fax Requests, and switch to for other VIP functions if they are not available in our current clan. Set to empty (Or in relay, 'Don't use VIP Invitation') to disable all VIP usage, even the yellow rockets.. Best support for 'Bonus Adventures From Hell' and 'The Average Clan'",
     valid: function valid(value) {return (
         value.length == 0 ||
         (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getClanName)().toLowerCase() == value.toLowerCase() ||
         _toConsumableArray((0,_GreyClan__WEBPACK_IMPORTED_MODULE_1__/* .getAvailableClans */ .Q5)().values()).find(
         function (s) {return s.toLowerCase() == value.toLowerCase();}) !=
         null);},
-    "default": "Bonus Adventures From Hell"
+    "default": "Bonus Adventures From Hell",
+    viableSettings: viableClans
   };
 
   var greyFortuneTeller = {
@@ -2514,6 +2517,7 @@ function getGreySettings() {
   skipPalindome,
   useMummery,
   greyCookbat,
+  greyVIPClan,
   moonTune,
   dailyMalware,
   greySavePulls,
@@ -2521,8 +2525,7 @@ function getGreySettings() {
   greyValueOfNC,
   greyPullValue,
   greySwitchWorkshed,
-  greyClipArt,
-  greyVIPClan].
+  greyClipArt].
   map(function (s) {
     s.setting = "main";
 
