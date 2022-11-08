@@ -1,6 +1,7 @@
 import {
   availableAmount,
   Familiar,
+  getClanName,
   getProperty,
   inHardcore,
   Item,
@@ -236,6 +237,7 @@ export function getGreySettings(): GreySetting[] {
       "The name of the clan we will use to execute Fax Requests, and switch to for other VIP functions if they are not available in our current clan. Set to empty to disable all VIP usage, even the yellow rockets..",
     valid: (value) =>
       value.length == 0 ||
+      getClanName().toLowerCase() == value.toLowerCase() ||
       [...getAvailableClans().values()].find(
         (s) => s.toLowerCase() == value.toLowerCase()
       ) != null,

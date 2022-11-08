@@ -21,8 +21,11 @@ const vipInvitation = Item.get("Clan VIP Lounge key");
 const fireworks = Item.get("Clan Underground fireworks shop");
 const fortune = Item.get("Clan Carnival Game");
 const faxMachine = Item.get("deluxe fax machine");
-const bonusAdvFromHell: number = 90485;
 const faxOnline = isOnline("CheeseFax");
+const fortuneTellers: Map<number, string> = new Map([
+  [82072, "AverageChat"],
+  [90485, "CheeseFax"],
+]);
 
 let availableClans: Map<number, string>;
 
@@ -65,6 +68,10 @@ class ClanSwitcher {
 function getDefaultClan(): number {
   if (GreySettings.greyVIPClan.trim().length == 0) {
     return null;
+  }
+
+  if (GreySettings.greyVIPClan.trim().toLowerCase() == getClanName()) {
+    return getClanId();
   }
 
   const clanInfo = [...getAvailableClans()].find(
@@ -208,24 +215,43 @@ export function doFortuneTeller() {
     return;
   }
 
-  const bot: string = "CheeseFax";
-  const fortuneClan: number = bonusAdvFromHell;
+  let bot: string = null;
+  let fortuneClan: number = null;
 
-  if (!canAccessClan(fortuneClan)) {
-    print("Oh dear, can't access the clan for Fortune Telling", "red");
-    return;
+  if (fortuneTellers.has(getClanId())) {
+    bot = fortuneTellers.get(getClanId());
+    fortuneClan = getClanId();
+
+    if (!isOnline(bot)) {
+      bot = null;
+    }
   }
 
-  if (getClanId() != fortuneClan && !hasWhitelistToCurrentClan()) {
+  if (bot == null) {
+    if (!hasWhitelistToCurrentClan()) {
+      print(
+        "Oh dear, we don't have whitelist to current clan. Skipping fortune telling",
+        "red"
+      );
+      return;
+    }
+
+    for (const [clanId, botName] of fortuneTellers) {
+      if (!canAccessClan(clanId) || !isOnline(bot)) {
+        continue;
+      }
+
+      bot = botName;
+      fortuneClan = clanId;
+      break;
+    }
+  }
+
+  if (bot == null) {
     print(
-      "Oh dear, we don't have whitelist to current clan. Skipping fortune telling",
+      "Unfortunately we do not have access to any Fortune Telling as the bots are either offline or you do not have a whitelist to the clans",
       "red"
     );
-    return;
-  }
-
-  if (!isOnline(bot)) {
-    print(`Oh dear, can't do fortune teller as ${bot} is offline`);
     return;
   }
 
