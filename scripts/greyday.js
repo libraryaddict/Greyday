@@ -139,7 +139,8 @@ function runInClan(clanId, func) {
 }
 
 function loadWhitelists() {
-  var prop = "_whitelistedClans";
+  var prop = "_clansWhitelisted";
+
   availableClans = new Map();
 
   if (!(0,external_kolmafia_namespaceObject.propertyExists)(prop)) {
@@ -167,14 +168,14 @@ function loadWhitelists() {
 
     (0,external_kolmafia_namespaceObject.setProperty)(
     prop,
-    _toConsumableArray(availableClans).map(function (_ref3) {var _ref4 = _slicedToArray(_ref3, 2),id = _ref4[0],name = _ref4[1];return id + ">" + name;}).join(">>"));
+    (0,external_kolmafia_namespaceObject.toJson)(_toConsumableArray(availableClans).map(function (_ref3) {var _ref4 = _slicedToArray(_ref3, 2),k = _ref4[0],v = _ref4[1];return [k.toString(), v];})));
 
   } else {
-    var data = (0,external_kolmafia_namespaceObject.getProperty)(prop);var _iterator = _createForOfIteratorHelper(
+    var data = (0,external_kolmafia_namespaceObject.getProperty)(prop);
 
-      data.split(">>").map(function (s) {return s.split(">");})),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _step$value = _slicedToArray(_step.value, 2),id = _step$value[0],name = _step$value[1];
-        availableClans.set((0,external_kolmafia_namespaceObject.toInt)(id), name);
-      }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+    availableClans = new Map(
+    JSON.parse(data).map(function (_ref5) {var _ref6 = _slicedToArray(_ref5, 2),k = _ref6[0],v = _ref6[1];return [(0,external_kolmafia_namespaceObject.toInt)(k), v];}));
+
   }
 
   return availableClans;
@@ -291,9 +292,9 @@ function doFortuneTeller() {
       "red");
 
       return;
-    }var _iterator2 = _createForOfIteratorHelper(
+    }var _iterator = _createForOfIteratorHelper(
 
-      fortuneTellers),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var _step2$value = _slicedToArray(_step2.value, 2),clanId = _step2$value[0],botName = _step2$value[1];
+      fortuneTellers),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _step$value = _slicedToArray(_step.value, 2),clanId = _step$value[0],botName = _step$value[1];
         if (!canAccessClan(clanId) || !(0,external_kolmafia_namespaceObject.isOnline)(bot)) {
           continue;
         }
@@ -301,7 +302,7 @@ function doFortuneTeller() {
         bot = botName;
         fortuneClan = clanId;
         break;
-      }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+      }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
   }
 
   if (bot == null) {
@@ -14360,6 +14361,7 @@ function QuestL12Nuns_classCallCheck(instance, Constructor) {if (!(instance inst
 
 
 
+
 var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL12Nuns_classCallCheck(this, Quest12WarNuns);QuestL12Nuns_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get("The Themthar Hills"));QuestL12Nuns_defineProperty(this, "lep",
     external_kolmafia_namespaceObject.Familiar.get("Leprechaun"));QuestL12Nuns_defineProperty(this, "hobo",
@@ -14375,7 +14377,8 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
     external_kolmafia_namespaceObject.Item.get("Cosmic Bowling Ball"));QuestL12Nuns_defineProperty(this, "asdonMartin",
     external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestL12Nuns_defineProperty(this, "driving",
     external_kolmafia_namespaceObject.Effect.get("Driving Observantly"));QuestL12Nuns_defineProperty(this, "savingsBond",
-    external_kolmafia_namespaceObject.Item.get("Savings bond"));QuestL12Nuns_defineProperty(this, "fishHead",
+    external_kolmafia_namespaceObject.Item.get("Savings bond"));QuestL12Nuns_defineProperty(this, "autumnDollar",
+    external_kolmafia_namespaceObject.Item.get("Autumn Dollar"));QuestL12Nuns_defineProperty(this, "fishHead",
 
     external_kolmafia_namespaceObject.Item.get("Fish Head"));QuestL12Nuns_defineProperty(this, "boxedWine",
     external_kolmafia_namespaceObject.Item.get("Boxed Wine"));QuestL12Nuns_defineProperty(this, "piscatini",
@@ -14615,6 +14618,15 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
       (0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(this.savingsBond, "Effect")) == 0)
       {
         (0,external_kolmafia_namespaceObject.use)(this.savingsBond);
+      }
+
+      if (
+      GreySettings.greyValueOfAdventure * 1.3 >
+      (0,external_kolmafia_namespaceObject.historicalPrice)(this.autumnDollar) &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.autumnDollar) > 0 &&
+      (0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(this.autumnDollar, "Effect")) == 0)
+      {
+        (0,external_kolmafia_namespaceObject.use)(this.autumnDollar);
       }
     } }, { key: "canAcceptPrimes", value:
 
@@ -33138,7 +33150,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "d662813";
+var lastCommitHash = "90f9407";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
