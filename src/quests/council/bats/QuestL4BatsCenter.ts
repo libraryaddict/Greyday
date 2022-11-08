@@ -76,6 +76,7 @@ export class QuestL4BatsCenter extends TaskInfo implements QuestInfo {
         this.lastStenchCheck == null ||
         this.lastStenchCheck + 10 < turnsPlayed()
       ) {
+        this.lastStenchCheck = turnsPlayed();
         maximize("Stench Res -tie", true);
         this.hasStenchRes =
           numericModifier("Generated:_spec", "Stench Resistance") > 0;
