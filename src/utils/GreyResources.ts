@@ -5,6 +5,7 @@ import {
   cliExecute,
   closetAmount,
   displayAmount,
+  equippedAmount,
   Familiar,
   getLocketMonsters,
   getProperty,
@@ -246,7 +247,12 @@ export class GreyRequirements {
       unsupported: boolean = false
     ) => {
       if (name instanceof Item) {
-        owns = itemAmount(name) + closetAmount(name) + storageAmount(name) > 0;
+        owns =
+          itemAmount(name) +
+            closetAmount(name) +
+            storageAmount(name) +
+            equippedAmount(name) >
+          0;
         name = name.name;
       } else if (name instanceof Familiar) {
         owns = haveFamiliar(name);
