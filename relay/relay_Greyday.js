@@ -1885,15 +1885,18 @@ resourceType)
 /* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(530);
 /* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(kolmafia__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _GreySettings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(772);
-function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return _arrayLikeToArray(arr);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function _createClass(Constructor, protoProps, staticProps) {if (protoProps) _defineProperties(Constructor.prototype, protoProps);if (staticProps) _defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function _createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return _arrayLikeToArray(arr);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function _createClass(Constructor, protoProps, staticProps) {if (protoProps) _defineProperties(Constructor.prototype, protoProps);if (staticProps) _defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 var vipInvitation = kolmafia__WEBPACK_IMPORTED_MODULE_0__.Item.get("Clan VIP Lounge key");
 var fireworks = kolmafia__WEBPACK_IMPORTED_MODULE_0__.Item.get("Clan Underground fireworks shop");
 var fortune = kolmafia__WEBPACK_IMPORTED_MODULE_0__.Item.get("Clan Carnival Game");
 var faxMachine = kolmafia__WEBPACK_IMPORTED_MODULE_0__.Item.get("deluxe fax machine");
-var bonusAdvFromHell = 90485;
 var faxOnline = (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.isOnline)("CheeseFax");
+var fortuneTellers = new Map([
+[82072, "AverageChat"],
+[90485, "CheeseFax"]]);
+
 
 var availableClans;var
 
@@ -1936,6 +1939,10 @@ ClanSwitcher = /*#__PURE__*/function () {function ClanSwitcher() {_classCallChec
 function getDefaultClan() {
   if (_GreySettings__WEBPACK_IMPORTED_MODULE_1__/* .GreySettings.greyVIPClan.trim */ .G6.greyVIPClan.trim().length == 0) {
     return null;
+  }
+
+  if (_GreySettings__WEBPACK_IMPORTED_MODULE_1__/* .GreySettings.greyVIPClan.trim */ .G6.greyVIPClan.trim().toLowerCase() == (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getClanName)()) {
+    return (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getClanId)();
   }
 
   var clanInfo = _toConsumableArray(getAvailableClans()).find(
@@ -2079,24 +2086,43 @@ function doFortuneTeller() {
     return;
   }
 
-  var bot = "CheeseFax";
-  var fortuneClan = bonusAdvFromHell;
+  var bot = null;
+  var fortuneClan = null;
 
-  if (!canAccessClan(fortuneClan)) {
-    print("Oh dear, can't access the clan for Fortune Telling", "red");
-    return;
+  if (fortuneTellers.has(getClanId())) {
+    bot = fortuneTellers.get(getClanId());
+    fortuneClan = getClanId();
+
+    if (!isOnline(bot)) {
+      bot = null;
+    }
   }
 
-  if (getClanId() != fortuneClan && !hasWhitelistToCurrentClan()) {
+  if (bot == null) {
+    if (!hasWhitelistToCurrentClan()) {
+      print(
+      "Oh dear, we don't have whitelist to current clan. Skipping fortune telling",
+      "red");
+
+      return;
+    }var _iterator = _createForOfIteratorHelper(
+
+      fortuneTellers),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _step$value = _slicedToArray(_step.value, 2),clanId = _step$value[0],botName = _step$value[1];
+        if (!canAccessClan(clanId) || !isOnline(bot)) {
+          continue;
+        }
+
+        bot = botName;
+        fortuneClan = clanId;
+        break;
+      }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+  }
+
+  if (bot == null) {
     print(
-    "Oh dear, we don't have whitelist to current clan. Skipping fortune telling",
+    "Unfortunately we do not have access to any Fortune Telling as the bots are either offline or you do not have a whitelist to the clans",
     "red");
 
-    return;
-  }
-
-  if (!isOnline(bot)) {
-    print("Oh dear, can't do fortune teller as ".concat(bot, " is offline"));
     return;
   }
 
@@ -2444,6 +2470,7 @@ function getGreySettings() {
     "The name of the clan we will use to execute Fax Requests, and switch to for other VIP functions if they are not available in our current clan. Set to empty to disable all VIP usage, even the yellow rockets..",
     valid: function valid(value) {return (
         value.length == 0 ||
+        (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getClanName)().toLowerCase() == value.toLowerCase() ||
         _toConsumableArray((0,_GreyClan__WEBPACK_IMPORTED_MODULE_1__/* .getAvailableClans */ .Q5)().values()).find(
         function (s) {return s.toLowerCase() == value.toLowerCase();}) !=
         null);},
