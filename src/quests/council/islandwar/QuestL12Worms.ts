@@ -254,6 +254,9 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
           0;
         let killingBlow: Macro;
         const props = new PropertyManager();
+        const killingSkill = haveSkill(this.nanovision)
+          ? this.nanovision
+          : Skill.get("Infinite Loop");
 
         if (resource != null && !this.isKillingQueen()) {
           resource.prepare(null, props);
@@ -262,10 +265,10 @@ export class QuestL12Worms extends TaskInfo implements QuestInfo {
           if (tryRun) {
             killingBlow.runaway();
           } else {
-            killingBlow.skill(this.nanovision).repeat();
+            killingBlow.skill(killingSkill).repeat();
           }
         } else {
-          killingBlow = Macro.skill(this.nanovision).repeat();
+          killingBlow = Macro.skill(killingSkill).repeat();
         }
 
         try {
