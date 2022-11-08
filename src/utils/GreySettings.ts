@@ -231,10 +231,15 @@ export function getGreySettings(): GreySetting[] {
     default: "Grey Goose",
   };
 
+  const viableClans: [string, string][] = [
+    ["Don't use VIP Invitation", ""],
+    ...[...getAvailableClans().values()].map((s) => [s, s] as [string, string]),
+  ];
+
   const greyVIPClan: GreySetting = {
     name: "greyVIPClan",
     description:
-      "The name of the clan we will use to execute Fax Requests, and switch to for other VIP functions if they are not available in our current clan. Set to empty to disable all VIP usage, even the yellow rockets..",
+      "The name of the clan we will use to execute Fax Requests, and switch to for other VIP functions if they are not available in our current clan. Set to empty (Or in relay, 'Don't use VIP Invitation') to disable all VIP usage, even the yellow rockets.. Best support for 'Bonus Adventures From Hell' and 'The Average Clan'",
     valid: (value) =>
       value.length == 0 ||
       getClanName().toLowerCase() == value.toLowerCase() ||
@@ -242,6 +247,7 @@ export function getGreySettings(): GreySetting[] {
         (s) => s.toLowerCase() == value.toLowerCase()
       ) != null,
     default: "Bonus Adventures From Hell",
+    viableSettings: viableClans,
   };
 
   const greyFortuneTeller: GreySetting = {
@@ -281,6 +287,7 @@ export function getGreySettings(): GreySetting[] {
     skipPalindome,
     useMummery,
     greyCookbat,
+    greyVIPClan,
     moonTune,
     dailyMalware,
     greySavePulls,
@@ -289,7 +296,6 @@ export function getGreySettings(): GreySetting[] {
     greyPullValue,
     greySwitchWorkshed,
     greyClipArt,
-    greyVIPClan,
   ].map((s) => {
     s.setting = "main";
 

@@ -136,12 +136,9 @@ export function getFax(monster: Monster) {
   const faxbot = "CheeseFax";
 
   if (!canAccessClan(getDefaultClan()) || !isOnline(faxbot)) {
-    throw (
-      "Cannot access fax machine, clan accessible? " +
-      canAccessClan(getDefaultClan()) +
-      ". CheeseFax online? " +
-      isOnline(faxbot)
-    );
+    throw `Cannot access fax machine, clan accessible? ${canAccessClan(
+      getDefaultClan()
+    )}. ${faxbot} online? ${isOnline(faxbot)}`;
   }
 
   runInClan(getDefaultClan(), () => {
