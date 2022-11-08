@@ -1976,27 +1976,54 @@ function runInClan(clanId, func) {
   }
 }
 
+function loadWhitelists() {
+  var prop = "_whitelistedClans";
+  availableClans = new Map();
+
+  if (!(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.propertyExists)(prop)) {
+    // Wait until we can fetch the page without errors
+    while (
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.currentRound)() != 0 ||
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.handlingChoice)() ||
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.choiceFollowsFight)() ||
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.fightFollowsChoice)())
+    {}
+
+    var page = (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("clan_signup.php?place=managewhitelists");
+
+    var match;
+
+    while (
+    (match = page.match(
+    /option +value=(\d+)>([^<>]*)<\/option>(?!.*name=whichclan>)/)) !=
+    null)
+    {
+      page = page.replace(match[0], "");
+
+      availableClans.set((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.toInt)(match[1]), match[2]);
+    }
+
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.setProperty)(
+    prop,
+    _toConsumableArray(availableClans).map(function (_ref3) {var _ref4 = _slicedToArray(_ref3, 2),id = _ref4[0],name = _ref4[1];return id + ">" + name;}).join(">>"));
+
+  } else {
+    var data = (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getProperty)(prop);var _iterator = _createForOfIteratorHelper(
+
+      data.split(">>").map(function (s) {return s.split(">");})),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _step$value = _slicedToArray(_step.value, 2),id = _step$value[0],name = _step$value[1];
+        availableClans.set((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.toInt)(id), name);
+      }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+  }
+
+  return availableClans;
+}
+
 function getAvailableClans() {
   if (availableClans != null) {
     return availableClans;
   }
 
-  var page = (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("clan_signup.php?place=managewhitelists");
-
-  availableClans = new Map();
-  var match;
-
-  while (
-  (match = page.match(
-  /option +value=(\d+)>([^<>]*)<\/option>(?!.*name=whichclan>)/)) !=
-  null)
-  {
-    page = page.replace(match[0], "");
-
-    availableClans.set((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.toInt)(match[1]), match[2]);
-  }
-
-  return availableClans;
+  return loadWhitelists();
 }
 
 function getFax(monster) {
@@ -2102,9 +2129,9 @@ function doFortuneTeller() {
       "red");
 
       return;
-    }var _iterator = _createForOfIteratorHelper(
+    }var _iterator2 = _createForOfIteratorHelper(
 
-      fortuneTellers),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _step$value = _slicedToArray(_step.value, 2),clanId = _step$value[0],botName = _step$value[1];
+      fortuneTellers),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var _step2$value = _slicedToArray(_step2.value, 2),clanId = _step2$value[0],botName = _step2$value[1];
         if (!canAccessClan(clanId) || !isOnline(bot)) {
           continue;
         }
@@ -2112,7 +2139,7 @@ function doFortuneTeller() {
         bot = botName;
         fortuneClan = clanId;
         break;
-      }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+      }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
   }
 
   if (bot == null) {
