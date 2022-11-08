@@ -51,12 +51,8 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   mines: Location = Location.get("Itznotyerzitz Mine");
   needRecalculate: boolean;
   burglar: Familiar = Familiar.get("Cat Burglar");
-  faxAndGooseDupe: PossiblePath = new PossiblePath(1)
-    .add(ResourceCategory.YELLOW_RAY)
-    .addFax(this.mountainMan);
-  failsafeBackup: PossiblePath = new PossiblePath(1).add(
-    ResourceCategory.COPIER
-  );
+  faxAndGooseDupe: PossiblePath;
+  failsafeBackup: PossiblePath;
   paths: PossiblePath[] = [];
   asbestos: Item = Item.get("asbestos ore");
   linoleum: Item = Item.get("linoleum ore");
@@ -117,6 +113,10 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   createPaths(assumeUnstarted: boolean): void {
     this.needRecalculate = this.getStatus() < MountainStatus.TRAPPER_DEMANDS;
     this.paths = [];
+    this.faxAndGooseDupe = new PossiblePath(1)
+      .add(ResourceCategory.YELLOW_RAY)
+      .addFax(this.mountainMan);
+    this.failsafeBackup = new PossiblePath(1).add(ResourceCategory.COPIER);
 
     const resourceTypes: ResourceCategory[] = [];
     const needOres = assumeUnstarted ? 3 : this.getOreRemaining();
