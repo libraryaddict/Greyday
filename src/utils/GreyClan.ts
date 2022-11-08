@@ -1,15 +1,21 @@
 import {
   availableAmount,
   chatPrivate,
+  choiceFollowsFight,
   cliExecute,
+  currentRound,
+  fightFollowsChoice,
   getClanId,
   getClanLounge,
   getClanName,
   getProperty,
+  handlingChoice,
   isOnline,
   Item,
   Monster,
   print,
+  propertyExists,
+  setProperty,
   toInt,
   visitUrl,
   wait,
@@ -105,27 +111,54 @@ function runInClan(clanId: number, func: () => void) {
   }
 }
 
+function loadWhitelists(): Map<number, string> {
+  const prop = "_whitelistedClans";
+  availableClans = new Map();
+
+  if (!propertyExists(prop)) {
+    // Wait until we can fetch the page without errors
+    while (
+      currentRound() != 0 ||
+      handlingChoice() ||
+      choiceFollowsFight() ||
+      fightFollowsChoice()
+    ) {}
+
+    let page = visitUrl("clan_signup.php?place=managewhitelists");
+
+    let match: string[];
+
+    while (
+      (match = page.match(
+        /option +value=(\d+)>([^<>]*)<\/option>(?!.*name=whichclan>)/
+      )) != null
+    ) {
+      page = page.replace(match[0], "");
+
+      availableClans.set(toInt(match[1]), match[2]);
+    }
+
+    setProperty(
+      prop,
+      [...availableClans].map(([id, name]) => id + ">" + name).join(">>")
+    );
+  } else {
+    const data = getProperty(prop);
+
+    for (const [id, name] of data.split(">>").map((s) => s.split(">"))) {
+      availableClans.set(toInt(id), name);
+    }
+  }
+
+  return availableClans;
+}
+
 export function getAvailableClans(): Map<number, string> {
   if (availableClans != null) {
     return availableClans;
   }
 
-  let page = visitUrl("clan_signup.php?place=managewhitelists");
-
-  availableClans = new Map();
-  let match: string[];
-
-  while (
-    (match = page.match(
-      /option +value=(\d+)>([^<>]*)<\/option>(?!.*name=whichclan>)/
-    )) != null
-  ) {
-    page = page.replace(match[0], "");
-
-    availableClans.set(toInt(match[1]), match[2]);
-  }
-
-  return availableClans;
+  return loadWhitelists();
 }
 
 export function getFax(monster: Monster) {
