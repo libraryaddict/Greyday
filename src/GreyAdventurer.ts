@@ -484,11 +484,22 @@ export class GreyAdventurer {
         }
       }
 
-      replaceWith.push(...this.adventureFinder.getRecommendedFamiliars());
+      // We want cat burglar to always be charged first
+      const burglar = Familiar.get("Cat Burglar");
+      const recced = this.adventureFinder.getRecommendedFamiliars();
 
+      // If burglar wants to be charged, add it to the list
+      if (recced.includes(burglar)) {
+        replaceWith.push(burglar);
+      }
+
+      // If we want the recipe, add cookbat
       if (GreySettings.greyCookbatRecipe && !hasCookbatRecipe()) {
         replaceWith.push(Familiar.get("Cookbookbat"));
       }
+
+      // Add every other fam, exclude burglar.
+      replaceWith.push(...recced.filter((f) => f != burglar));
 
       const robor: Familiar = Familiar.get("Robortender");
       const doRobor =
