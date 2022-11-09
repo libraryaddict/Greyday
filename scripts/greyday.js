@@ -18944,7 +18944,8 @@ var QuestL1Toot = /*#__PURE__*/function (_TaskInfo) {QuestL1Toot_inherits(QuestL
     external_kolmafia_namespaceObject.Item.get("Deck of Every Card"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "ring",
     external_kolmafia_namespaceObject.Item.get("Gold Wedding Ring"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "gold",
     external_kolmafia_namespaceObject.Item.get("1,970 Carat Gold"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "mickyCard",
-    external_kolmafia_namespaceObject.Item.get("1952 Mickey Mantle card"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "letter",
+    external_kolmafia_namespaceObject.Item.get("1952 Mickey Mantle card"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "autosells",
+    [_this.ring, _this.gold, _this.mickyCard]);QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "letter",
     external_kolmafia_namespaceObject.Item.get("Letter from King Ralph XI"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "sack",
     external_kolmafia_namespaceObject.Item.get("pork elf goodies sack"));return _this;}QuestL1Toot_createClass(QuestL1Toot, [{ key: "level", value:
 
@@ -18975,6 +18976,7 @@ var QuestL1Toot = /*#__PURE__*/function (_TaskInfo) {QuestL1Toot_inherits(QuestL
       this.paths = [];
 
       var hasEnoughMeat =
+      this.autosells.find(function (i) {return (0,external_kolmafia_namespaceObject.itemAmount)(i) > 0;}) ||
       (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("hasMaydayContract")) &&
       (0,external_kolmafia_namespaceObject.availableAmount)(this.boombox) > 0;
 
@@ -19045,6 +19047,10 @@ var QuestL1Toot = /*#__PURE__*/function (_TaskInfo) {QuestL1Toot_inherits(QuestL
               throw "Expected to have sold a " + _this2.mickyCard;
             }
           }
+
+          _this2.autosells.
+          filter(function (i) {return (0,external_kolmafia_namespaceObject.itemAmount)(i) > 0;}).
+          forEach(function (i) {return (0,external_kolmafia_namespaceObject.autosell)(i, (0,external_kolmafia_namespaceObject.itemAmount)(i));});
 
           // If we're poor, sell one of the gems for some starting meat
           if ((0,external_kolmafia_namespaceObject.myMeat)() < 500) {
@@ -26570,12 +26576,16 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.getProperty)("breakfastCompleted") == "false") {
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.saber) > 0 && (0,external_kolmafia_namespaceObject.getProperty)("_saberMod") == "0") {
         return QuestStatus.READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.saber) > 0 && (0,external_kolmafia_namespaceObject.getProperty)("_saberMod") == "0") {
-        return QuestStatus.READY;
+      if ((0,external_kolmafia_namespaceObject.getProperty)("breakfastCompleted") == "false") {
+        if ((0,external_kolmafia_namespaceObject.myMeat)() >= 400) {
+          return QuestStatus.READY;
+        }
+
+        return QuestStatus.NOT_READY;
       }
 
       return QuestStatus.COMPLETED;
@@ -26667,7 +26677,7 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
             }
           }
 
-          if ((0,external_kolmafia_namespaceObject.getProperty)("breakfastCompleted") == "false") {
+          if ((0,external_kolmafia_namespaceObject.getProperty)("breakfastCompleted") == "false" && (0,external_kolmafia_namespaceObject.myMeat)() >= 400) {
             var breakfastScript = (0,external_kolmafia_namespaceObject.getProperty)("breakfastScript");
             var props = new PropertyManager();
             props.setProperty("grabCloversSoftcore", "true");
@@ -33512,7 +33522,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "89e9a1a";
+var lastCommitHash = "bdc72be";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
