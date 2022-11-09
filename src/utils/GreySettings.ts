@@ -274,6 +274,14 @@ export function getGreySettings(): GreySetting[] {
     default: true,
   };
 
+  const prioritizeLocket: GreySetting = {
+    name: "greyLocketWeight",
+    description:
+      "Set this to a value higher than 0 to add weight to maximizer if you want Greyday to wear the locket more often, this is only useful if you're trying to locket everything",
+    valid: (s) => /$\d+^/.test(s),
+    default: 0,
+  };
+
   return [
     //greyBountyHunter,
     towerBreak,
@@ -296,6 +304,7 @@ export function getGreySettings(): GreySetting[] {
     greyPullValue,
     greySwitchWorkshed,
     greyClipArt,
+    prioritizeLocket,
   ].map((s) => {
     s.setting = "main";
 
@@ -377,6 +386,7 @@ export class GreySettings {
   static greyHippyMode: boolean = false;
   static greyGrabZapWand: boolean;
   static greyCookbatRecipe: boolean;
+  static greyLocketWeight: number;
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

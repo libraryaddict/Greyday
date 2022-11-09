@@ -84,6 +84,13 @@ export class GreyOutfit {
   }
 
   setWeights() {
+    if (GreySettings.greyLocketWeight > 0) {
+      this.addWeight(
+        Item.get("combat lover's locket"),
+        GreySettings.greyLocketWeight
+      );
+    }
+
     this.addWeight(Item.get("lucky gold ring"), 20);
     this.addWeight(Item.get("mafia thumb ring"), 19);
 
