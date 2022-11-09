@@ -264,7 +264,7 @@ export function doFortuneTeller() {
     }
 
     for (const [clanId, botName] of fortuneTellers) {
-      if (!canAccessClan(clanId) || !isOnline(bot)) {
+      if (!canAccessClan(clanId) || !isOnline(botName)) {
         continue;
       }
 
