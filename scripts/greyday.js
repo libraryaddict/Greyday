@@ -8288,7 +8288,8 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
     external_kolmafia_namespaceObject.Effect.get("Twice-Cursed"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "curse3",
     external_kolmafia_namespaceObject.Effect.get("Thrice-Cursed"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "blur",
     external_kolmafia_namespaceObject.Monster.get("Blur"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "hooks",
-    external_kolmafia_namespaceObject.Item.get("worm-riding hooks"));return _this;}QuestL11DesertExplore_createClass(QuestL11DesertExplore, [{ key: "createPaths", value:
+    external_kolmafia_namespaceObject.Item.get("worm-riding hooks"));QuestL11DesertExplore_defineProperty(QuestL11DesertExplore_assertThisInitialized(_this), "stillsuit",
+    external_kolmafia_namespaceObject.Item.get("tiny stillsuit"));return _this;}QuestL11DesertExplore_createClass(QuestL11DesertExplore, [{ key: "createPaths", value:
 
     function createPaths(assumeUnstarted) {
       this.paths = [];
@@ -8443,39 +8444,63 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
       }
 
       var crystalBall = currentPredictions();
+      var fam = (0,external_kolmafia_namespaceObject.haveFamiliar)(this.camel) ? this.camel : null;
+      var forceFam = fam != null && this.toAbsorb.length == 0;
+      var predictAbsorb = this.toAbsorb.includes(crystalBall.get(this.desert));
+
+      if (fam != null) {
+        if (!crystalBall.has(this.desert) || !predictAbsorb) {
+          forceFam = true;
+        }
+
+        if (this.getExplored() < 10) {
+          forceFam = true;
+        }
+      }
 
       return {
         outfit: outfit,
         location: this.desert,
-        familiar: (0,external_kolmafia_namespaceObject.haveFamiliar)(this.camel) ? this.camel : null,
-        disableFamOverride:
-        (this.toAbsorb.length == 0 ||
-        crystalBall.has(this.desert) &&
-        !this.toAbsorb.includes(crystalBall.get(this.desert))) &&
-        (0,external_kolmafia_namespaceObject.haveFamiliar)(this.camel),
+        familiar: fam,
+        disableFamOverride: forceFam,
         run: function run() {
           var killing = Macro.if_(
           external_kolmafia_namespaceObject.Effect.get("Tenuous Grip on Reality"),
           Macro.attack().repeat()).
           step(greyKillingBlow(outfit));
 
-          // If we're looking for an absorb, have the crystal ball and have the camel
+          // If we're looking for an absorb, have the crystal ball and have the camel and explored is >= 10
           if (
           _this2.toAbsorb.length > 0 &&
           (0,external_kolmafia_namespaceObject.availableAmount)(_this2.ball) > 0 &&
-          (0,external_kolmafia_namespaceObject.haveFamiliar)(_this2.camel))
+          fam != null)
           {
-            // If we already have a prediction, and the prediction isn't what we want
-            if (
-            crystalBall.has(_this2.desert) &&
-            !_this2.toAbsorb.includes(crystalBall.get(_this2.desert)))
-            {
-              (0,external_kolmafia_namespaceObject.useFamiliar)(_this2.camel);
-              (0,external_kolmafia_namespaceObject.equip)(_this2.ball);
-            } else if (
-            (0,external_kolmafia_namespaceObject.familiarWeight)(_this2.goose) >= 6 &&
-            (0,external_kolmafia_namespaceObject.equippedAmount)(_this2.ball) == 0)
-            {
+            // If we have a prediction
+            if (crystalBall.has(_this2.desert)) {
+              // If we predict an absorb
+              if (predictAbsorb) {
+                // If we are still doing the first 10 explores
+                if (_this2.getExplored() < 10) {
+                  // We don't want to wear the ball, we'll do that when we do the absorb
+                  if ((0,external_kolmafia_namespaceObject.availableAmount)(_this2.stillsuit) > 0) {
+                    (0,external_kolmafia_namespaceObject.cliExecute)("equip " + _this2.stillsuit);
+                  } else {
+                    (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Slot.get("familiar"), external_kolmafia_namespaceObject.Item.none);
+
+                    (0,external_kolmafia_namespaceObject.maximize)("familiar -equip " + _this2.ball, false);
+                  }
+                } else if (
+                (0,external_kolmafia_namespaceObject.equippedAmount)(_this2.ball) == 0 &&
+                (0,external_kolmafia_namespaceObject.familiarWeight)(_this2.goose) >= 6)
+                {
+                  (0,external_kolmafia_namespaceObject.equip)(_this2.ball);
+                }
+              } else {
+                // Force them to wear the ball to change our prediction
+                (0,external_kolmafia_namespaceObject.equip)(_this2.ball);
+              }
+            } else {
+              // Force the ball to be worn to make a prediction
               (0,external_kolmafia_namespaceObject.equip)(_this2.ball);
             }
           } else if (_this2.toAbsorb.length == 0 && resource != null) {
@@ -8513,7 +8538,9 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
             props.resetAll();
           }
 
-          if (explored == _this2.getExplored()) {
+          if ((0,external_kolmafia_namespaceObject.getProperty)("lastEncounter") == "A Sietch in Time") {
+            (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=desertbeach", false);
+          } else if (explored == _this2.getExplored()) {
             (0,external_kolmafia_namespaceObject.print)("Checking explored..", "blue");
             (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=desertbeach", false);
           } else if (
@@ -15290,12 +15317,14 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
 
 
 
+
+
   function QuestL12Lobster() {var _this;QuestL12WarLobster_classCallCheck(this, QuestL12Lobster);
-    _this = _super.call(this);QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "loc", external_kolmafia_namespaceObject.Location.get("Sonofa Beach"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "item", external_kolmafia_namespaceObject.Item.get("barrel of gunpowder"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "monster", external_kolmafia_namespaceObject.Monster.get("Lobsterfrogman"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "bossBat", external_kolmafia_namespaceObject.Monster.get("Boss Bat"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "cursedMagnifyingGlass", external_kolmafia_namespaceObject.Item.get("Cursed Magnifying Glass"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "powerfulGlove", external_kolmafia_namespaceObject.Item.get("Powerful Glove"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "backupCamera", external_kolmafia_namespaceObject.Item.get("Backup Camera"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "votedSticker", external_kolmafia_namespaceObject.Item.get("&quot;I Voted!&quot; sticker"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "paths", []);return _this;
+    _this = _super.call(this);QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "loc", external_kolmafia_namespaceObject.Location.get("Sonofa Beach"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "item", external_kolmafia_namespaceObject.Item.get("barrel of gunpowder"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "monster", external_kolmafia_namespaceObject.Monster.get("Lobsterfrogman"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "bossBat", external_kolmafia_namespaceObject.Monster.get("Boss Bat"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "cursedMagnifyingGlass", external_kolmafia_namespaceObject.Item.get("Cursed Magnifying Glass"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "powerfulGlove", external_kolmafia_namespaceObject.Item.get("Powerful Glove"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "backupCamera", external_kolmafia_namespaceObject.Item.get("Backup Camera"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "votedSticker", external_kolmafia_namespaceObject.Item.get("&quot;I Voted!&quot; sticker"));QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "paths", []);QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "hasAutumn", (0,external_kolmafia_namespaceObject.getProperty)("hasAutumnaton") == "true");QuestL12WarLobster_defineProperty(QuestL12WarLobster_assertThisInitialized(_this), "fallbotTag", "Fallbot");return _this;
   }QuestL12WarLobster_createClass(QuestL12Lobster, [{ key: "level", value:
 
     function level() {
-      return 15;
+      return this.hasAutumn ? 13 : 15;
     } }, { key: "getFriendsRemaining", value:
 
     function getFriendsRemaining() {
@@ -15307,6 +15336,17 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
     } }, { key: "createPaths", value:
 
     function createPaths(assumeUnstarted) {
+      this.paths = [];
+
+      if (this.hasAutumn) {
+        this.paths.push(
+        new PossiblePath(
+        assumeUnstarted ? 1 : this.loc.turnsSpent > 0 ? 0 : 1).
+        addTag(this.fallbotTag));
+
+        return;
+      }
+
       var barrelsNeeded =
       5 - (assumeUnstarted ? 0 : (0,external_kolmafia_namespaceObject.availableAmount)(this.item));
       var turnsManual = 8;
@@ -15335,9 +15375,7 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
       !this.isBackupReady() || this.getFriendsRemaining() == 0))
       {
         possibleCombo.push(ResourceCategory.GLOVE_REPLACE);
-      }
-
-      this.paths = [];var _iterator = QuestL12WarLobster_createForOfIteratorHelper(
+      }var _iterator = QuestL12WarLobster_createForOfIteratorHelper(
 
         getAllCombinations(possibleCombo)),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var combo = _step.value;
           // If a combo would do something silly, like request a glove replace when its not needed
@@ -15480,6 +15518,14 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
         return QuestStatus.NOT_READY;
       }
 
+      if (path.hasTag(this.fallbotTag)) {
+        if (this.loc.turnsSpent < 1) {
+          return QuestStatus.READY;
+        }
+
+        return QuestStatus.NOT_READY;
+      }
+
       if (this.getFriendsRemaining() > 0) {
         return QuestStatus.READY;
       }
@@ -15522,10 +15568,6 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
       (0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) > 2 &&
       (0,external_kolmafia_namespaceObject.familiarWeight)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose")) < 6)
       {
-        return QuestStatus.FASTER_LATER;
-      }
-
-      if ((0,external_kolmafia_namespaceObject.myLevel)() < 16 && (0,external_kolmafia_namespaceObject.getProperty)("sidequestArenaCompleted") == "none") {
         return QuestStatus.FASTER_LATER;
       }
 
@@ -15719,6 +15761,16 @@ var QuestL12Lobster = /*#__PURE__*/function (_TaskInfo) {QuestL12WarLobster_inhe
       // Try to turn in quest
       if ((0,external_kolmafia_namespaceObject.itemAmount)(this.item) >= 5) {
         return this.turnInQuest();
+      }
+
+      // Going here just to unlock fallbot~!
+      if (path.hasTag(this.fallbotTag)) {
+        return {
+          location: this.loc,
+          run: function run() {
+            greyAdv(_this4.loc);
+          }
+        };
       }
 
       if (this.getFriendsRemaining() > 0) {
@@ -22634,8 +22686,8 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestL9SmutOrcs_defineProperty(this, "driveSafe",
     external_kolmafia_namespaceObject.Effect.get("Driving Safely"));QuestL9SmutOrcs_defineProperty(this, "lastColdCheck",
     0);QuestL9SmutOrcs_defineProperty(this, "hasEnoughCold",
-    false);QuestL9SmutOrcs_defineProperty(this, "lastColdMaximize", void 0);QuestL9SmutOrcs_defineProperty(this, "smutSleazeSkill",
-
+    false);QuestL9SmutOrcs_defineProperty(this, "lastColdMaximize",
+    "Cold Damage");QuestL9SmutOrcs_defineProperty(this, "smutSleazeSkill",
     external_kolmafia_namespaceObject.Skill.get("Procgen Ribaldry"));QuestL9SmutOrcs_defineProperty(this, "sleazeMonster",
     external_kolmafia_namespaceObject.Monster.get("Smut orc screwer"));QuestL9SmutOrcs_defineProperty(this, "damagingEquips",
     [
@@ -25308,6 +25360,10 @@ var QuestMoonSignAbsorb = /*#__PURE__*/function (_TaskInfo) {QuestMoonSignAbsorb
 
       if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) < 6) {
         return QuestStatus.NOT_READY;
+      }
+
+      if (this.level() <= 6) {
+        return QuestStatus.READY;
       }
 
       return QuestStatus.FASTER_LATER;
@@ -29800,6 +29856,7 @@ var SimmedPath = /*#__PURE__*/function () {
 
 
 
+
       var used = new Map();var _iterator2 = TaskManager_createForOfIteratorHelper(
 
         this.resourcesUsed),_step2;try {var _loop = function _loop() {var _step2$value = TaskManager_slicedToArray(_step2.value, 2),quest = _step2$value[0],resource = _step2$value[1];
@@ -29820,6 +29877,7 @@ var SimmedPath = /*#__PURE__*/function () {
 
             used.get(key).push(
             pair = {
+              level: quest.level(),
               questName: id,
               resourcesUsed: 0,
               turnsSaved: path.getAverageTurns(),
@@ -29840,6 +29898,15 @@ var SimmedPath = /*#__PURE__*/function () {
         var resourcesUsed = details.
         map(function (d) {return d.resourcesUsed;}).
         reduce(function (p, n) {return p + n;}, 0);
+
+        details.sort(function (d1, d2) {
+          if (d1.level != d2.level) {
+            return d1.level - d2.level;
+          }
+
+          return d1.questName.localeCompare(d2.questName);
+        });
+
         var paths = details.
         map(
         function (d, index) {return "<font color='".concat(
@@ -30996,6 +31063,14 @@ var AdventureFinder = /*#__PURE__*/function () {
     {
       if (status != QuestStatus.READY) {
         return status;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getProperty)("autumnatonQuestLocation") != "") {
+        var loc = external_kolmafia_namespaceObject.Location.get((0,external_kolmafia_namespaceObject.getProperty)("autumnatonQuestLocation"));
+
+        if (runned.location == loc) {
+          status = QuestStatus.FASTER_LATER;
+        }
       }
 
       var outfit = runned.outfit;
@@ -32203,6 +32278,22 @@ function TaskAutumnaton_createForOfIteratorHelper(o, allowArrayLike) {var it = t
 
 
 
+var leaf = external_kolmafia_namespaceObject.Item.get("Autumn Leaf");
+var debrisShield = external_kolmafia_namespaceObject.Item.get("Autumn Debris Shield");
+var leafPendant = external_kolmafia_namespaceObject.Item.get("Autumn Leaf Pendant");
+var ale = external_kolmafia_namespaceObject.Item.get("AutumnFest Ale");
+var donut = external_kolmafia_namespaceObject.Item.get("Autumn-Spice Donut");
+var breeze = external_kolmafia_namespaceObject.Item.get("Autumn Breeze");
+var sweater = external_kolmafia_namespaceObject.Item.get("Autumn Sweater-weather sweater");
+var dollar = external_kolmafia_namespaceObject.Item.get("Autumn Dollar");
+var wisdom = external_kolmafia_namespaceObject.Item.get("Autumn Years Wisdom");
+
+
+
+
+
+
+
 var TaskAutumnaton = /*#__PURE__*/function () {
 
 
@@ -32221,7 +32312,91 @@ var TaskAutumnaton = /*#__PURE__*/function () {
     }
 
     this.createItems();
-  }TaskAutumnaton_createClass(TaskAutumnaton, [{ key: "run", value:
+  }TaskAutumnaton_createClass(TaskAutumnaton, [{ key: "selectLocation", value:
+
+    function selectLocation(locs) {var _this = this;
+      var weights = new Map([
+      ["time taken", 1000], // We always want it to return asap
+      ["extra item", 900], // We want extra items
+      ["extra seasonal item", 10], // This is more profit!
+      ["item drop%", 3], // Eh, sure
+      ["stats", 1]]);
+
+
+      var selections = [];var _iterator = TaskAutumnaton_createForOfIteratorHelper(
+
+        locs),_step;try {var _loop = function _loop() {var _step$value = _step.value,location = _step$value.location,item = _step$value.item,upgrade = _step$value.upgrade;
+          var score = 0;
+
+          if (item == sweater) {
+            score += 1;
+          } else if (item == dollar) {
+            score += 2;
+          }
+
+          var toGrab = _this.toGrab.filter(
+          function (t) {return (
+              t.loc == location && (
+              t.viable == null || t.viable()) &&
+              (0,external_kolmafia_namespaceObject.availableAmount)(t.item) < t.amount);});
+
+
+          if (toGrab.length > 0) {
+            score +=
+            1 +
+            _this.toGrab.length -
+            toGrab.
+            map(function (t) {return _this.toGrab.indexOf(t);}).
+            reduce(function (p1, p2) {return Math.min(p1, p2);}, 999);
+          }
+
+          // Add scores for stuff we want
+          if (!getAutumnUpgrades().includes(upgrade)) {
+            var stat = getAutumnStat(upgrade);
+
+            if (weights.has(stat)) {
+              score += weights.get(stat);
+            }
+          }
+
+          if (score <= 0) {
+            return "continue";
+          }
+
+          var reason = toGrab.length > 0 ? "grab " + toGrab[0].item : "";
+
+          if (getAutumnUpgraded(upgrade) == 0) {
+            if (reason.length > 0) {
+              reason += " and ";
+            }
+
+            reason +=
+            "get upgrade " +
+            _this.getEnumByEnumValue(AutumnUpgrades, upgrade) +
+            " (" +
+            upgrade +
+            ") which upgrades stat '" +
+            getAutumnStat(upgrade) +
+            "'";
+          }
+
+          selections.push({ location: location, score: score, reason: reason });};for (_iterator.s(); !(_step = _iterator.n()).done;) {var _ret = _loop();if (_ret === "continue") continue;
+        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+
+      if (selections.length == 0) {
+        return null;
+      }
+
+      selections.sort(function (s1, s2) {return s2.score - s1.score;});
+
+      return selections[0];
+    } }, { key: "getEnumByEnumValue", value:
+
+    function getEnumByEnumValue(myEnum, enumValue) {
+      var keys = Object.keys(myEnum).filter(function (x) {return myEnum[x] == enumValue;});
+
+      return keys.length > 0 ? keys[0] : null;
+    } }, { key: "run", value:
 
     function run() {
       if (this.item == null || (0,external_kolmafia_namespaceObject.availableAmount)(this.item) == 0) {
@@ -32232,88 +32407,65 @@ var TaskAutumnaton = /*#__PURE__*/function () {
         return;
       }
 
-      var validLocs;
+      var outcomes = getAutumnatonLocations();
 
-      var getValid = function getValid() {
-        if (validLocs == null) {
-          validLocs = [];
-          var page = (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?pwd&whichitem=10954");
-          var match;
+      if ((0,external_kolmafia_namespaceObject.availableChoiceOptions)()[1] != null) {
+        (0,external_kolmafia_namespaceObject.print)("Beep Boop, now upgrading autumn-aton", "blue");
+        (0,external_kolmafia_namespaceObject.print)("Autumn-aton upgrade will: " + (0,external_kolmafia_namespaceObject.availableChoiceOptions)()[1], "blue");
+        (0,external_kolmafia_namespaceObject.visitUrl)("choice.php?option=1&pwd&whichchoice=1483");
+      }
 
-          while ((match = page.match(/<option {2}value="(\d+)">/)) != null) {
-            page = page.replace(match[0], "");
+      var bestChoice = this.selectLocation(outcomes);
 
-            validLocs.push((0,external_kolmafia_namespaceObject.toInt)(match[1]));
-          }
-        }
-
-        return validLocs;
-      };var _iterator = TaskAutumnaton_createForOfIteratorHelper(
-
-        this.toGrab),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var valid = _step.value;
-          if (valid.loc.turnsSpent <= 0 || (0,external_kolmafia_namespaceObject.myLocation)() == valid.loc) {
-            continue;
-          }
-
-          if ((0,external_kolmafia_namespaceObject.availableAmount)(valid.item) >= valid.amount) {
-            continue;
-          }
-
-          if (valid.viable != null && !valid.viable()) {
-            continue;
-          }
-
-          if (!getValid().includes((0,external_kolmafia_namespaceObject.toInt)(valid.loc))) {
-            continue;
-          }
-
-          if (!(0,external_kolmafia_namespaceObject.handlingChoice)()) {
-            throw "Expected to be handling the aton choice";
-          }
-
-          if ((0,external_kolmafia_namespaceObject.lastChoice)() != 1483) {
-            throw "Expected to be in aton choice";
-          }
-
-          if ((0,external_kolmafia_namespaceObject.availableChoiceOptions)()[1] != null) {
-            (0,external_kolmafia_namespaceObject.print)("Beep Boop, now upgrading autumn-aton", "blue");
-            (0,external_kolmafia_namespaceObject.print)(
-            "Autumn-aton upgrade will: " + (0,external_kolmafia_namespaceObject.availableChoiceOptions)()[1],
-            "blue");
-
-            (0,external_kolmafia_namespaceObject.visitUrl)("choice.php?option=1&pwd&whichchoice=1483");
-          }
-
-          (0,external_kolmafia_namespaceObject.visitUrl)(
-          "choice.php?option=2&pwd&whichchoice=1483&heythereprogrammer=" +
-          (0,external_kolmafia_namespaceObject.toInt)(valid.loc));
-
-
-          (0,external_kolmafia_namespaceObject.print)("Sending Autumn-aton on a glorious quest to acquire ".concat(
-          valid.item, " from ").concat(valid.loc),
-          "blue");
-
-
-          if ((0,external_kolmafia_namespaceObject.handlingChoice)()) {
-            throw "Unexpectedly still handling a choice!";
-          }
-
-          (0,external_kolmafia_namespaceObject.cliExecute)("refresh inventory");
-
-          return;
-        }
-
-        // Failed to find a place to go
-      } catch (err) {_iterator.e(err);} finally {_iterator.f();}this.skipFor = 3;
-
-      // If we are in the choice, just quit
-      if ((0,external_kolmafia_namespaceObject.handlingChoice)()) {
+      if (bestChoice == null) {
+        this.skipFor = 2;
         (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
+        return;
+      }
+
+      if (!(0,external_kolmafia_namespaceObject.handlingChoice)()) {
+        throw "Expected to be handling the aton choice";
+      }
+
+      if ((0,external_kolmafia_namespaceObject.lastChoice)() != 1483) {
+        throw "Expected to be in aton choice";
+      }
+
+      (0,external_kolmafia_namespaceObject.print)("Sending Autumn-aton on a glorious quest to ".concat(
+      bestChoice.reason, " from ").concat(bestChoice.location),
+      "blue");
+
+
+      (0,external_kolmafia_namespaceObject.visitUrl)(
+      "choice.php?option=2&pwd&whichchoice=1483&heythereprogrammer=" +
+      (0,external_kolmafia_namespaceObject.toInt)(bestChoice.location));
+
+
+      if ((0,external_kolmafia_namespaceObject.handlingChoice)()) {
+        throw "Unexpectedly still handling a choice!";
       }
     } }, { key: "createItems", value:
 
     function createItems() {
       this.toGrab = [];
+
+      this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("Sonofa Beach"),
+        item: external_kolmafia_namespaceObject.Item.get("barrel of gunpowder"),
+        amount: 5,
+        viable: function viable() {return (
+            (0,external_kolmafia_namespaceObject.getProperty)("sidequestLighthouseCompleted") != "true" &&
+            getItemsPerExpedition() >= 5);}
+      });
+
+      this.toGrab.push({
+        loc: external_kolmafia_namespaceObject.Location.get("The Smut Orc Logging Camp"),
+        item: external_kolmafia_namespaceObject.Item.get("Raging hardwood plank"),
+        amount: 10,
+        viable: function viable() {return (
+            getQuestStatus("questL09Topping") == 0 &&
+            (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("chasmBridgeProgress")) < 30);}
+      });
 
       this.toGrab.push({
         loc: external_kolmafia_namespaceObject.Location.get("The Copperhead Club"),
@@ -32379,27 +32531,170 @@ var TaskAutumnaton = /*#__PURE__*/function () {
       });
 
       this.toGrab.push({
-        loc: external_kolmafia_namespaceObject.Location.get("The Smut Orc Logging Camp"),
-        item: external_kolmafia_namespaceObject.Item.get("Raging hardwood plank"),
-        amount: 10,
-        viable: function viable() {return (
-            getQuestStatus("questL09Topping") == 0 &&
-            (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("chasmBridgeProgress")) < 30);}
-      });
-
-      this.toGrab.push({
-        loc: external_kolmafia_namespaceObject.Location.get("The Haunted Library"),
-        item: external_kolmafia_namespaceObject.Item.get("tattered scrap of paper"),
-        amount: 300
-      });
-
-      this.toGrab.push({
         loc: external_kolmafia_namespaceObject.Location.get("Guano Junction"),
         item: external_kolmafia_namespaceObject.Item.get("sonar-in-a-biscuit"),
         amount: 1,
         viable: function viable() {return getQuestStatus("questL04Bat") <= 2;}
       });
+
+      // Harem
+      // Gauno Junction - Bat sonar
+      // Infernal Rackets Backstage / laugh floor
+      // Oil peak?
+      // Sonofa Beach
+      // Black Forest
+      // Castle in clouds basement - WAND
+      // Castle in clouds ground - Maybe +combat weapon
+      // Dungeons of Doom - Ring of +combat
+      // The greater than sign - Mehhh
+      // Goatlet - Goat Cheese
+      // Haunted Billiards - Hand of chalk, meh
+      // Haunted library - Killing jar
+      // Janitor - Book of matches
+      // Bowling Balls
+      // Surgeon outfit?
+      // Misc locations for when we can't tower break, like key locs?
+      // Middle chamber - tomb ratchets?
+      // Red zeppelin - Glark cables
+      // Crypt - Evil eyes
+      // Twin Peak - Hedge trimmers
+      // Whitey's grove - White page? lol
     } }]);return TaskAutumnaton;}();
+
+
+
+
+
+
+
+
+
+// autumnatonUpgrades=leftleg1,periscope,radardish,rightleg1
+var AutumnUpgrades;
+
+
+
+
+
+
+
+
+// More stats
+(function (AutumnUpgrades) {AutumnUpgrades["LEFT_ARM"] = "leftarm1";AutumnUpgrades["LEFT_LEG"] = "leftleg1";AutumnUpgrades["RIGHT_ARM"] = "rightarm1";AutumnUpgrades["RIGHT_LEG"] = "rightleg1";AutumnUpgrades["ENERGY_HAT"] = "base_blackhat";AutumnUpgrades["COLLECTION_PROW"] = "cowcatcher";AutumnUpgrades["VISION_EXTENDER"] = "periscope";AutumnUpgrades["RADAR"] = "radardish";AutumnUpgrades["EXHAUST"] = "dualexhaust";})(AutumnUpgrades || (AutumnUpgrades = {}));
+
+
+
+
+
+
+
+
+function getAutumnStat(upgrade) {
+  switch (upgrade) {
+    case AutumnUpgrades.LEFT_ARM:
+    case AutumnUpgrades.RIGHT_ARM:
+      return "extra item";
+    case AutumnUpgrades.LEFT_LEG:
+    case AutumnUpgrades.RIGHT_LEG:
+      return "time taken";
+    case AutumnUpgrades.ENERGY_HAT:
+    case AutumnUpgrades.EXHAUST:
+      return "stats";
+    case AutumnUpgrades.VISION_EXTENDER:
+      return "item drop%";
+    case AutumnUpgrades.COLLECTION_PROW:
+      return "extra seasonal item";
+
+      throw "Unknown Autumn upgrade '" + upgrade + "'";}
+
+}
+
+function getItemsPerExpedition() {
+  return (
+    3 + getAutumnUpgraded(AutumnUpgrades.LEFT_ARM, AutumnUpgrades.RIGHT_ARM));
+
+}
+
+function getExpeditionTime() {
+  // At 0 quests, it takes 11 turns
+  var questsDone = 1 + toInt(getProperty("_autumnatonQuests"));
+
+  // With 1 upgrade, it takes 0 turns. At 2, it takes -11 turns
+  questsDone -= getAutumnUpgraded(
+  AutumnUpgrades.LEFT_LEG,
+  AutumnUpgrades.RIGHT_LEG);
+
+
+  // We demand a min of 1 quests, for 11 turns
+  return 11 * Math.max(1, questsDone);
+}
+
+function getAutumnUpgraded() {for (var _len = arguments.length, upgrades = new Array(_len), _key = 0; _key < _len; _key++) {upgrades[_key] = arguments[_key];}
+  return getAutumnUpgrades().filter(function (u) {return upgrades.includes(u);}).length;
+}
+
+
+
+
+
+
+
+function getAutumnatonLocations() {
+  var validLocs = [];
+
+  var page = (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?pwd&whichitem=10954");
+  var match;
+
+  while ((match = page.match(/<option {2}value="(\d+)">/)) != null) {
+    page = page.replace(match[0], "");
+    var loc = (0,external_kolmafia_namespaceObject.toLocation)((0,external_kolmafia_namespaceObject.toInt)(match[1]));
+    var outcome = getAutumnOutcome(loc);
+
+    if (outcome == null) {
+      continue;
+    }
+
+    validLocs.push({ location: loc, upgrade: outcome[0], item: outcome[1] });
+  }
+
+  return validLocs;
+}
+
+function getAutumnUpgrades() {
+  return (0,external_kolmafia_namespaceObject.getProperty)("autumnatonUpgrades").
+  split(",").
+  filter(function (s) {return s.length > 0;});
+}
+
+function getAutumnOutcome(location) {
+  if (location.environment == "outdoor") {
+    if (location.difficultyLevel == "low") {
+      return [AutumnUpgrades.ENERGY_HAT, leaf];
+    } else if (location.difficultyLevel == "mid") {
+      return [AutumnUpgrades.RIGHT_ARM, debrisShield];
+    } else if (location.difficultyLevel == "high") {
+      return [AutumnUpgrades.VISION_EXTENDER, leafPendant];
+    }
+  } else if (location.environment == "indoor") {
+    if (location.difficultyLevel == "low") {
+      return [AutumnUpgrades.LEFT_ARM, ale];
+    } else if (location.difficultyLevel == "mid") {
+      return [AutumnUpgrades.RIGHT_LEG, donut];
+    } else if (location.difficultyLevel == "high") {
+      return [AutumnUpgrades.RADAR, breeze];
+    }
+  } else if (location.environment == "underground") {
+    if (location.difficultyLevel == "low") {
+      return [AutumnUpgrades.LEFT_LEG, sweater];
+    } else if (location.difficultyLevel == "mid") {
+      return [AutumnUpgrades.COLLECTION_PROW, dollar];
+    } else if (location.difficultyLevel == "high") {
+      return [AutumnUpgrades.EXHAUST, wisdom];
+    }
+  }
+
+  return null;
+}
 ;// CONCATENATED MODULE: ./src/GreyAdventurer.ts
 function GreyAdventurer_toConsumableArray(arr) {return GreyAdventurer_arrayWithoutHoles(arr) || GreyAdventurer_iterableToArray(arr) || GreyAdventurer_unsupportedIterableToArray(arr) || GreyAdventurer_nonIterableSpread();}function GreyAdventurer_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyAdventurer_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function GreyAdventurer_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return GreyAdventurer_arrayLikeToArray(arr);}function GreyAdventurer_slicedToArray(arr, i) {return GreyAdventurer_arrayWithHoles(arr) || GreyAdventurer_iterableToArrayLimit(arr, i) || GreyAdventurer_unsupportedIterableToArray(arr, i) || GreyAdventurer_nonIterableRest();}function GreyAdventurer_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyAdventurer_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function GreyAdventurer_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function GreyAdventurer_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyAdventurer_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyAdventurer_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyAdventurer_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyAdventurer_arrayLikeToArray(o, minLen);}function GreyAdventurer_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyAdventurer_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyAdventurer_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyAdventurer_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyAdventurer_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyAdventurer_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyAdventurer_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -33194,7 +33489,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "fd9914e";
+var lastCommitHash = "0eb8c43";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -33351,6 +33646,23 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
 
       this.checkVersion();
 
+      if (
+      (0,external_kolmafia_namespaceObject.currentRound)() != 0 ||
+      (0,external_kolmafia_namespaceObject.handlingChoice)() ||
+      (0,external_kolmafia_namespaceObject.choiceFollowsFight)() ||
+      (0,external_kolmafia_namespaceObject.fightFollowsChoice)())
+      {
+        (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
+
+        if ((0,external_kolmafia_namespaceObject.currentRound)() != 0 || (0,external_kolmafia_namespaceObject.handlingChoice)()) {
+          (0,external_kolmafia_namespaceObject.print)(
+          "In a fight or in a choice, please resolve before continuing..",
+          "red");
+
+          return;
+        }
+      }
+
       GreySettings.loadSettings();
 
       if (command == "resources") {
@@ -33451,18 +33763,6 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
         "red");
 
         return;
-      }
-
-      if ((0,external_kolmafia_namespaceObject.currentRound)() != 0 || (0,external_kolmafia_namespaceObject.handlingChoice)()) {
-        (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
-
-        if ((0,external_kolmafia_namespaceObject.currentRound)() != 0 || (0,external_kolmafia_namespaceObject.handlingChoice)()) {
-          (0,external_kolmafia_namespaceObject.print)(
-          "In a fight or in a choice, please resolve before continuing..",
-          "red");
-
-          return;
-        }
       }
 
       if ((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") == "") {
