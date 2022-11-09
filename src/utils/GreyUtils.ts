@@ -322,7 +322,9 @@ export function isDaylightShavingBuffReady(): boolean {
 const bookbatRecipes: Item[] = [
   10979, 10980, 10981, 10982, 10983, 10984, 10985, 10986, 10987, 10993, 10994,
   10995, 10996, 10997, 10999,
-].map((i) => toItem(i));
+].map((i) => {
+  return toItem(toInt(i));
+});
 
 const recipeProp = "_droppedCookbatRecipe";
 
