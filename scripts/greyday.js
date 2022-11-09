@@ -570,14 +570,6 @@ function getGreySettings() {
     "default": defaultAdvValue
   };
 
-  var greyPullValue = {
-    name: "greyValueOfPull",
-    description:
-    "Used to determine the value of a pull from storage, generally can be ignored.",
-    valid: function valid(value) {return /\d+/.test(value);},
-    "default": 0
-  };
-
   var greySavePulls = {
     name: "greyPullsLimit",
     description:
@@ -602,14 +594,6 @@ function getGreySettings() {
       return value == "" || (0,external_kolmafia_namespaceObject.toItem)(value).usable;
     },
     "default": ""
-  };
-
-  var greyValueOfNC = {
-    name: "greyValueOfNonCombat",
-    description:
-    "Really only applicable for people that do garbo's Yachtzee, set this to an absurd value to never use it",
-    valid: function valid(value) {return /\d+/.test(value);},
-    "default": 0
   };
 
   var greyClipArt = {
@@ -707,8 +691,6 @@ function getGreySettings() {
   dailyMalware,
   greySavePulls,
   grayAdventureValue,
-  greyValueOfNC,
-  greyPullValue,
   greySwitchWorkshed,
   greyClipArt,
   prioritizeLocket].
@@ -1731,7 +1713,7 @@ var StrictMacro = /*#__PURE__*/(/* unused pure expression or super */ null && (f
       return (_this12 = new this()).trySkillRepeat.apply(_this12, arguments);
     } }]);return StrictMacro;}(Macro)));
 ;// CONCATENATED MODULE: ./src/typings/ResourceTypes.ts
-function ResourceTypes_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function ResourceTypes_createClass(Constructor, protoProps, staticProps) {if (protoProps) ResourceTypes_defineProperties(Constructor.prototype, protoProps);if (staticProps) ResourceTypes_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function ResourceTypes_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function ResourceTypes_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function ResourceTypes_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = ResourceTypes_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function ResourceTypes_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return ResourceTypes_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return ResourceTypes_arrayLikeToArray(o, minLen);}function ResourceTypes_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function ResourceTypes_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function ResourceTypes_createClass(Constructor, protoProps, staticProps) {if (protoProps) ResourceTypes_defineProperties(Constructor.prototype, protoProps);if (staticProps) ResourceTypes_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function ResourceTypes_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function ResourceTypes_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -1834,12 +1816,14 @@ var PillkeeperPill;(function (PillkeeperPill) {PillkeeperPill["YELLOW_RAY"] = "e
 
 function getResourceSettings() {
   return getResourceValues().map(function (res) {
+    var def = ResourceValues[res.name];
+
     var setting = {
       setting: "values",
-      name: "greyValue_" + res.valueName,
-      description: res.description,
+      name: "greyValue_" + res.name,
+      description: res.description + " (Default " + def + ")",
       valid: function valid(s) {return /\d+/.test(s);},
-      "default": ResourceValues[res.valueName + "Value"]
+      "default": def
     };
 
     return setting;
@@ -1848,78 +1832,78 @@ function getResourceSettings() {
 
 function getResourceValues() {
   var embezzler = {
-    valueName: "Embezzler",
+    name: "Embezzler",
     description: "How much meat this resource would give from embezzlers"
   };
 
   var cloverValue = {
-    valueName: "Clover",
+    name: "Clover",
     description: "How much meat you could sell an 11-leaf clover for"
   };
 
-  var forcedNC = {
-    valueName: "ForcedNC",
-    description: "How much meat each forced non-combat (Parka) is worth"
+  var parkaNC = {
+    name: "ParkaNC",
+    description: "How much meat each forced non-combat using Parka is worth"
   };
 
   var forcedDrop = {
-    valueName: "ForcedDrop",
+    name: "ForcedDrop",
     description: "How much meat you could earn from each forced drop"
   };
 
   var pillkeeper = {
-    valueName: "Pillkeeper",
+    name: "Pillkeeper",
     description: "How much meat you'd earn from the free pillkeeper use"
   };
 
   var pull = {
-    valueName: "Pull",
+    name: "Pull",
     description: "How much each pull is worth to the player in meat"
   };
 
   var cosplay = {
-    valueName: "CosplaySaber",
+    name: "CosplaySaber",
     description:
-    "How much meat each cosplay saber use is worth, normally calculated by pills remaining",
+    "How much meat each cosplay saber use is worth, normally calculated by pills remaining. Set to 0 to let Greyday calculate this.",
     dynamic: true
   };
 
   var shorts = {
-    valueName: "CargoShorts",
+    name: "CargoShorts",
     description: "How much meat an item from Cargo Shorts is worth"
   };
 
   var deckOfCards = {
-    valueName: "DeckOfCards",
+    name: "DeckOfCards",
     description:
     "With 15 uses, a cheat using 5, how much each use is worth in meat"
   };
 
   var zap = {
-    valueName: "ZapWand",
+    name: "ZapWand",
     description: "How much each zap is worth in meat"
   };
 
   var burglar = {
-    valueName: "CatBurglarHeist",
+    name: "CatBurglarHeist",
     description: "How much a cat burglar heist is worth in meat"
   };
 
   var chateauPainting = {
-    valueName: "ChateauPainting",
+    name: "ChateauPainting",
     description:
     "How much Chateau Painting is worth in meat, not sure why this is an option given it'll only consider the painting if it's a fax it wants"
   };
 
   var hotTub = {
-    valueName: "HotTub",
+    name: "HotTub",
     description: "How much each hot tub usage is worth to you"
   };
 
   return [
   embezzler,
   cloverValue,
-  forcedNC,
+  parkaNC,
   pillkeeper,
   forcedDrop,
   pull,
@@ -1937,23 +1921,60 @@ ResourceValues = /*#__PURE__*/ResourceTypes_createClass(function ResourceValues(
 19000);ResourceTypes_defineProperty(ResourceValues, "CloverValue",
 22000);ResourceTypes_defineProperty(ResourceValues, "ForcedDropValue",
 4000);ResourceTypes_defineProperty(ResourceValues, "PillkeeperValue",
-70000);ResourceTypes_defineProperty(ResourceValues, "ForcedNCValue",
-(0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("greyValueOfNonCombat") || "0"));ResourceTypes_defineProperty(ResourceValues, "PullValue",
-(0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("greyValueOfPull") || "0"));ResourceTypes_defineProperty(ResourceValues, "CosplaySaberValue",
+70000);ResourceTypes_defineProperty(ResourceValues, "ParkaNCValue",
+0);ResourceTypes_defineProperty(ResourceValues, "PullValue",
+0);ResourceTypes_defineProperty(ResourceValues, "CosplaySaberValue",
 
 
-
-(0,external_kolmafia_namespaceObject.storageAmount)(external_kolmafia_namespaceObject.Item.get("distention pill")) > 60 ?
--100 :
-(0,external_kolmafia_namespaceObject.modifierEval)("G") >= 4 ?
-3000 :
 0);ResourceTypes_defineProperty(ResourceValues, "CargoShortsValue",
 30000);ResourceTypes_defineProperty(ResourceValues, "DeckOfCardsValue",
 2000);ResourceTypes_defineProperty(ResourceValues, "ZapWandValue",
 15000);ResourceTypes_defineProperty(ResourceValues, "CatBurglarHeistValue",
 -500);ResourceTypes_defineProperty(ResourceValues, "ChateauPaintingValue",
 5000);ResourceTypes_defineProperty(ResourceValues, "HotTubValue",
-0);
+0);(function () {
+
+
+  if (
+  ["Distention Pill", "Dog Hair Pill"].
+  map(function (s) {return external_kolmafia_namespaceObject.Item.get(s);}).
+  map(function (i) {return (0,external_kolmafia_namespaceObject.itemAmount)(i) + (0,external_kolmafia_namespaceObject.closetAmount)(i) + (0,external_kolmafia_namespaceObject.storageAmount)(i);}).
+  reduce(function (p1, p2) {return Math.min(p1, p2);}) > 60)
+  {
+    ResourceValues.CosplaySaberValue = -100;
+  } else if ((0,external_kolmafia_namespaceObject.modifierEval)("G") >= 4) {
+    ResourceValues.CosplaySaberValue = 3000;
+  } else {
+    ResourceValues.CosplaySaberValue = 0;
+  }var _iterator = ResourceTypes_createForOfIteratorHelper(
+
+    getResourceValues()),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var setting = _step.value;
+      if (ResourceValues[setting.name + "Value"] == null) {
+        (0,external_kolmafia_namespaceObject.print)("Can't find resource value " + setting.name, "red");
+        continue;
+      }
+
+      ResourceValues[setting.name] = ResourceValues[setting.name + "Value"];
+
+      var prop = "greyValue_" + setting.name;
+
+      if (!(0,external_kolmafia_namespaceObject.propertyExists)(prop)) {
+        continue;
+      }
+
+      var val = (0,external_kolmafia_namespaceObject.getProperty)(prop);
+
+      if (!/^\d+$/.test(val)) {
+        continue;
+      }
+
+      if (val == "0" && setting.name == "CosplaySaber") {
+        continue;
+      }
+
+      ResourceValues[setting.name + "Value"] = (0,external_kolmafia_namespaceObject.toInt)(val);
+    }} catch (err) {_iterator.e(err);} finally {_iterator.f();}})();
+
 
 
 var glove = external_kolmafia_namespaceObject.Item.get("Powerful Glove");
@@ -2098,7 +2119,7 @@ var parkaProp = "_parkaPrimed";
 var ncParka = {
   type: ResourceCategory.FORCE_NC,
   resource: "Parka: Force NC",
-  worthInAftercore: ResourceValues.ForcedNCValue,
+  worthInAftercore: ResourceValues.ParkaNCValue,
   //available: () => haveSkill(torso) && availableAmount(parka) > 0,
   prepare: function prepare(outfit) {
     if (outfit != null) {
@@ -33491,7 +33512,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "29e7a5e";
+var lastCommitHash = "89e9a1a";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 

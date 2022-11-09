@@ -5295,7 +5295,6 @@ function Main(_ref) {var settings = _ref.settings;
 
 
 
-
 function Values(_ref) {var settings = _ref.settings;
   var preferences = settings.
   filter(function (s) {return s.setting == "values";}).
@@ -5303,7 +5302,6 @@ function Values(_ref) {var settings = _ref.settings;
 
   return /*#__PURE__*/(
     react.createElement("table", null, /*#__PURE__*/
-    react.createElement("p", { className: "unimplemented" }, "This page currently does nothing"), /*#__PURE__*/
     react.createElement("tbody", null, preferences)));
 
 
