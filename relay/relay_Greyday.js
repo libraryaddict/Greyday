@@ -1992,7 +1992,7 @@ function getDefaultClan() {
     return null;
   }
 
-  return clanInfo[0];
+  return (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.toInt)(clanInfo[0]);
 }
 
 function runInClan(clanId, func) {
@@ -2150,16 +2150,11 @@ function doFortuneTeller() {
     return;
   }
 
-  var bot = null;
-  var fortuneClan = null;
+  var bot = fortuneTellers.get(getClanId());
+  var fortuneClan = getClanId();
 
-  if (fortuneTellers.has(getClanId())) {
-    bot = fortuneTellers.get(getClanId());
-    fortuneClan = getClanId();
-
-    if (!isOnline(bot)) {
-      bot = null;
-    }
+  if (!(typeof bot == "string") || !isOnline(bot)) {
+    bot = null;
   }
 
   if (bot == null) {
@@ -2242,6 +2237,8 @@ function canAccessClan(clanId) {
   if (clanId == null) {
     return false;
   }
+
+  clanId = (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.toInt)(clanId);
 
   return (
     clanId == (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getClanId)() ||
