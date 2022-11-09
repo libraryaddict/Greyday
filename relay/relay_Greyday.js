@@ -2167,7 +2167,7 @@ function doFortuneTeller() {
     }var _iterator = _createForOfIteratorHelper(
 
       fortuneTellers),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var _step$value = _slicedToArray(_step.value, 2),clanId = _step$value[0],botName = _step$value[1];
-        if (!canAccessClan(clanId) || !isOnline(bot)) {
+        if (!canAccessClan(clanId) || !isOnline(botName)) {
           continue;
         }
 
