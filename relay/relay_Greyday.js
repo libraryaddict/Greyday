@@ -2532,6 +2532,14 @@ function getGreySettings() {
     "default": true
   };
 
+  var prioritizeLocket = {
+    name: "greyLocketWeight",
+    description:
+    "Set this to a value higher than 0 to add weight to maximizer if you want Greyday to wear the locket more often, this is only useful if you're trying to locket everything",
+    valid: function valid(s) {return /$\d+^/.test(s);},
+    "default": 0
+  };
+
   return [
   //greyBountyHunter,
   towerBreak,
@@ -2553,7 +2561,8 @@ function getGreySettings() {
   greyValueOfNC,
   greyPullValue,
   greySwitchWorkshed,
-  greyClipArt].
+  greyClipArt,
+  prioritizeLocket].
   map(function (s) {
     s.setting = "main";
 
@@ -2636,6 +2645,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {_classCall
 
 
 
+
     function isHardcoreMode() {
       return this.hardcoreMode || (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.inHardcore)();
     } }, { key: "willBeAccessible", value:
@@ -2686,7 +2696,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {_classCall
 
           GreySettings[setting.name] = prop;
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
-    } }]);return GreySettings;}();_defineProperty(GreySettings, "hardcoreMode", false);_defineProperty(GreySettings, "speedRunMode", false);_defineProperty(GreySettings, "adventuresBeforeAbort", 8);_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);_defineProperty(GreySettings, "usefulSkillsWeight", 6);_defineProperty(GreySettings, "handySkillsWeight", 0.5);_defineProperty(GreySettings, "greyBreakAtTower", void 0);_defineProperty(GreySettings, "greyReachedTower", (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.toBoolean)((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getProperty)("_greyReachedTower")));_defineProperty(GreySettings, "greyDailyDungeon", void 0);_defineProperty(GreySettings, "greyDailyMalware", void 0);_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);_defineProperty(GreySettings, "greyFantasyBandits", void 0);_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);_defineProperty(GreySettings, "greyDebug", (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.toBoolean)((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getProperty)("greyDebug") || "false"));_defineProperty(GreySettings, "greySkipPalindome", void 0);_defineProperty(GreySettings, "greyPullsLimit", 20);_defineProperty(GreySettings, "greyValueOfAdventure", void 0);_defineProperty(GreySettings, "greyUseMummery", void 0);_defineProperty(GreySettings, "greyVotingBooth", void 0);_defineProperty(GreySettings, "greyBountyHunting", void 0);_defineProperty(GreySettings, "greySwitchWorkshed", void 0);_defineProperty(GreySettings, "greyClipArt", void 0);_defineProperty(GreySettings, "greyVIPClan", void 0);_defineProperty(GreySettings, "greyFortuneTeller", void 0);_defineProperty(GreySettings, "greyDeleteKmails", void 0);_defineProperty(GreySettings, "greyHippyMode", false);_defineProperty(GreySettings, "greyGrabZapWand", void 0);_defineProperty(GreySettings, "greyCookbatRecipe", void 0);
+    } }]);return GreySettings;}();_defineProperty(GreySettings, "hardcoreMode", false);_defineProperty(GreySettings, "speedRunMode", false);_defineProperty(GreySettings, "adventuresBeforeAbort", 8);_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);_defineProperty(GreySettings, "usefulSkillsWeight", 6);_defineProperty(GreySettings, "handySkillsWeight", 0.5);_defineProperty(GreySettings, "greyBreakAtTower", void 0);_defineProperty(GreySettings, "greyReachedTower", (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.toBoolean)((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getProperty)("_greyReachedTower")));_defineProperty(GreySettings, "greyDailyDungeon", void 0);_defineProperty(GreySettings, "greyDailyMalware", void 0);_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);_defineProperty(GreySettings, "greyFantasyBandits", void 0);_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);_defineProperty(GreySettings, "greyDebug", (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.toBoolean)((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getProperty)("greyDebug") || "false"));_defineProperty(GreySettings, "greySkipPalindome", void 0);_defineProperty(GreySettings, "greyPullsLimit", 20);_defineProperty(GreySettings, "greyValueOfAdventure", void 0);_defineProperty(GreySettings, "greyUseMummery", void 0);_defineProperty(GreySettings, "greyVotingBooth", void 0);_defineProperty(GreySettings, "greyBountyHunting", void 0);_defineProperty(GreySettings, "greySwitchWorkshed", void 0);_defineProperty(GreySettings, "greyClipArt", void 0);_defineProperty(GreySettings, "greyVIPClan", void 0);_defineProperty(GreySettings, "greyFortuneTeller", void 0);_defineProperty(GreySettings, "greyDeleteKmails", void 0);_defineProperty(GreySettings, "greyHippyMode", false);_defineProperty(GreySettings, "greyGrabZapWand", void 0);_defineProperty(GreySettings, "greyCookbatRecipe", void 0);_defineProperty(GreySettings, "greyLocketWeight", void 0);
 
 /***/ }),
 

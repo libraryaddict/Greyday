@@ -681,6 +681,14 @@ function getGreySettings() {
     "default": true
   };
 
+  var prioritizeLocket = {
+    name: "greyLocketWeight",
+    description:
+    "Set this to a value higher than 0 to add weight to maximizer if you want Greyday to wear the locket more often, this is only useful if you're trying to locket everything",
+    valid: function valid(s) {return /$\d+^/.test(s);},
+    "default": 0
+  };
+
   return [
   //greyBountyHunter,
   towerBreak,
@@ -702,7 +710,8 @@ function getGreySettings() {
   greyValueOfNC,
   greyPullValue,
   greySwitchWorkshed,
-  greyClipArt].
+  greyClipArt,
+  prioritizeLocket].
   map(function (s) {
     s.setting = "main";
 
@@ -785,6 +794,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
 
 
 
+
     function isHardcoreMode() {
       return this.hardcoreMode || (0,external_kolmafia_namespaceObject.inHardcore)();
     } }, { key: "willBeAccessible", value:
@@ -835,7 +845,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
 
           GreySettings[setting.name] = prop;
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
-    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings, "greyHippyMode", false);GreySettings_defineProperty(GreySettings, "greyGrabZapWand", void 0);GreySettings_defineProperty(GreySettings, "greyCookbatRecipe", void 0);
+    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings, "greyHippyMode", false);GreySettings_defineProperty(GreySettings, "greyGrabZapWand", void 0);GreySettings_defineProperty(GreySettings, "greyCookbatRecipe", void 0);GreySettings_defineProperty(GreySettings, "greyLocketWeight", void 0);
 ;// CONCATENATED MODULE: ./src/quests/Quests.ts
 
 
@@ -5293,6 +5303,13 @@ var GreyOutfit = /*#__PURE__*/function () {
     } }, { key: "setWeights", value:
 
     function setWeights() {
+      if (GreySettings.greyLocketWeight > 0) {
+        this.addWeight(
+        external_kolmafia_namespaceObject.Item.get("combat lover's locket"),
+        GreySettings.greyLocketWeight);
+
+      }
+
       this.addWeight(external_kolmafia_namespaceObject.Item.get("lucky gold ring"), 20);
       this.addWeight(external_kolmafia_namespaceObject.Item.get("mafia thumb ring"), 19);
 
@@ -30360,7 +30377,7 @@ var OrbStatus;(function (OrbStatus) {OrbStatus[OrbStatus["READY"] = 0] = "READY"
 
 
 
-var ConsiderPriority;(function (ConsiderPriority) {ConsiderPriority[ConsiderPriority["INSISTS_ON_BEING_DONE"] = 0] = "INSISTS_ON_BEING_DONE";ConsiderPriority[ConsiderPriority["MUST_BE_DONE"] = 1] = "MUST_BE_DONE";ConsiderPriority[ConsiderPriority["ORB_ABSORB"] = 2] = "ORB_ABSORB";ConsiderPriority[ConsiderPriority["ORB_ABSORB_OTHER"] = 3] = "ORB_ABSORB_OTHER";ConsiderPriority[ConsiderPriority["ORB_OTHER"] = 4] = "ORB_OTHER";ConsiderPriority[ConsiderPriority["RANDOM_ABSORB"] = 5] = "RANDOM_ABSORB";ConsiderPriority[ConsiderPriority["RANDOM_COMBAT_ABSORB"] = 6] = "RANDOM_COMBAT_ABSORB";ConsiderPriority[ConsiderPriority["NOTHING_SPECIAL"] = 7] = "NOTHING_SPECIAL";ConsiderPriority[ConsiderPriority["BAD_COMBAT_RATE"] = 8] = "BAD_COMBAT_RATE";ConsiderPriority[ConsiderPriority["BAD_PREDICTION"] = 9] = "BAD_PREDICTION";ConsiderPriority[ConsiderPriority["BAD_ABSORB"] = 10] = "BAD_ABSORB";ConsiderPriority[ConsiderPriority["BAD_ABSORB_PREDICTION"] = 11] = "BAD_ABSORB_PREDICTION";})(ConsiderPriority || (ConsiderPriority = {}));
+var ConsiderPriority;
 
 
 
@@ -30372,8 +30389,8 @@ var ConsiderPriority;(function (ConsiderPriority) {ConsiderPriority[ConsiderPrio
 
 
 
-
-
+// When we'd hit an absorb that's useless to us
+(function (ConsiderPriority) {ConsiderPriority[ConsiderPriority["INSISTS_ON_BEING_DONE"] = 0] = "INSISTS_ON_BEING_DONE";ConsiderPriority[ConsiderPriority["MUST_BE_DONE"] = 1] = "MUST_BE_DONE";ConsiderPriority[ConsiderPriority["ORB_ABSORB"] = 2] = "ORB_ABSORB";ConsiderPriority[ConsiderPriority["ORB_ABSORB_OTHER"] = 3] = "ORB_ABSORB_OTHER";ConsiderPriority[ConsiderPriority["ORB_OTHER"] = 4] = "ORB_OTHER";ConsiderPriority[ConsiderPriority["RANDOM_ABSORB"] = 5] = "RANDOM_ABSORB";ConsiderPriority[ConsiderPriority["RANDOM_COMBAT_ABSORB"] = 6] = "RANDOM_COMBAT_ABSORB";ConsiderPriority[ConsiderPriority["NOTHING_SPECIAL"] = 7] = "NOTHING_SPECIAL";ConsiderPriority[ConsiderPriority["BAD_COMBAT_RATE"] = 8] = "BAD_COMBAT_RATE";ConsiderPriority[ConsiderPriority["BAD_PREDICTION"] = 9] = "BAD_PREDICTION";ConsiderPriority[ConsiderPriority["BAD_ABSORB"] = 10] = "BAD_ABSORB";ConsiderPriority[ConsiderPriority["BAD_ABSORB_PREDICTION"] = 11] = "BAD_ABSORB_PREDICTION";})(ConsiderPriority || (ConsiderPriority = {}));
 
 
 
@@ -33177,7 +33194,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "b090832";
+var lastCommitHash = "fd9914e";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
