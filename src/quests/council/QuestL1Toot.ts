@@ -64,6 +64,7 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
 
     const hasEnoughMeat =
       this.autosells.find((i) => itemAmount(i) > 0) ||
+      myMeat() >= 5000 ||
       (toBoolean(getProperty("hasMaydayContract")) &&
         availableAmount(this.boombox) > 0);
 
