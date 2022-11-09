@@ -1,7 +1,6 @@
 import * as React from "react";
-import { addNotification, saveSettings } from "../api/ApiRequest";
 import Setting from "../components/Setting";
-import { Data, SettingProp } from "../types/Types";
+import { SettingProp } from "../types/Types";
 
 function Values({ settings }: { settings: SettingProp[] }): JSX.Element {
   const preferences = settings
@@ -10,7 +9,6 @@ function Values({ settings }: { settings: SettingProp[] }): JSX.Element {
 
   return (
     <table>
-      <p className="unimplemented">This page currently does nothing</p>
       <tbody>{preferences}</tbody>
     </table>
   );

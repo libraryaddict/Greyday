@@ -163,14 +163,6 @@ export function getGreySettings(): GreySetting[] {
     default: defaultAdvValue,
   };
 
-  const greyPullValue: GreySetting = {
-    name: "greyValueOfPull",
-    description:
-      "Used to determine the value of a pull from storage, generally can be ignored.",
-    valid: (value) => /\d+/.test(value),
-    default: 0,
-  };
-
   const greySavePulls: GreySetting = {
     name: "greyPullsLimit",
     description:
@@ -195,14 +187,6 @@ export function getGreySettings(): GreySetting[] {
       return value == "" || toItem(value).usable;
     },
     default: "",
-  };
-
-  const greyValueOfNC: GreySetting = {
-    name: "greyValueOfNonCombat",
-    description:
-      "Really only applicable for people that do garbo's Yachtzee, set this to an absurd value to never use it",
-    valid: (value) => /\d+/.test(value),
-    default: 0,
   };
 
   const greyClipArt: GreySetting = {
@@ -300,8 +284,6 @@ export function getGreySettings(): GreySetting[] {
     dailyMalware,
     greySavePulls,
     grayAdventureValue,
-    greyValueOfNC,
-    greyPullValue,
     greySwitchWorkshed,
     greyClipArt,
     prioritizeLocket,

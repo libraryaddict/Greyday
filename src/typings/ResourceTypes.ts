@@ -1,6 +1,7 @@
 import {
   availableAmount,
   cliExecute,
+  closetAmount,
   currentRound,
   Effect,
   Familiar,
@@ -18,6 +19,7 @@ import {
   myMeat,
   myMp,
   print,
+  propertyExists,
   pullsRemaining,
   setProperty,
   Skill,
@@ -129,19 +131,21 @@ export interface SomeResource {
 }
 
 type ResourceValue = {
-  valueName: string;
+  name: string;
   description: string;
   dynamic?: boolean;
 };
 
 export function getResourceSettings(): GreySetting[] {
   return getResourceValues().map((res) => {
+    const def = ResourceValues[res.name];
+
     const setting: GreySetting = {
       setting: "values",
-      name: "greyValue_" + res.valueName,
-      description: res.description,
+      name: "greyValue_" + res.name,
+      description: res.description + " (Default " + def + ")",
       valid: (s) => /\d+/.test(s),
-      default: ResourceValues[res.valueName + "Value"],
+      default: def,
     };
 
     return setting;
@@ -150,78 +154,78 @@ export function getResourceSettings(): GreySetting[] {
 
 export function getResourceValues(): ResourceValue[] {
   const embezzler: ResourceValue = {
-    valueName: "Embezzler",
+    name: "Embezzler",
     description: "How much meat this resource would give from embezzlers",
   };
 
   const cloverValue: ResourceValue = {
-    valueName: "Clover",
+    name: "Clover",
     description: "How much meat you could sell an 11-leaf clover for",
   };
 
-  const forcedNC: ResourceValue = {
-    valueName: "ForcedNC",
-    description: "How much meat each forced non-combat (Parka) is worth",
+  const parkaNC: ResourceValue = {
+    name: "ParkaNC",
+    description: "How much meat each forced non-combat using Parka is worth",
   };
 
   const forcedDrop: ResourceValue = {
-    valueName: "ForcedDrop",
+    name: "ForcedDrop",
     description: "How much meat you could earn from each forced drop",
   };
 
   const pillkeeper: ResourceValue = {
-    valueName: "Pillkeeper",
+    name: "Pillkeeper",
     description: "How much meat you'd earn from the free pillkeeper use",
   };
 
   const pull: ResourceValue = {
-    valueName: "Pull",
+    name: "Pull",
     description: "How much each pull is worth to the player in meat",
   };
 
   const cosplay: ResourceValue = {
-    valueName: "CosplaySaber",
+    name: "CosplaySaber",
     description:
-      "How much meat each cosplay saber use is worth, normally calculated by pills remaining",
+      "How much meat each cosplay saber use is worth, normally calculated by pills remaining. Set to 0 to let Greyday calculate this.",
     dynamic: true,
   };
 
   const shorts: ResourceValue = {
-    valueName: "CargoShorts",
+    name: "CargoShorts",
     description: "How much meat an item from Cargo Shorts is worth",
   };
 
   const deckOfCards: ResourceValue = {
-    valueName: "DeckOfCards",
+    name: "DeckOfCards",
     description:
       "With 15 uses, a cheat using 5, how much each use is worth in meat",
   };
 
   const zap: ResourceValue = {
-    valueName: "ZapWand",
+    name: "ZapWand",
     description: "How much each zap is worth in meat",
   };
 
   const burglar: ResourceValue = {
-    valueName: "CatBurglarHeist",
+    name: "CatBurglarHeist",
     description: "How much a cat burglar heist is worth in meat",
   };
 
   const chateauPainting: ResourceValue = {
-    valueName: "ChateauPainting",
+    name: "ChateauPainting",
     description:
       "How much Chateau Painting is worth in meat, not sure why this is an option given it'll only consider the painting if it's a fax it wants",
   };
 
   const hotTub: ResourceValue = {
-    valueName: "HotTub",
+    name: "HotTub",
     description: "How much each hot tub usage is worth to you",
   };
 
   return [
     embezzler,
     cloverValue,
-    forcedNC,
+    parkaNC,
     pillkeeper,
     forcedDrop,
     pull,
@@ -240,22 +244,59 @@ class ResourceValues {
   static CloverValue = 22000;
   static ForcedDropValue = 4000;
   static PillkeeperValue = 70000;
-  static ForcedNCValue = toInt(getProperty("greyValueOfNonCombat") || "0");
-  static PullValue = toInt(getProperty("greyValueOfPull") || "0");
+  static ParkaNCValue = 0;
+  static PullValue = 0;
   // If we have more than 60 pills, the saber is free. Otherwise it's worth 3k meat when its alien free day
   // Garbo has some use of it, but if you have an oflaction like its basically worth grimace pill/2 free fights
-  static CosplaySaberValue =
-    storageAmount(Item.get("distention pill")) > 60
-      ? -100
-      : modifierEval("G") >= 4
-      ? 3000
-      : 0;
+  static CosplaySaberValue = 0;
   static CargoShortsValue = 30000;
   static DeckOfCardsValue = 2000;
   static ZapWandValue = 15000;
   static CatBurglarHeistValue = -500;
   static ChateauPaintingValue = 5000;
   static HotTubValue = 0;
+
+  static {
+    if (
+      ["Distention Pill", "Dog Hair Pill"]
+        .map((s) => Item.get(s))
+        .map((i) => itemAmount(i) + closetAmount(i) + storageAmount(i))
+        .reduce((p1, p2) => Math.min(p1, p2)) > 60
+    ) {
+      this.CosplaySaberValue = -100;
+    } else if (modifierEval("G") >= 4) {
+      this.CosplaySaberValue = 3000;
+    } else {
+      this.CosplaySaberValue = 0;
+    }
+
+    for (const setting of getResourceValues()) {
+      if (ResourceValues[setting.name + "Value"] == null) {
+        print("Can't find resource value " + setting.name, "red");
+        continue;
+      }
+
+      ResourceValues[setting.name] = ResourceValues[setting.name + "Value"];
+
+      const prop = "greyValue_" + setting.name;
+
+      if (!propertyExists(prop)) {
+        continue;
+      }
+
+      const val = getProperty(prop);
+
+      if (!/^\d+$/.test(val)) {
+        continue;
+      }
+
+      if (val == "0" && setting.name == "CosplaySaber") {
+        continue;
+      }
+
+      ResourceValues[setting.name + "Value"] = toInt(val);
+    }
+  }
 }
 
 const glove = Item.get("Powerful Glove");
@@ -400,7 +441,7 @@ const parkaProp: string = "_parkaPrimed";
 const ncParka: SomeResource = {
   type: ResourceCategory.FORCE_NC,
   resource: "Parka: Force NC",
-  worthInAftercore: ResourceValues.ForcedNCValue,
+  worthInAftercore: ResourceValues.ParkaNCValue,
   //available: () => haveSkill(torso) && availableAmount(parka) > 0,
   prepare: (outfit: GreyOutfit) => {
     if (outfit != null) {
