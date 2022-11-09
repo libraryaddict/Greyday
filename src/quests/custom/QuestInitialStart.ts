@@ -11,6 +11,7 @@ import {
   Item,
   Location,
   myFamiliar,
+  myMeat,
   print,
   Skill,
   toBoolean,
@@ -77,12 +78,16 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (getProperty("breakfastCompleted") == "false") {
+    if (availableAmount(this.saber) > 0 && getProperty("_saberMod") == "0") {
       return QuestStatus.READY;
     }
 
-    if (availableAmount(this.saber) > 0 && getProperty("_saberMod") == "0") {
-      return QuestStatus.READY;
+    if (getProperty("breakfastCompleted") == "false") {
+      if (myMeat() >= 400) {
+        return QuestStatus.READY;
+      }
+
+      return QuestStatus.NOT_READY;
     }
 
     return QuestStatus.COMPLETED;
@@ -175,7 +180,7 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
           }
         }
 
-        if (getProperty("breakfastCompleted") == "false") {
+        if (getProperty("breakfastCompleted") == "false" && myMeat() >= 400) {
           let breakfastScript = getProperty("breakfastScript");
           const props = new PropertyManager();
           props.setProperty("grabCloversSoftcore", "true");

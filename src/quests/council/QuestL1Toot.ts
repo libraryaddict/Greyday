@@ -32,6 +32,7 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
   ring: Item = Item.get("Gold Wedding Ring");
   gold: Item = Item.get("1,970 Carat Gold");
   mickyCard: Item = Item.get("1952 Mickey Mantle card");
+  autosells: Item[] = [this.ring, this.gold, this.mickyCard];
   letter = Item.get("Letter from King Ralph XI");
   sack = Item.get("pork elf goodies sack");
 
@@ -62,8 +63,9 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
     this.paths = [];
 
     const hasEnoughMeat =
-      toBoolean(getProperty("hasMaydayContract")) &&
-      availableAmount(this.boombox) > 0;
+      this.autosells.find((i) => itemAmount(i) > 0) ||
+      (toBoolean(getProperty("hasMaydayContract")) &&
+        availableAmount(this.boombox) > 0);
 
     if (hasEnoughMeat) {
       this.paths.push(new PossiblePath(0));
@@ -132,6 +134,10 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
             throw "Expected to have sold a " + this.mickyCard;
           }
         }
+
+        this.autosells
+          .filter((i) => itemAmount(i) > 0)
+          .forEach((i) => autosell(i, itemAmount(i)));
 
         // If we're poor, sell one of the gems for some starting meat
         if (myMeat() < 500) {
