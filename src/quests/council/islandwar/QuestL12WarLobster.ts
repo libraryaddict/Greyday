@@ -8,7 +8,6 @@ import {
   Location,
   Monster,
   myAdventures,
-  myLevel,
   toInt,
   toMonster,
   totalTurnsPlayed,
@@ -23,9 +22,7 @@ import {
   setPrimedResource,
 } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import {
-  getAllCombinations,
-} from "../../../utils/GreyUtils";
+import { getAllCombinations } from "../../../utils/GreyUtils";
 import { Macro } from "../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../utils/Properties";
 import {
@@ -46,13 +43,15 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
   backupCamera: Item = Item.get("Backup Camera");
   votedSticker: Item = Item.get("&quot;I Voted!&quot; sticker");
   paths: PossiblePath[] = [];
+  hasAutumn: boolean = getProperty("hasAutumnaton") == "true";
+  fallbotTag: string = "Fallbot";
 
   constructor() {
     super();
   }
 
   level(): number {
-    return 15;
+    return this.hasAutumn ? 13 : 15;
   }
 
   getFriendsRemaining(): number {
@@ -64,6 +63,17 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
   }
 
   createPaths(assumeUnstarted: boolean): void {
+    this.paths = [];
+
+    if (this.hasAutumn) {
+      this.paths.push(
+        new PossiblePath(
+          assumeUnstarted ? 1 : this.loc.turnsSpent > 0 ? 0 : 1
+        ).addTag(this.fallbotTag)
+      );
+      return;
+    }
+
     const barrelsNeeded =
       5 - (assumeUnstarted ? 0 : availableAmount(this.item));
     const turnsManual = 8;
@@ -93,8 +103,6 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
     ) {
       possibleCombo.push(ResourceCategory.GLOVE_REPLACE);
     }
-
-    this.paths = [];
 
     for (const combo of getAllCombinations(possibleCombo)) {
       // If a combo would do something silly, like request a glove replace when its not needed
@@ -237,6 +245,14 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
+    if (path.hasTag(this.fallbotTag)) {
+      if (this.loc.turnsSpent < 1) {
+        return QuestStatus.READY;
+      }
+
+      return QuestStatus.NOT_READY;
+    }
+
     if (this.getFriendsRemaining() > 0) {
       return QuestStatus.READY;
     }
@@ -279,10 +295,6 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
       familiarWeight(Familiar.get("Grey Goose")) > 2 &&
       familiarWeight(Familiar.get("Grey Goose")) < 6
     ) {
-      return QuestStatus.FASTER_LATER;
-    }
-
-    if (myLevel() < 16 && getProperty("sidequestArenaCompleted") == "none") {
       return QuestStatus.FASTER_LATER;
     }
 
@@ -476,6 +488,16 @@ export class QuestL12Lobster extends TaskInfo implements QuestInfo {
     // Try to turn in quest
     if (itemAmount(this.item) >= 5) {
       return this.turnInQuest();
+    }
+
+    // Going here just to unlock fallbot~!
+    if (path.hasTag(this.fallbotTag)) {
+      return {
+        location: this.loc,
+        run: () => {
+          greyAdv(this.loc);
+        },
+      };
     }
 
     if (this.getFriendsRemaining() > 0) {

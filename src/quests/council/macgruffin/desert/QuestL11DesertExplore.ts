@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  cliExecute,
   Effect,
   equip,
   equippedAmount,
@@ -12,6 +13,7 @@ import {
   Item,
   itemAmount,
   Location,
+  maximize,
   Monster,
   myAdventures,
   myFamiliar,
@@ -66,6 +68,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
   curse3: Effect = Effect.get("Thrice-Cursed");
   blur: Monster = Monster.get("Blur");
   hooks: Item = Item.get("worm-riding hooks");
+  stillsuit: Item = Item.get("tiny stillsuit");
 
   createPaths(assumeUnstarted: boolean) {
     this.paths = [];
@@ -220,39 +223,63 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
     }
 
     const crystalBall: Map<Location, Monster> = currentPredictions();
+    const fam = haveFamiliar(this.camel) ? this.camel : null;
+    let forceFam: boolean = fam != null && this.toAbsorb.length == 0;
+    const predictAbsorb = this.toAbsorb.includes(crystalBall.get(this.desert));
+
+    if (fam != null) {
+      if (!crystalBall.has(this.desert) || !predictAbsorb) {
+        forceFam = true;
+      }
+
+      if (this.getExplored() < 10) {
+        forceFam = true;
+      }
+    }
 
     return {
       outfit: outfit,
       location: this.desert,
-      familiar: haveFamiliar(this.camel) ? this.camel : null,
-      disableFamOverride:
-        (this.toAbsorb.length == 0 ||
-          (crystalBall.has(this.desert) &&
-            !this.toAbsorb.includes(crystalBall.get(this.desert)))) &&
-        haveFamiliar(this.camel),
+      familiar: fam,
+      disableFamOverride: forceFam,
       run: () => {
         let killing: Macro = Macro.if_(
           Effect.get("Tenuous Grip on Reality"),
           Macro.attack().repeat()
         ).step(greyKillingBlow(outfit));
 
-        // If we're looking for an absorb, have the crystal ball and have the camel
+        // If we're looking for an absorb, have the crystal ball and have the camel and explored is >= 10
         if (
           this.toAbsorb.length > 0 &&
           availableAmount(this.ball) > 0 &&
-          haveFamiliar(this.camel)
+          fam != null
         ) {
-          // If we already have a prediction, and the prediction isn't what we want
-          if (
-            crystalBall.has(this.desert) &&
-            !this.toAbsorb.includes(crystalBall.get(this.desert))
-          ) {
-            useFamiliar(this.camel);
-            equip(this.ball);
-          } else if (
-            familiarWeight(this.goose) >= 6 &&
-            equippedAmount(this.ball) == 0
-          ) {
+          // If we have a prediction
+          if (crystalBall.has(this.desert)) {
+            // If we predict an absorb
+            if (predictAbsorb) {
+              // If we are still doing the first 10 explores
+              if (this.getExplored() < 10) {
+                // We don't want to wear the ball, we'll do that when we do the absorb
+                if (availableAmount(this.stillsuit) > 0) {
+                  cliExecute("equip " + this.stillsuit);
+                } else {
+                  equip(Slot.get("familiar"), Item.none);
+
+                  maximize("familiar -equip " + this.ball, false);
+                }
+              } else if (
+                equippedAmount(this.ball) == 0 &&
+                familiarWeight(this.goose) >= 6
+              ) {
+                equip(this.ball);
+              }
+            } else {
+              // Force them to wear the ball to change our prediction
+              equip(this.ball);
+            }
+          } else {
+            // Force the ball to be worn to make a prediction
             equip(this.ball);
           }
         } else if (this.toAbsorb.length == 0 && resource != null) {
@@ -290,7 +317,9 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
           props.resetAll();
         }
 
-        if (explored == this.getExplored()) {
+        if (getProperty("lastEncounter") == "A Sietch in Time") {
+          visitUrl("place.php?whichplace=desertbeach", false);
+        } else if (explored == this.getExplored()) {
           print("Checking explored..", "blue");
           visitUrl("place.php?whichplace=desertbeach", false);
         } else if (

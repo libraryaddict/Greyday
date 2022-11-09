@@ -32,9 +32,7 @@ import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { Macro } from "../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../utils/Properties";
-import {
-  isGhostBustingTime,
-} from "../../custom/QuestTrapGhost";
+import { isGhostBustingTime } from "../../custom/QuestTrapGhost";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -55,7 +53,7 @@ export class SmutOrcs implements QuestInfo {
   driveSafe: Effect = Effect.get("Driving Safely");
   lastColdCheck: number = 0;
   hasEnoughCold: boolean = false;
-  lastColdMaximize: string;
+  lastColdMaximize: string = "Cold Damage";
   smutSleazeSkill: Skill = Skill.get("Procgen Ribaldry");
   sleazeMonster: Monster = Monster.get("Smut orc screwer");
   damagingEquips: Item[] = [

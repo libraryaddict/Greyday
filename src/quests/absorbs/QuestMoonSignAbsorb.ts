@@ -17,11 +17,7 @@ import { ResourceCategory } from "../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { AbsorbsProvider } from "../../utils/GreyAbsorber";
 import { greyAdv } from "../../utils/GreyLocations";
-import {
-  MoonZone,
-  GreySettings,
-  getMoonZone,
-} from "../../utils/GreySettings";
+import { MoonZone, GreySettings, getMoonZone } from "../../utils/GreySettings";
 import { Macro } from "../../utils/MacroBuilder";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -83,6 +79,10 @@ export abstract class QuestMoonSignAbsorb
 
     if (familiarWeight(this.goose) < 6) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (this.level() <= 6) {
+      return QuestStatus.READY;
     }
 
     return QuestStatus.FASTER_LATER;

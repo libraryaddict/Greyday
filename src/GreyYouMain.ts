@@ -1,6 +1,8 @@
 import {
+  choiceFollowsFight,
   currentRound,
   Effect,
+  fightFollowsChoice,
   getAutoAttack,
   getProperty,
   getRevision,
@@ -180,6 +182,23 @@ class GreyYouMain {
 
     this.checkVersion();
 
+    if (
+      currentRound() != 0 ||
+      handlingChoice() ||
+      choiceFollowsFight() ||
+      fightFollowsChoice()
+    ) {
+      visitUrl("main.php");
+
+      if (currentRound() != 0 || handlingChoice()) {
+        print(
+          "In a fight or in a choice, please resolve before continuing..",
+          "red"
+        );
+        return;
+      }
+    }
+
     GreySettings.loadSettings();
 
     if (command == "resources") {
@@ -280,18 +299,6 @@ class GreyYouMain {
         "red"
       );
       return;
-    }
-
-    if (currentRound() != 0 || handlingChoice()) {
-      visitUrl("main.php");
-
-      if (currentRound() != 0 || handlingChoice()) {
-        print(
-          "In a fight or in a choice, please resolve before continuing..",
-          "red"
-        );
-        return;
-      }
     }
 
     if (getProperty("greyBreakAtTower") == "") {

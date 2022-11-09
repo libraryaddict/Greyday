@@ -693,6 +693,14 @@ export class AdventureFinder {
       return status;
     }
 
+    if (getProperty("autumnatonQuestLocation") != "") {
+      const loc = Location.get(getProperty("autumnatonQuestLocation"));
+
+      if (runned.location == loc) {
+        status = QuestStatus.FASTER_LATER;
+      }
+    }
+
     const outfit = runned.outfit;
 
     if (outfit != null) {

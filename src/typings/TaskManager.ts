@@ -98,6 +98,7 @@ export class SimmedPath {
 
   printInfo() {
     interface UsedEntry {
+      level: number;
       questName: string;
       resourcesUsed: number;
       turnsSaved: number;
@@ -123,6 +124,7 @@ export class SimmedPath {
 
         used.get(key).push(
           (pair = {
+            level: quest.level(),
             questName: id,
             resourcesUsed: 0,
             turnsSaved: path.getAverageTurns(),
@@ -143,6 +145,15 @@ export class SimmedPath {
       const resourcesUsed = details
         .map((d) => d.resourcesUsed)
         .reduce((p, n) => p + n, 0);
+
+      details.sort((d1, d2) => {
+        if (d1.level != d2.level) {
+          return d1.level - d2.level;
+        }
+
+        return d1.questName.localeCompare(d2.questName);
+      });
+
       const paths = details
         .map(
           (d, index) =>
