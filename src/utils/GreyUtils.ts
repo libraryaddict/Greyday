@@ -20,7 +20,6 @@ import {
   setProperty,
   toEffect,
   toInt,
-  toItem,
   toLocation,
   toMonster,
   turnsPlayed,
@@ -323,7 +322,7 @@ const bookbatRecipes: Item[] = [
   10979, 10980, 10981, 10982, 10983, 10984, 10985, 10986, 10987, 10993, 10994,
   10995, 10996, 10997, 10999,
 ].map((i) => {
-  return toItem(toInt(i));
+  return Item.get(i);
 });
 
 const recipeProp = "_droppedCookbatRecipe";

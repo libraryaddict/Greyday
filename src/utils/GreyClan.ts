@@ -89,7 +89,7 @@ function getDefaultClan(): number {
     return null;
   }
 
-  return clanInfo[0];
+  return toInt(clanInfo[0]);
 }
 
 function runInClan(clanId: number, func: () => void) {
@@ -247,16 +247,11 @@ export function doFortuneTeller() {
     return;
   }
 
-  let bot: string = null;
-  let fortuneClan: number = null;
+  let bot: string = fortuneTellers.get(getClanId());
+  let fortuneClan: number = getClanId();
 
-  if (fortuneTellers.has(getClanId())) {
-    bot = fortuneTellers.get(getClanId());
-    fortuneClan = getClanId();
-
-    if (!isOnline(bot)) {
-      bot = null;
-    }
+  if (!(typeof bot == "string") || !isOnline(bot)) {
+    bot = null;
   }
 
   if (bot == null) {
@@ -339,6 +334,8 @@ function canAccessClan(clanId: number): boolean {
   if (clanId == null) {
     return false;
   }
+
+  clanId = toInt(clanId);
 
   return (
     clanId == getClanId() ||
