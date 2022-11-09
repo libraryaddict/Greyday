@@ -325,7 +325,7 @@ type AutumnStat =
   | "stats"
   | "item drop%";
 
-export function getAutumnStat(upgrade: AutumnUpgrades): AutumnStat {
+function getAutumnStat(upgrade: AutumnUpgrades): AutumnStat {
   switch (upgrade) {
     case AutumnUpgrades.LEFT_ARM:
     case AutumnUpgrades.RIGHT_ARM:
@@ -345,13 +345,13 @@ export function getAutumnStat(upgrade: AutumnUpgrades): AutumnStat {
   }
 }
 
-export function getItemsPerExpedition(): number {
+function getItemsPerExpedition(): number {
   return (
     3 + getAutumnUpgraded(AutumnUpgrades.LEFT_ARM, AutumnUpgrades.RIGHT_ARM)
   );
 }
 
-export function getExpeditionTime(): number {
+function getExpeditionTime(): number {
   // At 0 quests, it takes 11 turns
   let questsDone = 1 + toInt(getProperty("_autumnatonQuests"));
 
@@ -369,13 +369,13 @@ function getAutumnUpgraded(...upgrades: AutumnUpgrades[]): number {
   return getAutumnUpgrades().filter((u) => upgrades.includes(u)).length;
 }
 
-export type AutumnOutcome = {
+type AutumnOutcome = {
   location: Location;
   item: Item;
   upgrade: AutumnUpgrades;
 };
 
-export function getAutumnatonLocations(): AutumnOutcome[] {
+function getAutumnatonLocations(): AutumnOutcome[] {
   const validLocs: AutumnOutcome[] = [];
 
   let page = visitUrl("inv_use.php?pwd&whichitem=10954");
@@ -396,13 +396,13 @@ export function getAutumnatonLocations(): AutumnOutcome[] {
   return validLocs;
 }
 
-export function getAutumnUpgrades(): AutumnUpgrades[] {
+function getAutumnUpgrades(): AutumnUpgrades[] {
   return getProperty("autumnatonUpgrades")
     .split(",")
     .filter((s) => s.length > 0) as AutumnUpgrades[];
 }
 
-export function getAutumnOutcome(location: Location): [AutumnUpgrades, Item] {
+function getAutumnOutcome(location: Location): [AutumnUpgrades, Item] {
   if (location.environment == "outdoor") {
     if (location.difficultyLevel == "low") {
       return [AutumnUpgrades.ENERGY_HAT, leaf];
