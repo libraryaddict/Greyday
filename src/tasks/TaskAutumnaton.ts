@@ -190,7 +190,7 @@ export class TaskAutumnaton implements Task {
       item: Item.get("barrel of gunpowder"),
       amount: 5,
       viable: () =>
-        getProperty("sidequestLighthouseCompleted") != "true" &&
+        getProperty("sidequestLighthouseCompleted") == "none" &&
         getItemsPerExpedition() >= 5,
     });
 
