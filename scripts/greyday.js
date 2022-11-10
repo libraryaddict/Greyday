@@ -26801,7 +26801,7 @@ var QuestJuneCleaver = /*#__PURE__*/function () {function QuestJuneCleaver() {Qu
             throw "Something went wrong. Expected to be holding the june cleaver";
           }
 
-          if (loc == _this.palindom) {
+          if (loc == _this.palindom && (0,external_kolmafia_namespaceObject.equippedAmount)(_this.talisman) == 0) {
             (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Slot.get("acc3"), _this.talisman);
           }
 
@@ -32303,6 +32303,18 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
         return;
       }
 
+      this.trySwitch();
+
+      if (!this.isConsultReady() || !this.isIndoors() || !this.shouldCheck()) {
+        return;
+      }
+
+      this.check();
+
+      this.trySwitch();
+    } }, { key: "trySwitch", value:
+
+    function trySwitch() {
       if (!this.hasConsults()) {
         if (!this.triedSwitch && GreySettings.greySwitchWorkshed != "") {
           this.triedSwitch = true;
@@ -32341,12 +32353,6 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
         }
         return;
       }
-
-      if (!this.isConsultReady() || !this.isIndoors() || !this.shouldCheck()) {
-        return;
-      }
-
-      this.check();
     } }]);return TaskColdMedicineCabinet;}();
 ;// CONCATENATED MODULE: ./src/tasks/TaskAutumnaton.ts
 function TaskAutumnaton_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskAutumnaton_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function TaskAutumnaton_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskAutumnaton_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskAutumnaton_arrayLikeToArray(o, minLen);}function TaskAutumnaton_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskAutumnaton_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskAutumnaton_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskAutumnaton_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskAutumnaton_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskAutumnaton_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskAutumnaton_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
@@ -32413,7 +32419,9 @@ var TaskAutumnaton = /*#__PURE__*/function () {
           function (t) {return (
               t.loc == location && (
               t.viable == null || t.viable()) &&
-              (0,external_kolmafia_namespaceObject.availableAmount)(t.item) < t.amount);});
+              (0,external_kolmafia_namespaceObject.availableAmount)(t.item) < t.amount && (
+              t.allowLongExpeditions == true ||
+              (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_autumnatonQuests")) <= 7));});
 
 
           if (toGrab.length > 0) {
@@ -32528,6 +32536,7 @@ var TaskAutumnaton = /*#__PURE__*/function () {
         loc: external_kolmafia_namespaceObject.Location.get("Sonofa Beach"),
         item: external_kolmafia_namespaceObject.Item.get("barrel of gunpowder"),
         amount: 5,
+        allowLongExpeditions: true,
         viable: function viable() {return (
             (0,external_kolmafia_namespaceObject.getProperty)("sidequestLighthouseCompleted") == "none" &&
             getItemsPerExpedition() >= 5);}
@@ -32635,6 +32644,7 @@ var TaskAutumnaton = /*#__PURE__*/function () {
       // Twin Peak - Hedge trimmers
       // Whitey's grove - White page? lol
     } }]);return TaskAutumnaton;}();
+
 
 
 
@@ -33564,7 +33574,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "f86078e";
+var lastCommitHash = "8a63459";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
