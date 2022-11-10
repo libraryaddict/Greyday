@@ -137,7 +137,8 @@ export class QuestL11Business extends TaskInfo implements QuestInfo {
           ncAfter +
           " delay, but we have " +
           turnsSpent +
-          " spent..",
+          " spent.. Encounters: " +
+          this.savedEncounters.map(([e, turn]) => e + ": " + turn).join(", "),
         "red"
       );
     }
