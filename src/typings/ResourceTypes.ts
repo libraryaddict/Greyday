@@ -144,7 +144,7 @@ export function getResourceSettings(): GreySetting[] {
       setting: "values",
       name: "greyValue_" + res.name,
       description: res.description + " (Default " + def + ")",
-      valid: (s) => /\d+/.test(s),
+      valid: (s) => /^-?\d+$/.test(s),
       default: def,
     };
 
