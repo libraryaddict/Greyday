@@ -1819,7 +1819,7 @@ function getResourceSettings() {
       setting: "values",
       name: "greyValue_" + res.name,
       description: res.description + " (Default " + def + ")",
-      valid: function valid(s) {return /\d+/.test(s);},
+      valid: function valid(s) {return /^-?\d+$/.test(s);},
       "default": def
     };
 
@@ -26721,10 +26721,29 @@ function QuestJuneCleaver_classCallCheck(instance, Constructor) {if (!(instance 
 
 
 
+
 var QuestJuneCleaver = /*#__PURE__*/function () {function QuestJuneCleaver() {QuestJuneCleaver_classCallCheck(this, QuestJuneCleaver);QuestJuneCleaver_defineProperty(this, "warren",
     external_kolmafia_namespaceObject.Location.get("The Dire Warren"));QuestJuneCleaver_defineProperty(this, "cleaver",
     external_kolmafia_namespaceObject.Item.get("June Cleaver"));QuestJuneCleaver_defineProperty(this, "teleportis",
-    external_kolmafia_namespaceObject.Effect.get("Teleportitis"));}QuestJuneCleaver_createClass(QuestJuneCleaver, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Effect.get("Teleportitis"));QuestJuneCleaver_defineProperty(this, "icyPeak",
+    external_kolmafia_namespaceObject.Location.get("The Icy Peak"));QuestJuneCleaver_defineProperty(this, "palindom",
+    external_kolmafia_namespaceObject.Location.get("Inside the Palindome"));QuestJuneCleaver_defineProperty(this, "ultraRares",
+    [
+    "Battlefield (No Uniform)",
+    "Inside the Palindome",
+    "The Dungeons of Doom",
+    "Menagerie Level 1",
+    "Cobb's Knob Treasury",
+    "Pandamonium Slums",
+    "A Mob of Zeppelin Protesters",
+    "The Icy Peak",
+    "The Sleazy Back Alley",
+    "The Haunted Billiards Room",
+    "The VERY Unquiet Garves",
+    "The Spooky Forest"].
+    map(function (s) {return external_kolmafia_namespaceObject.Location.get(s);}));QuestJuneCleaver_defineProperty(this, "goose",
+    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestJuneCleaver_defineProperty(this, "talisman",
+    external_kolmafia_namespaceObject.Item.get("Talisman o' Namsilat"));}QuestJuneCleaver_createClass(QuestJuneCleaver, [{ key: "getId", value:
 
     function getId() {
       return "Misc / JuneCleaver";
@@ -26761,8 +26780,19 @@ var QuestJuneCleaver = /*#__PURE__*/function () {function QuestJuneCleaver() {Qu
     } }, { key: "run", value:
 
     function run() {var _this = this;
+      // We fish for zones with URs in them, on the chance it lets us. Unlikely hey.
+      var loc = this.ultraRares.find(
+      function (l) {return (
+          canGreyAdventure(l) && (
+          l != _this.icyPeak || (0,external_kolmafia_namespaceObject.numericModifier)("Cold Resistance") >= 5));});
+
+
+      if (loc == null) {
+        loc = this.warren;
+      }
+
       return {
-        location: this.warren,
+        location: null,
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: function run() {
           (0,external_kolmafia_namespaceObject.maximize)("+equip " + _this.cleaver.name + " -tie", false);
@@ -26771,9 +26801,22 @@ var QuestJuneCleaver = /*#__PURE__*/function () {function QuestJuneCleaver() {Qu
             throw "Something went wrong. Expected to be holding the june cleaver";
           }
 
+          if (loc == _this.palindom) {
+            (0,external_kolmafia_namespaceObject.equip)(external_kolmafia_namespaceObject.Slot.get("acc3"), _this.talisman);
+          }
+
+          // We're using the grey goose if it has enough fam weight to dupe, incase we hit an UR
+          if (
+          (0,external_kolmafia_namespaceObject.myFamiliar)() != _this.goose &&
+          (0,external_kolmafia_namespaceObject.familiarWeight)(_this.goose) >= 6 &&
+          _this.ultraRares.includes(loc))
+          {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(_this.goose);
+          }
+
           var turn = (0,external_kolmafia_namespaceObject.turnsPlayed)();
 
-          greyAdv(_this.warren);
+          greyAdv(loc);
 
           if (turn != (0,external_kolmafia_namespaceObject.turnsPlayed)()) {
             throw "Something went wrong, expected to hit a june cleaver NC but instead spent a turn.";
@@ -33521,7 +33564,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "bbcd72a";
+var lastCommitHash = "f86078e";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 

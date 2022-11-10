@@ -940,7 +940,7 @@ function getResourceSettings() {
       setting: "values",
       name: "greyValue_" + res.name,
       description: res.description + " (Default " + def + ")",
-      valid: function valid(s) {return /\d+/.test(s);},
+      valid: function valid(s) {return /^-?\d+$/.test(s);},
       "default": def
     };
 
