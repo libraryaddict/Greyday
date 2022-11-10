@@ -79,6 +79,18 @@ export class TaskColdMedicineCabinet implements Task {
       return;
     }
 
+    this.trySwitch();
+
+    if (!this.isConsultReady() || !this.isIndoors() || !this.shouldCheck()) {
+      return;
+    }
+
+    this.check();
+
+    this.trySwitch();
+  }
+
+  trySwitch() {
     if (!this.hasConsults()) {
       if (!this.triedSwitch && GreySettings.greySwitchWorkshed != "") {
         this.triedSwitch = true;
@@ -117,11 +129,5 @@ export class TaskColdMedicineCabinet implements Task {
       }
       return;
     }
-
-    if (!this.isConsultReady() || !this.isIndoors() || !this.shouldCheck()) {
-      return;
-    }
-
-    this.check();
   }
 }

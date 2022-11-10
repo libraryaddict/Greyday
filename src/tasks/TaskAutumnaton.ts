@@ -74,7 +74,9 @@ export class TaskAutumnaton implements Task {
         (t) =>
           t.loc == location &&
           (t.viable == null || t.viable()) &&
-          availableAmount(t.item) < t.amount
+          availableAmount(t.item) < t.amount &&
+          (t.allowLongExpeditions == true ||
+            toInt(getProperty("_autumnatonQuests")) <= 7)
       );
 
       if (toGrab.length > 0) {
@@ -189,6 +191,7 @@ export class TaskAutumnaton implements Task {
       loc: Location.get("Sonofa Beach"),
       item: Item.get("barrel of gunpowder"),
       amount: 5,
+      allowLongExpeditions: true,
       viable: () =>
         getProperty("sidequestLighthouseCompleted") == "none" &&
         getItemsPerExpedition() >= 5,
@@ -302,6 +305,7 @@ interface ValidItem {
   loc: Location;
   item: Item;
   amount: number;
+  allowLongExpeditions?: true;
   viable?: () => boolean;
 }
 

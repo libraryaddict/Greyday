@@ -102,7 +102,7 @@ export class QuestJuneCleaver implements QuestInfo {
           throw "Something went wrong. Expected to be holding the june cleaver";
         }
 
-        if (loc == this.palindom) {
+        if (loc == this.palindom && equippedAmount(this.talisman) == 0) {
           equip(Slot.get("acc3"), this.talisman);
         }
 
