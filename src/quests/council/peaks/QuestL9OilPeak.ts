@@ -20,6 +20,7 @@ import {
   Effect,
   print,
   toBoolean,
+  haveEffect,
 } from "kolmafia";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -38,6 +39,7 @@ export class OilHandler implements QuestInfo {
   crude: Item = Item.get("Bubblin' Crude");
   umbrella: Item = Item.get("Unbreakable Umbrella");
   baron: Monster = Monster.get("Oil Baron");
+  beatenUp = Effect.get("Beaten Up");
 
   getId(): QuestType {
     return "Council / Peaks / OilPeak";
@@ -60,7 +62,7 @@ export class OilHandler implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (myHp() < 90) {
+    if (myHp() < 90 || haveEffect(this.beatenUp) > 0) {
       return QuestStatus.NOT_READY;
     }
 
