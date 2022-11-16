@@ -307,16 +307,17 @@ export class GreyRequirements {
       s.toLowerCase().trim()
     );
 
+    const monstersLocket: string[] = [
+      "pygmy witch lawyer",
+      "mountain man",
+      "cloud of disembodied whiskers",
+      "one-eyed willie",
+      "little man in the canoe",
+      "fantasy bandit",
+      "pygmy janitor",
+    ];
+
     if (locket.length > 0) {
-      const monstersLocket: string[] = [
-        "pygmy witch lawyer",
-        "mountain man",
-        "cloud of disembodied whiskers",
-        "one-eyed willie",
-        "little man in the canoe",
-        "fantasy bandit",
-        "pygmy janitor",
-      ];
       const monstersNeed = monstersLocket.filter((m) => !locket.includes(m));
       const monstersHave = monstersLocket.filter((m) => locket.includes(m));
 
@@ -339,6 +340,14 @@ export class GreyRequirements {
           true
         );
       }
+    } else if (availableAmount(Item.get("Combat Lover's Locket")) > 0) {
+      add(
+        Type.IOTM_EXTRA,
+        "Combat Locket " + monstersLocket.join(", "),
+        "We can't tell if you have these in your locket unfortunately due to mafia limitations.",
+        Required.MUST,
+        false
+      );
     }
 
     const poolSkill = Math.floor(
