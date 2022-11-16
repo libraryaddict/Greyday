@@ -60,10 +60,10 @@ export class QuestL4BatsCenter extends TaskInfo implements QuestInfo {
     return 4;
   }
 
-  status(): QuestStatus {
+  status(path: PossiblePath): QuestStatus {
     const status = getQuestStatus("questL04Bat");
 
-    if (status < 0) {
+    if (status < 0 || path == null) {
       return QuestStatus.NOT_READY;
     }
 
@@ -77,7 +77,15 @@ export class QuestL4BatsCenter extends TaskInfo implements QuestInfo {
         this.lastStenchCheck + 10 < turnsPlayed()
       ) {
         this.lastStenchCheck = turnsPlayed();
-        maximize("Stench Res -tie", true);
+
+        let maximizerString = "stench res -tie";
+
+        if (path.canUse(ResourceCategory.FIRE_EXTINGUSHER_ZONE)) {
+          maximizerString += " +equip industrial fire extinguisher";
+        }
+
+        maximize(maximizerString, true);
+
         this.hasStenchRes =
           numericModifier("Generated:_spec", "Stench Resistance") > 0;
       }
