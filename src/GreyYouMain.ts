@@ -10,7 +10,6 @@ import {
   gitExists,
   handlingChoice,
   haveEffect,
-  isBanished,
   Item,
   myAdventures,
   myPath,
@@ -32,6 +31,7 @@ import { GreyAdventurer } from "./GreyAdventurer";
 import { getQuestStatus } from "./quests/Quests";
 import { getResources } from "./typings/ResourceTypes";
 import { FigureOutPath } from "./typings/TaskManager";
+import { BanishType, getBanished } from "./utils/Banishers";
 import { AbsorbsProvider } from "./utils/GreyAbsorber";
 import { hasVIPInvitation, hasWhitelistToCurrentClan } from "./utils/GreyClan";
 import { GreyRequirements } from "./utils/GreyResources";
@@ -108,6 +108,14 @@ class GreyYouMain {
     print("");
     printHtml(
       "<div style=\"text-align: center;\" color='blue'>======================</div>"
+    );
+
+    this.clickThis();
+  }
+
+  clickThis() {
+    printHtml(
+      "It's easiest to use the <a href='relay_Greyday.js?relay=true'><u>relay page</u></a>"
     );
   }
 
@@ -222,13 +230,18 @@ class GreyYouMain {
       return;
     }
 
-    const banishedAbsorbs = AbsorbsProvider.loadAbsorbs(true).filter((absorb) =>
-      isBanished(absorb.monster)
+    const banishedAbsorbs = AbsorbsProvider.loadAbsorbs(true).filter(
+      (absorb) =>
+        getBanished().find(
+          (b) =>
+            b.banisher.type == BanishType.ICE_HOUSE &&
+            b.monster == absorb.monster
+        ) != null
     );
 
     if (banishedAbsorbs.length > 0) {
       print(
-        "Please note that the following has been banished, if this is a persistant banish (Eg, Ice House). Then we cannot absorb said monster. Monsters: " +
+        "Your Ice House contains a monster we'd like to absorb! Please release them.. " +
           banishedAbsorbs.map((a) => a.monster).join(", "),
         "red"
       );
