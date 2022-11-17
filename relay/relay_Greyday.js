@@ -2540,7 +2540,7 @@ function getGreySettings() {
   var greyGrabZapWand = {
     name: "greyGrabZapWand",
     description:
-    "Should the script grab the zap wand? This generally adds another 5-6 turns to the run",
+    "Should the script grab the zap wand? This generally adds another 5-6 turns to the run. You'll need this if you don't have enough key sources",
     valid: isBoolean,
     "default": false
   };
