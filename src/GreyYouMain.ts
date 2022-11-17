@@ -122,9 +122,8 @@ class GreyYouMain {
   doHelp() {
     printHtml(centerText("======================================"));
     print("help - Shows this message", "blue");
-    print(
-      "settings - Show the settings (You should use the relay page instead!)",
-      "blue"
+    printHtml(
+      "<font color='blue'>settings - Manage settings (Try the <a color='purple' href='relay_Greyday.js?relay=true'><u>relay page</u></a> instead!)</font>"
     );
     print("required - Prints off a series of requirements.", "blue");
     print(
