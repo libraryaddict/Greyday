@@ -951,7 +951,8 @@ function getResourceSettings() {
 function getResourceValues() {
   var embezzler = {
     name: "Embezzler",
-    description: "How much meat this resource would give from embezzlers"
+    description:
+    "How much meat you expect to gain from embezzlers in garbo (This is basically how much a copier is worth using garbo)"
   };
 
   var cloverValue = {
