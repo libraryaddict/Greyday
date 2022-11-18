@@ -32391,32 +32391,35 @@ var TaskAutumnaton = /*#__PURE__*/function () {
         Object.entries(
         (0,external_kolmafia_namespaceObject.appearanceRates)(loc)).
         map(
-        function (_ref5) {var _ref6 = TaskAutumnaton_slicedToArray(_ref5, 2),monster = _ref6[0],rate = _ref6[1];return [external_kolmafia_namespaceObject.Monster.get(monster), rate];})),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;)
+        function (_ref3) {var _ref4 = TaskAutumnaton_slicedToArray(_ref3, 2),monster = _ref4[0],rate = _ref4[1];return [external_kolmafia_namespaceObject.Monster.get(monster), rate];})),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;)
         {var _step$value = TaskAutumnaton_slicedToArray(_step.value, 2),monster = _step$value[0],encounterRate = _step$value[1];
           if (encounterRate <= 0) {
             continue;
-          }var _iterator2 = TaskAutumnaton_createForOfIteratorHelper(
+          }var _iterator3 = TaskAutumnaton_createForOfIteratorHelper(
 
-            (0,external_kolmafia_namespaceObject.itemDropsArray)(monster)),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var _step2$value = _step2.value,drop = _step2$value.drop,rate = _step2$value.rate,type = _step2$value.type;
-              if (type != "") {
+            (0,external_kolmafia_namespaceObject.itemDropsArray)(monster)),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var _step3$value = _step3.value,drop = _step3$value.drop,rate = _step3$value.rate,type = _step3$value.type;
+              if (type != "" || drop.quest || !drop.tradeable) {
                 continue;
               }
 
               map.set(drop, (map.get(drop) || 0) + rate);
-            }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+            }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
 
+      var expectedItems = getItemsPerExpedition();
       var totalItemDrop = TaskAutumnaton_toConsumableArray(map.values()).reduce(function (p, n) {return p + n;}, 0);
-      var expectedDrops = TaskAutumnaton_toConsumableArray(map.entries()).map(
-      function (_ref) {var _ref2 = TaskAutumnaton_slicedToArray(_ref, 2),item = _ref2[0],rate = _ref2[1];return [item, rate / totalItemDrop * rate];});
+      var multiBy = expectedItems * 100 / totalItemDrop;var _iterator2 = TaskAutumnaton_createForOfIteratorHelper(
+
+        map),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var _step2$value = TaskAutumnaton_slicedToArray(_step2.value, 2),_drop = _step2$value[0],_rate = _step2$value[1];
+          map.set(_drop, _rate * multiBy);
+        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
 
       var outcome = getAutumnOutcome(loc);
 
-      var expectedItems = getItemsPerExpedition();
       var expectedProfit =
       (outcome != null ? (0,external_kolmafia_namespaceObject.historicalPrice)(outcome[1]) : 0) +
-      expectedDrops.
-      map(function (_ref3) {var _ref4 = TaskAutumnaton_slicedToArray(_ref3, 2),i = _ref4[0],rate = _ref4[1];return 0.01 * (0,external_kolmafia_namespaceObject.historicalPrice)(i) * rate * expectedItems;}).
+      TaskAutumnaton_toConsumableArray(map.entries()).
+      map(function (_ref) {var _ref2 = TaskAutumnaton_slicedToArray(_ref, 2),i = _ref2[0],rate = _ref2[1];return 0.01 * (0,external_kolmafia_namespaceObject.historicalPrice)(i) * rate;}).
       reduce(function (p, n) {return p + n;}, 0);
 
       return Math.round(expectedProfit);
@@ -32431,9 +32434,9 @@ var TaskAutumnaton = /*#__PURE__*/function () {
       ["stats", 1]]);
 
 
-      var selections = [];var _iterator3 = TaskAutumnaton_createForOfIteratorHelper(
+      var selections = [];var _iterator4 = TaskAutumnaton_createForOfIteratorHelper(
 
-        locs),_step3;try {var _loop = function _loop() {var _step3$value = _step3.value,location = _step3$value.location,item = _step3$value.item,upgrade = _step3$value.upgrade;
+        locs),_step4;try {var _loop = function _loop() {var _step4$value = _step4.value,location = _step4$value.location,item = _step4$value.item,upgrade = _step4$value.upgrade;
           var score = _this.getExpectedFallbotProfits(location) / 2500; // Turn 5k expected profit into a score of 2
 
           var toGrab = _this.toGrab.filter(
@@ -32484,8 +32487,8 @@ var TaskAutumnaton = /*#__PURE__*/function () {
             "'";
           }
 
-          selections.push({ location: location, score: score, reason: reason });};for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var _ret = _loop();if (_ret === "continue") continue;
-        }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+          selections.push({ location: location, score: score, reason: reason });};for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var _ret = _loop();if (_ret === "continue") continue;
+        }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
 
       if (selections.length == 0) {
         return null;
@@ -33605,7 +33608,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "bf3656a";
+var lastCommitHash = "baca49c";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
