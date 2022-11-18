@@ -17,7 +17,6 @@ import {
   print,
   retrieveItem,
   sessionLogs,
-  setProperty,
   toEffect,
   toInt,
   toLocation,
@@ -316,27 +315,4 @@ export function getDaylightShavingsBuffs(): Effect[] {
 
 export function isDaylightShavingBuffReady(): boolean {
   return getDaylightShavingsBuffs().find((e) => haveEffect(e) > 1) == null;
-}
-
-const bookbatRecipes: Item[] = [
-  10979, 10980, 10981, 10982, 10983, 10984, 10985, 10986, 10987, 10993, 10994,
-  10995, 10996, 10997, 10999,
-].map((i) => {
-  return Item.get(i);
-});
-
-const recipeProp = "_droppedCookbatRecipe";
-
-export function hasCookbatRecipe(): boolean {
-  if (getProperty(recipeProp) == "true") {
-    return true;
-  }
-
-  const hasRecipe = bookbatRecipes.find((i) => availableAmount(i) > 0) != null;
-
-  if (hasRecipe) {
-    setProperty(recipeProp, "true");
-  }
-
-  return hasRecipe;
 }

@@ -14,9 +14,7 @@ import {
   pullsRemaining,
   toBoolean,
 } from "kolmafia";
-import {
-  ResourceCategory,
-} from "../../../../../typings/ResourceTypes";
+import { ResourceCategory } from "../../../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
@@ -212,11 +210,16 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
           (i) => itemAmount(i) + equippedAmount(i) == 0
         );
 
-        if (pullsRemaining() == -1) {
+        if (pullsRemaining() == -1 && dontHave.length > 0) {
           dontHave.forEach((i) => {
             GreyPulls.tryPull(i, 5000);
             path.addUsed(ResourceCategory.PULL);
+
+            if (itemAmount(i) == 0) {
+              throw "Expected to have " + i;
+            }
           });
+          return;
         } /*else if (dontHave.length > 0) {
           print("Uh oh! Missing " + dontHave.join(", ") + "!", "red");
           throw "Expected to have dungeon items, didn't.";

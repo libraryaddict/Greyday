@@ -24,6 +24,7 @@ import {
   putCloset,
   setLocation,
   Skill,
+  toBoolean,
   toInt,
   turnsPlayed,
   useFamiliar,
@@ -61,7 +62,7 @@ import {
 import { AbsorbsProvider, Reabsorbed } from "./utils/GreyAbsorber";
 import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
-import { doColor, hasCookbatRecipe, setUmbrella } from "./utils/GreyUtils";
+import { doColor, setUmbrella } from "./utils/GreyUtils";
 import { getPrimedResource } from "./utils/GreyLocations";
 import { TaskAutumnaton } from "./tasks/TaskAutumnaton";
 import { handledChoices } from "./utils/Properties";
@@ -485,21 +486,31 @@ export class GreyAdventurer {
       }
 
       // We want cat burglar to always be charged first
-      const burglar = Familiar.get("Cat Burglar");
+      const prioritize: Familiar[] = [
+        Familiar.get("Cat Burglar"),
+        Familiar.get("Gelatinous Cubeling"),
+      ];
       const recced = this.adventureFinder.getRecommendedFamiliars();
 
-      // If burglar wants to be charged, add it to the list
-      if (recced.includes(burglar)) {
-        replaceWith.push(burglar);
+      // If fam wants to be charged, add it to the list
+      for (const fam of prioritize) {
+        if (!recced.includes(fam)) {
+          continue;
+        }
+
+        replaceWith.push(fam);
       }
 
       // If we want the recipe, add cookbat
-      if (GreySettings.greyCookbatRecipe && !hasCookbatRecipe()) {
+      if (
+        GreySettings.greyCookbatRecipe &&
+        !toBoolean(getProperty("_cookbookbatRecipeDrops"))
+      ) {
         replaceWith.push(Familiar.get("Cookbookbat"));
       }
 
       // Add every other fam, exclude burglar.
-      replaceWith.push(...recced.filter((f) => f != burglar));
+      replaceWith.push(...recced.filter((f) => !replaceWith.includes(f)));
 
       const robor: Familiar = Familiar.get("Robortender");
       const doRobor =
