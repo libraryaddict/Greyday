@@ -56,7 +56,7 @@ export class TaskAutumnaton implements Task {
       }
 
       for (const { drop, rate, type } of itemDropsArray(monster)) {
-        if (type != "") {
+        if (type != "" || drop.quest || !drop.tradeable) {
           continue;
         }
 
@@ -64,17 +64,20 @@ export class TaskAutumnaton implements Task {
       }
     }
 
+    const expectedItems = getItemsPerExpedition();
     const totalItemDrop = [...map.values()].reduce((p, n) => p + n, 0);
-    const expectedDrops: [Item, number][] = [...map.entries()].map(
-      ([item, rate]) => [item, (rate / totalItemDrop) * rate] as [Item, number]
-    );
+    const multiBy = (expectedItems * 100) / totalItemDrop;
+
+    for (const [drop, rate] of map) {
+      map.set(drop, rate * multiBy);
+    }
+
     const outcome = getAutumnOutcome(loc);
 
-    const expectedItems = getItemsPerExpedition();
     const expectedProfit =
       (outcome != null ? historicalPrice(outcome[1]) : 0) +
-      expectedDrops
-        .map(([i, rate]) => 0.01 * historicalPrice(i) * rate * expectedItems)
+      [...map.entries()]
+        .map(([i, rate]) => 0.01 * historicalPrice(i) * rate)
         .reduce((p, n) => p + n, 0);
 
     return Math.round(expectedProfit);
