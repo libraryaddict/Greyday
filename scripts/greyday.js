@@ -32374,7 +32374,7 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
       }
     } }]);return TaskColdMedicineCabinet;}();
 ;// CONCATENATED MODULE: ./src/tasks/TaskAutumnaton.ts
-function TaskAutumnaton_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskAutumnaton_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function TaskAutumnaton_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskAutumnaton_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskAutumnaton_arrayLikeToArray(o, minLen);}function TaskAutumnaton_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskAutumnaton_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskAutumnaton_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskAutumnaton_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskAutumnaton_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskAutumnaton_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskAutumnaton_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function TaskAutumnaton_slicedToArray(arr, i) {return TaskAutumnaton_arrayWithHoles(arr) || TaskAutumnaton_iterableToArrayLimit(arr, i) || TaskAutumnaton_unsupportedIterableToArray(arr, i) || TaskAutumnaton_nonIterableRest();}function TaskAutumnaton_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskAutumnaton_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function TaskAutumnaton_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskAutumnaton_toConsumableArray(arr) {return TaskAutumnaton_arrayWithoutHoles(arr) || TaskAutumnaton_iterableToArray(arr) || TaskAutumnaton_unsupportedIterableToArray(arr) || TaskAutumnaton_nonIterableSpread();}function TaskAutumnaton_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskAutumnaton_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function TaskAutumnaton_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return TaskAutumnaton_arrayLikeToArray(arr);}function TaskAutumnaton_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskAutumnaton_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function TaskAutumnaton_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskAutumnaton_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskAutumnaton_arrayLikeToArray(o, minLen);}function TaskAutumnaton_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function TaskAutumnaton_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskAutumnaton_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function TaskAutumnaton_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskAutumnaton_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskAutumnaton_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskAutumnaton_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -32399,20 +32399,46 @@ var TaskAutumnaton = /*#__PURE__*/function () {
 
 
 
-  function TaskAutumnaton() {TaskAutumnaton_classCallCheck(this, TaskAutumnaton);TaskAutumnaton_defineProperty(this, "item", void 0);TaskAutumnaton_defineProperty(this, "skipFor", 0);TaskAutumnaton_defineProperty(this, "toGrab", void 0);
-    (0,external_kolmafia_namespaceObject.visitUrl)("desc_item.php?whichitem=174185886");
-    this.item = external_kolmafia_namespaceObject.Item.all().find(function (i) {return i.descid == "174185886";});
-
-    if (
-    this.item == null ||
-    this.item.name == null ||
-    !this.item.name.includes("aton"))
-    {
-      this.item = null;
-    }
-
+  function TaskAutumnaton() {TaskAutumnaton_classCallCheck(this, TaskAutumnaton);TaskAutumnaton_defineProperty(this, "item", external_kolmafia_namespaceObject.Item.get("Autumn-aton"));TaskAutumnaton_defineProperty(this, "skipFor", 0);TaskAutumnaton_defineProperty(this, "toGrab", void 0);
     this.createItems();
-  }TaskAutumnaton_createClass(TaskAutumnaton, [{ key: "selectLocation", value:
+  }TaskAutumnaton_createClass(TaskAutumnaton, [{ key: "getExpectedFallbotProfits", value:
+
+    function getExpectedFallbotProfits(loc) {
+      var map = new Map();var _iterator = TaskAutumnaton_createForOfIteratorHelper(
+
+        Object.entries(
+        (0,external_kolmafia_namespaceObject.appearanceRates)(loc)).
+        map(
+        function (_ref5) {var _ref6 = TaskAutumnaton_slicedToArray(_ref5, 2),monster = _ref6[0],rate = _ref6[1];return [external_kolmafia_namespaceObject.Monster.get(monster), rate];})),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;)
+        {var _step$value = TaskAutumnaton_slicedToArray(_step.value, 2),monster = _step$value[0],encounterRate = _step$value[1];
+          if (encounterRate <= 0) {
+            continue;
+          }var _iterator2 = TaskAutumnaton_createForOfIteratorHelper(
+
+            (0,external_kolmafia_namespaceObject.itemDropsArray)(monster)),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var _step2$value = _step2.value,drop = _step2$value.drop,rate = _step2$value.rate,type = _step2$value.type;
+              if (type != "") {
+                continue;
+              }
+
+              map.set(drop, (map.get(drop) || 0) + rate);
+            }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+
+      var totalItemDrop = TaskAutumnaton_toConsumableArray(map.values()).reduce(function (p, n) {return p + n;}, 0);
+      var expectedDrops = TaskAutumnaton_toConsumableArray(map.entries()).map(
+      function (_ref) {var _ref2 = TaskAutumnaton_slicedToArray(_ref, 2),item = _ref2[0],rate = _ref2[1];return [item, rate / totalItemDrop * rate];});
+
+      var outcome = getAutumnOutcome(loc);
+
+      var expectedItems = getItemsPerExpedition();
+      var expectedProfit =
+      (outcome != null ? (0,external_kolmafia_namespaceObject.historicalPrice)(outcome[1]) : 0) +
+      expectedDrops.
+      map(function (_ref3) {var _ref4 = TaskAutumnaton_slicedToArray(_ref3, 2),i = _ref4[0],rate = _ref4[1];return 0.01 * (0,external_kolmafia_namespaceObject.historicalPrice)(i) * rate * expectedItems;}).
+      reduce(function (p, n) {return p + n;}, 0);
+
+      return Math.round(expectedProfit);
+    } }, { key: "selectLocation", value:
 
     function selectLocation(locs) {var _this = this;
       var weights = new Map([
@@ -32423,16 +32449,10 @@ var TaskAutumnaton = /*#__PURE__*/function () {
       ["stats", 1]]);
 
 
-      var selections = [];var _iterator = TaskAutumnaton_createForOfIteratorHelper(
+      var selections = [];var _iterator3 = TaskAutumnaton_createForOfIteratorHelper(
 
-        locs),_step;try {var _loop = function _loop() {var _step$value = _step.value,location = _step$value.location,item = _step$value.item,upgrade = _step$value.upgrade;
-          var score = 0;
-
-          if (item == sweater) {
-            score += 1;
-          } else if (item == dollar) {
-            score += 2;
-          }
+        locs),_step3;try {var _loop = function _loop() {var _step3$value = _step3.value,location = _step3$value.location,item = _step3$value.item,upgrade = _step3$value.upgrade;
+          var score = _this.getExpectedFallbotProfits(location) / 2500; // Turn 5k expected profit into a score of 2
 
           var toGrab = _this.toGrab.filter(
           function (t) {return (
@@ -32482,8 +32502,8 @@ var TaskAutumnaton = /*#__PURE__*/function () {
             "'";
           }
 
-          selections.push({ location: location, score: score, reason: reason });};for (_iterator.s(); !(_step = _iterator.n()).done;) {var _ret = _loop();if (_ret === "continue") continue;
-        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+          selections.push({ location: location, score: score, reason: reason });};for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var _ret = _loop();if (_ret === "continue") continue;
+        }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
 
       if (selections.length == 0) {
         return null;
@@ -33593,7 +33613,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "1afdf9f";
+var lastCommitHash = "2663162";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
