@@ -10,6 +10,10 @@ import {
   toInt,
   getProperty,
   toLocation,
+  Monster,
+  appearanceRates,
+  itemDropsArray,
+  historicalPrice,
 } from "kolmafia";
 import { getQuestStatus } from "../quests/Quests";
 import { Task } from "./Tasks";
@@ -31,23 +35,49 @@ interface AutumnSelection {
 }
 
 export class TaskAutumnaton implements Task {
-  item: Item;
+  item: Item = Item.get("Autumn-aton");
   skipFor: number = 0;
   toGrab: ValidItem[];
 
   constructor() {
-    visitUrl("desc_item.php?whichitem=174185886");
-    this.item = Item.all().find((i) => i.descid == "174185886");
+    this.createItems();
+  }
 
-    if (
-      this.item == null ||
-      this.item.name == null ||
-      !this.item.name.includes("aton")
-    ) {
-      this.item = null;
+  getExpectedFallbotProfits(loc: Location): number {
+    const map: Map<Item, number> = new Map();
+
+    for (const [monster, encounterRate] of Object.entries(
+      appearanceRates(loc)
+    ).map(
+      ([monster, rate]) => [Monster.get(monster), rate] as [Monster, number]
+    )) {
+      if (encounterRate <= 0) {
+        continue;
+      }
+
+      for (const { drop, rate, type } of itemDropsArray(monster)) {
+        if (type != "") {
+          continue;
+        }
+
+        map.set(drop, (map.get(drop) || 0) + rate);
+      }
     }
 
-    this.createItems();
+    const totalItemDrop = [...map.values()].reduce((p, n) => p + n, 0);
+    const expectedDrops: [Item, number][] = [...map.entries()].map(
+      ([item, rate]) => [item, (rate / totalItemDrop) * rate] as [Item, number]
+    );
+    const outcome = getAutumnOutcome(loc);
+
+    const expectedItems = getItemsPerExpedition();
+    const expectedProfit =
+      (outcome != null ? historicalPrice(outcome[1]) : 0) +
+      expectedDrops
+        .map(([i, rate]) => 0.01 * historicalPrice(i) * rate * expectedItems)
+        .reduce((p, n) => p + n, 0);
+
+    return Math.round(expectedProfit);
   }
 
   selectLocation(locs: AutumnOutcome[]): AutumnSelection {
@@ -62,13 +92,7 @@ export class TaskAutumnaton implements Task {
     const selections: AutumnSelection[] = [];
 
     for (const { location, item, upgrade } of locs) {
-      let score = 0;
-
-      if (item == sweater) {
-        score += 1;
-      } else if (item == dollar) {
-        score += 2;
-      }
+      let score = this.getExpectedFallbotProfits(location) / 2500; // Turn 5k expected profit into a score of 2
 
       const toGrab = this.toGrab.filter(
         (t) =>
