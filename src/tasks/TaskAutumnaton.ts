@@ -82,7 +82,7 @@ export class TaskAutumnaton implements Task {
 
   selectLocation(locs: AutumnOutcome[]): AutumnSelection {
     const weights: Map<AutumnStat, number> = new Map([
-      ["time taken", 1000], // We always want it to return asap
+      ["time taken", toInt(getProperty("_autumnatonQuests")) == 0 ? 800 : 1000], // We always want it to return asap except the first quest isn't as important
       ["extra item", 900], // We want extra items
       ["extra seasonal item", 10], // This is more profit!
       ["item drop%", 3], // Eh, sure
@@ -380,8 +380,8 @@ function getItemsPerExpedition(): number {
 }
 
 function getExpeditionTime(): number {
-  // At 0 quests, it takes 11 turns
-  let questsDone = 1 + toInt(getProperty("_autumnatonQuests"));
+  // It goes 11 > 11 > 22 > 33
+  let questsDone = toInt(getProperty("_autumnatonQuests"));
 
   // With 1 upgrade, it takes 0 turns. At 2, it takes -11 turns
   questsDone -= getAutumnUpgraded(
