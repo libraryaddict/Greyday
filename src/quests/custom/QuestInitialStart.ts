@@ -13,6 +13,7 @@ import {
   myFamiliar,
   myMeat,
   print,
+  runChoice,
   Skill,
   toBoolean,
   use,
@@ -117,6 +118,14 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
           getProperty("_saberMod") == "0"
         ) {
           cliExecute("saber resistance");
+        }
+
+        if (
+          getProperty("telegraphOfficeAvailable") == "true" &&
+          availableAmount(Item.get("Your cowboy boots")) == 0
+        ) {
+          visitUrl("place.php?whichplace=town_right&action=townright_ltt");
+          runChoice(8);
         }
 
         const clipFams: [Familiar, Item][] = GreySettings.greyClipArt
