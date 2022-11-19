@@ -415,6 +415,11 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
 
           try {
             greyAdv(this.proLoc, outfit);
+
+            // Dumb workaround
+            if (haveEffect(this.lucky)) {
+              greyAdv(this.proLoc, outfit);
+            }
           } finally {
             props.resetAll();
           }
