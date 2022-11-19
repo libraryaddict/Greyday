@@ -11,6 +11,7 @@ import {
   Monster,
   pullsRemaining,
   cliExecute,
+  print,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -99,6 +100,7 @@ export class QuestDigitalKey implements QuestInfo {
           while (handlingChoice()) {
             runChoice(1);
           }
+          print("Grabbed " + this.transfomer, "gray");
         },
       };
     }
@@ -111,12 +113,9 @@ export class QuestDigitalKey implements QuestInfo {
         location: null,
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
-          const toMake = Math.min(
-            itemAmount(this.rPixel),
-            itemAmount(this.gPixel),
-            itemAmount(this.bPixel),
-            this.needPixels()
-          );
+          const toMake = Math.min(this.canMakePixelCount(), this.needPixels());
+
+          print("Creating " + toMake + " white pixels..", "gray");
 
           create(this.wPixel, toMake);
         },
@@ -129,6 +128,10 @@ export class QuestDigitalKey implements QuestInfo {
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           cliExecute("acquire " + this.key);
+
+          if (availableAmount(this.key) == 0) {
+            throw "Expected to have a digital key on hand!";
+          }
         },
       };
     }
