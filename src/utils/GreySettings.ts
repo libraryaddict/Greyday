@@ -420,5 +420,9 @@ export class GreySettings {
 
       GreySettings[setting.name] = prop;
     }
+
+    if (this.isHardcoreMode()) {
+      GreySettings.greyBreakAtTower = false;
+    }
   }
 }

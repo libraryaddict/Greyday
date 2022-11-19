@@ -57,7 +57,7 @@ export class QuestDigitalKey implements QuestInfo {
     const status = getQuestStatus("questL13Final");
 
     // If we're not at the keys, don't farm yet. We can still hit it from powerful glove
-    if (status < 5) {
+    if (status < 5 && GreySettings.shouldAvoidTowerRequirements()) {
       return QuestStatus.NOT_READY;
     }
 
@@ -148,6 +148,7 @@ export class QuestDigitalKey implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      olfaction: [Monster.get("Blooper")],
       run: () => {
         greyAdv(this.location, outfit, settings);
       },
