@@ -613,6 +613,14 @@ export class GreyRequirements {
 
     add(
       Type.IOTM,
+      "Autumn-aton",
+      "Fetches stuff from zones, the only major one is sonofa beach, and less major if you're shiny. If very shiny, saves 4 turns + resources, otherwise 20+ turns",
+      Required.USEFUL,
+      toBoolean(getProperty("hasAutumnaton"))
+    );
+
+    add(
+      Type.IOTM,
       "Gingerbread City",
       "Useful as another key source",
       Required.MINOR,
