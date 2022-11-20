@@ -314,7 +314,8 @@ export class GreyRequirements {
       "one-eyed willie",
       "little man in the canoe",
       "fantasy bandit",
-      "pygmy janitor",
+      "vicious gnauga",
+      "revolving bugbear",
     ];
 
     if (locket.length > 0) {
