@@ -33249,6 +33249,16 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
       outfit.addWeight(external_kolmafia_namespaceObject.Item.get("june cleaver"), 1);
 
       var powerLevelGoose = false;
+      // We want cat burglar to always be charged first
+      var prioritize = [
+      external_kolmafia_namespaceObject.Familiar.get("Cat Burglar"),
+      external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling")];
+
+      var noLevel = [].concat(
+      prioritize, [
+      external_kolmafia_namespaceObject.Familiar.get("Cookbookbat"),
+      external_kolmafia_namespaceObject.Familiar.get("Melodramedary")]);
+
 
       if (
       toRun.familiar != null && (
@@ -33276,24 +33286,19 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
           }
         }
 
-        // We want cat burglar to always be charged first
-        var prioritize = [
-        external_kolmafia_namespaceObject.Familiar.get("Cat Burglar"),
-        external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling")];
-
         var recced = this.adventureFinder.getRecommendedFamiliars();
 
         // If fam wants to be charged, add it to the list
-        for (var _i2 = 0, _prioritize = prioritize; _i2 < _prioritize.length; _i2++) {var fam = _prioritize[_i2];
-          if (!recced.includes(fam)) {
-            continue;
+        var _iterator6 = GreyAdventurer_createForOfIteratorHelper(prioritize),_step6;try {for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {var fam = _step6.value;
+            if (!recced.includes(fam)) {
+              continue;
+            }
+
+            replaceWith.push(fam);
           }
 
-          replaceWith.push(fam);
-        }
-
-        // If we want the recipe, add cookbat
-        if (
+          // If we want the recipe, add cookbat
+        } catch (err) {_iterator6.e(err);} finally {_iterator6.f();}if (
         GreySettings.greyCookbatRecipe &&
         !(0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_cookbookbatRecipeDrops")))
         {
@@ -33359,7 +33364,7 @@ var GreyAdventurer = /*#__PURE__*/function () {function GreyAdventurer() {GreyAd
 
       (0,external_kolmafia_namespaceObject.useFamiliar)(familiar);
 
-      if (familiar == external_kolmafia_namespaceObject.Familiar.get("Melodramedary")) {
+      if (noLevel.includes(familiar)) {
         outfit.famExpWeight = 0;
       } else if (
       familiar != this.goose ||
@@ -33637,7 +33642,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "7f48d9a";
+var lastCommitHash = "5ee1144";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
