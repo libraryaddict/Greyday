@@ -458,6 +458,16 @@ export class GreyAdventurer {
     outfit.addWeight(Item.get("june cleaver"), 1);
 
     let powerLevelGoose: boolean = false;
+    // We want cat burglar to always be charged first
+    const prioritize: Familiar[] = [
+      Familiar.get("Cat Burglar"),
+      Familiar.get("Gelatinous Cubeling"),
+    ];
+    const noLevel = [
+      ...prioritize,
+      Familiar.get("Cookbookbat"),
+      Familiar.get("Melodramedary"),
+    ];
 
     if (
       toRun.familiar != null &&
@@ -485,11 +495,6 @@ export class GreyAdventurer {
         }
       }
 
-      // We want cat burglar to always be charged first
-      const prioritize: Familiar[] = [
-        Familiar.get("Cat Burglar"),
-        Familiar.get("Gelatinous Cubeling"),
-      ];
       const recced = this.adventureFinder.getRecommendedFamiliars();
 
       // If fam wants to be charged, add it to the list
@@ -568,7 +573,7 @@ export class GreyAdventurer {
 
     useFamiliar(familiar);
 
-    if (familiar == Familiar.get("Melodramedary")) {
+    if (noLevel.includes(familiar)) {
       outfit.famExpWeight = 0;
     } else if (
       familiar != this.goose ||
