@@ -301,12 +301,15 @@ const order: QuestOrder[] = [
   { id: "Council / Tower / Maze", towerDelayed: true },
 
   {
-    id: "Council / Tower / Keys / Heroes / Pull and Zap Keys",
+    id: "Council / Tower / Keys / Heroes / Buy and Zap Keys",
     towerDelayed: true,
   },
-  { id: "Council / Tower / Keys / Heroes / ZapKeys", towerDelayed: true },
   {
     id: "Council / Tower / Keys / Heroes / DailyDungeon",
+    towerDelayed: true,
+  },
+  {
+    id: "Council / Tower / Keys / Heroes / DailyDungeon + Malware",
     towerDelayed: true,
   },
   {
@@ -369,6 +372,10 @@ export class QuestRegistry {
 
     for (const type of QuestTypeArray) {
       if (this.map.has(type) || !GreySettings.greyDebug) {
+        continue;
+      }
+
+      if (type.includes("Council / Tower / Keys / Heroes /")) {
         continue;
       }
 

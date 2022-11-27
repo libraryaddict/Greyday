@@ -17,7 +17,6 @@ import {
 import {
   getQuestStatus,
   QuestAdventure,
-  QuestInfo,
   QuestStatus,
 } from "../../../../Quests";
 import { QuestType } from "../../../../QuestTypes";
@@ -27,8 +26,9 @@ import { AdventureSettings, greyAdv } from "../../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../../utils/MacroBuilder";
 import { PropertyManager } from "../../../../../utils/Properties";
+import { HeroKeysTemplate } from "./HeroKeysTemplate";
 
-export class QuestFantasyBandit extends TaskInfo implements QuestInfo {
+export class QuestFantasyBandit extends TaskInfo implements HeroKeysTemplate {
   fought: string = "_foughtFantasyRealm";
   monster: Monster = Monster.get("Fantasy Bandit");
   camera: Item = Item.get("Backup Camera");
@@ -36,6 +36,10 @@ export class QuestFantasyBandit extends TaskInfo implements QuestInfo {
   equip: Item = Item.get("FantasyRealm G. E. M.");
   token: Item = Item.get("fat loot token");
   path: PossiblePath;
+
+  getKeys() {
+    return 1;
+  }
 
   createPaths(assumeUnstarted: boolean) {
     // We copy 4 times, fax 1 time

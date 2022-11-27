@@ -379,6 +379,7 @@ export class PossiblePath {
 }
 
 export class PossibleMultiPath extends PossiblePath {
+  printUsing: boolean = false;
   subpaths: [QuestInfo, PossiblePath][] = [];
 
   addPath(quest: QuestInfo, path: PossiblePath) {

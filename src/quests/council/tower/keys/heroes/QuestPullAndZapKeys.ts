@@ -5,6 +5,7 @@ import {
   availableAmount,
   getZapWand,
   zap,
+  itemAmount,
 } from "kolmafia";
 import { ResourceCategory } from "../../../../../typings/ResourceTypes";
 import { PossiblePath } from "../../../../../typings/TaskInfo";
@@ -14,26 +15,43 @@ import { GreySettings } from "../../../../../utils/GreySettings";
 import { getAllCombinations, hasPulled } from "../../../../../utils/GreyUtils";
 import { QuestKeyStuffAbstract } from "../../../../custom/QuestKeyStuffAbstract";
 import {
-  QuestInfo,
   QuestStatus,
   getQuestStatus,
   QuestAdventure,
 } from "../../../../Quests";
 import { QuestType } from "../../../../QuestTypes";
-import { PossibleKeyPath } from "./QuestHeroKeys";
+import { HeroKeysTemplate } from "./HeroKeysTemplate";
 
 export class QuestPullAndZapKeys
   extends QuestKeyStuffAbstract
-  implements QuestInfo
+  implements HeroKeysTemplate
 {
   paths: PossiblePath[];
+  keysToAcquire: number;
+
+  constructor(keys: number) {
+    super();
+
+    if (keys > 2) {
+      throw "We can't do more than 2 zaps!";
+    }
+
+    this.keysToAcquire = keys;
+  }
+
+  getKeys(): number {
+    return this.keysToAcquire;
+  }
 
   getId(): QuestType {
-    return "Council / Tower / Keys / Heroes / Pull and Zap Keys";
+    return "Council / Tower / Keys / Heroes / Buy and Zap Keys";
   }
 
   createPaths(assumeUnstarted: boolean): void {
-    if (!assumeUnstarted && GreySettings.isHardcoreMode()) {
+    if (
+      this.keysToAcquire == 0 ||
+      (!assumeUnstarted && GreySettings.isHardcoreMode())
+    ) {
       this.paths = null;
       return;
     }
@@ -44,9 +62,14 @@ export class QuestPullAndZapKeys
       pullableKeys = pullableKeys.filter(
         (i) => !hasPulled(i) || availableAmount(i) > 0
       );
+    } else {
+      // Since we have unlimited pulls..
+      for (let i = 1; i < Math.min(2, this.keysToAcquire); i++) {
+        pullableKeys.push(...GreyPulls.getPullableKeys());
+      }
     }
 
-    if (pullableKeys.length == 0) {
+    if (pullableKeys.length < this.keysToAcquire) {
       this.paths = null;
       return;
     }
@@ -54,13 +77,14 @@ export class QuestPullAndZapKeys
     this.paths = [];
 
     for (const combination of getAllCombinations(pullableKeys)) {
-      const path = new PossibleKeyPath(0);
-      path.keys = combination.length;
+      if (combination.length != this.keysToAcquire) {
+        continue;
+      }
+
+      const path = new PossiblePath(0);
 
       combination.forEach((i) => {
-        if (availableAmount(i) == 0) {
-          path.addConsumablePull(i);
-        }
+        path.addConsumablePull(i);
 
         path.add(ResourceCategory.ZAP);
       });
@@ -77,8 +101,8 @@ export class QuestPullAndZapKeys
     return 8;
   }
 
-  status(path: PossibleKeyPath): QuestStatus {
-    if (GreySettings.isHardcoreMode()) {
+  status(path: PossiblePath): QuestStatus {
+    if (this.keysToAcquire == 0) {
       return QuestStatus.COMPLETED;
     }
 
@@ -96,40 +120,30 @@ export class QuestPullAndZapKeys
       return QuestStatus.COMPLETED;
     }
 
-    if (this.getViableKeyCount() >= 3) {
-      //    return QuestStatus.COMPLETED;
-    }
-
-    if (this.getOwnedZappables().length > 0) {
-      //   return QuestStatus.COMPLETED;
-    }
-
     return QuestStatus.READY;
   }
 
-  run(path: PossibleKeyPath): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     return {
       location: null,
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         const wand = getZapWand();
 
-        if (wand == Item.get("None")) {
+        if (wand == Item.none) {
           throw "Expected a wand! What happened!";
         }
 
-        if (this.getOwnedZappables().length == 0) {
-          const toPull = path.pulls.find((i) => !hasPulled(i));
+        const toPull = path.pulls.find((i) => !hasPulled(i));
 
-          if (toPull == null) {
-            throw "Failed to find a zappable key to pull?";
-          }
+        if (toPull == null) {
+          throw "Failed to find a zappable key to pull?";
+        }
 
-          GreyPulls.tryRetrieve(toPull, 80000);
+        GreyPulls.tryRetrieve(toPull, 80000);
 
-          if (this.getOwnedZappables().length == 0) {
-            throw "Expected to have a zappable key grabbed";
-          }
+        if (itemAmount(toPull) == 0) {
+          throw "Expected to have a zappable key grabbed";
         }
 
         const toZap = this.getOwnedZappables();

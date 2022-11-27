@@ -22,31 +22,38 @@ import {
   QuestStatus,
 } from "../../../../Quests";
 import { QuestType } from "../../../../QuestTypes";
+import { HeroKeysTemplate } from "./HeroKeysTemplate";
 import { QuestDailyDungeon } from "./QuestDailyDungeon";
 import { QuestFantasyBandit } from "./QuestFantasyBandits";
 import { QuestPackOfCardsKey } from "./QuestPackOfCardsKey";
 import { QuestPullAndZapKeys } from "./QuestPullAndZapKeys";
-import { QuestZapKeys } from "./QuestZapKeys";
-
-export class PossibleKeyPath extends PossiblePath {
-  keys?: number;
-}
 
 export class QuestHeroKeys extends TaskInfo implements QuestInfo {
   keys: Item[] = ["Boris's key", "Sneaky Pete's key", "Jarlsberg's key"].map(
     (s) => Item.get(s)
   );
   token: Item = Item.get("Fat loot token");
-  quests: QuestInfo[] = [];
+  quests: HeroKeysTemplate[] = [];
   paths: PossibleMultiPath[];
+  conflicts: QuestType[][] = [
+    [
+      "Council / Tower / Keys / Heroes / DailyDungeon",
+      "Council / Tower / Keys / Heroes / DailyDungeon + Malware",
+    ],
+    ["Council / Tower / Keys / Heroes / Buy and Zap Keys"],
+  ];
 
   constructor() {
     super();
 
-    this.quests.push(new QuestDailyDungeon());
+    this.quests.push(new QuestDailyDungeon(true));
+    this.quests.push(new QuestDailyDungeon(false));
     this.quests.push(new QuestFantasyBandit());
     this.quests.push(new QuestPackOfCardsKey());
-    this.quests.push(new QuestPullAndZapKeys());
+
+    for (let i = 1; i <= 2; i++) {
+      this.quests.push(new QuestPullAndZapKeys(i));
+    }
   }
 
   getTokensAvailable(): number {
@@ -78,7 +85,7 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
       return;
     }
 
-    const allPaths: [QuestInfo, PossibleKeyPath][] = [];
+    const allPaths: [HeroKeysTemplate, PossiblePath][] = [];
 
     for (const quest of this.quests) {
       if (!(quest instanceof TaskInfo)) {
@@ -92,7 +99,7 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
 
       // This shouldn't be done at this point
       if (paths == null) {
-        print("Can't do " + quest.getId());
+        //   print("Can't do " + quest.getId());
         continue;
       }
 
@@ -112,17 +119,14 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
       }
 
       (quest as TaskInfo).getPossiblePaths().forEach((path) => {
-        allPaths.push([quest, path as PossibleKeyPath]);
+        allPaths.push([quest, path]);
       });
     }
 
     const keysNeeded: number = assumeUnstarted ? 3 : this.getMissingKeys();
     const shouldDoDaily =
       GreySettings.greyDailyDungeon &&
-      (assumeUnstarted || getProperty("dailyDungeonDone") != "true") &&
-      (GreySettings.greyDailyMalware != "Always" ||
-        assumeUnstarted ||
-        !GreySettings.isHardcoreMode());
+      (assumeUnstarted || getProperty("dailyDungeonDone") != "true");
 
     if (keysNeeded <= 0 && !shouldDoDaily) {
       return;
@@ -130,51 +134,43 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
 
     this.paths = [];
 
-    for (const combination of getAllCombinations(allPaths)) {
-      // If we're asking for too many key sources
-      if (combination.length > keysNeeded) {
-        continue;
-      }
+    loop: for (const combination of getAllCombinations(allPaths)) {
+      // Detect conflicts
+      for (const conflicts of this.conflicts) {
+        const hits = conflicts.filter((c) =>
+          combination.find(([c1]) => c1.getId() == c)
+        ).length;
 
-      // If we're asking to run a quest multiple times
-      if (
-        combination.find(
-          ([c]) =>
-            combination.filter(([cc]) => cc.getId() === c.getId()).length > 1
-        )
-      ) {
-        continue;
+        if (hits > 1) {
+          continue loop;
+        }
       }
 
       const hittingMalware =
         combination.find(
-          ([q, path]) =>
-            q.getId() == "Council / Tower / Keys / Heroes / DailyDungeon" &&
-            (path.keys ?? 1) > 1
+          ([q]) =>
+            q.getId() ==
+            "Council / Tower / Keys / Heroes / DailyDungeon + Malware"
         ) != null;
 
-      const keysGiven =
-        combination.length +
-        combination
-          .map(([, path]) => path.keys ?? 1)
-          .reduce((p, n) => p + n, 0);
+      const keysGiven = combination
+        .map(([c]) => c.getKeys())
+        .reduce((r1, r2) => r1 + r2);
 
-      // If we're not going to get enough keys
+      // If we won't get enough keys
       if (keysGiven < keysNeeded) {
         continue;
       }
 
-      // Here we know we're definitely going to get enough keys. But what about malware?
-
-      // True means the user always wants to use malware
-      // False means the user never wants to use malware
-      // Null means we don't care. Which means do an equal check
-
-      // If we're going to hit malware, and it'd give us too many keys, and the user doesn't care..
+      // If we're getting too many keys
       if (
-        hittingMalware &&
-        keysGiven - 1 == keysNeeded &&
-        GreySettings.greyDailyMalware == "Best Judgement"
+        keysGiven >
+        keysNeeded -
+          (hittingMalware &&
+          keysNeeded > 2 &&
+          GreySettings.greyDailyMalware != "Best Judgement"
+            ? 1
+            : 0)
       ) {
         continue;
       }
@@ -182,14 +178,13 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
       // If we need to do daily dungeon as per settings, and this combination doesn't let us do that..
       if (
         shouldDoDaily &&
-        combination.find(
-          ([q]) => q.getId() == "Council / Tower / Keys / Heroes / DailyDungeon"
-        ) == null
+        combination.find(([q]) => q instanceof QuestDailyDungeon) == null
       ) {
         continue;
       }
 
       const path = new PossibleMultiPath(0);
+      path.printUsing = true;
 
       combination.forEach((c) => {
         path.addPath(c[0], c[1]);
@@ -197,10 +192,25 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
 
       this.paths.push(path);
     }
-  }
 
-  getChildren(): QuestInfo[] {
-    return [new QuestZapKeys()];
+    if (this.paths.length == 0) {
+      print("Failed to find a way to do the hero keys!", "red");
+
+      print("Hero Key Sources..", "red");
+
+      for (const quest of this.quests) {
+        print(
+          quest.getId() +
+            " - Gives " +
+            quest.getKeys() +
+            " keys. Doable? " +
+            (quest.status() != QuestStatus.COMPLETED) +
+            ". Possible path count: " +
+            (quest as TaskInfo).getPossiblePaths().length,
+          "red"
+        );
+      }
+    }
   }
 
   getPossiblePaths(): PossiblePath[] {

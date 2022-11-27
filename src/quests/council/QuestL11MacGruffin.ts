@@ -116,7 +116,9 @@ export class QuestL11MacGruffin implements QuestInfo {
           }
         }
 
-        use(this.diary);
+        if (getProperty("questL11Desert") != "started") {
+          use(this.diary);
+        }
       },
     };
   }

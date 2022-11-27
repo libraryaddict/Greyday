@@ -170,7 +170,9 @@ export class Quest12WarNuns implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    this.doRoboDrinks();
+    if (availableAmount(this.item) == 0) {
+      this.doRoboDrinks();
+    }
 
     if (
       getProperty("warProgress") != "started" ||

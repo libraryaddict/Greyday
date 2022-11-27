@@ -2,11 +2,16 @@ import { Location, getProperty } from "kolmafia";
 import { ResourceCategory } from "../../../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../../../typings/TaskInfo";
 import { GreyOutfit } from "../../../../../utils/GreyOutfitter";
-import { QuestAdventure, QuestInfo, QuestStatus } from "../../../../Quests";
+import { QuestAdventure, QuestStatus } from "../../../../Quests";
 import { QuestType } from "../../../../QuestTypes";
+import { HeroKeysTemplate } from "./HeroKeysTemplate";
 
-export class QuestPackOfCardsKey extends TaskInfo implements QuestInfo {
+export class QuestPackOfCardsKey extends TaskInfo implements HeroKeysTemplate {
   pickCard: PossiblePath;
+
+  getKeys() {
+    return 1;
+  }
 
   createPaths(assumeUnstarted: boolean) {
     this.pickCard = new PossiblePath(0).add(

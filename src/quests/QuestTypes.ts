@@ -141,9 +141,9 @@ const QuestIslandWar = [
 const QuestKeys = [
   "Council / Tower / Keys / Heroes",
   "Council / Tower / Keys / Heroes / DailyDungeon",
+  "Council / Tower / Keys / Heroes / DailyDungeon + Malware",
   "Council / Tower / Keys / Heroes / FantasyBandit",
-  "Council / Tower / Keys / Heroes / ZapKeys",
-  "Council / Tower / Keys / Heroes / Pull and Zap Keys",
+  "Council / Tower / Keys / Heroes / Buy and Zap Keys",
   "Council / Tower / Keys / Heroes / DeckOfCards",
   "Council / Tower / Keys / Digital",
   "Council / Tower / Keys / HoleInSkyUnlock",

@@ -5,12 +5,9 @@ import {
   Familiar,
   getProperty,
   haveFamiliar,
-  historicalAge,
-  historicalPrice,
   Item,
   itemAmount,
   Location,
-  mallPrice,
   pullsRemaining,
   toBoolean,
 } from "kolmafia";
@@ -25,12 +22,12 @@ import { PropertyManager } from "../../../../../utils/Properties";
 import {
   getQuestStatus,
   QuestAdventure,
-  QuestInfo,
   QuestStatus,
 } from "../../../../Quests";
 import { QuestType } from "../../../../QuestTypes";
+import { HeroKeysTemplate } from "./HeroKeysTemplate";
 
-export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
+export class QuestDailyDungeon extends TaskInfo implements HeroKeysTemplate {
   pole: Item = Item.get("eleven-foot pole");
   ring: Item = Item.get("ring of Detect Boring Doors");
   picklocks: Item = Item.get("Pick-O-Matic lockpicks");
@@ -38,6 +35,17 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
   fam: Familiar = Familiar.get("Gelatinous Cubeling");
   malware: Item = Item.get("Daily dungeon malware");
   paths: PossiblePath[];
+  usingMalware: boolean;
+
+  constructor(useMalware: boolean) {
+    super();
+
+    this.usingMalware = useMalware;
+  }
+
+  getKeys(): number {
+    return this.usingMalware && !this.isMalwareUsed() ? 2 : 1;
+  }
 
   getLocations(): Location[] {
     return [this.location];
@@ -60,23 +68,18 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
     const mustDoMalware = GreySettings.greyDailyMalware == "Always";
     const mustNeverDoMalware = GreySettings.greyDailyMalware == "Never";
 
-    if (mustDoMalware && GreySettings.isHardcoreMode()) {
+    if (
+      mustDoMalware &&
+      (GreySettings.isHardcoreMode() || !this.usingMalware)
+    ) {
+      this.paths = null;
+      return;
+    } else if (mustNeverDoMalware && this.usingMalware) {
       this.paths = null;
       return;
     }
 
     this.paths = [];
-
-    // We don't need to do malware
-    if (!mustDoMalware) {
-      this.paths.push(
-        new PossiblePath(4).addMeat(historicalPrice(this.malware) * 1.2)
-      );
-    }
-
-    if (mustNeverDoMalware) {
-      return;
-    }
 
     const usedMalware = toBoolean(getProperty("_dailyDungeonMalwareUsed"));
 
@@ -93,29 +96,6 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
 
   getPossiblePaths(): PossiblePath[] {
     return this.paths;
-  }
-
-  doMalware(): boolean {
-    if (GreySettings.isHardcoreMode()) {
-      return false;
-    }
-
-    if (
-      GreySettings.greyDailyMalware != null &&
-      GreySettings.greyDailyMalware != "Best Judgement"
-    ) {
-      return GreySettings.greyDailyMalware == "Always";
-    }
-
-    const key = GreyPulls.getPullableKeys()[0];
-    const itemPrice =
-      historicalAge(key) > 2 ? mallPrice(key) : historicalPrice(key);
-    const malwarePrice =
-      historicalAge(this.malware) > 2
-        ? mallPrice(this.malware)
-        : historicalPrice(this.malware);
-
-    return itemPrice * 1.5 > malwarePrice && malwarePrice < 60000;
   }
 
   hasFamiliarRecommendation(): Familiar {
@@ -146,19 +126,19 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
-    if (
-      GreySettings.shouldAvoidTowerRequirements() &&
-      !GreySettings.greyReachedTower
-    ) {
-      if (GreySettings.greyDailyMalware != "Never") {
+    if (this.usingMalware) {
+      if (
+        GreySettings.isHardcoreMode() ||
+        GreySettings.greyDailyMalware == "Never"
+      ) {
+        return QuestStatus.COMPLETED;
+      } else if (GreySettings.shouldAvoidTowerRequirements()) {
         if (GreySettings.greyReachedTower) {
           return QuestStatus.READY;
         }
 
         return QuestStatus.NOT_READY;
       }
-
-      return QuestStatus.COMPLETED;
     }
 
     if (this.hasFamiliarRecommendation() != null && pullsRemaining() >= 0) {
@@ -225,13 +205,15 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
           throw "Expected to have dungeon items, didn't.";
         }*/
 
-        this.grabMalware(path);
-
         const props = new PropertyManager();
         const settings = new AdventureSettings();
 
-        if (itemAmount(this.malware) > 0 && !this.isMalwareUsed()) {
-          settings.setStartOfFightMacro(Macro.item(this.malware));
+        if (this.usingMalware) {
+          this.grabMalware(path);
+
+          if (itemAmount(this.malware) > 0 && !this.isMalwareUsed()) {
+            settings.setStartOfFightMacro(Macro.item(this.malware));
+          }
         }
 
         props.setChoice(689, 1);
@@ -250,6 +232,10 @@ export class QuestDailyDungeon extends TaskInfo implements QuestInfo {
   }
 
   getId(): QuestType {
+    if (this.usingMalware) {
+      return "Council / Tower / Keys / Heroes / DailyDungeon + Malware";
+    }
+
     return "Council / Tower / Keys / Heroes / DailyDungeon";
   }
 }
