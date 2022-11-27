@@ -47,10 +47,7 @@ startWith("Level / 7")
 startWith("Level / 8")
   .unlocks("Misc / UnlockDungeonsOfDoom")
   .unlocks("Misc / GrabZapWand")
-  .unlocks(
-    "Council / Tower / Keys / Heroes / ZapKeys",
-    "Council / Tower / Keys / Heroes / Pull and Zap Keys"
-  );
+  .unlocks("Council / Tower / Keys / Heroes / Buy and Zap Keys");
 
 startWith("Level / 8")
   .unlocks("Council / Ice / Trapper")
