@@ -3155,7 +3155,8 @@ var PossiblePath = /*#__PURE__*/function () {
     } }]);return PossiblePath;}();
 
 
-var PossibleMultiPath = /*#__PURE__*/function (_PossiblePath) {TaskInfo_inherits(PossibleMultiPath, _PossiblePath);var _super = TaskInfo_createSuper(PossibleMultiPath);function PossibleMultiPath() {var _this2;TaskInfo_classCallCheck(this, PossibleMultiPath);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this2 = _super.call.apply(_super, [this].concat(args));TaskInfo_defineProperty(TaskInfo_assertThisInitialized(_this2), "subpaths",
+var PossibleMultiPath = /*#__PURE__*/function (_PossiblePath) {TaskInfo_inherits(PossibleMultiPath, _PossiblePath);var _super = TaskInfo_createSuper(PossibleMultiPath);function PossibleMultiPath() {var _this2;TaskInfo_classCallCheck(this, PossibleMultiPath);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this2 = _super.call.apply(_super, [this].concat(args));TaskInfo_defineProperty(TaskInfo_assertThisInitialized(_this2), "printUsing",
+    false);TaskInfo_defineProperty(TaskInfo_assertThisInitialized(_this2), "subpaths",
     []);return _this2;}TaskInfo_createClass(PossibleMultiPath, [{ key: "addPath", value:
 
     function addPath(quest, path) {var _this$resourcesNeeded, _this$resourceUsed, _this$resourcesAvaila, _this$ignoreResources, _this$pulls;
@@ -13785,7 +13786,9 @@ var QuestL11MacGruffin = /*#__PURE__*/function () {
             }
           }
 
-          (0,external_kolmafia_namespaceObject.use)(_this.diary);
+          if ((0,external_kolmafia_namespaceObject.getProperty)("questL11Desert") != "started") {
+            (0,external_kolmafia_namespaceObject.use)(_this.diary);
+          }
         }
       };
     } }]);return QuestL11MacGruffin;}();
@@ -14573,7 +14576,9 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
         return QuestStatus.COMPLETED;
       }
 
-      this.doRoboDrinks();
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.item) == 0) {
+        this.doRoboDrinks();
+      }
 
       if (
       (0,external_kolmafia_namespaceObject.getProperty)("warProgress") != "started" ||
@@ -16767,14 +16772,26 @@ function QuestDailyDungeon_typeof(obj) {"@babel/helpers - typeof";return QuestDa
 
 
 
-var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inherits(QuestDailyDungeon, _TaskInfo);var _super = QuestDailyDungeon_createSuper(QuestDailyDungeon);function QuestDailyDungeon() {var _this;QuestDailyDungeon_classCallCheck(this, QuestDailyDungeon);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "pole",
-    external_kolmafia_namespaceObject.Item.get("eleven-foot pole"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "ring",
-    external_kolmafia_namespaceObject.Item.get("ring of Detect Boring Doors"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "picklocks",
-    external_kolmafia_namespaceObject.Item.get("Pick-O-Matic lockpicks"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "location",
-    external_kolmafia_namespaceObject.Location.get("The Daily Dungeon"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "fam",
-    external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "malware",
-    external_kolmafia_namespaceObject.Item.get("Daily dungeon malware"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "paths", void 0);return _this;}QuestDailyDungeon_createClass(QuestDailyDungeon, [{ key: "getLocations", value:
 
+var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inherits(QuestDailyDungeon, _TaskInfo);var _super = QuestDailyDungeon_createSuper(QuestDailyDungeon);
+
+
+
+
+
+
+
+
+
+  function QuestDailyDungeon(useMalware) {var _this;QuestDailyDungeon_classCallCheck(this, QuestDailyDungeon);
+    _this = _super.call(this);QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "pole", external_kolmafia_namespaceObject.Item.get("eleven-foot pole"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "ring", external_kolmafia_namespaceObject.Item.get("ring of Detect Boring Doors"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "picklocks", external_kolmafia_namespaceObject.Item.get("Pick-O-Matic lockpicks"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "location", external_kolmafia_namespaceObject.Location.get("The Daily Dungeon"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "fam", external_kolmafia_namespaceObject.Familiar.get("Gelatinous Cubeling"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "malware", external_kolmafia_namespaceObject.Item.get("Daily dungeon malware"));QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "paths", void 0);QuestDailyDungeon_defineProperty(QuestDailyDungeon_assertThisInitialized(_this), "usingMalware", void 0);
+
+    _this.usingMalware = useMalware;return _this;
+  }QuestDailyDungeon_createClass(QuestDailyDungeon, [{ key: "getKeys", value:
+
+    function getKeys() {
+      return this.usingMalware && !this.isMalwareUsed() ? 2 : 1;
+    } }, { key: "getLocations", value:
 
     function getLocations() {
       return [this.location];
@@ -16797,23 +16814,18 @@ var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inh
       var mustDoMalware = GreySettings.greyDailyMalware == "Always";
       var mustNeverDoMalware = GreySettings.greyDailyMalware == "Never";
 
-      if (mustDoMalware && GreySettings.isHardcoreMode()) {
+      if (
+      mustDoMalware && (
+      GreySettings.isHardcoreMode() || !this.usingMalware))
+      {
+        this.paths = null;
+        return;
+      } else if (mustNeverDoMalware && this.usingMalware) {
         this.paths = null;
         return;
       }
 
       this.paths = [];
-
-      // We don't need to do malware
-      if (!mustDoMalware) {
-        this.paths.push(
-        new PossiblePath(4).addMeat((0,external_kolmafia_namespaceObject.historicalPrice)(this.malware) * 1.2));
-
-      }
-
-      if (mustNeverDoMalware) {
-        return;
-      }
 
       var usedMalware = (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_dailyDungeonMalwareUsed"));
 
@@ -16830,29 +16842,6 @@ var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inh
 
     function getPossiblePaths() {
       return this.paths;
-    } }, { key: "doMalware", value:
-
-    function doMalware() {
-      if (GreySettings.isHardcoreMode()) {
-        return false;
-      }
-
-      if (
-      GreySettings.greyDailyMalware != null &&
-      GreySettings.greyDailyMalware != "Best Judgement")
-      {
-        return GreySettings.greyDailyMalware == "Always";
-      }
-
-      var key = GreyPulls.getPullableKeys()[0];
-      var itemPrice =
-      (0,external_kolmafia_namespaceObject.historicalAge)(key) > 2 ? (0,external_kolmafia_namespaceObject.mallPrice)(key) : (0,external_kolmafia_namespaceObject.historicalPrice)(key);
-      var malwarePrice =
-      (0,external_kolmafia_namespaceObject.historicalAge)(this.malware) > 2 ?
-      (0,external_kolmafia_namespaceObject.mallPrice)(this.malware) :
-      (0,external_kolmafia_namespaceObject.historicalPrice)(this.malware);
-
-      return itemPrice * 1.5 > malwarePrice && malwarePrice < 60000;
     } }, { key: "hasFamiliarRecommendation", value:
 
     function hasFamiliarRecommendation() {
@@ -16883,19 +16872,19 @@ var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inh
         return QuestStatus.COMPLETED;
       }
 
-      if (
-      GreySettings.shouldAvoidTowerRequirements() &&
-      !GreySettings.greyReachedTower)
-      {
-        if (GreySettings.greyDailyMalware != "Never") {
+      if (this.usingMalware) {
+        if (
+        GreySettings.isHardcoreMode() ||
+        GreySettings.greyDailyMalware == "Never")
+        {
+          return QuestStatus.COMPLETED;
+        } else if (GreySettings.shouldAvoidTowerRequirements()) {
           if (GreySettings.greyReachedTower) {
             return QuestStatus.READY;
           }
 
           return QuestStatus.NOT_READY;
         }
-
-        return QuestStatus.COMPLETED;
       }
 
       if (this.hasFamiliarRecommendation() != null && (0,external_kolmafia_namespaceObject.pullsRemaining)() >= 0) {
@@ -16962,13 +16951,15 @@ var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inh
           throw "Expected to have dungeon items, didn't.";
           }*/
 
-          _this2.grabMalware(path);
-
           var props = new PropertyManager();
           var settings = new AdventureSettings();
 
-          if ((0,external_kolmafia_namespaceObject.itemAmount)(_this2.malware) > 0 && !_this2.isMalwareUsed()) {
-            settings.setStartOfFightMacro(Macro.item(_this2.malware));
+          if (_this2.usingMalware) {
+            _this2.grabMalware(path);
+
+            if ((0,external_kolmafia_namespaceObject.itemAmount)(_this2.malware) > 0 && !_this2.isMalwareUsed()) {
+              settings.setStartOfFightMacro(Macro.item(_this2.malware));
+            }
           }
 
           props.setChoice(689, 1);
@@ -16987,10 +16978,15 @@ var QuestDailyDungeon = /*#__PURE__*/function (_TaskInfo) {QuestDailyDungeon_inh
     } }, { key: "getId", value:
 
     function getId() {
+      if (this.usingMalware) {
+        return "Council / Tower / Keys / Heroes / DailyDungeon + Malware";
+      }
+
       return "Council / Tower / Keys / Heroes / DailyDungeon";
     } }]);return QuestDailyDungeon;}(TaskInfo);
 ;// CONCATENATED MODULE: ./src/quests/council/tower/keys/heroes/QuestFantasyBandits.ts
 function QuestFantasyBandits_typeof(obj) {"@babel/helpers - typeof";return QuestFantasyBandits_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestFantasyBandits_typeof(obj);}function QuestFantasyBandits_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestFantasyBandits_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestFantasyBandits_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestFantasyBandits_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestFantasyBandits_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestFantasyBandits_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestFantasyBandits_setPrototypeOf(subClass, superClass);}function QuestFantasyBandits_setPrototypeOf(o, p) {QuestFantasyBandits_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestFantasyBandits_setPrototypeOf(o, p);}function QuestFantasyBandits_createSuper(Derived) {var hasNativeReflectConstruct = QuestFantasyBandits_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestFantasyBandits_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestFantasyBandits_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestFantasyBandits_possibleConstructorReturn(this, result);};}function QuestFantasyBandits_possibleConstructorReturn(self, call) {if (call && (QuestFantasyBandits_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestFantasyBandits_assertThisInitialized(self);}function QuestFantasyBandits_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestFantasyBandits_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestFantasyBandits_getPrototypeOf(o) {QuestFantasyBandits_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestFantasyBandits_getPrototypeOf(o);}function QuestFantasyBandits_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+
 
 
 
@@ -17006,8 +17002,12 @@ var QuestFantasyBandit = /*#__PURE__*/function (_TaskInfo) {QuestFantasyBandits_
     external_kolmafia_namespaceObject.Item.get("Backup Camera"));QuestFantasyBandits_defineProperty(QuestFantasyBandits_assertThisInitialized(_this), "location",
     external_kolmafia_namespaceObject.Location.get("The Bandit Crossroads"));QuestFantasyBandits_defineProperty(QuestFantasyBandits_assertThisInitialized(_this), "equip",
     external_kolmafia_namespaceObject.Item.get("FantasyRealm G. E. M."));QuestFantasyBandits_defineProperty(QuestFantasyBandits_assertThisInitialized(_this), "token",
-    external_kolmafia_namespaceObject.Item.get("fat loot token"));QuestFantasyBandits_defineProperty(QuestFantasyBandits_assertThisInitialized(_this), "path", void 0);return _this;}QuestFantasyBandits_createClass(QuestFantasyBandit, [{ key: "createPaths", value:
+    external_kolmafia_namespaceObject.Item.get("fat loot token"));QuestFantasyBandits_defineProperty(QuestFantasyBandits_assertThisInitialized(_this), "path", void 0);return _this;}QuestFantasyBandits_createClass(QuestFantasyBandit, [{ key: "getKeys", value:
 
+
+    function getKeys() {
+      return 1;
+    } }, { key: "createPaths", value:
 
     function createPaths(assumeUnstarted) {
       // We copy 4 times, fax 1 time
@@ -17258,8 +17258,13 @@ function QuestPackOfCardsKey_typeof(obj) {"@babel/helpers - typeof";return Quest
 
 
 
-var QuestPackOfCardsKey = /*#__PURE__*/function (_TaskInfo) {QuestPackOfCardsKey_inherits(QuestPackOfCardsKey, _TaskInfo);var _super = QuestPackOfCardsKey_createSuper(QuestPackOfCardsKey);function QuestPackOfCardsKey() {var _this;QuestPackOfCardsKey_classCallCheck(this, QuestPackOfCardsKey);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestPackOfCardsKey_defineProperty(QuestPackOfCardsKey_assertThisInitialized(_this), "pickCard", void 0);return _this;}QuestPackOfCardsKey_createClass(QuestPackOfCardsKey, [{ key: "createPaths", value:
 
+var QuestPackOfCardsKey = /*#__PURE__*/function (_TaskInfo) {QuestPackOfCardsKey_inherits(QuestPackOfCardsKey, _TaskInfo);var _super = QuestPackOfCardsKey_createSuper(QuestPackOfCardsKey);function QuestPackOfCardsKey() {var _this;QuestPackOfCardsKey_classCallCheck(this, QuestPackOfCardsKey);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestPackOfCardsKey_defineProperty(QuestPackOfCardsKey_assertThisInitialized(_this), "pickCard", void 0);return _this;}QuestPackOfCardsKey_createClass(QuestPackOfCardsKey, [{ key: "getKeys", value:
+
+
+    function getKeys() {
+      return 1;
+    } }, { key: "createPaths", value:
 
     function createPaths(assumeUnstarted) {
       this.pickCard = new PossiblePath(0).add(
@@ -17314,7 +17319,7 @@ var QuestPackOfCardsKey = /*#__PURE__*/function (_TaskInfo) {QuestPackOfCardsKey
       return 0;
     } }]);return QuestPackOfCardsKey;}(TaskInfo);
 ;// CONCATENATED MODULE: ./src/quests/council/tower/keys/heroes/QuestPullAndZapKeys.ts
-function QuestPullAndZapKeys_typeof(obj) {"@babel/helpers - typeof";return QuestPullAndZapKeys_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestPullAndZapKeys_typeof(obj);}function QuestPullAndZapKeys_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestPullAndZapKeys_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function QuestPullAndZapKeys_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestPullAndZapKeys_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestPullAndZapKeys_arrayLikeToArray(o, minLen);}function QuestPullAndZapKeys_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestPullAndZapKeys_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestPullAndZapKeys_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestPullAndZapKeys_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestPullAndZapKeys_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestPullAndZapKeys_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestPullAndZapKeys_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestPullAndZapKeys_setPrototypeOf(subClass, superClass);}function QuestPullAndZapKeys_setPrototypeOf(o, p) {QuestPullAndZapKeys_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestPullAndZapKeys_setPrototypeOf(o, p);}function QuestPullAndZapKeys_createSuper(Derived) {var hasNativeReflectConstruct = QuestPullAndZapKeys_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestPullAndZapKeys_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestPullAndZapKeys_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestPullAndZapKeys_possibleConstructorReturn(this, result);};}function QuestPullAndZapKeys_possibleConstructorReturn(self, call) {if (call && (QuestPullAndZapKeys_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestPullAndZapKeys_assertThisInitialized(self);}function QuestPullAndZapKeys_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestPullAndZapKeys_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestPullAndZapKeys_getPrototypeOf(o) {QuestPullAndZapKeys_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestPullAndZapKeys_getPrototypeOf(o);}function QuestPullAndZapKeys_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestPullAndZapKeys_typeof(obj) {"@babel/helpers - typeof";return QuestPullAndZapKeys_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestPullAndZapKeys_typeof(obj);}function QuestPullAndZapKeys_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestPullAndZapKeys_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function QuestPullAndZapKeys_toConsumableArray(arr) {return QuestPullAndZapKeys_arrayWithoutHoles(arr) || QuestPullAndZapKeys_iterableToArray(arr) || QuestPullAndZapKeys_unsupportedIterableToArray(arr) || QuestPullAndZapKeys_nonIterableSpread();}function QuestPullAndZapKeys_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestPullAndZapKeys_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestPullAndZapKeys_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestPullAndZapKeys_arrayLikeToArray(o, minLen);}function QuestPullAndZapKeys_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function QuestPullAndZapKeys_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return QuestPullAndZapKeys_arrayLikeToArray(arr);}function QuestPullAndZapKeys_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestPullAndZapKeys_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestPullAndZapKeys_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestPullAndZapKeys_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestPullAndZapKeys_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestPullAndZapKeys_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestPullAndZapKeys_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestPullAndZapKeys_setPrototypeOf(subClass, superClass);}function QuestPullAndZapKeys_setPrototypeOf(o, p) {QuestPullAndZapKeys_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestPullAndZapKeys_setPrototypeOf(o, p);}function QuestPullAndZapKeys_createSuper(Derived) {var hasNativeReflectConstruct = QuestPullAndZapKeys_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestPullAndZapKeys_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestPullAndZapKeys_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestPullAndZapKeys_possibleConstructorReturn(this, result);};}function QuestPullAndZapKeys_possibleConstructorReturn(self, call) {if (call && (QuestPullAndZapKeys_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestPullAndZapKeys_assertThisInitialized(self);}function QuestPullAndZapKeys_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestPullAndZapKeys_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestPullAndZapKeys_getPrototypeOf(o) {QuestPullAndZapKeys_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestPullAndZapKeys_getPrototypeOf(o);}function QuestPullAndZapKeys_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -17326,18 +17331,36 @@ function QuestPullAndZapKeys_typeof(obj) {"@babel/helpers - typeof";return Quest
 
 
 
-var QuestPullAndZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestPullAndZapKeys_inherits(QuestPullAndZapKeys, _QuestKeyStuffAbstrac);var _super = QuestPullAndZapKeys_createSuper(QuestPullAndZapKeys);function QuestPullAndZapKeys() {var _this;QuestPullAndZapKeys_classCallCheck(this, QuestPullAndZapKeys);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestPullAndZapKeys_defineProperty(QuestPullAndZapKeys_assertThisInitialized(_this), "paths", void 0);return _this;}QuestPullAndZapKeys_createClass(QuestPullAndZapKeys, [{ key: "getId", value:
+var QuestPullAndZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestPullAndZapKeys_inherits(QuestPullAndZapKeys, _QuestKeyStuffAbstrac);var _super = QuestPullAndZapKeys_createSuper(QuestPullAndZapKeys);
 
 
 
 
+
+
+  function QuestPullAndZapKeys(keys) {var _this;QuestPullAndZapKeys_classCallCheck(this, QuestPullAndZapKeys);
+    _this = _super.call(this);QuestPullAndZapKeys_defineProperty(QuestPullAndZapKeys_assertThisInitialized(_this), "paths", void 0);QuestPullAndZapKeys_defineProperty(QuestPullAndZapKeys_assertThisInitialized(_this), "keysToAcquire", void 0);
+
+    if (keys > 2) {
+      throw "We can't do more than 2 zaps!";
+    }
+
+    _this.keysToAcquire = keys;return _this;
+  }QuestPullAndZapKeys_createClass(QuestPullAndZapKeys, [{ key: "getKeys", value:
+
+    function getKeys() {
+      return this.keysToAcquire;
+    } }, { key: "getId", value:
 
     function getId() {
-      return "Council / Tower / Keys / Heroes / Pull and Zap Keys";
+      return "Council / Tower / Keys / Heroes / Buy and Zap Keys";
     } }, { key: "createPaths", value:
 
     function createPaths(assumeUnstarted) {var _this2 = this;
-      if (!assumeUnstarted && GreySettings.isHardcoreMode()) {
+      if (
+      this.keysToAcquire == 0 ||
+      !assumeUnstarted && GreySettings.isHardcoreMode())
+      {
         this.paths = null;
         return;
       }
@@ -17348,9 +17371,14 @@ var QuestPullAndZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestPu
         pullableKeys = pullableKeys.filter(
         function (i) {return !hasPulled(i) || (0,external_kolmafia_namespaceObject.availableAmount)(i) > 0;});
 
+      } else {
+        // Since we have unlimited pulls..
+        for (var i = 1; i < Math.min(2, this.keysToAcquire); i++) {var _pullableKeys;
+          (_pullableKeys = pullableKeys).push.apply(_pullableKeys, QuestPullAndZapKeys_toConsumableArray(GreyPulls.getPullableKeys()));
+        }
       }
 
-      if (pullableKeys.length == 0) {
+      if (pullableKeys.length < this.keysToAcquire) {
         this.paths = null;
         return;
       }
@@ -17358,18 +17386,19 @@ var QuestPullAndZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestPu
       this.paths = [];var _iterator = QuestPullAndZapKeys_createForOfIteratorHelper(
 
         getAllCombinations(pullableKeys)),_step;try {var _loop = function _loop() {var combination = _step.value;
-          var path = new PossibleKeyPath(0);
-          path.keys = combination.length;
+          if (combination.length != _this2.keysToAcquire) {
+            return "continue";
+          }
+
+          var path = new PossiblePath(0);
 
           combination.forEach(function (i) {
-            if ((0,external_kolmafia_namespaceObject.availableAmount)(i) == 0) {
-              path.addConsumablePull(i);
-            }
+            path.addConsumablePull(i);
 
             path.add(ResourceCategory.ZAP);
           });
 
-          _this2.paths.push(path);};for (_iterator.s(); !(_step = _iterator.n()).done;) {_loop();
+          _this2.paths.push(path);};for (_iterator.s(); !(_step = _iterator.n()).done;) {var _ret = _loop();if (_ret === "continue") continue;
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
     } }, { key: "getPossiblePaths", value:
 
@@ -17382,7 +17411,7 @@ var QuestPullAndZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestPu
     } }, { key: "status", value:
 
     function status(path) {
-      if (GreySettings.isHardcoreMode()) {
+      if (this.keysToAcquire == 0) {
         return QuestStatus.COMPLETED;
       }
 
@@ -17400,14 +17429,6 @@ var QuestPullAndZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestPu
         return QuestStatus.COMPLETED;
       }
 
-      if (this.getViableKeyCount() >= 3) {
-
-        //    return QuestStatus.COMPLETED;
-      }
-      if (this.getOwnedZappables().length > 0) {
-
-        //   return QuestStatus.COMPLETED;
-      }
       return QuestStatus.READY;
     } }, { key: "run", value:
 
@@ -17418,22 +17439,20 @@ var QuestPullAndZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestPu
         run: function run() {
           var wand = (0,external_kolmafia_namespaceObject.getZapWand)();
 
-          if (wand == external_kolmafia_namespaceObject.Item.get("None")) {
+          if (wand == external_kolmafia_namespaceObject.Item.none) {
             throw "Expected a wand! What happened!";
           }
 
-          if (_this3.getOwnedZappables().length == 0) {
-            var toPull = path.pulls.find(function (i) {return !hasPulled(i);});
+          var toPull = path.pulls.find(function (i) {return !hasPulled(i);});
 
-            if (toPull == null) {
-              throw "Failed to find a zappable key to pull?";
-            }
+          if (toPull == null) {
+            throw "Failed to find a zappable key to pull?";
+          }
 
-            GreyPulls.tryRetrieve(toPull, 80000);
+          GreyPulls.tryRetrieve(toPull, 80000);
 
-            if (_this3.getOwnedZappables().length == 0) {
-              throw "Expected to have a zappable key grabbed";
-            }
+          if ((0,external_kolmafia_namespaceObject.itemAmount)(toPull) == 0) {
+            throw "Expected to have a zappable key grabbed";
           }
 
           var toZap = _this3.getOwnedZappables();
@@ -17455,93 +17474,8 @@ var QuestPullAndZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestPu
     function getLocations() {
       return [];
     } }]);return QuestPullAndZapKeys;}(QuestKeyStuffAbstract);
-;// CONCATENATED MODULE: ./src/quests/council/tower/keys/heroes/QuestZapKeys.ts
-function QuestZapKeys_typeof(obj) {"@babel/helpers - typeof";return QuestZapKeys_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestZapKeys_typeof(obj);}function QuestZapKeys_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestZapKeys_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestZapKeys_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestZapKeys_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestZapKeys_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestZapKeys_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestZapKeys_setPrototypeOf(subClass, superClass);}function QuestZapKeys_setPrototypeOf(o, p) {QuestZapKeys_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestZapKeys_setPrototypeOf(o, p);}function QuestZapKeys_createSuper(Derived) {var hasNativeReflectConstruct = QuestZapKeys_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestZapKeys_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestZapKeys_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestZapKeys_possibleConstructorReturn(this, result);};}function QuestZapKeys_possibleConstructorReturn(self, call) {if (call && (QuestZapKeys_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestZapKeys_assertThisInitialized(self);}function QuestZapKeys_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestZapKeys_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestZapKeys_getPrototypeOf(o) {QuestZapKeys_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestZapKeys_getPrototypeOf(o);}
-
-
-
-
-
-
-var QuestZapKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestZapKeys_inherits(QuestZapKeys, _QuestKeyStuffAbstrac);var _super = QuestZapKeys_createSuper(QuestZapKeys);function QuestZapKeys() {QuestZapKeys_classCallCheck(this, QuestZapKeys);return _super.apply(this, arguments);}QuestZapKeys_createClass(QuestZapKeys, [{ key: "getTimesZapped", value:
-
-
-    function getTimesZapped() {
-      return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_zapCount"));
-    } }, { key: "getId", value:
-
-    function getId() {
-      return "Council / Tower / Keys / Heroes / ZapKeys";
-    } }, { key: "level", value:
-
-    function level() {
-      return 5;
-    } }, { key: "status", value:
-
-    function status() {
-      if ((0,external_kolmafia_namespaceObject.pullsRemaining)() == -1) {
-        return QuestStatus.COMPLETED;
-      }
-
-      var status = getQuestStatus("questL13Final");
-
-      if (status < 5) {
-        return QuestStatus.NOT_READY;
-      }
-
-      if (status > 5) {
-        return QuestStatus.COMPLETED;
-      }
-
-      if (this.getKeysUnavailable().length == 0) {
-        return QuestStatus.COMPLETED;
-      }
-
-      var zappables = this.getOwnedZappables();
-
-      if (zappables.length == 0) {
-        return QuestStatus.NOT_READY;
-      }
-
-      return QuestStatus.READY;
-    } }, { key: "run", value:
-
-    function run() {var _this = this;
-      return {
-        location: null,
-        outfit: GreyOutfit.IGNORE_OUTFIT,
-        run: function run() {
-          var wand = (0,external_kolmafia_namespaceObject.getZapWand)();
-
-          if (wand == external_kolmafia_namespaceObject.Item.get("None")) {
-            throw "Expected a wand! What happened!";
-          }
-
-          var toZap = _this.getOwnedZappables();
-
-          if (toZap.length == 0) {
-            throw "Expected something to zap! What happened!";
-          }
-
-          var zapped = (0,external_kolmafia_namespaceObject.zap)(toZap[0]);
-
-          if (!_this.keys.includes(zapped)) {
-            throw (
-              "Ugh, we failed to zap it properly. We zapped " +
-              toZap[0].name +
-              " and got " +
-              zapped.name);
-
-          }
-        }
-      };
-    } }, { key: "getLocations", value:
-
-    function getLocations() {
-      return [];
-    } }]);return QuestZapKeys;}(QuestKeyStuffAbstract);
 ;// CONCATENATED MODULE: ./src/quests/council/tower/keys/heroes/QuestHeroKeys.ts
-function QuestHeroKeys_typeof(obj) {"@babel/helpers - typeof";return QuestHeroKeys_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestHeroKeys_typeof(obj);}function QuestHeroKeys_slicedToArray(arr, i) {return QuestHeroKeys_arrayWithHoles(arr) || QuestHeroKeys_iterableToArrayLimit(arr, i) || QuestHeroKeys_unsupportedIterableToArray(arr, i) || QuestHeroKeys_nonIterableRest();}function QuestHeroKeys_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestHeroKeys_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function QuestHeroKeys_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestHeroKeys_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestHeroKeys_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function QuestHeroKeys_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestHeroKeys_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestHeroKeys_arrayLikeToArray(o, minLen);}function QuestHeroKeys_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestHeroKeys_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestHeroKeys_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestHeroKeys_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestHeroKeys_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestHeroKeys_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestHeroKeys_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestHeroKeys_setPrototypeOf(subClass, superClass);}function QuestHeroKeys_setPrototypeOf(o, p) {QuestHeroKeys_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestHeroKeys_setPrototypeOf(o, p);}function QuestHeroKeys_createSuper(Derived) {var hasNativeReflectConstruct = QuestHeroKeys_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestHeroKeys_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestHeroKeys_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestHeroKeys_possibleConstructorReturn(this, result);};}function QuestHeroKeys_possibleConstructorReturn(self, call) {if (call && (QuestHeroKeys_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestHeroKeys_assertThisInitialized(self);}function QuestHeroKeys_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestHeroKeys_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestHeroKeys_getPrototypeOf(o) {QuestHeroKeys_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestHeroKeys_getPrototypeOf(o);}function QuestHeroKeys_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+function QuestHeroKeys_typeof(obj) {"@babel/helpers - typeof";return QuestHeroKeys_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestHeroKeys_typeof(obj);}function QuestHeroKeys_slicedToArray(arr, i) {return QuestHeroKeys_arrayWithHoles(arr) || QuestHeroKeys_iterableToArrayLimit(arr, i) || QuestHeroKeys_unsupportedIterableToArray(arr, i) || QuestHeroKeys_nonIterableRest();}function QuestHeroKeys_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestHeroKeys_iterableToArrayLimit(arr, i) {var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];if (_i == null) return;var _arr = [];var _n = true;var _d = false;var _s, _e;try {for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function QuestHeroKeys_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestHeroKeys_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestHeroKeys_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function QuestHeroKeys_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestHeroKeys_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestHeroKeys_arrayLikeToArray(o, minLen);}function QuestHeroKeys_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestHeroKeys_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestHeroKeys_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function QuestHeroKeys_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestHeroKeys_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestHeroKeys_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestHeroKeys_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestHeroKeys_setPrototypeOf(subClass, superClass);}function QuestHeroKeys_setPrototypeOf(o, p) {QuestHeroKeys_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestHeroKeys_setPrototypeOf(o, p);}function QuestHeroKeys_createSuper(Derived) {var hasNativeReflectConstruct = QuestHeroKeys_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestHeroKeys_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestHeroKeys_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestHeroKeys_possibleConstructorReturn(this, result);};}function QuestHeroKeys_possibleConstructorReturn(self, call) {if (call && (QuestHeroKeys_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestHeroKeys_assertThisInitialized(self);}function QuestHeroKeys_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestHeroKeys_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestHeroKeys_getPrototypeOf(o) {QuestHeroKeys_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestHeroKeys_getPrototypeOf(o);}function QuestHeroKeys_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 
 
@@ -17553,11 +17487,7 @@ function QuestHeroKeys_typeof(obj) {"@babel/helpers - typeof";return QuestHeroKe
 
 
 
-var PossibleKeyPath = /*#__PURE__*/function (_PossiblePath) {QuestHeroKeys_inherits(PossibleKeyPath, _PossiblePath);var _super = QuestHeroKeys_createSuper(PossibleKeyPath);function PossibleKeyPath() {var _this;QuestHeroKeys_classCallCheck(this, PossibleKeyPath);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestHeroKeys_defineProperty(QuestHeroKeys_assertThisInitialized(_this), "keys", void 0);return _this;}return QuestHeroKeys_createClass(PossibleKeyPath);}(PossiblePath);
-
-
-
-var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(QuestHeroKeys, _TaskInfo);var _super2 = QuestHeroKeys_createSuper(QuestHeroKeys);
+var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(QuestHeroKeys, _TaskInfo);var _super = QuestHeroKeys_createSuper(QuestHeroKeys);
 
 
 
@@ -17565,13 +17495,24 @@ var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(Qu
 
 
 
-  function QuestHeroKeys() {var _this2;QuestHeroKeys_classCallCheck(this, QuestHeroKeys);
-    _this2 = _super2.call(this);QuestHeroKeys_defineProperty(QuestHeroKeys_assertThisInitialized(_this2), "keys", ["Boris's key", "Sneaky Pete's key", "Jarlsberg's key"].map(function (s) {return external_kolmafia_namespaceObject.Item.get(s);}));QuestHeroKeys_defineProperty(QuestHeroKeys_assertThisInitialized(_this2), "token", external_kolmafia_namespaceObject.Item.get("Fat loot token"));QuestHeroKeys_defineProperty(QuestHeroKeys_assertThisInitialized(_this2), "quests", []);QuestHeroKeys_defineProperty(QuestHeroKeys_assertThisInitialized(_this2), "paths", void 0);
 
-    _this2.quests.push(new QuestDailyDungeon());
-    _this2.quests.push(new QuestFantasyBandit());
-    _this2.quests.push(new QuestPackOfCardsKey());
-    _this2.quests.push(new QuestPullAndZapKeys());return _this2;
+
+
+
+
+
+
+  function QuestHeroKeys() {var _this;QuestHeroKeys_classCallCheck(this, QuestHeroKeys);
+    _this = _super.call(this);QuestHeroKeys_defineProperty(QuestHeroKeys_assertThisInitialized(_this), "keys", ["Boris's key", "Sneaky Pete's key", "Jarlsberg's key"].map(function (s) {return external_kolmafia_namespaceObject.Item.get(s);}));QuestHeroKeys_defineProperty(QuestHeroKeys_assertThisInitialized(_this), "token", external_kolmafia_namespaceObject.Item.get("Fat loot token"));QuestHeroKeys_defineProperty(QuestHeroKeys_assertThisInitialized(_this), "quests", []);QuestHeroKeys_defineProperty(QuestHeroKeys_assertThisInitialized(_this), "paths", void 0);QuestHeroKeys_defineProperty(QuestHeroKeys_assertThisInitialized(_this), "conflicts", [["Council / Tower / Keys / Heroes / DailyDungeon", "Council / Tower / Keys / Heroes / DailyDungeon + Malware"], ["Council / Tower / Keys / Heroes / Buy and Zap Keys"]]);
+
+    _this.quests.push(new QuestDailyDungeon(true));
+    _this.quests.push(new QuestDailyDungeon(false));
+    _this.quests.push(new QuestFantasyBandit());
+    _this.quests.push(new QuestPackOfCardsKey());
+
+    for (var i = 1; i <= 2; i++) {
+      _this.quests.push(new QuestPullAndZapKeys(i));
+    }return _this;
   }QuestHeroKeys_createClass(QuestHeroKeys, [{ key: "getTokensAvailable", value:
 
     function getTokensAvailable() {
@@ -17590,7 +17531,7 @@ var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(Qu
 
     } }, { key: "createPaths", value:
 
-    function createPaths(assumeUnstarted) {var _this3 = this;
+    function createPaths(assumeUnstarted) {var _this2 = this;
       // If we're avoiding the tower requirements, and haven't reached tower yet.
       // Don't use our resources on key stuff
       if (
@@ -17617,7 +17558,7 @@ var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(Qu
 
           // This shouldn't be done at this point
           if (paths == null) {
-            (0,external_kolmafia_namespaceObject.print)("Can't do " + quest.getId());
+            //   print("Can't do " + quest.getId());
             return "continue";
           }
 
@@ -17644,10 +17585,7 @@ var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(Qu
       var keysNeeded = assumeUnstarted ? 3 : this.getMissingKeys();
       var shouldDoDaily =
       GreySettings.greyDailyDungeon && (
-      assumeUnstarted || (0,external_kolmafia_namespaceObject.getProperty)("dailyDungeonDone") != "true") && (
-      GreySettings.greyDailyMalware != "Always" ||
-      assumeUnstarted ||
-      !GreySettings.isHardcoreMode());
+      assumeUnstarted || (0,external_kolmafia_namespaceObject.getProperty)("dailyDungeonDone") != "true");
 
       if (keysNeeded <= 0 && !shouldDoDaily) {
         return;
@@ -17656,50 +17594,42 @@ var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(Qu
       this.paths = [];var _iterator2 = QuestHeroKeys_createForOfIteratorHelper(
 
         getAllCombinations(allPaths)),_step2;try {var _loop2 = function _loop2() {var combination = _step2.value;
-          // If we're asking for too many key sources
-          if (combination.length > keysNeeded) {
-            return "continue";
-          }
+          // Detect conflicts
+          var _iterator4 = QuestHeroKeys_createForOfIteratorHelper(_this2.conflicts),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var conflicts = _step4.value;
+              var hits = conflicts.filter(function (c) {return (
+                  combination.find(function (_ref7) {var _ref8 = QuestHeroKeys_slicedToArray(_ref7, 1),c1 = _ref8[0];return c1.getId() == c;}));}).
+              length;
 
-          // If we're asking to run a quest multiple times
-          if (
-          combination.find(
-          function (_ref) {var _ref2 = QuestHeroKeys_slicedToArray(_ref, 1),c = _ref2[0];return (
-              combination.filter(function (_ref3) {var _ref4 = QuestHeroKeys_slicedToArray(_ref3, 1),cc = _ref4[0];return cc.getId() === c.getId();}).length > 1);}))
-
-          {
-            return "continue";
-          }
+              if (hits > 1) {
+                return "continue|loop";
+              }
+            }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
 
           var hittingMalware =
           combination.find(
-          function (_ref5) {var _path$keys;var _ref6 = QuestHeroKeys_slicedToArray(_ref5, 2),q = _ref6[0],path = _ref6[1];return (
-              q.getId() == "Council / Tower / Keys / Heroes / DailyDungeon" &&
-              ((_path$keys = path.keys) !== null && _path$keys !== void 0 ? _path$keys : 1) > 1);}) !=
+          function (_ref) {var _ref2 = QuestHeroKeys_slicedToArray(_ref, 1),q = _ref2[0];return (
+              q.getId() ==
+              "Council / Tower / Keys / Heroes / DailyDungeon + Malware");}) !=
           null;
 
-          var keysGiven =
-          combination.length +
-          combination.
-          map(function (_ref7) {var _path$keys2;var _ref8 = QuestHeroKeys_slicedToArray(_ref7, 2),path = _ref8[1];return (_path$keys2 = path.keys) !== null && _path$keys2 !== void 0 ? _path$keys2 : 1;}).
-          reduce(function (p, n) {return p + n;}, 0);
+          var keysGiven = combination.
+          map(function (_ref3) {var _ref4 = QuestHeroKeys_slicedToArray(_ref3, 1),c = _ref4[0];return c.getKeys();}).
+          reduce(function (r1, r2) {return r1 + r2;});
 
-          // If we're not going to get enough keys
+          // If we won't get enough keys
           if (keysGiven < keysNeeded) {
             return "continue";
           }
 
-          // Here we know we're definitely going to get enough keys. But what about malware?
-
-          // True means the user always wants to use malware
-          // False means the user never wants to use malware
-          // Null means we don't care. Which means do an equal check
-
-          // If we're going to hit malware, and it'd give us too many keys, and the user doesn't care..
+          // If we're getting too many keys
           if (
+          keysGiven >
+          keysNeeded - (
           hittingMalware &&
-          keysGiven - 1 == keysNeeded &&
-          GreySettings.greyDailyMalware == "Best Judgement")
+          keysNeeded > 2 &&
+          GreySettings.greyDailyMalware != "Best Judgement" ?
+          1 :
+          0))
           {
             return "continue";
           }
@@ -17707,25 +17637,39 @@ var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(Qu
           // If we need to do daily dungeon as per settings, and this combination doesn't let us do that..
           if (
           shouldDoDaily &&
-          combination.find(
-          function (_ref9) {var _ref10 = QuestHeroKeys_slicedToArray(_ref9, 1),q = _ref10[0];return q.getId() == "Council / Tower / Keys / Heroes / DailyDungeon";}) ==
-          null)
+          combination.find(function (_ref5) {var _ref6 = QuestHeroKeys_slicedToArray(_ref5, 1),q = _ref6[0];return q instanceof QuestDailyDungeon;}) == null)
           {
             return "continue";
           }
 
           var path = new PossibleMultiPath(0);
+          path.printUsing = true;
 
           combination.forEach(function (c) {
             path.addPath(c[0], c[1]);
           });
 
-          _this3.paths.push(path);};for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var _ret2 = _loop2();if (_ret2 === "continue") continue;
+          _this2.paths.push(path);};loop: for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var _ret2 = _loop2();if (_ret2 === "continue|loop") continue loop;if (_ret2 === "continue") continue;
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
-    } }, { key: "getChildren", value:
 
-    function getChildren() {
-      return [new QuestZapKeys()];
+      if (this.paths.length == 0) {
+        (0,external_kolmafia_namespaceObject.print)("Failed to find a way to do the hero keys!", "red");
+
+        (0,external_kolmafia_namespaceObject.print)("Hero Key Sources..", "red");var _iterator3 = QuestHeroKeys_createForOfIteratorHelper(
+
+          this.quests),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var quest = _step3.value;
+            (0,external_kolmafia_namespaceObject.print)(
+            quest.getId() +
+            " - Gives " +
+            quest.getKeys() +
+            " keys. Doable? " + (
+            quest.status() != QuestStatus.COMPLETED) +
+            ". Possible path count: " +
+            quest.getPossiblePaths().length,
+            "red");
+
+          }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+      }
     } }, { key: "getPossiblePaths", value:
 
     function getPossiblePaths() {
@@ -29282,9 +29226,9 @@ QuestIslandWarGremlins);
 var QuestKeys = [
 "Council / Tower / Keys / Heroes",
 "Council / Tower / Keys / Heroes / DailyDungeon",
+"Council / Tower / Keys / Heroes / DailyDungeon + Malware",
 "Council / Tower / Keys / Heroes / FantasyBandit",
-"Council / Tower / Keys / Heroes / ZapKeys",
-"Council / Tower / Keys / Heroes / Pull and Zap Keys",
+"Council / Tower / Keys / Heroes / Buy and Zap Keys",
 "Council / Tower / Keys / Heroes / DeckOfCards",
 "Council / Tower / Keys / Digital",
 "Council / Tower / Keys / HoleInSkyUnlock",
@@ -29718,12 +29662,15 @@ var order = [
 { id: "Council / Tower / Maze", towerDelayed: true },
 
 {
-  id: "Council / Tower / Keys / Heroes / Pull and Zap Keys",
+  id: "Council / Tower / Keys / Heroes / Buy and Zap Keys",
   towerDelayed: true
 },
-{ id: "Council / Tower / Keys / Heroes / ZapKeys", towerDelayed: true },
 {
   id: "Council / Tower / Keys / Heroes / DailyDungeon",
+  towerDelayed: true
+},
+{
+  id: "Council / Tower / Keys / Heroes / DailyDungeon + Malware",
   towerDelayed: true
 },
 {
@@ -29786,6 +29733,10 @@ var QuestRegistry = /*#__PURE__*/function () {
 
       QuestTypeArray),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var _type = _step2.value;
         if (this.map.has(_type) || !GreySettings.greyDebug) {
+          continue;
+        }
+
+        if (_type.includes("Council / Tower / Keys / Heroes /")) {
           continue;
         }
 
@@ -33642,7 +33593,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "5ee1144";
+var lastCommitHash = "9ca6819";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
