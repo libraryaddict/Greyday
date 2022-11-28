@@ -127,7 +127,7 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
       });
     }
 
-    if (!assumeUnstarted && getResourcesLeft("Pull") <= 0) {
+    if (getResourcesLeft("Pull", assumeUnstarted) <= 0) {
       allPaths = allPaths.filter(
         ([, p]) => p.canUse(ResourceCategory.PULL) == 0
       );
@@ -172,16 +172,14 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
         continue;
       }
 
+      let maxKeys = keysNeeded;
+
+      if (hittingMalware) {
+        maxKeys++;
+      }
+
       // If we're getting too many keys
-      if (
-        keysGiven >
-        keysNeeded -
-          (hittingMalware &&
-          keysNeeded > 2 &&
-          GreySettings.greyDailyMalware != "Best Judgement"
-            ? 1
-            : 0)
-      ) {
+      if (keysGiven > maxKeys) {
         continue;
       }
 
@@ -204,7 +202,10 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
     }
 
     if (this.paths.length == 0) {
-      print("Failed to find a way to do the hero keys!", "red");
+      print(
+        "Failed to find a way to do the hero keys! Looking for " + keysNeeded,
+        "red"
+      );
 
       print("Hero Key Sources..", "red");
 
