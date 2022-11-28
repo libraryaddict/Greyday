@@ -17487,6 +17487,7 @@ function QuestHeroKeys_typeof(obj) {"@babel/helpers - typeof";return QuestHeroKe
 
 
 
+
 var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(QuestHeroKeys, _TaskInfo);var _super = QuestHeroKeys_createSuper(QuestHeroKeys);
 
 
@@ -17582,6 +17583,12 @@ var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(Qu
           });};for (_iterator.s(); !(_step = _iterator.n()).done;) {var _ret = _loop();if (_ret === "continue") continue;
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
 
+      if (!assumeUnstarted && getResourcesLeft("Pull") <= 0) {
+        allPaths = allPaths.filter(
+        function (_ref) {var _ref2 = QuestHeroKeys_slicedToArray(_ref, 2),p = _ref2[1];return p.canUse(ResourceCategory.PULL) == 0;});
+
+      }
+
       var keysNeeded = assumeUnstarted ? 3 : this.getMissingKeys();
       var shouldDoDaily =
       GreySettings.greyDailyDungeon && (
@@ -17597,7 +17604,7 @@ var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(Qu
           // Detect conflicts
           var _iterator4 = QuestHeroKeys_createForOfIteratorHelper(_this2.conflicts),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var conflicts = _step4.value;
               var hits = conflicts.filter(function (c) {return (
-                  combination.find(function (_ref7) {var _ref8 = QuestHeroKeys_slicedToArray(_ref7, 1),c1 = _ref8[0];return c1.getId() == c;}));}).
+                  combination.find(function (_ref9) {var _ref10 = QuestHeroKeys_slicedToArray(_ref9, 1),c1 = _ref10[0];return c1.getId() == c;}));}).
               length;
 
               if (hits > 1) {
@@ -17607,13 +17614,13 @@ var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(Qu
 
           var hittingMalware =
           combination.find(
-          function (_ref) {var _ref2 = QuestHeroKeys_slicedToArray(_ref, 1),q = _ref2[0];return (
+          function (_ref3) {var _ref4 = QuestHeroKeys_slicedToArray(_ref3, 1),q = _ref4[0];return (
               q.getId() ==
               "Council / Tower / Keys / Heroes / DailyDungeon + Malware");}) !=
           null;
 
           var keysGiven = combination.
-          map(function (_ref3) {var _ref4 = QuestHeroKeys_slicedToArray(_ref3, 1),c = _ref4[0];return c.getKeys();}).
+          map(function (_ref5) {var _ref6 = QuestHeroKeys_slicedToArray(_ref5, 1),c = _ref6[0];return c.getKeys();}).
           reduce(function (r1, r2) {return r1 + r2;});
 
           // If we won't get enough keys
@@ -17637,7 +17644,7 @@ var QuestHeroKeys = /*#__PURE__*/function (_TaskInfo) {QuestHeroKeys_inherits(Qu
           // If we need to do daily dungeon as per settings, and this combination doesn't let us do that..
           if (
           shouldDoDaily &&
-          combination.find(function (_ref5) {var _ref6 = QuestHeroKeys_slicedToArray(_ref5, 1),q = _ref6[0];return q instanceof QuestDailyDungeon;}) == null)
+          combination.find(function (_ref7) {var _ref8 = QuestHeroKeys_slicedToArray(_ref7, 1),q = _ref8[0];return q instanceof QuestDailyDungeon;}) == null)
           {
             return "continue";
           }
@@ -33593,7 +33600,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "9ca6819";
+var lastCommitHash = "eef6cf0";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -33882,7 +33889,10 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
         return;
       }
 
-      if ((0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") == "") {
+      if (
+      (0,external_kolmafia_namespaceObject.getProperty)("greyBreakAtTower") == "" &&
+      !GreySettings.isHardcoreMode())
+      {
         (0,external_kolmafia_namespaceObject.print)(
         "The 'greyBreakAtTower' setting has not been set, the script will break when it reaches the tower.",
         "red");
