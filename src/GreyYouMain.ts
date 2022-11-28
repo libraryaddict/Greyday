@@ -313,7 +313,10 @@ class GreyYouMain {
       return;
     }
 
-    if (getProperty("greyBreakAtTower") == "") {
+    if (
+      getProperty("greyBreakAtTower") == "" &&
+      !GreySettings.isHardcoreMode()
+    ) {
       print(
         "The 'greyBreakAtTower' setting has not been set, the script will break when it reaches the tower.",
         "red"

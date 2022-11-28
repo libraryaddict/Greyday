@@ -9,6 +9,10 @@ import {
   storageAmount,
 } from "kolmafia";
 import {
+  getResourcesLeft,
+  ResourceCategory,
+} from "../../../../../typings/ResourceTypes";
+import {
   PossibleMultiPath,
   PossiblePath,
   TaskInfo,
@@ -85,7 +89,7 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
       return;
     }
 
-    const allPaths: [HeroKeysTemplate, PossiblePath][] = [];
+    let allPaths: [HeroKeysTemplate, PossiblePath][] = [];
 
     for (const quest of this.quests) {
       if (!(quest instanceof TaskInfo)) {
@@ -121,6 +125,12 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
       (quest as TaskInfo).getPossiblePaths().forEach((path) => {
         allPaths.push([quest, path]);
       });
+    }
+
+    if (!assumeUnstarted && getResourcesLeft("Pull") <= 0) {
+      allPaths = allPaths.filter(
+        ([, p]) => p.canUse(ResourceCategory.PULL) == 0
+      );
     }
 
     const keysNeeded: number = assumeUnstarted ? 3 : this.getMissingKeys();
