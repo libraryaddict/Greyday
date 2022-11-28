@@ -138,11 +138,12 @@ export class QuestHeroKeys extends TaskInfo implements QuestInfo {
       GreySettings.greyDailyDungeon &&
       (assumeUnstarted || getProperty("dailyDungeonDone") != "true");
 
+    this.paths = [];
+
     if (keysNeeded <= 0 && !shouldDoDaily) {
+      this.paths.push(new PossibleMultiPath(0));
       return;
     }
-
-    this.paths = [];
 
     loop: for (const combination of getAllCombinations(allPaths)) {
       // Detect conflicts
