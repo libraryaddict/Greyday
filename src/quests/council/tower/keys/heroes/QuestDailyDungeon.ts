@@ -81,17 +81,21 @@ export class QuestDailyDungeon extends TaskInfo implements HeroKeysTemplate {
 
     this.paths = [];
 
+    const path = new PossiblePath(4);
+
+    this.paths.push(path);
+
+    if (!this.usingMalware) {
+      return;
+    }
+
     const usedMalware = toBoolean(getProperty("_dailyDungeonMalwareUsed"));
-
-    const malwarePath = new PossiblePath(4);
-
-    this.paths.push(malwarePath);
 
     if (!assumeUnstarted && usedMalware) {
       return;
     }
 
-    malwarePath.addConsumablePull(this.malware);
+    path.addConsumablePull(this.malware);
   }
 
   getPossiblePaths(): PossiblePath[] {
