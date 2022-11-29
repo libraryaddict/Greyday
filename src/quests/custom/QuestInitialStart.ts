@@ -203,6 +203,14 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
             }
 
             cliExecute(breakfastScript);
+
+            if (availableAmount(Item.get("11-leaf Clover")) == 0) {
+              print(
+                "Don't see any clovers available, maybe mafia hiccuped? Trying breakfast again..",
+                "gray"
+              );
+              cliExecute(breakfastScript);
+            }
           } finally {
             props.resetAll();
           }
