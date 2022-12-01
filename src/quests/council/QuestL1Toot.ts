@@ -3,10 +3,12 @@ import {
   availableAmount,
   council,
   getProperty,
+  haveSkill,
   Item,
   itemAmount,
   Location,
   myMeat,
+  Skill,
   storageAmount,
   toBoolean,
   use,
@@ -24,6 +26,7 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
   purq: Item = Item.get("porquoise");
   bacon: Item = Item.get("baconstone");
   ham: Item = Item.get("hamethyst");
+  loop: Skill = Skill.get("Infinite Loop");
 
   sellGems: PossiblePath;
   paths: PossiblePath[];
@@ -43,7 +46,8 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
   status(): QuestStatus {
     if (
       getProperty("questM05Toot") == "finished" &&
-      availableAmount(this.letter) + availableAmount(this.sack) == 0
+      availableAmount(this.letter) + availableAmount(this.sack) == 0 &&
+      (myMeat() >= 300 || haveSkill(this.loop))
     ) {
       return QuestStatus.COMPLETED;
     }
