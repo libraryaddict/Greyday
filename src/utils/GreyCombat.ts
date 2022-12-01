@@ -4,6 +4,7 @@ import {
   Effect,
   Element,
   equippedAmount,
+  expectedDamage,
   Familiar,
   familiarWeight,
   getFuel,
@@ -156,7 +157,7 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
 
   if (
     /*toInt(getProperty("flyeredML")) <= 10000 && */ monster.baseHp < 300 &&
-    monster.rawAttack < Math.min(200, myHp() * 0.9) &&
+    expectedDamage(monster) < Math.min(200, myHp() * 0.9) &&
     !monster.attributes.includes("FREE") &&
     !poisonousMonsters.includes(monster)
   ) {
