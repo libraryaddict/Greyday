@@ -1,13 +1,5 @@
-import {
-  availableAmount,
-  handlingChoice,
-  Item,
-  Location,
-  Monster,
-  visitUrl,
-} from "kolmafia";
+import { availableAmount, Item, Location, Monster } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
-
 
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -147,15 +139,7 @@ export class ManorBedroom implements QuestInfo {
             }
           }
 
-          try {
-            greyAdv(this.location, outfit, settings);
-          } catch {}
-
-          visitUrl("choice.php");
-
-          if (handlingChoice()) {
-            greyAdv(this.location, outfit, settings);
-          }
+          greyAdv(this.location, outfit, settings);
         } finally {
           props.resetAll();
         }

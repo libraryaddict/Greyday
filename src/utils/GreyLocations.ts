@@ -1,5 +1,6 @@
 import {
   availableChoiceOptions,
+  choiceFollowsFight,
   cliExecute,
   currentRound,
   equippedAmount,
@@ -335,7 +336,12 @@ export function greyAdv(
     }
   }
 
-  while (currentRound() != 0 || handlingChoice() || fightFollowsChoice()) {
+  while (
+    currentRound() != 0 ||
+    handlingChoice() ||
+    fightFollowsChoice() ||
+    choiceFollowsFight()
+  ) {
     let page: string = "";
 
     if (currentRound() != 0) {
@@ -364,7 +370,7 @@ export function greyAdv(
         );
       }
 
-      if (page.includes("The phone in your doctor's bag rings")) {
+      if (choiceFollowsFight()) {
         visitUrl("main.php");
       }
     }
