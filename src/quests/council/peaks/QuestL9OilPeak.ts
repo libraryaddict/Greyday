@@ -21,7 +21,9 @@ import {
   print,
   toBoolean,
   haveEffect,
+  myMaxhp,
 } from "kolmafia";
+import { restoreHPTo } from "../../../tasks/TaskMaintainStatus";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -62,10 +64,6 @@ export class OilHandler implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (myHp() < 90 || haveEffect(this.beatenUp) > 0) {
-      return QuestStatus.NOT_READY;
-    }
-
     if (
       !this.needsJar() &&
       this.getStatus() <= 0 &&
@@ -75,10 +73,6 @@ export class OilHandler implements QuestInfo {
     }
 
     if (getQuestStatus("questL09Topping") < 1) {
-      return QuestStatus.NOT_READY;
-    }
-
-    if (myHp() < 140) {
       return QuestStatus.NOT_READY;
     }
 
@@ -92,6 +86,10 @@ export class OilHandler implements QuestInfo {
           return QuestStatus.NOT_READY;
         }
       }
+    }
+
+    if (myHp() < 90 || haveEffect(this.beatenUp) > 0) {
+      return QuestStatus.FASTER_LATER;
     }
 
     return QuestStatus.READY;
@@ -197,6 +195,11 @@ export class OilHandler implements QuestInfo {
 
     const outfit = new GreyOutfit().setItemDrops();
     outfit.addWeight("ML", 2, null, 100);
+
+    if (myMaxhp() < 150) {
+      outfit.addWeight("hp", 1);
+    }
+
     outfit.umbrellaSetting = UmbrellaState.MONSTER_LEVEL;
     outfit.addExtra("-offhand");
 
@@ -207,6 +210,10 @@ export class OilHandler implements QuestInfo {
       run: () => {
         if (numericModifier("Monster Level") < 100) {
           changeMcd(10);
+        }
+
+        if (myHp() < Math.min(150, myMaxhp() * 0.9)) {
+          restoreHPTo(Math.min(150, myMaxhp() * 0.9));
         }
 
         if (
