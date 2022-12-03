@@ -4,7 +4,6 @@ import {
   chew,
   cliExecute,
   drinksilent,
-  eatsilent,
   equip,
   equippedAmount,
   Familiar,
@@ -182,10 +181,12 @@ export class TaskEater implements Task {
           putCloset(itemAmount(this.seasoning), this.seasoning);
         }
 
-        eatsilent(item);
+        visitUrl(`inv_eat.php?pwd&which=1&whichitem=${toInt(item)}`, true);
       } else if (item.inebriety > 0) {
+        visitUrl(`inv_booze.php?pwd&which=1&&whichitem=${toInt(item)}`, true);
         drinksilent(item);
       } else if (item.spleen > 0) {
+        visitUrl(`inv_spleen.php?pwd&which=1&&whichitem=${toInt(item)}`, true);
         chew(item);
       }
 
