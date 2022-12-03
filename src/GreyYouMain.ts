@@ -4,6 +4,7 @@ import {
   Effect,
   fightFollowsChoice,
   getAutoAttack,
+  getIgnoreZoneWarnings,
   getProperty,
   getRevision,
   gitAtHead,
@@ -414,6 +415,21 @@ class GreyYouMain {
 
       if (autoAttack != 0) {
         setAutoAttack(0);
+        props.addCleanup(() => setAutoAttack(autoAttack));
+      }
+
+      if (!getIgnoreZoneWarnings()) {
+        visitUrl(
+          "http://127.0.0.1:60080/account.php?am=1&pwd&action=flag_ignorezonewarnings&value=1&ajax=1",
+          true
+        );
+
+        props.addCleanup(() =>
+          visitUrl(
+            "http://127.0.0.1:60080/account.php?am=1&pwd&action=flag_ignorezonewarnings&value=0&ajax=1",
+            true
+          )
+        );
       }
 
       try {
@@ -479,10 +495,6 @@ class GreyYouMain {
             timings.getTimeAsString(timings.getTotalSeconds()),
           "blue"
         );
-
-        if (autoAttack != 0) {
-          setAutoAttack(autoAttack);
-        }
       }
 
       if (haveEffect(effect) - lastBeaten == 3) {

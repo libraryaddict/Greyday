@@ -4,6 +4,7 @@ export const handledChoices: [number, number][] = [];
 
 export class PropertyManager {
   private properties = new Map<string, string>();
+  private cleanups: (() => void)[] = [];
   private choicesSet: [number, number][] = [];
 
   setProperty(property: string, value: string, quiet: boolean = true) {
@@ -16,6 +17,10 @@ export class PropertyManager {
     if (!quiet) {
       print("Set property " + property + " to " + value);
     }
+  }
+
+  addCleanup(cleanup: () => void) {
+    this.cleanups.push(cleanup);
   }
 
   setChoiceProperty(choice: number, value: number) {
@@ -53,5 +58,8 @@ export class PropertyManager {
     }
 
     this.choicesSet.splice(0, this.choicesSet.length);
+
+    this.cleanups.forEach((c) => c());
+    this.cleanups.splice(0, this.cleanups.length);
   }
 }
