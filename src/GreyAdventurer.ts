@@ -585,6 +585,10 @@ export class GreyAdventurer {
         adventure.considerPriority == ConsiderPriority.RANDOM_ABSORB ? 3 : 1;
     }
 
+    if (shouldGreydayStop()) {
+      return;
+    }
+
     const primed = getPrimedResource();
 
     if (primed != null) {
@@ -599,12 +603,16 @@ export class GreyAdventurer {
       false
     );
 
-    if (primed != null) {
-      primed.resource.prepare(null);
-    }
-
     if (!maximizeResult) {
       throw "Failed to maximize. Either fix, or report to the script author";
+    }
+
+    if (shouldGreydayStop()) {
+      return;
+    }
+
+    if (primed != null) {
+      primed.resource.prepare(null);
     }
 
     const closet = Item.get("Funky junk key");
@@ -623,6 +631,10 @@ export class GreyAdventurer {
       }
 
       this.doOutfitPrep(adventure);
+
+      if (shouldGreydayStop()) {
+        return;
+      }
     } else if (toRun.outfit == null) {
       toRun.outfit = new GreyOutfit();
     }
