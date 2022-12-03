@@ -405,34 +405,35 @@ class GreyYouMain {
       const pullsBeforeStart = getProperty("_roninStoragePulls");
 
       const props = new PropertyManager();
-      props.setProperty("autoSatisfyWithNPCs", "true");
-      props.setProperty("autoSatisfyWithMall", "true");
-      props.setProperty("autoSatisfyWithStorage", "true");
-      props.setProperty("autoSatisfyWithCoinmasters", "true");
-      props.setProperty("requireBoxServants", "false");
-
-      const autoAttack = getAutoAttack();
-
-      if (autoAttack != 0) {
-        setAutoAttack(0);
-        props.addCleanup(() => setAutoAttack(autoAttack));
-      }
-
-      if (!getIgnoreZoneWarnings()) {
-        visitUrl(
-          "http://127.0.0.1:60080/account.php?am=1&pwd&action=flag_ignorezonewarnings&value=1&ajax=1",
-          true
-        );
-
-        props.addCleanup(() =>
-          visitUrl(
-            "http://127.0.0.1:60080/account.php?am=1&pwd&action=flag_ignorezonewarnings&value=0&ajax=1",
-            true
-          )
-        );
-      }
 
       try {
+        props.setProperty("autoSatisfyWithNPCs", "true");
+        props.setProperty("autoSatisfyWithMall", "true");
+        props.setProperty("autoSatisfyWithStorage", "true");
+        props.setProperty("autoSatisfyWithCoinmasters", "true");
+        props.setProperty("requireBoxServants", "false");
+
+        const autoAttack = getAutoAttack();
+
+        if (autoAttack != 0) {
+          props.addCleanup(() => setAutoAttack(autoAttack));
+          setAutoAttack(0);
+        }
+
+        if (!getIgnoreZoneWarnings()) {
+          props.addCleanup(() =>
+            visitUrl(
+              "http://127.0.0.1:60080/account.php?am=1&pwd&action=flag_ignorezonewarnings&value=0&ajax=1",
+              true
+            )
+          );
+
+          visitUrl(
+            "http://127.0.0.1:60080/account.php?am=1&pwd&action=flag_ignorezonewarnings&value=1&ajax=1",
+            true
+          );
+        }
+
         for (
           ;
           turnsRunAsFar < turns && haveEffect(effect) - lastBeaten != 3;
