@@ -27,6 +27,7 @@ export class SimmedPath {
   totalCost: number;
   advsSaved: [number, number];
   profitLost: [number, number];
+  desiredYR: number;
 
   constructor(assumeUnused: boolean, skip: boolean = false) {
     if (skip) {
@@ -50,6 +51,33 @@ export class SimmedPath {
     );
 
     if (unused == null) {
+      if (
+        this.desiredYR == null ||
+        (this.desiredYR > 0 && this.desiredYR > getResourcesLeft("Yellow Ray"))
+      ) {
+        this.desiredYR = 0;
+
+        for (const resource of getResources()) {
+          if (resource.resource != "Yellow Ray") {
+            continue;
+          }
+
+          this.desiredYR += resource.resourcesUsed ?? 1;
+        }
+
+        if (
+          this.desiredYR > 0 &&
+          this.desiredYR > getResourcesLeft("Yellow Ray")
+        ) {
+          print(
+            "It appears that we do not have enough turns left for every Yellow Ray, recalculating..",
+            "red"
+          );
+
+          return true;
+        }
+      }
+
       return false;
     }
 
