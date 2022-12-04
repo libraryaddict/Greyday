@@ -29870,7 +29870,8 @@ var SimmedPath = /*#__PURE__*/function () {
 
 
 
-  function SimmedPath(assumeUnused) {var skip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;TaskManager_classCallCheck(this, SimmedPath);TaskManager_defineProperty(this, "resourcesRemaining", new Map());TaskManager_defineProperty(this, "resourcesUsed", []);TaskManager_defineProperty(this, "thisPath", []);TaskManager_defineProperty(this, "totalCost", void 0);TaskManager_defineProperty(this, "advsSaved", void 0);TaskManager_defineProperty(this, "profitLost", void 0);
+
+  function SimmedPath(assumeUnused) {var skip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;TaskManager_classCallCheck(this, SimmedPath);TaskManager_defineProperty(this, "resourcesRemaining", new Map());TaskManager_defineProperty(this, "resourcesUsed", []);TaskManager_defineProperty(this, "thisPath", []);TaskManager_defineProperty(this, "totalCost", void 0);TaskManager_defineProperty(this, "advsSaved", void 0);TaskManager_defineProperty(this, "profitLost", void 0);TaskManager_defineProperty(this, "desiredYR", void 0);
     if (skip) {
       return;
     }var _iterator = TaskManager_createForOfIteratorHelper(
@@ -29892,6 +29893,33 @@ var SimmedPath = /*#__PURE__*/function () {
 
 
       if (unused == null) {
+        if (
+        this.desiredYR == null ||
+        this.desiredYR > 0 && this.desiredYR > getResourcesLeft("Yellow Ray"))
+        {
+          this.desiredYR = 0;var _iterator2 = TaskManager_createForOfIteratorHelper(
+
+            getResources()),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var _resource$resourcesUs;var resource = _step2.value;
+              if (resource.resource != "Yellow Ray") {
+                continue;
+              }
+
+              this.desiredYR += (_resource$resourcesUs = resource.resourcesUsed) !== null && _resource$resourcesUs !== void 0 ? _resource$resourcesUs : 1;
+            }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+
+          if (
+          this.desiredYR > 0 &&
+          this.desiredYR > getResourcesLeft("Yellow Ray"))
+          {
+            (0,external_kolmafia_namespaceObject.print)(
+            "It appears that we do not have enough turns left for every Yellow Ray, recalculating..",
+            "red");
+
+
+            return true;
+          }
+        }
+
         return false;
       }
 
@@ -29946,9 +29974,9 @@ var SimmedPath = /*#__PURE__*/function () {
 
 
 
-      var used = new Map();var _iterator2 = TaskManager_createForOfIteratorHelper(
+      var used = new Map();var _iterator3 = TaskManager_createForOfIteratorHelper(
 
-        this.resourcesUsed),_step2;try {var _loop = function _loop() {var _step2$value = TaskManager_slicedToArray(_step2.value, 2),quest = _step2$value[0],resource = _step2$value[1];
+        this.resourcesUsed),_step3;try {var _loop = function _loop() {var _step3$value = TaskManager_slicedToArray(_step3.value, 2),quest = _step3$value[0],resource = _step3$value[1];
           var key = resource.name;
 
           if (!used.has(key)) {
@@ -29975,8 +30003,8 @@ var SimmedPath = /*#__PURE__*/function () {
 
           }
 
-          pair.resourcesUsed++;};for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {_loop();
-        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+          pair.resourcesUsed++;};for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {_loop();
+        }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
 
       var index1 = 0;
       var lines = [];
@@ -30037,26 +30065,26 @@ var SimmedPath = /*#__PURE__*/function () {
       this.thisPath = paths;
     } }, { key: "assignResources", value:
 
-    function assignResources() {var _this2 = this;var _iterator3 = TaskManager_createForOfIteratorHelper(
-        this.resourcesUsed),_step3;try {var _loop2 = function _loop2() {var _step3$value = TaskManager_slicedToArray(_step3.value, 2),quest = _step3$value[0],resource = _step3$value[1];
+    function assignResources() {var _this2 = this;var _iterator4 = TaskManager_createForOfIteratorHelper(
+        this.resourcesUsed),_step4;try {var _loop2 = function _loop2() {var _step4$value = TaskManager_slicedToArray(_step4.value, 2),quest = _step4$value[0],resource = _step4$value[1];
           var _this2$thisPath$find = _this2.thisPath.find(function (_ref7) {var _ref8 = TaskManager_slicedToArray(_ref7, 1),q = _ref8[0];return q === quest;}),_this2$thisPath$find2 = TaskManager_slicedToArray(_this2$thisPath$find, 2),path = _this2$thisPath$find2[1];
 
-          path.resourcesAvailable.push(resource);};for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {_loop2();
-        }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+          path.resourcesAvailable.push(resource);};for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {_loop2();
+        }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
     } }, { key: "getAdvs", value:
 
     function getAdvs() {
       if (this.advsSaved == null) {
-        this.advsSaved = [0, 0];var _iterator4 = TaskManager_createForOfIteratorHelper(
+        this.advsSaved = [0, 0];var _iterator5 = TaskManager_createForOfIteratorHelper(
 
-          this.thisPath),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var _step4$value = TaskManager_slicedToArray(_step4.value, 2),path = _step4$value[1];
+          this.thisPath),_step5;try {for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {var _step5$value = TaskManager_slicedToArray(_step5.value, 2),path = _step5$value[1];
             if (path == null) {
               continue;
             }
 
             this.advsSaved[0] += path.advsSavedMin;
             this.advsSaved[1] += path.advsSavedMax;
-          }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
+          }} catch (err) {_iterator5.e(err);} finally {_iterator5.f();}
       }
 
       return this.advsSaved;
@@ -30090,15 +30118,15 @@ var SimmedPath = /*#__PURE__*/function () {
     function getTotalCost() {
       this.totalCost = this.thisPath.
       map(function (p) {return p[1] != null ? p[1].miscMeat : 0;}).
-      reduce(function (p, n) {return p + n;}, 0);var _iterator5 = TaskManager_createForOfIteratorHelper(
+      reduce(function (p, n) {return p + n;}, 0);var _iterator6 = TaskManager_createForOfIteratorHelper(
 
-        this.resourcesUsed),_step5;try {for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {var resource = _step5.value;
+        this.resourcesUsed),_step6;try {for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {var resource = _step6.value;
           this.totalCost += resource[1].worthInAftercore * 1; //resource[2];
 
           if (resource[1].freeTurn == true) {
             this.totalCost -= GreySettings.greyValueOfAdventure;
           }
-        }} catch (err) {_iterator5.e(err);} finally {_iterator5.f();}
+        }} catch (err) {_iterator6.e(err);} finally {_iterator6.f();}
 
       return this.totalCost;
     }
@@ -30137,7 +30165,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
 
       // What we need to do is sort the paths by the most profitable. Ideally we want to eliminate the ones that are just not feasible asap.
       // If it wants 2 faxes but we only want 1, then we can immediately eliminate the least profitable.
-      var _iterator6 = TaskManager_createForOfIteratorHelper(quests),_step6;try {var _loop3 = function _loop3() {var quest = _step6.value;
+      var _iterator7 = TaskManager_createForOfIteratorHelper(quests),_step7;try {var _loop3 = function _loop3() {var quest = _step7.value;
           var q = quest;
 
           if (q.getPossiblePaths == null) {
@@ -30177,10 +30205,10 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
           quest.status() == QuestStatus.COMPLETED)
           {
             return "continue";
-          }var _iterator8 = TaskManager_createForOfIteratorHelper(
+          }var _iterator9 = TaskManager_createForOfIteratorHelper(
 
-            paths),_step8;try {var _loop4 = function _loop4() {var path = _step8.value;var _iterator10 = TaskManager_createForOfIteratorHelper(
-                ResourceIds),_step10;try {var _loop5 = function _loop5() {var res = _step10.value;
+            paths),_step9;try {var _loop4 = function _loop4() {var path = _step9.value;var _iterator11 = TaskManager_createForOfIteratorHelper(
+                ResourceIds),_step11;try {var _loop5 = function _loop5() {var res = _step11.value;
                   if (path.ignoreResources.includes(res)) {
                     return "continue";
                   }
@@ -30194,18 +30222,18 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
                   }
 
                   //print("Better check " + quest.getId() + " for " + res);
-                };for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {var _ret2 = _loop5();if (_ret2 === "continue") continue;}} catch (err) {_iterator10.e(err);} finally {_iterator10.f();}};for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {_loop4();
-            }} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}
+                };for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {var _ret2 = _loop5();if (_ret2 === "continue") continue;}} catch (err) {_iterator11.e(err);} finally {_iterator11.f();}};for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {_loop4();
+            }} catch (err) {_iterator9.e(err);} finally {_iterator9.f();}
 
           paths = paths.filter(function (p) {
-            var resources = new Map();var _iterator9 = TaskManager_createForOfIteratorHelper(
+            var resources = new Map();var _iterator10 = TaskManager_createForOfIteratorHelper(
 
-              ResourceIds),_step9;try {for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {var resourceId = _step9.value;
+              ResourceIds),_step10;try {for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {var resourceId = _step10.value;
                 resources.set(
                 resourceId,
                 getResourcesLeft(resourceId, assumeUnstarted));
 
-              }} catch (err) {_iterator9.e(err);} finally {_iterator9.f();}
+              }} catch (err) {_iterator10.e(err);} finally {_iterator10.f();}
 
             var resourcesToComplete = _this3.getResourcesToComplete(
             resources,
@@ -30264,11 +30292,11 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
             GreySettings.greyValueOfAdventure;
           }
 
-          allPaths.push([quest, paths]);};for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {var _ret = _loop3();if (_ret === "continue") continue;
-        }} catch (err) {_iterator6.e(err);} finally {_iterator6.f();}
+          allPaths.push([quest, paths]);};for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var _ret = _loop3();if (_ret === "continue") continue;
+        }} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}
 
-      if (uncompleteable.length > 0) {var _iterator7 = TaskManager_createForOfIteratorHelper(
-          uncompleteable),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var q = _step7.value;
+      if (uncompleteable.length > 0) {var _iterator8 = TaskManager_createForOfIteratorHelper(
+          uncompleteable),_step8;try {for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {var q = _step8.value;
             (0,external_kolmafia_namespaceObject.print)(
             "Unable to plot a path! Not enough resources to complete `" +
             q.getId() +
@@ -30284,7 +30312,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
 
 
             (0,external_kolmafia_namespaceObject.print)("Combinations of resources needed are: ".concat(combos.join(" OR ")));
-          }} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}
+          }} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}
 
         return null;
       }
@@ -30338,9 +30366,9 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
 
 
 
-      [];var _iterator11 = TaskManager_createForOfIteratorHelper(
+      [];var _iterator12 = TaskManager_createForOfIteratorHelper(
 
-        paths),_step11;try {for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {var path = _step11.value;
+        paths),_step12;try {for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {var path = _step12.value;
           var resources =
           this.getResourcesToComplete(
           currentPath.resourcesRemaining,
@@ -30368,7 +30396,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
           resources,
           path.miscMeat + resourceCost - extraAdvsWorth]);
 
-        }} catch (err) {_iterator11.e(err);} finally {_iterator11.f();}
+        }} catch (err) {_iterator12.e(err);} finally {_iterator12.f();}
 
       possible.sort(function (_ref15, _ref16) {var _ref17 = TaskManager_slicedToArray(_ref15, 3),meat1 = _ref17[2];var _ref18 = TaskManager_slicedToArray(_ref16, 3),meat2 = _ref18[2];return meat1 - meat2;});
 
@@ -30378,10 +30406,10 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
       quest,
       path)
       {
-        if (path instanceof PossibleMultiPath) {var _iterator12 = TaskManager_createForOfIteratorHelper(
-            path.subpaths),_step12;try {for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {var _step12$value = TaskManager_slicedToArray(_step12.value, 2),_quest = _step12$value[0],p = _step12$value[1];
+        if (path instanceof PossibleMultiPath) {var _iterator13 = TaskManager_createForOfIteratorHelper(
+            path.subpaths),_step13;try {for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {var _step13$value = TaskManager_slicedToArray(_step13.value, 2),_quest = _step13$value[0],p = _step13$value[1];
               addPath(simmed, _quest, p);
-            }} catch (err) {_iterator12.e(err);} finally {_iterator12.f();}
+            }} catch (err) {_iterator13.e(err);} finally {_iterator13.f();}
         } else {
           simmed.thisPath.push([quest, path]);
         }
@@ -30445,8 +30473,8 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
     resourcesAvailable,
     resources)
     {
-      if (path instanceof PossibleMultiPath) {var _iterator13 = TaskManager_createForOfIteratorHelper(
-          path.subpaths),_step13;try {for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {var _step13$value = TaskManager_slicedToArray(_step13.value, 2),q = _step13$value[0],p = _step13$value[1];
+      if (path instanceof PossibleMultiPath) {var _iterator14 = TaskManager_createForOfIteratorHelper(
+          path.subpaths),_step14;try {for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {var _step14$value = TaskManager_slicedToArray(_step14.value, 2),q = _step14$value[0],p = _step14$value[1];
             var result = this.doResourcesToComplete(
             q,
             p,
@@ -30457,10 +30485,10 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
             if (result == null) {
               return null;
             }
-          }} catch (err) {_iterator13.e(err);} finally {_iterator13.f();}
+          }} catch (err) {_iterator14.e(err);} finally {_iterator14.f();}
       } else {
-        var skip = new Map();var _iterator14 = TaskManager_createForOfIteratorHelper(
-          path.resourcesNeeded),_step14;try {for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {var _r$resourcesUsed;var _step14$value = TaskManager_slicedToArray(_step14.value, 2),res = _step14$value[0],chance = _step14$value[1];
+        var skip = new Map();var _iterator15 = TaskManager_createForOfIteratorHelper(
+          path.resourcesNeeded),_step15;try {for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {var _r$resourcesUsed;var _step15$value = TaskManager_slicedToArray(_step15.value, 2),res = _step15$value[0],chance = _step15$value[1];
             if (!skip.has(res)) {
               skip.set(res, path.getUsed(res));
             }
@@ -30485,7 +30513,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
             r.resource,
             resourcesAvailable.get(r.resource) - ((_r$resourcesUsed = r.resourcesUsed) !== null && _r$resourcesUsed !== void 0 ? _r$resourcesUsed : 1));
 
-          }} catch (err) {_iterator14.e(err);} finally {_iterator14.f();}
+          }} catch (err) {_iterator15.e(err);} finally {_iterator15.f();}
       }
 
       return resources;
@@ -30495,8 +30523,8 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
     used,
     resourceType,
     unsupported)
-    {var _iterator15 = TaskManager_createForOfIteratorHelper(
-        this.resources),_step15;try {for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {var resource = _step15.value;
+    {var _iterator16 = TaskManager_createForOfIteratorHelper(
+        this.resources),_step16;try {for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {var resource = _step16.value;
           if (
           resource.type != resourceType ||
           unsupported.includes(resource.resource))
@@ -30507,7 +30535,7 @@ var FigureOutPath = /*#__PURE__*/function () {function FigureOutPath() {TaskMana
           if (used.get(resource.resource) >= (resource.resourcesUsed || 1)) {
             return resource;
           }
-        }} catch (err) {_iterator15.e(err);} finally {_iterator15.f();}
+        }} catch (err) {_iterator16.e(err);} finally {_iterator16.f();}
 
       return null;
     } }]);return FigureOutPath;}();
@@ -33638,7 +33666,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "aa98214";
+var lastCommitHash = "270f308";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
