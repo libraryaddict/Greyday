@@ -164,7 +164,9 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
     macro.tryItem(Item.get("rock band flyers"));
   }
 
-  macro.trySkill(Skill.get("Pocket Crumbs"));
+  if (equippedAmount(Item.get("Pantsgiving")) > 0) {
+    macro.trySkill(Skill.get("Pocket Crumbs"));
+  }
 
   if (
     myHp() > monster.baseAttack * 2 &&

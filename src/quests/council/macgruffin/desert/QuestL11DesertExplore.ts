@@ -60,7 +60,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
   rose: Item = Item.get("Stone Rose");
   nanovision: Skill = Skill.get("Double Nanovision");
   lefthand: Familiar = Familiar.get("Left-Hand Man");
-  extingusherProp: string = "";
+  extingusherProp: string = "fireExtinguisherDesertUsed";
   kramco: Item = Item.get("Kramco Sausage-o-Matic&trade;");
   paths: PossiblePath[] = [];
   curse1: Effect = Effect.get("Once-Cursed");
