@@ -57,12 +57,18 @@ export class SimmedPath {
       ) {
         this.desiredYR = 0;
 
-        for (const resource of getResources()) {
-          if (resource.resource != "Yellow Ray") {
+        for (const [, path] of this.thisPath) {
+          if (path == null) {
             continue;
           }
 
-          this.desiredYR += resource.resourcesUsed ?? 1;
+          for (const resource of path.resourcesAvailable) {
+            if (resource.resource != "Yellow Ray") {
+              continue;
+            }
+
+            this.desiredYR += resource.resourcesUsed ?? 1;
+          }
         }
 
         if (
@@ -70,7 +76,9 @@ export class SimmedPath {
           this.desiredYR > getResourcesLeft("Yellow Ray")
         ) {
           print(
-            "It appears that we do not have enough turns left for every Yellow Ray, recalculating..",
+            `It appears that we do not have enough turns left for every Yellow Ray, wanted ${
+              this.desiredYR
+            } but have ${getResourcesLeft("Yellow Ray")}.. Recalculating..`,
             "red"
           );
 
