@@ -109,7 +109,7 @@ export class QuestPowerLeveling implements QuestInfo {
 
   run(): QuestAdventure {
     return {
-      outfit: new GreyOutfit("familiar experience -tie"),
+      outfit: new GreyOutfit("familiar experience +familiar weight -tie"),
       location: null,
       run: () => {
         useFamiliar(this.familiar);

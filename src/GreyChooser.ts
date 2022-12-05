@@ -1135,7 +1135,7 @@ class EmergencyTrainer implements FoundAdventure {
         print("Unfortunately Ghost Dog Chow wasn't enough!", "blue");
       }
 
-      maximize("familiar experience -tie", false);
+      maximize("familiar experience +familiar weight -tie", false);
       visitUrl("arena.php");
 
       let turnsSpent = 0;
