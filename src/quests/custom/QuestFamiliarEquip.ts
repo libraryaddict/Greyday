@@ -8,6 +8,7 @@ import {
   myMeat,
   useFamiliar,
   Item,
+  visitUrl,
 } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
@@ -42,6 +43,7 @@ export class QuestFamiliarEquip implements QuestInfo {
       run: () => {
         useFamiliar(this.familiar);
         maximize("familiar experience +familiar weight -tie", false);
+        visitUrl("arena.php");
 
         while (
           availableAmount(this.equip) == 0 &&

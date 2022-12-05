@@ -58,6 +58,10 @@ const poisonousMonsters: Monster[] = [
   "ninja snowman assassin",
 ].map((s) => Monster.get(s));
 
+const flyers = Item.get("Rockband Flyers");
+const pantsgiving = Item.get("Pantsgiving");
+const cosmicBall = Item.get("Cosmic Bowling Ball");
+
 export function greyDuringFightMacro(settings: AdventureSettings): Macro {
   let macro = new Macro();
 
@@ -159,12 +163,13 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
     /*toInt(getProperty("flyeredML")) <= 10000 && */ monster.baseHp < 300 &&
     expectedDamage(monster) < Math.min(200, myHp() * 0.9) &&
     !monster.attributes.includes("FREE") &&
-    !poisonousMonsters.includes(monster)
+    !poisonousMonsters.includes(monster) &&
+    itemAmount(flyers) > 0
   ) {
-    macro.tryItem(Item.get("rock band flyers"));
+    macro.tryItem(flyers);
   }
 
-  if (equippedAmount(Item.get("Pantsgiving")) > 0) {
+  if (equippedAmount(pantsgiving) > 0) {
     macro.trySkill(Skill.get("Pocket Crumbs"));
   }
 
@@ -274,7 +279,9 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
     `!pastround 15 && !hppercentbelow ${healthPerc}`,
     Macro.tryItem(Item.get("Beehive"))
   );
-  macro.tryItem(Item.get("Cosmic Bowling Ball"));
+
+  macro.tryItem(cosmicBall);
+
   macro.while_("!pastround 15 && !hppercentbelow 30", Macro.attack());
   macro.abort();
 

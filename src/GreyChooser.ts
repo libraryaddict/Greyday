@@ -28,6 +28,7 @@ import {
   toInt,
   use,
   useFamiliar,
+  visitUrl,
 } from "kolmafia";
 import {
   hasCombatSkillActive,
@@ -115,6 +116,10 @@ export class AdventureFinder {
 
   constructor() {
     AdventureFinder.instance = this;
+  }
+
+  static getPath(): SimmedPath {
+    return AdventureFinder.instance.path;
   }
 
   static recalculatePath() {
@@ -1131,6 +1136,7 @@ class EmergencyTrainer implements FoundAdventure {
       }
 
       maximize("familiar experience -tie", false);
+      visitUrl("arena.php");
 
       let turnsSpent = 0;
 

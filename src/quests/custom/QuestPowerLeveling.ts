@@ -20,6 +20,7 @@ import {
   squareRoot,
   toInt,
   useFamiliar,
+  visitUrl,
 } from "kolmafia";
 import { greyKillingBlow } from "../../utils/GreyCombat";
 import { greyAdv, AdventureSettings } from "../../utils/GreyLocations";
@@ -117,6 +118,8 @@ export class QuestPowerLeveling implements QuestInfo {
         const weightNeeded = this.getWeightNeededToReachLevel(
           this.desiredLevel
         );
+
+        visitUrl("arena.php");
 
         while (
           familiarWeight(this.familiar) < weightNeeded &&

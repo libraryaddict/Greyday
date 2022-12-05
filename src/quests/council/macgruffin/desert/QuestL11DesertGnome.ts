@@ -89,8 +89,10 @@ export class QuestL11DesertGnome implements QuestInfo {
         location: null,
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
-          if (itemAmount(Item.get("Can of black paint")) == 0) {
-            retrieveItem(Item.get("Can of black paint"));
+          const paint = Item.get("Can of black paint");
+
+          if (itemAmount(paint) == 0) {
+            retrieveItem(paint);
           }
 
           print("Giving gnome their black paint");
@@ -142,6 +144,8 @@ export class QuestL11DesertGnome implements QuestInfo {
   }
 
   turnInItem() {
+    const gnome = this.getGnome();
+
     visitUrl("place.php?whichplace=desertbeach&action=db_gnasir");
     visitUrl("choice.php?whichchoice=805&option=1&pwd=");
     visitUrl("choice.php?whichchoice=805&option=2&pwd=");
@@ -149,11 +153,13 @@ export class QuestL11DesertGnome implements QuestInfo {
 
     const item = Item.get("desert sightseeing pamphlet");
 
-    if (availableAmount(item) <= 0) {
-      return;
+    if (availableAmount(item) > 0) {
+      use(item, availableAmount(item));
     }
 
-    use(item, availableAmount(item));
+    if (gnome == this.getGnome()) {
+      throw "Failed to progress gnome";
+    }
   }
 
   needsMorePages(): boolean {
