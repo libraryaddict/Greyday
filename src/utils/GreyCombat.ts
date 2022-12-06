@@ -1,6 +1,7 @@
 import {
   appearanceRates,
   availableAmount,
+  currentRound,
   Effect,
   Element,
   equippedAmount,
@@ -28,8 +29,10 @@ import {
   myMeat,
   myMp,
   myTurncount,
+  Phylum,
   Skill,
   Stat,
+  toInt,
   use,
 } from "kolmafia";
 import { BanishType, getBanished, hasBanished } from "./Banishers";
@@ -61,6 +64,7 @@ const poisonousMonsters: Monster[] = [
 const flyers = Item.get("Rockband Flyers");
 const pantsgiving = Item.get("Pantsgiving");
 const cosmicBall = Item.get("Cosmic Bowling Ball");
+const goose = Familiar.get("Grey Goose");
 
 export function greyDuringFightMacro(settings: AdventureSettings): Macro {
   let macro = new Macro();
@@ -81,7 +85,8 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
     myLevel() >= 6 &&
     monster == Monster.get("Sausage Goblin") &&
     !GreySettings.isHardcoreMode() &&
-    familiarWeight(Familiar.get("Grey Goose")) < 9
+    familiarWeight(goose) >= 6 &&
+    familiarWeight(goose) < 9
   ) {
     macro = macro.trySkill(Skill.get("Emit Matter Duplicating Drones"));
   } else if (
@@ -215,6 +220,8 @@ const toRemove: Effect[] = [
   "Hardly Poisoned at All",
 ].map((s) => Effect.get(s));
 const antidote: Item = Item.get("anti-anti-antidote");
+const cape = Item.get("Unwrapped knock-off retro superhero cape");
+const beehive = Item.get("Beehive");
 
 export function greyKillingBlow(outfit: GreyOutfit): Macro {
   let macro = new Macro();
@@ -235,7 +242,9 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
   if (haveEffect(Effect.get("Temporary Amnesia")) == 0) {
     if (
       getProperty("retroCapeSuperhero") == "vampire" &&
-      getProperty("retroCapeWashingInstructions") == "kill"
+      getProperty("retroCapeWashingInstructions") == "kill" &&
+      equippedAmount(cape) > 0 &&
+      (currentRound() == 0 || lastMonster().phylum == Phylum.get("undead"))
     ) {
       macro = macro.trySkillRepeat("Slay the dead");
     }
@@ -275,12 +284,16 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
     }
   }
 
-  macro.if_(
-    `!pastround 15 && !hppercentbelow ${healthPerc}`,
-    Macro.tryItem(Item.get("Beehive"))
-  );
+  if (itemAmount(beehive) > 0) {
+    macro.if_(
+      `!pastround 15 && !hppercentbelow ${healthPerc}`,
+      Macro.tryItem(beehive)
+    );
+  }
 
-  macro.tryItem(cosmicBall);
+  if (toInt(getProperty("cosmicBowlingBallReturnCombats")) <= 1) {
+    macro.tryItem(cosmicBall);
+  }
 
   macro.while_("!pastround 15 && !hppercentbelow 30", Macro.attack());
   macro.abort();
