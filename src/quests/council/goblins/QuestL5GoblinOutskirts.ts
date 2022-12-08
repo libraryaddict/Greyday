@@ -1,4 +1,4 @@
-import { availableAmount, Item, Location, use } from "kolmafia";
+import { availableAmount, Item, itemAmount, Location, use } from "kolmafia";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { PropertyManager } from "../../../utils/Properties";
@@ -21,6 +21,22 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
 
   level(): number {
     return this.location.turnsSpent < 10 ? 4 : 5;
+  }
+
+  mustBeDone(reallyMustBeDone?: boolean): boolean {
+    return (
+      getQuestStatus("questL05Goblin") == 0 &&
+      itemAmount(this.map) > 0 &&
+      itemAmount(this.key) > 0
+    );
+  }
+
+  free(): boolean {
+    return this.mustBeDone();
+  }
+
+  canAcceptPrimes(): boolean {
+    return true;
   }
 
   status(): QuestStatus {
