@@ -69,7 +69,7 @@ export class SmutOrcs implements QuestInfo {
   noise: Skill = Skill.get("Grey Noise");
 
   level(): number {
-    return 7;
+    return 9;
   }
 
   getChildren(): QuestInfo[] {
@@ -93,6 +93,10 @@ export class SmutOrcs implements QuestInfo {
 
     if (status > 0) {
       return QuestStatus.COMPLETED;
+    }
+
+    if (status < 0) {
+      return QuestStatus.NOT_READY;
     }
 
     if (this.getReadyToBuild() > 0) {
