@@ -8,9 +8,11 @@ import {
   itemAmount,
   Location,
   myMeat,
+  pullsRemaining,
   Skill,
   storageAmount,
   toBoolean,
+  turnsPlayed,
   use,
   visitUrl,
 } from "kolmafia";
@@ -44,12 +46,21 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (
-      getProperty("questM05Toot") == "finished" &&
-      availableAmount(this.letter) + availableAmount(this.sack) == 0 &&
-      (myMeat() >= 300 || haveSkill(this.loop))
-    ) {
-      return QuestStatus.COMPLETED;
+    if (getProperty("questM05Toot") == "finished") {
+      if (pullsRemaining() == -1) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if (turnsPlayed() > 50) {
+        return QuestStatus.COMPLETED;
+      }
+
+      if (
+        availableAmount(this.letter) + availableAmount(this.sack) == 0 &&
+        (myMeat() >= 300 || haveSkill(this.loop))
+      ) {
+        return QuestStatus.COMPLETED;
+      }
     }
 
     return QuestStatus.READY;
