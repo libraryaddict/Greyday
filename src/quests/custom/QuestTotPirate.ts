@@ -31,6 +31,10 @@ export class QuestTotPirate implements QuestInfo {
   }
 
   status(): QuestStatus {
+    if (getProperty("warProgress") != "unstarted") {
+      return QuestStatus.COMPLETED;
+    }
+
     if (!haveFamiliar(this.familiar) || availableAmount(this.item) > 0) {
       return QuestStatus.COMPLETED;
     }

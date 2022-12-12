@@ -1,7 +1,9 @@
 import {
   availableAmount,
   equippedAmount,
+  Familiar,
   getProperty,
+  haveFamiliar,
   haveOutfit,
   Item,
   Location,
@@ -26,6 +28,8 @@ import { QuestType } from "../../QuestTypes";
 export class QuestL12StartWar extends TaskInfo implements QuestInfo {
   loc: Location = Location.get("Hippy Camp");
   umbrella: Item = Item.get("Unbreakable Umbrella");
+  familiar: Familiar = Familiar.get("Trick-or-Treating Tot");
+  item: Item = Item.get("li'l pirate costume");
   paths: PossiblePath[];
 
   createPaths(assumeUnstarted: boolean) {
@@ -98,6 +102,10 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
     }
 
     if (path == null || !this.canStartWar()) {
+      return QuestStatus.NOT_READY;
+    }
+
+    if (haveFamiliar(this.familiar) && availableAmount(this.item) == 0) {
       return QuestStatus.NOT_READY;
     }
 
