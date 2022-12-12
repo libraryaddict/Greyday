@@ -14761,7 +14761,9 @@ function QuestL12StartWar_typeof(obj) {"@babel/helpers - typeof";return QuestL12
 
 var QuestL12StartWar = /*#__PURE__*/function (_TaskInfo) {QuestL12StartWar_inherits(QuestL12StartWar, _TaskInfo);var _super = QuestL12StartWar_createSuper(QuestL12StartWar);function QuestL12StartWar() {var _this;QuestL12StartWar_classCallCheck(this, QuestL12StartWar);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL12StartWar_defineProperty(QuestL12StartWar_assertThisInitialized(_this), "loc",
     external_kolmafia_namespaceObject.Location.get("Hippy Camp"));QuestL12StartWar_defineProperty(QuestL12StartWar_assertThisInitialized(_this), "umbrella",
-    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL12StartWar_defineProperty(QuestL12StartWar_assertThisInitialized(_this), "paths", void 0);return _this;}QuestL12StartWar_createClass(QuestL12StartWar, [{ key: "createPaths", value:
+    external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella"));QuestL12StartWar_defineProperty(QuestL12StartWar_assertThisInitialized(_this), "familiar",
+    external_kolmafia_namespaceObject.Familiar.get("Trick-or-Treating Tot"));QuestL12StartWar_defineProperty(QuestL12StartWar_assertThisInitialized(_this), "item",
+    external_kolmafia_namespaceObject.Item.get("li'l pirate costume"));QuestL12StartWar_defineProperty(QuestL12StartWar_assertThisInitialized(_this), "paths", void 0);return _this;}QuestL12StartWar_createClass(QuestL12StartWar, [{ key: "createPaths", value:
 
 
     function createPaths(assumeUnstarted) {
@@ -14834,6 +14836,10 @@ var QuestL12StartWar = /*#__PURE__*/function (_TaskInfo) {QuestL12StartWar_inher
       }
 
       if (path == null || !this.canStartWar()) {
+        return QuestStatus.NOT_READY;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.haveFamiliar)(this.familiar) && (0,external_kolmafia_namespaceObject.availableAmount)(this.item) == 0) {
         return QuestStatus.NOT_READY;
       }
 
@@ -29034,6 +29040,10 @@ var QuestTotPirate = /*#__PURE__*/function () {function QuestTotPirate() {QuestT
     } }, { key: "status", value:
 
     function status() {
+      if ((0,external_kolmafia_namespaceObject.getProperty)("warProgress") != "unstarted") {
+        return QuestStatus.COMPLETED;
+      }
+
       if (!(0,external_kolmafia_namespaceObject.haveFamiliar)(this.familiar) || (0,external_kolmafia_namespaceObject.availableAmount)(this.item) > 0) {
         return QuestStatus.COMPLETED;
       }
@@ -33736,7 +33746,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "e6c2d3c";
+var lastCommitHash = "50a7a5d";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
