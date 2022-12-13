@@ -252,14 +252,7 @@ export class SmutOrcs implements QuestInfo {
       run: () => {
         let attack: Macro;
 
-        const meleeDmg = numericModifier("Cold Damage");
-        const spellDmg = numericModifier("Cold Spell Damage");
-
-        if (meleeDmg <= 0 && spellDmg <= 0) {
-          throw "Not enough cold damage to do smut orcs!";
-        }
-
-        if (meleeDmg > spellDmg) {
+        if (this.lastColdMaximize.includes("cold dmg")) {
           attack = Macro.attack();
         } else {
           attack = Macro.skill("Grey Noise");
