@@ -120,15 +120,22 @@ export class QuestL11Business extends TaskInfo implements QuestInfo {
     }
 
     let turnsSpent = 0;
+    let lastTurnSpent = -1;
     let ncAfter: number = 5;
 
-    for (const [encounter] of this.savedEncounters) {
+    for (const [encounter, turn] of this.savedEncounters) {
       if (encounter == "Working Holiday") {
         ncAfter = 4;
+
+        if (turn == lastTurnSpent) {
+          turnsSpent--;
+        }
+
         break;
       }
 
       turnsSpent++;
+      lastTurnSpent = turn;
     }
 
     if (turnsSpent > ncAfter) {
