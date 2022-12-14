@@ -393,7 +393,7 @@ export class AbsorbsProvider {
 
         const mons = toMonster(spl[0]);
 
-        if (mons == Monster.get("None")) {
+        if (mons == Monster.none) {
           print("Unknown " + spl[0]);
           continue;
         }
@@ -418,7 +418,7 @@ export class AbsorbsProvider {
         } else {
           absorb.skill = toSkill(spl[1]);
 
-          if (absorb.skill == Skill.get("None")) {
+          if (absorb.skill == Skill.none) {
             throw "Unknown line '" + spl[1] + "' in absorb data";
           }
         }

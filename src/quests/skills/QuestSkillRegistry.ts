@@ -97,7 +97,7 @@ export class QuestSkillRegistry implements QuestInfo {
       );
     }
 
-    if (skill == Skill.get("None")) {
+    if (skill == Skill.none) {
       throw "There's no skill found for " + questType;
     }
 

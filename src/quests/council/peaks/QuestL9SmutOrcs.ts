@@ -260,7 +260,7 @@ export class SmutOrcs implements QuestInfo {
 
         for (const i of this.damagingEquips) {
           if (equippedAmount(i) > 0) {
-            equip(Slot.get("familiar"), Item.get("None"));
+            equip(Slot.get("familiar"), Item.none);
           }
         }
 

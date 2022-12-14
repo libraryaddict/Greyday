@@ -104,15 +104,15 @@ export class QuestFantasyBandit extends TaskInfo implements HeroKeysTemplate {
 
     return {
       location: this.location,
-      familiar: Familiar.get("None"),
+      familiar: Familiar.none,
       disableFamOverride: true,
       outfit: outfit,
       run: () => {
         const props = new PropertyManager();
         props.setChoice(1281, 0); // Don't handle
 
-        if (myFamiliar() != Familiar.get("None")) {
-          useFamiliar(Familiar.get("None"));
+        if (myFamiliar() != Familiar.none) {
+          useFamiliar(Familiar.none);
         }
 
         const tokens = availableAmount(this.token);

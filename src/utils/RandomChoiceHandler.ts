@@ -108,7 +108,7 @@ export function getBackupChoices(): [number, number][] {
 
   // Distant woods
   // The NC
-  choices(502, 1);
+  choices(502, 2);
   choices(505, 2);
 
   choices(46, 3);

@@ -218,7 +218,7 @@ export class QuestTowerKillBones {
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         let macro: Macro;
-        useFamiliar(Familiar.get("None"));
+        useFamiliar(Familiar.none);
 
         if (this.isRocketPossible()) {
           maximize("moxie +equip " + this.rocket.name, false);

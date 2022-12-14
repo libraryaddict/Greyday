@@ -29,7 +29,7 @@ import { GreySettings } from "../../utils/GreySettings";
 
 export class QuestMPRegen implements QuestInfo {
   realDung: Location = Location.get("The Dungeons of Doom");
-  none: Item = Item.get("None");
+  none: Item = Item.none;
   deadMimic: Item = Item.get("dead mimic");
   skill: Skill = Skill.get("Hivemindedness");
   plusSign: Item = Item.get("plus sign");

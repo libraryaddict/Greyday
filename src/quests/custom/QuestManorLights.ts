@@ -199,7 +199,7 @@ export class QuestManorLights implements QuestInfo {
       if (fight) {
         outfit.addIgnored(Item.get("June Cleaver"));
       } else {
-        equip(Slot.get("weapon"), Item.get("None"));
+        equip(Slot.get("weapon"), Item.none);
       }
     }
 
@@ -305,7 +305,7 @@ export class QuestManorLights implements QuestInfo {
       if (fight) {
         outfit.addBonus("-equip june cleaver");
       } else {
-        equip(Slot.get("weapon"), Item.get("None"));
+        equip(Slot.get("weapon"), Item.none);
       }
     }
 

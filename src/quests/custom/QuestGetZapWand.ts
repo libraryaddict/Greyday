@@ -84,7 +84,7 @@ export class QuestGetZapWand implements QuestInfo {
   getWand(): Item {
     const wand = getZapWand();
 
-    return wand == Item.get("None") ? null : wand;
+    return wand == Item.none ? null : wand;
   }
 
   hasWandExploded() {

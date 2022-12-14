@@ -14,7 +14,7 @@ import { Task } from "./Tasks";
 export class TaskBoomboxSwitch implements Task {
   boombox: Item = Item.get("SongBoom&trade; BoomBox");
   canSkip: boolean = false;
-  noneItem = Item.get("None");
+  noneItem = Item.none;
   skill: Skill = Skill.get("Hivemindedness");
 
   isForgedRequired(): boolean {

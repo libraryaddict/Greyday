@@ -58,7 +58,7 @@ export class GreyPulls {
 
     const ore = Item.get(getProperty("trapperOre"));
 
-    if (ore == Item.get("none") || availableAmount(ore) >= 3) {
+    if (ore == Item.none || availableAmount(ore) >= 3) {
       return;
     }
 
