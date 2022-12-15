@@ -5,6 +5,8 @@ import {
   myMeat,
   Location,
   retrieveItem,
+  toInt,
+  getProperty,
 } from "kolmafia";
 import { greyKillingBlow } from "../../../../utils/GreyCombat";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -73,7 +75,10 @@ export class QuestL11RonAirship implements QuestInfo {
 
         let macro = greyKillingBlow(outfit);
 
-        if (availableAmount(Item.get("Glark Cable")) > 0) {
+        if (
+          availableAmount(Item.get("Glark Cable")) > 0 &&
+          toInt(getProperty("_glarkCableUses")) < 5
+        ) {
           macro = Macro.if_(this.ron, macro)
             .step(Macro.tryItem(Item.get("Glark Cable")))
             .step(macro);
