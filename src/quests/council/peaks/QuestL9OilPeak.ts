@@ -136,7 +136,7 @@ export class OilHandler implements QuestInfo {
   doMonsterLevel() {
     changeMcd(10);
     maximize(
-      "ML 50 MIN 51 MAX -tie -equip unbreakable umbrella" +
+      "50 ML 50 MIN 51 MAX +DA +DR +INIT -equip unbreakable umbrella" +
         (getProperty("cursedMagnifyingGlassCount") == "13"
           ? " -equip Cursed magnifying glass"
           : ""),
