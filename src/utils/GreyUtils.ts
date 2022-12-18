@@ -44,6 +44,23 @@ export function centerText(text: string, color?: string): string {
 const umbrella: Item = Item.get("Unbreakable Umbrella");
 const lefthand: Familiar = Familiar.get("Left-Hand Man");
 
+export function getUmbrella(): UmbrellaState {
+  if (availableAmount(umbrella) == 0) {
+    return null;
+  }
+  const prop = getProperty("umbrellaState");
+
+  for (const state of Object.values(UmbrellaState)) {
+    if (!prop.includes(state)) {
+      return;
+    }
+
+    return state as UmbrellaState;
+  }
+
+  return null;
+}
+
 export function setUmbrella(setting: UmbrellaState) {
   if (
     availableAmount(umbrella) == 0 ||
