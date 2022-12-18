@@ -7,27 +7,29 @@ import {
   Location,
   changeMcd,
   Monster,
-  maximize,
-  cliExecute,
   myHp,
   equip,
   myEffects,
   numericModifier,
-  equippedAmount,
   familiarWeight,
   Familiar,
-  Slot,
   Effect,
   print,
   toBoolean,
   haveEffect,
   myMaxhp,
+  currentMcd,
+  equippedAmount,
 } from "kolmafia";
 import { restoreHPTo } from "../../../tasks/TaskMaintainStatus";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { setUmbrella, UmbrellaState } from "../../../utils/GreyUtils";
+import {
+  getUmbrella,
+  setUmbrella,
+  UmbrellaState,
+} from "../../../utils/GreyUtils";
 import {
   getQuestStatus,
   QuestAdventure,
@@ -114,56 +116,53 @@ export class OilHandler implements QuestInfo {
         "Pushin' Down on Me, Pushin' Down on You"
       );
 
+    const outfit = new GreyOutfit();
+    outfit.addWeight("ML", 50, 40, 51);
+
     return {
       location: this.loc,
+      outfit: outfit,
       run: () => {
         if (doneFirst) {
           print("Now doing a special adventure for Oil Baron absorb!", "blue");
         }
 
-        this.doMonsterLevel();
+        const ml = () => {
+          let level = numericModifier("Monster Level");
+
+          const state = getUmbrella();
+
+          if (
+            state == UmbrellaState.MONSTER_LEVEL &&
+            equippedAmount(this.umbrella) > 0
+          ) {
+            level *= 0.25;
+          }
+
+          return level;
+        };
+
+        if (ml() < 50) {
+          changeMcd(10);
+        }
+
+        if (ml() < 50) {
+          throw "Unable to raise enough ML to get the oil baron, handle manually?";
+        } else if (ml() >= 100) {
+          throw "Too much ML on the oil baron, we want less than 100!";
+        }
 
         greyAdv(this.loc);
-        changeMcd(0);
+
+        if (currentMcd() > 0) {
+          changeMcd(0);
+        }
 
         if (this.needsAbsorb() && doneFirst) {
           throw "We spent a turn trying to grab the absorb for oil baron! This didn't work..";
         }
       },
     };
-  }
-
-  doMonsterLevel() {
-    changeMcd(10);
-    maximize(
-      "ML 50 MIN 51 MAX -tie -equip unbreakable umbrella" +
-        (getProperty("cursedMagnifyingGlassCount") == "13"
-          ? " -equip Cursed magnifying glass"
-          : ""),
-      false
-    );
-
-    const level = numericModifier("Monster Level");
-
-    if (level >= 99) {
-      throw "Need to lower your monster level, TODO!";
-    }
-
-    if (level <= 50) {
-      if (getProperty("backupCameraMode") != "ml") {
-        cliExecute("backupcamera ml");
-      }
-
-      const item = Item.get("Backup Camera");
-
-      if (equippedAmount(item) == 0) {
-        equip(item, Slot.get("acc3"));
-      }
-
-      if (numericModifier("Monster Level") < 50) {
-        throw "Need to raise your monster level, TODO!";
-      }
-    }
   }
 
   mustBeDone(): boolean {
