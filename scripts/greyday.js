@@ -4991,6 +4991,23 @@ function centerText(text, color) {
 var umbrella = external_kolmafia_namespaceObject.Item.get("Unbreakable Umbrella");
 var lefthand = external_kolmafia_namespaceObject.Familiar.get("Left-Hand Man");
 
+function getUmbrella() {
+  if ((0,external_kolmafia_namespaceObject.availableAmount)(umbrella) == 0) {
+    return null;
+  }
+  var prop = (0,external_kolmafia_namespaceObject.getProperty)("umbrellaState");
+
+  for (var _i = 0, _Object$values = Object.values(UmbrellaState); _i < _Object$values.length; _i++) {var state = _Object$values[_i];
+    if (!prop.includes(state)) {
+      return;
+    }
+
+    return state;
+  }
+
+  return null;
+}
+
 function setUmbrella(setting) {
   if (
   (0,external_kolmafia_namespaceObject.availableAmount)(umbrella) == 0 ||
@@ -23482,56 +23499,53 @@ var OilHandler = /*#__PURE__*/function () {function OilHandler() {QuestL9OilPeak
       "Pushin' Down on Me, Pushin' Down on You");
 
 
+      var outfit = new GreyOutfit();
+      outfit.addWeight("ML", 50, 40, 51);
+
       return {
         location: this.loc,
+        outfit: outfit,
         run: function run() {
           if (doneFirst) {
             (0,external_kolmafia_namespaceObject.print)("Now doing a special adventure for Oil Baron absorb!", "blue");
           }
 
-          _this.doMonsterLevel();
+          var ml = function ml() {
+            var level = (0,external_kolmafia_namespaceObject.numericModifier)("Monster Level");
+
+            var state = getUmbrella();
+
+            if (
+            state == UmbrellaState.MONSTER_LEVEL &&
+            (0,external_kolmafia_namespaceObject.equippedAmount)(_this.umbrella) > 0)
+            {
+              level *= 0.25;
+            }
+
+            return level;
+          };
+
+          if (ml() < 50) {
+            (0,external_kolmafia_namespaceObject.changeMcd)(10);
+          }
+
+          if (ml() < 50) {
+            throw "Unable to raise enough ML to get the oil baron, handle manually?";
+          } else if (ml() >= 100) {
+            throw "Too much ML on the oil baron, we want less than 100!";
+          }
 
           greyAdv(_this.loc);
-          (0,external_kolmafia_namespaceObject.changeMcd)(0);
+
+          if ((0,external_kolmafia_namespaceObject.currentMcd)() > 0) {
+            (0,external_kolmafia_namespaceObject.changeMcd)(0);
+          }
 
           if (_this.needsAbsorb() && doneFirst) {
             throw "We spent a turn trying to grab the absorb for oil baron! This didn't work..";
           }
         }
       };
-    } }, { key: "doMonsterLevel", value:
-
-    function doMonsterLevel() {
-      (0,external_kolmafia_namespaceObject.changeMcd)(10);
-      (0,external_kolmafia_namespaceObject.maximize)(
-      "50 ML 50 MIN 51 MAX +DA +DR +INIT -equip unbreakable umbrella" + (
-      (0,external_kolmafia_namespaceObject.getProperty)("cursedMagnifyingGlassCount") == "13" ?
-      " -equip Cursed magnifying glass" :
-      ""),
-      false);
-
-
-      var level = (0,external_kolmafia_namespaceObject.numericModifier)("Monster Level");
-
-      if (level >= 99) {
-        throw "Need to lower your monster level, TODO!";
-      }
-
-      if (level <= 50) {
-        if ((0,external_kolmafia_namespaceObject.getProperty)("backupCameraMode") != "ml") {
-          (0,external_kolmafia_namespaceObject.cliExecute)("backupcamera ml");
-        }
-
-        var item = external_kolmafia_namespaceObject.Item.get("Backup Camera");
-
-        if ((0,external_kolmafia_namespaceObject.equippedAmount)(item) == 0) {
-          (0,external_kolmafia_namespaceObject.equip)(item, external_kolmafia_namespaceObject.Slot.get("acc3"));
-        }
-
-        if ((0,external_kolmafia_namespaceObject.numericModifier)("Monster Level") < 50) {
-          throw "Need to raise your monster level, TODO!";
-        }
-      }
     } }, { key: "mustBeDone", value:
 
     function mustBeDone() {
@@ -33749,7 +33763,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "40fb192";
+var lastCommitHash = "64c7b8f";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
