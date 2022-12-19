@@ -20,6 +20,7 @@ import {
   myMaxhp,
   currentMcd,
   equippedAmount,
+  maximize,
 } from "kolmafia";
 import { restoreHPTo } from "../../../tasks/TaskMaintainStatus";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
@@ -117,7 +118,6 @@ export class OilHandler implements QuestInfo {
       );
 
     const outfit = new GreyOutfit();
-    outfit.addWeight("ML", 10, 40, 51);
 
     return {
       location: this.loc,
@@ -126,6 +126,8 @@ export class OilHandler implements QuestInfo {
         if (doneFirst) {
           print("Now doing a special adventure for Oil Baron absorb!", "blue");
         }
+
+        maximize("ml 40 min 40 max -tie", false);
 
         const ml = () => {
           let level = numericModifier("Monster Level");
