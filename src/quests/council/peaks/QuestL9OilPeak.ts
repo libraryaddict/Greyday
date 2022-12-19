@@ -117,7 +117,7 @@ export class OilHandler implements QuestInfo {
       );
 
     const outfit = new GreyOutfit();
-    outfit.addWeight("ML", 50, 40, 51);
+    outfit.addWeight("ML", 10, 40, 51);
 
     return {
       location: this.loc,
