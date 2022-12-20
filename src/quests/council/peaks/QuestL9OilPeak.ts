@@ -21,12 +21,17 @@ import {
   currentMcd,
   equippedAmount,
   maximize,
+  toSlot,
+  Slot,
+  equippedItem,
+  cliExecute,
 } from "kolmafia";
 import { restoreHPTo } from "../../../tasks/TaskMaintainStatus";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
+  getAllCombinations,
   getUmbrella,
   setUmbrella,
   UmbrellaState,
@@ -125,33 +130,78 @@ export class OilHandler implements QuestInfo {
       run: () => {
         if (doneFirst) {
           print("Now doing a special adventure for Oil Baron absorb!", "blue");
-        }
 
-        maximize("ml 40 min 40 max -tie", false);
+          const needed = 50 - (10 - currentMcd());
 
-        const ml = () => {
-          let level = numericModifier("Monster Level");
+          let maxResult = maximize(
+            `ml ${needed} min ${needed} max -tie`,
+            0,
+            0,
+            true,
+            true
+          );
 
-          const state = getUmbrella();
+          maxResult = maxResult.filter(
+            (res) => toSlot(res.item) != Slot.none && res.score != 0
+          );
 
-          if (
-            state == UmbrellaState.MONSTER_LEVEL &&
-            equippedAmount(this.umbrella) > 0
-          ) {
-            level *= 0.25;
+          const workingCombos: [number, string[]][] = [];
+
+          for (const combo of getAllCombinations(maxResult)) {
+            const baseML =
+              Slot.all()
+                .map((s) => [s, equippedItem(s)] as [Slot, Item])
+                .filter(
+                  ([s, i]) =>
+                    i != Item.none &&
+                    combo.find(
+                      (r) => r.command.startsWith("equip " + s) == null
+                    )
+                )
+                .map(([, i]) => numericModifier(i, "Monster Level"))
+                .reduce((l, r) => l + r, 0) + currentMcd();
+
+            const addedML = combo
+              .map((r) => r.score)
+              .reduce((l, r) => r + l, 0);
+
+            if (baseML + addedML < needed) {
+              continue;
+            }
+
+            workingCombos.push([addedML + baseML, combo.map((r) => r.command)]);
           }
 
-          return level;
-        };
+          workingCombos.sort((c1, c2) => c1[0] - c2[0]);
 
-        if (ml() < 50) {
-          changeMcd(10);
-        }
+          if (workingCombos.length > 0 && needed > 0) {
+            workingCombos[0][1].forEach((s) => cliExecute(s));
+          }
 
-        if (ml() < 50) {
-          throw "Unable to raise enough ML to get the oil baron, handle manually?";
-        } else if (ml() >= 100) {
-          throw "Too much ML on the oil baron, we want less than 100!";
+          const ml = () => {
+            let level = numericModifier("Monster Level");
+
+            const state = getUmbrella();
+
+            if (
+              state == UmbrellaState.MONSTER_LEVEL &&
+              equippedAmount(this.umbrella) > 0
+            ) {
+              level *= 0.25;
+            }
+
+            return level;
+          };
+
+          if (ml() < 50) {
+            changeMcd(10);
+          }
+
+          if (ml() < 50) {
+            throw "Unable to raise enough ML to get the oil baron, handle manually?";
+          } else if (ml() >= 100) {
+            throw "Too much ML on the oil baron, we want less than 100!";
+          }
         }
 
         greyAdv(this.loc);
