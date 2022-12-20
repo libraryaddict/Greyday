@@ -131,7 +131,11 @@ export class OilHandler implements QuestInfo {
         if (doneFirst) {
           print("Now doing a special adventure for Oil Baron absorb!", "blue");
 
-          const needed = 50 - (10 - currentMcd());
+          if (currentMcd() > 0) {
+            changeMcd(0);
+          }
+
+          const needed = 50;
 
           let maxResult = maximize(
             `ml ${needed} min ${needed} max -tie`,
@@ -159,7 +163,7 @@ export class OilHandler implements QuestInfo {
                     )
                 )
                 .map(([, i]) => numericModifier(i, "Monster Level"))
-                .reduce((l, r) => l + r, 0) + currentMcd();
+                .reduce((l, r) => l + r, 0) + 10;
 
             const addedML = combo
               .map((r) => r.score)
