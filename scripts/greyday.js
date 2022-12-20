@@ -23412,7 +23412,7 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
       return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("booPeakProgress"));
     } }]);return ABooHandler;}();
 ;// CONCATENATED MODULE: ./src/quests/council/peaks/QuestL9OilPeak.ts
-function QuestL9OilPeak_typeof(obj) {"@babel/helpers - typeof";return QuestL9OilPeak_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestL9OilPeak_typeof(obj);}function QuestL9OilPeak_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL9OilPeak_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestL9OilPeak_toPropertyKey(descriptor.key), descriptor);}}function QuestL9OilPeak_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL9OilPeak_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL9OilPeak_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL9OilPeak_defineProperty(obj, key, value) {key = QuestL9OilPeak_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestL9OilPeak_toPropertyKey(arg) {var key = QuestL9OilPeak_toPrimitive(arg, "string");return QuestL9OilPeak_typeof(key) === "symbol" ? key : String(key);}function QuestL9OilPeak_toPrimitive(input, hint) {if (QuestL9OilPeak_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestL9OilPeak_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
+function QuestL9OilPeak_typeof(obj) {"@babel/helpers - typeof";return QuestL9OilPeak_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestL9OilPeak_typeof(obj);}function QuestL9OilPeak_slicedToArray(arr, i) {return QuestL9OilPeak_arrayWithHoles(arr) || QuestL9OilPeak_iterableToArrayLimit(arr, i) || QuestL9OilPeak_unsupportedIterableToArray(arr, i) || QuestL9OilPeak_nonIterableRest();}function QuestL9OilPeak_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestL9OilPeak_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0) {;}} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function QuestL9OilPeak_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestL9OilPeak_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL9OilPeak_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function QuestL9OilPeak_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL9OilPeak_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL9OilPeak_arrayLikeToArray(o, minLen);}function QuestL9OilPeak_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function QuestL9OilPeak_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL9OilPeak_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestL9OilPeak_toPropertyKey(descriptor.key), descriptor);}}function QuestL9OilPeak_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL9OilPeak_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL9OilPeak_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL9OilPeak_defineProperty(obj, key, value) {key = QuestL9OilPeak_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestL9OilPeak_toPropertyKey(arg) {var key = QuestL9OilPeak_toPrimitive(arg, "string");return QuestL9OilPeak_typeof(key) === "symbol" ? key : String(key);}function QuestL9OilPeak_toPrimitive(input, hint) {if (QuestL9OilPeak_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestL9OilPeak_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
 
 
@@ -23507,33 +23507,78 @@ var OilHandler = /*#__PURE__*/function () {function OilHandler() {QuestL9OilPeak
         run: function run() {
           if (doneFirst) {
             (0,external_kolmafia_namespaceObject.print)("Now doing a special adventure for Oil Baron absorb!", "blue");
-          }
 
-          (0,external_kolmafia_namespaceObject.maximize)("ml 40 min 40 max -tie", false);
+            var needed = 50 - (10 - (0,external_kolmafia_namespaceObject.currentMcd)());
 
-          var ml = function ml() {
-            var level = (0,external_kolmafia_namespaceObject.numericModifier)("Monster Level");
+            var maxResult = (0,external_kolmafia_namespaceObject.maximize)("ml ".concat(
+            needed, " min ").concat(needed, " max -tie"),
+            0,
+            0,
+            true,
+            true);
 
-            var state = getUmbrella();
 
-            if (
-            state == UmbrellaState.MONSTER_LEVEL &&
-            (0,external_kolmafia_namespaceObject.equippedAmount)(_this.umbrella) > 0)
-            {
-              level *= 0.25;
+            maxResult = maxResult.filter(
+            function (res) {return (0,external_kolmafia_namespaceObject.toSlot)(res.item) != external_kolmafia_namespaceObject.Slot.none && res.score != 0;});
+
+
+            var workingCombos = [];var _iterator = QuestL9OilPeak_createForOfIteratorHelper(
+
+              getAllCombinations(maxResult)),_step;try {var _loop = function _loop() {var combo = _step.value;
+                var baseML =
+                external_kolmafia_namespaceObject.Slot.all().
+                map(function (s) {return [s, (0,external_kolmafia_namespaceObject.equippedItem)(s)];}).
+                filter(
+                function (_ref) {var _ref2 = QuestL9OilPeak_slicedToArray(_ref, 2),s = _ref2[0],i = _ref2[1];return (
+                    i != external_kolmafia_namespaceObject.Item.none &&
+                    combo.find(
+                    function (r) {return r.command.startsWith("equip " + s) == null;}));}).
+
+
+                map(function (_ref3) {var _ref4 = QuestL9OilPeak_slicedToArray(_ref3, 2),i = _ref4[1];return (0,external_kolmafia_namespaceObject.numericModifier)(i, "Monster Level");}).
+                reduce(function (l, r) {return l + r;}, 0) + (0,external_kolmafia_namespaceObject.currentMcd)();
+
+                var addedML = combo.
+                map(function (r) {return r.score;}).
+                reduce(function (l, r) {return r + l;}, 0);
+
+                if (baseML + addedML < needed) {
+                  return "continue";
+                }
+
+                workingCombos.push([addedML + baseML, combo.map(function (r) {return r.command;})]);};for (_iterator.s(); !(_step = _iterator.n()).done;) {var _ret = _loop();if (_ret === "continue") continue;
+              }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+
+            workingCombos.sort(function (c1, c2) {return c1[0] - c2[0];});
+
+            if (workingCombos.length > 0 && needed > 0) {
+              workingCombos[0][1].forEach(function (s) {return (0,external_kolmafia_namespaceObject.cliExecute)(s);});
             }
 
-            return level;
-          };
+            var ml = function ml() {
+              var level = (0,external_kolmafia_namespaceObject.numericModifier)("Monster Level");
 
-          if (ml() < 50) {
-            (0,external_kolmafia_namespaceObject.changeMcd)(10);
-          }
+              var state = getUmbrella();
 
-          if (ml() < 50) {
-            throw "Unable to raise enough ML to get the oil baron, handle manually?";
-          } else if (ml() >= 100) {
-            throw "Too much ML on the oil baron, we want less than 100!";
+              if (
+              state == UmbrellaState.MONSTER_LEVEL &&
+              (0,external_kolmafia_namespaceObject.equippedAmount)(_this.umbrella) > 0)
+              {
+                level *= 0.25;
+              }
+
+              return level;
+            };
+
+            if (ml() < 50) {
+              (0,external_kolmafia_namespaceObject.changeMcd)(10);
+            }
+
+            if (ml() < 50) {
+              throw "Unable to raise enough ML to get the oil baron, handle manually?";
+            } else if (ml() >= 100) {
+              throw "Too much ML on the oil baron, we want less than 100!";
+            }
           }
 
           greyAdv(_this.loc);
@@ -33764,7 +33809,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "4424874";
+var lastCommitHash = "99fa03a";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
