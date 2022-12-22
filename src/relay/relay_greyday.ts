@@ -89,6 +89,16 @@ export function main(): void {
       }
     }
 
+    if (dropdowns != null) {
+      const dropSetting = dropdowns.find(
+        ([s]) => s.toLowerCase().trim() == prop.value.toLowerCase().trim()
+      );
+
+      if (dropSetting != null && dropSetting[0] != prop.value) {
+        prop.value = dropSetting[0];
+      }
+    }
+
     settings.push(prop);
   }
 

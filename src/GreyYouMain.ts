@@ -48,7 +48,7 @@ class GreyYouMain {
   git_name = "libraryaddict-Greyday-release";
 
   isRevisionPass(): boolean {
-    const required = 26902;
+    const required = 27017;
 
     if (getRevision() > 0 && getRevision() < required) {
       print(

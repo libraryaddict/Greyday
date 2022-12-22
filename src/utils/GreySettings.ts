@@ -10,9 +10,9 @@ import {
   setProperty,
   toBoolean,
   toInt,
-  toItem,
 } from "kolmafia";
 import { getAvailableClans } from "./GreyClan";
+import { Workshed, Worksheds } from "./GreyUtils";
 
 export type GreySettingType = "main" | "values";
 
@@ -182,10 +182,14 @@ export function getGreySettings(): GreySetting[] {
   const greySwitchWorkshed: GreySetting = {
     name: "greySwitchWorkshed",
     description:
-      "Applicable only for CMC, if set to the name of a workshed item, will switch to that workshed after all 5 CMC uses are expended. Requires the item to be in inventory",
-    valid: (value) => {
-      return value == "" || toItem(value).usable;
-    },
+      "Applicable only if you're starting your run with Cold Medicine Cabinet, if set to the name of a workshed item, will switch to that workshed after all 5 CMC uses are expended. Requires the item to be in inventory",
+    valid: (value) =>
+      value == "" ||
+      Worksheds.find((s) => s.toLowerCase() == value.toLowerCase()) != null,
+    viableSettings: [
+      ["Don't Switch", ""],
+      ...(Worksheds.map((w) => [w, w]) as [string, string][]),
+    ],
     default: "",
   };
 
@@ -360,7 +364,7 @@ export class GreySettings {
   static greyUseMummery: boolean;
   static greyVotingBooth: boolean;
   static greyBountyHunting: boolean;
-  static greySwitchWorkshed: string;
+  static greySwitchWorkshed: Workshed;
   static greyClipArt: string;
   static greyVIPClan: string;
   static greyFortuneTeller: boolean;

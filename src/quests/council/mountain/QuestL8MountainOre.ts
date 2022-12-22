@@ -5,12 +5,14 @@ import {
   Familiar,
   familiarWeight,
   getProperty,
+  getWorkshed,
   handlingChoice,
   haveEffect,
   haveFamiliar,
   haveSkill,
   heistTargets,
   Item,
+  itemAmount,
   Location,
   Monster,
   myAdventures,
@@ -28,6 +30,7 @@ import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { GreyClovers, GreyPulls } from "../../../utils/GreyResources";
+import { GreySettings } from "../../../utils/GreySettings";
 import {
   getAllCombinations,
   getBackupsRemaining,
@@ -57,6 +60,8 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   asbestos: Item = Item.get("asbestos ore");
   linoleum: Item = Item.get("linoleum ore");
   chrome: Item = Item.get("chrome ore");
+  trainset: Item = Item.get("model train set");
+  cmc: Item = Item.get("Cold Medicine Cabinet");
 
   getId(): QuestType {
     return "Council / Ice / Ore";
@@ -110,9 +115,23 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
     return this.burglar;
   }
 
+  willUseTrainset(): boolean {
+    return (
+      getWorkshed() == this.trainset ||
+      (getWorkshed() == this.cmc &&
+        itemAmount(this.trainset) > 0 &&
+        GreySettings.greySwitchWorkshed == "Model train set")
+    );
+  }
+
   createPaths(assumeUnstarted: boolean): void {
-    this.needRecalculate = this.getStatus() < MountainStatus.TRAPPER_DEMANDS;
+    if (this.willUseTrainset()) {
+      this.paths = [new PossiblePath(0)];
+      return;
+    }
+
     this.paths = [];
+    this.needRecalculate = this.getStatus() < MountainStatus.TRAPPER_DEMANDS;
     this.faxAndGooseDupe = new PossiblePath(1)
       .add(ResourceCategory.YELLOW_RAY)
       .addFax(this.mountainMan);
@@ -251,6 +270,10 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   }
 
   getPossiblePaths(): PossiblePath[] {
+    if (this.willUseTrainset()) {
+      return this.paths;
+    }
+
     const paths = [...this.paths];
 
     if (this.doDuping()) {
@@ -269,6 +292,10 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   }
 
   status(path: PossiblePath): QuestStatus {
+    if (this.willUseTrainset()) {
+      return QuestStatus.COMPLETED;
+    }
+
     const status = this.getStatus();
 
     if (status < MountainStatus.TRAPPER_DEMANDS) {

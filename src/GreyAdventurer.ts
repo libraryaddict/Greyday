@@ -67,6 +67,7 @@ import { getPrimedResource } from "./utils/GreyLocations";
 import { TaskAutumnaton } from "./tasks/TaskAutumnaton";
 import { handledChoices } from "./utils/Properties";
 import { shouldGreydayStop } from "./GreyYouMain";
+import { TaskTrainset } from "./tasks/TaskTrainset";
 
 export class GreyAdventurer {
   goose: Familiar = Familiar.get("Grey Goose");
@@ -84,6 +85,7 @@ export class GreyAdventurer {
     new TaskBoomboxSwitch(),
     new TaskEquipDistillery(),
     new TaskAutumnaton(),
+    new TaskTrainset(),
     //new TaskBountyHunter(),
   ];
   static currentAdventure: FoundAdventure;
