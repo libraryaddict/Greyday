@@ -2267,32 +2267,37 @@ function greyKillingBlow(outfit) {
     ((0,external_kolmafia_namespaceObject.lastMonster)().baseHp < 2 || (0,external_kolmafia_namespaceObject.lastMonster)().physicalResistance < 70) &&
     (0,external_kolmafia_namespaceObject.myMp)() >= 20)
     {
-      if (outfit.itemDropWeight >= 2 || (0,external_kolmafia_namespaceObject.myLevel)() > 18) {
-        macro.while_("!pastround 15 && !hppercentbelow ".concat(
-        healthPerc, " && hasskill Double Nanovision"),
-        Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Double Nanovision")));
+      var nano = external_kolmafia_namespaceObject.Skill.get("Double Nanovision");
+      var loop = external_kolmafia_namespaceObject.Skill.get("Infinite Loop");
+      var attackSkill = null;
 
+      if ((0,external_kolmafia_namespaceObject.haveSkill)(nano) && (outfit.itemDropWeight >= 2 || (0,external_kolmafia_namespaceObject.myLevel)() > 18)) {
+        attackSkill = nano;
       }
 
-      // Only infinite loop if we're underleveled or have the outfit
-      if (
-      !(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Double Nanovision")) ||
-      (0,external_kolmafia_namespaceObject.myLevel)() <= 10 ||
-      (0,external_kolmafia_namespaceObject.myLevel)() < 18 && (
-      !GreySettings.isHippyMode() ||
-      (0,external_kolmafia_namespaceObject.haveOutfit)("Filthy Hippy Disguise") ||
-      (0,external_kolmafia_namespaceObject.haveOutfit)("Frat Warrior Fatigues")))
-      {
-        macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Infinite Loop"));
-        macro.while_("!pastround 15 && !hppercentbelow ".concat(
-        healthPerc, " && hasskill Infinite Loop"),
-        Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Infinite Loop")));
+      if ((0,external_kolmafia_namespaceObject.haveSkill)(loop)) {
+        // If we're underleveled or don't intend to use nanovision
+        if ((0,external_kolmafia_namespaceObject.myLevel)() <= 10 || attackSkill == null) {
+          attackSkill = loop;
+        } else if (
+        // If we failed to stay underleveled for hippies, or don't need to stay underleveled
+        (0,external_kolmafia_namespaceObject.myLevel)() >= 12 ||
+        !GreySettings.isHippyMode() ||
+        (0,external_kolmafia_namespaceObject.haveOutfit)("Filthy Hippy Disguise") ||
+        (0,external_kolmafia_namespaceObject.haveOutfit)("Frat Warrior Fatigues"))
+        {
+          attackSkill = loop;
+        }
+      } else if ((0,external_kolmafia_namespaceObject.haveSkill)(nano)) {
+        attackSkill = nano;
+      }
 
-      } else {
-        macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));
+      if (attackSkill != null) {
+        macro.trySkill(attackSkill);
+
         macro.while_("!pastround 15 && !hppercentbelow ".concat(
-        healthPerc, " && hasskill Double Nanovision"),
-        Macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Double Nanovision")));
+        healthPerc, " && hasskill ").concat(attackSkill.name),
+        Macro.skill(attackSkill));
 
       }
     }
@@ -22865,7 +22870,9 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     "Tiny bowler"].
     map(function (s) {return external_kolmafia_namespaceObject.Item.get(s);}));QuestL9SmutOrcs_defineProperty(this, "plastered",
     external_kolmafia_namespaceObject.Monster.get("plastered frat orc"));QuestL9SmutOrcs_defineProperty(this, "noise",
-    external_kolmafia_namespaceObject.Skill.get("Grey Noise"));}QuestL9SmutOrcs_createClass(SmutOrcs, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Skill.get("Grey Noise"));QuestL9SmutOrcs_defineProperty(this, "trainset",
+    external_kolmafia_namespaceObject.Item.get("model train set"));QuestL9SmutOrcs_defineProperty(this, "toAbsorb", void 0);}QuestL9SmutOrcs_createClass(SmutOrcs, [{ key: "level", value:
+
 
     function level() {
       return 9;
@@ -22940,6 +22947,10 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         if (!this.hasEnoughCold) {
           return QuestStatus.NOT_READY;
         }
+      }
+
+      if ((0,external_kolmafia_namespaceObject.getWorkshed)() == this.trainset && this.toAbsorb.length == 0) {
+        return QuestStatus.FASTER_LATER;
       }
 
       if (getQuestStatus("questL11Black") <= 1) {
@@ -31653,6 +31664,19 @@ var AdventureFinder = /*#__PURE__*/function () {
       "Council / War / Filthworms"];
 
       var prioritize2 = ["Manor / Kitchen"];
+      // If we're using CMC and have consults remaining
+      var sortIndoorLocations =
+      GreySettings.greySwitchWorkshed != "" &&
+      (0,external_kolmafia_namespaceObject.getWorkshed)() == external_kolmafia_namespaceObject.Item.get("Cold Medicine Cabinet") &&
+      (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_coldMedicineConsults")) < 5;
+      // If indoor locations now would be wasted
+      var avoidIndoors =
+      (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_nextColdMedicineConsult")) - (0,external_kolmafia_namespaceObject.totalTurnsPlayed)() >= 10;
+      var prioritizeIndoors =
+      !avoidIndoors &&
+      (0,external_kolmafia_namespaceObject.getProperty)("lastCombatEnvironments").
+      split("").
+      filter(function (s) {return s == "i";}).length > 4;
 
       this.possibleAdventures.sort(function (a1, a2) {var _a1$quest, _a2$quest, _a1$quest2, _a2$quest2;
         if (a1.considerPriority != a2.considerPriority) {
@@ -31688,6 +31712,26 @@ var AdventureFinder = /*#__PURE__*/function () {
         if (banished1 != banished2) {
           // We want the location with the most banishes to be prioritized
           return banished2 - banished1;
+        }
+
+        // If we're prioritizing indoors vs outdoors for w/e reason
+        if (
+        sortIndoorLocations &&
+        a1.adventure.location != null &&
+        a2.adventure.location != null)
+        {
+          var e1 = a1.adventure.location.environment;
+          var e2 = a1.adventure.location.environment;
+
+          if (e1 != e2 && (e1 == "indoor" || e2 == "indoor")) {
+            // If we want to avoid indoors, then indoor locations are given a bad score
+            if (avoidIndoors) {
+              return e1 == "indoor" ? 1 : -1;
+              // If we want to prioritize indoors, then indoor locations are given a good score
+            } else if (prioritizeIndoors) {
+              return e1 == "indoor" ? -1 : 1;
+            }
+          }
         }
 
         if (a1.quest == null != (a2.quest == null)) {
@@ -32516,6 +32560,14 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
         split("").
         filter(function (s) {return s == "i";}).length > 10);
 
+    } }, { key: "isUnderground", value:
+
+    function isUnderground() {
+      return (
+        (0,external_kolmafia_namespaceObject.getProperty)("lastCombatEnvironments").
+        split("").
+        filter(function (s) {return s == "u";}).length > 10);
+
     } }, { key: "getLastChecked", value:
 
     function getLastChecked() {
@@ -32541,7 +32593,10 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
 
       if (GreySettings.isHardcoreMode() && (0,external_kolmafia_namespaceObject.availableAmount)(this.pants) == 0) {
         (0,external_kolmafia_namespaceObject.runChoice)(1);
-      } else if (page.includes("Extrovermectin&trade;")) {
+      } else if (
+      page.includes("Extrovermectin&trade;") ||
+      page.includes("Breathitin&trade;"))
+      {
         (0,external_kolmafia_namespaceObject.runChoice)(5);
       } else {
         (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
@@ -32563,7 +32618,12 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
 
       this.trySwitch();
 
-      if (!this.isConsultReady() || !this.isIndoors() || !this.shouldCheck()) {
+      if (
+      !this.isConsultReady() ||
+      !this.isIndoors() && (
+      GreySettings.greySwitchWorkshed == "" || !this.isUnderground()) ||
+      !this.shouldCheck())
+      {
         return;
       }
 
@@ -32598,13 +32658,11 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
           (0,external_kolmafia_namespaceObject.use)(item);
 
           if ((0,external_kolmafia_namespaceObject.getWorkshed)() == this.cabinet) {
-            (0,external_kolmafia_namespaceObject.print)(
-            "Failed to switch workshed to " +
-            item +
-            ", are you sure it's a workshed item?",
-            "red");
+            throw (
+              "Failed to switch workshed to " +
+              item +
+              ", are you sure it's a workshed item?");
 
-            return;
           }
 
           (0,external_kolmafia_namespaceObject.print)("Now using " + (0,external_kolmafia_namespaceObject.getWorkshed)() + " as the workshed!", "blue");
@@ -33174,6 +33232,9 @@ function isTrainsetConfigurable() {
 
 }
 
+/**
+ * Where [0] is your next encounter, [1] is the one after, [7] is the one you just had
+ */
 function getTrainsetEncounters() {
   var pieces = getTrainsetConfiguration();
   var newPieces = [];
@@ -34223,7 +34284,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "eaebe70";
+var lastCommitHash = "7e088f4";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 

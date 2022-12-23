@@ -6132,32 +6132,37 @@ function greyKillingBlow(outfit) {
     ((0,external_kolmafia_.lastMonster)().baseHp < 2 || (0,external_kolmafia_.lastMonster)().physicalResistance < 70) &&
     (0,external_kolmafia_.myMp)() >= 20)
     {
-      if (outfit.itemDropWeight >= 2 || (0,external_kolmafia_.myLevel)() > 18) {
-        macro.while_("!pastround 15 && !hppercentbelow ".concat(
-        healthPerc, " && hasskill Double Nanovision"),
-        MacroBuilder/* Macro.trySkill */.LE.trySkill(external_kolmafia_.Skill.get("Double Nanovision")));
+      var nano = external_kolmafia_.Skill.get("Double Nanovision");
+      var loop = external_kolmafia_.Skill.get("Infinite Loop");
+      var attackSkill = null;
 
+      if ((0,external_kolmafia_.haveSkill)(nano) && (outfit.itemDropWeight >= 2 || (0,external_kolmafia_.myLevel)() > 18)) {
+        attackSkill = nano;
       }
 
-      // Only infinite loop if we're underleveled or have the outfit
-      if (
-      !(0,external_kolmafia_.haveSkill)(external_kolmafia_.Skill.get("Double Nanovision")) ||
-      (0,external_kolmafia_.myLevel)() <= 10 ||
-      (0,external_kolmafia_.myLevel)() < 18 && (
-      !GreySettings_GreySettings.isHippyMode() ||
-      (0,external_kolmafia_.haveOutfit)("Filthy Hippy Disguise") ||
-      (0,external_kolmafia_.haveOutfit)("Frat Warrior Fatigues")))
-      {
-        macro.trySkill(external_kolmafia_.Skill.get("Infinite Loop"));
-        macro.while_("!pastround 15 && !hppercentbelow ".concat(
-        healthPerc, " && hasskill Infinite Loop"),
-        MacroBuilder/* Macro.trySkill */.LE.trySkill(external_kolmafia_.Skill.get("Infinite Loop")));
+      if ((0,external_kolmafia_.haveSkill)(loop)) {
+        // If we're underleveled or don't intend to use nanovision
+        if ((0,external_kolmafia_.myLevel)() <= 10 || attackSkill == null) {
+          attackSkill = loop;
+        } else if (
+        // If we failed to stay underleveled for hippies, or don't need to stay underleveled
+        (0,external_kolmafia_.myLevel)() >= 12 ||
+        !GreySettings_GreySettings.isHippyMode() ||
+        (0,external_kolmafia_.haveOutfit)("Filthy Hippy Disguise") ||
+        (0,external_kolmafia_.haveOutfit)("Frat Warrior Fatigues"))
+        {
+          attackSkill = loop;
+        }
+      } else if ((0,external_kolmafia_.haveSkill)(nano)) {
+        attackSkill = nano;
+      }
 
-      } else {
-        macro.trySkill(external_kolmafia_.Skill.get("Double Nanovision"));
+      if (attackSkill != null) {
+        macro.trySkill(attackSkill);
+
         macro.while_("!pastround 15 && !hppercentbelow ".concat(
-        healthPerc, " && hasskill Double Nanovision"),
-        MacroBuilder/* Macro.trySkill */.LE.trySkill(external_kolmafia_.Skill.get("Double Nanovision")));
+        healthPerc, " && hasskill ").concat(attackSkill.name),
+        MacroBuilder/* Macro.skill */.LE.skill(attackSkill));
 
       }
     }
@@ -22035,7 +22040,9 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
     "Tiny bowler"].
     map(function (s) {return external_kolmafia_.Item.get(s);}));QuestL9SmutOrcs_defineProperty(this, "plastered",
     external_kolmafia_.Monster.get("plastered frat orc"));QuestL9SmutOrcs_defineProperty(this, "noise",
-    external_kolmafia_.Skill.get("Grey Noise"));}QuestL9SmutOrcs_createClass(SmutOrcs, [{ key: "level", value:
+    external_kolmafia_.Skill.get("Grey Noise"));QuestL9SmutOrcs_defineProperty(this, "trainset",
+    external_kolmafia_.Item.get("model train set"));QuestL9SmutOrcs_defineProperty(this, "toAbsorb", void 0);}QuestL9SmutOrcs_createClass(SmutOrcs, [{ key: "level", value:
+
 
     function level() {
       return 9;
@@ -22110,6 +22117,10 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
         if (!this.hasEnoughCold) {
           return QuestStatus.NOT_READY;
         }
+      }
+
+      if ((0,external_kolmafia_.getWorkshed)() == this.trainset && this.toAbsorb.length == 0) {
+        return QuestStatus.FASTER_LATER;
       }
 
       if (getQuestStatus("questL11Black") <= 1) {
@@ -30122,6 +30133,19 @@ var AdventureFinder = /*#__PURE__*/function () {
       "Council / War / Filthworms"];
 
       var prioritize2 = ["Manor / Kitchen"];
+      // If we're using CMC and have consults remaining
+      var sortIndoorLocations =
+      GreySettings_GreySettings.greySwitchWorkshed != "" &&
+      (0,external_kolmafia_.getWorkshed)() == external_kolmafia_.Item.get("Cold Medicine Cabinet") &&
+      (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("_coldMedicineConsults")) < 5;
+      // If indoor locations now would be wasted
+      var avoidIndoors =
+      (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("_nextColdMedicineConsult")) - (0,external_kolmafia_.totalTurnsPlayed)() >= 10;
+      var prioritizeIndoors =
+      !avoidIndoors &&
+      (0,external_kolmafia_.getProperty)("lastCombatEnvironments").
+      split("").
+      filter(function (s) {return s == "i";}).length > 4;
 
       this.possibleAdventures.sort(function (a1, a2) {var _a1$quest, _a2$quest, _a1$quest2, _a2$quest2;
         if (a1.considerPriority != a2.considerPriority) {
@@ -30157,6 +30181,26 @@ var AdventureFinder = /*#__PURE__*/function () {
         if (banished1 != banished2) {
           // We want the location with the most banishes to be prioritized
           return banished2 - banished1;
+        }
+
+        // If we're prioritizing indoors vs outdoors for w/e reason
+        if (
+        sortIndoorLocations &&
+        a1.adventure.location != null &&
+        a2.adventure.location != null)
+        {
+          var e1 = a1.adventure.location.environment;
+          var e2 = a1.adventure.location.environment;
+
+          if (e1 != e2 && (e1 == "indoor" || e2 == "indoor")) {
+            // If we want to avoid indoors, then indoor locations are given a bad score
+            if (avoidIndoors) {
+              return e1 == "indoor" ? 1 : -1;
+              // If we want to prioritize indoors, then indoor locations are given a good score
+            } else if (prioritizeIndoors) {
+              return e1 == "indoor" ? -1 : 1;
+            }
+          }
         }
 
         if (a1.quest == null != (a2.quest == null)) {
@@ -30985,6 +31029,14 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
         split("").
         filter(function (s) {return s == "i";}).length > 10);
 
+    } }, { key: "isUnderground", value:
+
+    function isUnderground() {
+      return (
+        (0,external_kolmafia_.getProperty)("lastCombatEnvironments").
+        split("").
+        filter(function (s) {return s == "u";}).length > 10);
+
     } }, { key: "getLastChecked", value:
 
     function getLastChecked() {
@@ -31010,7 +31062,10 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
 
       if (GreySettings_GreySettings.isHardcoreMode() && (0,external_kolmafia_.availableAmount)(this.pants) == 0) {
         (0,external_kolmafia_.runChoice)(1);
-      } else if (page.includes("Extrovermectin&trade;")) {
+      } else if (
+      page.includes("Extrovermectin&trade;") ||
+      page.includes("Breathitin&trade;"))
+      {
         (0,external_kolmafia_.runChoice)(5);
       } else {
         (0,external_kolmafia_.visitUrl)("main.php");
@@ -31032,7 +31087,12 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
 
       this.trySwitch();
 
-      if (!this.isConsultReady() || !this.isIndoors() || !this.shouldCheck()) {
+      if (
+      !this.isConsultReady() ||
+      !this.isIndoors() && (
+      GreySettings_GreySettings.greySwitchWorkshed == "" || !this.isUnderground()) ||
+      !this.shouldCheck())
+      {
         return;
       }
 
@@ -31067,13 +31127,11 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
           (0,external_kolmafia_.use)(item);
 
           if ((0,external_kolmafia_.getWorkshed)() == this.cabinet) {
-            (0,external_kolmafia_.print)(
-            "Failed to switch workshed to " +
-            item +
-            ", are you sure it's a workshed item?",
-            "red");
+            throw (
+              "Failed to switch workshed to " +
+              item +
+              ", are you sure it's a workshed item?");
 
-            return;
           }
 
           (0,external_kolmafia_.print)("Now using " + (0,external_kolmafia_.getWorkshed)() + " as the workshed!", "blue");
@@ -31643,6 +31701,9 @@ function isTrainsetConfigurable() {
 
 }
 
+/**
+ * Where [0] is your next encounter, [1] is the one after, [7] is the one you just had
+ */
 function getTrainsetEncounters() {
   var pieces = getTrainsetConfiguration();
   var newPieces = [];
