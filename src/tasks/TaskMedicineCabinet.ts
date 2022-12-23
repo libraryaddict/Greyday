@@ -44,6 +44,14 @@ export class TaskColdMedicineCabinet implements Task {
     );
   }
 
+  isUnderground(): boolean {
+    return (
+      getProperty("lastCombatEnvironments")
+        .split("")
+        .filter((s) => s == "u").length > 10
+    );
+  }
+
   getLastChecked(): number {
     return toInt(getProperty(this.lastChecked));
   }
@@ -67,7 +75,10 @@ export class TaskColdMedicineCabinet implements Task {
 
     if (GreySettings.isHardcoreMode() && availableAmount(this.pants) == 0) {
       runChoice(1);
-    } else if (page.includes("Extrovermectin&trade;")) {
+    } else if (
+      page.includes("Extrovermectin&trade;") ||
+      page.includes("Breathitin&trade;")
+    ) {
       runChoice(5);
     } else {
       visitUrl("main.php");
@@ -89,7 +100,12 @@ export class TaskColdMedicineCabinet implements Task {
 
     this.trySwitch();
 
-    if (!this.isConsultReady() || !this.isIndoors() || !this.shouldCheck()) {
+    if (
+      !this.isConsultReady() ||
+      (!this.isIndoors() &&
+        (GreySettings.greySwitchWorkshed == "" || !this.isUnderground())) ||
+      !this.shouldCheck()
+    ) {
       return;
     }
 
@@ -124,13 +140,11 @@ export class TaskColdMedicineCabinet implements Task {
         use(item);
 
         if (getWorkshed() == this.cabinet) {
-          print(
+          throw (
             "Failed to switch workshed to " +
-              item +
-              ", are you sure it's a workshed item?",
-            "red"
+            item +
+            ", are you sure it's a workshed item?"
           );
-          return;
         }
 
         print("Now using " + getWorkshed() + " as the workshed!", "blue");

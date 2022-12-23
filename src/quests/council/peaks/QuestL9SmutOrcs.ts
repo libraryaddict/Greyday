@@ -67,6 +67,8 @@ export class SmutOrcs implements QuestInfo {
   ].map((s) => Item.get(s));
   plastered: Monster = Monster.get("plastered frat orc");
   noise: Skill = Skill.get("Grey Noise");
+  trainset: Item = Item.get("model train set");
+  toAbsorb: Monster[];
 
   level(): number {
     return 9;
@@ -141,6 +143,10 @@ export class SmutOrcs implements QuestInfo {
       if (!this.hasEnoughCold) {
         return QuestStatus.NOT_READY;
       }
+    }
+
+    if (getWorkshed() == this.trainset && this.toAbsorb.length == 0) {
+      return QuestStatus.FASTER_LATER;
     }
 
     if (getQuestStatus("questL11Black") <= 1) {

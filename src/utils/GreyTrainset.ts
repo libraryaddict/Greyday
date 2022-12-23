@@ -121,6 +121,9 @@ export function isTrainsetConfigurable(): boolean {
   );
 }
 
+/**
+ * Where [0] is your next encounter, [1] is the one after, [7] is the one you just had
+ */
 function getTrainsetEncounters(): TrainsetPiece[] {
   const pieces = getTrainsetConfiguration();
   const newPieces: TrainsetPiece[] = [];

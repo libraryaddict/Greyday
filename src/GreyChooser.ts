@@ -7,6 +7,7 @@ import {
   familiarWeight,
   getLocationMonsters,
   getProperty,
+  getWorkshed,
   haveEffect,
   haveSkill,
   historicalPrice,
@@ -26,6 +27,7 @@ import {
   Skill,
   Stat,
   toInt,
+  totalTurnsPlayed,
   use,
   useFamiliar,
   visitUrl,
@@ -962,6 +964,19 @@ export class AdventureFinder {
       "Council / War / Filthworms",
     ];
     const prioritize2: QuestType[] = ["Manor / Kitchen"];
+    // If we're using CMC and have consults remaining
+    const sortIndoorLocations =
+      GreySettings.greySwitchWorkshed != "" &&
+      getWorkshed() == Item.get("Cold Medicine Cabinet") &&
+      toInt(getProperty("_coldMedicineConsults")) < 5;
+    // If indoor locations now would be wasted
+    const avoidIndoors =
+      toInt(getProperty("_nextColdMedicineConsult")) - totalTurnsPlayed() >= 10;
+    const prioritizeIndoors =
+      !avoidIndoors &&
+      getProperty("lastCombatEnvironments")
+        .split("")
+        .filter((s) => s == "i").length > 4;
 
     this.possibleAdventures.sort((a1, a2) => {
       if (a1.considerPriority != a2.considerPriority) {
@@ -997,6 +1012,26 @@ export class AdventureFinder {
       if (banished1 != banished2) {
         // We want the location with the most banishes to be prioritized
         return banished2 - banished1;
+      }
+
+      // If we're prioritizing indoors vs outdoors for w/e reason
+      if (
+        sortIndoorLocations &&
+        a1.adventure.location != null &&
+        a2.adventure.location != null
+      ) {
+        const e1 = a1.adventure.location.environment;
+        const e2 = a1.adventure.location.environment;
+
+        if (e1 != e2 && (e1 == "indoor" || e2 == "indoor")) {
+          // If we want to avoid indoors, then indoor locations are given a bad score
+          if (avoidIndoors) {
+            return e1 == "indoor" ? 1 : -1;
+            // If we want to prioritize indoors, then indoor locations are given a good score
+          } else if (prioritizeIndoors) {
+            return e1 == "indoor" ? -1 : 1;
+          }
+        }
       }
 
       if ((a1.quest == null) != (a2.quest == null)) {

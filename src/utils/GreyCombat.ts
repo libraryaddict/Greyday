@@ -253,32 +253,37 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
       (lastMonster().baseHp < 2 || lastMonster().physicalResistance < 70) &&
       myMp() >= 20
     ) {
-      if (outfit.itemDropWeight >= 2 || myLevel() > 18) {
-        macro.while_(
-          `!pastround 15 && !hppercentbelow ${healthPerc} && hasskill Double Nanovision`,
-          Macro.trySkill(Skill.get("Double Nanovision"))
-        );
+      const nano = Skill.get("Double Nanovision");
+      const loop = Skill.get("Infinite Loop");
+      let attackSkill: Skill = null;
+
+      if (haveSkill(nano) && (outfit.itemDropWeight >= 2 || myLevel() > 18)) {
+        attackSkill = nano;
       }
 
-      // Only infinite loop if we're underleveled or have the outfit
-      if (
-        !haveSkill(Skill.get("Double Nanovision")) ||
-        myLevel() <= 10 ||
-        (myLevel() < 18 &&
-          (!GreySettings.isHippyMode() ||
-            haveOutfit("Filthy Hippy Disguise") ||
-            haveOutfit("Frat Warrior Fatigues")))
-      ) {
-        macro.trySkill(Skill.get("Infinite Loop"));
+      if (haveSkill(loop)) {
+        // If we're underleveled or don't intend to use nanovision
+        if (myLevel() <= 10 || attackSkill == null) {
+          attackSkill = loop;
+        } else if (
+          // If we failed to stay underleveled for hippies, or don't need to stay underleveled
+          myLevel() >= 12 ||
+          !GreySettings.isHippyMode() ||
+          haveOutfit("Filthy Hippy Disguise") ||
+          haveOutfit("Frat Warrior Fatigues")
+        ) {
+          attackSkill = loop;
+        }
+      } else if (haveSkill(nano)) {
+        attackSkill = nano;
+      }
+
+      if (attackSkill != null) {
+        macro.trySkill(attackSkill);
+
         macro.while_(
-          `!pastround 15 && !hppercentbelow ${healthPerc} && hasskill Infinite Loop`,
-          Macro.trySkill(Skill.get("Infinite Loop"))
-        );
-      } else {
-        macro.trySkill(Skill.get("Double Nanovision"));
-        macro.while_(
-          `!pastround 15 && !hppercentbelow ${healthPerc} && hasskill Double Nanovision`,
-          Macro.trySkill(Skill.get("Double Nanovision"))
+          `!pastround 15 && !hppercentbelow ${healthPerc} && hasskill ${attackSkill.name}`,
+          Macro.skill(attackSkill)
         );
       }
     }
