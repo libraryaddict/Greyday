@@ -20,7 +20,10 @@ export class TaskTrainset implements Task {
   mpSkill: Skill = Skill.get("Hivemindedness");
 
   run(): void {
-    if (!isTrainsetConfigurable()) {
+    if (
+      !isTrainsetConfigurable() ||
+      getProperty("questL13Final") != "unstarted"
+    ) {
       return;
     }
 
