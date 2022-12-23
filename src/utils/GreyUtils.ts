@@ -27,20 +27,13 @@ import {
 import { getPrimedResource, greyAdv } from "./GreyLocations";
 
 export const Worksheds = [
+  "",
   "Model train set",
   "cold medicine cabinet",
   "diabolic pizza cube",
   "Asdon Martin keyfob",
   "portable Mayo Clinic",
   "Little Geneticist DNA-Splicing Lab",
-  "snow machine",
-  "spinning wheel",
-  "warbear auto-anvil",
-  "warbear chemistry lab",
-  "warbear high-efficiency still",
-  "warbear induction oven",
-  "warbear jackhammer drill press",
-  "warbear LP-ROM burner",
 ] as const;
 
 export type Workshed = typeof Worksheds[number];

@@ -179,6 +179,21 @@ export function getGreySettings(): GreySetting[] {
     default: false,
   };
 
+  const greyDefaultWorkshed: GreySetting = {
+    name: "greyDefaultWorkshed",
+    description:
+      "What should Greyday set your empty workshed to at the start of the day?",
+    valid: (value) =>
+      value == "" ||
+      Worksheds.find((s) => s.toLowerCase() == value.toLowerCase()) != null,
+    viableSettings: [
+      ...(Worksheds.map((w) => [w == "" ? "Don't Set" : w, w]) as [
+        string,
+        string
+      ][]),
+    ],
+    default: "",
+  };
   const greySwitchWorkshed: GreySetting = {
     name: "greySwitchWorkshed",
     description:
@@ -187,8 +202,10 @@ export function getGreySettings(): GreySetting[] {
       value == "" ||
       Worksheds.find((s) => s.toLowerCase() == value.toLowerCase()) != null,
     viableSettings: [
-      ["Don't Switch", ""],
-      ...(Worksheds.map((w) => [w, w]) as [string, string][]),
+      ...(Worksheds.map((w) => [w == "" ? "Don't Switch" : w, w]) as [
+        string,
+        string
+      ][]),
     ],
     default: "",
   };
@@ -288,6 +305,7 @@ export function getGreySettings(): GreySetting[] {
     dailyMalware,
     greySavePulls,
     grayAdventureValue,
+    greyDefaultWorkshed,
     greySwitchWorkshed,
     greyClipArt,
     prioritizeLocket,
@@ -364,6 +382,7 @@ export class GreySettings {
   static greyUseMummery: boolean;
   static greyVotingBooth: boolean;
   static greyBountyHunting: boolean;
+  static greyDefaultWorkshed: Workshed;
   static greySwitchWorkshed: Workshed;
   static greyClipArt: string;
   static greyVIPClan: string;

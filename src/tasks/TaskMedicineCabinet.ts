@@ -75,6 +75,14 @@ export class TaskColdMedicineCabinet implements Task {
   }
 
   run() {
+    if (
+      getWorkshed() == Item.none &&
+      GreySettings.greyDefaultWorkshed != "" &&
+      availableAmount(Item.get(GreySettings.greyDefaultWorkshed)) > 0
+    ) {
+      use(Item.get(GreySettings.greyDefaultWorkshed));
+    }
+
     if (getWorkshed() != this.cabinet) {
       return;
     }
