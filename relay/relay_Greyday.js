@@ -31753,7 +31753,10 @@ var TaskTrainset = /*#__PURE__*/function () {function TaskTrainset() {TaskTrains
     external_kolmafia_.Skill.get("Hivemindedness"));}TaskTrainset_createClass(TaskTrainset, [{ key: "run", value:
 
     function run() {
-      if (!isTrainsetConfigurable()) {
+      if (
+      !isTrainsetConfigurable() ||
+      (0,external_kolmafia_.getProperty)("questL13Final") != "unstarted")
+      {
         return;
       }
 
