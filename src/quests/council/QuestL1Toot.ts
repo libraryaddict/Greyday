@@ -3,6 +3,7 @@ import {
   availableAmount,
   council,
   getProperty,
+  getWorkshed,
   haveSkill,
   Item,
   itemAmount,
@@ -78,6 +79,7 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
     this.paths = [];
 
     const hasEnoughMeat =
+      getWorkshed() == Item.get("model train set") ||
       this.autosells.find((i) => itemAmount(i) > 0) ||
       myMeat() >= 5000 ||
       (toBoolean(getProperty("hasMaydayContract")) &&
