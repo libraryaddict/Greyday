@@ -25933,7 +25933,11 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_.availableAmount)(this.saber) > 0 && (0,external_kolmafia_.getProperty)("_saberMod") == "0") {
+      if (
+      (0,external_kolmafia_.availableAmount)(this.saber) > 0 &&
+      (0,external_kolmafia_.getProperty)("_saberMod") == "0" &&
+      GreySettings_GreySettings.greyCosplaySaber != "")
+      {
         return QuestStatus.READY;
       }
 
@@ -25969,9 +25973,10 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
 
           if (
           (0,external_kolmafia_.availableAmount)(_this2.saber) > 0 &&
-          (0,external_kolmafia_.getProperty)("_saberMod") == "0")
+          (0,external_kolmafia_.getProperty)("_saberMod") == "0" &&
+          GreySettings_GreySettings.greyCosplaySaber != "")
           {
-            (0,external_kolmafia_.cliExecute)("saber resistance");
+            (0,external_kolmafia_.cliExecute)("saber " + GreySettings_GreySettings.greyCosplaySaber);
           }
 
           if (
@@ -33832,6 +33837,21 @@ function GreySettings_getGreySettings() {
     "default": "Grey Goose"
   };
 
+  var greyCosplaySaber = {
+    name: "greyCosplaySaber",
+    description:
+    "What upgrade should GreyDay place on the Cosplay Saber if you own it?",
+    valid: function valid(value) {return value.length == 0 || /^\d+$/.test(value);},
+    "default": "resistance",
+    viableSettings: [
+    ["Don't Modify", ""],
+    ["15-20 MP Regen", "mp"],
+    ["+20 Monster Level", "ml"],
+    ["+3 elemental resistance", "resistance"],
+    ["+10 Familiar Weight", "familiar"]]
+
+  };
+
   var viableClans = [
   ["Don't use VIP Invitation", ""]].concat(GreySettings_toConsumableArray(
   GreySettings_toConsumableArray((0,GreyClan/* getAvailableClans */.Q5)().values()).map(function (s) {return [s, s];})));
@@ -33903,6 +33923,7 @@ function GreySettings_getGreySettings() {
   grayAdventureValue,
   greyDefaultWorkshed,
   greySwitchWorkshed,
+  greyCosplaySaber,
   greyClipArt,
   prioritizeLocket].
   map(function (s) {
@@ -33956,6 +33977,7 @@ function getMoonZone() {var sign = arguments.length > 0 && arguments[0] !== unde
 var spoon = external_kolmafia_.Item.get("hewn moon-rune spoon");
 
 var GreySettings_GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettings_classCallCheck(this, GreySettings);}GreySettings_createClass(GreySettings, null, [{ key: "isHardcoreMode", value:
+
 
 
 
@@ -34043,7 +34065,7 @@ var GreySettings_GreySettings = /*#__PURE__*/function () {function GreySettings(
       if (this.isHardcoreMode()) {
         GreySettings.greyBreakAtTower = false;
       }
-    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings_GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings_GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings_GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings_GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings_GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyReachedTower", (0,external_kolmafia_.toBoolean)((0,external_kolmafia_.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings_GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDebug", (0,external_kolmafia_.toBoolean)((0,external_kolmafia_.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings_GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings_GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDefaultWorkshed", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyHippyMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "greyGrabZapWand", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyCookbatRecipe", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyLocketWeight", void 0);
+    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings_GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings_GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings_GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings_GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings_GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyReachedTower", (0,external_kolmafia_.toBoolean)((0,external_kolmafia_.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings_GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDebug", (0,external_kolmafia_.toBoolean)((0,external_kolmafia_.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings_GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings_GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDefaultWorkshed", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyHippyMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "greyGrabZapWand", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyCookbatRecipe", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyLocketWeight", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyCosplaySaber", void 0);
 
 /***/ }),
 

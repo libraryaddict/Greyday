@@ -3880,6 +3880,21 @@ function getGreySettings() {
     "default": "Grey Goose"
   };
 
+  var greyCosplaySaber = {
+    name: "greyCosplaySaber",
+    description:
+    "What upgrade should GreyDay place on the Cosplay Saber if you own it?",
+    valid: function valid(value) {return value.length == 0 || /^\d+$/.test(value);},
+    "default": "resistance",
+    viableSettings: [
+    ["Don't Modify", ""],
+    ["15-20 MP Regen", "mp"],
+    ["+20 Monster Level", "ml"],
+    ["+3 elemental resistance", "resistance"],
+    ["+10 Familiar Weight", "familiar"]]
+
+  };
+
   var viableClans = [
   ["Don't use VIP Invitation", ""]].concat(GreySettings_toConsumableArray(
   GreySettings_toConsumableArray(getAvailableClans().values()).map(function (s) {return [s, s];})));
@@ -3951,6 +3966,7 @@ function getGreySettings() {
   grayAdventureValue,
   greyDefaultWorkshed,
   greySwitchWorkshed,
+  greyCosplaySaber,
   greyClipArt,
   prioritizeLocket].
   map(function (s) {
@@ -4004,6 +4020,7 @@ function getMoonZone() {var sign = arguments.length > 0 && arguments[0] !== unde
 var spoon = external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon");
 
 var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettings_classCallCheck(this, GreySettings);}GreySettings_createClass(GreySettings, null, [{ key: "isHardcoreMode", value:
+
 
 
 
@@ -4091,7 +4108,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
       if (this.isHardcoreMode()) {
         GreySettings.greyBreakAtTower = false;
       }
-    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings, "greyDefaultWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings, "greyHippyMode", false);GreySettings_defineProperty(GreySettings, "greyGrabZapWand", void 0);GreySettings_defineProperty(GreySettings, "greyCookbatRecipe", void 0);GreySettings_defineProperty(GreySettings, "greyLocketWeight", void 0);
+    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings, "greyDefaultWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings, "greyHippyMode", false);GreySettings_defineProperty(GreySettings, "greyGrabZapWand", void 0);GreySettings_defineProperty(GreySettings, "greyCookbatRecipe", void 0);GreySettings_defineProperty(GreySettings, "greyLocketWeight", void 0);GreySettings_defineProperty(GreySettings, "greyCosplaySaber", void 0);
 ;// CONCATENATED MODULE: ./src/typings/ResourceTypes.ts
 function ResourceTypes_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = ResourceTypes_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function ResourceTypes_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return ResourceTypes_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return ResourceTypes_arrayLikeToArray(o, minLen);}function ResourceTypes_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function ResourceTypes_typeof(obj) {"@babel/helpers - typeof";return ResourceTypes_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, ResourceTypes_typeof(obj);}function ResourceTypes_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, ResourceTypes_toPropertyKey(descriptor.key), descriptor);}}function ResourceTypes_createClass(Constructor, protoProps, staticProps) {if (protoProps) ResourceTypes_defineProperties(Constructor.prototype, protoProps);if (staticProps) ResourceTypes_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function ResourceTypes_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function ResourceTypes_defineProperty(obj, key, value) {key = ResourceTypes_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function ResourceTypes_toPropertyKey(arg) {var key = ResourceTypes_toPrimitive(arg, "string");return ResourceTypes_typeof(key) === "symbol" ? key : String(key);}function ResourceTypes_toPrimitive(input, hint) {if (ResourceTypes_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (ResourceTypes_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
@@ -26763,7 +26780,11 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
         return QuestStatus.NOT_READY;
       }
 
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.saber) > 0 && (0,external_kolmafia_namespaceObject.getProperty)("_saberMod") == "0") {
+      if (
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.saber) > 0 &&
+      (0,external_kolmafia_namespaceObject.getProperty)("_saberMod") == "0" &&
+      GreySettings.greyCosplaySaber != "")
+      {
         return QuestStatus.READY;
       }
 
@@ -26799,9 +26820,10 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
 
           if (
           (0,external_kolmafia_namespaceObject.availableAmount)(_this2.saber) > 0 &&
-          (0,external_kolmafia_namespaceObject.getProperty)("_saberMod") == "0")
+          (0,external_kolmafia_namespaceObject.getProperty)("_saberMod") == "0" &&
+          GreySettings.greyCosplaySaber != "")
           {
-            (0,external_kolmafia_namespaceObject.cliExecute)("saber resistance");
+            (0,external_kolmafia_namespaceObject.cliExecute)("saber " + GreySettings.greyCosplaySaber);
           }
 
           if (
@@ -34281,7 +34303,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "9134168";
+var lastCommitHash = "097c70f";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
