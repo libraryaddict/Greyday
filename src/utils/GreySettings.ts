@@ -236,6 +236,21 @@ export function getGreySettings(): GreySetting[] {
     default: "Grey Goose",
   };
 
+  const greyCosplaySaber: GreySetting = {
+    name: "greyCosplaySaber",
+    description:
+      "What upgrade should GreyDay place on the Cosplay Saber if you own it?",
+    valid: (value) => value.length == 0 || /^\d+$/.test(value),
+    default: "resistance",
+    viableSettings: [
+      ["Don't Modify", ""],
+      ["15-20 MP Regen", "mp"],
+      ["+20 Monster Level", "ml"],
+      ["+3 elemental resistance", "resistance"],
+      ["+10 Familiar Weight", "familiar"],
+    ],
+  };
+
   const viableClans: [string, string][] = [
     ["Don't use VIP Invitation", ""],
     ...[...getAvailableClans().values()].map((s) => [s, s] as [string, string]),
@@ -307,6 +322,7 @@ export function getGreySettings(): GreySetting[] {
     grayAdventureValue,
     greyDefaultWorkshed,
     greySwitchWorkshed,
+    greyCosplaySaber,
     greyClipArt,
     prioritizeLocket,
   ].map((s) => {
@@ -392,6 +408,7 @@ export class GreySettings {
   static greyGrabZapWand: boolean;
   static greyCookbatRecipe: boolean;
   static greyLocketWeight: number;
+  static greyCosplaySaber: string;
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

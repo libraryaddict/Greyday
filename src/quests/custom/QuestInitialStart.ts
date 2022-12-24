@@ -79,7 +79,11 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (availableAmount(this.saber) > 0 && getProperty("_saberMod") == "0") {
+    if (
+      availableAmount(this.saber) > 0 &&
+      getProperty("_saberMod") == "0" &&
+      GreySettings.greyCosplaySaber != ""
+    ) {
       return QuestStatus.READY;
     }
 
@@ -115,9 +119,10 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
 
         if (
           availableAmount(this.saber) > 0 &&
-          getProperty("_saberMod") == "0"
+          getProperty("_saberMod") == "0" &&
+          GreySettings.greyCosplaySaber != ""
         ) {
-          cliExecute("saber resistance");
+          cliExecute("saber " + GreySettings.greyCosplaySaber);
         }
 
         if (
