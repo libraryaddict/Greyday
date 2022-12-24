@@ -17872,13 +17872,13 @@ GreyYouMain = /*#__PURE__*/(/* unused pure expression or super */ null && (funct
           if (!getIgnoreZoneWarnings()) {
             props.addCleanup(function () {return (
                 visitUrl(
-                "http://127.0.0.1:60080/account.php?am=1&pwd&action=flag_ignorezonewarnings&value=0&ajax=1",
+                "account.php?am=1&pwd&action=flag_ignorezonewarnings&value=0&ajax=1",
                 true));});
 
 
 
             visitUrl(
-            "http://127.0.0.1:60080/account.php?am=1&pwd&action=flag_ignorezonewarnings&value=1&ajax=1",
+            "account.php?am=1&pwd&action=flag_ignorezonewarnings&value=1&ajax=1",
             true);
 
           }
@@ -21021,7 +21021,10 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
         (0,external_kolmafia_.getWorkshed)() == this.trainset ||
         (0,external_kolmafia_.getWorkshed)() == this.cmc &&
         (0,external_kolmafia_.itemAmount)(this.trainset) > 0 &&
-        GreySettings_GreySettings.greySwitchWorkshed == "Model train set");
+        GreySettings_GreySettings.greySwitchWorkshed == "Model train set" ||
+        (0,external_kolmafia_.getWorkshed)() == external_kolmafia_.Item.none &&
+        (0,external_kolmafia_.itemAmount)(this.trainset) > 0 &&
+        GreySettings_GreySettings.greyDefaultWorkshed == "Model train set");
 
     } }, { key: "createPaths", value:
 
