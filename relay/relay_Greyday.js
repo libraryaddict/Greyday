@@ -18237,6 +18237,7 @@ var QuestL1Toot = /*#__PURE__*/function (_TaskInfo) {QuestL1Toot_inherits(QuestL
       this.paths = [];
 
       var hasEnoughMeat =
+      (0,external_kolmafia_.getWorkshed)() == external_kolmafia_.Item.get("model train set") ||
       this.autosells.find(function (i) {return (0,external_kolmafia_.itemAmount)(i) > 0;}) ||
       (0,external_kolmafia_.myMeat)() >= 5000 ||
       (0,external_kolmafia_.toBoolean)((0,external_kolmafia_.getProperty)("hasMaydayContract")) &&
@@ -25734,11 +25735,7 @@ var QuestInitialPulls = /*#__PURE__*/function (_TaskInfo) {QuestInitialPulls_inh
     [external_kolmafia_.Item.get("Giant Yellow Hat"), -35],
     [external_kolmafia_.Item.get("Mafia Thumb Ring"), -30],
     [external_kolmafia_.Item.get("Portable cassette player"), -15],
-    [external_kolmafia_.Item.get("Pantsgiving"), -10]]);QuestInitialPulls_defineProperty(QuestInitialPulls_assertThisInitialized(_this), "highValueSells",
-
-    [
-    external_kolmafia_.Item.get("1,970 carat gold"),
-    external_kolmafia_.Item.get("Gold Wedding Ring")]);QuestInitialPulls_defineProperty(QuestInitialPulls_assertThisInitialized(_this), "paths", void 0);QuestInitialPulls_defineProperty(QuestInitialPulls_assertThisInitialized(_this), "freeRunners",
+    [external_kolmafia_.Item.get("Pantsgiving"), -10]]);QuestInitialPulls_defineProperty(QuestInitialPulls_assertThisInitialized(_this), "paths", void 0);QuestInitialPulls_defineProperty(QuestInitialPulls_assertThisInitialized(_this), "freeRunners",
 
 
     [

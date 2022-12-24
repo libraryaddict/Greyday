@@ -544,7 +544,7 @@ var react_namespaceObject = /*#__PURE__*/__webpack_require__.t(react, 2);
 ;// CONCATENATED MODULE: ./node_modules/@remix-run/router/dist/router.js
 function _regeneratorRuntime() {"use strict";
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */_regeneratorRuntime = function _regeneratorRuntime() {return exports;};var exports = {},Op = Object.prototype,hasOwn = Op.hasOwnProperty,defineProperty = Object.defineProperty || function (obj, key, desc) {obj[key] = desc.value;},$Symbol = "function" == typeof Symbol ? Symbol : {},iteratorSymbol = $Symbol.iterator || "@@iterator",asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";function define(obj, key, value) {return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key];}try {define({}, "");} catch (err) {define = function define(obj, key, value) {return obj[key] = value;};}function wrap(innerFn, outerFn, self, tryLocsList) {var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,generator = Object.create(protoGenerator.prototype),context = new Context(tryLocsList || []);return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator;}function tryCatch(fn, obj, arg) {try {return { type: "normal", arg: fn.call(obj, arg) };} catch (err) {return { type: "throw", arg: err };}}exports.wrap = wrap;var ContinueSentinel = {};function Generator() {}function GeneratorFunction() {}function GeneratorFunctionPrototype() {}var IteratorPrototype = {};define(IteratorPrototype, iteratorSymbol, function () {return this;});var getProto = Object.getPrototypeOf,NativeIteratorPrototype = getProto && getProto(getProto(values([])));NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);function defineIteratorMethods(prototype) {["next", "throw", "return"].forEach(function (method) {define(prototype, method, function (arg) {return this._invoke(method, arg);});});}function AsyncIterator(generator, PromiseImpl) {function invoke(method, arg, resolve, reject) {var record = tryCatch(generator[method], generator, arg);if ("throw" !== record.type) {var result = record.arg,value = result.value;return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {invoke("next", value, resolve, reject);}, function (err) {invoke("throw", err, resolve, reject);}) : PromiseImpl.resolve(value).then(function (unwrapped) {result.value = unwrapped, resolve(result);}, function (error) {return invoke("throw", error, resolve, reject);});}reject(record.arg);}var previousPromise;defineProperty(this, "_invoke", { value: function value(method, arg) {function callInvokeWithMethodAndArg() {return new PromiseImpl(function (resolve, reject) {invoke(method, arg, resolve, reject);});}return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();} });}function makeInvokeMethod(innerFn, self, context) {var state = "suspendedStart";return function (method, arg) {if ("executing" === state) throw new Error("Generator is already running");if ("completed" === state) {if ("throw" === method) throw arg;return doneResult();}for (context.method = method, context.arg = arg;;) {var delegate = context.delegate;if (delegate) {var delegateResult = maybeInvokeDelegate(delegate, context);if (delegateResult) {if (delegateResult === ContinueSentinel) continue;return delegateResult;}}if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {if ("suspendedStart" === state) throw state = "completed", context.arg;context.dispatchException(context.arg);} else "return" === context.method && context.abrupt("return", context.arg);state = "executing";var record = tryCatch(innerFn, self, context);if ("normal" === record.type) {if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;return { value: record.arg, done: context.done };}"throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);}};}function maybeInvokeDelegate(delegate, context) {var methodName = context.method,method = delegate.iterator[methodName];if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;var record = tryCatch(method, delegate.iterator, context.arg);if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;var info = record.arg;return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);}function pushTryEntry(locs) {var entry = { tryLoc: locs[0] };1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);}function resetTryEntry(entry) {var record = entry.completion || {};record.type = "normal", delete record.arg, entry.completion = record;}function Context(tryLocsList) {this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);}function values(iterable) {if (iterable) {var iteratorMethod = iterable[iteratorSymbol];if (iteratorMethod) return iteratorMethod.call(iterable);if ("function" == typeof iterable.next) return iterable;if (!isNaN(iterable.length)) {var i = -1,next = function next() {for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;return next.value = undefined, next.done = !0, next;};return next.next = next;}}return { next: doneResult };}function doneResult() {return { value: undefined, done: !0 };}return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {var ctor = "function" == typeof genFun && genFun.constructor;return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));}, exports.mark = function (genFun) {return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;}, exports.awrap = function (arg) {return { __await: arg };}, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () {return this;}), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {void 0 === PromiseImpl && (PromiseImpl = Promise);var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) {return result.done ? result.value : iter.next();});}, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () {return this;}), define(Gp, "toString", function () {return "[object Generator]";}), exports.keys = function (val) {var object = Object(val),keys = [];for (var key in object) keys.push(key);return keys.reverse(), function next() {for (; keys.length;) {var key = keys.pop();if (key in object) return next.value = key, next.done = !1, next;}return next.done = !0, next;};}, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) {if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);}, stop: function stop() {this.done = !0;var rootRecord = this.tryEntries[0].completion;if ("throw" === rootRecord.type) throw rootRecord.arg;return this.rval;}, dispatchException: function dispatchException(exception) {if (this.done) throw exception;var context = this;function handle(loc, caught) {return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;}for (var i = this.tryEntries.length - 1; i >= 0; --i) {var entry = this.tryEntries[i],record = entry.completion;if ("root" === entry.tryLoc) return handle("end");if (entry.tryLoc <= this.prev) {var hasCatch = hasOwn.call(entry, "catchLoc"),hasFinally = hasOwn.call(entry, "finallyLoc");if (hasCatch && hasFinally) {if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);} else if (hasCatch) {if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);} else {if (!hasFinally) throw new Error("try statement without catch or finally");if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);}}}}, abrupt: function abrupt(type, arg) {for (var i = this.tryEntries.length - 1; i >= 0; --i) {var entry = this.tryEntries[i];if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {var finallyEntry = entry;break;}}finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);var record = finallyEntry ? finallyEntry.completion : {};return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);}, complete: function complete(record, afterLoc) {if ("throw" === record.type) throw record.arg;return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel;}, finish: function finish(finallyLoc) {for (var i = this.tryEntries.length - 1; i >= 0; --i) {var entry = this.tryEntries[i];if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;}}, "catch": function _catch(tryLoc) {for (var i = this.tryEntries.length - 1; i >= 0; --i) {var entry = this.tryEntries[i];if (entry.tryLoc === tryLoc) {var record = entry.completion;if ("throw" === record.type) {var thrown = record.arg;resetTryEntry(entry);}return thrown;}}throw new Error("illegal catch attempt");}, delegateYield: function delegateYield(iterable, resultName, nextLoc) {return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel;} }, exports;}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function _defineProperty(obj, key, value) {key = _toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function _typeof(obj) {"@babel/helpers - typeof";return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, _typeof(obj);}function _defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);}}function _createClass(Constructor, protoProps, staticProps) {if (protoProps) _defineProperties(Constructor.prototype, protoProps);if (staticProps) _defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function _toPropertyKey(arg) {var key = _toPrimitive(arg, "string");return _typeof(key) === "symbol" ? key : String(key);}function _toPrimitive(input, hint) {if (_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) _setPrototypeOf(subClass, superClass);}function _createSuper(Derived) {var hasNativeReflectConstruct = _isNativeReflectConstruct();return function _createSuperInternal() {var Super = _getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = _getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return _possibleConstructorReturn(this, result);};}function _possibleConstructorReturn(self, call) {if (call && (_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return _assertThisInitialized(self);}function _assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function _wrapNativeSuper(Class) {var _cache = typeof Map === "function" ? new Map() : undefined;_wrapNativeSuper = function _wrapNativeSuper(Class) {if (Class === null || !_isNativeFunction(Class)) return Class;if (typeof Class !== "function") {throw new TypeError("Super expression must either be null or a function");}if (typeof _cache !== "undefined") {if (_cache.has(Class)) return _cache.get(Class);_cache.set(Class, Wrapper);}function Wrapper() {return _construct(Class, arguments, _getPrototypeOf(this).constructor);}Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });return _setPrototypeOf(Wrapper, Class);};return _wrapNativeSuper(Class);}function _construct(Parent, args, Class) {if (_isNativeReflectConstruct()) {_construct = Reflect.construct.bind();} else {_construct = function _construct(Parent, args, Class) {var a = [null];a.push.apply(a, args);var Constructor = Function.bind.apply(Parent, a);var instance = new Constructor();if (Class) _setPrototypeOf(instance, Class.prototype);return instance;};}return _construct.apply(null, arguments);}function _isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function _isNativeFunction(fn) {return Function.toString.call(fn).indexOf("[native code]") !== -1;}function _setPrototypeOf(o, p) {_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return _setPrototypeOf(o, p);}function _getPrototypeOf(o) {_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return _getPrototypeOf(o);}function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function _toArray(arr) {return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function _createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return _arrayLikeToArray(arr);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;} /**
-* @remix-run/router v1.2.0
+* @remix-run/router v1.2.1
 *
 * Copyright (c) Remix Software Inc.
 *
@@ -2042,17 +2042,14 @@ function router_createRouter(init) {
 
 
   function completeNavigation(location, newState) {
-    var _state$navigation$for;
+    var _location$state;
 
     // Deduce if we're in a loading/actionReload state:
     // - We have committed actionData in the store
-    // - The current navigation was a submission
+    // - The current navigation was a mutation submission
     // - We're past the submitting state and into the loading state
-    // - The location we've finished loading is different from the submission
-    //   location, indicating we redirected from the action (avoids false
-    //   positives for loading/submissionRedirect when actionData returned
-    //   on a prior submission)
-    var isActionReload = state.actionData != null && state.navigation.formMethod != null && state.navigation.state === "loading" && ((_state$navigation$for = state.navigation.formAction) == null ? void 0 : _state$navigation$for.split("?")[0]) === location.pathname;
+    // - The location being loaded is not the result of a redirect
+    var isActionReload = state.actionData != null && state.navigation.formMethod != null && isMutationMethod(state.navigation.formMethod) && state.navigation.state === "loading" && ((_location$state = location.state) == null ? void 0 : _location$state._isRedirect) !== true;
     var actionData;
 
     if (newState.actionData) {
@@ -2370,6 +2367,9 @@ function router_createRouter(init) {
 
 
 
+
+
+
   // Call all applicable loaders for the given matches, handling redirects,
   // errors, etc.
   function _handleAction() {_handleAction = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(request, location, submission, matches, opts) {var navigation, result, actionMatch, replace, boundaryMatch;return _regeneratorRuntime().wrap(function _callee4$(_context4) {while (1) switch (_context4.prev = _context4.next) {case 0:interruptActiveLoads(); // Put us in a submitting state
@@ -2377,27 +2377,35 @@ function router_createRouter(init) {
             actionMatch = getTargetMatch(matches, location);if (actionMatch.route.action) {_context4.next = 8;break;}result = { type: ResultType.error, error: getInternalRouterError(405, { method: request.method, pathname: location.pathname, routeId: actionMatch.route.id }) };_context4.next = 13;break;case 8:_context4.next = 10;return callLoaderOrAction("action", request, actionMatch, matches, router.basename);case 10:result = _context4.sent;if (!request.signal.aborted) {_context4.next = 13;break;}return _context4.abrupt("return", { shortCircuited: true });case 13:if (!isRedirectResult(result)) {_context4.next = 18;break;}if (opts && opts.replace != null) {replace = opts.replace;} else {// If the user didn't explicity indicate replace behavior, replace if
               // we redirected to the exact same location we're currently at to avoid
               // double back-buttons
-              replace = result.location === state.location.pathname + state.location.search;}_context4.next = 17;return startRedirectNavigation(state, result, replace);case 17:return _context4.abrupt("return", { shortCircuited: true });case 18:if (!isErrorResult(result)) {_context4.next = 22;break;} // Store off the pending error - we use it to determine which loaders
+              replace = result.location === state.location.pathname + state.location.search;}_context4.next = 17;return startRedirectNavigation(state, result, { submission: submission, replace: replace });case 17:return _context4.abrupt("return", { shortCircuited: true });case 18:if (!isErrorResult(result)) {_context4.next = 22;break;} // Store off the pending error - we use it to determine which loaders
             // to call and will commit it when we complete the navigation
             boundaryMatch = findNearestBoundary(matches, actionMatch.route.id); // By default, all submissions are REPLACE navigations, but if the
             // action threw an error that'll be rendered in an errorElement, we fall
             // back to PUSH so that the user can use the back button to get back to
             // the pre-submission form location to try again
             if ((opts && opts.replace) !== true) {pendingAction = Action.Push;}return _context4.abrupt("return", { // Send back an empty object we can use to clear out any prior actionData
-              pendingActionData: {}, pendingActionError: _defineProperty({}, boundaryMatch.route.id, result.error) });case 22:if (!isDeferredResult(result)) {_context4.next = 24;break;}throw new Error("defer() is not supported in actions");case 24:return _context4.abrupt("return", { pendingActionData: _defineProperty({}, actionMatch.route.id, result.data) });case 25:case "end":return _context4.stop();}}, _callee4);}));return _handleAction.apply(this, arguments);}function handleLoaders(_x13, _x14, _x15, _x16, _x17, _x18, _x19, _x20) {return _handleLoaders.apply(this, arguments);}function _handleLoaders() {_handleLoaders = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(request, location, matches, overrideNavigation, submission, replace, pendingActionData, pendingError) {var loadingNavigation, navigation, _getMatchesToLoad, _getMatchesToLoad2, matchesToLoad, revalidatingFetchers, actionData, _yield$callLoadersAnd, results, loaderResults, fetcherResults, redirect, _processLoaderData, loaderData, errors, didAbortFetchLoads;return _regeneratorRuntime().wrap(function _callee5$(_context5) {while (1) switch (_context5.prev = _context5.next) {case 0: // Figure out the right navigation we want to use for data loading
+              pendingActionData: {}, pendingActionError: _defineProperty({}, boundaryMatch.route.id, result.error) });case 22:if (!isDeferredResult(result)) {_context4.next = 24;break;}throw new Error("defer() is not supported in actions");case 24:return _context4.abrupt("return", { pendingActionData: _defineProperty({}, actionMatch.route.id, result.data) });case 25:case "end":return _context4.stop();}}, _callee4);}));return _handleAction.apply(this, arguments);}function handleLoaders(_x13, _x14, _x15, _x16, _x17, _x18, _x19, _x20) {return _handleLoaders.apply(this, arguments);}function _handleLoaders() {_handleLoaders = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(request, location, matches, overrideNavigation, submission, replace, pendingActionData, pendingError) {var loadingNavigation, navigation, activeSubmission, _getMatchesToLoad, _getMatchesToLoad2, matchesToLoad, revalidatingFetchers, actionData, _yield$callLoadersAnd, results, loaderResults, fetcherResults, redirect, _processLoaderData, loaderData, errors, didAbortFetchLoads;return _regeneratorRuntime().wrap(function _callee5$(_context5) {while (1) switch (_context5.prev = _context5.next) {case 0: // Figure out the right navigation we want to use for data loading
             loadingNavigation = overrideNavigation;if (!loadingNavigation) {navigation = _extends({ state: "loading", location: location, formMethod: undefined, formAction: undefined, formEncType: undefined, formData: undefined
               }, submission);
 
               loadingNavigation = navigation;
-            }_getMatchesToLoad =
+            } // If this was a redirect from an action we don't have a "submission" but
+            // we have it on the loading navigation so use that if available
 
-            getMatchesToLoad(state, matches, submission, location, isRevalidationRequired, cancelledDeferredRoutes, cancelledFetcherLoads, pendingActionData, pendingError, fetchLoadMatches), _getMatchesToLoad2 = _slicedToArray(_getMatchesToLoad, 2), matchesToLoad = _getMatchesToLoad2[0], revalidatingFetchers = _getMatchesToLoad2[1]; // Cancel pending deferreds for no-longer-matched routes or routes we're
+
+            activeSubmission = submission ? submission : loadingNavigation.formMethod && loadingNavigation.formAction && loadingNavigation.formData && loadingNavigation.formEncType ? {
+              formMethod: loadingNavigation.formMethod,
+              formAction: loadingNavigation.formAction,
+              formData: loadingNavigation.formData,
+              formEncType: loadingNavigation.formEncType
+            } : undefined;_getMatchesToLoad =
+            getMatchesToLoad(state, matches, activeSubmission, location, isRevalidationRequired, cancelledDeferredRoutes, cancelledFetcherLoads, pendingActionData, pendingError, fetchLoadMatches), _getMatchesToLoad2 = _slicedToArray(_getMatchesToLoad, 2), matchesToLoad = _getMatchesToLoad2[0], revalidatingFetchers = _getMatchesToLoad2[1]; // Cancel pending deferreds for no-longer-matched routes or routes we're
             // about to reload.  Note that if this is an action reload we would have
             // already cancelled all pending deferreds so this would be a no-op
 
             cancelActiveDeferreds(function (routeId) {return !(matches && matches.some(function (m) {return m.route.id === routeId;})) || matchesToLoad && matchesToLoad.some(function (m) {return m.route.id === routeId;});}); // Short circuit if we have no loaders to run
             if (!(
-            matchesToLoad.length === 0 && revalidatingFetchers.length === 0)) {_context5.next = 7;break;}
+            matchesToLoad.length === 0 && revalidatingFetchers.length === 0)) {_context5.next = 8;break;}
             completeNavigation(location, _extends({
               matches: matches,
               loaderData: {},
@@ -2408,7 +2416,7 @@ function router_createRouter(init) {
             } : {}));return _context5.abrupt("return",
             {
               shortCircuited: true
-            });case 7:
+            });case 8:
             // If this is an uninterrupted revalidation, we remain in our current idle
             // state.  If not, we need to switch to our loading state and load data,
             // preserving any new action data or existing action data (in the case of
@@ -2446,17 +2454,17 @@ function router_createRouter(init) {
             revalidatingFetchers.forEach(function (_ref3) {
               var _ref15 = _slicedToArray(_ref3, 1),key = _ref15[0];
               return fetchControllers.set(key, pendingNavigationController);
-            });_context5.next = 12;return (
+            });_context5.next = 13;return (
 
 
 
 
-              callLoadersAndMaybeResolveData(state.matches, matches, matchesToLoad, revalidatingFetchers, request));case 12:_yield$callLoadersAnd = _context5.sent;results = _yield$callLoadersAnd.results;loaderResults = _yield$callLoadersAnd.loaderResults;fetcherResults = _yield$callLoadersAnd.fetcherResults;if (!
+              callLoadersAndMaybeResolveData(state.matches, matches, matchesToLoad, revalidatingFetchers, request));case 13:_yield$callLoadersAnd = _context5.sent;results = _yield$callLoadersAnd.results;loaderResults = _yield$callLoadersAnd.loaderResults;fetcherResults = _yield$callLoadersAnd.fetcherResults;if (!
 
-            request.signal.aborted) {_context5.next = 18;break;}return _context5.abrupt("return",
+            request.signal.aborted) {_context5.next = 19;break;}return _context5.abrupt("return",
             {
               shortCircuited: true
-            });case 18:
+            });case 19:
             // Clean up _after_ loaders have completed.  Don't clean up if we short
             // circuited because fetchControllers would have been aborted and
             // reassigned to new controllers for the next navigation
@@ -2469,11 +2477,13 @@ function router_createRouter(init) {
 
             redirect = findRedirect(results);if (!
 
-            redirect) {_context5.next = 24;break;}_context5.next = 23;return (
-              startRedirectNavigation(state, redirect, replace));case 23:return _context5.abrupt("return",
+            redirect) {_context5.next = 25;break;}_context5.next = 24;return (
+              startRedirectNavigation(state, redirect, {
+                replace: replace
+              }));case 24:return _context5.abrupt("return",
             {
               shortCircuited: true
-            });case 24:
+            });case 25:
             // Process and commit output from loaders
             _processLoaderData =
 
@@ -2499,7 +2509,7 @@ function router_createRouter(init) {
               errors: errors
             }, didAbortFetchLoads || revalidatingFetchers.length > 0 ? {
               fetchers: new Map(state.fetchers)
-            } : {}));case 29:case "end":return _context5.stop();}}, _callee5);}));return _handleLoaders.apply(this, arguments);}
+            } : {}));case 30:case "end":return _context5.stop();}}, _callee5);}));return _handleLoaders.apply(this, arguments);}
 
 
   function getFetcher(key) {
@@ -2720,12 +2730,14 @@ function router_createRouter(init) {
 
 
 
+
+
   // Call the matched loader for fetcher.load(), handling redirects, errors, etc.
   function _handleFetcherAction() {_handleFetcherAction = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(key, routeId, path, match, requestMatches, submission) {var _error2, existingFetcher, fetcher, abortController, fetchRequest, actionResult, loadingFetcher, nextLocation, revalidationRequest, matches, loadId, loadFetcher, _getMatchesToLoad3, _getMatchesToLoad4, matchesToLoad, revalidatingFetchers, _yield$callLoadersAnd2, results, loaderResults, fetcherResults, redirect, _processLoaderData2, loaderData, errors, doneFetcher, didAbortFetchLoads;return _regeneratorRuntime().wrap(function _callee6$(_context6) {while (1) switch (_context6.prev = _context6.next) {case 0:interruptActiveLoads();fetchLoadMatches["delete"](key);if (match.route.action) {_context6.next = 6;break;}_error2 = getInternalRouterError(405, { method: submission.formMethod, pathname: path, routeId: routeId });setFetcherError(key, routeId, _error2);return _context6.abrupt("return");case 6: // Put this fetcher into it's submitting state
             existingFetcher = state.fetchers.get(key);fetcher = _extends({ state: "submitting" }, submission, { data: existingFetcher && existingFetcher.data, " _hasFetcherDoneAnything ": true });state.fetchers.set(key, fetcher);updateState({ fetchers: new Map(state.fetchers) }); // Call the action for the fetcher
             abortController = new AbortController();fetchRequest = createClientSideRequest(path, abortController.signal, submission);fetchControllers.set(key, abortController);_context6.next = 15;return callLoaderOrAction("action", fetchRequest, match, requestMatches, router.basename);case 15:actionResult = _context6.sent;if (!fetchRequest.signal.aborted) {_context6.next = 19;break;} // We can delete this so long as we weren't aborted by ou our own fetcher
             // re-submit which would have put _new_ controller is in fetchControllers
-            if (fetchControllers.get(key) === abortController) {fetchControllers["delete"](key);}return _context6.abrupt("return");case 19:if (!isRedirectResult(actionResult)) {_context6.next = 26;break;}fetchControllers["delete"](key);fetchRedirectIds.add(key);loadingFetcher = _extends({ state: "loading" }, submission, { data: undefined, " _hasFetcherDoneAnything ": true });state.fetchers.set(key, loadingFetcher);updateState({ fetchers: new Map(state.fetchers) });return _context6.abrupt("return", startRedirectNavigation(state, actionResult, false, true));case 26:if (!isErrorResult(actionResult)) {_context6.next = 29;break;}setFetcherError(key, routeId, actionResult.error);return _context6.abrupt("return");case 29:if (isDeferredResult(actionResult)) {router_invariant(false, "defer() is not supported in actions");} // Start the data load for current matches, or the next location if we're
+            if (fetchControllers.get(key) === abortController) {fetchControllers["delete"](key);}return _context6.abrupt("return");case 19:if (!isRedirectResult(actionResult)) {_context6.next = 26;break;}fetchControllers["delete"](key);fetchRedirectIds.add(key);loadingFetcher = _extends({ state: "loading" }, submission, { data: undefined, " _hasFetcherDoneAnything ": true });state.fetchers.set(key, loadingFetcher);updateState({ fetchers: new Map(state.fetchers) });return _context6.abrupt("return", startRedirectNavigation(state, actionResult, { isFetchActionRedirect: true }));case 26:if (!isErrorResult(actionResult)) {_context6.next = 29;break;}setFetcherError(key, routeId, actionResult.error);return _context6.abrupt("return");case 29:if (isDeferredResult(actionResult)) {router_invariant(false, "defer() is not supported in actions");} // Start the data load for current matches, or the next location if we're
             // in the middle of a navigation
             nextLocation = state.navigation.location || state.location;revalidationRequest = createClientSideRequest(nextLocation, abortController.signal);matches = state.navigation.state !== "idle" ? matchRoutes(dataRoutes, state.navigation.location, init.basename) : state.matches;router_invariant(matches, "Didn't find any matches after fetcher action");loadId = ++incrementingLoadId;fetchReloadIds.set(key, loadId);loadFetcher = _extends({ state: "loading", data: actionResult.data }, submission, { " _hasFetcherDoneAnything ": true });state.fetchers.set(key, loadFetcher);_getMatchesToLoad3 = getMatchesToLoad(state, matches, submission, nextLocation, isRevalidationRequired, cancelledDeferredRoutes, cancelledFetcherLoads, _defineProperty({}, match.route.id, actionResult.data), undefined, // No need to send through errors since we short circuit above
             fetchLoadMatches), _getMatchesToLoad4 = _slicedToArray(_getMatchesToLoad3, 2), matchesToLoad = _getMatchesToLoad4[0], revalidatingFetchers = _getMatchesToLoad4[1]; // Put all revalidating fetchers into the loading state, except for the
@@ -2828,7 +2840,13 @@ function router_createRouter(init) {
             // do we need to behave any differently with our non-redirect errors?
             // What if it was a non-redirect Response?
             updateState({ fetchers: new Map(state.fetchers), errors: _defineProperty({}, boundaryMatch.route.id, result.error) });return _context7.abrupt("return");case 29:router_invariant(!isDeferredResult(result), "Unhandled fetcher deferred data"); // Put the fetcher back into an idle state
-            doneFetcher = { state: "idle", data: result.data, formMethod: undefined, formAction: undefined, formEncType: undefined, formData: undefined, " _hasFetcherDoneAnything ": true };state.fetchers.set(key, doneFetcher);updateState({ fetchers: new Map(state.fetchers) });case 33:case "end":return _context7.stop();}}, _callee7);}));return _handleFetcherLoader.apply(this, arguments);}function startRedirectNavigation(_x33, _x34, _x35, _x36) {return _startRedirectNavigation.apply(this, arguments);}function _startRedirectNavigation() {_startRedirectNavigation = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(state, redirect, replace, isFetchActionRedirect) {var _window, redirectLocation, newOrigin, redirectHistoryAction, _state$navigation, formMethod, formAction, formEncType, formData;return _regeneratorRuntime().wrap(function _callee8$(_context8) {while (1) switch (_context8.prev = _context8.next) {case 0:if (redirect.revalidate) {isRevalidationRequired = true;}
+            doneFetcher = { state: "idle", data: result.data, formMethod: undefined, formAction: undefined, formEncType: undefined, formData: undefined, " _hasFetcherDoneAnything ": true };state.fetchers.set(key, doneFetcher);updateState({ fetchers: new Map(state.fetchers) });case 33:case "end":return _context7.stop();}}, _callee7);}));return _handleFetcherLoader.apply(this, arguments);}function startRedirectNavigation(_x33, _x34, _x35) {return _startRedirectNavigation.apply(this, arguments);}function _startRedirectNavigation() {_startRedirectNavigation = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(state, redirect, _temp) {var _window, _ref20, submission, replace, isFetchActionRedirect, redirectLocation, newOrigin, redirectHistoryAction, _state$navigation, formMethod, formAction, formEncType, formData;return _regeneratorRuntime().wrap(function _callee8$(_context8) {while (1) switch (_context8.prev = _context8.next) {case 0:_ref20 =
+
+            _temp === void 0 ? {} : _temp, submission = _ref20.submission, replace = _ref20.replace, isFetchActionRedirect = _ref20.isFetchActionRedirect;
+
+            if (redirect.revalidate) {
+              isRevalidationRequired = true;
+            }
 
             redirectLocation = createLocation(state.location, redirect.location, // TODO: This can be removed once we get rid of useTransition in Remix v2
             _extends({
@@ -2838,15 +2856,15 @@ function router_createRouter(init) {
             } : {}));
             router_invariant(redirectLocation, "Expected a location on the redirect navigation"); // Check if this an external redirect that goes to a new origin
             if (!(
-            typeof ((_window = window) == null ? void 0 : _window.location) !== "undefined")) {_context8.next = 8;break;}
+            typeof ((_window = window) == null ? void 0 : _window.location) !== "undefined")) {_context8.next = 9;break;}
             newOrigin = createClientSideURL(redirect.location).origin;if (!(
 
-            window.location.origin !== newOrigin)) {_context8.next = 8;break;}
+            window.location.origin !== newOrigin)) {_context8.next = 9;break;}
             if (replace) {
               window.location.replace(redirect.location);
             } else {
               window.location.assign(redirect.location);
-            }return _context8.abrupt("return");case 8:
+            }return _context8.abrupt("return");case 9:
 
 
 
@@ -2855,25 +2873,34 @@ function router_createRouter(init) {
 
 
             pendingNavigationController = null;
-            redirectHistoryAction = replace === true ? Action.Replace : Action.Push;_state$navigation =
+            redirectHistoryAction = replace === true ? Action.Replace : Action.Push; // Use the incoming submission if provided, fallback on the active one in
+            // state.navigation
+            _state$navigation =
 
 
 
 
 
-            state.navigation, formMethod = _state$navigation.formMethod, formAction = _state$navigation.formAction, formEncType = _state$navigation.formEncType, formData = _state$navigation.formData; // If this was a 307/308 submission we want to preserve the HTTP method and
+            state.navigation, formMethod = _state$navigation.formMethod, formAction = _state$navigation.formAction, formEncType = _state$navigation.formEncType, formData = _state$navigation.formData;
+
+            if (!submission && formMethod && formAction && formData && formEncType) {
+              submission = {
+                formMethod: formMethod,
+                formAction: formAction,
+                formEncType: formEncType,
+                formData: formData
+              };
+            } // If this was a 307/308 submission we want to preserve the HTTP method and
             // re-submit the GET/POST/PUT/PATCH/DELETE as a submission navigation to the
             // redirected location
             if (!(
-            redirectPreserveMethodStatusCodes.has(redirect.status) && formMethod && isMutationMethod(formMethod) && formEncType && formData)) {_context8.next = 16;break;}_context8.next = 14;return (
+
+            redirectPreserveMethodStatusCodes.has(redirect.status) && submission && isMutationMethod(submission.formMethod))) {_context8.next = 18;break;}_context8.next = 16;return (
               startNavigation(redirectHistoryAction, redirectLocation, {
-                submission: {
-                  formMethod: formMethod,
-                  formAction: redirect.location,
-                  formEncType: formEncType,
-                  formData: formData
-                }
-              }));case 14:_context8.next = 18;break;case 16:_context8.next = 18;return (
+                submission: _extends({}, submission, {
+                  formAction: redirect.location
+                })
+              }));case 16:_context8.next = 20;break;case 18:_context8.next = 20;return (
 
 
 
@@ -2881,27 +2908,27 @@ function router_createRouter(init) {
                 overrideNavigation: {
                   state: "loading",
                   location: redirectLocation,
-                  formMethod: formMethod || undefined,
-                  formAction: formAction || undefined,
-                  formEncType: formEncType || undefined,
-                  formData: formData || undefined
+                  formMethod: submission ? submission.formMethod : undefined,
+                  formAction: submission ? submission.formAction : undefined,
+                  formEncType: submission ? submission.formEncType : undefined,
+                  formData: submission ? submission.formData : undefined
                 }
-              }));case 18:case "end":return _context8.stop();}}, _callee8);}));return _startRedirectNavigation.apply(this, arguments);}function
+              }));case 20:case "end":return _context8.stop();}}, _callee8);}));return _startRedirectNavigation.apply(this, arguments);}function
 
 
 
-  callLoadersAndMaybeResolveData(_x37, _x38, _x39, _x40, _x41) {return _callLoadersAndMaybeResolveData.apply(this, arguments);}function _callLoadersAndMaybeResolveData() {_callLoadersAndMaybeResolveData = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(currentMatches, matches, matchesToLoad, fetchersToLoad, request) {var results, loaderResults, fetcherResults;return _regeneratorRuntime().wrap(function _callee9$(_context9) {while (1) switch (_context9.prev = _context9.next) {case 0:_context9.next = 2;return (
+  callLoadersAndMaybeResolveData(_x36, _x37, _x38, _x39, _x40) {return _callLoadersAndMaybeResolveData.apply(this, arguments);}function _callLoadersAndMaybeResolveData() {_callLoadersAndMaybeResolveData = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(currentMatches, matches, matchesToLoad, fetchersToLoad, request) {var results, loaderResults, fetcherResults;return _regeneratorRuntime().wrap(function _callee9$(_context9) {while (1) switch (_context9.prev = _context9.next) {case 0:_context9.next = 2;return (
 
 
 
               Promise.all([].concat(_toConsumableArray(matchesToLoad.map(function (match) {return callLoaderOrAction("loader", request, match, matches, router.basename);})), _toConsumableArray(fetchersToLoad.map(function (_ref8) {
-                var _ref20 = _slicedToArray(_ref8, 4),href = _ref20[1],match = _ref20[2],fetchMatches = _ref20[3];
+                var _ref21 = _slicedToArray(_ref8, 4),href = _ref21[1],match = _ref21[2],fetchMatches = _ref21[3];
                 return callLoaderOrAction("loader", createClientSideRequest(href, request.signal), match, fetchMatches, router.basename);
               })))));case 2:results = _context9.sent;
             loaderResults = results.slice(0, matchesToLoad.length);
             fetcherResults = results.slice(matchesToLoad.length);_context9.next = 7;return (
               Promise.all([resolveDeferredResults(currentMatches, matchesToLoad, loaderResults, request.signal, false, state.loaderData), resolveDeferredResults(currentMatches, fetchersToLoad.map(function (_ref9) {
-                var _ref21 = _slicedToArray(_ref9, 3),match = _ref21[2];
+                var _ref22 = _slicedToArray(_ref9, 3),match = _ref22[2];
                 return match;
               }), fetcherResults, request.signal, true)]));case 7:return _context9.abrupt("return",
             {
@@ -3129,7 +3156,7 @@ function createStaticHandler(routes, opts) {
    * return it directly.
    */function
 
-  query(_x42, _x43) {return _query.apply(this, arguments);}
+  query(_x41, _x42) {return _query.apply(this, arguments);}
 
 
 
@@ -3215,14 +3242,14 @@ function createStaticHandler(routes, opts) {
    * serialize the error as they see fit while including the proper response
    * code.  Examples here are 404 and 405 errors that occur prior to reaching
    * any user-defined loaders.
-   */function _query() {_query = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(request, _temp) {var _ref22, requestContext, url, method, location, matches, error, _getShortCircuitMatch3, methodNotAllowedMatches, route, _error3, _getShortCircuitMatch4, notFoundMatches, _route2, result;return _regeneratorRuntime().wrap(function _callee10$(_context10) {while (1) switch (_context10.prev = _context10.next) {case 0:_ref22 = _temp === void 0 ? {} : _temp, requestContext = _ref22.requestContext;url = new URL(request.url);method = request.method.toLowerCase();location = createLocation("", router_createPath(url), null, "default");matches = matchRoutes(dataRoutes, location, basename); // SSR supports HEAD requests while SPA doesn't
+   */function _query() {_query = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(request, _temp2) {var _ref23, requestContext, url, method, location, matches, error, _getShortCircuitMatch3, methodNotAllowedMatches, route, _error3, _getShortCircuitMatch4, notFoundMatches, _route2, result;return _regeneratorRuntime().wrap(function _callee10$(_context10) {while (1) switch (_context10.prev = _context10.next) {case 0:_ref23 = _temp2 === void 0 ? {} : _temp2, requestContext = _ref23.requestContext;url = new URL(request.url);method = request.method.toLowerCase();location = createLocation("", router_createPath(url), null, "default");matches = matchRoutes(dataRoutes, location, basename); // SSR supports HEAD requests while SPA doesn't
             if (!(!isValidMethod(method) && method !== "head")) {_context10.next = 11;break;}error = getInternalRouterError(405, { method: method });_getShortCircuitMatch3 = getShortCircuitMatches(dataRoutes), methodNotAllowedMatches = _getShortCircuitMatch3.matches, route = _getShortCircuitMatch3.route;return _context10.abrupt("return", { basename: basename, location: location, matches: methodNotAllowedMatches, loaderData: {}, actionData: null, errors: _defineProperty({}, route.id, error), statusCode: error.status, loaderHeaders: {}, actionHeaders: {} });case 11:if (matches) {_context10.next = 15;break;}_error3 = getInternalRouterError(404, { pathname: location.pathname });_getShortCircuitMatch4 = getShortCircuitMatches(dataRoutes), notFoundMatches = _getShortCircuitMatch4.matches, _route2 = _getShortCircuitMatch4.route;return _context10.abrupt("return", { basename: basename, location: location, matches: notFoundMatches, loaderData: {}, actionData: null, errors: _defineProperty({}, _route2.id, _error3), statusCode: _error3.status, loaderHeaders: {}, actionHeaders: {} });case 15:_context10.next = 17;return queryImpl(request, location, matches, requestContext);case 17:result = _context10.sent;if (!isResponse(result)) {_context10.next = 20;break;}return _context10.abrupt("return", result);case 20:return _context10.abrupt("return", _extends({ location: location, basename: basename }, result));case 21:case "end":return _context10.stop();}}, _callee10);}));return _query.apply(this, arguments);}function
 
-  queryRoute(_x44, _x45) {return _queryRoute.apply(this, arguments);}function _queryRoute() {_queryRoute = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(request, _temp2) {var _ref23, routeId, requestContext, url, method, location, matches, match, result, error, routeData;return _regeneratorRuntime().wrap(function _callee11$(_context11) {while (1) switch (_context11.prev = _context11.next) {case 0:_ref23 =
+  queryRoute(_x43, _x44) {return _queryRoute.apply(this, arguments);}function _queryRoute() {_queryRoute = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(request, _temp3) {var _ref24, routeId, requestContext, url, method, location, matches, match, result, error, routeData;return _regeneratorRuntime().wrap(function _callee11$(_context11) {while (1) switch (_context11.prev = _context11.next) {case 0:_ref24 =
 
 
 
-            _temp2 === void 0 ? {} : _temp2, routeId = _ref23.routeId, requestContext = _ref23.requestContext;
+            _temp3 === void 0 ? {} : _temp3, routeId = _ref24.routeId, requestContext = _ref24.requestContext;
             url = new URL(request.url);
             method = request.method.toLowerCase();
             location = createLocation("", router_createPath(url), null, "default");
@@ -3273,7 +3300,7 @@ function createStaticHandler(routes, opts) {
             Object.values(routeData || {})[0]);case 28:case "end":return _context11.stop();}}, _callee11);}));return _queryRoute.apply(this, arguments);}function
 
 
-  queryImpl(_x46, _x47, _x48, _x49, _x50) {return _queryImpl.apply(this, arguments);}function _queryImpl() {_queryImpl = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(request, location, matches, requestContext, routeMatch) {var _result, result;return _regeneratorRuntime().wrap(function _callee12$(_context12) {while (1) switch (_context12.prev = _context12.next) {case 0:
+  queryImpl(_x45, _x46, _x47, _x48, _x49) {return _queryImpl.apply(this, arguments);}function _queryImpl() {_queryImpl = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(request, location, matches, requestContext, routeMatch) {var _result, result;return _regeneratorRuntime().wrap(function _callee12$(_context12) {while (1) switch (_context12.prev = _context12.next) {case 0:
             router_invariant(request.signal, "query()/queryRoute() requests must contain an AbortController signal");_context12.prev = 1;if (!
 
 
@@ -3309,7 +3336,7 @@ function createStaticHandler(routes, opts) {
 
 
 
-  submit(_x51, _x52, _x53, _x54, _x55) {return _submit.apply(this, arguments);}function _submit() {_submit = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(request, matches, actionMatch, requestContext, isRouteRequest) {var result, error, method, boundaryMatch, _context13, loaderRequest, context;return _regeneratorRuntime().wrap(function _callee13$(_context14) {while (1) switch (_context14.prev = _context14.next) {case 0:if (
+  submit(_x50, _x51, _x52, _x53, _x54) {return _submit.apply(this, arguments);}function _submit() {_submit = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(request, matches, actionMatch, requestContext, isRouteRequest) {var result, error, method, boundaryMatch, _context13, loaderRequest, context;return _regeneratorRuntime().wrap(function _callee13$(_context14) {while (1) switch (_context14.prev = _context14.next) {case 0:if (
 
 
             actionMatch.route.action) {_context14.next = 7;break;}
@@ -3411,7 +3438,7 @@ function createStaticHandler(routes, opts) {
             }));case 32:case "end":return _context14.stop();}}, _callee13);}));return _submit.apply(this, arguments);}function
 
 
-  loadRouteData(_x56, _x57, _x58, _x59, _x60) {return _loadRouteData.apply(this, arguments);}function _loadRouteData() {_loadRouteData = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(request, matches, requestContext, routeMatch, pendingActionError) {var isRouteRequest, requestMatches, matchesToLoad, results, method, executedLoaders, context;return _regeneratorRuntime().wrap(function _callee14$(_context15) {while (1) switch (_context15.prev = _context15.next) {case 0:
+  loadRouteData(_x55, _x56, _x57, _x58, _x59) {return _loadRouteData.apply(this, arguments);}function _loadRouteData() {_loadRouteData = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(request, matches, requestContext, routeMatch, pendingActionError) {var isRouteRequest, requestMatches, matchesToLoad, results, method, executedLoaders, context;return _regeneratorRuntime().wrap(function _callee14$(_context15) {while (1) switch (_context15.prev = _context15.next) {case 0:
             isRouteRequest = routeMatch != null; // Short circuit if we have no loaders to run (queryRoute())
             if (!(
             isRouteRequest && !(routeMatch != null && routeMatch.route.loader))) {_context15.next = 3;break;}throw (
@@ -3592,7 +3619,7 @@ function getMatchesToLoad(state, matches, submission, location, isRevalidationRe
 
   var revalidatingFetchers = [];
   fetchLoadMatches && fetchLoadMatches.forEach(function (_ref10, key) {
-    var _ref26 = _slicedToArray(_ref10, 3),href = _ref26[0],match = _ref26[1],fetchMatches = _ref26[2];
+    var _ref27 = _slicedToArray(_ref10, 3),href = _ref27[0],match = _ref27[1],fetchMatches = _ref27[2];
 
     // This fetcher was cancelled from a prior action submission - force reload
     if (cancelledFetcherLoads.includes(key)) {
@@ -3663,7 +3690,7 @@ function shouldRevalidateLoader(currentLocation, currentMatch, submission, locat
   return defaultShouldRevalidate;
 }function
 
-callLoaderOrAction(_x61, _x62, _x63, _x64, _x65, _x66, _x67, _x68) {return _callLoaderOrAction.apply(this, arguments);}
+callLoaderOrAction(_x60, _x61, _x62, _x63, _x64, _x65, _x66, _x67) {return _callLoaderOrAction.apply(this, arguments);}
 
 
 
@@ -4003,12 +4030,12 @@ function getShortCircuitMatches(routes) {
   };
 }
 
-function getInternalRouterError(status, _temp3) {
-  var _ref27 =
+function getInternalRouterError(status, _temp4) {
+  var _ref28 =
 
 
 
-    _temp3 === void 0 ? {} : _temp3,pathname = _ref27.pathname,routeId = _ref27.routeId,method = _ref27.method;
+    _temp4 === void 0 ? {} : _temp4,pathname = _ref28.pathname,routeId = _ref28.routeId,method = _ref28.method;
   var statusText = "Unknown Server Error";
   var errorMessage = "Unknown @remix-run/router error";
 
@@ -4099,7 +4126,7 @@ function isMutationMethod(method) {
   return validMutationMethods.has(method);
 }function
 
-resolveDeferredResults(_x69, _x70, _x71, _x72, _x73, _x74) {return _resolveDeferredResults.apply(this, arguments);}function _resolveDeferredResults() {_resolveDeferredResults = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(currentMatches, matchesToLoad, results, signal, isFetcher, currentLoaderData) {var _loop, index;return _regeneratorRuntime().wrap(function _callee16$(_context18) {while (1) switch (_context18.prev = _context18.next) {case 0:_loop = /*#__PURE__*/_regeneratorRuntime().mark(function _loop(index) {var result, match, currentMatch, isRevalidatingLoader;return _regeneratorRuntime().wrap(function _loop$(_context17) {while (1) switch (_context17.prev = _context17.next) {case 0:
+resolveDeferredResults(_x68, _x69, _x70, _x71, _x72, _x73) {return _resolveDeferredResults.apply(this, arguments);}function _resolveDeferredResults() {_resolveDeferredResults = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(currentMatches, matchesToLoad, results, signal, isFetcher, currentLoaderData) {var _loop, index;return _regeneratorRuntime().wrap(function _callee16$(_context18) {while (1) switch (_context18.prev = _context18.next) {case 0:_loop = /*#__PURE__*/_regeneratorRuntime().mark(function _loop(index) {var result, match, currentMatch, isRevalidatingLoader;return _regeneratorRuntime().wrap(function _loop$(_context17) {while (1) switch (_context17.prev = _context17.next) {case 0:
 
                   result = results[index];
                   match = matchesToLoad[index];
@@ -4119,7 +4146,7 @@ resolveDeferredResults(_x69, _x70, _x71, _x72, _x73, _x74) {return _resolveDefer
 
 
 
-resolveDeferredData(_x75, _x76, _x77) {return _resolveDeferredData.apply(this, arguments);}function _resolveDeferredData() {_resolveDeferredData = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17(result, signal, unwrap) {var aborted;return _regeneratorRuntime().wrap(function _callee17$(_context19) {while (1) switch (_context19.prev = _context19.next) {case 0:
+resolveDeferredData(_x74, _x75, _x76) {return _resolveDeferredData.apply(this, arguments);}function _resolveDeferredData() {_resolveDeferredData = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17(result, signal, unwrap) {var aborted;return _regeneratorRuntime().wrap(function _callee17$(_context19) {while (1) switch (_context19.prev = _context19.next) {case 0:
           if (unwrap === void 0) {
             unwrap = false;
           }_context19.next = 3;return (
@@ -4189,7 +4216,7 @@ function getTargetMatch(matches, location) {
 
 ;// CONCATENATED MODULE: ./node_modules/react-router/dist/index.js
 function dist_typeof(obj) {"@babel/helpers - typeof";return dist_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, dist_typeof(obj);}function dist_toConsumableArray(arr) {return dist_arrayWithoutHoles(arr) || dist_iterableToArray(arr) || dist_unsupportedIterableToArray(arr) || dist_nonIterableSpread();}function dist_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function dist_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function dist_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return dist_arrayLikeToArray(arr);}function dist_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function dist_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, dist_toPropertyKey(descriptor.key), descriptor);}}function dist_createClass(Constructor, protoProps, staticProps) {if (protoProps) dist_defineProperties(Constructor.prototype, protoProps);if (staticProps) dist_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function dist_toPropertyKey(arg) {var key = dist_toPrimitive(arg, "string");return dist_typeof(key) === "symbol" ? key : String(key);}function dist_toPrimitive(input, hint) {if (dist_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (dist_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}function dist_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) dist_setPrototypeOf(subClass, superClass);}function dist_setPrototypeOf(o, p) {dist_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return dist_setPrototypeOf(o, p);}function dist_createSuper(Derived) {var hasNativeReflectConstruct = dist_isNativeReflectConstruct();return function _createSuperInternal() {var Super = dist_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = dist_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return dist_possibleConstructorReturn(this, result);};}function dist_possibleConstructorReturn(self, call) {if (call && (dist_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return dist_assertThisInitialized(self);}function dist_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function dist_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function dist_getPrototypeOf(o) {dist_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return dist_getPrototypeOf(o);}function dist_slicedToArray(arr, i) {return dist_arrayWithHoles(arr) || dist_iterableToArrayLimit(arr, i) || dist_unsupportedIterableToArray(arr, i) || dist_nonIterableRest();}function dist_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function dist_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return dist_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return dist_arrayLikeToArray(o, minLen);}function dist_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function dist_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function dist_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;} /**
-* React Router v6.6.0
+* React Router v6.6.1
 *
 * Copyright (c) Remix Software Inc.
 *
@@ -5635,7 +5662,7 @@ function Values(_ref) {var settings = _ref.settings;
 /* harmony default export */ const routes_Values = (Values);
 ;// CONCATENATED MODULE: ./node_modules/react-router-dom/dist/index.js
 function react_router_dom_dist_toConsumableArray(arr) {return react_router_dom_dist_arrayWithoutHoles(arr) || react_router_dom_dist_iterableToArray(arr) || react_router_dom_dist_unsupportedIterableToArray(arr) || react_router_dom_dist_nonIterableSpread();}function react_router_dom_dist_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function react_router_dom_dist_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function react_router_dom_dist_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return react_router_dom_dist_arrayLikeToArray(arr);}function react_router_dom_dist_slicedToArray(arr, i) {return react_router_dom_dist_arrayWithHoles(arr) || react_router_dom_dist_iterableToArrayLimit(arr, i) || react_router_dom_dist_unsupportedIterableToArray(arr, i) || react_router_dom_dist_nonIterableRest();}function react_router_dom_dist_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function react_router_dom_dist_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function react_router_dom_dist_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function dist_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = react_router_dom_dist_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function react_router_dom_dist_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return react_router_dom_dist_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return react_router_dom_dist_arrayLikeToArray(o, minLen);}function react_router_dom_dist_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;} /**
-* React Router DOM v6.6.0
+* React Router DOM v6.6.1
 *
 * Copyright (c) Remix Software Inc.
 *
