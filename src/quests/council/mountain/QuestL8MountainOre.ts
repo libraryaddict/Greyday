@@ -120,7 +120,10 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
       getWorkshed() == this.trainset ||
       (getWorkshed() == this.cmc &&
         itemAmount(this.trainset) > 0 &&
-        GreySettings.greySwitchWorkshed == "Model train set")
+        GreySettings.greySwitchWorkshed == "Model train set") ||
+      (getWorkshed() == Item.none &&
+        itemAmount(this.trainset) > 0 &&
+        GreySettings.greyDefaultWorkshed == "Model train set")
     );
   }
 

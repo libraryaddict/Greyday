@@ -423,13 +423,13 @@ class GreyYouMain {
         if (!getIgnoreZoneWarnings()) {
           props.addCleanup(() =>
             visitUrl(
-              "http://127.0.0.1:60080/account.php?am=1&pwd&action=flag_ignorezonewarnings&value=0&ajax=1",
+              "account.php?am=1&pwd&action=flag_ignorezonewarnings&value=0&ajax=1",
               true
             )
           );
 
           visitUrl(
-            "http://127.0.0.1:60080/account.php?am=1&pwd&action=flag_ignorezonewarnings&value=1&ajax=1",
+            "account.php?am=1&pwd&action=flag_ignorezonewarnings&value=1&ajax=1",
             true
           );
         }
