@@ -41,6 +41,7 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
   autosells: Item[] = [this.ring, this.gold, this.mickyCard];
   letter = Item.get("Letter from King Ralph XI");
   sack = Item.get("pork elf goodies sack");
+  trainset: Item = Item.get("model train set");
 
   level(): number {
     return 1;
@@ -78,12 +79,31 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
   createPaths(assumeUnstarted: boolean): void {
     this.paths = [];
 
-    const hasEnoughMeat =
-      getWorkshed() == Item.get("model train set") ||
-      this.autosells.find((i) => itemAmount(i) > 0) ||
-      myMeat() >= 5000 ||
-      (toBoolean(getProperty("hasMaydayContract")) &&
-        availableAmount(this.boombox) > 0);
+    let hasEnoughMeat: boolean = false;
+
+    if (
+      getWorkshed() == this.trainset ||
+      (getWorkshed() == Item.none &&
+        itemAmount(this.trainset) > 0 &&
+        GreySettings.greySwitchWorkshed == "Model train set")
+    ) {
+      hasEnoughMeat = true;
+    }
+
+    if (this.autosells.find((i) => itemAmount(i) > 0)) {
+      hasEnoughMeat = true;
+    }
+
+    if (myMeat() >= 5000) {
+      hasEnoughMeat = true;
+    }
+
+    if (
+      toBoolean(getProperty("hasMaydayContract")) &&
+      availableAmount(this.boombox) > 0
+    ) {
+      hasEnoughMeat = true;
+    }
 
     if (hasEnoughMeat) {
       this.paths.push(new PossiblePath(0));

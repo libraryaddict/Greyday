@@ -2,6 +2,9 @@ import {
   Location,
   visitUrl,
   print,
+  Item,
+  closetAmount,
+  takeCloset,
 } from "kolmafia";
 import { printEndOfRun } from "../../../../GreyYouMain";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
@@ -15,6 +18,8 @@ import {
 import { QuestType } from "../../../QuestTypes";
 
 export class QuestTowerKillWitch implements QuestInfo {
+  seasoning: Item = Item.get("Special Seasoning");
+
   getId(): QuestType {
     return "Council / Tower / NaughtyBoss";
   }
@@ -64,6 +69,11 @@ export class QuestTowerKillWitch implements QuestInfo {
 
         greyAdv("choice.php"); // Final fight
         visitUrl("place.php?whichplace=nstower");
+
+        if (closetAmount(this.seasoning) > 0) {
+          takeCloset(this.seasoning, closetAmount(this.seasoning));
+        }
+
         print("Should be all done", "blue");
 
         printEndOfRun();

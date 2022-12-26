@@ -145,7 +145,6 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
           }
 
           GreyPulls.tryPull(item, 25000);
-          path.addUsed(ResourceCategory.PULL);
         }
 
         const failedPulls = path.pulls.filter((i) => itemAmount(i) == 0);

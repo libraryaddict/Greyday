@@ -134,11 +134,20 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
     }
 
     this.paths = [];
+
     this.needRecalculate = this.getStatus() < MountainStatus.TRAPPER_DEMANDS;
     this.faxAndGooseDupe = new PossiblePath(1)
       .add(ResourceCategory.YELLOW_RAY)
       .addFax(this.mountainMan);
     this.failsafeBackup = new PossiblePath(1).add(ResourceCategory.COPIER);
+
+    if (this.doDuping()) {
+      this.paths.push(this.faxAndGooseDupe);
+    }
+
+    if (this.canBackup()) {
+      this.paths.push(this.failsafeBackup);
+    }
 
     const resourceTypes: ResourceCategory[] = [];
     const needOres = assumeUnstarted ? 3 : this.getOreRemaining();
@@ -273,21 +282,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
   }
 
   getPossiblePaths(): PossiblePath[] {
-    if (this.willUseTrainset()) {
-      return this.paths;
-    }
-
-    const paths = [...this.paths];
-
-    if (this.doDuping()) {
-      paths.push(this.faxAndGooseDupe);
-    }
-
-    if (this.canBackup()) {
-      paths.push(this.failsafeBackup);
-    }
-
-    return paths;
+    return this.paths;
   }
 
   getStatus(): MountainStatus {
