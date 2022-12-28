@@ -43,7 +43,7 @@ export class QuestL4BatsLeft implements QuestInfo {
 
   run(): QuestAdventure {
     return {
-      outfit: new GreyOutfit().addWeight("Stench Res", 100, null, 1),
+      outfit: new GreyOutfit().addWeight("Stench Res", 100, 1, 1),
       location: this.location,
       run: () => {
         greyAdv(this.location);

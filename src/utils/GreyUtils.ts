@@ -169,7 +169,7 @@ export function getEncounters(
   return matches;
 }
 
-const ballProp = () =>
+const ballProp: () => [number, Location, Monster][] = () =>
   getProperty("crystalBallPredictions")
     .split("|")
     .map((element) => element.split(":") as [string, string, string])

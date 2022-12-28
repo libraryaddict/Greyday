@@ -58,7 +58,7 @@ export class QuestL4BatsRight implements QuestInfo {
 
   run(): QuestAdventure {
     const outfit = new GreyOutfit().setItemDrops();
-    outfit.addWeight("Stench Res", 100, null, 1);
+    outfit.addWeight("Stench Res", 100, 1, 1);
 
     return {
       location: this.loc,
