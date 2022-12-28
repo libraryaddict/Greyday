@@ -3,7 +3,6 @@ import {
   availableAmount,
   council,
   getProperty,
-  getWorkshed,
   haveSkill,
   Item,
   itemAmount,
@@ -22,6 +21,7 @@ import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreyPulls } from "../../utils/GreyResources";
 import { GreySettings } from "../../utils/GreySettings";
+import { isTrainsetInUse } from "../../utils/GreyTrainset";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
@@ -41,7 +41,6 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
   autosells: Item[] = [this.ring, this.gold, this.mickyCard];
   letter = Item.get("Letter from King Ralph XI");
   sack = Item.get("pork elf goodies sack");
-  trainset: Item = Item.get("model train set");
 
   level(): number {
     return 1;
@@ -81,12 +80,7 @@ export class QuestL1Toot extends TaskInfo implements QuestInfo {
 
     let hasEnoughMeat: boolean = false;
 
-    if (
-      getWorkshed() == this.trainset ||
-      (getWorkshed() == Item.none &&
-        itemAmount(this.trainset) > 0 &&
-        GreySettings.greySwitchWorkshed == "Model train set")
-    ) {
+    if (isTrainsetInUse()) {
       hasEnoughMeat = true;
     }
 

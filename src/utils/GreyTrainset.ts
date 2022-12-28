@@ -5,11 +5,13 @@ import {
   getWorkshed,
   haveEffect,
   Item,
+  itemAmount,
   propertyExists,
   setProperty,
   toInt,
   visitUrl,
 } from "kolmafia";
+import { GreySettings } from "./GreySettings";
 
 export enum TrainsetPiece {
   UNKNOWN = "",
@@ -81,6 +83,22 @@ const trainsetEffectsDoubled: Map<TrainsetPiece, Effect> = new Map([
 ]);
 
 const trainset: Item = Item.get("model train set");
+
+export function isTrainsetInUse(): boolean {
+  if (getWorkshed() == trainset) {
+    return true;
+  }
+
+  if (
+    getWorkshed() != Item.none ||
+    GreySettings.greyDefaultWorkshed != "Model train set" ||
+    itemAmount(trainset) == 0
+  ) {
+    return false;
+  }
+
+  return true;
+}
 
 export function getTrainsetEffect(piece: TrainsetPiece): Effect {
   return trainsetEffects.get(piece);

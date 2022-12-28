@@ -11,6 +11,7 @@ import {
   toInt,
   toItem,
   totalTurnsPlayed,
+  turnsPlayed,
   use,
   visitUrl,
 } from "kolmafia";
@@ -24,8 +25,12 @@ export class TaskColdMedicineCabinet implements Task {
   cabinet: Item = Item.get("Cold medicine cabinet");
   triedSwitch: boolean = false;
 
+  getConsults(): number {
+    return toInt(getProperty("_coldMedicineConsults"));
+  }
+
   hasConsults(): boolean {
-    return toInt(getProperty("_coldMedicineConsults")) < 5;
+    return this.getConsults() < 5;
   }
 
   getNextConsult(): number {
@@ -57,7 +62,7 @@ export class TaskColdMedicineCabinet implements Task {
   }
 
   shouldCheck(): boolean {
-    return this.getLastChecked() + 10 <= totalTurnsPlayed();
+    return this.getLastChecked() + 2 <= totalTurnsPlayed();
   }
 
   check() {
@@ -100,13 +105,30 @@ export class TaskColdMedicineCabinet implements Task {
 
     this.trySwitch();
 
-    if (
-      !this.isConsultReady() ||
-      (!this.isIndoors() &&
-        (GreySettings.greySwitchWorkshed == "" || !this.isUnderground())) ||
-      !this.shouldCheck()
-    ) {
+    if (!this.isConsultReady()) {
       return;
+    }
+
+    if (!this.shouldCheck()) {
+      return;
+    }
+
+    // If we would not get extro
+    if (!this.isIndoors()) {
+      // If we don't care about breathitin
+      if (GreySettings.greySwitchWorkshed == "") {
+        return;
+      }
+
+      // If we wouldn't get breathitin
+      if (!this.isUnderground()) {
+        return;
+      }
+
+      // If we haven't spent enough turns to get desperate to grab breathitin
+      if (turnsPlayed() < this.getConsults() * 75) {
+        return;
+      }
     }
 
     this.check();
