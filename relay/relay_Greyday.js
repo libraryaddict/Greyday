@@ -26192,7 +26192,7 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
       }
 
       if ((0,external_kolmafia_.getProperty)("breakfastCompleted") == "false") {
-        if ((0,external_kolmafia_.myMeat)() >= 400) {
+        if ((0,external_kolmafia_.myMeat)() >= 900) {
           return QuestStatus.READY;
         }
 
@@ -26297,7 +26297,7 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
             }
           }
 
-          if ((0,external_kolmafia_.getProperty)("breakfastCompleted") == "false" && (0,external_kolmafia_.myMeat)() >= 400) {
+          if ((0,external_kolmafia_.getProperty)("breakfastCompleted") == "false" && (0,external_kolmafia_.myMeat)() >= 900) {
             var breakfastScript = (0,external_kolmafia_.getProperty)("breakfastScript");
             var props = new Properties_PropertyManager();
             props.setProperty("grabCloversSoftcore", "true");
@@ -26312,7 +26312,9 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
 
               (0,external_kolmafia_.cliExecute)(breakfastScript);
 
-              if ((0,external_kolmafia_.availableAmount)(external_kolmafia_.Item.get("11-leaf Clover")) == 0) {
+              var clover = external_kolmafia_.Item.get("11-leaf Clover");
+
+              if ((0,external_kolmafia_.availableAmount)(clover) == 0) {
                 (0,external_kolmafia_.print)(
                 "Don't see any clovers available, maybe mafia hiccuped? Trying breakfast again..",
                 "gray");
