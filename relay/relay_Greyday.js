@@ -18972,7 +18972,7 @@ var QuestL4BatsBoss = /*#__PURE__*/function () {function QuestL4BatsBoss() {Ques
     function run() {var _this = this;
       var outfit = new GreyOutfit();
       outfit.meatDropWeight = 2;
-      outfit.addWeight("Stench Res", 100, null, 1);
+      outfit.addWeight("Stench Res", 100, 1, 1);
 
       return {
         location: this.loc,
@@ -19089,7 +19089,7 @@ var QuestL4BatsCenter = /*#__PURE__*/function (_TaskInfo) {QuestL4BatsCenter_inh
         outfit.setItemDrops();
       }
 
-      outfit.addWeight("Stench Res", 100, null, 1);
+      outfit.addWeight("Stench Res", 100, 1, 1);
 
       return {
         outfit: outfit,
@@ -19163,7 +19163,7 @@ var QuestL4BatsLeft = /*#__PURE__*/function () {function QuestL4BatsLeft() {Ques
 
     function run() {var _this = this;
       return {
-        outfit: new GreyOutfit().addWeight("Stench Res", 100, null, 1),
+        outfit: new GreyOutfit().addWeight("Stench Res", 100, 1, 1),
         location: this.location,
         run: function run() {
           greyAdv(_this.location);
@@ -19224,7 +19224,7 @@ var QuestL4BatsRight = /*#__PURE__*/function () {function QuestL4BatsRight() {Qu
 
     function run() {var _this = this;
       var outfit = new GreyOutfit().setItemDrops();
-      outfit.addWeight("Stench Res", 100, null, 1);
+      outfit.addWeight("Stench Res", 100, 1, 1);
 
       return {
         location: this.loc,
