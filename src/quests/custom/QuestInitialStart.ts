@@ -88,7 +88,7 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
     }
 
     if (getProperty("breakfastCompleted") == "false") {
-      if (myMeat() >= 400) {
+      if (myMeat() >= 900) {
         return QuestStatus.READY;
       }
 
@@ -194,7 +194,7 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
           }
         }
 
-        if (getProperty("breakfastCompleted") == "false" && myMeat() >= 400) {
+        if (getProperty("breakfastCompleted") == "false" && myMeat() >= 900) {
           let breakfastScript = getProperty("breakfastScript");
           const props = new PropertyManager();
           props.setProperty("grabCloversSoftcore", "true");
@@ -209,7 +209,9 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
 
             cliExecute(breakfastScript);
 
-            if (availableAmount(Item.get("11-leaf Clover")) == 0) {
+            const clover = Item.get("11-leaf Clover");
+
+            if (availableAmount(clover) == 0) {
               print(
                 "Don't see any clovers available, maybe mafia hiccuped? Trying breakfast again..",
                 "gray"
