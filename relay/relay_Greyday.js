@@ -6341,13 +6341,16 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
 
     function run(path) {var _this2 = this;
       var pred = currentPredictions().get(this.desert);
-      var resource =
+      var fireExtingusherResource =
       (0,external_kolmafia_.toBoolean)((0,external_kolmafia_.getProperty)("_gnasirAvailable")) &&
       (0,external_kolmafia_.familiarWeight)(this.goose) >= 6 ?
       path.getResource(ResourceTypes/* ResourceCategory.FIRE_EXTINGUSHER_ZONE */.s6.FIRE_EXTINGUSHER_ZONE) :
       null;
 
-      if (resource == null && (pred == null || !this.toAbsorb.includes(pred))) {
+      if (
+      fireExtingusherResource == null && (
+      pred == null || !this.toAbsorb.includes(pred)))
+      {
         if (
         canGreyAdventure(this.oasis) &&
         (0,external_kolmafia_.haveEffect)(this.hydrated) == 0 &&
@@ -6367,8 +6370,8 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
       outfit.addWeight(this.compass); // Compass
       outfit.addWeight(this.knife);
 
-      if (resource != null) {
-        resource.prepare(outfit);
+      if (fireExtingusherResource != null) {
+        fireExtingusherResource.prepare(outfit);
       }
 
       if (this.toAbsorb.length > 0) {
@@ -6435,8 +6438,16 @@ var QuestL11DesertExplore = /*#__PURE__*/function (_TaskInfo) {QuestL11DesertExp
               // Force the ball to be worn to make a prediction
               (0,external_kolmafia_.equip)(_this2.ball);
             }
-          } else if (_this2.toAbsorb.length == 0 && resource != null) {
-            killing = resource.macro().step(killing);
+          }
+
+          if (fireExtingusherResource != null) {
+            var macro = fireExtingusherResource.macro();
+
+            if ((0,external_kolmafia_.myFamiliar)() == _this2.goose && _this2.toAbsorb.length > 0) {
+              macro = MacroBuilder/* Macro.ifNot_ */.LE.ifNot_(_this2.toAbsorb[0], macro);
+            }
+
+            killing = macro.step(killing);
           } else if (
           _this2.toAbsorb.length == 0 &&
           DelayBurners.isDelayBurnerReady())
