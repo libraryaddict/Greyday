@@ -19027,8 +19027,242 @@ var QuestL13 = /*#__PURE__*/function () {function QuestL13() {QuestL13Tower_clas
     function run() {
       throw "Not supported";
     } }]);return QuestL13;}();
+;// CONCATENATED MODULE: ./src/utils/GreyTrainset.ts
+
+
+
+var TrainsetPiece;(function (TrainsetPiece) {TrainsetPiece["UNKNOWN"] = "";TrainsetPiece["EMPTY"] = "empty";TrainsetPiece["GAIN_MEAT"] = "meat_mine";TrainsetPiece["EFFECT_MP"] = "tower_fizzy";TrainsetPiece["GAIN_STATS"] = "viewing_platform";TrainsetPiece["HOT_RES_COLD_DMG"] = "tower_frozen";TrainsetPiece["STENCH_RES_SPOOKY_DMG"] = "spooky_graveyard";TrainsetPiece["SMUT_BRIDGE_OR_STATS"] = "logging_mill";TrainsetPiece["CANDY"] = "candy_factory";TrainsetPiece["DOUBLE_NEXT_STATION"] = "coal_hopper";TrainsetPiece["COLD_RES_STENCH_DMG"] = "tower_sewage";TrainsetPiece["SPOOKY_RES_SLEAZE_DMG"] = "oil_refinery";TrainsetPiece["SLEAZE_RES_HOT_DMG"] = "oil_bridge";TrainsetPiece["MORE_ML"] = "water_bridge";TrainsetPiece["MOXIE_STATS"] = "groin_silo";TrainsetPiece["RANDOM_BOOZE"] = "grain_silo";TrainsetPiece["MYS_STATS"] = "brain_silo";TrainsetPiece["MUS_STATS"] = "brawn_silo";TrainsetPiece["BUFF_FOOD_DROP"] = "prawn_silo";TrainsetPiece["DROP_LAST_FOOD_OR_RANDOM"] = "trackside_diner";TrainsetPiece["ORE"] = "ore_hopper";})(TrainsetPiece || (TrainsetPiece = {}));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var pieces = [
+TrainsetPiece.EMPTY,
+TrainsetPiece.GAIN_MEAT,
+TrainsetPiece.EFFECT_MP,
+TrainsetPiece.GAIN_STATS,
+TrainsetPiece.HOT_RES_COLD_DMG,
+TrainsetPiece.STENCH_RES_SPOOKY_DMG,
+TrainsetPiece.SMUT_BRIDGE_OR_STATS,
+TrainsetPiece.CANDY,
+TrainsetPiece.DOUBLE_NEXT_STATION,
+TrainsetPiece.COLD_RES_STENCH_DMG,
+TrainsetPiece.UNKNOWN,
+TrainsetPiece.SPOOKY_RES_SLEAZE_DMG,
+TrainsetPiece.SLEAZE_RES_HOT_DMG,
+TrainsetPiece.MORE_ML,
+TrainsetPiece.MOXIE_STATS,
+TrainsetPiece.RANDOM_BOOZE,
+TrainsetPiece.MYS_STATS,
+TrainsetPiece.MUS_STATS,
+TrainsetPiece.BUFF_FOOD_DROP,
+TrainsetPiece.DROP_LAST_FOOD_OR_RANDOM,
+TrainsetPiece.ORE];
+
+
+var trainsetEffects = new Map([
+[TrainsetPiece.EFFECT_MP, external_kolmafia_namespaceObject.Effect.get("Carbonated")],
+[TrainsetPiece.HOT_RES_COLD_DMG, external_kolmafia_namespaceObject.Effect.get("Frozen")],
+[TrainsetPiece.STENCH_RES_SPOOKY_DMG, external_kolmafia_namespaceObject.Effect.get("Shivering Spine")],
+[TrainsetPiece.COLD_RES_STENCH_DMG, external_kolmafia_namespaceObject.Effect.get("Hot Soupy Garbage")],
+[TrainsetPiece.SLEAZE_RES_HOT_DMG, external_kolmafia_namespaceObject.Effect.get("Burningly Oiled")],
+[TrainsetPiece.SPOOKY_RES_SLEAZE_DMG, external_kolmafia_namespaceObject.Effect.get("Spookily Greasy")],
+[TrainsetPiece.MORE_ML, external_kolmafia_namespaceObject.Effect.get("Troubled Waters")],
+[TrainsetPiece.BUFF_FOOD_DROP, external_kolmafia_namespaceObject.Effect.get("Craving Prawns")]]);
+
+var trainsetEffectsDoubled = new Map([
+[TrainsetPiece.EFFECT_MP, external_kolmafia_namespaceObject.Effect.get("Double Carbonated")],
+[TrainsetPiece.HOT_RES_COLD_DMG, external_kolmafia_namespaceObject.Effect.get("Double Frozen")],
+[TrainsetPiece.STENCH_RES_SPOOKY_DMG, external_kolmafia_namespaceObject.Effect.get("Doubly Shivering Spine")],
+[TrainsetPiece.COLD_RES_STENCH_DMG, external_kolmafia_namespaceObject.Effect.get("Double Hot Soupy Garbage")],
+[TrainsetPiece.SLEAZE_RES_HOT_DMG, external_kolmafia_namespaceObject.Effect.get("Doubly Burningly Oiled")],
+[TrainsetPiece.SPOOKY_RES_SLEAZE_DMG, external_kolmafia_namespaceObject.Effect.get("Doubly Spookily Greasy")],
+[TrainsetPiece.MORE_ML, external_kolmafia_namespaceObject.Effect.get("Doubly Troubled Waters")],
+[TrainsetPiece.BUFF_FOOD_DROP, external_kolmafia_namespaceObject.Effect.get("Doubly Craving Prawns")]]);
+
+
+var trainset = external_kolmafia_namespaceObject.Item.get("model train set");
+
+function isTrainsetInUse() {
+  if ((0,external_kolmafia_namespaceObject.getWorkshed)() == trainset) {
+    return true;
+  }
+
+  if (
+  (0,external_kolmafia_namespaceObject.getWorkshed)() != external_kolmafia_namespaceObject.Item.none ||
+  GreySettings.greyDefaultWorkshed != "Model train set" ||
+  (0,external_kolmafia_namespaceObject.itemAmount)(trainset) == 0)
+  {
+    return false;
+  }
+
+  return true;
+}
+
+function getTrainsetEffect(piece) {
+  return trainsetEffects.get(piece);
+}
+
+function getDoubledTrainsetEffect(piece) {
+  return trainsetEffectsDoubled.get(piece);
+}
+
+function isTrainsetPieceEffectActive(piece) {
+  return (
+    trainsetEffects.has(piece) &&
+    haveEffect(trainsetEffects.get(piece)) > 0 ||
+    trainsetEffectsDoubled.has(piece) &&
+    haveEffect(trainsetEffectsDoubled.get(piece)) > 0);
+
+}
+
+function getPieceId(piece) {
+  return Math.max(0, pieces.indexOf(piece));
+}
+
+function getTrainsetConfiguration() {
+  return (0,external_kolmafia_namespaceObject.getProperty)("trainsetConfiguration").split(",");
+}
+
+function getTrainsetPositionsUntilConfigurable() {
+  var pos = (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("trainsetPosition"));
+  var configured = (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("lastTrainsetConfiguration"));
+  var turnsSinceConfigured = pos - configured;
+
+  return Math.max(0, 40 - turnsSinceConfigured);
+}
+
+function isTrainsetConfigurable() {
+  return (
+    (0,external_kolmafia_namespaceObject.getWorkshed)() == trainset && getTrainsetPositionsUntilConfigurable() <= 0);
+
+}
+
+/**
+ * Where [0] is your next encounter, [1] is the one after, [7] is the one you just had
+ */
+function getTrainsetEncounters() {
+  var pieces = getTrainsetConfiguration();
+  var newPieces = [];
+  var offset = toInt(getProperty("trainsetPosition")) % 8;
+
+  for (var i = 0; i < 8; i++) {
+    var newPos = (i + offset) % 8;
+
+    newPieces[newPos] = pieces[i];
+  }
+
+  return newPieces;
+}
+
+var foodProperty = "lastFoodDropped";
+
+function trackLastFood(page) {
+  if (getWorkshed() != trainset) {
+    if (getProperty(foodProperty) != "") {
+      setProperty(foodProperty, "");
+    }
+
+    return;
+  }
+
+  if (page.includes("<b>Trackside Diner.</b>")) {
+    if (getProperty(foodProperty) != "") {
+      setProperty(foodProperty, "");
+    }
+
+    // Remove the part of the page that lists what food dropped
+    page = page.substring(
+    page.indexOf("</table>", page.indexOf("<b>Trackside Diner.</b>")));
+
+  }
+
+  if (!page.includes("<!--WINWINWIN-->")) {
+    return;
+  }
+
+  var items = extractItems(page);
+  var food = null;
+
+  for (var _i = 0, _Object$keys = Object.keys(items); _i < _Object$keys.length; _i++) {var key = _Object$keys[_i];
+    var item = Item.get(key);
+
+    if (item.fullness <= 0) {
+      continue;
+    }
+
+    food = item;
+  }
+
+  if (food == null) {
+    return;
+  }
+
+  setProperty(foodProperty, toInt(food).toString());
+}
+
+function getTrainsetFoodQueued() {
+  // TODO Returns the food that will drop when we hit diner
+  if (!propertyExists(foodProperty)) {
+    return null;
+  }
+
+  var prop = getProperty(foodProperty);
+
+  if (prop == "") {
+    return null;
+  }
+
+  return Item.get(toInt(prop));
+}
+
+function setTrainsetConfiguration(pieces) {
+  (0,external_kolmafia_namespaceObject.visitUrl)("campground.php?action=workshed");
+
+  var pieceIds = pieces.
+  map(function (p) {return getPieceId(p);}).
+  map(function (pieceId, index) {return "slot[".concat(index, "]=").concat(pieceId);});
+
+  // whichchoice=1485&option=1&pwd=86af819be25f6ee16d9b3736e362ef2b&slot%5B0%5D=12&slot%5B1%5D=0&slot%5B2%5D=0&slot%5B3%5D=0&slot%5B4%5D=0&slot%5B5%5D=0&slot%5B6%5D=0&slot%5B7%5D=0
+  // choice.php?forceoption=0&whichchoice=1485&option=1&pwd&slot[0]=0&slot[1]=0&slot[2]=0&slot[3]=0&slot[4]=0&slot[5]=0&slot[6]=0&slot[7]=0
+
+  var url = "choice.php?forceoption=0&whichchoice=1485&option=1&pwd&".concat(pieceIds.join(
+  "&"));
+
+
+  (0,external_kolmafia_namespaceObject.visitUrl)(url, true);
+  (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
+
+  var expected = pieces.join(",");
+
+  if (expected != (0,external_kolmafia_namespaceObject.getProperty)("trainsetConfiguration")) {
+    throw "Expected trainset configuration to have changed, expected \"".concat(expected, "\" but instead got ").concat((0,external_kolmafia_namespaceObject.getProperty)(
+    "trainsetConfiguration"));
+
+  }
+}
 ;// CONCATENATED MODULE: ./src/quests/council/QuestL1Toot.ts
 function QuestL1Toot_typeof(obj) {"@babel/helpers - typeof";return QuestL1Toot_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestL1Toot_typeof(obj);}function QuestL1Toot_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL1Toot_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestL1Toot_toPropertyKey(descriptor.key), descriptor);}}function QuestL1Toot_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL1Toot_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL1Toot_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL1Toot_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestL1Toot_setPrototypeOf(subClass, superClass);}function QuestL1Toot_setPrototypeOf(o, p) {QuestL1Toot_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestL1Toot_setPrototypeOf(o, p);}function QuestL1Toot_createSuper(Derived) {var hasNativeReflectConstruct = QuestL1Toot_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestL1Toot_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestL1Toot_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestL1Toot_possibleConstructorReturn(this, result);};}function QuestL1Toot_possibleConstructorReturn(self, call) {if (call && (QuestL1Toot_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestL1Toot_assertThisInitialized(self);}function QuestL1Toot_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestL1Toot_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestL1Toot_getPrototypeOf(o) {QuestL1Toot_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestL1Toot_getPrototypeOf(o);}function QuestL1Toot_defineProperty(obj, key, value) {key = QuestL1Toot_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestL1Toot_toPropertyKey(arg) {var key = QuestL1Toot_toPrimitive(arg, "string");return QuestL1Toot_typeof(key) === "symbol" ? key : String(key);}function QuestL1Toot_toPrimitive(input, hint) {if (QuestL1Toot_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestL1Toot_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
+
 
 
 
@@ -19052,8 +19286,7 @@ var QuestL1Toot = /*#__PURE__*/function (_TaskInfo) {QuestL1Toot_inherits(QuestL
     external_kolmafia_namespaceObject.Item.get("1952 Mickey Mantle card"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "autosells",
     [_this.ring, _this.gold, _this.mickyCard]);QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "letter",
     external_kolmafia_namespaceObject.Item.get("Letter from King Ralph XI"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "sack",
-    external_kolmafia_namespaceObject.Item.get("pork elf goodies sack"));QuestL1Toot_defineProperty(QuestL1Toot_assertThisInitialized(_this), "trainset",
-    external_kolmafia_namespaceObject.Item.get("model train set"));return _this;}QuestL1Toot_createClass(QuestL1Toot, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Item.get("pork elf goodies sack"));return _this;}QuestL1Toot_createClass(QuestL1Toot, [{ key: "level", value:
 
     function level() {
       return 1;
@@ -19093,12 +19326,7 @@ var QuestL1Toot = /*#__PURE__*/function (_TaskInfo) {QuestL1Toot_inherits(QuestL
 
       var hasEnoughMeat = false;
 
-      if (
-      (0,external_kolmafia_namespaceObject.getWorkshed)() == this.trainset ||
-      (0,external_kolmafia_namespaceObject.getWorkshed)() == external_kolmafia_namespaceObject.Item.none &&
-      (0,external_kolmafia_namespaceObject.itemAmount)(this.trainset) > 0 &&
-      GreySettings.greySwitchWorkshed == "Model train set")
-      {
+      if (isTrainsetInUse()) {
         hasEnoughMeat = true;
       }
 
@@ -21821,6 +22049,7 @@ function QuestL8MountainOre_typeof(obj) {"@babel/helpers - typeof";return QuestL
 
 
 
+
 var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_inherits(QuestL8MountainOre, _TaskInfo);var _super = QuestL8MountainOre_createSuper(QuestL8MountainOre);function QuestL8MountainOre() {var _this;QuestL8MountainOre_classCallCheck(this, QuestL8MountainOre);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "mountainMan",
     external_kolmafia_namespaceObject.Monster.get("Mountain Man"));QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "goose",
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestL8MountainOre_defineProperty(QuestL8MountainOre_assertThisInitialized(_this), "nanovision",
@@ -21892,13 +22121,10 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
 
     function willUseTrainset() {
       return (
-        (0,external_kolmafia_namespaceObject.getWorkshed)() == this.trainset ||
+        isTrainsetInUse() ||
         (0,external_kolmafia_namespaceObject.getWorkshed)() == this.cmc &&
         (0,external_kolmafia_namespaceObject.itemAmount)(this.trainset) > 0 &&
-        GreySettings.greySwitchWorkshed == "Model train set" ||
-        (0,external_kolmafia_namespaceObject.getWorkshed)() == external_kolmafia_namespaceObject.Item.none &&
-        (0,external_kolmafia_namespaceObject.itemAmount)(this.trainset) > 0 &&
-        GreySettings.greyDefaultWorkshed == "Model train set");
+        GreySettings.greySwitchWorkshed == "Model train set");
 
     } }, { key: "createPaths", value:
 
@@ -32583,10 +32809,14 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
     external_kolmafia_namespaceObject.Item.get("Ice Crown"));TaskMedicineCabinet_defineProperty(this, "pants",
     external_kolmafia_namespaceObject.Item.get("frozen jeans"));TaskMedicineCabinet_defineProperty(this, "cabinet",
     external_kolmafia_namespaceObject.Item.get("Cold medicine cabinet"));TaskMedicineCabinet_defineProperty(this, "triedSwitch",
-    false);}TaskMedicineCabinet_createClass(TaskColdMedicineCabinet, [{ key: "hasConsults", value:
+    false);}TaskMedicineCabinet_createClass(TaskColdMedicineCabinet, [{ key: "getConsults", value:
+
+    function getConsults() {
+      return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_coldMedicineConsults"));
+    } }, { key: "hasConsults", value:
 
     function hasConsults() {
-      return (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_coldMedicineConsults")) < 5;
+      return this.getConsults() < 5;
     } }, { key: "getNextConsult", value:
 
     function getNextConsult() {
@@ -32618,7 +32848,7 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
     } }, { key: "shouldCheck", value:
 
     function shouldCheck() {
-      return this.getLastChecked() + 10 <= (0,external_kolmafia_namespaceObject.totalTurnsPlayed)();
+      return this.getLastChecked() + 2 <= (0,external_kolmafia_namespaceObject.totalTurnsPlayed)();
     } }, { key: "check", value:
 
     function check() {
@@ -32661,13 +32891,30 @@ var TaskColdMedicineCabinet = /*#__PURE__*/function () {function TaskColdMedicin
 
       this.trySwitch();
 
-      if (
-      !this.isConsultReady() ||
-      !this.isIndoors() && (
-      GreySettings.greySwitchWorkshed == "" || !this.isUnderground()) ||
-      !this.shouldCheck())
-      {
+      if (!this.isConsultReady()) {
         return;
+      }
+
+      if (!this.shouldCheck()) {
+        return;
+      }
+
+      // If we would not get extro
+      if (!this.isIndoors()) {
+        // If we don't care about breathitin
+        if (GreySettings.greySwitchWorkshed == "") {
+          return;
+        }
+
+        // If we wouldn't get breathitin
+        if (!this.isUnderground()) {
+          return;
+        }
+
+        // If we haven't spent enough turns to get desperate to grab breathitin
+        if ((0,external_kolmafia_namespaceObject.turnsPlayed)() < this.getConsults() * 75) {
+          return;
+        }
       }
 
       this.check();
@@ -33161,222 +33408,6 @@ function getAutumnOutcome(location) {
   }
 
   return null;
-}
-;// CONCATENATED MODULE: ./src/utils/GreyTrainset.ts
-
-
-var TrainsetPiece;(function (TrainsetPiece) {TrainsetPiece["UNKNOWN"] = "";TrainsetPiece["EMPTY"] = "empty";TrainsetPiece["GAIN_MEAT"] = "meat_mine";TrainsetPiece["EFFECT_MP"] = "tower_fizzy";TrainsetPiece["GAIN_STATS"] = "viewing_platform";TrainsetPiece["HOT_RES_COLD_DMG"] = "tower_frozen";TrainsetPiece["STENCH_RES_SPOOKY_DMG"] = "spooky_graveyard";TrainsetPiece["SMUT_BRIDGE_OR_STATS"] = "logging_mill";TrainsetPiece["CANDY"] = "candy_factory";TrainsetPiece["DOUBLE_NEXT_STATION"] = "coal_hopper";TrainsetPiece["COLD_RES_STENCH_DMG"] = "tower_sewage";TrainsetPiece["SPOOKY_RES_SLEAZE_DMG"] = "oil_refinery";TrainsetPiece["SLEAZE_RES_HOT_DMG"] = "oil_bridge";TrainsetPiece["MORE_ML"] = "water_bridge";TrainsetPiece["MOXIE_STATS"] = "groin_silo";TrainsetPiece["RANDOM_BOOZE"] = "grain_silo";TrainsetPiece["MYS_STATS"] = "brain_silo";TrainsetPiece["MUS_STATS"] = "brawn_silo";TrainsetPiece["BUFF_FOOD_DROP"] = "prawn_silo";TrainsetPiece["DROP_LAST_FOOD_OR_RANDOM"] = "trackside_diner";TrainsetPiece["ORE"] = "ore_hopper";})(TrainsetPiece || (TrainsetPiece = {}));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var pieces = [
-TrainsetPiece.EMPTY,
-TrainsetPiece.GAIN_MEAT,
-TrainsetPiece.EFFECT_MP,
-TrainsetPiece.GAIN_STATS,
-TrainsetPiece.HOT_RES_COLD_DMG,
-TrainsetPiece.STENCH_RES_SPOOKY_DMG,
-TrainsetPiece.SMUT_BRIDGE_OR_STATS,
-TrainsetPiece.CANDY,
-TrainsetPiece.DOUBLE_NEXT_STATION,
-TrainsetPiece.COLD_RES_STENCH_DMG,
-TrainsetPiece.UNKNOWN,
-TrainsetPiece.SPOOKY_RES_SLEAZE_DMG,
-TrainsetPiece.SLEAZE_RES_HOT_DMG,
-TrainsetPiece.MORE_ML,
-TrainsetPiece.MOXIE_STATS,
-TrainsetPiece.RANDOM_BOOZE,
-TrainsetPiece.MYS_STATS,
-TrainsetPiece.MUS_STATS,
-TrainsetPiece.BUFF_FOOD_DROP,
-TrainsetPiece.DROP_LAST_FOOD_OR_RANDOM,
-TrainsetPiece.ORE];
-
-
-var trainsetEffects = new Map([
-[TrainsetPiece.EFFECT_MP, external_kolmafia_namespaceObject.Effect.get("Carbonated")],
-[TrainsetPiece.HOT_RES_COLD_DMG, external_kolmafia_namespaceObject.Effect.get("Frozen")],
-[TrainsetPiece.STENCH_RES_SPOOKY_DMG, external_kolmafia_namespaceObject.Effect.get("Shivering Spine")],
-[TrainsetPiece.COLD_RES_STENCH_DMG, external_kolmafia_namespaceObject.Effect.get("Hot Soupy Garbage")],
-[TrainsetPiece.SLEAZE_RES_HOT_DMG, external_kolmafia_namespaceObject.Effect.get("Burningly Oiled")],
-[TrainsetPiece.SPOOKY_RES_SLEAZE_DMG, external_kolmafia_namespaceObject.Effect.get("Spookily Greasy")],
-[TrainsetPiece.MORE_ML, external_kolmafia_namespaceObject.Effect.get("Troubled Waters")],
-[TrainsetPiece.BUFF_FOOD_DROP, external_kolmafia_namespaceObject.Effect.get("Craving Prawns")]]);
-
-var trainsetEffectsDoubled = new Map([
-[TrainsetPiece.EFFECT_MP, external_kolmafia_namespaceObject.Effect.get("Double Carbonated")],
-[TrainsetPiece.HOT_RES_COLD_DMG, external_kolmafia_namespaceObject.Effect.get("Double Frozen")],
-[TrainsetPiece.STENCH_RES_SPOOKY_DMG, external_kolmafia_namespaceObject.Effect.get("Doubly Shivering Spine")],
-[TrainsetPiece.COLD_RES_STENCH_DMG, external_kolmafia_namespaceObject.Effect.get("Double Hot Soupy Garbage")],
-[TrainsetPiece.SLEAZE_RES_HOT_DMG, external_kolmafia_namespaceObject.Effect.get("Doubly Burningly Oiled")],
-[TrainsetPiece.SPOOKY_RES_SLEAZE_DMG, external_kolmafia_namespaceObject.Effect.get("Doubly Spookily Greasy")],
-[TrainsetPiece.MORE_ML, external_kolmafia_namespaceObject.Effect.get("Doubly Troubled Waters")],
-[TrainsetPiece.BUFF_FOOD_DROP, external_kolmafia_namespaceObject.Effect.get("Doubly Craving Prawns")]]);
-
-
-var trainset = external_kolmafia_namespaceObject.Item.get("model train set");
-
-function getTrainsetEffect(piece) {
-  return trainsetEffects.get(piece);
-}
-
-function getDoubledTrainsetEffect(piece) {
-  return trainsetEffectsDoubled.get(piece);
-}
-
-function isTrainsetPieceEffectActive(piece) {
-  return (
-    trainsetEffects.has(piece) &&
-    haveEffect(trainsetEffects.get(piece)) > 0 ||
-    trainsetEffectsDoubled.has(piece) &&
-    haveEffect(trainsetEffectsDoubled.get(piece)) > 0);
-
-}
-
-function getPieceId(piece) {
-  return Math.max(0, pieces.indexOf(piece));
-}
-
-function getTrainsetConfiguration() {
-  return (0,external_kolmafia_namespaceObject.getProperty)("trainsetConfiguration").split(",");
-}
-
-function getTrainsetPositionsUntilConfigurable() {
-  var pos = (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("trainsetPosition"));
-  var configured = (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("lastTrainsetConfiguration"));
-  var turnsSinceConfigured = pos - configured;
-
-  return Math.max(0, 40 - turnsSinceConfigured);
-}
-
-function isTrainsetConfigurable() {
-  return (
-    (0,external_kolmafia_namespaceObject.getWorkshed)() == trainset && getTrainsetPositionsUntilConfigurable() <= 0);
-
-}
-
-/**
- * Where [0] is your next encounter, [1] is the one after, [7] is the one you just had
- */
-function getTrainsetEncounters() {
-  var pieces = getTrainsetConfiguration();
-  var newPieces = [];
-  var offset = toInt(getProperty("trainsetPosition")) % 8;
-
-  for (var i = 0; i < 8; i++) {
-    var newPos = (i + offset) % 8;
-
-    newPieces[newPos] = pieces[i];
-  }
-
-  return newPieces;
-}
-
-var foodProperty = "lastFoodDropped";
-
-function trackLastFood(page) {
-  if (getWorkshed() != trainset) {
-    if (getProperty(foodProperty) != "") {
-      setProperty(foodProperty, "");
-    }
-
-    return;
-  }
-
-  if (page.includes("<b>Trackside Diner.</b>")) {
-    if (getProperty(foodProperty) != "") {
-      setProperty(foodProperty, "");
-    }
-
-    // Remove the part of the page that lists what food dropped
-    page = page.substring(
-    page.indexOf("</table>", page.indexOf("<b>Trackside Diner.</b>")));
-
-  }
-
-  if (!page.includes("<!--WINWINWIN-->")) {
-    return;
-  }
-
-  var items = extractItems(page);
-  var food = null;
-
-  for (var _i = 0, _Object$keys = Object.keys(items); _i < _Object$keys.length; _i++) {var key = _Object$keys[_i];
-    var item = Item.get(key);
-
-    if (item.fullness <= 0) {
-      continue;
-    }
-
-    food = item;
-  }
-
-  if (food == null) {
-    return;
-  }
-
-  setProperty(foodProperty, toInt(food).toString());
-}
-
-function getTrainsetFoodQueued() {
-  // TODO Returns the food that will drop when we hit diner
-  if (!propertyExists(foodProperty)) {
-    return null;
-  }
-
-  var prop = getProperty(foodProperty);
-
-  if (prop == "") {
-    return null;
-  }
-
-  return Item.get(toInt(prop));
-}
-
-function setTrainsetConfiguration(pieces) {
-  (0,external_kolmafia_namespaceObject.visitUrl)("campground.php?action=workshed");
-
-  var pieceIds = pieces.
-  map(function (p) {return getPieceId(p);}).
-  map(function (pieceId, index) {return "slot[".concat(index, "]=").concat(pieceId);});
-
-  // whichchoice=1485&option=1&pwd=86af819be25f6ee16d9b3736e362ef2b&slot%5B0%5D=12&slot%5B1%5D=0&slot%5B2%5D=0&slot%5B3%5D=0&slot%5B4%5D=0&slot%5B5%5D=0&slot%5B6%5D=0&slot%5B7%5D=0
-  // choice.php?forceoption=0&whichchoice=1485&option=1&pwd&slot[0]=0&slot[1]=0&slot[2]=0&slot[3]=0&slot[4]=0&slot[5]=0&slot[6]=0&slot[7]=0
-
-  var url = "choice.php?forceoption=0&whichchoice=1485&option=1&pwd&".concat(pieceIds.join(
-  "&"));
-
-
-  (0,external_kolmafia_namespaceObject.visitUrl)(url, true);
-  (0,external_kolmafia_namespaceObject.visitUrl)("main.php");
-
-  var expected = pieces.join(",");
-
-  if (expected != (0,external_kolmafia_namespaceObject.getProperty)("trainsetConfiguration")) {
-    throw "Expected trainset configuration to have changed, expected \"".concat(expected, "\" but instead got ").concat((0,external_kolmafia_namespaceObject.getProperty)(
-    "trainsetConfiguration"));
-
-  }
 }
 ;// CONCATENATED MODULE: ./src/tasks/TaskTrainset.ts
 function TaskTrainset_typeof(obj) {"@babel/helpers - typeof";return TaskTrainset_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, TaskTrainset_typeof(obj);}function TaskTrainset_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskTrainset_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, TaskTrainset_toPropertyKey(descriptor.key), descriptor);}}function TaskTrainset_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskTrainset_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskTrainset_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskTrainset_defineProperty(obj, key, value) {key = TaskTrainset_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function TaskTrainset_toPropertyKey(arg) {var key = TaskTrainset_toPrimitive(arg, "string");return TaskTrainset_typeof(key) === "symbol" ? key : String(key);}function TaskTrainset_toPrimitive(input, hint) {if (TaskTrainset_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (TaskTrainset_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
@@ -34327,7 +34358,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "81c9c46";
+var lastCommitHash = "267c68d";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
