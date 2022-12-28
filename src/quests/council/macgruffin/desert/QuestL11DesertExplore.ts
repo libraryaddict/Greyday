@@ -188,13 +188,16 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
 
   run(path: PossiblePath): QuestAdventure {
     const pred = currentPredictions().get(this.desert);
-    const resource =
+    const fireExtingusherResource =
       toBoolean(getProperty("_gnasirAvailable")) &&
       familiarWeight(this.goose) >= 6
         ? path.getResource(ResourceCategory.FIRE_EXTINGUSHER_ZONE)
         : null;
 
-    if (resource == null && (pred == null || !this.toAbsorb.includes(pred))) {
+    if (
+      fireExtingusherResource == null &&
+      (pred == null || !this.toAbsorb.includes(pred))
+    ) {
       if (
         canGreyAdventure(this.oasis) &&
         haveEffect(this.hydrated) == 0 &&
@@ -214,8 +217,8 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
     outfit.addWeight(this.compass); // Compass
     outfit.addWeight(this.knife);
 
-    if (resource != null) {
-      resource.prepare(outfit);
+    if (fireExtingusherResource != null) {
+      fireExtingusherResource.prepare(outfit);
     }
 
     if (this.toAbsorb.length > 0) {
@@ -282,8 +285,16 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
             // Force the ball to be worn to make a prediction
             equip(this.ball);
           }
-        } else if (this.toAbsorb.length == 0 && resource != null) {
-          killing = resource.macro().step(killing);
+        }
+
+        if (fireExtingusherResource != null) {
+          let macro = fireExtingusherResource.macro();
+
+          if (myFamiliar() == this.goose && this.toAbsorb.length > 0) {
+            macro = Macro.ifNot_(this.toAbsorb[0], macro);
+          }
+
+          killing = macro.step(killing);
         } else if (
           this.toAbsorb.length == 0 &&
           DelayBurners.isDelayBurnerReady()
