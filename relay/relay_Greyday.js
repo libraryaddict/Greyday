@@ -2738,7 +2738,7 @@ var GreyResources_GreyRequirements = /*#__PURE__*/(/* unused pure expression or 
       add(
       Type.IOTM,
       Item.get("miniature crystal ball"),
-      "Great for speeding up predictions",
+      "Great for speeding up predictions, saves about 40 turns?",
       Required.VERY_USEFUL);
 
 
@@ -32786,7 +32786,7 @@ function getBackupChoices() {
 
   // Manor gallery
   choices(91, 2);
-  choices(89, 6);
+  choices(89, 4);
 
   // Manor bathroom
   choices(90, 3);
