@@ -383,7 +383,7 @@ export class GreyRequirements {
     add(
       Type.IOTM,
       Item.get("miniature crystal ball"),
-      "Great for speeding up predictions",
+      "Great for speeding up predictions, saves about 40 turns?",
       Required.VERY_USEFUL
     );
 
