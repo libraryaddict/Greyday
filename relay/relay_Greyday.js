@@ -6179,7 +6179,10 @@ function greyKillingBlow(outfit) {
     macro.tryItem(cosmicBall);
   }
 
-  macro.while_("!pastround 15 && !hppercentbelow 30", MacroBuilder/* Macro.attack */.LE.attack());
+  macro.while_("!pastround 15 && !hppercentbelow ".concat(
+  healthPerc),
+  MacroBuilder/* Macro.attack */.LE.attack());
+
   macro.abort();
 
   return macro;
