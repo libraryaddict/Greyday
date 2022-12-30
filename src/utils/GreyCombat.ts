@@ -300,7 +300,10 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
     macro.tryItem(cosmicBall);
   }
 
-  macro.while_("!pastround 15 && !hppercentbelow 30", Macro.attack());
+  macro.while_(
+    `!pastround 15 && !hppercentbelow ${healthPerc}`,
+    Macro.attack()
+  );
   macro.abort();
 
   return macro;
