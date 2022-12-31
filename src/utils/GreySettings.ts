@@ -305,7 +305,7 @@ export function getGreySettings(): GreySetting[] {
   const grabMeatSkill: GreySetting = {
     name: "greyMeatSkill",
     description:
-      "Should GreyDay grab Financial Spreadsheets? +40% meat from monsters, doesn't effect the run itself. ",
+      "Should GreyDay grab Financial Spreadsheets? +40% meat from monsters, doesn't effect the run itself. Convenient means it'll grab the skill if it's an orb prediction or current fight, but not care about it.",
     valid: (s) =>
       ["Yes", "No", "Convenient"].find(
         (a) => a.toLowerCase() == s.toLowerCase()
