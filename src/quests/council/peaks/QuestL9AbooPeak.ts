@@ -87,11 +87,11 @@ export class ABooHandler implements QuestInfo {
           let turn = 0;
 
           settings.setChoices({
-            calledOutOfScopeChoiceBehavior: (choice: number) => {
+            calledOutOfScopeChoiceBehavior: () => {
               return false;
             },
 
-            handleChoice: (choice: number) => {
+            handleChoice: () => {
               const dmgTaken = this.damageTaken(turn++);
 
               if (dmgTaken >= myHp() || this.getProgress() <= 0) {
@@ -143,21 +143,15 @@ export class ABooHandler implements QuestInfo {
   }
 
   wouldSurviveClue(): boolean {
-    const damageLevels: number[] = [13, 25, 50, 125, 250];
     let totalDamage: number = 2;
     let reducedBy: number = 0;
 
-    for (let i = 0; i < damageLevels.length; i++) {
+    for (let i = 0; i < this.damageLevels.length; i++) {
       if (this.getProgress() <= reducedBy) {
         return true;
       }
 
-      const dmg = damageLevels[i];
-
-      const sDmg = this.damageTakenByElement(dmg, Element.get("spooky"));
-      const cDmg = this.damageTakenByElement(dmg, Element.get("cold"));
-
-      totalDamage += cDmg + sDmg;
+      totalDamage += this.damageTaken(i);
 
       if (totalDamage >= myHp()) {
         return false;
@@ -167,6 +161,14 @@ export class ABooHandler implements QuestInfo {
     }
 
     return true;
+  }
+
+  getElementalResist(level: number): number {
+    if (level > 4) {
+      return 0.9 - 0.5 * Math.pow(0.05 / 0.06, level - 4);
+    }
+
+    return level * 0.1;
   }
 
   damageTakenByElement(base_damage: number, element: Element) {

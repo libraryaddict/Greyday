@@ -181,7 +181,10 @@ export class Quest12WarNuns implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    if (!haveSkill(Skill.get("Financial Spreadsheets"))) {
+    if (
+      !haveSkill(Skill.get("Financial Spreadsheets")) &&
+      GreySettings.greyMeatSkill != "No"
+    ) {
       return QuestStatus.FASTER_LATER;
     }
 

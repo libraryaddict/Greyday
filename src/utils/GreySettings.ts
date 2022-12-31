@@ -302,6 +302,22 @@ export function getGreySettings(): GreySetting[] {
     default: 0,
   };
 
+  const grabMeatSkill: GreySetting = {
+    name: "greyMeatSkill",
+    description:
+      "Should GreyDay grab Financial Spreadsheets? +40% meat from monsters, doesn't effect the run itself. ",
+    valid: (s) =>
+      ["Yes", "No", "Convenient"].find(
+        (a) => a.toLowerCase() == s.toLowerCase()
+      ) != null,
+    viableSettings: [
+      ["Yes", "Yes"],
+      ["No", "No"],
+      ["Only if Convenient", "Convenient"],
+    ],
+    default: "Yes",
+  };
+
   return [
     //greyBountyHunter,
     towerBreak,
@@ -318,6 +334,7 @@ export function getGreySettings(): GreySetting[] {
     greyVIPClan,
     moonTune,
     dailyMalware,
+    grabMeatSkill,
     greySavePulls,
     grayAdventureValue,
     greyDefaultWorkshed,
@@ -409,6 +426,7 @@ export class GreySettings {
   static greyCookbatRecipe: boolean;
   static greyLocketWeight: number;
   static greyCosplaySaber: string;
+  static greyMeatSkill: "Yes" | "No" | "Convenient";
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

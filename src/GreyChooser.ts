@@ -350,10 +350,7 @@ export class AdventureFinder {
       return true;
     }
 
-    if (
-      absorb.skill != null &&
-      this.absorbs.getMustHaveSkills().has(absorb.skill)
-    ) {
+    if (absorb.skill != null && this.absorbs.shouldGrabSkill(absorb.skill)) {
       return false;
     }
 
@@ -438,7 +435,7 @@ export class AdventureFinder {
           } else if (
             absorb != null &&
             absorb.skill != null &&
-            this.absorbs.getMustHaveSkills().has(absorb.skill) &&
+            this.absorbs.shouldGrabSkill(absorb.skill) &&
             defeat == null
           ) {
             adv.considerPriority = ConsiderPriority.ORB_ABSORB_OTHER;
@@ -466,8 +463,7 @@ export class AdventureFinder {
         (adv.locationInfo.turnsToGain > 0 ||
           [...adv.locationInfo.skills].find(
             ([a]) =>
-              !haveSkill(a.skill) &&
-              this.absorbs.getMustHaveSkills().has(a.skill)
+              !haveSkill(a.skill) && this.absorbs.shouldGrabSkill(a.skill)
           ) != null);
 
       // If we might hit an absorb we can't reabsorb

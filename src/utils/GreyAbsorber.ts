@@ -56,6 +56,7 @@ export class AbsorbsProvider {
   static remainingAdvAbsorbs: Monster[];
   static hasBall: boolean =
     availableAmount(Item.get("miniature crystal ball")) > 0;
+  static meatSkill = Skill.get("Financial Spreadsheets");
 
   getRolloverAdvs(): Map<Skill, string> {
     return new Map(
@@ -78,29 +79,40 @@ export class AbsorbsProvider {
     );
   }
 
+  shouldGrabSkill(skill: Skill): boolean {
+    if (skill == AbsorbsProvider.meatSkill) {
+      return GreySettings.greyMeatSkill != "No";
+    }
+
+    return this.getMustHaveSkills().has(skill);
+  }
+
   getMustHaveSkills(): Map<Skill, string> {
     if (getProperty("questL13Final") != "unstarted") {
       return new Map();
     }
 
-    return new Map(
-      [
-        ["Propagation Drive", "20% Item Drops"],
-        ["Overclocking", "Scaling +init"],
-        ["Ponzi Apparatus", "Scaling meat%"],
-        ["Advanced Exo-Alloy", "100 DA"],
-        ["Financial Spreadsheets", "+40% Meat from Monsters"],
-        ["Subatomic Hardening", "Scaling DR"],
-        ["Fluid Dynamics Simulation", "Scaling HP Regen"],
-        ["Infinite Loop", "Fast Leveling"],
-        ["Gravitational Compression", "Scaling Item Drop"],
-        ["Hivemindedness", "Scaling MP Regen"],
-        ["Photonic Shroud", "-10 Combat"],
-        ["Piezoelectric Honk", "+10 Combat"],
-        ["Phase Shift", "-10 Combat"],
-        ["Ponzi Apparatus", "Scaling Meat Drop"],
-      ].map((s) => [toSkill(s[0]), s[1]])
-    );
+    const array = [
+      ["Propagation Drive", "20% Item Drops"],
+      ["Overclocking", "Scaling +init"],
+      ["Ponzi Apparatus", "Scaling meat%"],
+      ["Advanced Exo-Alloy", "100 DA"],
+      ["Subatomic Hardening", "Scaling DR"],
+      ["Fluid Dynamics Simulation", "Scaling HP Regen"],
+      ["Infinite Loop", "Fast Leveling"],
+      ["Gravitational Compression", "Scaling Item Drop"],
+      ["Hivemindedness", "Scaling MP Regen"],
+      ["Photonic Shroud", "-10 Combat"],
+      ["Piezoelectric Honk", "+10 Combat"],
+      ["Phase Shift", "-10 Combat"],
+      ["Ponzi Apparatus", "Scaling Meat Drop"],
+    ];
+
+    if (GreySettings.greyMeatSkill == "Yes") {
+      array.push(["Financial Spreadsheets", "+40% Meat from Monsters"]);
+    }
+
+    return new Map(array.map((s) => [toSkill(s[0]), s[1]]));
   }
 
   getAbsorb(monster: Monster): Absorb {
