@@ -752,6 +752,7 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
 
 
 
+
     function getRolloverAdvs() {
       return new Map(
       [
@@ -771,6 +772,14 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
       ["Self-Actualized", 5]].
       map(function (s) {return [(0,external_kolmafia_namespaceObject.toSkill)(s[0]), s[1] + " Rollover Adventures"];}));
 
+    } }, { key: "shouldGrabSkill", value:
+
+    function shouldGrabSkill(skill) {
+      if (skill == AbsorbsProvider.meatSkill) {
+        return GreySettings.greyMeatSkill != "No";
+      }
+
+      return this.getMustHaveSkills().has(skill);
     } }, { key: "getMustHaveSkills", value:
 
     function getMustHaveSkills() {
@@ -778,13 +787,11 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
         return new Map();
       }
 
-      return new Map(
-      [
+      var array = [
       ["Propagation Drive", "20% Item Drops"],
       ["Overclocking", "Scaling +init"],
       ["Ponzi Apparatus", "Scaling meat%"],
       ["Advanced Exo-Alloy", "100 DA"],
-      ["Financial Spreadsheets", "+40% Meat from Monsters"],
       ["Subatomic Hardening", "Scaling DR"],
       ["Fluid Dynamics Simulation", "Scaling HP Regen"],
       ["Infinite Loop", "Fast Leveling"],
@@ -793,9 +800,14 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
       ["Photonic Shroud", "-10 Combat"],
       ["Piezoelectric Honk", "+10 Combat"],
       ["Phase Shift", "-10 Combat"],
-      ["Ponzi Apparatus", "Scaling Meat Drop"]].
-      map(function (s) {return [(0,external_kolmafia_namespaceObject.toSkill)(s[0]), s[1]];}));
+      ["Ponzi Apparatus", "Scaling Meat Drop"]];
 
+
+      if (GreySettings.greyMeatSkill == "Yes") {
+        array.push(["Financial Spreadsheets", "+40% Meat from Monsters"]);
+      }
+
+      return new Map(array.map(function (s) {return [(0,external_kolmafia_namespaceObject.toSkill)(s[0]), s[1]];}));
     } }, { key: "getAbsorb", value:
 
     function getAbsorb(monster) {
@@ -1223,7 +1235,7 @@ var AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {Grey
 
       join(", "));
 
-    } }], [{ key: "getAbsorb", value: function getAbsorb(monster) {var _iterator7 = GreyAbsorber_createForOfIteratorHelper(AbsorbsProvider.loadAbsorbs()),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var absorb = _step7.value;if (absorb.monster != monster) {continue;}return absorb;}} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}return null;} }, { key: "loadAbsorbs", value: function loadAbsorbs() {var includeBanished = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;if (AbsorbsProvider.allAbsorbs == null) {AbsorbsProvider.allAbsorbs = [];var _iterator8 = GreyAbsorber_createForOfIteratorHelper((0,external_kolmafia_namespaceObject.fileToBuffer)("data/grey_you_data.txt").split("\n")),_step8;try {for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {var line = _step8.value;var spl = line.replace("\r", "").split("\t");if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {continue;}var mons = (0,external_kolmafia_namespaceObject.toMonster)(spl[0]);if (mons == external_kolmafia_namespaceObject.Monster.none) {(0,external_kolmafia_namespaceObject.print)("Unknown " + spl[0]);continue;}var absorb = new Absorb();absorb.monster = mons;if (spl[1].endsWith("adventures")) {absorb.adventures = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("muscle")) {absorb.mus = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("mysticality")) {absorb.mys = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("moxie")) {absorb.mox = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("maximum hp")) {absorb.hp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else if (spl[1].endsWith("maximum mp")) {absorb.mp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else {absorb.skill = (0,external_kolmafia_namespaceObject.toSkill)(spl[1]);if (absorb.skill == external_kolmafia_namespaceObject.Skill.none) {throw "Unknown line '" + spl[1] + "' in absorb data";}}AbsorbsProvider.allAbsorbs.push(absorb);}} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}this.remainingAdvAbsorbs = AbsorbsProvider.allAbsorbs.filter(function (a) {return a.adventures > 0;}).map(function (a) {return a.monster;});}return AbsorbsProvider.allAbsorbs.filter(function (a) {return includeBanished || !(0,external_kolmafia_namespaceObject.isBanished)(a.monster);});} }, { key: "getAbsorbedMonsters", value: function getAbsorbedMonsters() {return Object.keys((0,external_kolmafia_namespaceObject.absorbedMonsters)()).map(function (m) {return external_kolmafia_namespaceObject.Monster.get(m);});} }, { key: "getReabsorbedMonsters", value: function getReabsorbedMonsters() {return (0,external_kolmafia_namespaceObject.getProperty)("gooseReprocessed").split(",").filter(function (s) {return s != "";}).map(function (m) {return (0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.toInt)(m));});} }]);return AbsorbsProvider;}();GreyAbsorber_defineProperty(AbsorbsProvider, "allAbsorbs", void 0);GreyAbsorber_defineProperty(AbsorbsProvider, "remainingAdvAbsorbs", void 0);GreyAbsorber_defineProperty(AbsorbsProvider, "hasBall", (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("miniature crystal ball")) > 0);
+    } }], [{ key: "getAbsorb", value: function getAbsorb(monster) {var _iterator7 = GreyAbsorber_createForOfIteratorHelper(AbsorbsProvider.loadAbsorbs()),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var absorb = _step7.value;if (absorb.monster != monster) {continue;}return absorb;}} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}return null;} }, { key: "loadAbsorbs", value: function loadAbsorbs() {var includeBanished = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;if (AbsorbsProvider.allAbsorbs == null) {AbsorbsProvider.allAbsorbs = [];var _iterator8 = GreyAbsorber_createForOfIteratorHelper((0,external_kolmafia_namespaceObject.fileToBuffer)("data/grey_you_data.txt").split("\n")),_step8;try {for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {var line = _step8.value;var spl = line.replace("\r", "").split("\t");if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {continue;}var mons = (0,external_kolmafia_namespaceObject.toMonster)(spl[0]);if (mons == external_kolmafia_namespaceObject.Monster.none) {(0,external_kolmafia_namespaceObject.print)("Unknown " + spl[0]);continue;}var absorb = new Absorb();absorb.monster = mons;if (spl[1].endsWith("adventures")) {absorb.adventures = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("muscle")) {absorb.mus = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("mysticality")) {absorb.mys = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("moxie")) {absorb.mox = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("maximum hp")) {absorb.hp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else if (spl[1].endsWith("maximum mp")) {absorb.mp = (0,external_kolmafia_namespaceObject.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else {absorb.skill = (0,external_kolmafia_namespaceObject.toSkill)(spl[1]);if (absorb.skill == external_kolmafia_namespaceObject.Skill.none) {throw "Unknown line '" + spl[1] + "' in absorb data";}}AbsorbsProvider.allAbsorbs.push(absorb);}} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}this.remainingAdvAbsorbs = AbsorbsProvider.allAbsorbs.filter(function (a) {return a.adventures > 0;}).map(function (a) {return a.monster;});}return AbsorbsProvider.allAbsorbs.filter(function (a) {return includeBanished || !(0,external_kolmafia_namespaceObject.isBanished)(a.monster);});} }, { key: "getAbsorbedMonsters", value: function getAbsorbedMonsters() {return Object.keys((0,external_kolmafia_namespaceObject.absorbedMonsters)()).map(function (m) {return external_kolmafia_namespaceObject.Monster.get(m);});} }, { key: "getReabsorbedMonsters", value: function getReabsorbedMonsters() {return (0,external_kolmafia_namespaceObject.getProperty)("gooseReprocessed").split(",").filter(function (s) {return s != "";}).map(function (m) {return (0,external_kolmafia_namespaceObject.toMonster)((0,external_kolmafia_namespaceObject.toInt)(m));});} }]);return AbsorbsProvider;}();GreyAbsorber_defineProperty(AbsorbsProvider, "allAbsorbs", void 0);GreyAbsorber_defineProperty(AbsorbsProvider, "remainingAdvAbsorbs", void 0);GreyAbsorber_defineProperty(AbsorbsProvider, "hasBall", (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("miniature crystal ball")) > 0);GreyAbsorber_defineProperty(AbsorbsProvider, "meatSkill", external_kolmafia_namespaceObject.Skill.get("Financial Spreadsheets"));
 
 
 
@@ -3949,6 +3961,22 @@ function getGreySettings() {
     "default": 0
   };
 
+  var grabMeatSkill = {
+    name: "greyMeatSkill",
+    description:
+    "Should GreyDay grab Financial Spreadsheets? +40% meat from monsters, doesn't effect the run itself. ",
+    valid: function valid(s) {return (
+        ["Yes", "No", "Convenient"].find(
+        function (a) {return a.toLowerCase() == s.toLowerCase();}) !=
+        null);},
+    viableSettings: [
+    ["Yes", "Yes"],
+    ["No", "No"],
+    ["Only if Convenient", "Convenient"]],
+
+    "default": "Yes"
+  };
+
   return [
   //greyBountyHunter,
   towerBreak,
@@ -3965,6 +3993,7 @@ function getGreySettings() {
   greyVIPClan,
   moonTune,
   dailyMalware,
+  grabMeatSkill,
   greySavePulls,
   grayAdventureValue,
   greyDefaultWorkshed,
@@ -4057,6 +4086,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
 
 
 
+
     function isHardcoreMode() {
       return this.hardcoreMode || (0,external_kolmafia_namespaceObject.inHardcore)();
     } }, { key: "willBeAccessible", value:
@@ -4111,7 +4141,7 @@ var GreySettings = /*#__PURE__*/function () {function GreySettings() {GreySettin
       if (this.isHardcoreMode()) {
         GreySettings.greyBreakAtTower = false;
       }
-    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings, "greyDefaultWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings, "greyHippyMode", false);GreySettings_defineProperty(GreySettings, "greyGrabZapWand", void 0);GreySettings_defineProperty(GreySettings, "greyCookbatRecipe", void 0);GreySettings_defineProperty(GreySettings, "greyLocketWeight", void 0);GreySettings_defineProperty(GreySettings, "greyCosplaySaber", void 0);
+    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings, "greyReachedTower", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings, "greyDebug", (0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings, "greyDefaultWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings, "greyHippyMode", false);GreySettings_defineProperty(GreySettings, "greyGrabZapWand", void 0);GreySettings_defineProperty(GreySettings, "greyCookbatRecipe", void 0);GreySettings_defineProperty(GreySettings, "greyLocketWeight", void 0);GreySettings_defineProperty(GreySettings, "greyCosplaySaber", void 0);GreySettings_defineProperty(GreySettings, "greyMeatSkill", void 0);
 ;// CONCATENATED MODULE: ./src/typings/ResourceTypes.ts
 function ResourceTypes_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = ResourceTypes_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function ResourceTypes_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return ResourceTypes_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return ResourceTypes_arrayLikeToArray(o, minLen);}function ResourceTypes_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function ResourceTypes_typeof(obj) {"@babel/helpers - typeof";return ResourceTypes_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, ResourceTypes_typeof(obj);}function ResourceTypes_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, ResourceTypes_toPropertyKey(descriptor.key), descriptor);}}function ResourceTypes_createClass(Constructor, protoProps, staticProps) {if (protoProps) ResourceTypes_defineProperties(Constructor.prototype, protoProps);if (staticProps) ResourceTypes_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function ResourceTypes_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function ResourceTypes_defineProperty(obj, key, value) {key = ResourceTypes_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function ResourceTypes_toPropertyKey(arg) {var key = ResourceTypes_toPrimitive(arg, "string");return ResourceTypes_typeof(key) === "symbol" ? key : String(key);}function ResourceTypes_toPrimitive(input, hint) {if (ResourceTypes_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (ResourceTypes_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
@@ -14724,7 +14754,10 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
         return QuestStatus.NOT_READY;
       }
 
-      if (!(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Financial Spreadsheets"))) {
+      if (
+      !(0,external_kolmafia_namespaceObject.haveSkill)(external_kolmafia_namespaceObject.Skill.get("Financial Spreadsheets")) &&
+      GreySettings.greyMeatSkill != "No")
+      {
         return QuestStatus.FASTER_LATER;
       }
 
@@ -23594,11 +23627,11 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
             var turn = 0;
 
             settings.setChoices({
-              calledOutOfScopeChoiceBehavior: function calledOutOfScopeChoiceBehavior(choice) {
+              calledOutOfScopeChoiceBehavior: function calledOutOfScopeChoiceBehavior() {
                 return false;
               },
 
-              handleChoice: function handleChoice(choice) {
+              handleChoice: function handleChoice() {
                 var dmgTaken = _this.damageTaken(turn++);
 
                 if (dmgTaken >= (0,external_kolmafia_namespaceObject.myHp)() || _this.getProgress() <= 0) {
@@ -23650,21 +23683,15 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
     } }, { key: "wouldSurviveClue", value:
 
     function wouldSurviveClue() {
-      var damageLevels = [13, 25, 50, 125, 250];
       var totalDamage = 2;
       var reducedBy = 0;
 
-      for (var i = 0; i < damageLevels.length; i++) {
+      for (var i = 0; i < this.damageLevels.length; i++) {
         if (this.getProgress() <= reducedBy) {
           return true;
         }
 
-        var dmg = damageLevels[i];
-
-        var sDmg = this.damageTakenByElement(dmg, external_kolmafia_namespaceObject.Element.get("spooky"));
-        var cDmg = this.damageTakenByElement(dmg, external_kolmafia_namespaceObject.Element.get("cold"));
-
-        totalDamage += cDmg + sDmg;
+        totalDamage += this.damageTaken(i);
 
         if (totalDamage >= (0,external_kolmafia_namespaceObject.myHp)()) {
           return false;
@@ -23674,6 +23701,14 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
       }
 
       return true;
+    } }, { key: "getElementalResist", value:
+
+    function getElementalResist(level) {
+      if (level > 4) {
+        return 0.9 - 0.5 * Math.pow(0.05 / 0.06, level - 4);
+      }
+
+      return level * 0.1;
     } }, { key: "damageTakenByElement", value:
 
     function damageTakenByElement(base_damage, element) {
@@ -31335,10 +31370,7 @@ var AdventureFinder = /*#__PURE__*/function () {
         return true;
       }
 
-      if (
-      absorb.skill != null &&
-      this.absorbs.getMustHaveSkills().has(absorb.skill))
-      {
+      if (absorb.skill != null && this.absorbs.shouldGrabSkill(absorb.skill)) {
         return false;
       }
 
@@ -31423,7 +31455,7 @@ var AdventureFinder = /*#__PURE__*/function () {
               } else if (
               absorb != null &&
               absorb.skill != null &&
-              _this2.absorbs.getMustHaveSkills().has(absorb.skill) &&
+              _this2.absorbs.shouldGrabSkill(absorb.skill) &&
               defeat == null)
               {
                 adv.considerPriority = ConsiderPriority.ORB_ABSORB_OTHER;
@@ -31451,8 +31483,7 @@ var AdventureFinder = /*#__PURE__*/function () {
           adv.locationInfo.turnsToGain > 0 ||
           GreyChooser_toConsumableArray(adv.locationInfo.skills).find(
           function (_ref5) {var _ref6 = GreyChooser_slicedToArray(_ref5, 1),a = _ref6[0];return (
-              !(0,external_kolmafia_namespaceObject.haveSkill)(a.skill) &&
-              _this2.absorbs.getMustHaveSkills().has(a.skill));}) !=
+              !(0,external_kolmafia_namespaceObject.haveSkill)(a.skill) && _this2.absorbs.shouldGrabSkill(a.skill));}) !=
           null);
 
           // If we might hit an absorb we can't reabsorb
@@ -34374,7 +34405,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "c0ef725";
+var lastCommitHash = "570cc1e";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 

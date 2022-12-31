@@ -5198,6 +5198,7 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
 
 
 
+
     function getRolloverAdvs() {
       return new Map(
       [
@@ -5217,6 +5218,14 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
       ["Self-Actualized", 5]].
       map(function (s) {return [(0,external_kolmafia_.toSkill)(s[0]), s[1] + " Rollover Adventures"];}));
 
+    } }, { key: "shouldGrabSkill", value:
+
+    function shouldGrabSkill(skill) {
+      if (skill == AbsorbsProvider.meatSkill) {
+        return GreySettings_GreySettings.greyMeatSkill != "No";
+      }
+
+      return this.getMustHaveSkills().has(skill);
     } }, { key: "getMustHaveSkills", value:
 
     function getMustHaveSkills() {
@@ -5224,13 +5233,11 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
         return new Map();
       }
 
-      return new Map(
-      [
+      var array = [
       ["Propagation Drive", "20% Item Drops"],
       ["Overclocking", "Scaling +init"],
       ["Ponzi Apparatus", "Scaling meat%"],
       ["Advanced Exo-Alloy", "100 DA"],
-      ["Financial Spreadsheets", "+40% Meat from Monsters"],
       ["Subatomic Hardening", "Scaling DR"],
       ["Fluid Dynamics Simulation", "Scaling HP Regen"],
       ["Infinite Loop", "Fast Leveling"],
@@ -5239,9 +5246,14 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
       ["Photonic Shroud", "-10 Combat"],
       ["Piezoelectric Honk", "+10 Combat"],
       ["Phase Shift", "-10 Combat"],
-      ["Ponzi Apparatus", "Scaling Meat Drop"]].
-      map(function (s) {return [(0,external_kolmafia_.toSkill)(s[0]), s[1]];}));
+      ["Ponzi Apparatus", "Scaling Meat Drop"]];
 
+
+      if (GreySettings_GreySettings.greyMeatSkill == "Yes") {
+        array.push(["Financial Spreadsheets", "+40% Meat from Monsters"]);
+      }
+
+      return new Map(array.map(function (s) {return [(0,external_kolmafia_.toSkill)(s[0]), s[1]];}));
     } }, { key: "getAbsorb", value:
 
     function getAbsorb(monster) {
@@ -5669,7 +5681,7 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
 
       join(", "));
 
-    } }], [{ key: "getAbsorb", value: function getAbsorb(monster) {var _iterator7 = GreyAbsorber_createForOfIteratorHelper(AbsorbsProvider.loadAbsorbs()),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var absorb = _step7.value;if (absorb.monster != monster) {continue;}return absorb;}} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}return null;} }, { key: "loadAbsorbs", value: function loadAbsorbs() {var includeBanished = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;if (AbsorbsProvider.allAbsorbs == null) {AbsorbsProvider.allAbsorbs = [];var _iterator8 = GreyAbsorber_createForOfIteratorHelper((0,external_kolmafia_.fileToBuffer)("data/grey_you_data.txt").split("\n")),_step8;try {for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {var line = _step8.value;var spl = line.replace("\r", "").split("\t");if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {continue;}var mons = (0,external_kolmafia_.toMonster)(spl[0]);if (mons == external_kolmafia_.Monster.none) {(0,external_kolmafia_.print)("Unknown " + spl[0]);continue;}var absorb = new Absorb();absorb.monster = mons;if (spl[1].endsWith("adventures")) {absorb.adventures = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("muscle")) {absorb.mus = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("mysticality")) {absorb.mys = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("moxie")) {absorb.mox = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("maximum hp")) {absorb.hp = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else if (spl[1].endsWith("maximum mp")) {absorb.mp = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else {absorb.skill = (0,external_kolmafia_.toSkill)(spl[1]);if (absorb.skill == external_kolmafia_.Skill.none) {throw "Unknown line '" + spl[1] + "' in absorb data";}}AbsorbsProvider.allAbsorbs.push(absorb);}} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}this.remainingAdvAbsorbs = AbsorbsProvider.allAbsorbs.filter(function (a) {return a.adventures > 0;}).map(function (a) {return a.monster;});}return AbsorbsProvider.allAbsorbs.filter(function (a) {return includeBanished || !(0,external_kolmafia_.isBanished)(a.monster);});} }, { key: "getAbsorbedMonsters", value: function getAbsorbedMonsters() {return Object.keys((0,external_kolmafia_.absorbedMonsters)()).map(function (m) {return external_kolmafia_.Monster.get(m);});} }, { key: "getReabsorbedMonsters", value: function getReabsorbedMonsters() {return (0,external_kolmafia_.getProperty)("gooseReprocessed").split(",").filter(function (s) {return s != "";}).map(function (m) {return (0,external_kolmafia_.toMonster)((0,external_kolmafia_.toInt)(m));});} }]);return AbsorbsProvider;}();GreyAbsorber_defineProperty(GreyAbsorber_AbsorbsProvider, "allAbsorbs", void 0);GreyAbsorber_defineProperty(GreyAbsorber_AbsorbsProvider, "remainingAdvAbsorbs", void 0);GreyAbsorber_defineProperty(GreyAbsorber_AbsorbsProvider, "hasBall", (0,external_kolmafia_.availableAmount)(external_kolmafia_.Item.get("miniature crystal ball")) > 0);
+    } }], [{ key: "getAbsorb", value: function getAbsorb(monster) {var _iterator7 = GreyAbsorber_createForOfIteratorHelper(AbsorbsProvider.loadAbsorbs()),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var absorb = _step7.value;if (absorb.monster != monster) {continue;}return absorb;}} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}return null;} }, { key: "loadAbsorbs", value: function loadAbsorbs() {var includeBanished = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;if (AbsorbsProvider.allAbsorbs == null) {AbsorbsProvider.allAbsorbs = [];var _iterator8 = GreyAbsorber_createForOfIteratorHelper((0,external_kolmafia_.fileToBuffer)("data/grey_you_data.txt").split("\n")),_step8;try {for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {var line = _step8.value;var spl = line.replace("\r", "").split("\t");if (spl.length != 2 || spl[1] == null || spl[1].length == 0) {continue;}var mons = (0,external_kolmafia_.toMonster)(spl[0]);if (mons == external_kolmafia_.Monster.none) {(0,external_kolmafia_.print)("Unknown " + spl[0]);continue;}var absorb = new Absorb();absorb.monster = mons;if (spl[1].endsWith("adventures")) {absorb.adventures = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("muscle")) {absorb.mus = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("mysticality")) {absorb.mys = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("moxie")) {absorb.mox = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].lastIndexOf(" ")));} else if (spl[1].endsWith("maximum hp")) {absorb.hp = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else if (spl[1].endsWith("maximum mp")) {absorb.mp = (0,external_kolmafia_.toInt)(spl[1].substring(0, spl[1].indexOf(" ")));} else {absorb.skill = (0,external_kolmafia_.toSkill)(spl[1]);if (absorb.skill == external_kolmafia_.Skill.none) {throw "Unknown line '" + spl[1] + "' in absorb data";}}AbsorbsProvider.allAbsorbs.push(absorb);}} catch (err) {_iterator8.e(err);} finally {_iterator8.f();}this.remainingAdvAbsorbs = AbsorbsProvider.allAbsorbs.filter(function (a) {return a.adventures > 0;}).map(function (a) {return a.monster;});}return AbsorbsProvider.allAbsorbs.filter(function (a) {return includeBanished || !(0,external_kolmafia_.isBanished)(a.monster);});} }, { key: "getAbsorbedMonsters", value: function getAbsorbedMonsters() {return Object.keys((0,external_kolmafia_.absorbedMonsters)()).map(function (m) {return external_kolmafia_.Monster.get(m);});} }, { key: "getReabsorbedMonsters", value: function getReabsorbedMonsters() {return (0,external_kolmafia_.getProperty)("gooseReprocessed").split(",").filter(function (s) {return s != "";}).map(function (m) {return (0,external_kolmafia_.toMonster)((0,external_kolmafia_.toInt)(m));});} }]);return AbsorbsProvider;}();GreyAbsorber_defineProperty(GreyAbsorber_AbsorbsProvider, "allAbsorbs", void 0);GreyAbsorber_defineProperty(GreyAbsorber_AbsorbsProvider, "remainingAdvAbsorbs", void 0);GreyAbsorber_defineProperty(GreyAbsorber_AbsorbsProvider, "hasBall", (0,external_kolmafia_.availableAmount)(external_kolmafia_.Item.get("miniature crystal ball")) > 0);GreyAbsorber_defineProperty(GreyAbsorber_AbsorbsProvider, "meatSkill", external_kolmafia_.Skill.get("Financial Spreadsheets"));
 
 
 
@@ -12528,7 +12540,10 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
         return QuestStatus.NOT_READY;
       }
 
-      if (!(0,external_kolmafia_.haveSkill)(external_kolmafia_.Skill.get("Financial Spreadsheets"))) {
+      if (
+      !(0,external_kolmafia_.haveSkill)(external_kolmafia_.Skill.get("Financial Spreadsheets")) &&
+      GreySettings_GreySettings.greyMeatSkill != "No")
+      {
         return QuestStatus.FASTER_LATER;
       }
 
@@ -22747,11 +22762,11 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
             var turn = 0;
 
             settings.setChoices({
-              calledOutOfScopeChoiceBehavior: function calledOutOfScopeChoiceBehavior(choice) {
+              calledOutOfScopeChoiceBehavior: function calledOutOfScopeChoiceBehavior() {
                 return false;
               },
 
-              handleChoice: function handleChoice(choice) {
+              handleChoice: function handleChoice() {
                 var dmgTaken = _this.damageTaken(turn++);
 
                 if (dmgTaken >= (0,external_kolmafia_.myHp)() || _this.getProgress() <= 0) {
@@ -22803,21 +22818,15 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
     } }, { key: "wouldSurviveClue", value:
 
     function wouldSurviveClue() {
-      var damageLevels = [13, 25, 50, 125, 250];
       var totalDamage = 2;
       var reducedBy = 0;
 
-      for (var i = 0; i < damageLevels.length; i++) {
+      for (var i = 0; i < this.damageLevels.length; i++) {
         if (this.getProgress() <= reducedBy) {
           return true;
         }
 
-        var dmg = damageLevels[i];
-
-        var sDmg = this.damageTakenByElement(dmg, external_kolmafia_.Element.get("spooky"));
-        var cDmg = this.damageTakenByElement(dmg, external_kolmafia_.Element.get("cold"));
-
-        totalDamage += cDmg + sDmg;
+        totalDamage += this.damageTaken(i);
 
         if (totalDamage >= (0,external_kolmafia_.myHp)()) {
           return false;
@@ -22827,6 +22836,14 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
       }
 
       return true;
+    } }, { key: "getElementalResist", value:
+
+    function getElementalResist(level) {
+      if (level > 4) {
+        return 0.9 - 0.5 * Math.pow(0.05 / 0.06, level - 4);
+      }
+
+      return level * 0.1;
     } }, { key: "damageTakenByElement", value:
 
     function damageTakenByElement(base_damage, element) {
@@ -29787,10 +29804,7 @@ var AdventureFinder = /*#__PURE__*/function () {
         return true;
       }
 
-      if (
-      absorb.skill != null &&
-      this.absorbs.getMustHaveSkills().has(absorb.skill))
-      {
+      if (absorb.skill != null && this.absorbs.shouldGrabSkill(absorb.skill)) {
         return false;
       }
 
@@ -29875,7 +29889,7 @@ var AdventureFinder = /*#__PURE__*/function () {
               } else if (
               absorb != null &&
               absorb.skill != null &&
-              _this2.absorbs.getMustHaveSkills().has(absorb.skill) &&
+              _this2.absorbs.shouldGrabSkill(absorb.skill) &&
               defeat == null)
               {
                 adv.considerPriority = ConsiderPriority.ORB_ABSORB_OTHER;
@@ -29903,8 +29917,7 @@ var AdventureFinder = /*#__PURE__*/function () {
           adv.locationInfo.turnsToGain > 0 ||
           GreyChooser_toConsumableArray(adv.locationInfo.skills).find(
           function (_ref5) {var _ref6 = GreyChooser_slicedToArray(_ref5, 1),a = _ref6[0];return (
-              !(0,external_kolmafia_.haveSkill)(a.skill) &&
-              _this2.absorbs.getMustHaveSkills().has(a.skill));}) !=
+              !(0,external_kolmafia_.haveSkill)(a.skill) && _this2.absorbs.shouldGrabSkill(a.skill));}) !=
           null);
 
           // If we might hit an absorb we can't reabsorb
@@ -33974,6 +33987,22 @@ function GreySettings_getGreySettings() {
     "default": 0
   };
 
+  var grabMeatSkill = {
+    name: "greyMeatSkill",
+    description:
+    "Should GreyDay grab Financial Spreadsheets? +40% meat from monsters, doesn't effect the run itself. ",
+    valid: function valid(s) {return (
+        ["Yes", "No", "Convenient"].find(
+        function (a) {return a.toLowerCase() == s.toLowerCase();}) !=
+        null);},
+    viableSettings: [
+    ["Yes", "Yes"],
+    ["No", "No"],
+    ["Only if Convenient", "Convenient"]],
+
+    "default": "Yes"
+  };
+
   return [
   //greyBountyHunter,
   towerBreak,
@@ -33990,6 +34019,7 @@ function GreySettings_getGreySettings() {
   greyVIPClan,
   moonTune,
   dailyMalware,
+  grabMeatSkill,
   greySavePulls,
   grayAdventureValue,
   greyDefaultWorkshed,
@@ -34082,6 +34112,7 @@ var GreySettings_GreySettings = /*#__PURE__*/function () {function GreySettings(
 
 
 
+
     function isHardcoreMode() {
       return this.hardcoreMode || (0,external_kolmafia_.inHardcore)();
     } }, { key: "willBeAccessible", value:
@@ -34136,7 +34167,7 @@ var GreySettings_GreySettings = /*#__PURE__*/function () {function GreySettings(
       if (this.isHardcoreMode()) {
         GreySettings.greyBreakAtTower = false;
       }
-    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings_GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings_GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings_GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings_GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings_GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyReachedTower", (0,external_kolmafia_.toBoolean)((0,external_kolmafia_.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings_GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDebug", (0,external_kolmafia_.toBoolean)((0,external_kolmafia_.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings_GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings_GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDefaultWorkshed", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyHippyMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "greyGrabZapWand", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyCookbatRecipe", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyLocketWeight", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyCosplaySaber", void 0);
+    } }]);return GreySettings;}();GreySettings_defineProperty(GreySettings_GreySettings, "hardcoreMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "speedRunMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "adventuresBeforeAbort", 8);GreySettings_defineProperty(GreySettings_GreySettings, "adventuresGenerateIfPossibleOrAbort", 12);GreySettings_defineProperty(GreySettings_GreySettings, "usefulSkillsWeight", 6);GreySettings_defineProperty(GreySettings_GreySettings, "handySkillsWeight", 0.5);GreySettings_defineProperty(GreySettings_GreySettings, "greyBreakAtTower", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyReachedTower", (0,external_kolmafia_.toBoolean)((0,external_kolmafia_.getProperty)("_greyReachedTower")));GreySettings_defineProperty(GreySettings_GreySettings, "greyDailyDungeon", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDailyMalware", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyPrepareLevelingResources", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyFantasyBandits", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyTuneMoonSpoon", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDebug", (0,external_kolmafia_.toBoolean)((0,external_kolmafia_.getProperty)("greyDebug") || "false"));GreySettings_defineProperty(GreySettings_GreySettings, "greySkipPalindome", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyPullsLimit", 20);GreySettings_defineProperty(GreySettings_GreySettings, "greyValueOfAdventure", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyUseMummery", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyVotingBooth", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyBountyHunting", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDefaultWorkshed", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greySwitchWorkshed", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyClipArt", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyVIPClan", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyFortuneTeller", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyDeleteKmails", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyHippyMode", false);GreySettings_defineProperty(GreySettings_GreySettings, "greyGrabZapWand", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyCookbatRecipe", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyLocketWeight", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyCosplaySaber", void 0);GreySettings_defineProperty(GreySettings_GreySettings, "greyMeatSkill", void 0);
 
 /***/ }),
 
