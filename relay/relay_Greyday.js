@@ -33990,7 +33990,7 @@ function GreySettings_getGreySettings() {
   var grabMeatSkill = {
     name: "greyMeatSkill",
     description:
-    "Should GreyDay grab Financial Spreadsheets? +40% meat from monsters, doesn't effect the run itself. ",
+    "Should GreyDay grab Financial Spreadsheets? +40% meat from monsters, doesn't effect the run itself. Convenient means it'll grab the skill if it's an orb prediction or current fight, but not care about it.",
     valid: function valid(s) {return (
         ["Yes", "No", "Convenient"].find(
         function (a) {return a.toLowerCase() == s.toLowerCase();}) !=
