@@ -5,6 +5,7 @@ import {
   cliExecute,
   currentRound,
   fightFollowsChoice,
+  gamedayToInt,
   getClanId,
   getClanLounge,
   getClanName,
@@ -113,11 +114,15 @@ function runInClan(clanId: number, func: () => void) {
 }
 
 function loadWhitelists(): Map<number, string> {
-  const prop = "_clansWhitelisted";
+  const prop = "clansWhitelisted";
+  const dayChecked = "clansWhitelistedChecked";
 
   availableClans = new Map();
 
-  if (!propertyExists(prop)) {
+  if (
+    !propertyExists(prop) ||
+    toInt(getProperty(dayChecked)) != gamedayToInt()
+  ) {
     // Wait until we can fetch the page without errors
     while (
       currentRound() != 0 ||
@@ -144,6 +149,7 @@ function loadWhitelists(): Map<number, string> {
       prop,
       toJson([...availableClans].map(([k, v]) => [k.toString(), v]))
     );
+    setProperty(dayChecked, gamedayToInt().toString());
   } else {
     const data = getProperty(prop);
 

@@ -7,6 +7,7 @@ import {
   familiarWeight,
   fightFollowsChoice,
   fileToBuffer,
+  gamedayToInt,
   getMonsters,
   getProperty,
   handlingChoice,
@@ -45,9 +46,9 @@ if (
   !fightFollowsChoice() &&
   !fightFollowsChoice()
 ) {
-  if (getProperty("_checkedIcehouse") != "true") {
+  if (getProperty("lastIcehouseCheck") != gamedayToInt().toString()) {
     visitUrl("museum.php?action=icehouse");
-    setProperty("_checkedIcehouse", "true");
+    setProperty("lastIcehouseCheck", gamedayToInt().toString());
   }
 }
 
