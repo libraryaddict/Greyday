@@ -1209,11 +1209,15 @@ function runInClan(clanId, func) {
 }
 
 function loadWhitelists() {
-  var prop = "_clansWhitelisted";
+  var prop = "clansWhitelisted";
+  var dayChecked = "clansWhitelistedChecked";
 
   availableClans = new Map();
 
-  if (!(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.propertyExists)(prop)) {
+  if (
+  !(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.propertyExists)(prop) ||
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.toInt)((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getProperty)(dayChecked)) != (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.gamedayToInt)())
+  {
     // Wait until we can fetch the page without errors
     while (
     (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.currentRound)() != 0 ||
@@ -1240,6 +1244,7 @@ function loadWhitelists() {
     prop,
     (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.toJson)(_toConsumableArray(availableClans).map(function (_ref3) {var _ref4 = _slicedToArray(_ref3, 2),k = _ref4[0],v = _ref4[1];return [k.toString(), v];})));
 
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.setProperty)(dayChecked, (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.gamedayToInt)().toString());
   } else {
     var data = (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getProperty)(prop);
 
@@ -5186,9 +5191,9 @@ if (
 !(0,external_kolmafia_.fightFollowsChoice)() &&
 !(0,external_kolmafia_.fightFollowsChoice)())
 {
-  if ((0,external_kolmafia_.getProperty)("_checkedIcehouse") != "true") {
+  if ((0,external_kolmafia_.getProperty)("lastIcehouseCheck") != (0,external_kolmafia_.gamedayToInt)().toString()) {
     (0,external_kolmafia_.visitUrl)("museum.php?action=icehouse");
-    (0,external_kolmafia_.setProperty)("_checkedIcehouse", "true");
+    (0,external_kolmafia_.setProperty)("lastIcehouseCheck", (0,external_kolmafia_.gamedayToInt)().toString());
   }
 }
 
