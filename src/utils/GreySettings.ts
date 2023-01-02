@@ -286,14 +286,6 @@ export function getGreySettings(): GreySetting[] {
     default: false,
   };
 
-  const greyCookbat: GreySetting = {
-    name: "greyCookbatRecipe",
-    description:
-      "Should the script try to use the cookbat to drop a recipe when no familiar is needed? This detects a recipe in inventory to know if one dropped, removing it will make it think none dropped",
-    valid: isBoolean,
-    default: true,
-  };
-
   const prioritizeLocket: GreySetting = {
     name: "greyLocketWeight",
     description:
@@ -318,6 +310,22 @@ export function getGreySettings(): GreySetting[] {
     default: "Yes",
   };
 
+  const greyUseFamiliar: GreySetting = {
+    name: "greyUseFamiliars",
+    description:
+      "Comma seperated list of familiars in order of priority to use. Best used with only a few fams at most, does support drop fams",
+    valid: (s) =>
+      ["Yes", "No", "Convenient"].find(
+        (a) => a.toLowerCase() == s.toLowerCase()
+      ) != null,
+    viableSettings: [
+      ["Yes", "Yes"],
+      ["No", "No"],
+      ["Only if Convenient", "Convenient"],
+    ],
+    default: "Yes",
+  };
+
   return [
     //greyBountyHunter,
     towerBreak,
@@ -330,7 +338,6 @@ export function getGreySettings(): GreySetting[] {
     greyGrabZapWand,
     skipPalindome,
     useMummery,
-    greyCookbat,
     greyVIPClan,
     moonTune,
     dailyMalware,
@@ -423,10 +430,10 @@ export class GreySettings {
   static greyDeleteKmails: boolean;
   static greyHippyMode: boolean = false;
   static greyGrabZapWand: boolean;
-  static greyCookbatRecipe: boolean;
   static greyLocketWeight: number;
   static greyCosplaySaber: string;
   static greyMeatSkill: "Yes" | "No" | "Convenient";
+  static greyUseFamiliars: string = "";
 
   static isHardcoreMode(): boolean {
     return this.hardcoreMode || inHardcore();

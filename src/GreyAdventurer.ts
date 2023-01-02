@@ -24,7 +24,6 @@ import {
   putCloset,
   setLocation,
   Skill,
-  toBoolean,
   toInt,
   turnsPlayed,
   useFamiliar,
@@ -68,6 +67,7 @@ import { TaskAutumnaton } from "./tasks/TaskAutumnaton";
 import { handledChoices } from "./utils/Properties";
 import { shouldGreydayStop } from "./GreyYouMain";
 import { TaskTrainset } from "./tasks/TaskTrainset";
+import { getFamiliarsToUse, shouldLevelFamiliar } from "./utils/GreyFamiliars";
 
 export class GreyAdventurer {
   goose: Familiar = Familiar.get("Grey Goose");
@@ -94,6 +94,8 @@ export class GreyAdventurer {
     "navel ring of navel gazing",
   ].map((s) => Item.get(s));
   lastTasksComplete: number = -1;
+  gnome = Familiar.get("Reagnimated Gnome");
+  gnomeKnee: Item = Item.get("gnomish housemaid's kgnee");
 
   runTurn(goTime: boolean): boolean {
     this.goTime = goTime;
@@ -397,7 +399,6 @@ export class GreyAdventurer {
       }
     }
 
-    let familiar: Familiar = this.goose;
     const wantToAbsorb: boolean =
       adventure.locationInfo != null &&
       adventure.locationInfo.turnsToGain > 0 &&
@@ -465,11 +466,8 @@ export class GreyAdventurer {
       Familiar.get("Cat Burglar"),
       Familiar.get("Gelatinous Cubeling"),
     ];
-    const noLevel = [
-      ...prioritize,
-      Familiar.get("Cookbookbat"),
-      Familiar.get("Melodramedary"),
-    ];
+
+    let familiar: Familiar = this.goose;
 
     if (
       toRun.familiar != null &&
@@ -508,38 +506,15 @@ export class GreyAdventurer {
         replaceWith.push(fam);
       }
 
-      // If we want the recipe, add cookbat
-      if (
-        GreySettings.greyCookbatRecipe &&
-        !toBoolean(getProperty("_cookbookbatRecipeDrops"))
-      ) {
-        replaceWith.push(Familiar.get("Cookbookbat"));
-      }
-
       // Add every other fam, exclude burglar.
       replaceWith.push(...recced.filter((f) => !replaceWith.includes(f)));
+      replaceWith.push(...getFamiliarsToUse());
 
-      const robor: Familiar = Familiar.get("Robortender");
-      const doRobor =
-        getProperty("_roboDrinks").includes("drive-by shooting") &&
-        familiarWeight(robor) < 20;
+      replaceWith.push(this.goose);
 
-      const toLevelUp = [
-        haveFamiliar(robor) ? (doRobor ? "Robortender" : "") : "Hobomonkey",
-        "Jumpsuited Hound Dog",
-        "Pocket Professor",
-        toInt(getProperty("camelSpit")) < 100 ? "Melodramedary" : "",
-      ]
-        .filter((f) => f.length > 0)
-        .map((f) => Familiar.get(f))
-        .filter((f) => haveFamiliar(f) && familiarWeight(f) < 20);
-
-      replaceWith.push(...toLevelUp.filter((f) => familiarWeight(f) <= 15));
-      replaceWith.push(...toLevelUp);
-
-      replaceWith.push(familiar);
-
-      familiar = replaceWith.filter((f) => haveFamiliar(f))[0];
+      familiar = replaceWith.filter(
+        (f) => haveFamiliar(f) && (!doOrb || f != this.gnome)
+      )[0];
     }
 
     if (
@@ -548,6 +523,10 @@ export class GreyAdventurer {
       familiar == Familiar.get("Melodramedary")
     ) {
       outfit.addWeight(Item.get("june cleaver"), 10);
+    }
+
+    if (familiar == this.gnome) {
+      outfit.addWeight(this.gnomeKnee);
     }
 
     if (
@@ -575,7 +554,7 @@ export class GreyAdventurer {
 
     useFamiliar(familiar);
 
-    if (noLevel.includes(familiar)) {
+    if (!shouldLevelFamiliar(familiar)) {
       outfit.famExpWeight = 0;
     } else if (
       familiar != this.goose ||

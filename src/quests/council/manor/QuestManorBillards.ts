@@ -212,7 +212,14 @@ export class QuestManorBillards extends TaskInfo implements QuestInfo {
       }
     }
 
-    outfit.addWeight(this.cue);
+    // Don't waste equips on cue if we wouldn't have enough skill
+    if (
+      toInt(getProperty("poolSkill")) >= 2 ||
+      availableAmount(this.chalk) > 0 ||
+      haveEffect(this.chalkEffect) > 0
+    ) {
+      outfit.addWeight(this.cue);
+    }
 
     const mustHitGhost =
       this.toAbsorb.includes(this.ghost) ||
