@@ -8765,13 +8765,6 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
       }
 
       if (
-      (0,external_kolmafia_.availableAmount)(this.sweatpants) + (0,external_kolmafia_.equippedAmount)(this.sweatpants) > 0 &&
-      (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("sweat")) < 95)
-      {
-        return QuestStatus.NOT_READY;
-      }
-
-      if (
       (0,external_kolmafia_.gnomadsAvailable)() &&
       !(0,external_kolmafia_.haveSkill)(this.torsoAwareness) &&
       !GreySettings_GreySettings.isHardcoreMode())
@@ -8797,6 +8790,13 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
       getQuestStatus("questL09Topping") < 1)
       {
         return QuestStatus.NOT_READY;
+      }
+
+      if (
+      (0,external_kolmafia_.availableAmount)(this.sweatpants) + (0,external_kolmafia_.equippedAmount)(this.sweatpants) > 0 &&
+      (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("sweat")) < 95)
+      {
+        return QuestStatus.FASTER_LATER;
       }
 
       return QuestStatus.READY;
