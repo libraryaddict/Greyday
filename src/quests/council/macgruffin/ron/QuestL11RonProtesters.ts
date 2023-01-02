@@ -307,13 +307,6 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     }
 
     if (
-      availableAmount(this.sweatpants) + equippedAmount(this.sweatpants) > 0 &&
-      toInt(getProperty("sweat")) < 95
-    ) {
-      return QuestStatus.NOT_READY;
-    }
-
-    if (
       gnomadsAvailable() &&
       !haveSkill(this.torsoAwareness) &&
       !GreySettings.isHardcoreMode()
@@ -339,6 +332,13 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
       getQuestStatus("questL09Topping") < 1
     ) {
       return QuestStatus.NOT_READY;
+    }
+
+    if (
+      availableAmount(this.sweatpants) + equippedAmount(this.sweatpants) > 0 &&
+      toInt(getProperty("sweat")) < 95
+    ) {
+      return QuestStatus.FASTER_LATER;
     }
 
     return QuestStatus.READY;
