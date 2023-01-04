@@ -32108,13 +32108,14 @@ lessThan("Ms. Puck Man", "_powerPillDrops", 5);
 lessThan("Puck Man", "_powerPillDrops", 5);
 lessThan("Rogue Program", "_tokenDrops", 5);
 lessThan("Machine Elf", "_snowglobeDrops", 1);
-lessThan("Mini-Hipster", "_hipsterAdv", 7);
-lessThan("Artistic Goth Kid", "_hipsterAdv", 7);
 
 alwaysValid("Reagnimated Gnome");
 alwaysValid("Temporal Riftlet");
 
 addLevelers(false);
+
+lessThan("Mini-Hipster", "_hipsterAdv", 7);
+lessThan("Artistic Goth Kid", "_hipsterAdv", 7);
 
 alwaysValid("Cookbookbat");
 alwaysValid("Obtuse Angel");
