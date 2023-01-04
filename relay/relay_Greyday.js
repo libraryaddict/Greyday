@@ -3130,12 +3130,12 @@ var QuestL7CryptPull = /*#__PURE__*/function (_TaskInfo) {QuestL7CryptPull_inher
       var sprinters = (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("cyrptAlcoveEvilness"));
 
       if (assumeFresh) {
-        dirty = eyes = rattling = sprinters = 25;
+        dirty = eyes = rattling = sprinters = 37;
       } else {
-        dirty = Math.max(0, dirty - 25);
-        eyes = Math.max(0, eyes - 25);
-        rattling = Math.max(0, rattling - 25);
-        sprinters = Math.max(0, sprinters - 25);
+        dirty = Math.max(0, dirty - 37);
+        eyes = Math.max(0, eyes - 37);
+        rattling = Math.max(0, rattling - 37);
+        sprinters = Math.max(0, sprinters - 37);
       }
 
       var evilPerNormFight = 1 + ((0,external_kolmafia_.availableAmount)(this.cape) > 0 ? 1 : 0);
@@ -20322,7 +20322,7 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
     function getStatus() {
       var num = (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)(this.getProperty()));
 
-      if (num > 25) {
+      if (num > 50 - 37) {
         return CryptStatus.FIGHT;
       }
 
@@ -20363,7 +20363,7 @@ var CryptL7DirtyMan = /*#__PURE__*/function (_CryptL7Template) {QuestL7CryptDirt
       var evilRemaining =
       (assumeUnused || (0,external_kolmafia_.getProperty)("questL07Cyrptic") == "unstarted" ?
       50 :
-      (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)(this.getProperty()))) - 25;
+      (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)(this.getProperty()))) - 37;
 
       // Need to do this better, with actual math for retro/gravy
       this.nonSpray = new PossiblePath(Math.ceil(evilRemaining / 2));
