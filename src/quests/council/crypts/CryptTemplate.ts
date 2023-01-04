@@ -108,7 +108,7 @@ export abstract class CryptL7Template implements QuestInfo {
   getStatus(): CryptStatus {
     const num = toInt(getProperty(this.getProperty()));
 
-    if (num > 25) {
+    if (num > 50 - 37) {
       return CryptStatus.FIGHT;
     }
 

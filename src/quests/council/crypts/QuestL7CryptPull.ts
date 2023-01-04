@@ -76,12 +76,12 @@ export class QuestL7CryptPull extends TaskInfo implements QuestInfo {
     let sprinters = toInt(getProperty("cyrptAlcoveEvilness"));
 
     if (assumeFresh) {
-      dirty = eyes = rattling = sprinters = 25;
+      dirty = eyes = rattling = sprinters = 37;
     } else {
-      dirty = Math.max(0, dirty - 25);
-      eyes = Math.max(0, eyes - 25);
-      rattling = Math.max(0, rattling - 25);
-      sprinters = Math.max(0, sprinters - 25);
+      dirty = Math.max(0, dirty - 37);
+      eyes = Math.max(0, eyes - 37);
+      rattling = Math.max(0, rattling - 37);
+      sprinters = Math.max(0, sprinters - 37);
     }
 
     const evilPerNormFight = 1 + (availableAmount(this.cape) > 0 ? 1 : 0);

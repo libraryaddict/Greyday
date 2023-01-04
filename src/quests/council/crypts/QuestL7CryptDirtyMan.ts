@@ -37,7 +37,7 @@ export class CryptL7DirtyMan extends CryptL7Template {
     const evilRemaining =
       (assumeUnused || getProperty("questL07Cyrptic") == "unstarted"
         ? 50
-        : toInt(getProperty(this.getProperty()))) - 25;
+        : toInt(getProperty(this.getProperty()))) - 37;
 
     // Need to do this better, with actual math for retro/gravy
     this.nonSpray = new PossiblePath(Math.ceil(evilRemaining / 2));
