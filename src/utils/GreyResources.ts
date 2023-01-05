@@ -25,7 +25,6 @@ import {
   storageAmount,
   toBoolean,
   toInt,
-  use,
 } from "kolmafia";
 
 export class GreyPulls {
@@ -158,52 +157,6 @@ export class GreyPulls {
       setProperty("_greyPulls", pullsSorted.join(","));
     }
   }
-}
-
-export class GreyClovers {
-  static clover: Item = Item.get("11-leaf Clover");
-
-  static doOres() {
-    // 2
-    use(this.clover);
-  }
-
-  static doWand() {
-    // 1
-    use(this.clover);
-  }
-}
-
-export class GreyVortex {
-  static doBatCave() {
-    // 20
-  }
-
-  static doHarem() {
-    // 20
-  }
-
-  static doHiddenTemple() {
-    // 20
-  }
-
-  static doSmutOrcs() {
-    // 20
-  }
-
-  static doCrypt() {
-    // 20
-  }
-}
-
-export class GreyCombatLocket {
-  static doSystemSweep() {}
-
-  static doInfiniteLoop() {}
-
-  static doFantasyBandit() {}
-
-  static doMountainMan() {}
 }
 
 export function getZappables(item: Item): Item[] {

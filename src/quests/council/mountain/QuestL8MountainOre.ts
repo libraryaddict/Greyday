@@ -21,6 +21,7 @@ import {
   pullsRemaining,
   Skill,
   toInt,
+  use,
   useFamiliar,
   visitUrl,
 } from "kolmafia";
@@ -29,7 +30,7 @@ import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
-import { GreyClovers, GreyPulls } from "../../../utils/GreyResources";
+import { GreyPulls } from "../../../utils/GreyResources";
 import { GreySettings } from "../../../utils/GreySettings";
 import { isTrainsetInUse } from "../../../utils/GreyTrainset";
 import {
@@ -539,7 +540,7 @@ export class QuestL8MountainOre extends TaskInfo implements QuestInfo {
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         while (path.canUse(ResourceCategory.CLOVER)) {
-          GreyClovers.doOres();
+          use(Item.get("11-leaf clover"));
           greyAdv(this.mines);
           path.addUsed(ResourceCategory.CLOVER);
         }

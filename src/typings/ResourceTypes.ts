@@ -968,9 +968,14 @@ export function getResourcesLeft(
           : toInt(getProperty("_fireExtinguisherCharge"))
         : 0;
     case "Clover":
-      return assumeUnused || !toBoolean(getProperty("breakfastCompleted"))
-        ? 3
-        : itemAmount(Item.get("11-leaf clover"));
+      if (assumeUnused) {
+        return 3;
+      }
+
+      const purchased = toInt(getProperty("_cloversPurchased"));
+
+      // If we've purchased 2, then we have 1 left to purchase along with item amount
+      return itemAmount(Item.get("11-leaf clover")) + (3 - purchased);
     case "Deck of Every Card":
       return availableAmount(Item.get("Deck of Every Card")) > 0
         ? 15 - (assumeUnused ? 0 : toInt(getProperty("_deckCardsDrawn")))
