@@ -5088,9 +5088,14 @@ resourceType)
       (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_fireExtinguisherCharge")) :
       0;
     case "Clover":
-      return assumeUnused || !(0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("breakfastCompleted")) ?
-      3 :
-      (0,external_kolmafia_namespaceObject.itemAmount)(external_kolmafia_namespaceObject.Item.get("11-leaf clover"));
+      if (assumeUnused) {
+        return 3;
+      }
+
+      var purchased = (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_cloversPurchased"));
+
+      // If we've purchased 2, then we have 1 left to purchase along with item amount
+      return (0,external_kolmafia_namespaceObject.itemAmount)(external_kolmafia_namespaceObject.Item.get("11-leaf clover")) + (3 - purchased);
     case "Deck of Every Card":
       return (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Deck of Every Card")) > 0 ?
       15 - (assumeUnused ? 0 : (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("_deckCardsDrawn"))) :
@@ -5710,7 +5715,7 @@ path)
   return newSnapshot;
 }
 ;// CONCATENATED MODULE: ./src/utils/GreyResources.ts
-function GreyResources_typeof(obj) {"@babel/helpers - typeof";return GreyResources_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyResources_typeof(obj);}function GreyResources_slicedToArray(arr, i) {return GreyResources_arrayWithHoles(arr) || GreyResources_iterableToArrayLimit(arr, i) || GreyResources_unsupportedIterableToArray(arr, i) || GreyResources_nonIterableRest();}function GreyResources_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyResources_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function GreyResources_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function GreyResources_defineProperty(obj, key, value) {key = GreyResources_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyResources_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyResources_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyResources_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyResources_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyResources_arrayLikeToArray(o, minLen);}function GreyResources_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyResources_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyResources_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyResources_toPropertyKey(descriptor.key), descriptor);}}function GreyResources_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyResources_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyResources_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyResources_toPropertyKey(arg) {var key = GreyResources_toPrimitive(arg, "string");return GreyResources_typeof(key) === "symbol" ? key : String(key);}function GreyResources_toPrimitive(input, hint) {if (GreyResources_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyResources_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
+function GreyResources_typeof(obj) {"@babel/helpers - typeof";return GreyResources_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyResources_typeof(obj);}function GreyResources_slicedToArray(arr, i) {return GreyResources_arrayWithHoles(arr) || GreyResources_iterableToArrayLimit(arr, i) || GreyResources_unsupportedIterableToArray(arr, i) || GreyResources_nonIterableRest();}function GreyResources_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function GreyResources_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function GreyResources_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function GreyResources_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyResources_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyResources_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyResources_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyResources_arrayLikeToArray(o, minLen);}function GreyResources_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyResources_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyResources_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyResources_toPropertyKey(descriptor.key), descriptor);}}function GreyResources_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyResources_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyResources_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyResources_toPropertyKey(arg) {var key = GreyResources_toPrimitive(arg, "string");return GreyResources_typeof(key) === "symbol" ? key : String(key);}function GreyResources_toPrimitive(input, hint) {if (GreyResources_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyResources_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
 var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_classCallCheck(this, GreyPulls);}GreyResources_createClass(GreyPulls, null, [{ key: "pullFratWarOutfit", value:
     function pullFratWarOutfit() {var _iterator = GreyResources_createForOfIteratorHelper(
@@ -5842,52 +5847,6 @@ var GreyPulls = /*#__PURE__*/function () {function GreyPulls() {GreyResources_cl
         (0,external_kolmafia_namespaceObject.setProperty)("_greyPulls", pullsSorted.join(","));
       }
     } }]);return GreyPulls;}();
-
-
-var GreyClovers = /*#__PURE__*/function () {function GreyClovers() {GreyResources_classCallCheck(this, GreyClovers);}GreyResources_createClass(GreyClovers, null, [{ key: "doOres", value:
-
-
-    function doOres() {
-      // 2
-      (0,external_kolmafia_namespaceObject.use)(this.clover);
-    } }, { key: "doWand", value:
-
-    function doWand() {
-      // 1
-      (0,external_kolmafia_namespaceObject.use)(this.clover);
-    } }]);return GreyClovers;}();GreyResources_defineProperty(GreyClovers, "clover", external_kolmafia_namespaceObject.Item.get("11-leaf Clover"));
-
-
-var GreyVortex = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {function GreyVortex() {GreyResources_classCallCheck(this, GreyVortex);}GreyResources_createClass(GreyVortex, null, [{ key: "doBatCave", value:
-    function doBatCave() {
-
-      // 20
-    } }, { key: "doHarem", value:
-    function doHarem() {
-
-      // 20
-    } }, { key: "doHiddenTemple", value:
-    function doHiddenTemple() {
-
-      // 20
-    } }, { key: "doSmutOrcs", value:
-    function doSmutOrcs() {
-
-      // 20
-    } }, { key: "doCrypt", value:
-    function doCrypt() {
-
-      // 20
-    } }]);return GreyVortex;}()));
-
-var GreyCombatLocket = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {function GreyCombatLocket() {GreyResources_classCallCheck(this, GreyCombatLocket);}GreyResources_createClass(GreyCombatLocket, null, [{ key: "doSystemSweep", value:
-    function doSystemSweep() {} }, { key: "doInfiniteLoop", value:
-
-    function doInfiniteLoop() {} }, { key: "doFantasyBandit", value:
-
-    function doFantasyBandit() {} }, { key: "doMountainMan", value:
-
-    function doMountainMan() {} }]);return GreyCombatLocket;}()));
 
 
 function getZappables(item) {
@@ -22601,7 +22560,7 @@ var QuestL8MountainOre = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainOre_i
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: function run() {
           while (path.canUse(ResourceCategory.CLOVER)) {
-            GreyClovers.doOres();
+            (0,external_kolmafia_namespaceObject.use)(external_kolmafia_namespaceObject.Item.get("11-leaf clover"));
             greyAdv(_this3.mines);
             path.addUsed(ResourceCategory.CLOVER);
           }
@@ -34553,7 +34512,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "b03e7e5";
+var lastCommitHash = "9b4400e";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
@@ -34576,7 +34535,7 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
     "libraryaddict-Greyday-release");}GreyYouMain_createClass(GreyYouMain, [{ key: "isRevisionPass", value:
 
     function isRevisionPass() {
-      var required = 27017;
+      var required = 27065;
 
       if ((0,external_kolmafia_namespaceObject.getRevision)() > 0 && (0,external_kolmafia_namespaceObject.getRevision)() < required) {
         (0,external_kolmafia_namespaceObject.print)("Please update your mafia. You are using ".concat(
