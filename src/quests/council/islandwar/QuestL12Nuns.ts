@@ -13,7 +13,9 @@ import {
   haveSkill,
   historicalPrice,
   Item,
+  itemAmount,
   Location,
+  numericModifier,
   print,
   Skill,
   toBoolean,
@@ -44,8 +46,12 @@ export class Quest12WarNuns implements QuestInfo {
   cosmicBall: Item = Item.get("Cosmic Bowling Ball");
   asdonMartin: Item = Item.get("Asdon Martin keyfob");
   driving: Effect = Effect.get("Driving Observantly");
-  savingsBond: Item = Item.get("Savings bond");
-  autumnDollar: Item = Item.get("Autumn Dollar");
+  meatPotions: Item[] = [
+    "Savings Bond",
+    "Autumn Dollar",
+    "Polka Pop",
+    "Pink candy heart",
+  ].map((s) => Item.get(s));
 
   fishHead: Item = Item.get("Fish Head");
   boxedWine: Item = Item.get("Boxed Wine");
@@ -285,20 +291,29 @@ export class Quest12WarNuns implements QuestInfo {
       cliExecute("concert 2"); // Feeling wrinkled
     }
 
-    if (
-      availableAmount(this.savingsBond) > 0 &&
-      haveEffect(effectModifier(this.savingsBond, "Effect")) == 0
-    ) {
-      use(this.savingsBond);
-    }
+    for (const i of this.meatPotions) {
+      if (itemAmount(i) == 0) {
+        continue;
+      }
 
-    if (
-      GreySettings.greyValueOfAdventure * 1.3 >
-        historicalPrice(this.autumnDollar) &&
-      availableAmount(this.autumnDollar) > 0 &&
-      haveEffect(effectModifier(this.autumnDollar, "Effect")) == 0
-    ) {
-      use(this.autumnDollar);
+      const effect = effectModifier(i, "Effect");
+
+      if (haveEffect(effect) > 0) {
+        continue;
+      }
+
+      // How much meat will drop from this effect
+      // Multiply by 10 to get 1k meat from 100% meat, then multiply by duration which is assumed to be 10
+      const meatWorth = numericModifier(effect, "Meat Drop") * 10 * 10;
+
+      if (
+        historicalPrice(i) >
+        GreySettings.greyValueOfAdventure * (meatWorth / 1000.0)
+      ) {
+        continue;
+      }
+
+      use(i);
     }
   }
 
