@@ -5,7 +5,6 @@ export enum LatteFlavor {
   ITEM_DROP = "carrot",
   COLD_DAMAGE = "blue chalks",
   MEAT_DROP = "cajun",
-  FAM_WEIGHT = "rawhide",
   PVP_FIGHTS = "hellion",
   PLUS_COMBAT = "wing",
   MINUS_COMBAT = "ink",

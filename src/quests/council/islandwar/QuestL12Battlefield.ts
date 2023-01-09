@@ -156,7 +156,7 @@ export class QuestL12Battlefield implements QuestInfo {
           burner.doFightSetup();
         }
 
-        if (DelayBurners.isTryingForDupeableGoblin()) {
+        if (DelayBurners.isTryingForDupeableGoblin() && fam != null) {
           useFamiliar(fam);
         }
 
