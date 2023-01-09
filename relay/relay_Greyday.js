@@ -4282,9 +4282,8 @@ var LatteFlavor;
 
 
 
-
 // Map of kol latte names, to mafia latte names
-(function (LatteFlavor) {LatteFlavor["FAM_EXP"] = "vitamins";LatteFlavor["ITEM_DROP"] = "carrot";LatteFlavor["COLD_DAMAGE"] = "blue chalks";LatteFlavor["MEAT_DROP"] = "cajun";LatteFlavor["FAM_WEIGHT"] = "rawhide";LatteFlavor["PVP_FIGHTS"] = "hellion";LatteFlavor["PLUS_COMBAT"] = "wing";LatteFlavor["MINUS_COMBAT"] = "ink";LatteFlavor["MP_5_REGEN"] = "carrrdamom";LatteFlavor["MP_10_REGEN"] = "lizard milk";LatteFlavor["HOT_RESIST"] = "chili seeds";LatteFlavor["COLD_RESIST"] = "cocoa powder";LatteFlavor["SLEAZE_RESIST"] = "white flour";LatteFlavor["SPOOKY_RESIST"] = "squamous salt";LatteFlavor["STENCH_RESIST"] = "clove";LatteFlavor["FAMILIAR_WEIGHT"] = "rawhide";LatteFlavor["UNKNOWN"] = "??";})(LatteFlavor || (LatteFlavor = {}));var latteAliases = new Map([
+(function (LatteFlavor) {LatteFlavor["FAM_EXP"] = "vitamins";LatteFlavor["ITEM_DROP"] = "carrot";LatteFlavor["COLD_DAMAGE"] = "blue chalks";LatteFlavor["MEAT_DROP"] = "cajun";LatteFlavor["PVP_FIGHTS"] = "hellion";LatteFlavor["PLUS_COMBAT"] = "wing";LatteFlavor["MINUS_COMBAT"] = "ink";LatteFlavor["MP_5_REGEN"] = "carrrdamom";LatteFlavor["MP_10_REGEN"] = "lizard milk";LatteFlavor["HOT_RESIST"] = "chili seeds";LatteFlavor["COLD_RESIST"] = "cocoa powder";LatteFlavor["SLEAZE_RESIST"] = "white flour";LatteFlavor["SPOOKY_RESIST"] = "squamous salt";LatteFlavor["STENCH_RESIST"] = "clove";LatteFlavor["FAMILIAR_WEIGHT"] = "rawhide";LatteFlavor["UNKNOWN"] = "??";})(LatteFlavor || (LatteFlavor = {}));var latteAliases = new Map([
 ["fortified", "vitamins"],
 ["hot wing", "wing"],
 ["hot wings", "wing"],
@@ -11852,7 +11851,7 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
             burner.doFightSetup();
           }
 
-          if (DelayBurners.isTryingForDupeableGoblin()) {
+          if (DelayBurners.isTryingForDupeableGoblin() && fam != null) {
             (0,external_kolmafia_.useFamiliar)(fam);
           }
 
