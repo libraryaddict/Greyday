@@ -11064,8 +11064,6 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
             if ((0,external_kolmafia_namespaceObject.haveEffect)(_this6.lucky)) {
               throw "Expected not to have lucky effect";
             }
-
-            path.addUsed(ResourceCategory.CLOVER);
           }
         }
       };
@@ -14564,7 +14562,7 @@ var QuestL12FratOutfit = /*#__PURE__*/function (_TaskInfo) {QuestL12FratOutfit_i
       return [];
     } }]);return QuestL12FratOutfit;}(TaskInfo);
 ;// CONCATENATED MODULE: ./src/quests/council/islandwar/QuestL12Nuns.ts
-function QuestL12Nuns_typeof(obj) {"@babel/helpers - typeof";return QuestL12Nuns_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestL12Nuns_typeof(obj);}function QuestL12Nuns_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL12Nuns_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestL12Nuns_toPropertyKey(descriptor.key), descriptor);}}function QuestL12Nuns_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL12Nuns_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL12Nuns_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL12Nuns_defineProperty(obj, key, value) {key = QuestL12Nuns_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestL12Nuns_toPropertyKey(arg) {var key = QuestL12Nuns_toPrimitive(arg, "string");return QuestL12Nuns_typeof(key) === "symbol" ? key : String(key);}function QuestL12Nuns_toPrimitive(input, hint) {if (QuestL12Nuns_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestL12Nuns_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
+function QuestL12Nuns_typeof(obj) {"@babel/helpers - typeof";return QuestL12Nuns_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestL12Nuns_typeof(obj);}function QuestL12Nuns_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestL12Nuns_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function QuestL12Nuns_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL12Nuns_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL12Nuns_arrayLikeToArray(o, minLen);}function QuestL12Nuns_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function QuestL12Nuns_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL12Nuns_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestL12Nuns_toPropertyKey(descriptor.key), descriptor);}}function QuestL12Nuns_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL12Nuns_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL12Nuns_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL12Nuns_defineProperty(obj, key, value) {key = QuestL12Nuns_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestL12Nuns_toPropertyKey(arg) {var key = QuestL12Nuns_toPrimitive(arg, "string");return QuestL12Nuns_typeof(key) === "symbol" ? key : String(key);}function QuestL12Nuns_toPrimitive(input, hint) {if (QuestL12Nuns_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestL12Nuns_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
 
 
@@ -14586,9 +14584,13 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
     external_kolmafia_namespaceObject.Effect.get("Cosmic Ball in the Air"));QuestL12Nuns_defineProperty(this, "cosmicBall",
     external_kolmafia_namespaceObject.Item.get("Cosmic Bowling Ball"));QuestL12Nuns_defineProperty(this, "asdonMartin",
     external_kolmafia_namespaceObject.Item.get("Asdon Martin keyfob"));QuestL12Nuns_defineProperty(this, "driving",
-    external_kolmafia_namespaceObject.Effect.get("Driving Observantly"));QuestL12Nuns_defineProperty(this, "savingsBond",
-    external_kolmafia_namespaceObject.Item.get("Savings bond"));QuestL12Nuns_defineProperty(this, "autumnDollar",
-    external_kolmafia_namespaceObject.Item.get("Autumn Dollar"));QuestL12Nuns_defineProperty(this, "fishHead",
+    external_kolmafia_namespaceObject.Effect.get("Driving Observantly"));QuestL12Nuns_defineProperty(this, "meatPotions",
+    [
+    "Savings Bond",
+    "Autumn Dollar",
+    "Polka Pop",
+    "Pink candy heart"].
+    map(function (s) {return external_kolmafia_namespaceObject.Item.get(s);}));QuestL12Nuns_defineProperty(this, "fishHead",
 
     external_kolmafia_namespaceObject.Item.get("Fish Head"));QuestL12Nuns_defineProperty(this, "boxedWine",
     external_kolmafia_namespaceObject.Item.get("Boxed Wine"));QuestL12Nuns_defineProperty(this, "piscatini",
@@ -14826,23 +14828,32 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
 
       if (!(0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("concertVisited"))) {
         (0,external_kolmafia_namespaceObject.cliExecute)("concert 2"); // Feeling wrinkled
-      }
+      }var _iterator = QuestL12Nuns_createForOfIteratorHelper(
 
-      if (
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.savingsBond) > 0 &&
-      (0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(this.savingsBond, "Effect")) == 0)
-      {
-        (0,external_kolmafia_namespaceObject.use)(this.savingsBond);
-      }
+        this.meatPotions),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var i = _step.value;
+          if ((0,external_kolmafia_namespaceObject.itemAmount)(i) == 0) {
+            continue;
+          }
 
-      if (
-      GreySettings.greyValueOfAdventure * 1.3 >
-      (0,external_kolmafia_namespaceObject.historicalPrice)(this.autumnDollar) &&
-      (0,external_kolmafia_namespaceObject.availableAmount)(this.autumnDollar) > 0 &&
-      (0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(this.autumnDollar, "Effect")) == 0)
-      {
-        (0,external_kolmafia_namespaceObject.use)(this.autumnDollar);
-      }
+          var effect = (0,external_kolmafia_namespaceObject.effectModifier)(i, "Effect");
+
+          if ((0,external_kolmafia_namespaceObject.haveEffect)(effect) > 0) {
+            continue;
+          }
+
+          // How much meat will drop from this effect
+          // Multiply by 10 to get 1k meat from 100% meat, then multiply by duration which is assumed to be 10
+          var meatWorth = (0,external_kolmafia_namespaceObject.numericModifier)(effect, "Meat Drop") * 10 * 10;
+
+          if (
+          (0,external_kolmafia_namespaceObject.historicalPrice)(i) >
+          GreySettings.greyValueOfAdventure * (meatWorth / 1000.0))
+          {
+            continue;
+          }
+
+          (0,external_kolmafia_namespaceObject.use)(i);
+        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
     } }, { key: "canAcceptPrimes", value:
 
     function canAcceptPrimes() {
@@ -34511,7 +34522,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "1cf119a";
+var lastCommitHash = "1c10f74";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
