@@ -427,8 +427,6 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
           if (haveEffect(this.lucky)) {
             throw "Expected not to have lucky effect";
           }
-
-          path.addUsed(ResourceCategory.CLOVER);
         }
       },
     };
