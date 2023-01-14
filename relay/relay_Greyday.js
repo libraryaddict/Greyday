@@ -20291,7 +20291,12 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
     function getStatus() {
       var num = (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)(this.getProperty()));
 
-      if (num > 50 - 37) {
+      if (
+      num > 50 - 37 ||
+      num == 0 &&
+      this.getProperty() == "cyrptCrannyEvilness" &&
+      !external_kolmafia_.Location.get("The Defiled Cranny").combatQueue.includes("huge ghuol"))
+      {
         return CryptStatus.FIGHT;
       }
 

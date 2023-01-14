@@ -4216,7 +4216,7 @@ function getTargetMatch(matches, location) {
 
 ;// CONCATENATED MODULE: ./node_modules/react-router/dist/index.js
 function dist_typeof(obj) {"@babel/helpers - typeof";return dist_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, dist_typeof(obj);}function dist_toConsumableArray(arr) {return dist_arrayWithoutHoles(arr) || dist_iterableToArray(arr) || dist_unsupportedIterableToArray(arr) || dist_nonIterableSpread();}function dist_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function dist_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function dist_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return dist_arrayLikeToArray(arr);}function dist_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function dist_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, dist_toPropertyKey(descriptor.key), descriptor);}}function dist_createClass(Constructor, protoProps, staticProps) {if (protoProps) dist_defineProperties(Constructor.prototype, protoProps);if (staticProps) dist_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function dist_toPropertyKey(arg) {var key = dist_toPrimitive(arg, "string");return dist_typeof(key) === "symbol" ? key : String(key);}function dist_toPrimitive(input, hint) {if (dist_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (dist_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}function dist_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) dist_setPrototypeOf(subClass, superClass);}function dist_setPrototypeOf(o, p) {dist_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return dist_setPrototypeOf(o, p);}function dist_createSuper(Derived) {var hasNativeReflectConstruct = dist_isNativeReflectConstruct();return function _createSuperInternal() {var Super = dist_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = dist_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return dist_possibleConstructorReturn(this, result);};}function dist_possibleConstructorReturn(self, call) {if (call && (dist_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return dist_assertThisInitialized(self);}function dist_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function dist_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function dist_getPrototypeOf(o) {dist_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return dist_getPrototypeOf(o);}function dist_slicedToArray(arr, i) {return dist_arrayWithHoles(arr) || dist_iterableToArrayLimit(arr, i) || dist_unsupportedIterableToArray(arr, i) || dist_nonIterableRest();}function dist_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function dist_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return dist_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return dist_arrayLikeToArray(o, minLen);}function dist_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function dist_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function dist_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;} /**
-* React Router v6.6.1
+* React Router v6.6.2
 *
 * Copyright (c) Remix Software Inc.
 *
@@ -4407,11 +4407,6 @@ var canUseDOM = !!(typeof window !== "undefined" && typeof window.document !== "
 var isServerEnvironment = !canUseDOM;
 var shim = isServerEnvironment ? useSyncExternalStore$1 : useSyncExternalStore$2;
 var useSyncExternalStore =  true ? function (module) {return module.useSyncExternalStore;}(react_namespaceObject) : shim;
-
-// Contexts for data routers
-var DataStaticRouterContext = /*#__PURE__*/react.createContext(null);
-
-if (false) {}
 
 var DataRouterContext = /*#__PURE__*/react.createContext(null);
 
@@ -4811,9 +4806,9 @@ RenderErrorBoundary = /*#__PURE__*/function (_React$Component) {dist_inherits(Re
       // any new errors that may come through. We retain the existing error, we do
       // this because the error provided from the app state may be cleared without
       // the location changing.
-      return { error: props.error || state.error, location: state.location };} }]);return RenderErrorBoundary;}(react.Component);function RenderedRoute(_ref) {var routeContext = _ref.routeContext,match = _ref.match,children = _ref.children;var dataStaticRouterContext = react.useContext(DataStaticRouterContext); // Track how deep we got in our render pass to emulate SSR componentDidCatch
+      return { error: props.error || state.error, location: state.location };} }]);return RenderErrorBoundary;}(react.Component);function RenderedRoute(_ref) {var routeContext = _ref.routeContext,match = _ref.match,children = _ref.children;var dataRouterContext = react.useContext(DataRouterContext); // Track how deep we got in our render pass to emulate SSR componentDidCatch
   // in a DataStaticRouter
-  if (dataStaticRouterContext && match.route.errorElement) {dataStaticRouterContext._deepestRenderedBoundaryId = match.route.id;
+  if (dataRouterContext && dataRouterContext["static"] && dataRouterContext.staticContext && match.route.errorElement) {dataRouterContext.staticContext._deepestRenderedBoundaryId = match.route.id;
   }
 
   return /*#__PURE__*/react.createElement(RouteContext.Provider, {
@@ -5079,8 +5074,14 @@ function RouterProvider(_ref) {
         });}
     };
   }, [router]);
-  var basename = router.basename || "/";
-  return /*#__PURE__*/React.createElement(DataRouterContext.Provider, {
+  var basename = router.basename || "/"; // The fragment and {null} here are important!  We need them to keep React 18's
+  // useId happy when we are server-rendering since we may have a <script> here
+  // containing the hydrated server-side staticContext (from StaticRouterProvider).
+  // useId relies on the component tree structure to generate deterministic id's
+  // so we need to ensure it remains the same on the client even though
+  // we don't need the <script> tag
+
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(DataRouterContext.Provider, {
     value: {
       router: router,
       navigator: navigator,
@@ -5095,7 +5096,7 @@ function RouterProvider(_ref) {
     location: router.state.location,
     navigationType: router.state.historyAction,
     navigator: navigator
-  }, router.state.initialized ? /*#__PURE__*/React.createElement(Routes, null) : fallbackElement)));
+  }, router.state.initialized ? /*#__PURE__*/React.createElement(Routes, null) : fallbackElement))), null);
 }
 
 /**
@@ -5662,7 +5663,7 @@ function Values(_ref) {var settings = _ref.settings;
 /* harmony default export */ const routes_Values = (Values);
 ;// CONCATENATED MODULE: ./node_modules/react-router-dom/dist/index.js
 function react_router_dom_dist_toConsumableArray(arr) {return react_router_dom_dist_arrayWithoutHoles(arr) || react_router_dom_dist_iterableToArray(arr) || react_router_dom_dist_unsupportedIterableToArray(arr) || react_router_dom_dist_nonIterableSpread();}function react_router_dom_dist_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function react_router_dom_dist_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function react_router_dom_dist_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return react_router_dom_dist_arrayLikeToArray(arr);}function react_router_dom_dist_slicedToArray(arr, i) {return react_router_dom_dist_arrayWithHoles(arr) || react_router_dom_dist_iterableToArrayLimit(arr, i) || react_router_dom_dist_unsupportedIterableToArray(arr, i) || react_router_dom_dist_nonIterableRest();}function react_router_dom_dist_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function react_router_dom_dist_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function react_router_dom_dist_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function dist_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = react_router_dom_dist_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function react_router_dom_dist_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return react_router_dom_dist_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return react_router_dom_dist_arrayLikeToArray(o, minLen);}function react_router_dom_dist_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;} /**
-* React Router DOM v6.6.1
+* React Router DOM v6.6.2
 *
 * Copyright (c) Remix Software Inc.
 *
