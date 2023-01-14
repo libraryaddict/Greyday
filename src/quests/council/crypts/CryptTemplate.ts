@@ -108,7 +108,12 @@ export abstract class CryptL7Template implements QuestInfo {
   getStatus(): CryptStatus {
     const num = toInt(getProperty(this.getProperty()));
 
-    if (num > 50 - 37) {
+    if (
+      num > 50 - 37 ||
+      (num == 0 &&
+        this.getProperty() == "cyrptCrannyEvilness" &&
+        !Location.get("The Defiled Cranny").combatQueue.includes("huge ghuol"))
+    ) {
       return CryptStatus.FIGHT;
     }
 
