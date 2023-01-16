@@ -8805,8 +8805,10 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
         familiar: (0,external_kolmafia_.haveFamiliar)(this.lefthandMan) ? this.lefthandMan : null,
         disableFamOverride: (0,external_kolmafia_.haveFamiliar)(this.lefthandMan),
         run: function run() {
+          var used = 0;
+
           while (
-          path.canUse(ResourceTypes/* ResourceCategory.CLOVER */.s6.CLOVER) &&
+          used < path.canUse(ResourceTypes/* ResourceCategory.CLOVER */.s6.CLOVER) &&
           _this6.getProtestersRemaining() > 1)
           {
             var props = new Properties_PropertyManager();
@@ -8823,6 +8825,7 @@ var QuestL11RonProtesters = /*#__PURE__*/function (_TaskInfo) {QuestL11RonProtes
               props.setChoice(856, 1); // Scare
             }
 
+            used++;
             (0,external_kolmafia_.use)(_this6.clover);
 
             if (!(0,external_kolmafia_.haveEffect)(_this6.lucky)) {
@@ -12891,17 +12894,19 @@ var QuestL12WarBoss = /*#__PURE__*/function () {function QuestL12WarBoss() {Ques
       "bullet-proof corduroys",
       "round purple sunglasses",
       "reinforced beaded headband"].
-      map(function (s) {return external_kolmafia_.Item.get(s);});var _iterator = QuestL12WarBoss_createForOfIteratorHelper(
+      map(function (s) {return external_kolmafia_.Item.get(s);});
 
-        crap),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var s = _step.value;
-          var keep = (0,external_kolmafia_.toSlot)(s) == (0,external_kolmafia_.toSlot)("none") ? 1 : 0;
+      if ((0,external_kolmafia_.pullsRemaining)() >= 0) {var _iterator = QuestL12WarBoss_createForOfIteratorHelper(
+          crap),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var s = _step.value;
+            var keep = (0,external_kolmafia_.toSlot)(s) == (0,external_kolmafia_.toSlot)("none") ? 1 : 0;
 
-          if ((0,external_kolmafia_.itemAmount)(s) <= keep) {
-            continue;
-          }
+            if ((0,external_kolmafia_.itemAmount)(s) <= keep) {
+              continue;
+            }
 
-          (0,external_kolmafia_.sell)(s.buyer, (0,external_kolmafia_.itemAmount)(s) - keep, s);
-        }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+            (0,external_kolmafia_.sell)(s.buyer, (0,external_kolmafia_.itemAmount)(s) - keep, s);
+          }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+      }
 
       var master = crap[0].buyer;
       var garter = external_kolmafia_.Item.get("gauze garter");
@@ -20291,8 +20296,12 @@ var CryptL7Template = /*#__PURE__*/function () {function CryptL7Template() {Cryp
     function getStatus() {
       var num = (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)(this.getProperty()));
 
+      if (num > 50 - 37) {
+        return CryptStatus.FIGHT;
+      }
+
+      // Workaround for a kol bug
       if (
-      num > 50 - 37 ||
       num == 0 &&
       this.getProperty() == "cyrptCrannyEvilness" &&
       !external_kolmafia_.Location.get("The Defiled Cranny").combatQueue.includes("huge ghuol"))
