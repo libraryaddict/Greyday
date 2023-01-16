@@ -389,8 +389,10 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
       familiar: haveFamiliar(this.lefthandMan) ? this.lefthandMan : null,
       disableFamOverride: haveFamiliar(this.lefthandMan),
       run: () => {
+        let used = 0;
+
         while (
-          path.canUse(ResourceCategory.CLOVER) &&
+          used < path.canUse(ResourceCategory.CLOVER) &&
           this.getProtestersRemaining() > 1
         ) {
           const props = new PropertyManager();
@@ -407,6 +409,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
             props.setChoice(856, 1); // Scare
           }
 
+          used++;
           use(this.clover);
 
           if (!haveEffect(this.lucky)) {

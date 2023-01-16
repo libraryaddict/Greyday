@@ -5,6 +5,7 @@ import {
   Item,
   itemAmount,
   Location,
+  pullsRemaining,
   sell,
   storageAmount,
   toInt,
@@ -80,14 +81,16 @@ export class QuestL12WarBoss implements QuestInfo {
       "reinforced beaded headband",
     ].map((s) => Item.get(s));
 
-    for (const s of crap) {
-      const keep = toSlot(s) == toSlot("none") ? 1 : 0;
+    if (pullsRemaining() >= 0) {
+      for (const s of crap) {
+        const keep = toSlot(s) == toSlot("none") ? 1 : 0;
 
-      if (itemAmount(s) <= keep) {
-        continue;
+        if (itemAmount(s) <= keep) {
+          continue;
+        }
+
+        sell(s.buyer, itemAmount(s) - keep, s);
       }
-
-      sell(s.buyer, itemAmount(s) - keep, s);
     }
 
     const master = crap[0].buyer;
