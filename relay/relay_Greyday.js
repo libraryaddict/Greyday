@@ -14969,7 +14969,7 @@ var QuestFantasyBandit = /*#__PURE__*/function (_TaskInfo) {QuestFantasyBandits_
       // If the last monster was is a bandit, no need to fax
       // But we still need to fight X more bandits.
       if (this.lastBackup() != this.monster || assumeUnstarted) {
-        this.path.addFax(this.monster);
+        this.path.addFax(this.monster).addIgnored("Wish");
       } else {
         // We need to fax, so one of those copies is a fax and can be removed
         fightsRemaining--;
