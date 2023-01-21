@@ -16,7 +16,6 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
-import { QuestDigitalKey } from "../keys/QuestDigitalKey";
 import { QuestSkeletonKey } from "../keys/QuestSkeletonKey";
 import { QuestStarKey } from "../keys/QuestStarKey";
 import { QuestKeyStuffAbstract } from "../../../custom/QuestKeyStuffAbstract";
@@ -36,7 +35,6 @@ export class QuestTowerKeys extends QuestKeyStuffAbstract implements QuestInfo {
   children: QuestInfo[] = [
     new QuestSkeletonKey(),
     new QuestStarKey(),
-    new QuestDigitalKey(),
     new QuestHeroKeys(),
   ];
 

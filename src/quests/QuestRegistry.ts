@@ -316,7 +316,6 @@ const order: QuestOrder[] = [
     id: "Council / Tower / Keys / Heroes / DeckOfCards",
     towerDelayed: true,
   },
-  { id: "Council / Tower / Keys / Digital", towerDelayed: true },
   { id: "Council / Tower / Keys / Skeleton", towerDelayed: true },
 
   { id: "Council / War / Nuns" },
@@ -341,6 +340,7 @@ const order: QuestOrder[] = [
   { id: "Absorbs / Palin" },
   { id: "Absorbs / Irate Mariachi" },
   { id: "Council / Tower / Keys / Heroes", towerDelayed: true },
+  { id: "Council / Tower / Keys / Digital" },
 ];
 
 export class QuestRegistry {

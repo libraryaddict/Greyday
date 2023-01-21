@@ -1,6 +1,4 @@
-import {
-  Location,
-} from "kolmafia";
+import { Location } from "kolmafia";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestTowerKeys } from "./tower/stages/QuestTowerKeys";
 import { QuestTowerContestants } from "./tower/stages/QuestTowerContestants";
@@ -12,6 +10,7 @@ import { QuestTowerShadow } from "./tower/stages/QuestTowerShadow";
 import { QuestTowerMirror } from "./tower/stages/QuestTowerMirror";
 import { QuestTowerKillWitch } from "./tower/stages/QuestTowerKillWitch";
 import { QuestType } from "../QuestTypes";
+import { QuestDigitalKey } from "./tower/keys/QuestDigitalKey";
 
 export class QuestL13 implements QuestInfo {
   getLocations(): Location[] {
@@ -19,6 +18,7 @@ export class QuestL13 implements QuestInfo {
   }
 
   sideQuests: QuestInfo[] = [
+    new QuestDigitalKey(),
     new QuestTowerKeys(),
     new QuestTowerContestants(),
     new QuestTowerMaze(),

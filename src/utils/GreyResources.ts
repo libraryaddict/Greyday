@@ -478,7 +478,7 @@ export class GreyRequirements {
     add(
       Type.IOTM,
       Item.get("Powerful Glove"),
-      "If not tower breaking, great for white pixels. If you have cursed mag glass, saves 5 turns?",
+      "If not tower breaking, great for white pixels. If you have cursed mag glass, saves 5 turns if you don't have fallbot?",
       Required.USEFUL
     );
 
@@ -553,7 +553,7 @@ export class GreyRequirements {
     add(
       Type.IOTM,
       Item.get("Cursed Magnifying Glass"),
-      "Only really used for minor delay burning, and lobsters + powerful glove",
+      "Only really used for minor delay burning, and lobsters + powerful glove if no fallbot",
       Required.MINOR
     );
 

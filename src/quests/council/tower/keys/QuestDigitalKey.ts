@@ -5,14 +5,11 @@ import {
   visitUrl,
   runChoice,
   handlingChoice,
-  itemAmount,
-  create,
-  Monster,
-  pullsRemaining,
-  cliExecute,
   print,
+  getProperty,
+  toInt,
 } from "kolmafia";
-import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
+import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
   getQuestStatus,
@@ -22,12 +19,41 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 
+type PixelZone = {
+  loc: Location;
+  color: string;
+  maximize: string;
+  capped: number;
+};
+
+const PixelZones: PixelZone[] = [
+  {
+    loc: Location.get("Vanya's Castle"),
+    color: "black",
+    maximize: "init",
+    capped: 600,
+  },
+  {
+    loc: Location.get("Megalo-City"),
+    color: "blue",
+    maximize: "damage absorption",
+    capped: 600,
+  },
+  {
+    loc: Location.get("Hero's Field"),
+    color: "green",
+    maximize: "item drop",
+    capped: 400,
+  },
+  {
+    loc: Location.get("The Fungus Plains"),
+    color: "red",
+    maximize: "meat drop",
+    capped: 450,
+  },
+];
+
 export class QuestDigitalKey implements QuestInfo {
-  location: Location = Location.get("8-Bit Realm");
-  wPixel: Item = Item.get("White Pixel");
-  rPixel: Item = Item.get("Red Pixel");
-  gPixel: Item = Item.get("Green Pixel");
-  bPixel: Item = Item.get("Blue Pixel");
   transfomer: Item = Item.get("continuum transfunctioner");
   key: Item = Item.get("Digital key");
 
@@ -35,12 +61,14 @@ export class QuestDigitalKey implements QuestInfo {
     return 4;
   }
 
-  atDoor(): boolean {
-    return getQuestStatus("questL13Final") == 5;
+  currentBonusZone(): PixelZone {
+    const color = getProperty("8BitColor") || "black";
+
+    return PixelZones.find((z) => z.color == color);
   }
 
   status(): QuestStatus {
-    /* if (
+    if (
       getQuestStatus("questL13Final") > 5 ||
       availableAmount(this.key) > 0 ||
       getProperty("nsTowerDoorKeysUsed").includes(this.key.name)
@@ -54,38 +82,29 @@ export class QuestDigitalKey implements QuestInfo {
 
     const status = getQuestStatus("questL13Final");
 
-    // If we're not at the keys, don't farm yet. We can still hit it from powerful glove
-    if (status < 5 && GreySettings.shouldAvoidTowerRequirements()) {
+    if (status < 0) {
+      return QuestStatus.FASTER_LATER;
+    }
+
+    if (status == 0) {
       return QuestStatus.NOT_READY;
     }
 
-    // If we can make white pixels, or we have enough pixels
-    if (this.needPixels() - this.canMakePixelCount() <= 0) {
-      return QuestStatus.READY;
-    }
-
-    if (GreySettings.shouldAvoidTowerRequirements() && pullsRemaining() != -1) {
-      return QuestStatus.NOT_READY;
-    }
-
-    return QuestStatus.READY;*/
-    return QuestStatus.NOT_READY; // No support
+    return QuestStatus.READY;
   }
 
-  canMakePixels(): boolean {
-    return this.canMakePixelCount() > 0;
-  }
+  redeemKey(): QuestAdventure {
+    const outfit = new GreyOutfit().addWeight(this.transfomer);
 
-  canMakePixelCount(): number {
-    return Math.min(
-      itemAmount(this.rPixel),
-      itemAmount(this.bPixel),
-      itemAmount(this.gPixel)
-    );
-  }
-
-  needPixels(): number {
-    return Math.max(0, 30 - itemAmount(this.wPixel));
+    return {
+      location: null,
+      outfit: outfit,
+      run: () => {
+        visitUrl("place.php?whichplace=8bit&action=8treasure");
+        visitUrl("choice.php?forceoption=0");
+        visitUrl("choice.php?pwd&whichchoice=1493&option=3", true);
+      },
+    };
   }
 
   run(): QuestAdventure {
@@ -104,52 +123,21 @@ export class QuestDigitalKey implements QuestInfo {
       };
     }
 
-    if (
-      this.needPixels() - this.canMakePixelCount() <= 0 &&
-      this.needPixels() > 0
-    ) {
-      return {
-        location: null,
-        outfit: GreyOutfit.IGNORE_OUTFIT,
-        run: () => {
-          const toMake = Math.min(this.canMakePixelCount(), this.needPixels());
-
-          print("Creating " + toMake + " white pixels..", "gray");
-
-          create(this.wPixel, toMake);
-        },
-      };
+    if (toInt(getProperty("8BitScore")) >= 10000) {
+      return this.redeemKey();
     }
 
-    if (this.needPixels() <= 0 || pullsRemaining() == -1) {
-      return {
-        location: null,
-        outfit: GreyOutfit.IGNORE_OUTFIT,
-        run: () => {
-          cliExecute("acquire " + this.key);
+    const zone = this.currentBonusZone();
 
-          if (availableAmount(this.key) == 0) {
-            throw "Expected to have a digital key on hand!";
-          }
-        },
-      };
-    }
-
-    const outfit = new GreyOutfit().setItemDrops();
+    const outfit = new GreyOutfit();
     outfit.addWeight(this.transfomer);
-    const settings = new AdventureSettings();
-    settings.addNoBanish(Monster.get("Blooper"));
-    settings.addNoBanish(Monster.get("Buzzy Beetle"));
-    settings.addNoBanish(Monster.get("Goomba"));
-    settings.addNoBanish(Monster.get("Koopa Troopa"));
-    settings.addNoBanish(Monster.get("Tektite"));
+    outfit.addWeight(zone.maximize, 5, null, zone.capped);
 
     return {
-      location: this.location,
+      location: zone.loc,
       outfit: outfit,
-      olfaction: [Monster.get("Blooper")],
       run: () => {
-        greyAdv(this.location, outfit, settings);
+        greyAdv(zone.loc, outfit);
       },
     };
   }
@@ -159,11 +147,6 @@ export class QuestDigitalKey implements QuestInfo {
   }
 
   getLocations(): Location[] {
-    // Don't hog this location when we're not sure we need to
-    if (!this.atDoor()) {
-      return [];
-    }
-
-    return [this.location];
+    return PixelZones.map((z) => z.loc);
   }
 }

@@ -11,7 +11,6 @@ import {
   myMp,
   Skill,
 } from "kolmafia";
-import { getQuestStatus } from "../quests/Quests";
 import { GreySettings } from "./GreySettings";
 import { UmbrellaState } from "./GreyUtils";
 
@@ -94,12 +93,12 @@ export class GreyOutfit {
     this.addWeight(Item.get("lucky gold ring"), 20);
     this.addWeight(Item.get("mafia thumb ring"), 19);
 
-    if (getQuestStatus("questL13Final") <= 5) {
+    /*if (getQuestStatus("questL13Final") <= 5) {
       if (availableAmount(Item.get("powerful glove")) > 0) {
         this.addWeight(Item.get("hewn moon-rune spoon"), -4);
         this.addWeight(Item.get("Powerful Glove"), 4.5);
       }
-    }
+    }*/
 
     if (availableAmount(Item.get("Camp Scout Backpack")) > 0) {
       this.addWeight(Item.get("camp scout backpack"), 6000);
