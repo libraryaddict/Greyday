@@ -31272,6 +31272,11 @@ var TaskAutumnaton = /*#__PURE__*/function () {
             toGrab.
             map(function (t) {return _this.toGrab.indexOf(t);}).
             reduce(function (p1, p2) {return Math.min(p1, p2);}, 999);
+
+            score += _this.toGrab.reduce(
+            function (r1, r2) {var _r2$weightedScore;return r1 + ((_r2$weightedScore = r2.weightedScore) !== null && _r2$weightedScore !== void 0 ? _r2$weightedScore : 0);},
+            0);
+
           }
 
           // Add scores for stuff we want
@@ -31374,6 +31379,7 @@ var TaskAutumnaton = /*#__PURE__*/function () {
       this.toGrab = [];
 
       this.toGrab.push({
+        weightedScore: 1000,
         loc: external_kolmafia_.Location.get("Sonofa Beach"),
         item: external_kolmafia_.Item.get("barrel of gunpowder"),
         amount: 5,
@@ -31485,6 +31491,7 @@ var TaskAutumnaton = /*#__PURE__*/function () {
       // Twin Peak - Hedge trimmers
       // Whitey's grove - White page? lol
     } }]);return TaskAutumnaton;}();
+
 
 
 
