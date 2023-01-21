@@ -2351,7 +2351,6 @@ function GreyOutfitter_typeof(obj) {"@babel/helpers - typeof";return GreyOutfitt
 
 
 
-
 var GreyOutfitter_goose = external_kolmafia_namespaceObject.Familiar.get("Grey Goose");
 
 var GreyOutfit = /*#__PURE__*/function () {
@@ -2424,12 +2423,12 @@ var GreyOutfit = /*#__PURE__*/function () {
       this.addWeight(external_kolmafia_namespaceObject.Item.get("lucky gold ring"), 20);
       this.addWeight(external_kolmafia_namespaceObject.Item.get("mafia thumb ring"), 19);
 
-      if (getQuestStatus("questL13Final") <= 5) {
-        if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("powerful glove")) > 0) {
-          this.addWeight(external_kolmafia_namespaceObject.Item.get("hewn moon-rune spoon"), -4);
-          this.addWeight(external_kolmafia_namespaceObject.Item.get("Powerful Glove"), 4.5);
+      /*if (getQuestStatus("questL13Final") <= 5) {
+        if (availableAmount(Item.get("powerful glove")) > 0) {
+          this.addWeight(Item.get("hewn moon-rune spoon"), -4);
+          this.addWeight(Item.get("Powerful Glove"), 4.5);
         }
-      }
+      }*/
 
       if ((0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("Camp Scout Backpack")) > 0) {
         this.addWeight(external_kolmafia_namespaceObject.Item.get("camp scout backpack"), 6000);
@@ -6168,7 +6167,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
       add(
       Type.IOTM,
       external_kolmafia_namespaceObject.Item.get("Powerful Glove"),
-      "If not tower breaking, great for white pixels. If you have cursed mag glass, saves 5 turns?",
+      "If not tower breaking, great for white pixels. If you have cursed mag glass, saves 5 turns if you don't have fallbot?",
       Required.USEFUL);
 
 
@@ -6243,7 +6242,7 @@ var GreyRequirements = /*#__PURE__*/function () {function GreyRequirements() {Gr
       add(
       Type.IOTM,
       external_kolmafia_namespaceObject.Item.get("Cursed Magnifying Glass"),
-      "Only really used for minor delay burning, and lobsters + powerful glove",
+      "Only really used for minor delay burning, and lobsters + powerful glove if no fallbot",
       Required.MINOR);
 
 
@@ -16469,157 +16468,6 @@ var QuestL12War = /*#__PURE__*/function () {function QuestL12War() {QuestL12War_
     function run() {
       throw new Error("Method not implemented.");
     } }]);return QuestL12War;}();
-;// CONCATENATED MODULE: ./src/quests/council/tower/keys/QuestDigitalKey.ts
-function QuestDigitalKey_typeof(obj) {"@babel/helpers - typeof";return QuestDigitalKey_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestDigitalKey_typeof(obj);}function QuestDigitalKey_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestDigitalKey_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestDigitalKey_toPropertyKey(descriptor.key), descriptor);}}function QuestDigitalKey_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestDigitalKey_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestDigitalKey_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestDigitalKey_defineProperty(obj, key, value) {key = QuestDigitalKey_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestDigitalKey_toPropertyKey(arg) {var key = QuestDigitalKey_toPrimitive(arg, "string");return QuestDigitalKey_typeof(key) === "symbol" ? key : String(key);}function QuestDigitalKey_toPrimitive(input, hint) {if (QuestDigitalKey_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestDigitalKey_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
-
-
-
-
-
-var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {QuestDigitalKey_classCallCheck(this, QuestDigitalKey);QuestDigitalKey_defineProperty(this, "location",
-    external_kolmafia_namespaceObject.Location.get("8-Bit Realm"));QuestDigitalKey_defineProperty(this, "wPixel",
-    external_kolmafia_namespaceObject.Item.get("White Pixel"));QuestDigitalKey_defineProperty(this, "rPixel",
-    external_kolmafia_namespaceObject.Item.get("Red Pixel"));QuestDigitalKey_defineProperty(this, "gPixel",
-    external_kolmafia_namespaceObject.Item.get("Green Pixel"));QuestDigitalKey_defineProperty(this, "bPixel",
-    external_kolmafia_namespaceObject.Item.get("Blue Pixel"));QuestDigitalKey_defineProperty(this, "transfomer",
-    external_kolmafia_namespaceObject.Item.get("continuum transfunctioner"));QuestDigitalKey_defineProperty(this, "key",
-    external_kolmafia_namespaceObject.Item.get("Digital key"));}QuestDigitalKey_createClass(QuestDigitalKey, [{ key: "level", value:
-
-    function level() {
-      return 4;
-    } }, { key: "atDoor", value:
-
-    function atDoor() {
-      return getQuestStatus("questL13Final") == 5;
-    } }, { key: "status", value:
-
-    function status() {
-      /* if (
-        getQuestStatus("questL13Final") > 5 ||
-        availableAmount(this.key) > 0 ||
-        getProperty("nsTowerDoorKeysUsed").includes(this.key.name)
-      ) {
-        return QuestStatus.COMPLETED;
-      }
-       if (availableAmount(this.transfomer) == 0) {
-        return QuestStatus.READY;
-      }
-       const status = getQuestStatus("questL13Final");
-       // If we're not at the keys, don't farm yet. We can still hit it from powerful glove
-      if (status < 5 && GreySettings.shouldAvoidTowerRequirements()) {
-        return QuestStatus.NOT_READY;
-      }
-       // If we can make white pixels, or we have enough pixels
-      if (this.needPixels() - this.canMakePixelCount() <= 0) {
-        return QuestStatus.READY;
-      }
-       if (GreySettings.shouldAvoidTowerRequirements() && pullsRemaining() != -1) {
-        return QuestStatus.NOT_READY;
-      }
-       return QuestStatus.READY;*/
-
-
-
-
-
-
-      return QuestStatus.NOT_READY; // No support
-    } }, { key: "canMakePixels", value:
-
-    function canMakePixels() {
-      return this.canMakePixelCount() > 0;
-    } }, { key: "canMakePixelCount", value:
-
-    function canMakePixelCount() {
-      return Math.min(
-      (0,external_kolmafia_namespaceObject.itemAmount)(this.rPixel),
-      (0,external_kolmafia_namespaceObject.itemAmount)(this.bPixel),
-      (0,external_kolmafia_namespaceObject.itemAmount)(this.gPixel));
-
-    } }, { key: "needPixels", value:
-
-    function needPixels() {
-      return Math.max(0, 30 - (0,external_kolmafia_namespaceObject.itemAmount)(this.wPixel));
-    } }, { key: "run", value:
-
-    function run() {var _this = this;
-      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.transfomer) == 0) {
-        return {
-          location: null,
-          outfit: GreyOutfit.IGNORE_OUTFIT,
-          run: function run() {
-            (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=forestvillage&action=fv_mystic");
-
-            while ((0,external_kolmafia_namespaceObject.handlingChoice)()) {
-              (0,external_kolmafia_namespaceObject.runChoice)(1);
-            }
-            (0,external_kolmafia_namespaceObject.print)("Grabbed " + _this.transfomer, "gray");
-          }
-        };
-      }
-
-      if (
-      this.needPixels() - this.canMakePixelCount() <= 0 &&
-      this.needPixels() > 0)
-      {
-        return {
-          location: null,
-          outfit: GreyOutfit.IGNORE_OUTFIT,
-          run: function run() {
-            var toMake = Math.min(_this.canMakePixelCount(), _this.needPixels());
-
-            (0,external_kolmafia_namespaceObject.print)("Creating " + toMake + " white pixels..", "gray");
-
-            (0,external_kolmafia_namespaceObject.create)(_this.wPixel, toMake);
-          }
-        };
-      }
-
-      if (this.needPixels() <= 0 || (0,external_kolmafia_namespaceObject.pullsRemaining)() == -1) {
-        return {
-          location: null,
-          outfit: GreyOutfit.IGNORE_OUTFIT,
-          run: function run() {
-            (0,external_kolmafia_namespaceObject.cliExecute)("acquire " + _this.key);
-
-            if ((0,external_kolmafia_namespaceObject.availableAmount)(_this.key) == 0) {
-              throw "Expected to have a digital key on hand!";
-            }
-          }
-        };
-      }
-
-      var outfit = new GreyOutfit().setItemDrops();
-      outfit.addWeight(this.transfomer);
-      var settings = new AdventureSettings();
-      settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Blooper"));
-      settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Buzzy Beetle"));
-      settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Goomba"));
-      settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Koopa Troopa"));
-      settings.addNoBanish(external_kolmafia_namespaceObject.Monster.get("Tektite"));
-
-      return {
-        location: this.location,
-        outfit: outfit,
-        olfaction: [external_kolmafia_namespaceObject.Monster.get("Blooper")],
-        run: function run() {
-          greyAdv(_this.location, outfit, settings);
-        }
-      };
-    } }, { key: "getId", value:
-
-    function getId() {
-      return "Council / Tower / Keys / Digital";
-    } }, { key: "getLocations", value:
-
-    function getLocations() {
-      // Don't hog this location when we're not sure we need to
-      if (!this.atDoor()) {
-        return [];
-      }
-
-      return [this.location];
-    } }]);return QuestDigitalKey;}();
 ;// CONCATENATED MODULE: ./src/quests/council/tower/keys/QuestSkeletonKey.ts
 function QuestSkeletonKey_typeof(obj) {"@babel/helpers - typeof";return QuestSkeletonKey_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestSkeletonKey_typeof(obj);}function QuestSkeletonKey_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestSkeletonKey_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestSkeletonKey_toPropertyKey(descriptor.key), descriptor);}}function QuestSkeletonKey_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestSkeletonKey_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestSkeletonKey_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestSkeletonKey_defineProperty(obj, key, value) {key = QuestSkeletonKey_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestSkeletonKey_toPropertyKey(arg) {var key = QuestSkeletonKey_toPrimitive(arg, "string");return QuestSkeletonKey_typeof(key) === "symbol" ? key : String(key);}function QuestSkeletonKey_toPrimitive(input, hint) {if (QuestSkeletonKey_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestSkeletonKey_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
@@ -17881,7 +17729,6 @@ function QuestTowerKeys_typeof(obj) {"@babel/helpers - typeof";return QuestTower
 
 
 
-
 var QuestTowerKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestTowerKeys_inherits(QuestTowerKeys, _QuestKeyStuffAbstrac);var _super = QuestTowerKeys_createSuper(QuestTowerKeys);function QuestTowerKeys() {var _this;QuestTowerKeys_classCallCheck(this, QuestTowerKeys);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestTowerKeys_defineProperty(QuestTowerKeys_assertThisInitialized(_this), "keyItems",
     [
     ["ns_lock1", external_kolmafia_namespaceObject.Item.get("Boris's Key")],
@@ -17894,7 +17741,6 @@ var QuestTowerKeys = /*#__PURE__*/function (_QuestKeyStuffAbstrac) {QuestTowerKe
     [
     new QuestSkeletonKey(),
     new QuestStarKey(),
-    new QuestDigitalKey(),
     new QuestHeroKeys()]);QuestTowerKeys_defineProperty(QuestTowerKeys_assertThisInitialized(_this), "refreshedStorage",
 
 
@@ -18991,9 +18837,145 @@ var QuestTowerKillWitch = /*#__PURE__*/function () {function QuestTowerKillWitch
     function canAcceptPrimes() {
       return false;
     } }]);return QuestTowerKillWitch;}();
+;// CONCATENATED MODULE: ./src/quests/council/tower/keys/QuestDigitalKey.ts
+function QuestDigitalKey_typeof(obj) {"@babel/helpers - typeof";return QuestDigitalKey_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestDigitalKey_typeof(obj);}function QuestDigitalKey_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestDigitalKey_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestDigitalKey_toPropertyKey(descriptor.key), descriptor);}}function QuestDigitalKey_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestDigitalKey_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestDigitalKey_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestDigitalKey_defineProperty(obj, key, value) {key = QuestDigitalKey_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestDigitalKey_toPropertyKey(arg) {var key = QuestDigitalKey_toPrimitive(arg, "string");return QuestDigitalKey_typeof(key) === "symbol" ? key : String(key);}function QuestDigitalKey_toPrimitive(input, hint) {if (QuestDigitalKey_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestDigitalKey_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
+
+
+
+
+
+
+
+
+
+
+
+
+var PixelZones = [
+{
+  loc: external_kolmafia_namespaceObject.Location.get("Vanya's Castle"),
+  color: "black",
+  maximize: "init",
+  capped: 600
+},
+{
+  loc: external_kolmafia_namespaceObject.Location.get("Megalo-City"),
+  color: "blue",
+  maximize: "damage absorption",
+  capped: 600
+},
+{
+  loc: external_kolmafia_namespaceObject.Location.get("Hero's Field"),
+  color: "green",
+  maximize: "item drop",
+  capped: 400
+},
+{
+  loc: external_kolmafia_namespaceObject.Location.get("The Fungus Plains"),
+  color: "red",
+  maximize: "meat drop",
+  capped: 450
+}];
+
+
+var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {QuestDigitalKey_classCallCheck(this, QuestDigitalKey);QuestDigitalKey_defineProperty(this, "transfomer",
+    external_kolmafia_namespaceObject.Item.get("continuum transfunctioner"));QuestDigitalKey_defineProperty(this, "key",
+    external_kolmafia_namespaceObject.Item.get("Digital key"));}QuestDigitalKey_createClass(QuestDigitalKey, [{ key: "level", value:
+
+    function level() {
+      return 4;
+    } }, { key: "currentBonusZone", value:
+
+    function currentBonusZone() {
+      var color = (0,external_kolmafia_namespaceObject.getProperty)("8BitColor") || "black";
+
+      return PixelZones.find(function (z) {return z.color == color;});
+    } }, { key: "status", value:
+
+    function status() {
+      if (
+      getQuestStatus("questL13Final") > 5 ||
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.key) > 0 ||
+      (0,external_kolmafia_namespaceObject.getProperty)("nsTowerDoorKeysUsed").includes(this.key.name))
+      {
+        return QuestStatus.COMPLETED;
+      }
+
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.transfomer) == 0) {
+        return QuestStatus.READY;
+      }
+
+      var status = getQuestStatus("questL13Final");
+
+      if (status < 0) {
+        return QuestStatus.FASTER_LATER;
+      }
+
+      if (status == 0) {
+        return QuestStatus.NOT_READY;
+      }
+
+      return QuestStatus.READY;
+    } }, { key: "redeemKey", value:
+
+    function redeemKey() {
+      var outfit = new GreyOutfit().addWeight(this.transfomer);
+
+      return {
+        location: null,
+        outfit: outfit,
+        run: function run() {
+          (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=8bit&action=8treasure");
+          (0,external_kolmafia_namespaceObject.visitUrl)("choice.php?forceoption=0");
+          (0,external_kolmafia_namespaceObject.visitUrl)("choice.php?pwd&whichchoice=1493&option=3", true);
+        }
+      };
+    } }, { key: "run", value:
+
+    function run() {var _this = this;
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.transfomer) == 0) {
+        return {
+          location: null,
+          outfit: GreyOutfit.IGNORE_OUTFIT,
+          run: function run() {
+            (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=forestvillage&action=fv_mystic");
+
+            while ((0,external_kolmafia_namespaceObject.handlingChoice)()) {
+              (0,external_kolmafia_namespaceObject.runChoice)(1);
+            }
+            (0,external_kolmafia_namespaceObject.print)("Grabbed " + _this.transfomer, "gray");
+          }
+        };
+      }
+
+      if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("8BitScore")) >= 10000) {
+        return this.redeemKey();
+      }
+
+      var zone = this.currentBonusZone();
+
+      var outfit = new GreyOutfit();
+      outfit.addWeight(this.transfomer);
+      outfit.addWeight(zone.maximize, 5, null, zone.capped);
+
+      return {
+        location: zone.loc,
+        outfit: outfit,
+        run: function run() {
+          greyAdv(zone.loc, outfit);
+        }
+      };
+    } }, { key: "getId", value:
+
+    function getId() {
+      return "Council / Tower / Keys / Digital";
+    } }, { key: "getLocations", value:
+
+    function getLocations() {
+      return PixelZones.map(function (z) {return z.loc;});
+    } }]);return QuestDigitalKey;}();
 ;// CONCATENATED MODULE: ./src/quests/council/QuestL13Tower.ts
 function QuestL13Tower_typeof(obj) {"@babel/helpers - typeof";return QuestL13Tower_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestL13Tower_typeof(obj);}function QuestL13Tower_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL13Tower_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestL13Tower_toPropertyKey(descriptor.key), descriptor);}}function QuestL13Tower_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL13Tower_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL13Tower_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL13Tower_defineProperty(obj, key, value) {key = QuestL13Tower_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestL13Tower_toPropertyKey(arg) {var key = QuestL13Tower_toPrimitive(arg, "string");return QuestL13Tower_typeof(key) === "symbol" ? key : String(key);}function QuestL13Tower_toPrimitive(input, hint) {if (QuestL13Tower_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestL13Tower_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
-
 
 
 
@@ -19013,6 +18995,7 @@ var QuestL13 = /*#__PURE__*/function () {function QuestL13() {QuestL13Tower_clas
 
 
     [
+    new QuestDigitalKey(),
     new QuestTowerKeys(),
     new QuestTowerContestants(),
     new QuestTowerMaze(),
@@ -30237,7 +30220,6 @@ var order = [
   id: "Council / Tower / Keys / Heroes / DeckOfCards",
   towerDelayed: true
 },
-{ id: "Council / Tower / Keys / Digital", towerDelayed: true },
 { id: "Council / Tower / Keys / Skeleton", towerDelayed: true },
 
 { id: "Council / War / Nuns" },
@@ -30261,7 +30243,8 @@ var order = [
 { id: "Absorbs / Gnomads" },
 { id: "Absorbs / Palin" },
 { id: "Absorbs / Irate Mariachi" },
-{ id: "Council / Tower / Keys / Heroes", towerDelayed: true }];
+{ id: "Council / Tower / Keys / Heroes", towerDelayed: true },
+{ id: "Council / Tower / Keys / Digital" }];
 
 
 var QuestRegistry = /*#__PURE__*/function () {
@@ -34535,7 +34518,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "c5624a5";
+var lastCommitHash = "46a9978";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
@@ -34558,7 +34541,7 @@ GreyYouMain = /*#__PURE__*/function () {function GreyYouMain() {GreyYouMain_clas
     "libraryaddict-Greyday-release");}GreyYouMain_createClass(GreyYouMain, [{ key: "isRevisionPass", value:
 
     function isRevisionPass() {
-      var required = 27065;
+      var required = 27108;
 
       if ((0,external_kolmafia_namespaceObject.getRevision)() > 0 && (0,external_kolmafia_namespaceObject.getRevision)() < required) {
         (0,external_kolmafia_namespaceObject.print)("Please update your mafia. You are using ".concat(
