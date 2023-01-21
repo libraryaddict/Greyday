@@ -14255,7 +14255,6 @@ function QuestDigitalKey_typeof(obj) {"@babel/helpers - typeof";return QuestDigi
 
 
 
-
 var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {QuestDigitalKey_classCallCheck(this, QuestDigitalKey);QuestDigitalKey_defineProperty(this, "location",
     external_kolmafia_.Location.get("8-Bit Realm"));QuestDigitalKey_defineProperty(this, "wPixel",
     external_kolmafia_.Item.get("White Pixel"));QuestDigitalKey_defineProperty(this, "rPixel",
@@ -14274,35 +14273,36 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
     } }, { key: "status", value:
 
     function status() {
-      if (
-      getQuestStatus("questL13Final") > 5 ||
-      (0,external_kolmafia_.availableAmount)(this.key) > 0 ||
-      (0,external_kolmafia_.getProperty)("nsTowerDoorKeysUsed").includes(this.key.name))
-      {
+      /* if (
+        getQuestStatus("questL13Final") > 5 ||
+        availableAmount(this.key) > 0 ||
+        getProperty("nsTowerDoorKeysUsed").includes(this.key.name)
+      ) {
         return QuestStatus.COMPLETED;
       }
-
-      if ((0,external_kolmafia_.availableAmount)(this.transfomer) == 0) {
+       if (availableAmount(this.transfomer) == 0) {
         return QuestStatus.READY;
       }
-
-      var status = getQuestStatus("questL13Final");
-
-      // If we're not at the keys, don't farm yet. We can still hit it from powerful glove
-      if (status < 5 && GreySettings_GreySettings.shouldAvoidTowerRequirements()) {
+       const status = getQuestStatus("questL13Final");
+       // If we're not at the keys, don't farm yet. We can still hit it from powerful glove
+      if (status < 5 && GreySettings.shouldAvoidTowerRequirements()) {
         return QuestStatus.NOT_READY;
       }
-
-      // If we can make white pixels, or we have enough pixels
+       // If we can make white pixels, or we have enough pixels
       if (this.needPixels() - this.canMakePixelCount() <= 0) {
         return QuestStatus.READY;
       }
-
-      if (GreySettings_GreySettings.shouldAvoidTowerRequirements() && (0,external_kolmafia_.pullsRemaining)() != -1) {
+       if (GreySettings.shouldAvoidTowerRequirements() && pullsRemaining() != -1) {
         return QuestStatus.NOT_READY;
       }
+       return QuestStatus.READY;*/
 
-      return QuestStatus.READY;
+
+
+
+
+
+      return QuestStatus.NOT_READY; // No support
     } }, { key: "canMakePixels", value:
 
     function canMakePixels() {
@@ -22353,7 +22353,6 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
       }
 
       if (
-      status < 0 ||
       (0,external_kolmafia_.myMp)() < 15 ||
       !GreyAbsorber_AbsorbsProvider.getAbsorbedMonsters().includes(this.plastered))
       {
