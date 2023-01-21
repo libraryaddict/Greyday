@@ -102,7 +102,7 @@ export class QuestDigitalKey implements QuestInfo {
       run: () => {
         visitUrl("place.php?whichplace=8bit&action=8treasure");
         visitUrl("choice.php?forceoption=0");
-        visitUrl("choice.php?pwd&whichchoice=1493&option=3", true);
+        visitUrl("choice.php?pwd&whichchoice=1493&option=1", true);
       },
     };
   }
