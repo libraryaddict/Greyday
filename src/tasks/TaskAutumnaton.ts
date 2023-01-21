@@ -113,6 +113,11 @@ export class TaskAutumnaton implements Task {
           toGrab
             .map((t) => this.toGrab.indexOf(t))
             .reduce((p1, p2) => Math.min(p1, p2), 999);
+
+        score += this.toGrab.reduce(
+          (r1, r2) => r1 + (r2.weightedScore ?? 0),
+          0
+        );
       }
 
       // Add scores for stuff we want
@@ -215,6 +220,7 @@ export class TaskAutumnaton implements Task {
     this.toGrab = [];
 
     this.toGrab.push({
+      weightedScore: 1000,
       loc: Location.get("Sonofa Beach"),
       item: Item.get("barrel of gunpowder"),
       amount: 5,
@@ -329,6 +335,7 @@ export class TaskAutumnaton implements Task {
 }
 
 interface ValidItem {
+  weightedScore?: number;
   loc: Location;
   item: Item;
   amount: number;
