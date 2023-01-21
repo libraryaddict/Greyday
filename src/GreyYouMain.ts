@@ -83,9 +83,9 @@ class GreyYouMain {
 
       html += "<br>";
 
-      const val = getProperty(setting.name);
+      const val = getProperty(setting.property);
 
-      html += `<font color='blue'>${setting.name}</font> - <font color='gray'>${setting.description}</font>`;
+      html += `<font color='blue'>${setting.property}</font> - <font color='gray'>${setting.description}</font>`;
       html += "<br>";
 
       if (setting.valid(val)) {
@@ -287,7 +287,7 @@ class GreyYouMain {
     const invalid: boolean = false;
 
     for (const setting of settings) {
-      const val = getProperty(setting.name);
+      const val = getProperty(setting.property);
 
       if (val == "" || setting.valid(val)) {
         continue;
@@ -295,9 +295,9 @@ class GreyYouMain {
 
       printHtml(
         "<font color='red'>The setting '" +
-          setting.name +
+          setting.property +
           "' is invalid, please correct this or set it to empty. To reset it, use the CLI command <font color='blue'>set " +
-          setting.name +
+          setting.property +
           " =</font></font>"
       );
     }

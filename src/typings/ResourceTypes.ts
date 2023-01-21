@@ -141,9 +141,10 @@ export function getResourceSettings(): GreySetting[] {
     const def = ResourceValues[res.name];
 
     const setting: GreySetting = {
+      name: res.name,
       setting: "values",
-      name: "greyValue_" + res.name,
-      description: res.description + " (Default " + def + ")",
+      property: "greyValue_" + res.name,
+      description: res.description,
       valid: (s) => /^-?\d+$/.test(s),
       default: def,
     };

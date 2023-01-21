@@ -1,4 +1,4 @@
-import { getProperty, write } from "kolmafia";
+import { write } from "kolmafia";
 import { getResourceSettings } from "../typings/ResourceTypes";
 import { getGreySettings } from "../utils/GreySettings";
 import {
@@ -59,13 +59,14 @@ function getRelayPages(): RelayPage[] {
     }
 
     const prop: ComponentSetting = {
-      preference: setting.name,
       name: setting.name,
+      preference: setting.property,
       description: setting.description,
       default: setting.default == null ? "" : setting.default.toString(),
-      value: getProperty(setting.name),
       type: type,
       dropdown: dropdowns,
+      validate:
+        typeof setting.default == "number" ? "(s) => /^-?\\d+$/.test(s)" : null,
     };
 
     if (setting.setting == "main") {
