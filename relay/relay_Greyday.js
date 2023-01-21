@@ -17140,9 +17140,9 @@ GreyYouMain = /*#__PURE__*/(/* unused pure expression or super */ null && (funct
 
           html += "<br>";
 
-          var val = getProperty(setting.name);
+          var val = getProperty(setting.property);
 
-          html += "<font color='blue'>".concat(setting.name, "</font> - <font color='gray'>").concat(setting.description, "</font>");
+          html += "<font color='blue'>".concat(setting.property, "</font> - <font color='gray'>").concat(setting.description, "</font>");
           html += "<br>";
 
           if (setting.valid(val)) {
@@ -17344,7 +17344,7 @@ GreyYouMain = /*#__PURE__*/(/* unused pure expression or super */ null && (funct
       var invalid = false;var _iterator3 = GreyYouMain_createForOfIteratorHelper(
 
         settings),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var setting = _step3.value;
-          var val = getProperty(setting.name);
+          var val = getProperty(setting.property);
 
           if (val == "" || setting.valid(val)) {
             continue;
@@ -17352,9 +17352,9 @@ GreyYouMain = /*#__PURE__*/(/* unused pure expression or super */ null && (funct
 
           printHtml(
           "<font color='red'>The setting '" +
-          setting.name +
+          setting.property +
           "' is invalid, please correct this or set it to empty. To reset it, use the CLI command <font color='blue'>set " +
-          setting.name +
+          setting.property +
           " =</font></font>");
 
         }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
@@ -33573,6 +33573,7 @@ function GreySettings_classCallCheck(instance, Constructor) {if (!(instance inst
 
 
 
+
 function GreySettings_getGreySettings() {
   var isBoolean = function isBoolean(str) {return str == "true" || str == "false";};
   var triBoolean = ["Best Judgement", "Always", "Never"];
@@ -33580,7 +33581,8 @@ function GreySettings_getGreySettings() {
       triBoolean.includes(str));};
 
   var towerBreak = {
-    name: "greyBreakAtTower",
+    name: "Break at Tower",
+    property: "greyBreakAtTower",
     description:
     "Should the script halt when it reaches the tower? False by default. Useful as continuing after breaking ronin takes less turns. This will change the behavior of the script to skip some zones.",
     valid: isBoolean,
@@ -33588,7 +33590,8 @@ function GreySettings_getGreySettings() {
   };
 
   var moonTune = {
-    name: "greyTuneMoonSpoon",
+    name: "Tune Moon Spoon",
+    property: "greyTuneMoonSpoon",
     description:
     "If set, will use the rune moon spoon (if owned) to change moon signs to the requested moon sign when done with tasks in the current moon sign.",
     valid: function valid(value) {return (
@@ -33604,7 +33607,8 @@ function GreySettings_getGreySettings() {
   };
 
   var manorLights = {
-    name: "greyFinishManorLights",
+    name: "Finish Manor Lights",
+    property: "greyFinishManorLights",
     description:
     "The script will do the hidden manor lights quest, but should it fight Elizabeth & Stephen at the end? (Garbo does fight Stephen for meat)",
     valid: isBoolean,
@@ -33612,7 +33616,8 @@ function GreySettings_getGreySettings() {
   };
 
   var pvpEnable = {
-    name: "greyEnablePvP",
+    name: "Enable PvP",
+    property: "greyEnablePvP",
     description:
     "Should the script enable PvP at the start of the run? This doesn't actually make much difference vs enabling it later as there's no pvp generation, unless you have robortender.",
     valid: isBoolean,
@@ -33640,7 +33645,8 @@ function GreySettings_getGreySettings() {
   }
 
   var dailyMalware = {
-    name: "greyDailyMalware",
+    name: "Daily Malware",
+    property: "greyDailyMalware",
     description:
     "If we do daily dungeon, how should we treat daily malware? Set to 'Always' 'Never' or 'Best Judgement'",
     valid: isTriBoolean,
@@ -33649,7 +33655,8 @@ function GreySettings_getGreySettings() {
   };
 
   var dailyDungeon = {
-    name: "greyDailyDungeon",
+    name: "Daily Dungeon",
+    property: "greyDailyDungeon",
     description:
     "Should the script always do daily dungeon, even when there is no need to? Eg, tower break. Useful in conjunction with greyDailyMalware",
     valid: isBoolean,
@@ -33657,7 +33664,8 @@ function GreySettings_getGreySettings() {
   };
 
   var levelingResources = {
-    name: "greyPrepareLevelingResources",
+    name: "Prepare Leveling Resources",
+    property: "greyPrepareLevelingResources",
     description:
     "If this is set to true, script will attempt to prepare resources that are useful for power leveling. Namely familiar scrapbook and raise goose weight.",
     valid: isBoolean,
@@ -33665,23 +33673,18 @@ function GreySettings_getGreySettings() {
   };
 
   var skipPalindome = {
-    name: "greySkipPalindome",
+    name: "Skip Palindome",
+    property: "greySkipPalindome",
     description:
     "If set to true, will not complete palindome. This is only useful if you intend to burn turns on UR farming, and you're recommended to save at least 80 turns minumum to resume the script. To resume, this will need to be set to false.",
     valid: isBoolean,
     "default": false
   };
 
-  var doHellQuest = {
-    name: "greyAzazelSteelMargarita",
-    description:
-    "If set to true, will complete the requirements for the Steel Margarita +5 Liver drink. There is different scenarios for this, but this is best used with towerbreaking and ronin escaping. It will attempt to use the no-trades previously acquired.",
-    valid: isBoolean,
-    "default": false
-  };
-
   var deleteKmails = {
-    name: "greyDeleteKmails",
+    name: "Delete Kmails",
+
+    property: "greyDeleteKmails",
     description:
     "When true, will delete kmails from spooky lady and fortune teller",
     valid: isBoolean,
@@ -33689,7 +33692,9 @@ function GreySettings_getGreySettings() {
   };
 
   var useMummery = {
-    name: "greyUseMummery",
+    name: "Use Mummery",
+
+    property: "greyUseMummery",
     description:
     "If set to true, will set grey goose to use MP restoring. This is enabled by default as there isn't really a reason not to.",
     valid: isBoolean,
@@ -33701,7 +33706,9 @@ function GreySettings_getGreySettings() {
   Math.round((0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("valueOfAdventure")) * 0.7 / 100) * 100;
 
   var grayAdventureValue = {
-    name: "greyValueOfAdventure",
+    name: "Value of GYou Adventure",
+
+    property: "greyValueOfAdventure",
     description:
     "Used to determine how to prioritize resources, a fax for example is worth 20k. If it saves 3 turns and each turn is worth 10k, then it's obviously worth using the fax to save those 3 turns. Default value is based off roughly 70% of pref valueOfAdventure.",
     valid: function valid(value) {return /\d+/.test(value);},
@@ -33709,7 +33716,9 @@ function GreySettings_getGreySettings() {
   };
 
   var greySavePulls = {
-    name: "greyPullsLimit",
+    name: "Allowed Pulls",
+
+    property: "greyPullsLimit",
     description:
     "How many pulls the script can use, if this is too low then you're going to have a bad time. 20 means the script can use up to 20 pulls, leaving 0 remaining.",
     valid: function valid(value) {return /\d+/.test(value);},
@@ -33717,7 +33726,8 @@ function GreySettings_getGreySettings() {
   };
 
   var greyVoteMonster = {
-    name: "greyVotingBooth",
+    name: "Use Voting Booth",
+    property: "greyVotingBooth",
     description:
     "If you own the voting booth, by default will not vote as aftercore voting can be better",
     valid: isBoolean,
@@ -33725,7 +33735,8 @@ function GreySettings_getGreySettings() {
   };
 
   var greyDefaultWorkshed = {
-    name: "greyDefaultWorkshed",
+    name: "Default Workshed",
+    property: "greyDefaultWorkshed",
     description:
     "What should Greyday set your empty workshed to at the start of the day?",
     valid: function valid(value) {return (
@@ -33740,7 +33751,8 @@ function GreySettings_getGreySettings() {
     "default": ""
   };
   var greySwitchWorkshed = {
-    name: "greySwitchWorkshed",
+    name: "Switch Workshed to",
+    property: "greySwitchWorkshed",
     description:
     "Applicable only if you're starting your run with Cold Medicine Cabinet, if set to the name of a workshed item, will switch to that workshed after all 5 CMC uses are expended. Requires the item to be in inventory",
     valid: function valid(value) {return (
@@ -33756,7 +33768,8 @@ function GreySettings_getGreySettings() {
   };
 
   var greyClipArt = {
-    name: "greyClipArt",
+    name: "Clipart Targets",
+    property: "greyClipArt",
     description:
     "A comma seperated list of familiar names you'd like Greyday to summon and use Familiar Jacks on if you have Tome of Clip Art",
     valid: function valid(value) {var _iterator = GreySettings_createForOfIteratorHelper(
@@ -33782,7 +33795,8 @@ function GreySettings_getGreySettings() {
   };
 
   var greyCosplaySaber = {
-    name: "greyCosplaySaber",
+    name: "Cosplay Saber",
+    property: "greyCosplaySaber",
     description:
     "What upgrade should GreyDay place on the Cosplay Saber if you own it?",
     valid: function valid(value) {return value.length == 0 || /^\d+$/.test(value);},
@@ -33802,7 +33816,8 @@ function GreySettings_getGreySettings() {
 
 
   var greyVIPClan = {
-    name: "greyVIPClan",
+    name: "VIP Clan to use",
+    property: "greyVIPClan",
     description:
     "The name of the clan we will use to execute Fax Requests, and switch to for other VIP functions if they are not available in our current clan. Set to empty (Or in relay, 'Don't use VIP Invitation') to disable all VIP usage, even the yellow rockets.. Best support for 'Bonus Adventures From Hell' and 'The Average Clan'",
     valid: function valid(value) {return (
@@ -33816,7 +33831,8 @@ function GreySettings_getGreySettings() {
   };
 
   var greyFortuneTeller = {
-    name: "greyFortuneTeller",
+    name: "Use Fortune Teller",
+    property: "greyFortuneTeller",
     description:
     "If the script should use fortune teller if possible. Will grab: Prank Item, then Potion, then Psychic Equipment",
     valid: isBoolean,
@@ -33824,7 +33840,8 @@ function GreySettings_getGreySettings() {
   };
 
   var greyGrabZapWand = {
-    name: "greyGrabZapWand",
+    name: "Grab Zap Wand",
+    property: "greyGrabZapWand",
     description:
     "Should the script grab the zap wand? This generally adds another 5-6 turns to the run. You'll need this if you don't have enough key sources",
     valid: isBoolean,
@@ -33832,7 +33849,8 @@ function GreySettings_getGreySettings() {
   };
 
   var prioritizeLocket = {
-    name: "greyLocketWeight",
+    name: "Combat Lover's Locket weight",
+    property: "greyLocketWeight",
     description:
     "Set this to a value higher than 0 to add weight to maximizer if you want Greyday to wear the locket more often, this is only useful if you're trying to locket everything",
     valid: function valid(s) {return /$\d+^/.test(s);},
@@ -33840,7 +33858,8 @@ function GreySettings_getGreySettings() {
   };
 
   var grabMeatSkill = {
-    name: "greyMeatSkill",
+    name: "Pick up the Meat Skill",
+    property: "greyMeatSkill",
     description:
     "Should GreyDay grab Financial Spreadsheets? +40% meat from monsters, doesn't effect the run itself. Convenient means it'll grab the skill if it's an orb prediction or current fight, but not care about it.",
     valid: function valid(s) {return (
@@ -33856,7 +33875,8 @@ function GreySettings_getGreySettings() {
   };
 
   var greyUseFamiliar = {
-    name: "greyUseFamiliars",
+    name: "Familiars to use",
+    property: "greyUseFamiliars",
     description:
     "Comma seperated list of familiars in order of priority to use. Best used with only a few fams at most, does support drop fams",
     valid: function valid(s) {return (
@@ -34018,7 +34038,7 @@ var GreySettings_GreySettings = /*#__PURE__*/function () {function GreySettings(
 
     function loadSettings() {var _iterator2 = GreySettings_createForOfIteratorHelper(
         GreySettings_getGreySettings()),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var setting = _step2.value;
-          var prop = (0,external_kolmafia_.getProperty)(setting.name);
+          var prop = (0,external_kolmafia_.getProperty)(setting.property);
 
           if (prop == "") {
             prop = setting["default"];
@@ -34028,7 +34048,7 @@ var GreySettings_GreySettings = /*#__PURE__*/function () {function GreySettings(
             prop = (0,external_kolmafia_.toInt)(prop);
           }
 
-          GreySettings[setting.name] = prop;
+          GreySettings[setting.property] = prop;
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
 
       if (this.isHardcoreMode()) {
@@ -34515,9 +34535,10 @@ function getResourceSettings() {
     var def = ResourceValues[res.name];
 
     var setting = {
+      name: res.name,
       setting: "values",
-      name: "greyValue_" + res.name,
-      description: res.description + " (Default " + def + ")",
+      property: "greyValue_" + res.name,
+      description: res.description,
       valid: function valid(s) {return /^-?\d+$/.test(s);},
       "default": def
     };
@@ -35546,13 +35567,14 @@ function getRelayPages() {
     }
 
     var prop = {
-      preference: setting.name,
       name: setting.name,
+      preference: setting.property,
       description: setting.description,
       "default": setting["default"] == null ? "" : setting["default"].toString(),
-      value: (0,external_kolmafia_.getProperty)(setting.name),
       type: type,
-      dropdown: dropdowns
+      dropdown: dropdowns,
+      validate:
+      typeof setting["default"] == "number" ? "(s) => /^-?\\d+$/.test(s)" : null
     };
 
     if (setting.setting == "main") {
