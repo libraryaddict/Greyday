@@ -44,7 +44,7 @@ const scriptsConfig = merge(
 );
 
 // handle the file creating the greyday UI html file
-const otherRelayConfig = merge(
+const relayConfig = merge(
   {
     entry: "./src/relay/relay_greyday.ts",
     output: {
@@ -56,4 +56,4 @@ const otherRelayConfig = merge(
   sharedConfig
 );
 
-module.exports = [scriptsConfig, relayConfig, otherRelayConfig];
+module.exports = [scriptsConfig, relayConfig];
