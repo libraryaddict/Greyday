@@ -17809,7 +17809,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
         run: function run() {
           (0,external_kolmafia_.visitUrl)("place.php?whichplace=8bit&action=8treasure");
           (0,external_kolmafia_.visitUrl)("choice.php?forceoption=0");
-          (0,external_kolmafia_.visitUrl)("choice.php?pwd&whichchoice=1493&option=3", true);
+          (0,external_kolmafia_.visitUrl)("choice.php?pwd&whichchoice=1493&option=1", true);
         }
       };
     } }, { key: "run", value:
