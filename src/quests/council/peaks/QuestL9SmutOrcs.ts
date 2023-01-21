@@ -110,7 +110,6 @@ export class SmutOrcs implements QuestInfo {
     }
 
     if (
-      status < 0 ||
       myMp() < 15 ||
       !AbsorbsProvider.getAbsorbedMonsters().includes(this.plastered)
     ) {

@@ -2,7 +2,6 @@ import {
   Location,
   Item,
   availableAmount,
-  getProperty,
   visitUrl,
   runChoice,
   handlingChoice,
@@ -22,7 +21,6 @@ import {
   QuestStatus,
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
-import { GreySettings } from "../../../../utils/GreySettings";
 
 export class QuestDigitalKey implements QuestInfo {
   location: Location = Location.get("8-Bit Realm");
@@ -42,7 +40,7 @@ export class QuestDigitalKey implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (
+    /* if (
       getQuestStatus("questL13Final") > 5 ||
       availableAmount(this.key) > 0 ||
       getProperty("nsTowerDoorKeysUsed").includes(this.key.name)
@@ -70,7 +68,8 @@ export class QuestDigitalKey implements QuestInfo {
       return QuestStatus.NOT_READY;
     }
 
-    return QuestStatus.READY;
+    return QuestStatus.READY;*/
+    return QuestStatus.NOT_READY; // No support
   }
 
   canMakePixels(): boolean {
