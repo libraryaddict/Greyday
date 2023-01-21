@@ -14,10 +14,10 @@ import {
 import { getAvailableClans } from "./GreyClan";
 import { Workshed, Worksheds } from "./GreyUtils";
 
-export type GreySettingType = "main" | "values";
+export type GreySettingPage = "main" | "values";
 
 export type GreySetting = {
-  setting?: GreySettingType;
+  setting?: GreySettingPage;
   name: string;
   description: string;
   valid: (value: string) => boolean;

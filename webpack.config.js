@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { merge } = require("webpack-merge");
 
 const sharedConfig = {
@@ -16,14 +15,9 @@ const sharedConfig = {
         options: {
           presets: ["@babel/preset-env"]
         }
-      },
-      {
-        test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
       }
     ]
   },
-  plugins: [new MiniCssExtractPlugin()],
   resolve: {
     extensions: [".tsx", ".ts", ".js"]
   },
@@ -57,40 +51,6 @@ const otherRelayConfig = merge(
       path: path.join(__dirname, "./built/relay/"),
       filename: "relay_Greyday.js",
       libraryTarget: "commonjs"
-    },
-    module: {
-      rules: [
-        {
-          // Include ts, tsx, js, and jsx files.
-          test: /\.(ts|js)x?$/,
-          // exclude: /node_modules/,
-          loader: "babel-loader"
-        }
-      ]
-    }
-  },
-  sharedConfig
-);
-
-// handle the react files used in the greyday html file
-const relayConfig = merge(
-  {
-    entry: "./src/relay/relay/index.tsx",
-    output: {
-      path: path.join(__dirname, "./built/relay/greyday/"),
-      filename: "greyday_relay.js",
-      libraryTarget: "commonjs"
-    },
-    module: {
-      rules: [
-        {
-          // Include ts, tsx, js, and jsx files.
-          test: /\.(ts|js)x?$/,
-          // exclude: /node_modules/,
-          loader: "babel-loader",
-          options: { presets: ["@babel/env", "@babel/preset-react"] }
-        }
-      ]
     }
   },
   sharedConfig
