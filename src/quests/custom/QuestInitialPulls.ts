@@ -119,15 +119,10 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
 
   status(path: PossiblePath): QuestStatus {
     if (
-      this.donePulls ||
       pullsRemaining() <= 0 ||
       GreySettings.isHardcoreMode() ||
       (path != null && !path.canUse(ResourceCategory.PULL))
     ) {
-      if (path != null) {
-        this.donePulls = true;
-      }
-
       return QuestStatus.COMPLETED;
     }
 
@@ -139,7 +134,6 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
       location: null,
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
-        this.donePulls = true;
         useFamiliar(Familiar.get("Grey Goose")); // Force it to be leveled up if we happen to have short order cook
 
         for (const item of path.pulls) {
