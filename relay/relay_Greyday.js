@@ -6761,6 +6761,10 @@ var QuestL11ManorBomb = /*#__PURE__*/function () {function QuestL11ManorBomb() {
         return QuestStatus.COMPLETED;
       }
 
+      if ((0,external_kolmafia_.availableAmount)(this.bomb) > 0) {
+        return QuestStatus.READY;
+      }
+
       if (
       (0,external_kolmafia_.availableAmount)(this.unstable) == 0 && (
       (0,external_kolmafia_.availableAmount)(this.soda) == 0 || (0,external_kolmafia_.availableAmount)(this.wine) == 0))
@@ -6772,9 +6776,20 @@ var QuestL11ManorBomb = /*#__PURE__*/function () {function QuestL11ManorBomb() {
     } }, { key: "run", value:
 
     function run() {var _this = this;
+      if ((0,external_kolmafia_.availableAmount)(this.bomb) > 0) {
+        return {
+          location: null,
+          outfit: GreyOutfit.IGNORE_OUTFIT,
+          run: function run() {
+            (0,external_kolmafia_.visitUrl)("place.php?whichplace=manor4&action=manor4_chamberwall");
+          }
+        };
+      }
+
       if ((0,external_kolmafia_.availableAmount)(this.unstable) == 0) {
         return {
           location: null,
+          outfit: GreyOutfit.IGNORE_OUTFIT,
           run: function run() {
             (0,external_kolmafia_.cliExecute)("create Unstable Fulminate");
 
@@ -6799,7 +6814,7 @@ var QuestL11ManorBomb = /*#__PURE__*/function () {function QuestL11ManorBomb() {
 
           greyAdv(_this.boiler, outfit, settings);
 
-          if ((0,external_kolmafia_.itemAmount)(_this.unstable) == 0) {
+          if ((0,external_kolmafia_.availableAmount)(_this.bomb) > 0) {
             (0,external_kolmafia_.visitUrl)("place.php?whichplace=manor4&action=manor4_chamberwall");
           }
         }
