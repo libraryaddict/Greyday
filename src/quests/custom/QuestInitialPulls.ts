@@ -124,7 +124,10 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
       GreySettings.isHardcoreMode() ||
       (path != null && !path.canUse(ResourceCategory.PULL))
     ) {
-      this.donePulls = true;
+      if (path != null) {
+        this.donePulls = true;
+      }
+
       return QuestStatus.COMPLETED;
     }
 
