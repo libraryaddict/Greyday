@@ -1,7 +1,6 @@
 import {
   Location,
   Item,
-  itemAmount,
   Monster,
   visitUrl,
   availableAmount,
@@ -44,6 +43,10 @@ export class QuestL11ManorBomb implements QuestInfo {
       return QuestStatus.COMPLETED;
     }
 
+    if (availableAmount(this.bomb) > 0) {
+      return QuestStatus.READY;
+    }
+
     if (
       availableAmount(this.unstable) == 0 &&
       (availableAmount(this.soda) == 0 || availableAmount(this.wine) == 0)
@@ -55,9 +58,20 @@ export class QuestL11ManorBomb implements QuestInfo {
   }
 
   run(): QuestAdventure {
+    if (availableAmount(this.bomb) > 0) {
+      return {
+        location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
+        run: () => {
+          visitUrl("place.php?whichplace=manor4&action=manor4_chamberwall");
+        },
+      };
+    }
+
     if (availableAmount(this.unstable) == 0) {
       return {
         location: null,
+        outfit: GreyOutfit.IGNORE_OUTFIT,
         run: () => {
           cliExecute("create Unstable Fulminate");
 
@@ -82,7 +96,7 @@ export class QuestL11ManorBomb implements QuestInfo {
 
         greyAdv(this.boiler, outfit, settings);
 
-        if (itemAmount(this.unstable) == 0) {
+        if (availableAmount(this.bomb) > 0) {
           visitUrl("place.php?whichplace=manor4&action=manor4_chamberwall");
         }
       },
