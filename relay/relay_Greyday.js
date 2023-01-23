@@ -25855,27 +25855,21 @@ var QuestInitialPulls = /*#__PURE__*/function (_TaskInfo) {QuestInitialPulls_inh
 
     function status(path) {
       if (
-      this.donePulls ||
       (0,external_kolmafia_.pullsRemaining)() <= 0 ||
       GreySettings_GreySettings.isHardcoreMode() ||
       path != null && !path.canUse(ResourceCategory.PULL))
       {
-        if (path != null) {
-          this.donePulls = true;
-        }
-
         return QuestStatus.COMPLETED;
       }
 
       return QuestStatus.READY;
     } }, { key: "run", value:
 
-    function run(path) {var _this3 = this;
+    function run(path) {
       return {
         location: null,
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: function run() {
-          _this3.donePulls = true;
           (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose")); // Force it to be leveled up if we happen to have short order cook
           var _iterator2 = QuestInitialPulls_createForOfIteratorHelper(
             path.pulls),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var item = _step2.value;
