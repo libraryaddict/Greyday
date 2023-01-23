@@ -25845,7 +25845,10 @@ var QuestInitialPulls = /*#__PURE__*/function (_TaskInfo) {QuestInitialPulls_inh
       GreySettings_GreySettings.isHardcoreMode() ||
       path != null && !path.canUse(ResourceCategory.PULL))
       {
-        this.donePulls = true;
+        if (path != null) {
+          this.donePulls = true;
+        }
+
         return QuestStatus.COMPLETED;
       }
 
