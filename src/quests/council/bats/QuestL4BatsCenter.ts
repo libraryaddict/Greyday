@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  Effect,
   Familiar,
   familiarWeight,
   getProperty,
@@ -7,6 +8,7 @@ import {
   Location,
   maximize,
   Monster,
+  myEffects,
   numericModifier,
   Skill,
   turnsPlayed,
@@ -87,7 +89,11 @@ export class QuestL4BatsCenter extends TaskInfo implements QuestInfo {
         maximize(maximizerString, true);
 
         this.hasStenchRes =
-          numericModifier("Generated:_spec", "Stench Resistance") > 0;
+          numericModifier("Generated:_spec", "Stench Resistance") -
+            Object.keys(myEffects())
+              .map((e) => numericModifier(Effect.get(e), "Stench Resistance"))
+              .reduce((r1, r2) => r1 + r2, 0) >
+          0;
       }
 
       if (!this.hasStenchRes) {
