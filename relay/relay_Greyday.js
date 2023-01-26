@@ -18823,7 +18823,11 @@ var QuestL4BatsCenter = /*#__PURE__*/function (_TaskInfo) {QuestL4BatsCenter_inh
           (0,external_kolmafia_.maximize)(maximizerString, true);
 
           this.hasStenchRes =
-          (0,external_kolmafia_.numericModifier)("Generated:_spec", "Stench Resistance") > 0;
+          (0,external_kolmafia_.numericModifier)("Generated:_spec", "Stench Resistance") -
+          Object.keys((0,external_kolmafia_.myEffects)()).
+          map(function (e) {return (0,external_kolmafia_.numericModifier)(external_kolmafia_.Effect.get(e), "Stench Resistance");}).
+          reduce(function (r1, r2) {return r1 + r2;}, 0) >
+          0;
         }
 
         if (!this.hasStenchRes) {
