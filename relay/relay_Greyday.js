@@ -5772,6 +5772,7 @@ function greyDuringFightMacro(settings) {
   }
 
   if (
+  (0,external_kolmafia_.haveSkill)(external_kolmafia_.Skill.get("Fluid Dynamics Simulation")) &&
   /*toInt(getProperty("flyeredML")) <= 10000 && */monster.baseHp < 300 &&
   (0,external_kolmafia_.expectedDamage)(monster) < Math.min(200, (0,external_kolmafia_.myHp)() * 0.9) &&
   !monster.attributes.includes("FREE") &&
