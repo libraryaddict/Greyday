@@ -165,6 +165,7 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
   }
 
   if (
+    haveSkill(Skill.get("Fluid Dynamics Simulation")) &&
     /*toInt(getProperty("flyeredML")) <= 10000 && */ monster.baseHp < 300 &&
     expectedDamage(monster) < Math.min(200, myHp() * 0.9) &&
     !monster.attributes.includes("FREE") &&
