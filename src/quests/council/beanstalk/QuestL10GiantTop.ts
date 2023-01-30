@@ -6,6 +6,7 @@ import {
   Item,
   lastChoice,
   getProperty,
+  Monster,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -31,6 +32,7 @@ export class QuestL10GiantTop implements QuestInfo {
   punkNC: number = 678;
   gothNC: number = 675;
   holeInSky: QuestInfo = new QuestTowerHoleInSkyUnlock();
+  toAbsorb: Monster[];
 
   getChildren(): QuestInfo[] {
     return [this.holeInSky];
@@ -41,6 +43,10 @@ export class QuestL10GiantTop implements QuestInfo {
 
     if (availableAmount(this.wig) > 0) {
       outfit.addWeight(this.wig);
+    }
+
+    if (this.toAbsorb.length == 0) {
+      outfit.addDelayer();
     }
 
     return {

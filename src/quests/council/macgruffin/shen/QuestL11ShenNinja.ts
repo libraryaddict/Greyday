@@ -1,4 +1,5 @@
 import { Location, Monster } from "kolmafia";
+import { DelayCriteria } from "../../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
@@ -46,6 +47,8 @@ export class QuestL11ShenNinja implements QuestInfo {
     if (getQuestStatus("questL08Trapper") <= 2) {
       outfit.setPlusCombat();
     }
+
+    outfit.addDelayer(DelayCriteria().withForcedFights(null));
 
     return {
       location: this.location,

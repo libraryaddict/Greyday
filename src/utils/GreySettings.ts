@@ -22,9 +22,12 @@ export type GreySetting = {
   property: string;
   description: string;
   valid: (value: string) => boolean;
-  viableSettings?: [string, string][] | string[];
+  viableSettings?: [string, string][] | string[]; // [Display, Value] | Value & Display
   default: unknown;
   viable?: boolean;
+  tags?: {
+    maxTags: number;
+  };
 };
 
 export type SettingTriBoolean = "Best Judgement" | "Always" | "Never";
@@ -184,9 +187,15 @@ export function getGreySettings(): GreySetting[] {
     name: "Use Voting Booth",
     property: "greyVotingBooth",
     description:
-      "If you own the voting booth, by default will not vote as aftercore voting can be better",
-    valid: isBoolean,
-    default: false,
+      "If you own the voting booth, what buffs should GreyDay pick up? If none are selected, will not use. You may be better off picking this after ascending, eg: SC has familiar exp. Hot Res is only useful in Haunted Kitchen, and will save 3-4 turns at most. Muscle is best used after prism, moxie will deal more damage in gyou",
+    default: "",
+    valid: () => true,
+    viableSettings: [
+      ["Muscle +25%", "1"],
+      ["Moxie +25%", "3"],
+      ["Hot Resist (+3)", "4"],
+    ],
+    tags: { maxTags: 2 },
   };
 
   const greyDefaultWorkshed: GreySetting = {
@@ -347,7 +356,7 @@ export function getGreySettings(): GreySetting[] {
   };
 
   return [
-    //greyBountyHunter,
+    // Booleans
     towerBreak,
     manorLights,
     pvpEnable,
@@ -357,16 +366,20 @@ export function getGreySettings(): GreySetting[] {
     greyFortuneTeller,
     greyGrabZapWand,
     skipPalindome,
+    // Dropdowns
     useMummery,
     greyVIPClan,
     moonTune,
-    dailyMalware,
     grabMeatSkill,
-    greySavePulls,
-    grayAdventureValue,
     greyDefaultWorkshed,
     greySwitchWorkshed,
     greyCosplaySaber,
+    dailyMalware,
+    // Voting Booth
+    greyVoteMonster,
+    // Inputs
+    greySavePulls,
+    grayAdventureValue,
     greyClipArt,
     prioritizeLocket,
   ].map((s) => {
@@ -440,7 +453,7 @@ export class GreySettings {
   static greyPullsLimit: number = 20;
   static greyValueOfAdventure: number;
   static greyUseMummery: boolean;
-  static greyVotingBooth: boolean;
+  static greyVotingBooth: string;
   static greyBountyHunting: boolean;
   static greyDefaultWorkshed: Workshed;
   static greySwitchWorkshed: Workshed;

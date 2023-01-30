@@ -16,7 +16,10 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
-import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../iotms/delayburners/DelayBurners";
 
 export class QuestL10GiantShip implements QuestInfo {
   modelShip: Item = Item.get("Model airship");
@@ -59,10 +62,6 @@ export class QuestL10GiantShip implements QuestInfo {
   run(): QuestAdventure {
     const outfit = new GreyOutfit();
 
-    if (this.shouldRunNC()) {
-      outfit.setNoCombat();
-    }
-
     const orbs: Monster[] = [];
 
     if (availableAmount(this.amulet) == 0) {
@@ -84,6 +83,19 @@ export class QuestL10GiantShip implements QuestInfo {
       outfit.setItemDrops();
     }
 
+    if (this.shouldRunNC()) {
+      outfit.setNoCombat();
+    } else {
+      const criteria = DelayCriteria();
+
+      if (orbs.length == 0) {
+        criteria.withFreeFights(null);
+        criteria.withForcedFights(null);
+      }
+
+      outfit.addDelayer(criteria);
+    }
+
     return {
       location: this.loc,
       outfit: outfit,
@@ -93,16 +105,6 @@ export class QuestL10GiantShip implements QuestInfo {
       run: () => {
         const props = new PropertyManager();
         props.setChoice(681, 1);
-
-        if (!this.shouldRunNC()) {
-          const ready = DelayBurners.getReadyDelayBurner();
-
-          if (ready != null) {
-            ready.doFightSetup();
-          } else {
-            DelayBurners.tryReplaceCombats();
-          }
-        }
 
         if (DelayBurners.isTryingForDupeableGoblin()) {
           useFamiliar(Familiar.get("Grey Goose"));

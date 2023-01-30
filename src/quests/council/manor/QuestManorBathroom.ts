@@ -7,9 +7,7 @@ import {
   useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
-import {
-  hasNonCombatSkillsReady,
-} from "../../../GreyAdventurer";
+import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
@@ -19,7 +17,10 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
-import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../iotms/delayburners/DelayBurners";
 
 export class ManorBathroom implements QuestInfo {
   location: Location = Location.get("The Haunted Bathroom");
@@ -69,6 +70,12 @@ export class ManorBathroom implements QuestInfo {
       outfit.setNoCombat();
     }
 
+    if (this.toAbsorb.length == 0) {
+      outfit.addDelayer(
+        DelayCriteria().withForcedFights(this.hasDelay() ? null : false)
+      );
+    }
+
     return {
       location: this.location,
       outfit: outfit,
@@ -77,10 +84,6 @@ export class ManorBathroom implements QuestInfo {
         const props = new PropertyManager();
         props.setChoice(882, 1);
         props.setChoice(881, 1);
-
-        if (this.toAbsorb.length == 0) {
-          DelayBurners.tryReplaceCombats();
-        }
 
         if (DelayBurners.isTryingForDupeableGoblin()) {
           useFamiliar(Familiar.get("Grey Goose"));

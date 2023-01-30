@@ -234,7 +234,11 @@ export class AdventureFinder {
             !canFreeRun ||
             monster.boss ||
             !monster.copyable ||
-            monster.attributes.includes("FREE")
+            monster.attributes.includes("FREE") ||
+            (monster.name.startsWith("void ") &&
+              toInt(getProperty("_voidFreeFights")) <= 5) ||
+            (monster.name == "_voteMonster" &&
+              toInt(getProperty("_voteFreeFights")) <= 5)
           ) {
             return false;
           }

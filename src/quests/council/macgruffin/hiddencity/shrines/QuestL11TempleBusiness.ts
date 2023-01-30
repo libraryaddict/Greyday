@@ -190,7 +190,7 @@ export class QuestL11Business extends TaskInfo implements QuestInfo {
       return QuestStatus.READY;
     }
 
-    if (getProperty("questL11Curses") != "finished" && this.goCurses(path)) {
+    if (getProperty("questL11Curses") != "finished" && this.goCurses()) {
       return QuestStatus.NOT_READY;
     }
 
@@ -227,7 +227,7 @@ export class QuestL11Business extends TaskInfo implements QuestInfo {
     return QuestStatus.READY;
   }
 
-  goCurses(path: PossiblePath) {
+  goCurses() {
     return this.farmFiles() && this.delayUntilNextNC() == 0;
   }
 
@@ -288,7 +288,7 @@ export class QuestL11Business extends TaskInfo implements QuestInfo {
       };
     }
 
-    if (path != null && this.goCurses(path)) {
+    if (path != null && this.goCurses()) {
       //
       return {
         location: this.apartment,
@@ -312,6 +312,16 @@ export class QuestL11Business extends TaskInfo implements QuestInfo {
       };
     }
 
+    const outfit = new GreyOutfit();
+
+    if (
+      availableAmount(this.completeFile) > 0 &&
+      this.filesRemaining() == 0 &&
+      this.delayUntilNextNC() > 0
+    ) {
+      outfit.addDelayer();
+    }
+
     return {
       location:
         path.canUse(ResourceCategory.FORCE_NC) &&
@@ -326,6 +336,7 @@ export class QuestL11Business extends TaskInfo implements QuestInfo {
       mayFreeRun: this.delayUntilNextNC() > 0,
       freeRun: (monster) =>
         this.filesRemaining() == 0 || monster != this.accountant,
+      outfit: outfit,
       run: () => {
         const props = new PropertyManager();
 
@@ -336,19 +347,6 @@ export class QuestL11Business extends TaskInfo implements QuestInfo {
             props.setChoice(786, 2); // Get binder clip
           } else {
             props.setChoice(786, 3); // Fight accountant
-          }
-
-          if (
-            availableAmount(this.completeFile) > 0 &&
-            this.filesRemaining() == 0
-          ) {
-            const ready = DelayBurners.getReadyDelayBurner();
-
-            if (ready != null) {
-              ready.doFightSetup();
-            } else {
-              DelayBurners.tryReplaceCombats();
-            }
           }
 
           if (DelayBurners.isTryingForDupeableGoblin()) {

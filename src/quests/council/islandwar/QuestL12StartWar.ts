@@ -1,6 +1,5 @@
 import {
   availableAmount,
-  equippedAmount,
   Familiar,
   getProperty,
   haveFamiliar,
@@ -15,7 +14,10 @@ import {
   visitUrl,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
-import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../iotms/delayburners/DelayBurners";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { greyAdv, setPrimedResource } from "../../../utils/GreyLocations";
@@ -149,6 +151,8 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
       ) {
         outfit.addWeight(this.umbrella);
       }
+
+      outfit.addDelayer(DelayCriteria().withFreeFights(null));
     }
 
     return {
@@ -156,15 +160,6 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
       outfit: outfit,
       freeRun: () => true,
       run: () => {
-        // If we can cast both NC skills
-        if (
-          nc == null &&
-          DelayBurners.isDelayBurnerReady() &&
-          equippedAmount(this.umbrella) == 0
-        ) {
-          DelayBurners.tryReplaceCombats();
-        }
-
         const props = new PropertyManager();
         props.setChoice(139, 3);
         props.setChoice(140, 3);

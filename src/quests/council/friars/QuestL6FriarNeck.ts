@@ -89,6 +89,8 @@ export class QuestL6FriarNeck implements QuestInfo {
 
     if (this.shouldWearLatte()) {
       outfit.addWeight(this.latte);
+    } else if (!this.isAllAbsorbed()) {
+      outfit.addDelayer();
     }
 
     return {
@@ -96,18 +98,6 @@ export class QuestL6FriarNeck implements QuestInfo {
       outfit: outfit,
       freeRun: () => true,
       run: () => {
-        if (this.isAllAbsorbed() && !this.shouldWearLatte()) {
-          if (availableAmount(this.umbrella) == 0) {
-            DelayBurners.tryReplaceCombats();
-          } else {
-            const burner = DelayBurners.getReadyDelayBurner();
-
-            if (burner != null) {
-              burner.doFightSetup();
-            }
-          }
-        }
-
         if (DelayBurners.isTryingForDupeableGoblin()) {
           useFamiliar(Familiar.get("Grey Goose"));
         }

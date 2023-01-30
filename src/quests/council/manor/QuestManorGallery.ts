@@ -6,9 +6,7 @@ import {
   Monster,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
-import {
-  hasNonCombatSkillsReady,
-} from "../../../GreyAdventurer";
+import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import {
@@ -18,7 +16,10 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
-import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../iotms/delayburners/DelayBurners";
 import {
   getGhostBustingMacro,
   getGhostBustingOutfit,
@@ -78,6 +79,12 @@ export class ManorGallery implements QuestInfo {
 
     outfit.setNoCombat();
 
+    if (this.toAbsorb.length == 0) {
+      outfit.addDelayer(
+        DelayCriteria().withForcedFights(this.hasDelay() ? null : false)
+      );
+    }
+
     return {
       location: isGhostBustingTime(this.location) ? null : this.location,
       outfit: outfit,
@@ -88,14 +95,6 @@ export class ManorGallery implements QuestInfo {
 
         if (isGhostBustingTime(this.location)) {
           settings.setStartOfFightMacro(getGhostBustingMacro());
-        } else if (this.hasDelay()) {
-          const delay = DelayBurners.getReadyDelayBurner();
-
-          if (delay != null) {
-            delay.doFightSetup();
-          }
-        } else if (this.toAbsorb.length == 0) {
-          DelayBurners.tryReplaceCombats();
         }
 
         /* if (availableAmount(this.sword) == 0) {

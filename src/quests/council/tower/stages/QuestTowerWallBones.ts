@@ -24,7 +24,10 @@ import {
   useFamiliar,
   visitUrl,
 } from "kolmafia";
-import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../../iotms/delayburners/DelayBurners";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import { Macro } from "../../../../utils/MacroBuilder";
@@ -92,13 +95,13 @@ export class QuestTowerWallBones implements QuestInfo {
 
   runKnife(): QuestAdventure {
     const outfit = new GreyOutfit().setNoCombat().setNoCombat();
+    outfit.addDelayer(DelayCriteria().withFreeFights(null));
 
     return {
       location: this.groundFloor,
       outfit: outfit,
       run: () => {
         const props = new PropertyManager();
-        DelayBurners.tryReplaceCombats();
 
         if (DelayBurners.isTryingForDupeableGoblin()) {
           useFamiliar(Familiar.get("Grey Goose"));
@@ -142,10 +145,10 @@ export class QuestTowerKillBones {
 
     if (
       myPrimestat() != Stat.get("Moxie") &&
-      !haveEffect(Effect.get("Phairly Balanced")) &&
-      mallPrice(Item.get("PH Balancer")) < 1000
+      !haveEffect(Effect.get("Cock of the Walk")) &&
+      mallPrice(Item.get("Connery's Elixir of Audacity")) < 5000
     ) {
-      use(Item.get("PH Balancer"));
+      use(Item.get("Connery's Elixir of Audacity"));
     }
 
     maximize("moxie +equip " + this.rocket.name, true);
@@ -175,10 +178,10 @@ export class QuestTowerKillBones {
 
     if (
       myPrimestat() != Stat.get("Mysticality") &&
-      !haveEffect(Effect.get("Phairly Balanced")) &&
-      mallPrice(Item.get("PH Balancer")) < 1000
+      !haveEffect(Effect.get("On the Shoulders of Giants")) &&
+      mallPrice(Item.get("Hawking's Elixir of Brilliance")) < 5000
     ) {
-      use(Item.get("PH Balancer"));
+      use(Item.get("Hawking's Elixir of Brilliance"));
     }
 
     maximize("mys", true);

@@ -25,7 +25,7 @@ import {
   useFamiliar,
   visitUrl,
 } from "kolmafia";
-import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
+import { DelayCriteria } from "../../../../iotms/delayburners/DelayBurners";
 import { ResourceCategory } from "../../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
 import { AbsorbsProvider } from "../../../../utils/GreyAbsorber";
@@ -240,6 +240,21 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
       }
     }
 
+    if (fireExtingusherResource == null && this.toAbsorb.length == 0) {
+      outfit.addDelayer(
+        DelayCriteria()
+          .withForcedFights(
+            this.getExplored() >= 98 ||
+              (this.getExplored() >= 8 &&
+                !toBoolean(getProperty("_gnasirAvailable")))
+              ? false
+              : null
+          )
+          .withFreeFights(null)
+          .withAtLeastCombatChance(0.3)
+      );
+    }
+
     return {
       outfit: outfit,
       location: this.desert,
@@ -295,12 +310,7 @@ export class QuestL11DesertExplore extends TaskInfo implements QuestInfo {
           }
 
           killing = macro.step(killing);
-        } else if (
-          this.toAbsorb.length == 0 &&
-          DelayBurners.isDelayBurnerReady()
-        ) {
-          DelayBurners.tryReplaceCombats(3);
-
+        } else if (this.toAbsorb.length == 0) {
           // If the compass is not equipped, and we don't own camel, but we do own left-hand man.
           // Then it's worth it.
           if (

@@ -15,7 +15,11 @@ import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { QuestType } from "../QuestTypes";
-import { DelayBurners } from "../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+  DelayCriteriaInterface,
+} from "../../iotms/delayburners/DelayBurners";
 import { hasUnlockedLatteFlavor, LatteFlavor } from "../../utils/LatteUtils";
 import {
   getGhostBustingMacro,
@@ -45,6 +49,12 @@ export class QuestL2SpookyLarva implements QuestInfo {
     return "Council / Larva";
   }
 
+  delayCriteria(): DelayCriteriaInterface {
+    return DelayCriteria().withForcedFights(
+      !this.isDelayBurning() ? false : null
+    );
+  }
+
   status(): QuestStatus {
     const status = getProperty("questL02Larva");
 
@@ -57,11 +67,11 @@ export class QuestL2SpookyLarva implements QuestInfo {
         return QuestStatus.NOT_READY;
       }
     } else if (this.isDelayBurning()) {
-      if (DelayBurners.isDelayBurnerReady()) {
+      if (DelayBurners.isDelayBurnerReady(this.delayCriteria())) {
         return QuestStatus.READY;
       }
 
-      if (DelayBurners.isDelayBurnerFeasible()) {
+      if (DelayBurners.isDelayBurnerFeasible(this.delayCriteria())) {
         return QuestStatus.FASTER_LATER;
       }
     } else if (
@@ -80,9 +90,9 @@ export class QuestL2SpookyLarva implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    const outfit = isGhostBustingTime(this.location)
-      ? getGhostBustingOutfit()
-      : new GreyOutfit();
+    const ghostTime = isGhostBustingTime(this.location);
+
+    const outfit = ghostTime ? getGhostBustingOutfit() : new GreyOutfit();
 
     if (this.shouldWearLatte()) {
       outfit.addWeight(this.latte);
@@ -90,6 +100,10 @@ export class QuestL2SpookyLarva implements QuestInfo {
 
     if (this.location.turnsSpent >= 5) {
       outfit.setNoCombat();
+    }
+
+    if (!ghostTime && !this.shouldWearLatte() && this.toAbsorb.length == 0) {
+      outfit.addDelayer(this.delayCriteria());
     }
 
     return {
@@ -108,14 +122,6 @@ export class QuestL2SpookyLarva implements QuestInfo {
 
         if (isGhostBustingTime(this.location)) {
           settings.setStartOfFightMacro(getGhostBustingMacro());
-        } else if (!this.shouldWearLatte() && this.toAbsorb.length == 0) {
-          const delay = DelayBurners.getReadyDelayBurner();
-
-          if (delay != null) {
-            delay.doFightSetup();
-          } else if (hasNonCombatSkillsReady()) {
-            DelayBurners.tryReplaceCombats();
-          }
         }
 
         if (

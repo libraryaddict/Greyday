@@ -74,6 +74,11 @@ export class QuestL11PyramidMiddle implements QuestInfo {
 
     if (!this.haveEnough()) {
       outfit.setItemDrops();
+    } else if (
+      availableAmount(this.ratTangle) > 0 &&
+      this.toAbsorb.length == 0
+    ) {
+      outfit.addDelayer();
     }
 
     return {
@@ -89,14 +94,6 @@ export class QuestL11PyramidMiddle implements QuestInfo {
 
         if (availableAmount(this.ratTangle) > 0) {
           startMacro.if_(this.tombRat, Macro.item(this.ratTangle));
-        } else if (this.haveEnough() && this.toAbsorb.length == 0) {
-          const delay = DelayBurners.getReadyDelayBurner();
-
-          if (delay != null) {
-            delay.doFightSetup();
-          } else {
-            DelayBurners.tryReplaceCombats();
-          }
         }
 
         if (DelayBurners.isTryingForDupeableGoblin()) {

@@ -13,7 +13,10 @@ import {
   turnsPlayed,
   useFamiliar,
 } from "kolmafia";
-import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../../iotms/delayburners/DelayBurners";
 import { restoreHPTo } from "../../../../tasks/TaskMaintainStatus";
 import { ResourceCategory } from "../../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
@@ -97,13 +100,13 @@ export class QuestTowerWallSkin extends TaskInfo implements QuestInfo {
 
   runBees(): QuestAdventure {
     const outfit = new GreyOutfit().setNoCombat();
+    outfit.addDelayer(DelayCriteria().withFreeFights(null));
 
     return {
       outfit: outfit,
       location: this.blackForest,
       run: () => {
         const props = new PropertyManager();
-        DelayBurners.tryReplaceCombats();
 
         if (DelayBurners.isTryingForDupeableGoblin()) {
           useFamiliar(Familiar.get("Grey Goose"));

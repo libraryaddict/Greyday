@@ -34,6 +34,7 @@ import { QuestType } from "../../QuestTypes";
 import { MountainStatus } from "../QuestL8IcePeak";
 import { GreyPulls } from "../../../utils/GreyResources";
 import { AdventureFinder } from "../../../GreyChooser";
+import { DelayCriteria } from "../../../iotms/delayburners/DelayBurners";
 
 export class QuestL8MountainNinja extends TaskInfo implements QuestInfo {
   ninja: Location = Location.get("Lair of the Ninja Snowmen");
@@ -253,6 +254,8 @@ export class QuestL8MountainNinja extends TaskInfo implements QuestInfo {
 
     const outfit = new GreyOutfit().setPlusCombat();
     outfit.initWeight = 0.5;
+
+    outfit.addDelayer(DelayCriteria().withForcedFights(null));
 
     return {
       location: this.ninja,

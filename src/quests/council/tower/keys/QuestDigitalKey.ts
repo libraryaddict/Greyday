@@ -8,7 +8,18 @@ import {
   print,
   getProperty,
   toInt,
+  Monster,
+  turnsPlayed,
+  maximize,
+  numericModifier,
 } from "kolmafia";
+import { DelayBurner } from "../../../../iotms/delayburners/DelayBurnerAbstract";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../../iotms/delayburners/DelayBurners";
+import { DelayBurningVoter } from "../../../../iotms/delayburners/DelayBurningVoter";
+import { DelayBurningCursedMagnifyingGlass } from "../../../../iotms/delayburners/DelayCursedMagnifyingGlass";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
@@ -22,7 +33,7 @@ import { QuestType } from "../../../QuestTypes";
 type PixelZone = {
   loc: Location;
   color: string;
-  maximize: string;
+  maximize: "Meat Drop" | "Initiative" | "Damage Absorption" | "Item Drop";
   capped: number;
 };
 
@@ -30,25 +41,25 @@ const PixelZones: PixelZone[] = [
   {
     loc: Location.get("Vanya's Castle"),
     color: "black",
-    maximize: "init",
+    maximize: "Initiative",
     capped: 600,
   },
   {
     loc: Location.get("Megalo-City"),
     color: "blue",
-    maximize: "damage absorption",
+    maximize: "Damage Absorption",
     capped: 600,
   },
   {
     loc: Location.get("Hero's Field"),
     color: "green",
-    maximize: "item drop",
+    maximize: "Item Drop",
     capped: 400,
   },
   {
     loc: Location.get("The Fungus Plains"),
     color: "red",
-    maximize: "meat drop",
+    maximize: "Meat Drop",
     capped: 450,
   },
 ];
@@ -56,9 +67,75 @@ const PixelZones: PixelZone[] = [
 export class QuestDigitalKey implements QuestInfo {
   transfomer: Item = Item.get("continuum transfunctioner");
   key: Item = Item.get("Digital key");
+  currentZone: PixelZone;
+  favorZone: PixelZone;
+  zoneCalcedAt: number = 0;
 
   level(): number {
     return 4;
+  }
+
+  getEstimatedScore(zone: PixelZone): number {
+    maximize(zone.maximize + " -tie", true);
+
+    let score =
+      Math.min(zone.capped, numericModifier("Generated:_spec", zone.maximize)) -
+      (zone.capped - 300);
+
+    if (this.currentZone != zone) {
+      // Not sure its been spaded how it rounds
+      score = Math.round(score / 2);
+    }
+
+    return score;
+  }
+
+  getAdventureZone(): PixelZone {
+    const currentBonusZone = this.currentBonusZone();
+
+    if (
+      currentBonusZone == this.currentZone &&
+      this.zoneCalcedAt + 50 < turnsPlayed()
+    ) {
+      return this.favorZone;
+    }
+
+    this.currentZone = currentBonusZone;
+
+    const zones: Map<PixelZone, number> = new Map([
+      [currentBonusZone, this.getEstimatedScore(currentBonusZone)],
+    ]);
+
+    const sortedZones: PixelZone[] = [];
+
+    if (zones.get(currentBonusZone) < 300) {
+      for (const zone of PixelZones) {
+        sortedZones.push(zone);
+
+        if (zones.has(zone)) {
+          continue;
+        }
+
+        zones.set(zone, this.getEstimatedScore(zone));
+      }
+    } else {
+      sortedZones.push(currentBonusZone);
+    }
+
+    sortedZones.sort((z1, z2) => {
+      return zones.get(z2) - zones.get(z1);
+    });
+
+    this.favorZone = sortedZones[0];
+
+    print(
+      `Pixel Realm Est. Scores: ${sortedZones.map(
+        (z) => z.loc + ": " + zones.get(z)
+      )}`,
+      "gray"
+    );
+
+    return this.favorZone;
   }
 
   currentBonusZone(): PixelZone {
@@ -127,11 +204,19 @@ export class QuestDigitalKey implements QuestInfo {
       return this.redeemKey();
     }
 
-    const zone = this.currentBonusZone();
+    const zone = this.getAdventureZone();
 
     const outfit = new GreyOutfit();
     outfit.addWeight(this.transfomer);
     outfit.addWeight(zone.maximize, 5, null, zone.capped);
+
+    const delayers = this.getViableDelayBurners();
+
+    if (delayers.length > 0) {
+      for (const item of delayers[0].getFightSetup()) {
+        outfit.addWeight(item);
+      }
+    }
 
     return {
       location: zone.loc,
@@ -140,6 +225,33 @@ export class QuestDigitalKey implements QuestInfo {
         greyAdv(zone.loc, outfit);
       },
     };
+  }
+
+  getViableDelayBurners(): DelayBurner[] {
+    const burners = DelayBurners.getCombatReplacers(
+      DelayCriteria().withFreeFights(null).withForcedFights(null)
+    );
+
+    if (this.getAdventureZone().maximize != "Meat Drop") {
+      return burners;
+    }
+
+    // Remove monsters that don't drop meat
+    return burners.filter((d) => {
+      if (d instanceof DelayBurningCursedMagnifyingGlass) {
+        return false;
+      }
+
+      if (d instanceof DelayBurningVoter) {
+        if (getProperty("_voteMonster") == "") {
+          return false;
+        }
+
+        return Monster.get(getProperty("_voteMonster")).minMeat > 0;
+      }
+
+      return true;
+    });
   }
 
   getId(): QuestType {

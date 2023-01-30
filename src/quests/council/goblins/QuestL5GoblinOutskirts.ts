@@ -1,6 +1,11 @@
 import { availableAmount, Item, itemAmount, Location, use } from "kolmafia";
-import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+  DelayCriteriaInterface,
+} from "../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../utils/GreyLocations";
+import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { PropertyManager } from "../../../utils/Properties";
 import {
   getQuestStatus,
@@ -39,6 +44,12 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
     return true;
   }
 
+  delayCriteria(): DelayCriteriaInterface {
+    return DelayCriteria().withForcedFights(
+      this.location.turnsSpent >= 9 ? false : null
+    );
+  }
+
   status(): QuestStatus {
     const status = getQuestStatus("questL05Goblin");
 
@@ -51,11 +62,11 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
     }
 
     if (this.location.turnsSpent < 10) {
-      if (DelayBurners.isDelayBurnerReady()) {
+      if (DelayBurners.isDelayBurnerReady(this.delayCriteria())) {
         return QuestStatus.READY;
       }
 
-      if (DelayBurners.isDelayBurnerFeasible()) {
+      if (DelayBurners.isDelayBurnerFeasible(this.delayCriteria())) {
         return QuestStatus.FASTER_LATER;
       }
     }
@@ -64,21 +75,20 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
   }
 
   run(): QuestAdventure {
+    const outfit = new GreyOutfit();
+
+    if (this.location.turnsSpent < 10) {
+      outfit.addDelayer(this.delayCriteria());
+    }
+
     return {
       location: this.location,
       freeRun: () => true,
+      outfit: outfit,
       run: () => {
         if (availableAmount(this.map) > 0 && availableAmount(this.key)) {
           use(this.map);
         } else {
-          const ready = DelayBurners.getReadyDelayBurner();
-
-          if (ready != null) {
-            ready.doFightSetup();
-          } else {
-            DelayBurners.tryReplaceCombats();
-          }
-
           const props = new PropertyManager();
           props.setChoice(113, 2);
           props.setChoice(111, 3);

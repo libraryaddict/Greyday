@@ -2,15 +2,11 @@ import {
   absorbedMonsters,
   appearanceRates,
   availableAmount,
-  currentRound,
   Familiar,
   familiarWeight,
-  fightFollowsChoice,
   fileToBuffer,
-  gamedayToInt,
   getMonsters,
   getProperty,
-  handlingChoice,
   haveSkill,
   isBanished,
   Item,
@@ -18,12 +14,10 @@ import {
   Monster,
   print,
   printHtml,
-  setProperty,
   Skill,
   toInt,
   toMonster,
   toSkill,
-  visitUrl,
 } from "kolmafia";
 import { getQuestStatus } from "../quests/Quests";
 import { getLocations } from "./GreyLocations";
@@ -38,18 +32,6 @@ export class Absorb {
   mox: number = 0;
   hp: number = 0;
   mp: number = 0;
-}
-
-if (
-  currentRound() == 0 &&
-  !handlingChoice() &&
-  !fightFollowsChoice() &&
-  !fightFollowsChoice()
-) {
-  if (getProperty("lastIcehouseCheck") != gamedayToInt().toString()) {
-    visitUrl("museum.php?action=icehouse");
-    setProperty("lastIcehouseCheck", gamedayToInt().toString());
-  }
 }
 
 export class AbsorbsProvider {

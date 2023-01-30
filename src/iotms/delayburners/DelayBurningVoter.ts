@@ -4,7 +4,6 @@ import {
   mallPrice,
   visitUrl,
   getProperty,
-  waitq,
   toInt,
   totalTurnsPlayed,
   equip,
@@ -12,6 +11,7 @@ import {
   Item,
   Monster,
   turnsPlayed,
+  pullsRemaining,
 } from "kolmafia";
 import { GreySettings } from "../../utils/GreySettings";
 import { DelayBurner } from "./DelayBurnerAbstract";
@@ -20,25 +20,31 @@ export class DelayBurningVoter implements DelayBurner {
   absentee: Item = Item.get("Absentee Voter Ballot");
   sticker: Item = Item.get('"I Voted!" sticker');
 
+  getFightSetup(): Item[] {
+    return [this.sticker];
+  }
+
   doFightSetup(): Slot[] {
     equip(this.sticker, Slot.get("acc3"));
 
     return [Slot.get("acc3")];
   }
 
-  isViableAsCombatReplacer(): boolean {
-    return false;
+  forcesFight(): boolean {
+    return true;
   }
 
   readyIn(): number {
-    let turnsTillNextFight = (totalTurnsPlayed() - 1) % 11;
+    const turnsPlayed = totalTurnsPlayed();
+
+    let turnsTillNextFight = (turnsPlayed - 1) % 11;
 
     if (turnsTillNextFight > 0) {
-      turnsTillNextFight = 10 - turnsTillNextFight;
+      turnsTillNextFight = 11 - turnsTillNextFight;
     }
 
-    if (toInt(getProperty("lastVoteMonsterTurn")) >= totalTurnsPlayed()) {
-      turnsTillNextFight += 10;
+    if (toInt(getProperty("lastVoteMonsterTurn")) >= turnsPlayed) {
+      turnsTillNextFight += 11;
     }
 
     return turnsTillNextFight;
@@ -47,8 +53,8 @@ export class DelayBurningVoter implements DelayBurner {
   doSetup(): void {
     if (
       availableAmount(this.sticker) > 0 ||
-      turnsPlayed() < 200 ||
-      !GreySettings.greyVotingBooth
+      turnsPlayed() > 200 ||
+      this.getVoting() == null
     ) {
       return;
     }
@@ -56,14 +62,34 @@ export class DelayBurningVoter implements DelayBurner {
     this.voterSetup();
   }
 
+  getVoting(): number[] {
+    const match = GreySettings.greyVotingBooth.match(/^\d+(,\d+)*$/);
+
+    if (match == null) {
+      return null;
+    }
+
+    return GreySettings.greyVotingBooth.split(",").map((s) => toInt(s));
+  }
+
   isViable(): boolean {
-    return availableAmount(this.sticker) > 0;
-    // return (
-    //   availableAmount(this.sticker) > 0 ||
-    //   getProperty("voteAlways") == "true" ||
-    //   getProperty("_voteToday") == "true" ||
-    //   availableAmount(this.absentee) > 0
-    // );
+    if (availableAmount(this.sticker) > 0) {
+      return true;
+    }
+
+    if (this.getVoting() == null) {
+      return false;
+    }
+
+    if (getProperty("voteAlways") == "true") {
+      return true;
+    }
+
+    if (pullsRemaining() < 0) {
+      return false;
+    }
+
+    return availableAmount(this.absentee) > 0;
   }
 
   isFree(): boolean {
@@ -120,32 +146,62 @@ export class DelayBurningVoter implements DelayBurner {
         ? 1
         : 2;
 
-    const firstInit: [number, string] = [2, "Moxie Percent"];
-    const secondInit: [number, string] = [3, "Hot Resistance: +3"];
-    const firstProp = getProperty("_voteLocal" + (firstInit[0] + 1));
-    const secondProp = getProperty("_voteLocal" + (secondInit[0] + 1));
+    const canVoteFor: string[] = [
+      "Muscle Percent: +25",
+      "Maximum HP Percent: -50",
+      "Moxie Percent: +25",
+      "Hot Resistance: +3",
+    ];
 
-    if (firstInit[1] != firstProp || secondInit[1] != secondProp) {
-      throw `Expected voting booth to give us ${firstInit[1]} and ${secondInit[1]} but instead they give ${firstProp} and ${secondProp}`;
+    canVoteFor.forEach((name, index) => {
+      const prop = getProperty("_voteLocal" + (index + 1));
+
+      if (prop == name) {
+        return;
+      }
+
+      throw `Expected '${name}' as voting option ${
+        index + 1
+      } but instead got '${prop}'`;
+    });
+
+    const votingOptions: number[] = this.getVoting();
+
+    if (votingOptions.length < 1 || votingOptions.length > 2) {
+      throw "Expected 1-2 voting options, received " + votingOptions.length;
     }
+
+    votingOptions.forEach((option) => {
+      if (option < 0 || option > 4) {
+        throw "Invalid voting option " + option + " provided";
+      }
+    });
+
+    if (votingOptions.length == 1) {
+      votingOptions.push(votingOptions[0]);
+    }
+
+    const firstProp = getProperty("_voteLocal" + votingOptions[0]);
+    const secondProp = getProperty("_voteLocal" + votingOptions[1]);
 
     print(
       "We're voting for " +
-        getProperty("_voteLocal" + (firstInit[0] + 1)) +
+        firstProp +
         " (" +
-        firstInit +
+        votingOptions[0] +
         ")" +
         " and " +
-        getProperty("_voteLocal" + (secondInit[0] + 1)) +
+        secondProp +
         " (" +
-        secondInit +
+        votingOptions[1] +
         ")",
       "gray"
     );
 
     visitUrl(
-      `choice.php?option=1&whichchoice=1331&g=${monsterVote}&local[]=${firstInit[0]}&local[]=${secondInit[0]}`
+      `choice.php?option=1&whichchoice=1331&g=${monsterVote}&local[]=${
+        votingOptions[0] - 1
+      }&local[]=${votingOptions[1] - 1}`
     );
-    waitq(1);
   }
 }

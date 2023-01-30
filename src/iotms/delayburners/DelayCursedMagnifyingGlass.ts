@@ -14,24 +14,12 @@ export class DelayBurningCursedMagnifyingGlass implements DelayBurner {
   lobsterBarrels: Item = Item.get("barrel of gunpowder");
   monster: Monster = Monster.get("Lobsterfrogman");
 
-  isViable(): boolean {
-    if (availableAmount(this.item) == 0) {
-      return false;
-    }
-
-    // Force it to be available for lobster
-    if (
-      getProperty("sidequestLighthouseCompleted") == "none" &&
-      availableAmount(this.lobsterBarrels) < 5
-    ) {
-      return false;
-    }
-
-    return true;
+  getFightSetup(): Item[] {
+    return [this.item];
   }
 
-  isViableAsCombatReplacer(): boolean {
-    return false;
+  isViable(): boolean {
+    return availableAmount(this.item) > 0;
   }
 
   isFree(): boolean {
@@ -48,5 +36,9 @@ export class DelayBurningCursedMagnifyingGlass implements DelayBurner {
     equip(this.item, Slot.get("off-hand"));
 
     return [Slot.get("off-hand")];
+  }
+
+  forcesFight(): boolean {
+    return true;
   }
 }

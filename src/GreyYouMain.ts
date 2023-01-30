@@ -3,6 +3,7 @@ import {
   currentRound,
   Effect,
   fightFollowsChoice,
+  gamedayToInt,
   getAutoAttack,
   getIgnoreZoneWarnings,
   getProperty,
@@ -48,7 +49,7 @@ class GreyYouMain {
   git_name = "libraryaddict-Greyday-release";
 
   isRevisionPass(): boolean {
-    const required = 27108;
+    const required = 27132;
 
     if (getRevision() > 0 && getRevision() < required) {
       print(
@@ -204,6 +205,18 @@ class GreyYouMain {
           "red"
         );
         return;
+      }
+
+      if (
+        currentRound() == 0 &&
+        !handlingChoice() &&
+        !fightFollowsChoice() &&
+        !fightFollowsChoice()
+      ) {
+        if (getProperty("lastIcehouseCheck") != gamedayToInt().toString()) {
+          visitUrl("museum.php?action=icehouse");
+          setProperty("lastIcehouseCheck", gamedayToInt().toString());
+        }
       }
     }
 
@@ -529,6 +542,20 @@ export function shouldGreydayStop(): boolean {
       "blue"
     );
     print("The script will continue when you run the script again.");
+
+    const turnsToFarmScore = Math.max(
+      0,
+      Math.ceil((10_000 - toInt(getProperty("8BitScore"))) / 375)
+    );
+
+    if (turnsToFarmScore > 0) {
+      setProperty("_greyPixelRealmAdventures", turnsToFarmScore.toString());
+
+      print(
+        `Please note that Greyday expects to take an extra ${turnsToFarmScore} adventures to finish farming a digital key up in 8 bit realm, which is generally faster with full equipment access.`,
+        "red"
+      );
+    }
 
     printEndOfRun();
     stopped = true;

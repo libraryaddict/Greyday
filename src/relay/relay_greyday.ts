@@ -2,15 +2,17 @@ import { write } from "kolmafia";
 import { getResourceSettings } from "../typings/ResourceTypes";
 import { getGreySettings } from "../utils/GreySettings";
 import {
-  ComponentDropdown,
-  ComponentInterrupt,
-  ComponentSetting,
+  DropdownValue,
   generateHTML,
   handleApiRequest,
+  PreferenceValue,
   RelayComponent,
   RelayComponentType,
+  RelayDropdown,
+  RelayInterrupt,
   RelayPage,
-  RelayPreference,
+  RelaySetting,
+  RelayTags,
 } from "mafia-shared-relay";
 
 function getRelayPages(): RelayPage[] {
@@ -20,9 +22,9 @@ function getRelayPages(): RelayPage[] {
       name: "Interrupt Greyday",
       notification: "Greyday has been interrupted!",
       actions: [
-        { preference: "greyday_interrupt", value: "true" } as RelayPreference,
+        { preference: "greyday_interrupt", value: "true" } as PreferenceValue,
       ],
-    } as ComponentInterrupt,
+    } as RelayInterrupt,
   ];
   const valuesSettings: RelayComponent[] = [];
 
@@ -32,7 +34,7 @@ function getRelayPages(): RelayPage[] {
       continue;
     }
 
-    let dropdowns: ComponentDropdown[];
+    let dropdowns: DropdownValue[];
     let type: RelayComponentType;
 
     if (setting.viableSettings != null) {
@@ -51,23 +53,36 @@ function getRelayPages(): RelayPage[] {
         );
       }
 
-      type = "dropdown";
+      if (setting.tags != null) {
+        type = "tags";
+      } else {
+        type = "dropdown";
+      }
     } else if (typeof setting.default == "boolean") {
       type = "boolean";
     } else {
       type = "string";
     }
 
-    const prop: ComponentSetting = {
+    const prop: RelaySetting = {
+      type: type,
       name: setting.name,
+      placeholderText: null,
       preference: setting.property,
       description: setting.description,
       default: setting.default == null ? "" : setting.default.toString(),
-      type: type,
-      dropdown: dropdowns,
       validate:
         typeof setting.default == "number" ? "(s) => /^-?\\d+$/.test(s)" : null,
+      invalidReason: "This is not a proper number!",
     };
+
+    if (dropdowns != null) {
+      (prop as RelayDropdown).dropdown = dropdowns;
+    }
+
+    if (setting.tags != null) {
+      (prop as RelayTags).maxTags = setting.tags.maxTags;
+    }
 
     if (setting.setting == "main") {
       mainSettings.push(prop);

@@ -231,7 +231,14 @@ export class QuestL11Curses extends TaskInfo implements QuestInfo {
       orb.push(this.accountant);
     }
 
+    const outfit = new GreyOutfit();
+
+    if (haveEffect(this.curse3) && this.delayForNextNC() > 0) {
+      outfit.addDelayer();
+    }
+
     return {
+      outfit: outfit,
       location: this.apartment,
       orbs: orb,
       olfaction: needCurses ? [this.shaman] : null,
@@ -250,16 +257,6 @@ export class QuestL11Curses extends TaskInfo implements QuestInfo {
 
         if (haveEffect(this.curse3)) {
           props.setChoice(780, 1);
-
-          if (this.delayForNextNC() > 0) {
-            const ready = DelayBurners.getReadyDelayBurner();
-
-            if (ready != null) {
-              ready.doFightSetup();
-            } else {
-              DelayBurners.tryReplaceCombats();
-            }
-          }
         } else {
           props.setChoice(780, 2);
         }

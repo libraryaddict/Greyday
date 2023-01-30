@@ -11,6 +11,7 @@ import {
   useFamiliar,
 } from "kolmafia";
 import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
+import { DelayBurningKramco } from "../../../iotms/delayburners/DelayBurningKramco";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
@@ -152,7 +153,7 @@ export class QuestL12Battlefield implements QuestInfo {
       run: () => {
         const burner = DelayBurners.getReadyDelayBurner();
 
-        if (burner != null) {
+        if (burner != null && burner instanceof DelayBurningKramco) {
           burner.doFightSetup();
         }
 

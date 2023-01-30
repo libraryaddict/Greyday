@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  cliExecute,
   Effect,
   Familiar,
   getProperty,
@@ -10,6 +11,7 @@ import {
   Item,
   Location,
   Monster,
+  myFamiliar,
   refreshStatus,
   Skill,
   use,
@@ -42,6 +44,7 @@ export class QuestL11ShenTurnIn implements QuestInfo {
   penguin: Monster = Monster.get("Mob Penguin Capo");
   robor: Familiar = Familiar.get("Robortender");
   ball: Item = Item.get("miniature crystal ball");
+  snapper: Familiar = Familiar.get("Red-Nosed Snapper");
 
   getId(): QuestType {
     return "Council / MacGruffin / Shen / TurnIn";
@@ -110,11 +113,24 @@ export class QuestL11ShenTurnIn implements QuestInfo {
       this.toAbsorb.length == 0;
     const roboTime =
       fishHuntTime && currentPredictions().get(this.shenClub) == this.penguin;
+    const snapperTime =
+      ((fishHuntTime && !roboTime) ||
+        (currentPredictions().get(this.shenClub) != this.penguin &&
+          this.toAbsorb.includes(this.penguin))) &&
+      haveFamiliar(this.snapper) &&
+      availableAmount(this.ball) > 0;
+
+    if (
+      this.toAbsorb.length == 0 &&
+      currentPredictions().get(this.shenClub) != this.penguin
+    ) {
+      outfit.addDelayer();
+    }
 
     return {
       location: this.shenClub,
       outfit: outfit,
-      familiar: roboTime ? this.robor : null,
+      familiar: snapperTime ? this.snapper : roboTime ? this.robor : null,
       olfaction: haveFamiliar(this.robor) ? [this.penguin] : null,
       mayFreeRun: false,
       run: () => {
@@ -132,6 +148,10 @@ export class QuestL11ShenTurnIn implements QuestInfo {
           useFamiliar(Familiar.get("Grey Goose"));
         }
 
+        if (myFamiliar() == this.snapper) {
+          cliExecute("snapper penguin");
+        }
+
         const props = new PropertyManager();
 
         try {
@@ -139,16 +159,6 @@ export class QuestL11ShenTurnIn implements QuestInfo {
             props.setChoice(855, 3); // Light lanterns on fire
           } else {
             props.setChoice(855, 4); // Get unnamed cocktails
-
-            if (this.toAbsorb.length == 0) {
-              const ready = DelayBurners.getReadyDelayBurner();
-
-              if (ready != null) {
-                ready.doFightSetup();
-              } else {
-                DelayBurners.tryReplaceCombats();
-              }
-            }
           }
 
           props.setChoice(1074, 1); // Approach table

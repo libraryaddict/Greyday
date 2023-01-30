@@ -11,7 +11,10 @@ import {
   useFamiliar,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../../GreyAdventurer";
-import { DelayBurners } from "../../../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../../iotms/delayburners/DelayBurners";
 import { GreyChoices } from "../../../../utils/GreyChoices";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -158,16 +161,23 @@ export class QuestL11TempleUnlock implements QuestInfo {
   }
 
   run(): QuestAdventure {
-    const outfit = isGhostBustingTime(this.spookyLoc)
-      ? getGhostBustingOutfit()
-      : new GreyOutfit();
+    const ghostTime = isGhostBustingTime(this.spookyLoc);
+    const outfit = ghostTime ? getGhostBustingOutfit() : new GreyOutfit();
 
     if (this.spookyLoc.turnsSpent >= 5) {
       outfit.setNoCombat();
     }
 
+    if (!this.shouldWearLatte() && this.toAbsorb.length == 0) {
+      outfit.addDelayer(
+        DelayCriteria().withForcedFights(
+          this.spookyLoc.turnsSpent >= 5 ? false : null
+        )
+      );
+    }
+
     return {
-      location: isGhostBustingTime(this.spookyLoc) ? null : this.spookyLoc,
+      location: ghostTime ? null : this.spookyLoc,
       outfit: outfit,
       freeRun: () => true,
       run: () => {
@@ -181,14 +191,6 @@ export class QuestL11TempleUnlock implements QuestInfo {
 
         if (isGhostBustingTime(this.spookyLoc)) {
           settings.setStartOfFightMacro(getGhostBustingMacro());
-        } else if (!this.shouldWearLatte() && this.toAbsorb.length == 0) {
-          const delay = DelayBurners.getReadyDelayBurner();
-
-          if (delay != null) {
-            delay.doFightSetup();
-          } else if (hasNonCombatSkillsReady()) {
-            DelayBurners.tryReplaceCombats();
-          }
         }
 
         if (DelayBurners.isTryingForDupeableGoblin()) {

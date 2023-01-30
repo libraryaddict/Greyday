@@ -11,6 +11,11 @@ import {
   myMp,
   Skill,
 } from "kolmafia";
+import {
+  DelayBurners,
+  DelayCriteria,
+  DelayCriteriaInterface,
+} from "../iotms/delayburners/DelayBurners";
 import { GreySettings } from "./GreySettings";
 import { UmbrellaState } from "./GreyUtils";
 
@@ -146,6 +151,21 @@ export class GreyOutfit {
       this.famExpWeight = 100;
     }
     // Setup weights according to w/e passives I have
+  }
+
+  addDelayer(
+    delayCriteria: DelayCriteriaInterface = DelayCriteria(),
+    weight: number = 15
+  ) {
+    const delayer = DelayBurners.getReadyDelayBurner(delayCriteria);
+
+    if (delayer == null) {
+      return;
+    }
+
+    for (const item of delayer.getFightSetup()) {
+      this.addWeight(item, weight);
+    }
   }
 
   addIgnored(item: Item): GreyOutfit {

@@ -10,7 +10,10 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
-import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../iotms/delayburners/DelayBurners";
 
 export class ManorBedroom implements QuestInfo {
   location: Location = Location.get("The Haunted Bedroom");
@@ -132,7 +135,9 @@ export class ManorBedroom implements QuestInfo {
           this.dontLike.forEach((m) => settings.addBanish(m));
 
           if (this.hasDelay()) {
-            const delay = DelayBurners.getReadyDelayBurner();
+            const delay = DelayBurners.getReadyDelayBurner(
+              DelayCriteria().withFreeFights(true)
+            );
 
             if (delay != null) {
               delay.doFightSetup();
