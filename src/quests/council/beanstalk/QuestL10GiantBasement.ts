@@ -30,6 +30,7 @@ export class QuestL10GiantBasement implements QuestInfo {
   );
   alphaGiant: Monster = Monster.get("Alphabet Giant");
   letterD: Item = Item.get("Heavy D");
+  toAbsorb: Monster[];
   // TODO Once we've got the absorbs, try replace combats if it doesn't interfere with our slots cos umbrella
 
   constructor() {
@@ -42,6 +43,10 @@ export class QuestL10GiantBasement implements QuestInfo {
 
   run(): QuestAdventure {
     const outfit = new GreyOutfit().setNoCombat();
+
+    if (this.toAbsorb.length == 0) {
+      outfit.addDelayer();
+    }
 
     return {
       location: this.loc,

@@ -46,7 +46,7 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
 
   delayCriteria(): DelayCriteriaInterface {
     return DelayCriteria().withForcedFights(
-      this.location.turnsSpent >= 9 ? false : null
+      this.location.turnsSpent >= 10 ? false : null
     );
   }
 

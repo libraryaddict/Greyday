@@ -36,7 +36,10 @@ import {
   use,
 } from "kolmafia";
 import { BanishType, getBanished, hasBanished } from "./Banishers";
-import { AbsorbsProvider } from "./GreyAbsorber";
+import {
+  AbsorbsProvider,
+  getAbsorbedAdventuresRemaining,
+} from "./GreyAbsorber";
 import { AdventureSettings } from "./GreyLocations";
 import { GreyOutfit } from "./GreyOutfitter";
 import { GreySettings } from "./GreySettings";
@@ -91,10 +94,11 @@ export function greyDuringFightMacro(settings: AdventureSettings): Macro {
     macro = macro.trySkill(Skill.get("Emit Matter Duplicating Drones"));
   } else if (
     absorb != null &&
-    ((myAdventures() > 20 && absorb.mp > 0) || absorb.adventures > 0) &&
+    ((myAdventures() > 20 && absorb.mp > 0) ||
+      (absorb.adventures > 0 && getAbsorbedAdventuresRemaining() > 0)) &&
     !hasAbsorbed
   ) {
-    if (absorb.adventures > 0) {
+    if (absorb.adventures > 0 && getAbsorbedAdventuresRemaining() > 0) {
       macro = macro.trySkill(Skill.get("Re-Process Matter"));
     }
   } else if (isBanishable(settings, monster)) {

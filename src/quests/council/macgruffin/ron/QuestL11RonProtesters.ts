@@ -465,6 +465,7 @@ export class QuestL11RonProtesters extends TaskInfo implements QuestInfo {
     const sleazeScares = this.getSleazeScares();
 
     const outfit = new GreyOutfit().setNoCombat().setNoCombat().setItemDrops();
+    outfit.addDelayer();
 
     path.equips.forEach((i) => outfit.addWeight(i));
 

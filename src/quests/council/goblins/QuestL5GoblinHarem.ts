@@ -1,9 +1,4 @@
-import {
-  availableAmount,
-  Location,
-  Monster,
-  outfitPieces,
-} from "kolmafia";
+import { availableAmount, Location, Monster, outfitPieces } from "kolmafia";
 import { ResourceCategory } from "../../../typings/ResourceTypes";
 import { PossiblePath, TaskInfo } from "../../../typings/TaskInfo";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
@@ -25,6 +20,7 @@ export class QuestL5GoblinHarem extends TaskInfo implements QuestInfo {
 
   haremGirl: Monster = Monster.get("Knob Goblin Harem Girl");
   paths: PossiblePath[];
+
   createPaths() {
     this.paths = [
       new PossiblePath(0).add(ResourceCategory.FIRE_EXTINGUSHER_ZONE),

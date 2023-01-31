@@ -1,4 +1,5 @@
 import {
+  availableAmount,
   choiceFollowsFight,
   currentRound,
   Effect,
@@ -543,10 +544,14 @@ export function shouldGreydayStop(): boolean {
     );
     print("The script will continue when you run the script again.");
 
-    const turnsToFarmScore = Math.max(
-      0,
-      Math.ceil((10_000 - toInt(getProperty("8BitScore"))) / 375)
-    );
+    const turnsToFarmScore =
+      availableAmount(Item.get("digital key")) > 0 ||
+      getProperty("nsTowerDoorKeysUsed").includes("digital key")
+        ? 0
+        : Math.max(
+            0,
+            Math.ceil((10_000 - toInt(getProperty("8BitScore"))) / 375)
+          );
 
     if (turnsToFarmScore > 0) {
       setProperty("_greyPixelRealmAdventures", turnsToFarmScore.toString());

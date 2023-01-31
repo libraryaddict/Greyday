@@ -504,6 +504,10 @@ export class GreySettings {
     return !GreySettings.isHardcoreMode() && this.greyBreakAtTower;
   }
 
+  static isNerfMode(): boolean {
+    return true;
+  }
+
   static loadSettings() {
     for (const setting of getGreySettings()) {
       let prop: unknown = getProperty(setting.property);

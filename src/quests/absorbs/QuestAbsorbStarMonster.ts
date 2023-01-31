@@ -25,6 +25,10 @@ export class QuestAbsorbStarMonster extends TaskInfo implements QuestInfo {
   paths: PossiblePath[];
 
   createPaths() {
+    if (GreySettings.isNerfMode()) {
+      return;
+    }
+
     this.paths = [];
     this.paths.push(new PossiblePath(1).addFax(this.getMonster()));
     this.paths.push(new PossiblePath(20));

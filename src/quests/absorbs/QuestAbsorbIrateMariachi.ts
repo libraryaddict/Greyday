@@ -145,6 +145,7 @@ export class QuestAbsorbIrateMariachi extends TaskInfo implements QuestInfo {
 
   status(path: PossiblePath): QuestStatus {
     if (
+      GreySettings.isNerfMode() ||
       AbsorbsProvider.getReabsorbedMonsters().includes(this.irateMariachi) ||
       path == this.avoid
     ) {

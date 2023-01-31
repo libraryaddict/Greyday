@@ -58,7 +58,11 @@ import {
   getResourcesChanged,
   ResourcesSnapshot,
 } from "./typings/TaskInfo";
-import { AbsorbsProvider, Reabsorbed } from "./utils/GreyAbsorber";
+import {
+  AbsorbsProvider,
+  getAbsorbedAdventuresRemaining as getAbsorbAdventuresRemaining,
+  Reabsorbed,
+} from "./utils/GreyAbsorber";
 import { GreyOutfit } from "./utils/GreyOutfitter";
 import { GreySettings } from "./utils/GreySettings";
 import { doColor, setUmbrella } from "./utils/GreyUtils";
@@ -291,6 +295,7 @@ export class GreyAdventurer {
         const monsters: string[] = [];
 
         const absorbed = this.adventureFinder.defeated;
+        const advsLeft = getAbsorbAdventuresRemaining();
 
         goodAdventure.locationInfo.monsters
           .map((m) => {
@@ -304,7 +309,7 @@ export class GreyAdventurer {
               return m.name + " (Skill)";
             }
 
-            if ((absorb.adventures || 0) <= 0) {
+            if (advsLeft <= 0 || (absorb.adventures || 0) <= 0) {
               return m.name;
             }
 

@@ -34,6 +34,29 @@ export class Absorb {
   mp: number = 0;
 }
 
+export function getAbsorbedAdventuresRemaining(): number {
+  const absorbs = AbsorbsProvider.loadAbsorbs();
+
+  const monsters = [
+    ...AbsorbsProvider.getAbsorbedMonsters(),
+    ...AbsorbsProvider.getReabsorbedMonsters(),
+  ];
+
+  let advs = 0;
+
+  for (const monster of monsters) {
+    const absorb = absorbs.find((a) => a.monster == monster);
+
+    if (absorb == null || absorb.adventures == null || absorb.adventures <= 0) {
+      continue;
+    }
+
+    advs += absorb.adventures;
+  }
+
+  return 500 - advs;
+}
+
 export class AbsorbsProvider {
   private static allAbsorbs: Absorb[];
   static remainingAdvAbsorbs: Monster[];
@@ -467,10 +490,11 @@ export class AbsorbsProvider {
     includeSkills: boolean = false
   ): [Location, AbsorbDetails][] {
     const map: Map<Location, AbsorbDetails> = new Map();
+    const advsRemaining = getAbsorbedAdventuresRemaining();
 
     for (const absorb of AbsorbsProvider.loadAbsorbs().filter(
       (a) =>
-        (includeSkills || a.adventures > 0) &&
+        (includeSkills || (a.adventures > 0 && advsRemaining > 0)) &&
         defeated.get(a.monster) != Reabsorbed.REABSORBED
     )) {
       for (const l of getLocations(absorb.monster)) {

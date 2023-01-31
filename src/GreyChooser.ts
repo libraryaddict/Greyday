@@ -52,6 +52,7 @@ import {
   AbsorbDetails,
   Reabsorbed,
   Absorb,
+  getAbsorbedAdventuresRemaining,
 } from "./utils/GreyAbsorber";
 import {
   AdventureSettings,
@@ -347,7 +348,10 @@ export class AdventureFinder {
     // If we get adventures from this
     if (absorb.adventures > 0) {
       // Only free run if we can't absorb
-      return this.defeated.get(monster) == Reabsorbed.REABSORBED;
+      return (
+        getAbsorbedAdventuresRemaining() <= 0 ||
+        this.defeated.get(monster) == Reabsorbed.REABSORBED
+      );
     }
 
     if (this.defeated.has(monster)) {
@@ -423,7 +427,10 @@ export class AdventureFinder {
           adv.mayFreeRun = false;
 
           const absorb: Absorb = this.absorbs.getAbsorb(prediction);
-          const advAbsorb: boolean = absorb != null && absorb.adventures > 0;
+          const advAbsorb: boolean =
+            absorb != null &&
+            absorb.adventures > 0 &&
+            getAbsorbedAdventuresRemaining() > 0;
           const defeat: Reabsorbed = this.defeated.get(prediction);
 
           if (

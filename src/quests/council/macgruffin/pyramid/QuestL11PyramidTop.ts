@@ -4,7 +4,9 @@ import {
   getProperty,
   toInt,
   Item,
+  Monster,
 } from "kolmafia";
+import { DelayCriteria } from "../../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
@@ -22,6 +24,7 @@ export class QuestL11PyramidTop implements QuestInfo {
   headpiece: Item = Item.get("headpiece of the Staff of Ed");
   staff: Item = Item.get("Staff of Fats");
   staff2: Item = Item.get("[2325]Staff Of Ed");
+  toAbsorb: Monster[];
 
   getId(): QuestType {
     return "Council / MacGruffin / Pyramid / Top";
@@ -77,6 +80,10 @@ export class QuestL11PyramidTop implements QuestInfo {
     }
 
     const outfit = new GreyOutfit().setNoCombat();
+
+    if (this.toAbsorb.length == 0 && this.topLoc.turnsSpent < 5) {
+      outfit.addDelayer(DelayCriteria().withForcedFights(null));
+    }
 
     return {
       location: this.topLoc,

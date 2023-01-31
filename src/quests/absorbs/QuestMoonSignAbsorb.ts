@@ -131,6 +131,11 @@ export abstract class QuestMoonSignAbsorb
       return;
     }
 
+    if (GreySettings.isNerfMode()) {
+      this.paths = null;
+      return;
+    }
+
     this.paths = [];
     const faxing = new PossiblePath(1);
 
