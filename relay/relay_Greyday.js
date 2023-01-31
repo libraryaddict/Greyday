@@ -5528,15 +5528,17 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
 
 
     function getExtraAdventures(
+    ignoreAdventures,
     defeated)
 
-    {var includeSkills = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    {var includeSkills = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
       var map = new Map();
       var advsRemaining = getAbsorbedAdventuresRemaining();var _iterator6 = GreyAbsorber_createForOfIteratorHelper(
 
         AbsorbsProvider.loadAbsorbs().filter(
         function (a) {return (
-            (includeSkills || a.adventures > 0 && advsRemaining > 0) &&
+            (includeSkills ||
+            !ignoreAdventures && a.adventures > 0 && advsRemaining > 0) &&
             defeated.get(a.monster) != Reabsorbed.REABSORBED);})),_step6;try {for (_iterator6.s(); !(_step6 = _iterator6.n()).done;)
         {var absorb = _step6.value;var _iterator7 = GreyAbsorber_createForOfIteratorHelper(
             getLocations(absorb.monster)),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var l = _step7.value;
@@ -29855,7 +29857,11 @@ var AdventureFinder = /*#__PURE__*/function () {
           _this.possibleAdventures.push(adv);
         };for (_iterator.s(); !(_step = _iterator.n()).done;) {_loop();}} catch (err) {_iterator.e(err);} finally {_iterator.f();}
 
-      var nonQuests = this.absorbs.getExtraAdventures(this.defeated, true);
+      var nonQuests = this.absorbs.getExtraAdventures(
+      true,
+      this.defeated,
+      true);
+
 
       nonQuests.sort(function (_ref, _ref2) {var _ref3 = GreyChooser_slicedToArray(_ref, 2),a1 = _ref3[1];var _ref4 = GreyChooser_slicedToArray(_ref2, 2),a2 = _ref4[1];return a2.weight - a1.weight;});var _iterator2 = GreyChooser_createForOfIteratorHelper(
 
