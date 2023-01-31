@@ -486,6 +486,7 @@ export class AbsorbsProvider {
   }
 
   getExtraAdventures(
+    ignoreAdventures: boolean,
     defeated: Map<Monster, Reabsorbed>,
     includeSkills: boolean = false
   ): [Location, AbsorbDetails][] {
@@ -494,7 +495,8 @@ export class AbsorbsProvider {
 
     for (const absorb of AbsorbsProvider.loadAbsorbs().filter(
       (a) =>
-        (includeSkills || (a.adventures > 0 && advsRemaining > 0)) &&
+        (includeSkills ||
+          (!ignoreAdventures && a.adventures > 0 && advsRemaining > 0)) &&
         defeated.get(a.monster) != Reabsorbed.REABSORBED
     )) {
       for (const l of getLocations(absorb.monster)) {

@@ -288,7 +288,11 @@ export class AdventureFinder {
       this.possibleAdventures.push(adv);
     }
 
-    const nonQuests = this.absorbs.getExtraAdventures(this.defeated, true);
+    const nonQuests = this.absorbs.getExtraAdventures(
+      true,
+      this.defeated,
+      true
+    );
 
     nonQuests.sort(([, a1], [, a2]) => a2.weight - a1.weight);
 
