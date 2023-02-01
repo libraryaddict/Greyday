@@ -5293,17 +5293,23 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
     } }, { key: "getAdventuresInLocation", value:
 
     function getAdventuresInLocation(
+    ignoreAdventures,
     defeated,
     location)
 
-    {var _this2 = this;var includeSkills = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+    {var _this2 = this;var includeSkills = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
       var skills = this.getMustHaveSkills();
+      var advsRemaining = getAbsorbedAdventuresRemaining();
 
       // for (let entry of this.getRolloverAdvs()) {
       //   skills.set(entry[0], entry[1]);
       // }
 
       var absorbs = this.getAbsorbsInLocation(location).filter(function (a) {
+        if (a.adventures > 0 && (ignoreAdventures || advsRemaining <= 0)) {
+          return false;
+        }
+
         if (
         a.adventures <= 0 && (
         a.skill == null || !includeSkills || !skills.has(a.skill)))
@@ -5546,7 +5552,15 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
                 continue;
               }
 
-              map.set(l, this.getAdventuresInLocation(defeated, l, includeSkills));
+              map.set(
+              l,
+              this.getAdventuresInLocation(
+              ignoreAdventures,
+              defeated,
+              l,
+              includeSkills));
+
+
             }} catch (err) {_iterator7.e(err);} finally {_iterator7.f();}
         }} catch (err) {_iterator6.e(err);} finally {_iterator6.f();}
 
@@ -11541,7 +11555,7 @@ var QuestL11ShoreAccess = /*#__PURE__*/function () {function QuestL11ShoreAccess
     } }, { key: "level", value:
 
     function level() {
-      return 11;
+      return 7;
     } }, { key: "status", value:
 
     function status() {
@@ -18072,7 +18086,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
         score = Math.round(score / 2);
       }
 
-      return score;
+      return Math.max(0, score);
     } }, { key: "getAdventureZone", value:
 
     function getAdventureZone() {
@@ -18080,12 +18094,13 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
 
       if (
       currentBonusZone == this.currentZone &&
-      this.zoneCalcedAt + 50 < (0,external_kolmafia_.turnsPlayed)())
+      this.zoneCalcedAt + 50 >= (0,external_kolmafia_.turnsPlayed)())
       {
         return this.favorZone;
       }
 
       this.currentZone = currentBonusZone;
+      this.zoneCalcedAt = (0,external_kolmafia_.turnsPlayed)();
 
       var zones = new Map([
       [currentBonusZone, this.getEstimatedScore(currentBonusZone)]]);
@@ -18113,9 +18128,9 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
 
       this.favorZone = sortedZones[0];
 
-      (0,external_kolmafia_.print)("Pixel Realm Est. Scores: ".concat(
+      (0,external_kolmafia_.print)("Pixel Realm Scores: ".concat(
       sortedZones.map(
-      function (z) {return z.loc + ": " + zones.get(z);})),
+      function (z) {return z.loc + ": " + (100 + zones.get(z));})),
 
       "gray");
 
@@ -28380,6 +28395,7 @@ function QuestL11PalinAbsorbs_typeof(obj) {"@babel/helpers - typeof";return Ques
 
 
 
+
 var QuestL11PalinAbsorbs = /*#__PURE__*/function () {function QuestL11PalinAbsorbs() {QuestL11PalinAbsorbs_classCallCheck(this, QuestL11PalinAbsorbs);QuestL11PalinAbsorbs_defineProperty(this, "talisman",
     external_kolmafia_.Item.get("Talisman o' Namsilat"));QuestL11PalinAbsorbs_defineProperty(this, "palindome",
     external_kolmafia_.Location.get("Inside the Palindome"));QuestL11PalinAbsorbs_defineProperty(this, "toAbsorb", void 0);QuestL11PalinAbsorbs_defineProperty(this, "goose",
@@ -28395,7 +28411,10 @@ var QuestL11PalinAbsorbs = /*#__PURE__*/function () {function QuestL11PalinAbsor
     } }, { key: "status", value:
 
     function status() {
-      if (GreySettings_GreySettings.greySkipPalindome) {
+      if (
+      GreySettings_GreySettings.greySkipPalindome ||
+      getAbsorbedAdventuresRemaining() <= 0)
+      {
         return QuestStatus.COMPLETED;
       }
 
@@ -29738,6 +29757,7 @@ var AdventureFinder = /*#__PURE__*/function () {
 
           if (details == null && adventure.location != null) {
             details = _this.absorbs.getAdventuresInLocation(
+            false,
             _this.defeated,
             adventure.location,
             true);
@@ -29858,7 +29878,7 @@ var AdventureFinder = /*#__PURE__*/function () {
         };for (_iterator.s(); !(_step = _iterator.n()).done;) {_loop();}} catch (err) {_iterator.e(err);} finally {_iterator.f();}
 
       var nonQuests = this.absorbs.getExtraAdventures(
-      true,
+      (0,external_kolmafia_.myAdventures)() >= 40,
       this.defeated,
       true);
 
@@ -30213,7 +30233,11 @@ var AdventureFinder = /*#__PURE__*/function () {
           quest.toAbsorb = [];var _iterator9 = GreyChooser_createForOfIteratorHelper(
 
             quest.getLocations()),_step9;try {for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {var _quest$toAbsorb;var loc = _step9.value;
-              var result = this.absorbs.getAdventuresInLocation(defeated, loc);
+              var result = this.absorbs.getAdventuresInLocation(
+              false,
+              defeated,
+              loc);
+
 
               if (result == null) {
                 continue;
@@ -30243,11 +30267,15 @@ var AdventureFinder = /*#__PURE__*/function () {
             }
 
             var result = this.absorbs.getAdventuresInLocation(
+            false,
             defeated,
             run.location);
 
 
-            quest.toAbsorb = result == null ? [] : result.monsters;
+            quest.toAbsorb =
+            result == null ?
+            [] :
+            result.monsters.filter(function (m) {return defeated.get(m) == null;});
           } catch (e) {
             (0,external_kolmafia_.print)("Errored while trying to set absorbs on " + quest.getId());
             throw e;
@@ -32613,6 +32641,10 @@ var GreyAdventurer_GreyAdventurer = /*#__PURE__*/function () {function GreyAdven
       this.lastTasksComplete >= 0 ? completed - this.lastTasksComplete : 0;
       this.lastTasksComplete = completed;
 
+      (0,external_kolmafia_.print)(
+      "Adventures Left to Absorb: " + getAbsorbedAdventuresRemaining(),
+      "gray");
+
       (0,external_kolmafia_.printHtml)(
       "<font color='blue'>Tasks Complete: " +
       completed + (
@@ -34207,7 +34239,11 @@ function GreySettings_getGreySettings() {
 
       return true;
     },
-    "default": "Grey Goose"
+    "default": "Grey Goose",
+    viableSettings: external_kolmafia_.Familiar.all().
+    filter(function (f) {return (0,external_kolmafia_.haveFamiliar)(f);}).
+    map(function (f) {return f.toString();}),
+    tags: { maxTags: 3 }
   };
 
   var greyCosplaySaber = {
@@ -35970,7 +36006,7 @@ function getRelayPages() {
     if (setting.viableSettings != null) {
       if (typeof setting.viableSettings[0] == "string") {
         dropdowns = setting.viableSettings.map(function (s) {
-          return { value: s };
+          return { display: s, value: s };
         });
       } else {
         dropdowns = setting.viableSettings.map(
