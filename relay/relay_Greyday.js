@@ -2866,7 +2866,6 @@ function QuestL10GiantGround_typeof(obj) {"@babel/helpers - typeof";return Quest
 
 
 
-
 var QuestL10GiantGround = /*#__PURE__*/function () {function QuestL10GiantGround() {QuestL10GiantGround_classCallCheck(this, QuestL10GiantGround);QuestL10GiantGround_defineProperty(this, "boning",
     external_kolmafia_.Item.get("electric boning knife"));QuestL10GiantGround_defineProperty(this, "loc",
     external_kolmafia_.Location.get(
@@ -2895,15 +2894,15 @@ var QuestL10GiantGround = /*#__PURE__*/function () {function QuestL10GiantGround
         return false;
       }
 
-      if (GreySettings_GreySettings.shouldAvoidTowerRequirements()) {
+      /*if (GreySettings.shouldAvoidTowerRequirements()) {
         return (
-          (0,external_kolmafia_.availableAmount)(this.drunkBell) +
-          (0,external_kolmafia_.availableAmount)(this.rocket) +
-          (0,external_kolmafia_.storageAmount)(this.drunkBell) +
-          (0,external_kolmafia_.storageAmount)(this.rocket) ==
-          0);
-
-      }
+          availableAmount(this.drunkBell) +
+            availableAmount(this.rocket) +
+            storageAmount(this.drunkBell) +
+            storageAmount(this.rocket) ==
+          0
+        );
+      }*/
 
       return true;
     } }, { key: "run", value:
@@ -11817,8 +11816,7 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
       var fam = null;
 
       if (
-      (0,external_kolmafia_.haveFamiliar)(this.gelCube) &&
-      !GreySettings_GreySettings.shouldAvoidTowerRequirements() && (
+      (0,external_kolmafia_.haveFamiliar)(this.gelCube) && (
       (0,external_kolmafia_.availableAmount)(this.pole) == 0 ||
       (0,external_kolmafia_.availableAmount)(this.ring) == 0 ||
       (0,external_kolmafia_.availableAmount)(this.picklocks) == 0))
@@ -18063,14 +18061,24 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
     external_kolmafia_.Item.get("Digital key"));QuestDigitalKey_defineProperty(this, "currentZone", void 0);QuestDigitalKey_defineProperty(this, "favorZone", void 0);QuestDigitalKey_defineProperty(this, "zoneCalcedAt",
 
 
-    0);}QuestDigitalKey_createClass(QuestDigitalKey, [{ key: "level", value:
+    0);QuestDigitalKey_defineProperty(this, "totMeatItem",
+    external_kolmafia_.Item.get("li'l pirate costume"));QuestDigitalKey_defineProperty(this, "totItemItem",
+    external_kolmafia_.Item.get("li'l ninja costume"));QuestDigitalKey_defineProperty(this, "tot",
+    external_kolmafia_.Familiar.get("Trick-or-Treating Tot"));}QuestDigitalKey_createClass(QuestDigitalKey, [{ key: "level", value:
 
     function level() {
       return 4;
     } }, { key: "getEstimatedScore", value:
 
     function getEstimatedScore(zone) {
-      (0,external_kolmafia_.maximize)(zone.maximize + " -tie", true);
+      (0,external_kolmafia_.maximize)(
+      zone.maximize + (
+      zone.maximize == "Meat Drop" || zone.maximize == "Item Drop" ?
+      " +switch Trick-or-Treating Tot" :
+      "") +
+      " -tie",
+      true);
+
 
       var score =
       Math.min(zone.capped, (0,external_kolmafia_.numericModifier)("Generated:_spec", zone.maximize)) - (
@@ -18217,9 +18225,24 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
           }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
       }
 
+      var fam = null;
+
+      if (zone.maximize == "Item Drop" && (0,external_kolmafia_.availableAmount)(this.totItemItem) > 0) {
+        outfit.addWeight(this.totItemItem);
+        fam = this.tot;
+      } else if (
+      zone.maximize == "Meat Drop" &&
+      (0,external_kolmafia_.availableAmount)(this.totMeatItem) > 0)
+      {
+        outfit.addWeight(this.totMeatItem);
+        fam = this.tot;
+      }
+
       return {
         location: zone.loc,
         outfit: outfit,
+        familiar: fam,
+        disableFamOverride: fam != null,
         run: function run() {
           greyAdv(zone.loc, outfit);
         }

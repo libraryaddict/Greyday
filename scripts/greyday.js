@@ -7223,7 +7223,6 @@ function QuestL10GiantGround_typeof(obj) {"@babel/helpers - typeof";return Quest
 
 
 
-
 var QuestL10GiantGround = /*#__PURE__*/function () {function QuestL10GiantGround() {QuestL10GiantGround_classCallCheck(this, QuestL10GiantGround);QuestL10GiantGround_defineProperty(this, "boning",
     external_kolmafia_namespaceObject.Item.get("electric boning knife"));QuestL10GiantGround_defineProperty(this, "loc",
     external_kolmafia_namespaceObject.Location.get(
@@ -7252,15 +7251,15 @@ var QuestL10GiantGround = /*#__PURE__*/function () {function QuestL10GiantGround
         return false;
       }
 
-      if (GreySettings.shouldAvoidTowerRequirements()) {
+      /*if (GreySettings.shouldAvoidTowerRequirements()) {
         return (
-          (0,external_kolmafia_namespaceObject.availableAmount)(this.drunkBell) +
-          (0,external_kolmafia_namespaceObject.availableAmount)(this.rocket) +
-          (0,external_kolmafia_namespaceObject.storageAmount)(this.drunkBell) +
-          (0,external_kolmafia_namespaceObject.storageAmount)(this.rocket) ==
-          0);
-
-      }
+          availableAmount(this.drunkBell) +
+            availableAmount(this.rocket) +
+            storageAmount(this.drunkBell) +
+            storageAmount(this.rocket) ==
+          0
+        );
+      }*/
 
       return true;
     } }, { key: "run", value:
@@ -14296,8 +14295,7 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
       var fam = null;
 
       if (
-      (0,external_kolmafia_namespaceObject.haveFamiliar)(this.gelCube) &&
-      !GreySettings.shouldAvoidTowerRequirements() && (
+      (0,external_kolmafia_namespaceObject.haveFamiliar)(this.gelCube) && (
       (0,external_kolmafia_namespaceObject.availableAmount)(this.pole) == 0 ||
       (0,external_kolmafia_namespaceObject.availableAmount)(this.ring) == 0 ||
       (0,external_kolmafia_namespaceObject.availableAmount)(this.picklocks) == 0))
@@ -19163,14 +19161,24 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
     external_kolmafia_namespaceObject.Item.get("Digital key"));QuestDigitalKey_defineProperty(this, "currentZone", void 0);QuestDigitalKey_defineProperty(this, "favorZone", void 0);QuestDigitalKey_defineProperty(this, "zoneCalcedAt",
 
 
-    0);}QuestDigitalKey_createClass(QuestDigitalKey, [{ key: "level", value:
+    0);QuestDigitalKey_defineProperty(this, "totMeatItem",
+    external_kolmafia_namespaceObject.Item.get("li'l pirate costume"));QuestDigitalKey_defineProperty(this, "totItemItem",
+    external_kolmafia_namespaceObject.Item.get("li'l ninja costume"));QuestDigitalKey_defineProperty(this, "tot",
+    external_kolmafia_namespaceObject.Familiar.get("Trick-or-Treating Tot"));}QuestDigitalKey_createClass(QuestDigitalKey, [{ key: "level", value:
 
     function level() {
       return 4;
     } }, { key: "getEstimatedScore", value:
 
     function getEstimatedScore(zone) {
-      (0,external_kolmafia_namespaceObject.maximize)(zone.maximize + " -tie", true);
+      (0,external_kolmafia_namespaceObject.maximize)(
+      zone.maximize + (
+      zone.maximize == "Meat Drop" || zone.maximize == "Item Drop" ?
+      " +switch Trick-or-Treating Tot" :
+      "") +
+      " -tie",
+      true);
+
 
       var score =
       Math.min(zone.capped, (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", zone.maximize)) - (
@@ -19317,9 +19325,24 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
           }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
       }
 
+      var fam = null;
+
+      if (zone.maximize == "Item Drop" && (0,external_kolmafia_namespaceObject.availableAmount)(this.totItemItem) > 0) {
+        outfit.addWeight(this.totItemItem);
+        fam = this.tot;
+      } else if (
+      zone.maximize == "Meat Drop" &&
+      (0,external_kolmafia_namespaceObject.availableAmount)(this.totMeatItem) > 0)
+      {
+        outfit.addWeight(this.totMeatItem);
+        fam = this.tot;
+      }
+
       return {
         location: zone.loc,
         outfit: outfit,
+        familiar: fam,
+        disableFamOverride: fam != null,
         run: function run() {
           greyAdv(zone.loc, outfit);
         }
@@ -34949,7 +34972,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "dadc4b0";
+var lastCommitHash = "f05246f";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
