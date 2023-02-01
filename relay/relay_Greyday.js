@@ -18089,7 +18089,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       return Math.max(0, score);
     } }, { key: "getAdventureZone", value:
 
-    function getAdventureZone() {
+    function getAdventureZone() {var _this = this;
       var currentBonusZone = this.currentBonusZone();
 
       if (
@@ -18128,11 +18128,15 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
 
       this.favorZone = sortedZones[0];
 
-      (0,external_kolmafia_.print)("Pixel Realm Scores: ".concat(
-      sortedZones.map(
-      function (z) {return z.loc + ": " + (100 + zones.get(z));})),
+      (0,external_kolmafia_.printHtml)("Pixel Realm Scores: ".concat(
+      sortedZones.
+      map(
+      function (z) {return "<font color=".concat(
+        z == _this.currentZone ? "purple" : "gray", ">").concat(
+        z.loc + ": " + (100 + zones.get(z)), "</font>");}).
 
-      "gray");
+
+      join(", ")));
 
 
       return this.favorZone;
@@ -18184,7 +18188,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       };
     } }, { key: "run", value:
 
-    function run() {var _this = this;
+    function run() {var _this2 = this;
       if ((0,external_kolmafia_.availableAmount)(this.transfomer) == 0) {
         return {
           location: null,
@@ -18195,7 +18199,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
             while ((0,external_kolmafia_.handlingChoice)()) {
               (0,external_kolmafia_.runChoice)(1);
             }
-            (0,external_kolmafia_.print)("Grabbed " + _this.transfomer, "gray");
+            (0,external_kolmafia_.print)("Grabbed " + _this2.transfomer, "gray");
           }
         };
       }
@@ -25133,7 +25137,10 @@ var QuestMoonSignAbsorb = /*#__PURE__*/function (_TaskInfo) {QuestMoonSignAbsorb
         return QuestStatus.NOT_READY;
       }
 
-      if (GreyAbsorber_AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)) {
+      if (
+      !GreySettings_GreySettings.canMoonSpoon() ||
+      GreyAbsorber_AbsorbsProvider.getReabsorbedMonsters().includes(this.monster))
+      {
         return QuestStatus.COMPLETED;
       }
 
@@ -25641,6 +25648,7 @@ function QuestDungeonsOfDoom_typeof(obj) {"@babel/helpers - typeof";return Quest
 
 
 
+
 var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom() {QuestDungeonsOfDoom_classCallCheck(this, QuestDungeonsOfDoom);QuestDungeonsOfDoom_defineProperty(this, "bend",
     external_kolmafia_.Location.get("The Enormous Greater-Than Sign"));QuestDungeonsOfDoom_defineProperty(this, "plusSign",
     external_kolmafia_.Item.get("plus sign"));QuestDungeonsOfDoom_defineProperty(this, "teleportis",
@@ -25648,7 +25656,8 @@ var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom
     external_kolmafia_.Effect.get("Beaten Up"));QuestDungeonsOfDoom_defineProperty(this, "curse1",
     external_kolmafia_.Effect.get("Once-Cursed"));QuestDungeonsOfDoom_defineProperty(this, "curse2",
     external_kolmafia_.Effect.get("Twice-Cursed"));QuestDungeonsOfDoom_defineProperty(this, "curse3",
-    external_kolmafia_.Effect.get("Thrice-Cursed"));}QuestDungeonsOfDoom_createClass(QuestDungeonsOfDoom, [{ key: "getId", value:
+    external_kolmafia_.Effect.get("Thrice-Cursed"));QuestDungeonsOfDoom_defineProperty(this, "train",
+    external_kolmafia_.Item.get("Model Train Set"));}QuestDungeonsOfDoom_createClass(QuestDungeonsOfDoom, [{ key: "getId", value:
 
     function getId() {
       return "Misc / UnlockDungeonsOfDoom";
@@ -25666,7 +25675,10 @@ var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom
     } }, { key: "status", value:
 
     function status() {
-      if (this.isDoomUnlocked()) {
+      if (
+      this.isDoomUnlocked() ||
+      GreySettings_GreySettings.isNerfMode() && (0,external_kolmafia_.getWorkshed)() == this.train)
+      {
         return QuestStatus.COMPLETED;
       }
 

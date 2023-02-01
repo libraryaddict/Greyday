@@ -19189,7 +19189,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       return Math.max(0, score);
     } }, { key: "getAdventureZone", value:
 
-    function getAdventureZone() {
+    function getAdventureZone() {var _this = this;
       var currentBonusZone = this.currentBonusZone();
 
       if (
@@ -19228,11 +19228,15 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
 
       this.favorZone = sortedZones[0];
 
-      (0,external_kolmafia_namespaceObject.print)("Pixel Realm Scores: ".concat(
-      sortedZones.map(
-      function (z) {return z.loc + ": " + (100 + zones.get(z));})),
+      (0,external_kolmafia_namespaceObject.printHtml)("Pixel Realm Scores: ".concat(
+      sortedZones.
+      map(
+      function (z) {return "<font color=".concat(
+        z == _this.currentZone ? "purple" : "gray", ">").concat(
+        z.loc + ": " + (100 + zones.get(z)), "</font>");}).
 
-      "gray");
+
+      join(", ")));
 
 
       return this.favorZone;
@@ -19284,7 +19288,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       };
     } }, { key: "run", value:
 
-    function run() {var _this = this;
+    function run() {var _this2 = this;
       if ((0,external_kolmafia_namespaceObject.availableAmount)(this.transfomer) == 0) {
         return {
           location: null,
@@ -19295,7 +19299,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
             while ((0,external_kolmafia_namespaceObject.handlingChoice)()) {
               (0,external_kolmafia_namespaceObject.runChoice)(1);
             }
-            (0,external_kolmafia_namespaceObject.print)("Grabbed " + _this.transfomer, "gray");
+            (0,external_kolmafia_namespaceObject.print)("Grabbed " + _this2.transfomer, "gray");
           }
         };
       }
@@ -26233,7 +26237,10 @@ var QuestMoonSignAbsorb = /*#__PURE__*/function (_TaskInfo) {QuestMoonSignAbsorb
         return QuestStatus.NOT_READY;
       }
 
-      if (AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)) {
+      if (
+      !GreySettings.canMoonSpoon() ||
+      AbsorbsProvider.getReabsorbedMonsters().includes(this.monster))
+      {
         return QuestStatus.COMPLETED;
       }
 
@@ -26741,6 +26748,7 @@ function QuestDungeonsOfDoom_typeof(obj) {"@babel/helpers - typeof";return Quest
 
 
 
+
 var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom() {QuestDungeonsOfDoom_classCallCheck(this, QuestDungeonsOfDoom);QuestDungeonsOfDoom_defineProperty(this, "bend",
     external_kolmafia_namespaceObject.Location.get("The Enormous Greater-Than Sign"));QuestDungeonsOfDoom_defineProperty(this, "plusSign",
     external_kolmafia_namespaceObject.Item.get("plus sign"));QuestDungeonsOfDoom_defineProperty(this, "teleportis",
@@ -26748,7 +26756,8 @@ var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom
     external_kolmafia_namespaceObject.Effect.get("Beaten Up"));QuestDungeonsOfDoom_defineProperty(this, "curse1",
     external_kolmafia_namespaceObject.Effect.get("Once-Cursed"));QuestDungeonsOfDoom_defineProperty(this, "curse2",
     external_kolmafia_namespaceObject.Effect.get("Twice-Cursed"));QuestDungeonsOfDoom_defineProperty(this, "curse3",
-    external_kolmafia_namespaceObject.Effect.get("Thrice-Cursed"));}QuestDungeonsOfDoom_createClass(QuestDungeonsOfDoom, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Effect.get("Thrice-Cursed"));QuestDungeonsOfDoom_defineProperty(this, "train",
+    external_kolmafia_namespaceObject.Item.get("Model Train Set"));}QuestDungeonsOfDoom_createClass(QuestDungeonsOfDoom, [{ key: "getId", value:
 
     function getId() {
       return "Misc / UnlockDungeonsOfDoom";
@@ -26766,7 +26775,10 @@ var QuestDungeonsOfDoom = /*#__PURE__*/function () {function QuestDungeonsOfDoom
     } }, { key: "status", value:
 
     function status() {
-      if (this.isDoomUnlocked()) {
+      if (
+      this.isDoomUnlocked() ||
+      GreySettings.isNerfMode() && (0,external_kolmafia_namespaceObject.getWorkshed)() == this.train)
+      {
         return QuestStatus.COMPLETED;
       }
 
@@ -34939,7 +34951,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "3aac040";
+var lastCommitHash = "4723832";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
