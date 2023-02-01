@@ -13,6 +13,7 @@ import {
   maximize,
   numericModifier,
   printHtml,
+  Familiar,
 } from "kolmafia";
 import { DelayBurner } from "../../../../iotms/delayburners/DelayBurnerAbstract";
 import {
@@ -71,13 +72,23 @@ export class QuestDigitalKey implements QuestInfo {
   currentZone: PixelZone;
   favorZone: PixelZone;
   zoneCalcedAt: number = 0;
+  totMeatItem = Item.get("li'l pirate costume");
+  totItemItem = Item.get("li'l ninja costume");
+  tot: Familiar = Familiar.get("Trick-or-Treating Tot");
 
   level(): number {
     return 4;
   }
 
   getEstimatedScore(zone: PixelZone): number {
-    maximize(zone.maximize + " -tie", true);
+    maximize(
+      zone.maximize +
+        (zone.maximize == "Meat Drop" || zone.maximize == "Item Drop"
+          ? " +switch Trick-or-Treating Tot"
+          : "") +
+        " -tie",
+      true
+    );
 
     let score =
       Math.min(zone.capped, numericModifier("Generated:_spec", zone.maximize)) -
@@ -224,9 +235,24 @@ export class QuestDigitalKey implements QuestInfo {
       }
     }
 
+    let fam: Familiar = null;
+
+    if (zone.maximize == "Item Drop" && availableAmount(this.totItemItem) > 0) {
+      outfit.addWeight(this.totItemItem);
+      fam = this.tot;
+    } else if (
+      zone.maximize == "Meat Drop" &&
+      availableAmount(this.totMeatItem) > 0
+    ) {
+      outfit.addWeight(this.totMeatItem);
+      fam = this.tot;
+    }
+
     return {
       location: zone.loc,
       outfit: outfit,
+      familiar: fam,
+      disableFamOverride: fam != null,
       run: () => {
         greyAdv(zone.loc, outfit);
       },

@@ -4,7 +4,6 @@ import {
   availableAmount,
   Item,
   Monster,
-  storageAmount,
   useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
@@ -22,7 +21,6 @@ import {
   DelayCriteria,
   DelayCriteriaInterface,
 } from "../../../iotms/delayburners/DelayBurners";
-import { GreySettings } from "../../../utils/GreySettings";
 
 export class QuestL10GiantGround implements QuestInfo {
   boning: Item = Item.get("electric boning knife");
@@ -52,7 +50,7 @@ export class QuestL10GiantGround implements QuestInfo {
       return false;
     }
 
-    if (GreySettings.shouldAvoidTowerRequirements()) {
+    /*if (GreySettings.shouldAvoidTowerRequirements()) {
       return (
         availableAmount(this.drunkBell) +
           availableAmount(this.rocket) +
@@ -60,7 +58,7 @@ export class QuestL10GiantGround implements QuestInfo {
           storageAmount(this.rocket) ==
         0
       );
-    }
+    }*/
 
     return true;
   }

@@ -124,7 +124,6 @@ export class QuestL12Battlefield implements QuestInfo {
 
     if (
       haveFamiliar(this.gelCube) &&
-      !GreySettings.shouldAvoidTowerRequirements() &&
       (availableAmount(this.pole) == 0 ||
         availableAmount(this.ring) == 0 ||
         availableAmount(this.picklocks) == 0)
