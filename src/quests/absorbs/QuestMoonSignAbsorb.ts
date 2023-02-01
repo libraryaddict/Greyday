@@ -57,7 +57,10 @@ export abstract class QuestMoonSignAbsorb
       return QuestStatus.NOT_READY;
     }
 
-    if (AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)) {
+    if (
+      !GreySettings.canMoonSpoon() ||
+      AbsorbsProvider.getReabsorbedMonsters().includes(this.monster)
+    ) {
       return QuestStatus.COMPLETED;
     }
 

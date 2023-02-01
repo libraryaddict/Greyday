@@ -12,6 +12,7 @@ import {
   turnsPlayed,
   maximize,
   numericModifier,
+  printHtml,
 } from "kolmafia";
 import { DelayBurner } from "../../../../iotms/delayburners/DelayBurnerAbstract";
 import {
@@ -129,11 +130,15 @@ export class QuestDigitalKey implements QuestInfo {
 
     this.favorZone = sortedZones[0];
 
-    print(
-      `Pixel Realm Scores: ${sortedZones.map(
-        (z) => z.loc + ": " + (100 + zones.get(z))
-      )}`,
-      "gray"
+    printHtml(
+      `Pixel Realm Scores: ${sortedZones
+        .map(
+          (z) =>
+            `<font color=${z == this.currentZone ? "purple" : "gray"}>${
+              z.loc + ": " + (100 + zones.get(z))
+            }</font>`
+        )
+        .join(", ")}`
     );
 
     return this.favorZone;

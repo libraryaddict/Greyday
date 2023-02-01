@@ -11,10 +11,12 @@ import {
   use,
   myLevel,
   cliExecute,
+  getWorkshed,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../GreyAdventurer";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
+import { GreySettings } from "../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
 
@@ -26,6 +28,7 @@ export class QuestDungeonsOfDoom implements QuestInfo {
   curse1: Effect = Effect.get("Once-Cursed");
   curse2: Effect = Effect.get("Twice-Cursed");
   curse3: Effect = Effect.get("Thrice-Cursed");
+  train: Item = Item.get("Model Train Set");
 
   getId(): QuestType {
     return "Misc / UnlockDungeonsOfDoom";
@@ -43,7 +46,10 @@ export class QuestDungeonsOfDoom implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (this.isDoomUnlocked()) {
+    if (
+      this.isDoomUnlocked() ||
+      (GreySettings.isNerfMode() && getWorkshed() == this.train)
+    ) {
       return QuestStatus.COMPLETED;
     }
 
