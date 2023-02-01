@@ -5094,9 +5094,10 @@ function getAbsorbedAdventuresRemaining() {
       }
 
       advs += absorb.adventures;
-    };for (_iterator.s(); !(_step = _iterator.n()).done;) {var _ret = _loop();if (_ret === "continue") continue;}} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+    };for (_iterator.s(); !(_step = _iterator.n()).done;) {var _ret = _loop();if (_ret === "continue") continue;}
 
-  return 500 - advs;
+    // Because something is tracking wrong
+  } catch (err) {_iterator.e(err);} finally {_iterator.f();}return 480 - advs;
 }
 
 var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsProvider() {GreyAbsorber_classCallCheck(this, AbsorbsProvider);}GreyAbsorber_createClass(AbsorbsProvider, [{ key: "getRolloverAdvs", value:
@@ -11833,10 +11834,6 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
         fam = this.jellyfish;
       }
 
-      if (fam == this.goose && (0,external_kolmafia_.familiarWeight)(this.goose) >= 6) {
-        outfit.addWeight(external_kolmafia_.Item.get("Mafia Thumb Ring"), 50);
-      }
-
       return {
         outfit: outfit,
         location: this.loc,
@@ -11844,14 +11841,16 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
         disableFamOverride: fam == this.gelCube,
         mayFreeRun: false,
         run: function run() {
-          var burner = DelayBurners.getReadyDelayBurner();
+          if (fam == null && (0,external_kolmafia_.familiarWeight)(_this.goose) >= 6) {
+            var burner = DelayBurners.getReadyDelayBurner();
 
-          if (burner != null && burner instanceof DelayBurningKramco) {
-            burner.doFightSetup();
-          }
+            if (burner != null && burner instanceof DelayBurningKramco) {
+              burner.doFightSetup();
+            }
 
-          if (DelayBurners.isTryingForDupeableGoblin() && fam != null) {
-            (0,external_kolmafia_.useFamiliar)(fam);
+            if (DelayBurners.isTryingForDupeableGoblin()) {
+              (0,external_kolmafia_.useFamiliar)(_this.goose);
+            }
           }
 
           greyAdv(_this.loc, outfit);
@@ -12394,11 +12393,7 @@ var Quest12WarNuns = /*#__PURE__*/function () {function Quest12WarNuns() {QuestL
     } }, { key: "getFamiliarToUse", value:
 
     function getFamiliarToUse(allownNull) {
-      if (
-      !allownNull &&
-      (0,external_kolmafia_.haveFamiliar)(this.tot) &&
-      (0,external_kolmafia_.availableAmount)(this.item) > 0)
-      {
+      if ((0,external_kolmafia_.haveFamiliar)(this.tot) && (0,external_kolmafia_.availableAmount)(this.item) > 0) {
         return this.tot;
       }
 
@@ -22416,7 +22411,6 @@ function QuestL9SmutOrcs_typeof(obj) {"@babel/helpers - typeof";return QuestL9Sm
 
 
 
-
 var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_classCallCheck(this, SmutOrcs);QuestL9SmutOrcs_defineProperty(this, "loc",
     external_kolmafia_.Location.get("The Smut Orc Logging Camp"));QuestL9SmutOrcs_defineProperty(this, "shorts",
     new QuestL9SmutOrcsCargoShorts());QuestL9SmutOrcs_defineProperty(this, "hoaReg",
@@ -22485,8 +22479,8 @@ var SmutOrcs = /*#__PURE__*/function () {function SmutOrcs() {QuestL9SmutOrcs_cl
       }
 
       if (
-      (0,external_kolmafia_.myMp)() < 15 ||
-      !GreyAbsorber_AbsorbsProvider.getAbsorbedMonsters().includes(this.plastered))
+      (0,external_kolmafia_.myMp)() < 15 /*||
+      !AbsorbsProvider.getAbsorbedMonsters().includes(this.plastered)*/)
       {
         return QuestStatus.NOT_READY;
       }
@@ -23065,6 +23059,7 @@ function QuestL9OilPeak_typeof(obj) {"@babel/helpers - typeof";return QuestL9Oil
 
 
 
+
 var OilHandler = /*#__PURE__*/function () {function OilHandler() {QuestL9OilPeak_classCallCheck(this, OilHandler);QuestL9OilPeak_defineProperty(this, "loc",
     external_kolmafia_.Location.get("Oil Peak"));QuestL9OilPeak_defineProperty(this, "crude",
     external_kolmafia_.Item.get("Bubblin' Crude"));QuestL9OilPeak_defineProperty(this, "umbrella",
@@ -23125,7 +23120,10 @@ var OilHandler = /*#__PURE__*/function () {function OilHandler() {QuestL9OilPeak
     } }, { key: "needsAbsorb", value:
 
     function needsAbsorb() {
-      return !GreyAbsorber_AbsorbsProvider.getReabsorbedMonsters().includes(this.baron);
+      return (
+        !GreySettings_GreySettings.isNerfMode() &&
+        !GreyAbsorber_AbsorbsProvider.getReabsorbedMonsters().includes(this.baron));
+
     } }, { key: "isReady", value:
 
     function isReady() {
@@ -32751,9 +32749,9 @@ var GreyAdventurer_GreyAdventurer = /*#__PURE__*/function () {function GreyAdven
           _bonus = 6;
 
           if (canDoMagGlass) {
-            _bonus = 11;
-          }
-        }
+
+            //bonus = 11;
+          }}
 
         outfit.addWeight(external_kolmafia_.Item.get("familiar scrapbook"), _bonus);
       }
