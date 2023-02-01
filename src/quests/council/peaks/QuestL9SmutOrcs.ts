@@ -27,7 +27,6 @@ import {
   use,
   visitUrl,
 } from "kolmafia";
-import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
 import { Macro } from "../../../utils/MacroBuilder";
@@ -110,8 +109,8 @@ export class SmutOrcs implements QuestInfo {
     }
 
     if (
-      myMp() < 15 ||
-      !AbsorbsProvider.getAbsorbedMonsters().includes(this.plastered)
+      myMp() < 15 /*||
+      !AbsorbsProvider.getAbsorbedMonsters().includes(this.plastered)*/
     ) {
       return QuestStatus.NOT_READY;
     }

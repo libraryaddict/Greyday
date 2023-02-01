@@ -140,10 +140,6 @@ export class QuestL12Battlefield implements QuestInfo {
       fam = this.jellyfish;
     }
 
-    if (fam == this.goose && familiarWeight(this.goose) >= 6) {
-      outfit.addWeight(Item.get("Mafia Thumb Ring"), 50);
-    }
-
     return {
       outfit: outfit,
       location: this.loc,
@@ -151,14 +147,16 @@ export class QuestL12Battlefield implements QuestInfo {
       disableFamOverride: fam == this.gelCube,
       mayFreeRun: false,
       run: () => {
-        const burner = DelayBurners.getReadyDelayBurner();
+        if (fam == null && familiarWeight(this.goose) >= 6) {
+          const burner = DelayBurners.getReadyDelayBurner();
 
-        if (burner != null && burner instanceof DelayBurningKramco) {
-          burner.doFightSetup();
-        }
+          if (burner != null && burner instanceof DelayBurningKramco) {
+            burner.doFightSetup();
+          }
 
-        if (DelayBurners.isTryingForDupeableGoblin() && fam != null) {
-          useFamiliar(fam);
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            useFamiliar(this.goose);
+          }
         }
 
         greyAdv(this.loc, outfit);

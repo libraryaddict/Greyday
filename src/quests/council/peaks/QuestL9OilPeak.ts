@@ -30,6 +30,7 @@ import { restoreHPTo } from "../../../tasks/TaskMaintainStatus";
 import { AbsorbsProvider } from "../../../utils/GreyAbsorber";
 import { greyAdv } from "../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../utils/GreyOutfitter";
+import { GreySettings } from "../../../utils/GreySettings";
 import {
   getAllCombinations,
   getUmbrella,
@@ -104,7 +105,10 @@ export class OilHandler implements QuestInfo {
   }
 
   needsAbsorb(): boolean {
-    return !AbsorbsProvider.getReabsorbedMonsters().includes(this.baron);
+    return (
+      !GreySettings.isNerfMode() &&
+      !AbsorbsProvider.getReabsorbedMonsters().includes(this.baron)
+    );
   }
 
   isReady(): boolean {

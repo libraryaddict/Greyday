@@ -54,7 +54,8 @@ export function getAbsorbedAdventuresRemaining(): number {
     advs += absorb.adventures;
   }
 
-  return 500 - advs;
+  // Because something is tracking wrong
+  return 480 - advs;
 }
 
 export class AbsorbsProvider {

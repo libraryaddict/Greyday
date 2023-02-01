@@ -454,7 +454,7 @@ export class GreyAdventurer {
         bonus = 6;
 
         if (canDoMagGlass) {
-          bonus = 11;
+          //bonus = 11;
         }
       }
 
