@@ -18,7 +18,7 @@ export class QuestL11ShoreAccess implements QuestInfo {
   }
 
   level(): number {
-    return 11;
+    return 7;
   }
 
   status(): QuestStatus {

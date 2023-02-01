@@ -87,7 +87,7 @@ export class QuestDigitalKey implements QuestInfo {
       score = Math.round(score / 2);
     }
 
-    return score;
+    return Math.max(0, score);
   }
 
   getAdventureZone(): PixelZone {
@@ -95,12 +95,13 @@ export class QuestDigitalKey implements QuestInfo {
 
     if (
       currentBonusZone == this.currentZone &&
-      this.zoneCalcedAt + 50 < turnsPlayed()
+      this.zoneCalcedAt + 50 >= turnsPlayed()
     ) {
       return this.favorZone;
     }
 
     this.currentZone = currentBonusZone;
+    this.zoneCalcedAt = turnsPlayed();
 
     const zones: Map<PixelZone, number> = new Map([
       [currentBonusZone, this.getEstimatedScore(currentBonusZone)],
@@ -129,8 +130,8 @@ export class QuestDigitalKey implements QuestInfo {
     this.favorZone = sortedZones[0];
 
     print(
-      `Pixel Realm Est. Scores: ${sortedZones.map(
-        (z) => z.loc + ": " + zones.get(z)
+      `Pixel Realm Scores: ${sortedZones.map(
+        (z) => z.loc + ": " + (100 + zones.get(z))
       )}`,
       "gray"
     );

@@ -40,7 +40,7 @@ function getRelayPages(): RelayPage[] {
     if (setting.viableSettings != null) {
       if (typeof setting.viableSettings[0] == "string") {
         dropdowns = setting.viableSettings.map((s) => {
-          return { value: s };
+          return { display: s, value: s };
         });
       } else {
         dropdowns = (setting.viableSettings as [string, string][]).map(

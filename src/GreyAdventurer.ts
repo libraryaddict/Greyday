@@ -356,6 +356,10 @@ export class GreyAdventurer {
       this.lastTasksComplete >= 0 ? completed - this.lastTasksComplete : 0;
     this.lastTasksComplete = completed;
 
+    print(
+      "Adventures Left to Absorb: " + getAbsorbAdventuresRemaining(),
+      "gray"
+    );
     printHtml(
       "<font color='blue'>Tasks Complete: " +
         completed +

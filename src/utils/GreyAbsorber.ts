@@ -251,17 +251,23 @@ export class AbsorbsProvider {
   }
 
   getAdventuresInLocation(
+    ignoreAdventures: boolean,
     defeated: Map<Monster, Reabsorbed>,
     location: Location,
     includeSkills: boolean = true
   ): AbsorbDetails {
     const skills = this.getMustHaveSkills();
+    const advsRemaining = getAbsorbedAdventuresRemaining();
 
     // for (let entry of this.getRolloverAdvs()) {
     //   skills.set(entry[0], entry[1]);
     // }
 
     let absorbs = this.getAbsorbsInLocation(location).filter((a) => {
+      if (a.adventures > 0 && (ignoreAdventures || advsRemaining <= 0)) {
+        return false;
+      }
+
       if (
         a.adventures <= 0 &&
         (a.skill == null || !includeSkills || !skills.has(a.skill))
@@ -504,7 +510,15 @@ export class AbsorbsProvider {
           continue;
         }
 
-        map.set(l, this.getAdventuresInLocation(defeated, l, includeSkills));
+        map.set(
+          l,
+          this.getAdventuresInLocation(
+            ignoreAdventures,
+            defeated,
+            l,
+            includeSkills
+          )
+        );
       }
     }
 

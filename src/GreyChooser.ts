@@ -169,6 +169,7 @@ export class AdventureFinder {
 
       if (details == null && adventure.location != null) {
         details = this.absorbs.getAdventuresInLocation(
+          false,
           this.defeated,
           adventure.location,
           true
@@ -289,7 +290,7 @@ export class AdventureFinder {
     }
 
     const nonQuests = this.absorbs.getExtraAdventures(
-      true,
+      myAdventures() >= 40,
       this.defeated,
       true
     );
@@ -644,7 +645,11 @@ export class AdventureFinder {
       quest.toAbsorb = [];
 
       for (const loc of quest.getLocations()) {
-        const result = this.absorbs.getAdventuresInLocation(defeated, loc);
+        const result = this.absorbs.getAdventuresInLocation(
+          false,
+          defeated,
+          loc
+        );
 
         if (result == null) {
           continue;
@@ -674,11 +679,15 @@ export class AdventureFinder {
         }
 
         const result = this.absorbs.getAdventuresInLocation(
+          false,
           defeated,
           run.location
         );
 
-        quest.toAbsorb = result == null ? [] : result.monsters;
+        quest.toAbsorb =
+          result == null
+            ? []
+            : result.monsters.filter((m) => defeated.get(m) == null);
       } catch (e) {
         print("Errored while trying to set absorbs on " + quest.getId());
         throw e;

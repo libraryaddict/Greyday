@@ -3,6 +3,7 @@ import {
   Familiar,
   getClanName,
   getProperty,
+  haveFamiliar,
   inHardcore,
   Item,
   mySign,
@@ -256,6 +257,10 @@ export function getGreySettings(): GreySetting[] {
       return true;
     },
     default: "Grey Goose",
+    viableSettings: Familiar.all()
+      .filter((f) => haveFamiliar(f))
+      .map((f) => f.toString()),
+    tags: { maxTags: 3 },
   };
 
   const greyCosplaySaber: GreySetting = {

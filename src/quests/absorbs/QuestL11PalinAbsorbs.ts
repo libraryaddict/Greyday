@@ -1,4 +1,5 @@
 import { Familiar, familiarWeight, Item, Location, Monster } from "kolmafia";
+import { getAbsorbedAdventuresRemaining } from "../../utils/GreyAbsorber";
 import { greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
 import { GreySettings } from "../../utils/GreySettings";
@@ -26,7 +27,10 @@ export class QuestL11PalinAbsorbs implements QuestInfo {
   }
 
   status(): QuestStatus {
-    if (GreySettings.greySkipPalindome) {
+    if (
+      GreySettings.greySkipPalindome ||
+      getAbsorbedAdventuresRemaining() <= 0
+    ) {
       return QuestStatus.COMPLETED;
     }
 
