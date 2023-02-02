@@ -180,10 +180,7 @@ export class AbsorbsProvider {
           return false;
         }
 
-        if (
-          a.adventures > 0 &&
-          defeated.get(a.monster) == Reabsorbed.REABSORBED
-        ) {
+        if (a.adventures > 0 && defeated.has(a.monster)) {
           return false;
         }
 
@@ -276,10 +273,7 @@ export class AbsorbsProvider {
         return false;
       }
 
-      if (
-        a.adventures > 0 &&
-        defeated.get(a.monster) == Reabsorbed.REABSORBED
-      ) {
+      if (a.adventures > 0 && defeated.has(a.monster)) {
         return false;
       }
 
@@ -504,7 +498,7 @@ export class AbsorbsProvider {
       (a) =>
         (includeSkills ||
           (!ignoreAdventures && a.adventures > 0 && advsRemaining > 0)) &&
-        defeated.get(a.monster) != Reabsorbed.REABSORBED
+        !defeated.has(a.monster)
     )) {
       for (const l of getLocations(absorb.monster)) {
         if (map.has(l)) {

@@ -155,7 +155,7 @@ export class GreyOutfit {
 
   addDelayer(
     delayCriteria: DelayCriteriaInterface = DelayCriteria(),
-    weight: number = 15
+    weight: number = 21
   ) {
     const delayer = DelayBurners.getReadyDelayBurner(delayCriteria);
 

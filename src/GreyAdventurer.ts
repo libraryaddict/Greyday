@@ -423,14 +423,15 @@ export class GreyAdventurer {
       toInt(getProperty("cursedMagnifyingGlassCount")) < 13 &&
       toInt(getProperty("_voidFreeFights")) < 5;
     const reallyLovesMagGlass =
+      getProperty("autumnatonQuestLocation") == "" &&
       getProperty("sidequestLighthouseCompleted") == "none" &&
       availableAmount(Item.get("barrel of gunpowder")) < 5;
 
     if (canDoMagGlass) {
-      let bonus = 10;
+      const bonus = 10;
 
       if (reallyLovesMagGlass) {
-        bonus = 100;
+        //  bonus = 100;
       }
 
       outfit.addWeight(Item.get("cursed magnifying glass"), bonus);

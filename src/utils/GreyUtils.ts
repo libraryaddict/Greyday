@@ -3,6 +3,8 @@ import {
   canAdventure,
   cliExecute,
   Effect,
+  equip,
+  equippedAmount,
   Familiar,
   familiarEquippedEquipment,
   getLocketMonsters,
@@ -17,6 +19,7 @@ import {
   print,
   retrieveItem,
   sessionLogs,
+  Slot,
   toEffect,
   toInt,
   toLocation,
@@ -200,6 +203,10 @@ export function doToasterGaze() {
 
   if (ballProp().find(([turn]) => turn + 1 < turnsPlayed()) == null) {
     return;
+  }
+
+  if (equippedAmount(Item.get("June Cleaver")) > 0) {
+    equip(Item.none, Slot.get("weapon"));
   }
 
   print(

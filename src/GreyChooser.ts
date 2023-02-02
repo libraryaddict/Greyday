@@ -290,7 +290,7 @@ export class AdventureFinder {
     }
 
     const nonQuests = this.absorbs.getExtraAdventures(
-      myAdventures() >= 40,
+      myAdventures() >= 25,
       this.defeated,
       true
     );
