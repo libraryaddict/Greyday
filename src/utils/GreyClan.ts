@@ -116,22 +116,24 @@ function runInClan(clanId: number, func: () => void) {
 function loadWhitelists(): Map<number, string> {
   const prop = "clansWhitelisted";
   const dayChecked = "clansWhitelistedChecked";
-
   availableClans = new Map();
 
   if (
     !propertyExists(prop) ||
     toInt(getProperty(dayChecked)) != gamedayToInt()
   ) {
+    let page: string;
+
     // Wait until we can fetch the page without errors
     while (
       currentRound() != 0 ||
       handlingChoice() ||
       choiceFollowsFight() ||
-      fightFollowsChoice()
+      fightFollowsChoice() ||
+      !(page = visitUrl("clan_signup.php?place=managewhitelists")).includes(
+        "Here you can view the clans that you're currently whitelisted in"
+      )
     ) {}
-
-    let page = visitUrl("clan_signup.php?place=managewhitelists");
 
     let match: string[];
 
