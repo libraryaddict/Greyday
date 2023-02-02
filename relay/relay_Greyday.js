@@ -34643,22 +34643,24 @@ function runInClan(clanId, func) {
 function loadWhitelists() {
   var prop = "clansWhitelisted";
   var dayChecked = "clansWhitelistedChecked";
-
   availableClans = new Map();
 
   if (
   !(0,external_kolmafia_.propertyExists)(prop) ||
   (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)(dayChecked)) != (0,external_kolmafia_.gamedayToInt)())
   {
+    var page;
+
     // Wait until we can fetch the page without errors
     while (
     (0,external_kolmafia_.currentRound)() != 0 ||
     (0,external_kolmafia_.handlingChoice)() ||
     (0,external_kolmafia_.choiceFollowsFight)() ||
-    (0,external_kolmafia_.fightFollowsChoice)())
-    {}
+    (0,external_kolmafia_.fightFollowsChoice)() ||
+    !(page = (0,external_kolmafia_.visitUrl)("clan_signup.php?place=managewhitelists")).includes(
+    "Here you can view the clans that you're currently whitelisted in"))
 
-    var page = (0,external_kolmafia_.visitUrl)("clan_signup.php?place=managewhitelists");
+    {}
 
     var match;
 
