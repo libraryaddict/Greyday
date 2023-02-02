@@ -32803,18 +32803,10 @@ var GreyAdventurer_GreyAdventurer = /*#__PURE__*/function () {function GreyAdven
         if (
         GreySettings_GreySettings.greyPrepareLevelingResources &&
         (0,external_kolmafia_.familiarWeight)(this.goose) < 20 &&
-        (0,external_kolmafia_.absorbedMonsters)()["tomb asp"] == true &&
-        (0,external_kolmafia_.getProperty)("questL09Topping") == "finished")
+        getAbsorbedAdventuresRemaining() < 0)
         {
-          GreyAbsorber_AbsorbsProvider.remainingAdvAbsorbs =
-          GreyAbsorber_AbsorbsProvider.remainingAdvAbsorbs.filter(
-          function (m) {return !GreyAbsorber_AbsorbsProvider.getReabsorbedMonsters().includes(m);});
-
-
-          if (GreyAbsorber_AbsorbsProvider.remainingAdvAbsorbs.length <= 3) {
-            replaceWith.push(this.goose);
-            powerLevelGoose = true;
-          }
+          replaceWith.push(this.goose);
+          powerLevelGoose = true;
         }
 
         var recced = this.adventureFinder.getRecommendedFamiliars();
