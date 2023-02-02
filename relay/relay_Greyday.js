@@ -1669,7 +1669,7 @@ var GreyOutfit = /*#__PURE__*/function () {
     function addDelayer()
 
 
-    {var delayCriteria = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DelayCriteria();var weight = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 15;
+    {var delayCriteria = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DelayCriteria();var weight = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 21;
       var delayer = DelayBurners.getReadyDelayBurner(delayCriteria);
 
       if (delayer == null) {
@@ -5221,10 +5221,7 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
           return false;
         }
 
-        if (
-        a.adventures > 0 &&
-        defeated.get(a.monster) == Reabsorbed.REABSORBED)
-        {
+        if (a.adventures > 0 && defeated.has(a.monster)) {
           return false;
         }
 
@@ -5317,10 +5314,7 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
           return false;
         }
 
-        if (
-        a.adventures > 0 &&
-        defeated.get(a.monster) == Reabsorbed.REABSORBED)
-        {
+        if (a.adventures > 0 && defeated.has(a.monster)) {
           return false;
         }
 
@@ -5545,7 +5539,7 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
         function (a) {return (
             (includeSkills ||
             !ignoreAdventures && a.adventures > 0 && advsRemaining > 0) &&
-            defeated.get(a.monster) != Reabsorbed.REABSORBED);})),_step6;try {for (_iterator6.s(); !(_step6 = _iterator6.n()).done;)
+            !defeated.has(a.monster));})),_step6;try {for (_iterator6.s(); !(_step6 = _iterator6.n()).done;)
         {var absorb = _step6.value;var _iterator7 = GreyAbsorber_createForOfIteratorHelper(
             getLocations(absorb.monster)),_step7;try {for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {var l = _step7.value;
               if (map.has(l)) {
@@ -29911,7 +29905,7 @@ var AdventureFinder = /*#__PURE__*/function () {
         };for (_iterator.s(); !(_step = _iterator.n()).done;) {_loop();}} catch (err) {_iterator.e(err);} finally {_iterator.f();}
 
       var nonQuests = this.absorbs.getExtraAdventures(
-      (0,external_kolmafia_.myAdventures)() >= 40,
+      (0,external_kolmafia_.myAdventures)() >= 25,
       this.defeated,
       true);
 
@@ -32741,6 +32735,7 @@ var GreyAdventurer_GreyAdventurer = /*#__PURE__*/function () {function GreyAdven
       (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("cursedMagnifyingGlassCount")) < 13 &&
       (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("_voidFreeFights")) < 5;
       var reallyLovesMagGlass =
+      (0,external_kolmafia_.getProperty)("autumnatonQuestLocation") == "" &&
       (0,external_kolmafia_.getProperty)("sidequestLighthouseCompleted") == "none" &&
       (0,external_kolmafia_.availableAmount)(external_kolmafia_.Item.get("barrel of gunpowder")) < 5;
 
@@ -32748,9 +32743,9 @@ var GreyAdventurer_GreyAdventurer = /*#__PURE__*/function () {function GreyAdven
         var bonus = 10;
 
         if (reallyLovesMagGlass) {
-          bonus = 100;
-        }
 
+          //  bonus = 100;
+        }
         outfit.addWeight(external_kolmafia_.Item.get("cursed magnifying glass"), bonus);
       } else if (
       (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("cursedMagnifyingGlassCount")) == 13 &&
@@ -33881,6 +33876,10 @@ function doToasterGaze() {
 
   if (ballProp().find(function (_ref3) {var _ref4 = GreyUtils_slicedToArray(_ref3, 1),turn = _ref4[0];return turn + 1 < (0,external_kolmafia_.turnsPlayed)();}) == null) {
     return;
+  }
+
+  if ((0,external_kolmafia_.equippedAmount)(external_kolmafia_.Item.get("June Cleaver")) > 0) {
+    (0,external_kolmafia_.equip)(external_kolmafia_.Item.none, external_kolmafia_.Slot.get("weapon"));
   }
 
   (0,external_kolmafia_.print)(
