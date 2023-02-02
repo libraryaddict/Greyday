@@ -1,5 +1,4 @@
 import {
-  absorbedMonsters,
   availableAmount,
   bufferToFile,
   Effect,
@@ -491,18 +490,10 @@ export class GreyAdventurer {
       if (
         GreySettings.greyPrepareLevelingResources &&
         familiarWeight(this.goose) < 20 &&
-        absorbedMonsters()["tomb asp"] == true &&
-        getProperty("questL09Topping") == "finished"
+        getAbsorbAdventuresRemaining() < 0
       ) {
-        AbsorbsProvider.remainingAdvAbsorbs =
-          AbsorbsProvider.remainingAdvAbsorbs.filter(
-            (m) => !AbsorbsProvider.getReabsorbedMonsters().includes(m)
-          );
-
-        if (AbsorbsProvider.remainingAdvAbsorbs.length <= 3) {
-          replaceWith.push(this.goose);
-          powerLevelGoose = true;
-        }
+        replaceWith.push(this.goose);
+        powerLevelGoose = true;
       }
 
       const recced = this.adventureFinder.getRecommendedFamiliars();
