@@ -148,7 +148,10 @@ export class QuestL11ShenTurnIn implements QuestInfo {
           useFamiliar(Familiar.get("Grey Goose"));
         }
 
-        if (myFamiliar() == this.snapper) {
+        if (
+          myFamiliar() == this.snapper &&
+          getProperty("redSnapperPhylum") != "penguin"
+        ) {
           cliExecute("snapper penguin");
         }
 

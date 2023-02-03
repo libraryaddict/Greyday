@@ -139,18 +139,27 @@ export class DelayBurners {
   static getCombatReplacers(
     criteria: DelayCriteriaInterface = DelayCriteria()
   ): DelayBurner[] {
-    const delays = this.getDelays()
-      .filter((d) => {
-        return this.meetsCriteria(d, criteria) && d.readyIn() == 0;
-      })
-      .sort((d1, d2) => d1.readyIn() - d2.readyIn());
+    const delays = this.getDelays().filter((d) => {
+      return this.meetsCriteria(d, criteria) && d.readyIn() == 0;
+    });
 
     delays.sort((d1, d2) => {
-      if (d1.isFree() == d2.isFree()) {
-        return 0;
+      // If we have a choice between two free delayers, pick the one that's free
+      if (d1.isFree() != d2.isFree()) {
+        return d1.isFree() ? -1 : 1;
       }
 
-      return d1.isFree() ? -1 : 1;
+      // If we have a choice between ones that is basically kramco vs something else, pick the one that's more ready
+      if (d1.readyIn() != d2.readyIn()) {
+        return d1.readyIn() - d2.readyIn();
+      }
+
+      // If this is a free fight, prioritize the one that forces a fight since that's rarer
+      if (d1.isFree() && d1.forcesFight() != d2.forcesFight()) {
+        return d1.forcesFight() ? -1 : 1;
+      }
+
+      return 0;
     });
 
     return delays;

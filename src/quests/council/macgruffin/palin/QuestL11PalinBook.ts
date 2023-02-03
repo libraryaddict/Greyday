@@ -1,10 +1,15 @@
 import {
   availableAmount,
   cliExecute,
+  effectModifier,
+  Familiar,
   getProperty,
+  haveEffect,
+  haveFamiliar,
   Item,
   Location,
   Monster,
+  myFamiliar,
   myMaxhp,
   myMeat,
   toInt,
@@ -52,6 +57,8 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
   drab: Monster = Monster.get("Drab Bard");
   paths: PossiblePath[];
   toAbsorb: Monster[];
+  humanCandle: Item = Item.get("Scent of a Human™ candle");
+  snapper: Familiar = Familiar.get("Red-Nosed Snapper");
 
   createPaths(assumeUnused: boolean) {
     this.paths = [new PossiblePath(0).addMeat(1000)];
@@ -199,6 +206,12 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
       location: isGhostBustingTime(this.palindome) ? null : this.palindome,
       orbs: orbs,
       mayFreeRun: true,
+      familiar:
+        toInt(getProperty("palindomeDudesDefeated")) < 5 &&
+        !isGhostBustingTime(this.palindome) &&
+        haveFamiliar(this.snapper)
+          ? this.snapper
+          : null,
       freeRun: (monster) => !orbs.includes(monster),
       run: () => {
         let macro: Macro = null;
@@ -209,6 +222,22 @@ export class QuestL11PalinBook extends TaskInfo implements QuestInfo {
           macro = new Macro()
             .if_(this.bobRace, Macro.tryItem(this.camera))
             .if_(this.raceBob, Macro.tryItem(this.camera));
+
+          if (toInt(getProperty("palindomeDudesDefeated")) < 5) {
+            if (
+              availableAmount(this.humanCandle) > 0 &&
+              haveEffect(effectModifier(this.humanCandle, "Effect")) <= 0
+            ) {
+              use(this.humanCandle);
+            }
+          }
+        }
+
+        if (
+          myFamiliar() == this.snapper &&
+          getProperty("redSnapperPhylum") != "dude"
+        ) {
+          cliExecute("snapper dude");
         }
 
         const settings = new AdventureSettings().setStartOfFightMacro(macro);
