@@ -22884,7 +22884,10 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
     [13, 25, 50, 125, 250]);QuestL9AbooPeak_defineProperty(this, "canOfPaint",
     external_kolmafia_.Item.get("Can of black paint"));QuestL9AbooPeak_defineProperty(this, "asdonMartin",
     external_kolmafia_.Item.get("Asdon Martin keyfob"));QuestL9AbooPeak_defineProperty(this, "driveSafe",
-    external_kolmafia_.Effect.get("Driving Safely"));}QuestL9AbooPeak_createClass(ABooHandler, [{ key: "level", value:
+    external_kolmafia_.Effect.get("Driving Safely"));QuestL9AbooPeak_defineProperty(this, "totItemItem",
+    external_kolmafia_.Item.get("li'l ninja costume"));QuestL9AbooPeak_defineProperty(this, "tot",
+    external_kolmafia_.Familiar.get("Trick-or-Treating Tot"));QuestL9AbooPeak_defineProperty(this, "toAbsorb", void 0);}QuestL9AbooPeak_createClass(ABooHandler, [{ key: "level", value:
+
 
     function level() {
       return 9;
@@ -23049,12 +23052,29 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
 
     function runCombat() {var _this2 = this;
       var outfit = this.createOutfit();
+      var fam = null;
+
+      if (this.toAbsorb.length == 0 && (0,external_kolmafia_.availableAmount)(this.totItemItem) > 0) {
+        fam = this.tot;
+        outfit.addWeight(this.totItemItem);
+      }
 
       return {
         location: this.loc,
         outfit: outfit,
         mayFreeRun: false,
+        familiar: fam,
+        disableFamOverride: fam != null,
         run: function run() {
+          if (
+          (0,external_kolmafia_.myFamiliar)() == fam &&
+          fam == _this2.tot &&
+          (0,external_kolmafia_.equippedAmount)(_this2.totItemItem) == 0 &&
+          (0,external_kolmafia_.availableAmount)(_this2.totItemItem) > 0)
+          {
+            (0,external_kolmafia_.equip)(_this2.totItemItem);
+          }
+
           greyAdv(_this2.loc, outfit);
         }
       };
