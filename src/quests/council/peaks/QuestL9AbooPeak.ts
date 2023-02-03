@@ -5,12 +5,17 @@ import {
   effectModifier,
   Element,
   elementalResistance,
+  equip,
+  equippedAmount,
+  Familiar,
   getFuel,
   getProperty,
   getWorkshed,
   haveEffect,
   Item,
   Location,
+  Monster,
+  myFamiliar,
   myHp,
   myLevel,
   print,
@@ -36,6 +41,9 @@ export class ABooHandler implements QuestInfo {
   canOfPaint: Item = Item.get("Can of black paint");
   asdonMartin: Item = Item.get("Asdon Martin keyfob");
   driveSafe: Effect = Effect.get("Driving Safely");
+  totItemItem = Item.get("li'l ninja costume");
+  tot: Familiar = Familiar.get("Trick-or-Treating Tot");
+  toAbsorb: Monster[];
 
   level(): number {
     return 9;
@@ -200,12 +208,29 @@ export class ABooHandler implements QuestInfo {
 
   runCombat(): QuestAdventure {
     const outfit = this.createOutfit();
+    let fam: Familiar = null;
+
+    if (this.toAbsorb.length == 0 && availableAmount(this.totItemItem) > 0) {
+      fam = this.tot;
+      outfit.addWeight(this.totItemItem);
+    }
 
     return {
       location: this.loc,
       outfit: outfit,
       mayFreeRun: false,
+      familiar: fam,
+      disableFamOverride: fam != null,
       run: () => {
+        if (
+          myFamiliar() == fam &&
+          fam == this.tot &&
+          equippedAmount(this.totItemItem) == 0 &&
+          availableAmount(this.totItemItem) > 0
+        ) {
+          equip(this.totItemItem);
+        }
+
         greyAdv(this.loc, outfit);
       },
     };
