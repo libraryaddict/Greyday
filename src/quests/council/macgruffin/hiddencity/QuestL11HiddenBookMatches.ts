@@ -29,6 +29,7 @@ export class QuestL11HiddenBookMatches extends TaskInfo implements QuestInfo {
   monster: Monster = Monster.get("pygmy janitor");
   location: Location = Location.get("The Hidden Park");
   nanovision: Skill = Skill.get("Double Nanovision");
+  sword: Item = Item.get("Antique Machete");
   toAbsorb: Monster[];
   noPull: PossiblePath = new PossiblePath(5);
   doPull: PossiblePath;
@@ -76,6 +77,14 @@ export class QuestL11HiddenBookMatches extends TaskInfo implements QuestInfo {
 
     if (availableAmount(this.book) > 0) {
       return QuestStatus.READY;
+    }
+
+    // Not until the bowling alley is accessible and the sword has been got
+    if (
+      availableAmount(this.sword) == 0 ||
+      toInt(getProperty("hiddenBowlingAlleyProgress")) <= 0
+    ) {
+      return QuestStatus.NOT_READY;
     }
 
     // Might still hit the drop!
