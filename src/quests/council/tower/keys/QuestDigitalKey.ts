@@ -84,7 +84,7 @@ export class QuestDigitalKey implements QuestInfo {
     maximize(
       zone.maximize +
         (zone.maximize == "Meat Drop" || zone.maximize == "Item Drop"
-          ? " +switch Trick-or-Treating Tot -broken champagne bottle"
+          ? " +switch Trick-or-Treating Tot -equip broken champagne bottle"
           : "") +
         " -tie",
       true
