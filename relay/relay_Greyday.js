@@ -1500,18 +1500,27 @@ var DelayBurners = /*#__PURE__*/function () {function DelayBurners() {DelayBurne
     function getCombatReplacers()
 
     {var _this = this;var criteria = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DelayCriteria();
-      var delays = this.getDelays().
-      filter(function (d) {
+      var delays = this.getDelays().filter(function (d) {
         return _this.meetsCriteria(d, criteria) && d.readyIn() == 0;
-      }).
-      sort(function (d1, d2) {return d1.readyIn() - d2.readyIn();});
+      });
 
       delays.sort(function (d1, d2) {
-        if (d1.isFree() == d2.isFree()) {
-          return 0;
+        // If we have a choice between two free delayers, pick the one that's free
+        if (d1.isFree() != d2.isFree()) {
+          return d1.isFree() ? -1 : 1;
         }
 
-        return d1.isFree() ? -1 : 1;
+        // If we have a choice between ones that is basically kramco vs something else, pick the one that's more ready
+        if (d1.readyIn() != d2.readyIn()) {
+          return d1.readyIn() - d2.readyIn();
+        }
+
+        // If this is a free fight, prioritize the one that forces a fight since that's rarer
+        if (d1.isFree() && d1.forcesFight() != d2.forcesFight()) {
+          return d1.forcesFight() ? -1 : 1;
+        }
+
+        return 0;
       });
 
       return delays;
@@ -7691,9 +7700,11 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
     external_kolmafia_.Item.get("photograph of a dog"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "bobRace",
     external_kolmafia_.Monster.get("Bob Racecar"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "raceBob",
     external_kolmafia_.Monster.get("Racecar Bob"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "drab",
-    external_kolmafia_.Monster.get("Drab Bard"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "paths", void 0);QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "toAbsorb", void 0);return _this;}QuestL11PalinBook_createClass(QuestL11PalinBook, [{ key: "createPaths", value:
+    external_kolmafia_.Monster.get("Drab Bard"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "paths", void 0);QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "toAbsorb", void 0);QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "humanCandle",
 
 
+    external_kolmafia_.Item.get("Scent of a Human™ candle"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "snapper",
+    external_kolmafia_.Familiar.get("Red-Nosed Snapper"));return _this;}QuestL11PalinBook_createClass(QuestL11PalinBook, [{ key: "createPaths", value:
 
     function createPaths(assumeUnused) {
       this.paths = [new PossiblePath(0).addMeat(1000)];
@@ -7841,6 +7852,12 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
         location: isGhostBustingTime(this.palindome) ? null : this.palindome,
         orbs: orbs,
         mayFreeRun: true,
+        familiar:
+        (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("palindomeDudesDefeated")) < 5 &&
+        !isGhostBustingTime(this.palindome) &&
+        (0,external_kolmafia_.haveFamiliar)(this.snapper) ?
+        this.snapper :
+        null,
         freeRun: function freeRun(monster) {return !orbs.includes(monster);},
         run: function run() {
           var macro = null;
@@ -7851,6 +7868,22 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
             macro = new Macro().
             if_(_this3.bobRace, Macro.tryItem(_this3.camera)).
             if_(_this3.raceBob, Macro.tryItem(_this3.camera));
+
+            if ((0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("palindomeDudesDefeated")) < 5) {
+              if (
+              (0,external_kolmafia_.availableAmount)(_this3.humanCandle) > 0 &&
+              (0,external_kolmafia_.haveEffect)((0,external_kolmafia_.effectModifier)(_this3.humanCandle, "Effect")) <= 0)
+              {
+                (0,external_kolmafia_.use)(_this3.humanCandle);
+              }
+            }
+          }
+
+          if (
+          (0,external_kolmafia_.myFamiliar)() == _this3.snapper &&
+          (0,external_kolmafia_.getProperty)("redSnapperPhylum") != "dude")
+          {
+            (0,external_kolmafia_.cliExecute)("snapper dude");
           }
 
           var settings = new AdventureSettings().setStartOfFightMacro(macro);
@@ -9357,7 +9390,10 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
             (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose"));
           }
 
-          if ((0,external_kolmafia_.myFamiliar)() == _this.snapper) {
+          if (
+          (0,external_kolmafia_.myFamiliar)() == _this.snapper &&
+          (0,external_kolmafia_.getProperty)("redSnapperPhylum") != "penguin")
+          {
             (0,external_kolmafia_.cliExecute)("snapper penguin");
           }
 
@@ -18068,7 +18104,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       (0,external_kolmafia_.maximize)(
       zone.maximize + (
       zone.maximize == "Meat Drop" || zone.maximize == "Item Drop" ?
-      " +switch Trick-or-Treating Tot" :
+      " +switch Trick-or-Treating Tot -broken champagne bottle" :
       "") +
       " -tie",
       true);

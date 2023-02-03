@@ -2827,18 +2827,27 @@ var DelayBurners = /*#__PURE__*/function () {function DelayBurners() {DelayBurne
     function getCombatReplacers()
 
     {var _this = this;var criteria = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DelayCriteria();
-      var delays = this.getDelays().
-      filter(function (d) {
+      var delays = this.getDelays().filter(function (d) {
         return _this.meetsCriteria(d, criteria) && d.readyIn() == 0;
-      }).
-      sort(function (d1, d2) {return d1.readyIn() - d2.readyIn();});
+      });
 
       delays.sort(function (d1, d2) {
-        if (d1.isFree() == d2.isFree()) {
-          return 0;
+        // If we have a choice between two free delayers, pick the one that's free
+        if (d1.isFree() != d2.isFree()) {
+          return d1.isFree() ? -1 : 1;
         }
 
-        return d1.isFree() ? -1 : 1;
+        // If we have a choice between ones that is basically kramco vs something else, pick the one that's more ready
+        if (d1.readyIn() != d2.readyIn()) {
+          return d1.readyIn() - d2.readyIn();
+        }
+
+        // If this is a free fight, prioritize the one that forces a fight since that's rarer
+        if (d1.isFree() && d1.forcesFight() != d2.forcesFight()) {
+          return d1.forcesFight() ? -1 : 1;
+        }
+
+        return 0;
       });
 
       return delays;
@@ -10176,9 +10185,11 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
     external_kolmafia_namespaceObject.Item.get("photograph of a dog"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "bobRace",
     external_kolmafia_namespaceObject.Monster.get("Bob Racecar"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "raceBob",
     external_kolmafia_namespaceObject.Monster.get("Racecar Bob"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "drab",
-    external_kolmafia_namespaceObject.Monster.get("Drab Bard"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "paths", void 0);QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "toAbsorb", void 0);return _this;}QuestL11PalinBook_createClass(QuestL11PalinBook, [{ key: "createPaths", value:
+    external_kolmafia_namespaceObject.Monster.get("Drab Bard"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "paths", void 0);QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "toAbsorb", void 0);QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "humanCandle",
 
 
+    external_kolmafia_namespaceObject.Item.get("Scent of a Human™ candle"));QuestL11PalinBook_defineProperty(QuestL11PalinBook_assertThisInitialized(_this), "snapper",
+    external_kolmafia_namespaceObject.Familiar.get("Red-Nosed Snapper"));return _this;}QuestL11PalinBook_createClass(QuestL11PalinBook, [{ key: "createPaths", value:
 
     function createPaths(assumeUnused) {
       this.paths = [new PossiblePath(0).addMeat(1000)];
@@ -10326,6 +10337,12 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
         location: isGhostBustingTime(this.palindome) ? null : this.palindome,
         orbs: orbs,
         mayFreeRun: true,
+        familiar:
+        (0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("palindomeDudesDefeated")) < 5 &&
+        !isGhostBustingTime(this.palindome) &&
+        (0,external_kolmafia_namespaceObject.haveFamiliar)(this.snapper) ?
+        this.snapper :
+        null,
         freeRun: function freeRun(monster) {return !orbs.includes(monster);},
         run: function run() {
           var macro = null;
@@ -10336,6 +10353,22 @@ var QuestL11PalinBook = /*#__PURE__*/function (_TaskInfo) {QuestL11PalinBook_inh
             macro = new Macro().
             if_(_this3.bobRace, Macro.tryItem(_this3.camera)).
             if_(_this3.raceBob, Macro.tryItem(_this3.camera));
+
+            if ((0,external_kolmafia_namespaceObject.toInt)((0,external_kolmafia_namespaceObject.getProperty)("palindomeDudesDefeated")) < 5) {
+              if (
+              (0,external_kolmafia_namespaceObject.availableAmount)(_this3.humanCandle) > 0 &&
+              (0,external_kolmafia_namespaceObject.haveEffect)((0,external_kolmafia_namespaceObject.effectModifier)(_this3.humanCandle, "Effect")) <= 0)
+              {
+                (0,external_kolmafia_namespaceObject.use)(_this3.humanCandle);
+              }
+            }
+          }
+
+          if (
+          (0,external_kolmafia_namespaceObject.myFamiliar)() == _this3.snapper &&
+          (0,external_kolmafia_namespaceObject.getProperty)("redSnapperPhylum") != "dude")
+          {
+            (0,external_kolmafia_namespaceObject.cliExecute)("snapper dude");
           }
 
           var settings = new AdventureSettings().setStartOfFightMacro(macro);
@@ -11842,7 +11875,10 @@ var QuestL11ShenTurnIn = /*#__PURE__*/function () {function QuestL11ShenTurnIn()
             (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
           }
 
-          if ((0,external_kolmafia_namespaceObject.myFamiliar)() == _this.snapper) {
+          if (
+          (0,external_kolmafia_namespaceObject.myFamiliar)() == _this.snapper &&
+          (0,external_kolmafia_namespaceObject.getProperty)("redSnapperPhylum") != "penguin")
+          {
             (0,external_kolmafia_namespaceObject.cliExecute)("snapper penguin");
           }
 
@@ -19174,7 +19210,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       (0,external_kolmafia_namespaceObject.maximize)(
       zone.maximize + (
       zone.maximize == "Meat Drop" || zone.maximize == "Item Drop" ?
-      " +switch Trick-or-Treating Tot" :
+      " +switch Trick-or-Treating Tot -broken champagne bottle" :
       "") +
       " -tie",
       true);
@@ -34965,7 +35001,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "740ee5f";
+var lastCommitHash = "b682df9";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
