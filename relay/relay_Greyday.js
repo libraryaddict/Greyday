@@ -6963,7 +6963,8 @@ var QuestL11ManorBomb = /*#__PURE__*/function () {function QuestL11ManorBomb() {
     external_kolmafia_.Item.get("unstable fulminate"));QuestL11ManorBomb_defineProperty(this, "bomb",
     external_kolmafia_.Item.get("Wine Bomb"));QuestL11ManorBomb_defineProperty(this, "boiler",
     external_kolmafia_.Location.get("The Haunted Boiler Room"));QuestL11ManorBomb_defineProperty(this, "monster",
-    external_kolmafia_.Monster.get("Monstrous boiler"));}QuestL11ManorBomb_createClass(QuestL11ManorBomb, [{ key: "getId", value:
+    external_kolmafia_.Monster.get("Monstrous boiler"));QuestL11ManorBomb_defineProperty(this, "snapper",
+    external_kolmafia_.Familiar.get("Red-Nosed Snapper"));}QuestL11ManorBomb_createClass(QuestL11ManorBomb, [{ key: "getId", value:
 
     function getId() {
       return "Council / MacGruffin / Manor / Bomb";
@@ -7025,15 +7026,22 @@ var QuestL11ManorBomb = /*#__PURE__*/function () {function QuestL11ManorBomb() {
 
       var outfit = new GreyOutfit().addWeight(this.unstable);
       outfit.addWeight("ML", 5, null, 81);
-      //outfit.plusMonsterLevelWeight = 5;
 
       return {
         location: this.boiler,
         outfit: outfit,
         orbs: [this.monster],
+        familiar: (0,external_kolmafia_.haveFamiliar)(this.snapper) ? this.snapper : null,
         run: function run() {
           var settings = new AdventureSettings();
           settings.addNoBanish(_this.monster);
+
+          if (
+          (0,external_kolmafia_.myFamiliar)() == _this.snapper &&
+          (0,external_kolmafia_.getProperty)("redSnapperPhylum") != "construct")
+          {
+            (0,external_kolmafia_.cliExecute)("snapper construct");
+          }
 
           greyAdv(_this.boiler, outfit, settings);
 
@@ -28749,7 +28757,8 @@ function QuestShortOrderCookLevel_typeof(obj) {"@babel/helpers - typeof";return 
 var QuestShortOrderExpLevel = /*#__PURE__*/function () {function QuestShortOrderExpLevel() {QuestShortOrderCookLevel_classCallCheck(this, QuestShortOrderExpLevel);QuestShortOrderCookLevel_defineProperty(this, "cook",
     external_kolmafia_.Familiar.get("Shorter-Order Cook"));QuestShortOrderCookLevel_defineProperty(this, "goose",
     external_kolmafia_.Familiar.get("Grey Goose"));QuestShortOrderCookLevel_defineProperty(this, "warren",
-    external_kolmafia_.Location.get("The Dire Warren"));}QuestShortOrderCookLevel_createClass(QuestShortOrderExpLevel, [{ key: "getId", value:
+    external_kolmafia_.Location.get("The Dire Warren"));QuestShortOrderCookLevel_defineProperty(this, "latte",
+    external_kolmafia_.Item.get("latte lovers member's mug"));}QuestShortOrderCookLevel_createClass(QuestShortOrderExpLevel, [{ key: "getId", value:
 
     function getId() {
       return "Misc / Short Cook Goose";
@@ -28784,6 +28793,12 @@ var QuestShortOrderExpLevel = /*#__PURE__*/function () {function QuestShortOrder
     function run() {var _this = this;
       var outfit = new GreyOutfit();
 
+      if ((0,external_kolmafia_.availableAmount)(this.latte) > 0 && !(0,external_kolmafia_.toBoolean)("_latteDrinkUsed")) {
+        outfit.addWeight(this.latte);
+      }
+
+      outfit.famExpWeight += 5;
+
       return {
         location: null,
         familiar: this.goose,
@@ -28792,6 +28807,11 @@ var QuestShortOrderExpLevel = /*#__PURE__*/function () {function QuestShortOrder
         run: function run() {
           (0,external_kolmafia_.useFamiliar)(_this.goose);
           var macro = Macro.skill(external_kolmafia_.Skill.get("Convert Matter to Pomade"));
+
+          if ((0,external_kolmafia_.equippedAmount)(_this.latte) > 0 && !(0,external_kolmafia_.toBoolean)("_latteDrinkUsed")) {
+            macro.trySkill(external_kolmafia_.Skill.get("Gulp Latte"));
+          }
+
           macro.attack().attack();
 
           greyAdv(

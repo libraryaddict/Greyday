@@ -9448,7 +9448,8 @@ var QuestL11ManorBomb = /*#__PURE__*/function () {function QuestL11ManorBomb() {
     external_kolmafia_namespaceObject.Item.get("unstable fulminate"));QuestL11ManorBomb_defineProperty(this, "bomb",
     external_kolmafia_namespaceObject.Item.get("Wine Bomb"));QuestL11ManorBomb_defineProperty(this, "boiler",
     external_kolmafia_namespaceObject.Location.get("The Haunted Boiler Room"));QuestL11ManorBomb_defineProperty(this, "monster",
-    external_kolmafia_namespaceObject.Monster.get("Monstrous boiler"));}QuestL11ManorBomb_createClass(QuestL11ManorBomb, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Monster.get("Monstrous boiler"));QuestL11ManorBomb_defineProperty(this, "snapper",
+    external_kolmafia_namespaceObject.Familiar.get("Red-Nosed Snapper"));}QuestL11ManorBomb_createClass(QuestL11ManorBomb, [{ key: "getId", value:
 
     function getId() {
       return "Council / MacGruffin / Manor / Bomb";
@@ -9510,15 +9511,22 @@ var QuestL11ManorBomb = /*#__PURE__*/function () {function QuestL11ManorBomb() {
 
       var outfit = new GreyOutfit().addWeight(this.unstable);
       outfit.addWeight("ML", 5, null, 81);
-      //outfit.plusMonsterLevelWeight = 5;
 
       return {
         location: this.boiler,
         outfit: outfit,
         orbs: [this.monster],
+        familiar: (0,external_kolmafia_namespaceObject.haveFamiliar)(this.snapper) ? this.snapper : null,
         run: function run() {
           var settings = new AdventureSettings();
           settings.addNoBanish(_this.monster);
+
+          if (
+          (0,external_kolmafia_namespaceObject.myFamiliar)() == _this.snapper &&
+          (0,external_kolmafia_namespaceObject.getProperty)("redSnapperPhylum") != "construct")
+          {
+            (0,external_kolmafia_namespaceObject.cliExecute)("snapper construct");
+          }
 
           greyAdv(_this.boiler, outfit, settings);
 
@@ -29855,7 +29863,8 @@ function QuestShortOrderCookLevel_typeof(obj) {"@babel/helpers - typeof";return 
 var QuestShortOrderExpLevel = /*#__PURE__*/function () {function QuestShortOrderExpLevel() {QuestShortOrderCookLevel_classCallCheck(this, QuestShortOrderExpLevel);QuestShortOrderCookLevel_defineProperty(this, "cook",
     external_kolmafia_namespaceObject.Familiar.get("Shorter-Order Cook"));QuestShortOrderCookLevel_defineProperty(this, "goose",
     external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));QuestShortOrderCookLevel_defineProperty(this, "warren",
-    external_kolmafia_namespaceObject.Location.get("The Dire Warren"));}QuestShortOrderCookLevel_createClass(QuestShortOrderExpLevel, [{ key: "getId", value:
+    external_kolmafia_namespaceObject.Location.get("The Dire Warren"));QuestShortOrderCookLevel_defineProperty(this, "latte",
+    external_kolmafia_namespaceObject.Item.get("latte lovers member's mug"));}QuestShortOrderCookLevel_createClass(QuestShortOrderExpLevel, [{ key: "getId", value:
 
     function getId() {
       return "Misc / Short Cook Goose";
@@ -29890,6 +29899,12 @@ var QuestShortOrderExpLevel = /*#__PURE__*/function () {function QuestShortOrder
     function run() {var _this = this;
       var outfit = new GreyOutfit();
 
+      if ((0,external_kolmafia_namespaceObject.availableAmount)(this.latte) > 0 && !(0,external_kolmafia_namespaceObject.toBoolean)("_latteDrinkUsed")) {
+        outfit.addWeight(this.latte);
+      }
+
+      outfit.famExpWeight += 5;
+
       return {
         location: null,
         familiar: this.goose,
@@ -29898,6 +29913,11 @@ var QuestShortOrderExpLevel = /*#__PURE__*/function () {function QuestShortOrder
         run: function run() {
           (0,external_kolmafia_namespaceObject.useFamiliar)(_this.goose);
           var macro = Macro.skill(external_kolmafia_namespaceObject.Skill.get("Convert Matter to Pomade"));
+
+          if ((0,external_kolmafia_namespaceObject.equippedAmount)(_this.latte) > 0 && !(0,external_kolmafia_namespaceObject.toBoolean)("_latteDrinkUsed")) {
+            macro.trySkill(external_kolmafia_namespaceObject.Skill.get("Gulp Latte"));
+          }
+
           macro.attack().attack();
 
           greyAdv(
@@ -35001,7 +35021,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "b682df9";
+var lastCommitHash = "7604ca1";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
