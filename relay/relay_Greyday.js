@@ -10749,7 +10749,8 @@ var QuestL11HiddenBookMatches = /*#__PURE__*/function (_TaskInfo) {QuestL11Hidde
     external_kolmafia_.Item.get("Book of matches"));QuestL11HiddenBookMatches_defineProperty(QuestL11HiddenBookMatches_assertThisInitialized(_this), "monster",
     external_kolmafia_.Monster.get("pygmy janitor"));QuestL11HiddenBookMatches_defineProperty(QuestL11HiddenBookMatches_assertThisInitialized(_this), "location",
     external_kolmafia_.Location.get("The Hidden Park"));QuestL11HiddenBookMatches_defineProperty(QuestL11HiddenBookMatches_assertThisInitialized(_this), "nanovision",
-    external_kolmafia_.Skill.get("Double Nanovision"));QuestL11HiddenBookMatches_defineProperty(QuestL11HiddenBookMatches_assertThisInitialized(_this), "toAbsorb", void 0);QuestL11HiddenBookMatches_defineProperty(QuestL11HiddenBookMatches_assertThisInitialized(_this), "noPull",
+    external_kolmafia_.Skill.get("Double Nanovision"));QuestL11HiddenBookMatches_defineProperty(QuestL11HiddenBookMatches_assertThisInitialized(_this), "sword",
+    external_kolmafia_.Item.get("Antique Machete"));QuestL11HiddenBookMatches_defineProperty(QuestL11HiddenBookMatches_assertThisInitialized(_this), "toAbsorb", void 0);QuestL11HiddenBookMatches_defineProperty(QuestL11HiddenBookMatches_assertThisInitialized(_this), "noPull",
 
     new PossiblePath(5));QuestL11HiddenBookMatches_defineProperty(QuestL11HiddenBookMatches_assertThisInitialized(_this), "doPull", void 0);return _this;}QuestL11HiddenBookMatches_createClass(QuestL11HiddenBookMatches, [{ key: "getId", value:
 
@@ -10797,6 +10798,14 @@ var QuestL11HiddenBookMatches = /*#__PURE__*/function (_TaskInfo) {QuestL11Hidde
 
       if ((0,external_kolmafia_.availableAmount)(this.book) > 0) {
         return QuestStatus.READY;
+      }
+
+      // Not until the bowling alley is accessible and the sword has been got
+      if (
+      (0,external_kolmafia_.availableAmount)(this.sword) == 0 ||
+      (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("hiddenBowlingAlleyProgress")) <= 0)
+      {
+        return QuestStatus.NOT_READY;
       }
 
       // Might still hit the drop!
