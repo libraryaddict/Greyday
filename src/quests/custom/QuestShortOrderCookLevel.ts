@@ -7,6 +7,10 @@ import {
   useFamiliar,
   myLevel,
   getProperty,
+  Item,
+  availableAmount,
+  toBoolean,
+  equippedAmount,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../utils/GreyLocations";
 import { GreyOutfit } from "../../utils/GreyOutfitter";
@@ -18,6 +22,7 @@ export class QuestShortOrderExpLevel implements QuestInfo {
   cook: Familiar = Familiar.get("Shorter-Order Cook");
   goose: Familiar = Familiar.get("Grey Goose");
   warren: Location = Location.get("The Dire Warren");
+  latte: Item = Item.get("latte lovers member's mug");
 
   getId(): QuestType {
     return "Misc / Short Cook Goose";
@@ -52,6 +57,12 @@ export class QuestShortOrderExpLevel implements QuestInfo {
   run(): QuestAdventure {
     const outfit = new GreyOutfit();
 
+    if (availableAmount(this.latte) > 0 && !toBoolean("_latteDrinkUsed")) {
+      outfit.addWeight(this.latte);
+    }
+
+    outfit.famExpWeight += 5;
+
     return {
       location: null,
       familiar: this.goose,
@@ -60,6 +71,11 @@ export class QuestShortOrderExpLevel implements QuestInfo {
       run: () => {
         useFamiliar(this.goose);
         const macro = Macro.skill(Skill.get("Convert Matter to Pomade"));
+
+        if (equippedAmount(this.latte) > 0 && !toBoolean("_latteDrinkUsed")) {
+          macro.trySkill(Skill.get("Gulp Latte"));
+        }
+
         macro.attack().attack();
 
         greyAdv(

@@ -5,6 +5,10 @@ import {
   visitUrl,
   availableAmount,
   cliExecute,
+  haveFamiliar,
+  myFamiliar,
+  getProperty,
+  Familiar,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
@@ -23,6 +27,7 @@ export class QuestL11ManorBomb implements QuestInfo {
   bomb: Item = Item.get("Wine Bomb");
   boiler: Location = Location.get("The Haunted Boiler Room");
   monster: Monster = Monster.get("Monstrous boiler");
+  snapper: Familiar = Familiar.get("Red-Nosed Snapper");
 
   getId(): QuestType {
     return "Council / MacGruffin / Manor / Bomb";
@@ -84,15 +89,22 @@ export class QuestL11ManorBomb implements QuestInfo {
 
     const outfit = new GreyOutfit().addWeight(this.unstable);
     outfit.addWeight("ML", 5, null, 81);
-    //outfit.plusMonsterLevelWeight = 5;
 
     return {
       location: this.boiler,
       outfit: outfit,
       orbs: [this.monster],
+      familiar: haveFamiliar(this.snapper) ? this.snapper : null,
       run: () => {
         const settings = new AdventureSettings();
         settings.addNoBanish(this.monster);
+
+        if (
+          myFamiliar() == this.snapper &&
+          getProperty("redSnapperPhylum") != "construct"
+        ) {
+          cliExecute("snapper construct");
+        }
 
         greyAdv(this.boiler, outfit, settings);
 
