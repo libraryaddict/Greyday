@@ -18121,7 +18121,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       (0,external_kolmafia_.maximize)(
       zone.maximize + (
       zone.maximize == "Meat Drop" || zone.maximize == "Item Drop" ?
-      " +switch Trick-or-Treating Tot -broken champagne bottle" :
+      " +switch Trick-or-Treating Tot -equip broken champagne bottle" :
       "") +
       " -tie",
       true);
