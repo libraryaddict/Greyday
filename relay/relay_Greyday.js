@@ -1549,6 +1549,7 @@ function GreyOutfitter_typeof(obj) {"@babel/helpers - typeof";return GreyOutfitt
 
 
 var goose = external_kolmafia_.Familiar.get("Grey Goose");
+var ghostCape = external_kolmafia_.Item.get("protonic accelerator pack");
 
 var GreyOutfit = /*#__PURE__*/function () {
 
@@ -1672,7 +1673,15 @@ var GreyOutfit = /*#__PURE__*/function () {
       {
         this.famExpWeight = 100;
       }
+
       // Setup weights according to w/e passives I have
+      if (
+      (0,external_kolmafia_.availableAmount)(ghostCape) > 0 &&
+      (0,external_kolmafia_.getProperty)("ghostLocation") == "" &&
+      (0,external_kolmafia_.toInt)((0,external_kolmafia_.getProperty)("nextParanormalActivity")) <= (0,external_kolmafia_.totalTurnsPlayed)())
+      {
+        this.addWeight(ghostCape, 2);
+      }
     } }, { key: "addDelayer", value:
 
     function addDelayer()
