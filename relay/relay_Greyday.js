@@ -1687,7 +1687,7 @@ var GreyOutfit = /*#__PURE__*/function () {
     function addDelayer()
 
 
-    {var delayCriteria = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DelayCriteria();var weight = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 21;
+    {var delayCriteria = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DelayCriteria();var weight = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 31;
       var delayer = DelayBurners.getReadyDelayBurner(delayCriteria);
 
       if (delayer == null) {
