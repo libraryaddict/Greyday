@@ -71,6 +71,7 @@ export class QuestDigitalKey implements QuestInfo {
   key: Item = Item.get("Digital key");
   currentZone: PixelZone;
   favorZone: PixelZone;
+  zoneScore: number;
   zoneCalcedAt: number = 0;
   totMeatItem = Item.get("li'l pirate costume");
   totItemItem = Item.get("li'l ninja costume");
@@ -140,6 +141,7 @@ export class QuestDigitalKey implements QuestInfo {
     });
 
     this.favorZone = sortedZones[0];
+    this.zoneScore = zones.get(this.favorZone);
 
     printHtml(
       `Pixel Realm Scores: ${sortedZones
@@ -175,6 +177,10 @@ export class QuestDigitalKey implements QuestInfo {
     }
 
     const status = getQuestStatus("questL13Final");
+
+    if (this.getViableDelayBurners().length > 0 && this.zoneScore >= 390) {
+      return QuestStatus.READY;
+    }
 
     if (status < 0) {
       return QuestStatus.FASTER_LATER;
