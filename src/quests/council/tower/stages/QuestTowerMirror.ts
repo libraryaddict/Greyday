@@ -18,8 +18,10 @@ import {
 } from "../../../Quests";
 import { QuestType } from "../../../QuestTypes";
 import { GreySettings } from "../../../../utils/GreySettings";
+import { PossiblePath, TaskInfo } from "../../../../typings/TaskInfo";
+import { ResourceCategory } from "../../../../typings/ResourceTypes";
 
-export class QuestTowerMirror implements QuestInfo {
+export class QuestTowerMirror extends TaskInfo implements QuestInfo {
   wand: Item = Item.get(" Wand of Nagamar");
   lW: Item = Item.get("ruby W");
   lA: Item = Item.get("metallic A");
@@ -38,6 +40,15 @@ export class QuestTowerMirror implements QuestInfo {
     ],
   ].map((s) => [Item.get(s[0]), Monster.get(s[1]), Location.get(s[2])]);
   clover: Item = Item.get("11-leaf Clover");
+  paths: PossiblePath[];
+
+  createPossiblePaths() {
+    this.paths = [new PossiblePath(1).add(ResourceCategory.CLOVER)];
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
 
   getId(): QuestType {
     return "Council / Tower / Mirror";

@@ -262,7 +262,7 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
       const loop = Skill.get("Infinite Loop");
       let attackSkill: Skill = null;
 
-      if (haveSkill(nano) && (outfit.itemDropWeight >= 2 || myLevel() > 18)) {
+      if (haveSkill(nano) && (outfit.itemDropWeight >= 2 || myLevel() >= 18)) {
         attackSkill = nano;
       }
 
@@ -272,10 +272,12 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
           attackSkill = loop;
         } else if (
           // If we failed to stay underleveled for hippies, or don't need to stay underleveled
-          myLevel() >= 12 ||
-          !GreySettings.isHippyMode() ||
-          haveOutfit("Filthy Hippy Disguise") ||
-          haveOutfit("Frat Warrior Fatigues")
+          myLevel() >= 12 &&
+          GreySettings.isHippyMode() &&
+          !(
+            haveOutfit("Filthy Hippy Disguise") ||
+            haveOutfit("Frat Warrior Fatigues")
+          )
         ) {
           attackSkill = loop;
         }

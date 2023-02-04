@@ -25,6 +25,7 @@ export class QuestStarKey implements QuestInfo {
   map: Item = Item.get("Star Chart");
   line: Item = Item.get("Line");
   key: Item = Item.get("Richard's star key");
+  astromner = Monster.get("Astronomer");
   toAbsorb: Monster[];
 
   level(): number {
@@ -91,6 +92,7 @@ export class QuestStarKey implements QuestInfo {
     return {
       location: this.location,
       outfit: outfit,
+      orbs: availableAmount(this.map) > 0 ? null : [this.astromner],
       run: () => {
         greyAdv(this.location, outfit);
       },
