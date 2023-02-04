@@ -42,7 +42,7 @@ export class QuestTowerMirror extends TaskInfo implements QuestInfo {
   clover: Item = Item.get("11-leaf Clover");
   paths: PossiblePath[];
 
-  createPossiblePaths() {
+  createPaths() {
     this.paths = [new PossiblePath(1).add(ResourceCategory.CLOVER)];
   }
 
