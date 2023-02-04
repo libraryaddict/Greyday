@@ -14250,7 +14250,7 @@ var QuestL11MacGruffin = /*#__PURE__*/function () {
       };
     } }]);return QuestL11MacGruffin;}();
 ;// CONCATENATED MODULE: ./src/quests/council/islandwar/QuestL12Battlefield.ts
-function QuestL12Battlefield_typeof(obj) {"@babel/helpers - typeof";return QuestL12Battlefield_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestL12Battlefield_typeof(obj);}function QuestL12Battlefield_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL12Battlefield_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestL12Battlefield_toPropertyKey(descriptor.key), descriptor);}}function QuestL12Battlefield_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL12Battlefield_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL12Battlefield_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL12Battlefield_defineProperty(obj, key, value) {key = QuestL12Battlefield_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestL12Battlefield_toPropertyKey(arg) {var key = QuestL12Battlefield_toPrimitive(arg, "string");return QuestL12Battlefield_typeof(key) === "symbol" ? key : String(key);}function QuestL12Battlefield_toPrimitive(input, hint) {if (QuestL12Battlefield_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestL12Battlefield_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
+function QuestL12Battlefield_typeof(obj) {"@babel/helpers - typeof";return QuestL12Battlefield_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestL12Battlefield_typeof(obj);}function QuestL12Battlefield_slicedToArray(arr, i) {return QuestL12Battlefield_arrayWithHoles(arr) || QuestL12Battlefield_iterableToArrayLimit(arr, i) || QuestL12Battlefield_unsupportedIterableToArray(arr, i) || QuestL12Battlefield_nonIterableRest();}function QuestL12Battlefield_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestL12Battlefield_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestL12Battlefield_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestL12Battlefield_arrayLikeToArray(o, minLen);}function QuestL12Battlefield_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function QuestL12Battlefield_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function QuestL12Battlefield_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestL12Battlefield_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestL12Battlefield_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestL12Battlefield_toPropertyKey(descriptor.key), descriptor);}}function QuestL12Battlefield_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestL12Battlefield_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestL12Battlefield_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestL12Battlefield_defineProperty(obj, key, value) {key = QuestL12Battlefield_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestL12Battlefield_toPropertyKey(arg) {var key = QuestL12Battlefield_toPrimitive(arg, "string");return QuestL12Battlefield_typeof(key) === "symbol" ? key : String(key);}function QuestL12Battlefield_toPrimitive(input, hint) {if (QuestL12Battlefield_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestL12Battlefield_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
 
 
@@ -14273,36 +14273,35 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
 
     function level() {
       return 12;
-    } }, { key: "getDefeatedEachTurn", value:
+    } }, { key: "getTurnsInBattlefield", value:
 
-    function getDefeatedEachTurn() {
-      var defeated = 1;
+    function getTurnsInBattlefield() {
+      var completedTurns = [
+      ["sidequestArenaCompleted", 0],
+      ["sidequestLighthouseCompleted", 0],
+      ["sidequestJunkyardCompleted", 0],
+      ["sidequestOrchardCompleted", 64],
+      ["sidequestNunsCompleted", 192]];
 
-      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestArenaCompleted") == "fratboy") {
-        defeated *= 2;
+
+      var hippiesDefeated = this.getHippiesDefeated();
+      var turns = 0;
+
+      while (hippiesDefeated < 1000) {
+        var defeatPerTurn = 1;
+        var sidequests = completedTurns.filter(
+        function (_ref) {var _ref2 = QuestL12Battlefield_slicedToArray(_ref, 2),turns = _ref2[1];return hippiesDefeated >= turns;}).
+        length;
+
+        for (var i = 0; i < sidequests; i++) {
+          defeatPerTurn = defeatPerTurn * 2;
+        }
+
+        hippiesDefeated += defeatPerTurn;
+        turns++;
       }
 
-      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestJunkyardCompleted") == "fratboy") {
-        defeated *= 2;
-      }
-
-      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestJunkyardCompleted") == "fratboy") {
-        defeated *= 2;
-      }
-
-      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestNunsCompleted") == "fratboy") {
-        defeated *= 2;
-      }
-
-      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestOrchardCompleted") == "fratboy") {
-        defeated *= 2;
-      }
-
-      if ((0,external_kolmafia_namespaceObject.getProperty)("sidequestFarmCompleted") == "fratboy") {
-        defeated *= 2;
-      }
-
-      return defeated;
+      return turns;
     } }, { key: "status", value:
 
     function status() {
@@ -14396,10 +14395,7 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
 
           greyAdv(_this.loc, outfit);
 
-          var turns = Math.ceil(
-          (1000 - _this.getHippiesDefeated()) / _this.getDefeatedEachTurn());
-
-
+          var turns = _this.getTurnsInBattlefield();
           if (turns > 0) {
             (0,external_kolmafia_namespaceObject.print)("".concat(
             turns, " turn").concat(
@@ -14409,7 +14405,7 @@ var QuestL12Battlefield = /*#__PURE__*/function () {function QuestL12Battlefield
 
           } else {
             (0,external_kolmafia_namespaceObject.print)(
-            "Battlefield has been cleared! Hipster boss spotted eating BBQ'd sushi before it's cool! This enrages you!",
+            "Battlefield has been cleared! Hipster boss spotted eating BBQ'd sushi before it's cool! This (obviously) enrages you!",
             "blue");
 
           }
@@ -35135,7 +35131,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "7f92a0d";
+var lastCommitHash = "c1041c3";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
