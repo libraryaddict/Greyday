@@ -5150,11 +5150,11 @@ var GreyAbsorber_AbsorbsProvider = /*#__PURE__*/function () {function AbsorbsPro
       }
 
       var array = [
-      ["Propagation Drive", "20% Item Drops"],
+      //  ["Propagation Drive", "20% Item Drops"],
       ["Overclocking", "Scaling +init"],
       ["Ponzi Apparatus", "Scaling meat%"],
       ["Advanced Exo-Alloy", "100 DA"],
-      ["Subatomic Hardening", "Scaling DR"],
+      //["Subatomic Hardening", "Scaling DR"],
       ["Fluid Dynamics Simulation", "Scaling HP Regen"],
       ["Infinite Loop", "Fast Leveling"],
       ["Gravitational Compression", "Scaling Item Drop"],
@@ -26096,21 +26096,38 @@ var QuestGetZapWand = /*#__PURE__*/function () {function QuestGetZapWand() {Ques
       return [this.realDung];
     } }]);return QuestGetZapWand;}();
 ;// CONCATENATED MODULE: ./src/quests/custom/QuestGrabBoatVacation.ts
-function QuestGrabBoatVacation_typeof(obj) {"@babel/helpers - typeof";return QuestGrabBoatVacation_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestGrabBoatVacation_typeof(obj);}function QuestGrabBoatVacation_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestGrabBoatVacation_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestGrabBoatVacation_toPropertyKey(descriptor.key), descriptor);}}function QuestGrabBoatVacation_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestGrabBoatVacation_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestGrabBoatVacation_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestGrabBoatVacation_defineProperty(obj, key, value) {key = QuestGrabBoatVacation_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestGrabBoatVacation_toPropertyKey(arg) {var key = QuestGrabBoatVacation_toPrimitive(arg, "string");return QuestGrabBoatVacation_typeof(key) === "symbol" ? key : String(key);}function QuestGrabBoatVacation_toPrimitive(input, hint) {if (QuestGrabBoatVacation_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestGrabBoatVacation_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
+function QuestGrabBoatVacation_typeof(obj) {"@babel/helpers - typeof";return QuestGrabBoatVacation_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestGrabBoatVacation_typeof(obj);}function QuestGrabBoatVacation_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestGrabBoatVacation_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestGrabBoatVacation_toPropertyKey(descriptor.key), descriptor);}}function QuestGrabBoatVacation_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestGrabBoatVacation_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestGrabBoatVacation_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestGrabBoatVacation_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestGrabBoatVacation_setPrototypeOf(subClass, superClass);}function QuestGrabBoatVacation_setPrototypeOf(o, p) {QuestGrabBoatVacation_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestGrabBoatVacation_setPrototypeOf(o, p);}function QuestGrabBoatVacation_createSuper(Derived) {var hasNativeReflectConstruct = QuestGrabBoatVacation_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestGrabBoatVacation_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestGrabBoatVacation_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestGrabBoatVacation_possibleConstructorReturn(this, result);};}function QuestGrabBoatVacation_possibleConstructorReturn(self, call) {if (call && (QuestGrabBoatVacation_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestGrabBoatVacation_assertThisInitialized(self);}function QuestGrabBoatVacation_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestGrabBoatVacation_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestGrabBoatVacation_getPrototypeOf(o) {QuestGrabBoatVacation_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestGrabBoatVacation_getPrototypeOf(o);}function QuestGrabBoatVacation_defineProperty(obj, key, value) {key = QuestGrabBoatVacation_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestGrabBoatVacation_toPropertyKey(arg) {var key = QuestGrabBoatVacation_toPrimitive(arg, "string");return QuestGrabBoatVacation_typeof(key) === "symbol" ? key : String(key);}function QuestGrabBoatVacation_toPrimitive(input, hint) {if (QuestGrabBoatVacation_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestGrabBoatVacation_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
 
 
 
 
 
-var QuestGrabBoatVacation = /*#__PURE__*/function () {function QuestGrabBoatVacation() {QuestGrabBoatVacation_classCallCheck(this, QuestGrabBoatVacation);QuestGrabBoatVacation_defineProperty(this, "junkKey",
-    external_kolmafia_.Item.get("funky junk key"));QuestGrabBoatVacation_defineProperty(this, "boatParts",
+
+
+
+var QuestGrabBoatVacation = /*#__PURE__*/function (_TaskInfo) {QuestGrabBoatVacation_inherits(QuestGrabBoatVacation, _TaskInfo);var _super = QuestGrabBoatVacation_createSuper(QuestGrabBoatVacation);function QuestGrabBoatVacation() {var _this;QuestGrabBoatVacation_classCallCheck(this, QuestGrabBoatVacation);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestGrabBoatVacation_defineProperty(QuestGrabBoatVacation_assertThisInitialized(_this), "junkKey",
+    external_kolmafia_.Item.get("funky junk key"));QuestGrabBoatVacation_defineProperty(QuestGrabBoatVacation_assertThisInitialized(_this), "boatParts",
     [
     "old claw-foot bathtub",
     "old clothesline pole",
     "antique cigar sign"].
-    map(function (s) {return external_kolmafia_.Item.get(s);}));QuestGrabBoatVacation_defineProperty(this, "nanovision",
-    external_kolmafia_.Skill.get("Double Nanovision"));}QuestGrabBoatVacation_createClass(QuestGrabBoatVacation, [{ key: "getId", value:
+    map(function (s) {return external_kolmafia_.Item.get(s);}));QuestGrabBoatVacation_defineProperty(QuestGrabBoatVacation_assertThisInitialized(_this), "nanovision",
+    external_kolmafia_.Skill.get("Double Nanovision"));QuestGrabBoatVacation_defineProperty(QuestGrabBoatVacation_assertThisInitialized(_this), "paths", void 0);QuestGrabBoatVacation_defineProperty(QuestGrabBoatVacation_assertThisInitialized(_this), "scrip",
+
+    external_kolmafia_.Item.get("Shore Inc. Ship Trip Scrip"));return _this;}QuestGrabBoatVacation_createClass(QuestGrabBoatVacation, [{ key: "createPaths", value:
+
+    function createPaths() {
+      this.paths = [new PossiblePath(9)];
+
+      if ((0,external_kolmafia_.storageAmount)(this.scrip) > 0) {
+        this.paths.push(new PossiblePath(6).addPull(this.scrip));
+      }
+    } }, { key: "getPossiblePaths", value:
+
+    function getPossiblePaths() {
+      return this.paths;
+    } }, { key: "getId", value:
 
     function getId() {
       return "Boat / Vacation";
@@ -26168,7 +26185,7 @@ var QuestGrabBoatVacation = /*#__PURE__*/function () {function QuestGrabBoatVaca
       };
     } }, { key: "run", value:
 
-    function run() {var _this = this;
+    function run(path) {var _this2 = this;
       if ((0,external_kolmafia_.getProperty)("questM19Hippy") == "unstarted") {
         return this.doHippyJunk();
       }
@@ -26176,9 +26193,11 @@ var QuestGrabBoatVacation = /*#__PURE__*/function () {function QuestGrabBoatVaca
       return {
         location: null,
         run: function run() {
-          var scriptAvailable = (0,external_kolmafia_.availableAmount)(
-          external_kolmafia_.Item.get("Shore Inc. Ship Trip Scrip"));
+          if (path.canUse(ResourceCategory.PULL)) {
+            GreyPulls.tryPull(_this2.scrip);
+          }
 
+          var scriptAvailable = (0,external_kolmafia_.availableAmount)(_this2.scrip);
 
           var props = new Properties_PropertyManager();
           props.setChoice(793, 1);
@@ -26200,7 +26219,7 @@ var QuestGrabBoatVacation = /*#__PURE__*/function () {function QuestGrabBoatVaca
           (0,external_kolmafia_.cliExecute)("make dinghy plans");
           (0,external_kolmafia_.use)(external_kolmafia_.Item.get("Dinghy plans"));
 
-          if (!_this.hasBoat()) {
+          if (!_this2.hasBoat()) {
             throw "We should've had a boat!";
           }
         }
@@ -26229,7 +26248,7 @@ var QuestGrabBoatVacation = /*#__PURE__*/function () {function QuestGrabBoatVaca
 
     function canAcceptPrimes() {
       return false;
-    } }]);return QuestGrabBoatVacation;}();
+    } }]);return QuestGrabBoatVacation;}(TaskInfo);
 ;// CONCATENATED MODULE: ./src/quests/custom/QuestInitialPulls.ts
 function QuestInitialPulls_typeof(obj) {"@babel/helpers - typeof";return QuestInitialPulls_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestInitialPulls_typeof(obj);}function QuestInitialPulls_toConsumableArray(arr) {return QuestInitialPulls_arrayWithoutHoles(arr) || QuestInitialPulls_iterableToArray(arr) || QuestInitialPulls_unsupportedIterableToArray(arr) || QuestInitialPulls_nonIterableSpread();}function QuestInitialPulls_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestInitialPulls_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function QuestInitialPulls_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return QuestInitialPulls_arrayLikeToArray(arr);}function QuestInitialPulls_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestInitialPulls_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function QuestInitialPulls_slicedToArray(arr, i) {return QuestInitialPulls_arrayWithHoles(arr) || QuestInitialPulls_iterableToArrayLimit(arr, i) || QuestInitialPulls_unsupportedIterableToArray(arr, i) || QuestInitialPulls_nonIterableRest();}function QuestInitialPulls_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestInitialPulls_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestInitialPulls_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestInitialPulls_arrayLikeToArray(o, minLen);}function QuestInitialPulls_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function QuestInitialPulls_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function QuestInitialPulls_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestInitialPulls_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestInitialPulls_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestInitialPulls_toPropertyKey(descriptor.key), descriptor);}}function QuestInitialPulls_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestInitialPulls_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestInitialPulls_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestInitialPulls_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestInitialPulls_setPrototypeOf(subClass, superClass);}function QuestInitialPulls_setPrototypeOf(o, p) {QuestInitialPulls_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestInitialPulls_setPrototypeOf(o, p);}function QuestInitialPulls_createSuper(Derived) {var hasNativeReflectConstruct = QuestInitialPulls_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestInitialPulls_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestInitialPulls_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestInitialPulls_possibleConstructorReturn(this, result);};}function QuestInitialPulls_possibleConstructorReturn(self, call) {if (call && (QuestInitialPulls_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestInitialPulls_assertThisInitialized(self);}function QuestInitialPulls_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestInitialPulls_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestInitialPulls_getPrototypeOf(o) {QuestInitialPulls_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestInitialPulls_getPrototypeOf(o);}function QuestInitialPulls_defineProperty(obj, key, value) {key = QuestInitialPulls_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestInitialPulls_toPropertyKey(arg) {var key = QuestInitialPulls_toPrimitive(arg, "string");return QuestInitialPulls_typeof(key) === "symbol" ? key : String(key);}function QuestInitialPulls_toPrimitive(input, hint) {if (QuestInitialPulls_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestInitialPulls_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
