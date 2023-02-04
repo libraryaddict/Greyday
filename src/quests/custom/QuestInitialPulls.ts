@@ -135,6 +135,7 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
       outfit: GreyOutfit.IGNORE_OUTFIT,
       run: () => {
         useFamiliar(Familiar.get("Grey Goose")); // Force it to be leveled up if we happen to have short order cook
+        const pulled = pullsRemaining();
 
         for (const item of path.pulls) {
           if (hasPulled(item)) {
@@ -144,18 +145,19 @@ export class QuestInitialPulls extends TaskInfo implements QuestInfo {
           GreyPulls.tryPull(item, 25000);
         }
 
+        const pulledAfter = pullsRemaining();
+        const pulledDiff = pulled - pulledAfter;
+
         const failedPulls = path.pulls.filter((i) => itemAmount(i) == 0);
 
         if (failedPulls.length > 0) {
           throw "Failed to pull the items " + failedPulls.join(", ");
         }
 
-        if (path.canUse(ResourceCategory.PULL)) {
-          throw (
-            "Expected to have no pulls remaining, but it wants to pull " +
-            path.canUse(ResourceCategory.PULL) +
-            " more"
-          );
+        if (path.canUse(ResourceCategory.PULL) != pulledDiff) {
+          throw `Expected to use ${path.canUse(
+            ResourceCategory.PULL
+          )}, but we used ${pulledDiff}. Throwing error to avoid infinite looping this task`;
         }
       },
     };
