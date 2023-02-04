@@ -39,34 +39,33 @@ export class QuestL12Battlefield implements QuestInfo {
     return 12;
   }
 
-  getDefeatedEachTurn(): number {
-    let defeated = 1;
+  getTurnsInBattlefield(): number {
+    const completedTurns: [string, number][] = [
+      ["sidequestArenaCompleted", 0],
+      ["sidequestLighthouseCompleted", 0],
+      ["sidequestJunkyardCompleted", 0],
+      ["sidequestOrchardCompleted", 64],
+      ["sidequestNunsCompleted", 192],
+    ];
 
-    if (getProperty("sidequestArenaCompleted") == "fratboy") {
-      defeated *= 2;
+    let hippiesDefeated = this.getHippiesDefeated();
+    let turns = 0;
+
+    while (hippiesDefeated < 1000) {
+      let defeatPerTurn = 1;
+      const sidequests = completedTurns.filter(
+        ([, turns]) => hippiesDefeated >= turns
+      ).length;
+
+      for (let i = 0; i < sidequests; i++) {
+        defeatPerTurn = defeatPerTurn * 2;
+      }
+
+      hippiesDefeated += defeatPerTurn;
+      turns++;
     }
 
-    if (getProperty("sidequestJunkyardCompleted") == "fratboy") {
-      defeated *= 2;
-    }
-
-    if (getProperty("sidequestJunkyardCompleted") == "fratboy") {
-      defeated *= 2;
-    }
-
-    if (getProperty("sidequestNunsCompleted") == "fratboy") {
-      defeated *= 2;
-    }
-
-    if (getProperty("sidequestOrchardCompleted") == "fratboy") {
-      defeated *= 2;
-    }
-
-    if (getProperty("sidequestFarmCompleted") == "fratboy") {
-      defeated *= 2;
-    }
-
-    return defeated;
+    return turns;
   }
 
   status(): QuestStatus {
@@ -160,10 +159,7 @@ export class QuestL12Battlefield implements QuestInfo {
 
         greyAdv(this.loc, outfit);
 
-        const turns = Math.ceil(
-          (1000 - this.getHippiesDefeated()) / this.getDefeatedEachTurn()
-        );
-
+        const turns = this.getTurnsInBattlefield();
         if (turns > 0) {
           print(
             `${turns} turn${
@@ -173,7 +169,7 @@ export class QuestL12Battlefield implements QuestInfo {
           );
         } else {
           print(
-            "Battlefield has been cleared! Hipster boss spotted eating BBQ'd sushi before it's cool! This enrages you!",
+            "Battlefield has been cleared! Hipster boss spotted eating BBQ'd sushi before it's cool! This (obviously) enrages you!",
             "blue"
           );
         }
