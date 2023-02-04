@@ -6086,7 +6086,7 @@ function greyKillingBlow(outfit) {
       var loop = external_kolmafia_.Skill.get("Infinite Loop");
       var attackSkill = null;
 
-      if ((0,external_kolmafia_.haveSkill)(nano) && (outfit.itemDropWeight >= 2 || (0,external_kolmafia_.myLevel)() > 18)) {
+      if ((0,external_kolmafia_.haveSkill)(nano) && (outfit.itemDropWeight >= 2 || (0,external_kolmafia_.myLevel)() >= 18)) {
         attackSkill = nano;
       }
 
@@ -6096,10 +6096,12 @@ function greyKillingBlow(outfit) {
           attackSkill = loop;
         } else if (
         // If we failed to stay underleveled for hippies, or don't need to stay underleveled
-        (0,external_kolmafia_.myLevel)() >= 12 ||
-        !GreySettings_GreySettings.isHippyMode() ||
+        (0,external_kolmafia_.myLevel)() >= 12 &&
+        GreySettings_GreySettings.isHippyMode() &&
+        !(
         (0,external_kolmafia_.haveOutfit)("Filthy Hippy Disguise") ||
-        (0,external_kolmafia_.haveOutfit)("Frat Warrior Fatigues"))
+        (0,external_kolmafia_.haveOutfit)("Frat Warrior Fatigues")))
+
         {
           attackSkill = loop;
         }
@@ -14435,7 +14437,8 @@ var QuestStarKey = /*#__PURE__*/function () {function QuestStarKey() {QuestStarK
     external_kolmafia_.Item.get("Star"));QuestStarKey_defineProperty(this, "map",
     external_kolmafia_.Item.get("Star Chart"));QuestStarKey_defineProperty(this, "line",
     external_kolmafia_.Item.get("Line"));QuestStarKey_defineProperty(this, "key",
-    external_kolmafia_.Item.get("Richard's star key"));QuestStarKey_defineProperty(this, "toAbsorb", void 0);}QuestStarKey_createClass(QuestStarKey, [{ key: "level", value:
+    external_kolmafia_.Item.get("Richard's star key"));QuestStarKey_defineProperty(this, "astromner",
+    external_kolmafia_.Monster.get("Astronomer"));QuestStarKey_defineProperty(this, "toAbsorb", void 0);}QuestStarKey_createClass(QuestStarKey, [{ key: "level", value:
 
 
     function level() {
@@ -14502,6 +14505,7 @@ var QuestStarKey = /*#__PURE__*/function () {function QuestStarKey() {QuestStarK
       return {
         location: this.location,
         outfit: outfit,
+        orbs: (0,external_kolmafia_.availableAmount)(this.map) > 0 ? null : [this.astromner],
         run: function run() {
           greyAdv(_this.location, outfit);
         }
@@ -16486,7 +16490,7 @@ var QuestTowerShadow = /*#__PURE__*/function (_TaskInfo) {QuestTowerShadow_inher
       return false;
     } }]);return QuestTowerShadow;}(TaskInfo);
 ;// CONCATENATED MODULE: ./src/quests/council/tower/stages/QuestTowerMirror.ts
-function QuestTowerMirror_typeof(obj) {"@babel/helpers - typeof";return QuestTowerMirror_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestTowerMirror_typeof(obj);}function QuestTowerMirror_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestTowerMirror_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function QuestTowerMirror_slicedToArray(arr, i) {return QuestTowerMirror_arrayWithHoles(arr) || QuestTowerMirror_iterableToArrayLimit(arr, i) || QuestTowerMirror_unsupportedIterableToArray(arr, i) || QuestTowerMirror_nonIterableRest();}function QuestTowerMirror_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestTowerMirror_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestTowerMirror_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestTowerMirror_arrayLikeToArray(o, minLen);}function QuestTowerMirror_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function QuestTowerMirror_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function QuestTowerMirror_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestTowerMirror_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerMirror_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestTowerMirror_toPropertyKey(descriptor.key), descriptor);}}function QuestTowerMirror_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerMirror_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerMirror_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerMirror_defineProperty(obj, key, value) {key = QuestTowerMirror_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestTowerMirror_toPropertyKey(arg) {var key = QuestTowerMirror_toPrimitive(arg, "string");return QuestTowerMirror_typeof(key) === "symbol" ? key : String(key);}function QuestTowerMirror_toPrimitive(input, hint) {if (QuestTowerMirror_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestTowerMirror_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
+function QuestTowerMirror_typeof(obj) {"@babel/helpers - typeof";return QuestTowerMirror_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, QuestTowerMirror_typeof(obj);}function QuestTowerMirror_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = QuestTowerMirror_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function QuestTowerMirror_slicedToArray(arr, i) {return QuestTowerMirror_arrayWithHoles(arr) || QuestTowerMirror_iterableToArrayLimit(arr, i) || QuestTowerMirror_unsupportedIterableToArray(arr, i) || QuestTowerMirror_nonIterableRest();}function QuestTowerMirror_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function QuestTowerMirror_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return QuestTowerMirror_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return QuestTowerMirror_arrayLikeToArray(o, minLen);}function QuestTowerMirror_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function QuestTowerMirror_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function QuestTowerMirror_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function QuestTowerMirror_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function QuestTowerMirror_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, QuestTowerMirror_toPropertyKey(descriptor.key), descriptor);}}function QuestTowerMirror_createClass(Constructor, protoProps, staticProps) {if (protoProps) QuestTowerMirror_defineProperties(Constructor.prototype, protoProps);if (staticProps) QuestTowerMirror_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function QuestTowerMirror_inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });Object.defineProperty(subClass, "prototype", { writable: false });if (superClass) QuestTowerMirror_setPrototypeOf(subClass, superClass);}function QuestTowerMirror_setPrototypeOf(o, p) {QuestTowerMirror_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return QuestTowerMirror_setPrototypeOf(o, p);}function QuestTowerMirror_createSuper(Derived) {var hasNativeReflectConstruct = QuestTowerMirror_isNativeReflectConstruct();return function _createSuperInternal() {var Super = QuestTowerMirror_getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = QuestTowerMirror_getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return QuestTowerMirror_possibleConstructorReturn(this, result);};}function QuestTowerMirror_possibleConstructorReturn(self, call) {if (call && (QuestTowerMirror_typeof(call) === "object" || typeof call === "function")) {return call;} else if (call !== void 0) {throw new TypeError("Derived constructors may only return object or undefined");}return QuestTowerMirror_assertThisInitialized(self);}function QuestTowerMirror_assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function QuestTowerMirror_isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));return true;} catch (e) {return false;}}function QuestTowerMirror_getPrototypeOf(o) {QuestTowerMirror_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return QuestTowerMirror_getPrototypeOf(o);}function QuestTowerMirror_defineProperty(obj, key, value) {key = QuestTowerMirror_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function QuestTowerMirror_toPropertyKey(arg) {var key = QuestTowerMirror_toPrimitive(arg, "string");return QuestTowerMirror_typeof(key) === "symbol" ? key : String(key);}function QuestTowerMirror_toPrimitive(input, hint) {if (QuestTowerMirror_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (QuestTowerMirror_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 
 
 
@@ -16494,14 +16498,16 @@ function QuestTowerMirror_typeof(obj) {"@babel/helpers - typeof";return QuestTow
 
 
 
-var QuestTowerMirror = /*#__PURE__*/function () {function QuestTowerMirror() {QuestTowerMirror_classCallCheck(this, QuestTowerMirror);QuestTowerMirror_defineProperty(this, "wand",
-    external_kolmafia_.Item.get(" Wand of Nagamar"));QuestTowerMirror_defineProperty(this, "lW",
-    external_kolmafia_.Item.get("ruby W"));QuestTowerMirror_defineProperty(this, "lA",
-    external_kolmafia_.Item.get("metallic A"));QuestTowerMirror_defineProperty(this, "lN",
-    external_kolmafia_.Item.get("lowercase N"));QuestTowerMirror_defineProperty(this, "lD",
-    external_kolmafia_.Item.get("heavy D"));QuestTowerMirror_defineProperty(this, "wa",
-    external_kolmafia_.Item.get("WA"));QuestTowerMirror_defineProperty(this, "nd",
-    external_kolmafia_.Item.get("ND"));QuestTowerMirror_defineProperty(this, "locations",
+
+
+var QuestTowerMirror = /*#__PURE__*/function (_TaskInfo) {QuestTowerMirror_inherits(QuestTowerMirror, _TaskInfo);var _super = QuestTowerMirror_createSuper(QuestTowerMirror);function QuestTowerMirror() {var _this;QuestTowerMirror_classCallCheck(this, QuestTowerMirror);for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}_this = _super.call.apply(_super, [this].concat(args));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "wand",
+    external_kolmafia_.Item.get(" Wand of Nagamar"));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "lW",
+    external_kolmafia_.Item.get("ruby W"));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "lA",
+    external_kolmafia_.Item.get("metallic A"));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "lN",
+    external_kolmafia_.Item.get("lowercase N"));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "lD",
+    external_kolmafia_.Item.get("heavy D"));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "wa",
+    external_kolmafia_.Item.get("WA"));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "nd",
+    external_kolmafia_.Item.get("ND"));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "locations",
     [
     ["Ruby W", "W imp", "Pandamonium Slums"],
     ["Metallic A", "MagiMechTech MechaMech", "The Penultimate Fantasy Airship"],
@@ -16511,8 +16517,17 @@ var QuestTowerMirror = /*#__PURE__*/function () {function QuestTowerMirror() {Qu
     "Alphabet Giant",
     "The Castle in the Clouds in the Sky (Basement)"]].
 
-    map(function (s) {return [external_kolmafia_.Item.get(s[0]), external_kolmafia_.Monster.get(s[1]), external_kolmafia_.Location.get(s[2])];}));QuestTowerMirror_defineProperty(this, "clover",
-    external_kolmafia_.Item.get("11-leaf Clover"));}QuestTowerMirror_createClass(QuestTowerMirror, [{ key: "getId", value:
+    map(function (s) {return [external_kolmafia_.Item.get(s[0]), external_kolmafia_.Monster.get(s[1]), external_kolmafia_.Location.get(s[2])];}));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "clover",
+    external_kolmafia_.Item.get("11-leaf Clover"));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "paths", void 0);return _this;}QuestTowerMirror_createClass(QuestTowerMirror, [{ key: "createPossiblePaths", value:
+
+
+    function createPossiblePaths() {
+      this.paths = [new PossiblePath(1).add(ResourceCategory.CLOVER)];
+    } }, { key: "getPossiblePaths", value:
+
+    function getPossiblePaths() {
+      return this.paths;
+    } }, { key: "getId", value:
 
     function getId() {
       return "Council / Tower / Mirror";
@@ -16536,11 +16551,11 @@ var QuestTowerMirror = /*#__PURE__*/function () {function QuestTowerMirror() {Qu
       return QuestStatus.READY;
     } }, { key: "tryClover", value:
 
-    function tryClover() {var _this = this;
+    function tryClover() {var _this2 = this;
       return {
         location: null,
         run: function run() {
-          (0,external_kolmafia_.use)(_this.clover);
+          (0,external_kolmafia_.use)(_this2.clover);
           greyAdv(external_kolmafia_.Location.get("The Castle in the Clouds in the Sky (Basement)"));
         }
       };
@@ -16570,7 +16585,7 @@ var QuestTowerMirror = /*#__PURE__*/function () {function QuestTowerMirror() {Qu
       };
     } }, { key: "createWand", value:
 
-    function createWand() {var _this2 = this;
+    function createWand() {var _this3 = this;
       var toGrab = this.locations.filter(function (_ref) {var _ref2 = QuestTowerMirror_slicedToArray(_ref, 1),i = _ref2[0];return (0,external_kolmafia_.availableAmount)(i) == 0;});
 
       if (
@@ -16578,8 +16593,8 @@ var QuestTowerMirror = /*#__PURE__*/function () {function QuestTowerMirror() {Qu
       GreySettings_GreySettings.isHardcoreMode() || (0,external_kolmafia_.pullsRemaining)() != -1))
       {var _iterator = QuestTowerMirror_createForOfIteratorHelper(
           toGrab),_step;try {var _loop = function _loop() {var _step$value = QuestTowerMirror_slicedToArray(_step.value, 3),monster = _step$value[1],loc = _step$value[2];
-            if ((0,external_kolmafia_.availableAmount)(_this2.clover) > 0) {return { v:
-                _this2.tryClover() };
+            if ((0,external_kolmafia_.availableAmount)(_this3.clover) > 0) {return { v:
+                _this3.tryClover() };
             }
 
             var outfit = new GreyOutfit().setItemDrops();return { v:
@@ -16601,7 +16616,7 @@ var QuestTowerMirror = /*#__PURE__*/function () {function QuestTowerMirror() {Qu
         location: null,
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: function run() {
-          (0,external_kolmafia_.retrieveItem)(_this2.wand);
+          (0,external_kolmafia_.retrieveItem)(_this3.wand);
         }
       };
     } }, { key: "getLocations", value:
@@ -16612,7 +16627,7 @@ var QuestTowerMirror = /*#__PURE__*/function () {function QuestTowerMirror() {Qu
 
     function canAcceptPrimes() {
       return false;
-    } }]);return QuestTowerMirror;}();
+    } }]);return QuestTowerMirror;}(TaskInfo);
 ;// CONCATENATED MODULE: ./src/typings/TaskManager.ts
 function TaskManager_typeof(obj) {"@babel/helpers - typeof";return TaskManager_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, TaskManager_typeof(obj);}function TaskManager_toConsumableArray(arr) {return TaskManager_arrayWithoutHoles(arr) || TaskManager_iterableToArray(arr) || TaskManager_unsupportedIterableToArray(arr) || TaskManager_nonIterableSpread();}function TaskManager_nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskManager_iterableToArray(iter) {if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);}function TaskManager_arrayWithoutHoles(arr) {if (Array.isArray(arr)) return TaskManager_arrayLikeToArray(arr);}function TaskManager_slicedToArray(arr, i) {return TaskManager_arrayWithHoles(arr) || TaskManager_iterableToArrayLimit(arr, i) || TaskManager_unsupportedIterableToArray(arr, i) || TaskManager_nonIterableRest();}function TaskManager_nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function TaskManager_iterableToArrayLimit(arr, i) {var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];if (null != _i) {var _s,_e,_x,_r,_arr = [],_n = !0,_d = !1;try {if (_x = (_i = _i.call(arr)).next, 0 === i) {if (Object(_i) !== _i) return;_n = !1;} else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);} catch (err) {_d = !0, _e = err;} finally {try {if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;} finally {if (_d) throw _e;}}return _arr;}}function TaskManager_arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function TaskManager_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = TaskManager_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e2) {throw _e2;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e3) {didErr = true;err = _e3;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function TaskManager_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return TaskManager_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return TaskManager_arrayLikeToArray(o, minLen);}function TaskManager_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function TaskManager_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function TaskManager_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, TaskManager_toPropertyKey(descriptor.key), descriptor);}}function TaskManager_createClass(Constructor, protoProps, staticProps) {if (protoProps) TaskManager_defineProperties(Constructor.prototype, protoProps);if (staticProps) TaskManager_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function TaskManager_defineProperty(obj, key, value) {key = TaskManager_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function TaskManager_toPropertyKey(arg) {var key = TaskManager_toPrimitive(arg, "string");return TaskManager_typeof(key) === "symbol" ? key : String(key);}function TaskManager_toPrimitive(input, hint) {if (TaskManager_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (TaskManager_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);} // The biggest failures are
 // 1. Key sources, we want to get 3 key sources. Some key sources might return more than 1
