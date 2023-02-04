@@ -16514,10 +16514,10 @@ var QuestTowerMirror = /*#__PURE__*/function (_TaskInfo) {QuestTowerMirror_inher
     "The Castle in the Clouds in the Sky (Basement)"]].
 
     map(function (s) {return [external_kolmafia_.Item.get(s[0]), external_kolmafia_.Monster.get(s[1]), external_kolmafia_.Location.get(s[2])];}));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "clover",
-    external_kolmafia_.Item.get("11-leaf Clover"));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "paths", void 0);return _this;}QuestTowerMirror_createClass(QuestTowerMirror, [{ key: "createPossiblePaths", value:
+    external_kolmafia_.Item.get("11-leaf Clover"));QuestTowerMirror_defineProperty(QuestTowerMirror_assertThisInitialized(_this), "paths", void 0);return _this;}QuestTowerMirror_createClass(QuestTowerMirror, [{ key: "createPaths", value:
 
 
-    function createPossiblePaths() {
+    function createPaths() {
       this.paths = [new PossiblePath(1).add(ResourceCategory.CLOVER)];
     } }, { key: "getPossiblePaths", value:
 
