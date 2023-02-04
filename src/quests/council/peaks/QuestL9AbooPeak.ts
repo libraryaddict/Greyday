@@ -13,6 +13,7 @@ import {
   getWorkshed,
   haveEffect,
   Item,
+  lastChoice,
   Location,
   Monster,
   myFamiliar,
@@ -21,6 +22,7 @@ import {
   print,
   toBoolean,
   toInt,
+  turnsPlayed,
   use,
 } from "kolmafia";
 import { AdventureSettings, greyAdv } from "../../../utils/GreyLocations";
@@ -99,7 +101,11 @@ export class ABooHandler implements QuestInfo {
               return false;
             },
 
-            handleChoice: () => {
+            handleChoice: (choice: number) => {
+              if (choice != 611) {
+                return null;
+              }
+
               const dmgTaken = this.damageTaken(turn++);
 
               if (dmgTaken >= myHp() || this.getProgress() <= 0) {
@@ -112,7 +118,17 @@ export class ABooHandler implements QuestInfo {
             },
           });
 
+          const advs = turnsPlayed();
+
           greyAdv(this.loc, null, settings);
+
+          if (lastChoice() != 611 && turnsPlayed() == advs) {
+            print(
+              "I believe we hit a choice we did not expect, we expected 611"
+            );
+
+            greyAdv(this.loc, null, settings);
+          }
         } finally {
           props.resetAll();
         }
