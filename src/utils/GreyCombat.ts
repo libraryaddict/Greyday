@@ -262,7 +262,7 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
       const loop = Skill.get("Infinite Loop");
       let attackSkill: Skill = null;
 
-      if (haveSkill(nano) && (outfit.itemDropWeight >= 2 || myLevel() >= 18)) {
+      if (haveSkill(nano) && (outfit.itemDropWeight >= 1 || myLevel() >= 17)) {
         attackSkill = nano;
       }
 
