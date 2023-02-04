@@ -100,11 +100,11 @@ export class AbsorbsProvider {
     }
 
     const array = [
-      ["Propagation Drive", "20% Item Drops"],
+      //  ["Propagation Drive", "20% Item Drops"],
       ["Overclocking", "Scaling +init"],
       ["Ponzi Apparatus", "Scaling meat%"],
       ["Advanced Exo-Alloy", "100 DA"],
-      ["Subatomic Hardening", "Scaling DR"],
+      //["Subatomic Hardening", "Scaling DR"],
       ["Fluid Dynamics Simulation", "Scaling HP Regen"],
       ["Infinite Loop", "Fast Leveling"],
       ["Gravitational Compression", "Scaling Item Drop"],

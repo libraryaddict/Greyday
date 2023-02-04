@@ -16,14 +16,18 @@ import {
   Skill,
   haveEffect,
   Effect,
+  storageAmount,
 } from "kolmafia";
 import { PropertyManager } from "../../utils/Properties";
 import { greyAdv } from "../../utils/GreyLocations";
 import { GreySettings } from "../../utils/GreySettings";
 import { QuestAdventure, QuestInfo, QuestStatus } from "../Quests";
 import { QuestType } from "../QuestTypes";
+import { PossiblePath, TaskInfo } from "../../typings/TaskInfo";
+import { ResourceCategory } from "../../typings/ResourceTypes";
+import { GreyPulls } from "../../utils/GreyResources";
 
-export class QuestGrabBoatVacation implements QuestInfo {
+export class QuestGrabBoatVacation extends TaskInfo implements QuestInfo {
   junkKey: Item = Item.get("funky junk key");
   boatParts: Item[] = [
     "old claw-foot bathtub",
@@ -31,6 +35,20 @@ export class QuestGrabBoatVacation implements QuestInfo {
     "antique cigar sign",
   ].map((s) => Item.get(s));
   nanovision: Skill = Skill.get("Double Nanovision");
+  paths: PossiblePath[];
+  scrip = Item.get("Shore Inc. Ship Trip Scrip");
+
+  createPaths(): void {
+    this.paths = [new PossiblePath(9)];
+
+    if (storageAmount(this.scrip) > 0) {
+      this.paths.push(new PossiblePath(6).addPull(this.scrip));
+    }
+  }
+
+  getPossiblePaths(): PossiblePath[] {
+    return this.paths;
+  }
 
   getId(): QuestType {
     return "Boat / Vacation";
@@ -88,7 +106,7 @@ export class QuestGrabBoatVacation implements QuestInfo {
     };
   }
 
-  run(): QuestAdventure {
+  run(path: PossiblePath): QuestAdventure {
     if (getProperty("questM19Hippy") == "unstarted") {
       return this.doHippyJunk();
     }
@@ -96,9 +114,11 @@ export class QuestGrabBoatVacation implements QuestInfo {
     return {
       location: null,
       run: () => {
-        const scriptAvailable = availableAmount(
-          Item.get("Shore Inc. Ship Trip Scrip")
-        );
+        if (path.canUse(ResourceCategory.PULL)) {
+          GreyPulls.tryPull(this.scrip);
+        }
+
+        const scriptAvailable = availableAmount(this.scrip);
 
         const props = new PropertyManager();
         props.setChoice(793, 1);
