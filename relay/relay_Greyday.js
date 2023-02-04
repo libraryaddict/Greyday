@@ -6086,7 +6086,7 @@ function greyKillingBlow(outfit) {
       var loop = external_kolmafia_.Skill.get("Infinite Loop");
       var attackSkill = null;
 
-      if ((0,external_kolmafia_.haveSkill)(nano) && (outfit.itemDropWeight >= 2 || (0,external_kolmafia_.myLevel)() >= 18)) {
+      if ((0,external_kolmafia_.haveSkill)(nano) && (outfit.itemDropWeight >= 1 || (0,external_kolmafia_.myLevel)() >= 17)) {
         attackSkill = nano;
       }
 
@@ -9089,7 +9089,7 @@ var QuestL11ShenBats = /*#__PURE__*/function () {function QuestL11ShenBats() {Qu
         outfit: outfit,
         freeRun: function freeRun() {return getQuestStatus("questL04Bat") > 3;},
         run: function run() {
-          greyAdv(_this.location);
+          greyAdv(_this.location, outfit);
         }
       };
     } }, { key: "getLocations", value:
