@@ -8,6 +8,7 @@ import {
   toInt,
 } from "kolmafia";
 import { getQuestStatus } from "../quests/Quests";
+import { GreySettings } from "../utils/GreySettings";
 import {
   getTrainsetConfiguration,
   isTrainsetConfigurable,
@@ -48,7 +49,12 @@ export class TaskTrainset implements Task {
     pieces.push(TrainsetPiece.DOUBLE_NEXT_STATION);
 
     // 2
-    if (!haveSkill(this.mpSkill)) {
+    // If we do not have the MP skill, and we are not using mumming trunk
+    if (
+      !haveSkill(this.mpSkill) &&
+      (!GreySettings.greyUseMummery ||
+        availableAmount(Item.get("mumming trunk")) == 0)
+    ) {
       pieces.push(TrainsetPiece.EFFECT_MP);
     }
 
@@ -85,6 +91,10 @@ export class TaskTrainset implements Task {
     pieces.push(TrainsetPiece.CANDY);
 
     // And the extras
+
+    if (!pieces.includes(TrainsetPiece.EFFECT_MP) && !haveSkill(this.mpSkill)) {
+      pieces.push(TrainsetPiece.EFFECT_MP);
+    }
 
     // If kitchen isn't done.
     if (getQuestStatus("questM20Necklace") == 0) {
