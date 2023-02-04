@@ -22961,7 +22961,11 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
                 return false;
               },
 
-              handleChoice: function handleChoice() {
+              handleChoice: function handleChoice(choice) {
+                if (choice != 611) {
+                  return null;
+                }
+
                 var dmgTaken = _this.damageTaken(turn++);
 
                 if (dmgTaken >= (0,external_kolmafia_.myHp)() || _this.getProgress() <= 0) {
@@ -22974,7 +22978,17 @@ var ABooHandler = /*#__PURE__*/function () {function ABooHandler() {QuestL9AbooP
               }
             });
 
+            var advs = (0,external_kolmafia_.turnsPlayed)();
+
             greyAdv(_this.loc, null, settings);
+
+            if ((0,external_kolmafia_.lastChoice)() != 611 && (0,external_kolmafia_.turnsPlayed)() == advs) {
+              (0,external_kolmafia_.print)(
+              "I believe we hit a choice we did not expect, we expected 611");
+
+
+              greyAdv(_this.loc, null, settings);
+            }
           } finally {
             props.resetAll();
           }
