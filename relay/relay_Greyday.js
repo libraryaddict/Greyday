@@ -32233,6 +32233,7 @@ function TaskTrainset_typeof(obj) {"@babel/helpers - typeof";return TaskTrainset
 
 
 
+
 var TaskTrainset = /*#__PURE__*/function () {function TaskTrainset() {TaskTrainset_classCallCheck(this, TaskTrainset);TaskTrainset_defineProperty(this, "mpSkill",
     external_kolmafia_.Skill.get("Hivemindedness"));}TaskTrainset_createClass(TaskTrainset, [{ key: "run", value:
 
@@ -32265,7 +32266,12 @@ var TaskTrainset = /*#__PURE__*/function () {function TaskTrainset() {TaskTrains
       pieces.push(TrainsetPiece.DOUBLE_NEXT_STATION);
 
       // 2
-      if (!(0,external_kolmafia_.haveSkill)(this.mpSkill)) {
+      // If we do not have the MP skill, and we are not using mumming trunk
+      if (
+      !(0,external_kolmafia_.haveSkill)(this.mpSkill) && (
+      !GreySettings_GreySettings.greyUseMummery ||
+      (0,external_kolmafia_.availableAmount)(external_kolmafia_.Item.get("mumming trunk")) == 0))
+      {
         pieces.push(TrainsetPiece.EFFECT_MP);
       }
 
@@ -32302,6 +32308,10 @@ var TaskTrainset = /*#__PURE__*/function () {function TaskTrainset() {TaskTrains
       pieces.push(TrainsetPiece.CANDY);
 
       // And the extras
+
+      if (!pieces.includes(TrainsetPiece.EFFECT_MP) && !(0,external_kolmafia_.haveSkill)(this.mpSkill)) {
+        pieces.push(TrainsetPiece.EFFECT_MP);
+      }
 
       // If kitchen isn't done.
       if (getQuestStatus("questM20Necklace") == 0) {
