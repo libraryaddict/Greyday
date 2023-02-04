@@ -2,6 +2,7 @@ import {
   availableAmount,
   Familiar,
   familiarWeight,
+  getProperty,
   haveSkill,
   Item,
   myAdventures,
@@ -10,6 +11,8 @@ import {
   myMeat,
   myMp,
   Skill,
+  toInt,
+  totalTurnsPlayed,
 } from "kolmafia";
 import {
   DelayBurners,
@@ -27,9 +30,10 @@ interface MaximizerWeight {
 }
 
 const goose = Familiar.get("Grey Goose");
+const ghostCape = Item.get("protonic accelerator pack");
 
 export class GreyOutfit {
-  static IGNORE_OUTFIT: any = "Ignore Outfit";
+  static IGNORE_OUTFIT: unknown = "Ignore Outfit";
   private allowChampBottle: boolean = false;
   private static teachersPen: Item = Item.get("Teacher's Pen");
   private static leafPendant: Item = Item.get("Autumn leaf pendant");
@@ -150,7 +154,15 @@ export class GreyOutfit {
     ) {
       this.famExpWeight = 100;
     }
+
     // Setup weights according to w/e passives I have
+    if (
+      availableAmount(ghostCape) > 0 &&
+      getProperty("ghostLocation") == "" &&
+      toInt(getProperty("nextParanormalActivity")) <= totalTurnsPlayed()
+    ) {
+      this.addWeight(ghostCape, 2);
+    }
   }
 
   addDelayer(
