@@ -18125,7 +18125,8 @@ var PixelZones = [
 
 var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {QuestDigitalKey_classCallCheck(this, QuestDigitalKey);QuestDigitalKey_defineProperty(this, "transfomer",
     external_kolmafia_.Item.get("continuum transfunctioner"));QuestDigitalKey_defineProperty(this, "key",
-    external_kolmafia_.Item.get("Digital key"));QuestDigitalKey_defineProperty(this, "currentZone", void 0);QuestDigitalKey_defineProperty(this, "favorZone", void 0);QuestDigitalKey_defineProperty(this, "zoneCalcedAt",
+    external_kolmafia_.Item.get("Digital key"));QuestDigitalKey_defineProperty(this, "currentZone", void 0);QuestDigitalKey_defineProperty(this, "favorZone", void 0);QuestDigitalKey_defineProperty(this, "zoneScore", void 0);QuestDigitalKey_defineProperty(this, "zoneCalcedAt",
+
 
 
     0);QuestDigitalKey_defineProperty(this, "totMeatItem",
@@ -18197,6 +18198,7 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       });
 
       this.favorZone = sortedZones[0];
+      this.zoneScore = zones.get(this.favorZone);
 
       (0,external_kolmafia_.printHtml)("Pixel Realm Scores: ".concat(
       sortedZones.
@@ -18232,6 +18234,10 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
       }
 
       var status = getQuestStatus("questL13Final");
+
+      if (this.getViableDelayBurners().length > 0 && this.zoneScore >= 390) {
+        return QuestStatus.READY;
+      }
 
       if (status < 0) {
         return QuestStatus.FASTER_LATER;
