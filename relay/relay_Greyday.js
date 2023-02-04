@@ -26400,6 +26400,14 @@ var QuestInitialPulls = /*#__PURE__*/function (_TaskInfo) {QuestInitialPulls_inh
           if (failedPulls.length > 0) {
             throw "Failed to pull the items " + failedPulls.join(", ");
           }
+
+          if (path.canUse(ResourceCategory.PULL)) {
+            throw (
+              "Expected to have no pulls remaining, but it wants to pull " +
+              path.canUse(ResourceCategory.PULL) +
+              " more");
+
+          }
         }
       };
     } }, { key: "mustBeDone", value:
