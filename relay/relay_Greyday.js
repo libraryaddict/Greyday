@@ -30734,6 +30734,14 @@ var AdventureFinder = /*#__PURE__*/function () {
       split("").
       filter(function (s) {return s == "i";}).length > 4;
 
+      var pullsAdv = this.possibleAdventures.find(
+      function (p) {return p.quest != null && p.quest.getId() == "Misc / Initial Pulls";});
+
+
+      if (pullsAdv != null) {
+        return pullsAdv;
+      }
+
       this.possibleAdventures.sort(function (a1, a2) {var _a1$quest, _a2$quest, _a1$quest2, _a2$quest2;
         if (a1.considerPriority != a2.considerPriority) {
           return a1.considerPriority - a2.considerPriority;
