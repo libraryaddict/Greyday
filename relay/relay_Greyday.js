@@ -26386,7 +26386,8 @@ var QuestInitialPulls = /*#__PURE__*/function (_TaskInfo) {QuestInitialPulls_inh
         outfit: GreyOutfit.IGNORE_OUTFIT,
         run: function run() {
           (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose")); // Force it to be leveled up if we happen to have short order cook
-          var _iterator2 = QuestInitialPulls_createForOfIteratorHelper(
+          var pulled = (0,external_kolmafia_.pullsRemaining)();var _iterator2 = QuestInitialPulls_createForOfIteratorHelper(
+
             path.pulls),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var item = _step2.value;
               if (hasPulled(item)) {
                 continue;
@@ -26395,18 +26396,19 @@ var QuestInitialPulls = /*#__PURE__*/function (_TaskInfo) {QuestInitialPulls_inh
               GreyPulls.tryPull(item, 25000);
             }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
 
+          var pulledAfter = (0,external_kolmafia_.pullsRemaining)();
+          var pulledDiff = pulled - pulledAfter;
+
           var failedPulls = path.pulls.filter(function (i) {return (0,external_kolmafia_.itemAmount)(i) == 0;});
 
           if (failedPulls.length > 0) {
             throw "Failed to pull the items " + failedPulls.join(", ");
           }
 
-          if (path.canUse(ResourceCategory.PULL)) {
-            throw (
-              "Expected to have no pulls remaining, but it wants to pull " +
-              path.canUse(ResourceCategory.PULL) +
-              " more");
-
+          if (path.canUse(ResourceCategory.PULL) != pulledDiff) {
+            throw "Expected to use ".concat(path.canUse(
+            ResourceCategory.PULL), ", but we used ").concat(
+            pulledDiff, ". Throwing error to avoid infinite looping this task");
           }
         }
       };
