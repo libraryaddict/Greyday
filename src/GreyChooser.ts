@@ -998,6 +998,14 @@ export class AdventureFinder {
         .split("")
         .filter((s) => s == "i").length > 4;
 
+    const pullsAdv = this.possibleAdventures.find(
+      (p) => p.quest != null && p.quest.getId() == "Misc / Initial Pulls"
+    );
+
+    if (pullsAdv != null) {
+      return pullsAdv;
+    }
+
     this.possibleAdventures.sort((a1, a2) => {
       if (a1.considerPriority != a2.considerPriority) {
         return a1.considerPriority - a2.considerPriority;
