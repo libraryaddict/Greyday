@@ -285,6 +285,10 @@ export function greyKillingBlow(outfit: GreyOutfit): Macro {
         attackSkill = nano;
       }
 
+      if (attackSkill == null) {
+        attackSkill = haveSkill(nano) ? nano : haveSkill(loop) ? loop : null;
+      }
+
       if (attackSkill != null) {
         macro.trySkill(attackSkill);
 

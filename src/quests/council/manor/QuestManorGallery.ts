@@ -1,9 +1,11 @@
 import {
   availableAmount,
+  Familiar,
   getProperty,
   Item,
   Location,
   Monster,
+  useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
@@ -95,6 +97,10 @@ export class ManorGallery implements QuestInfo {
 
         if (isGhostBustingTime(this.location)) {
           settings.setStartOfFightMacro(getGhostBustingMacro());
+        }
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
         }
 
         /* if (availableAmount(this.sword) == 0) {

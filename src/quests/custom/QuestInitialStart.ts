@@ -126,6 +126,18 @@ export class QuestInitialStart extends TaskInfo implements QuestInfo {
         }
 
         if (
+          availableAmount(Item.get("S.I.T. Course Completion Certificate")) >
+            0 &&
+          !toBoolean(getProperty("_sitCourseCompleted"))
+        ) {
+          try {
+            visitUrl("inv_use.php?pwd&which=99&whichitem=11116");
+          } catch (e) {}
+
+          runChoice(2);
+        }
+
+        if (
           getProperty("telegraphOfficeAvailable") == "true" &&
           availableAmount(Item.get("Your cowboy boots")) == 0
         ) {

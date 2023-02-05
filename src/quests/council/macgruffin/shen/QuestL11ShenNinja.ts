@@ -1,5 +1,8 @@
-import { Location, Monster } from "kolmafia";
-import { DelayCriteria } from "../../../../iotms/delayburners/DelayBurners";
+import { Familiar, Location, Monster, useFamiliar } from "kolmafia";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
@@ -55,6 +58,10 @@ export class QuestL11ShenNinja implements QuestInfo {
       outfit: outfit,
       freeRun: (monster) => monster != this.assassin,
       run: () => {
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
+        }
+
         greyAdv(this.location, outfit);
       },
     };

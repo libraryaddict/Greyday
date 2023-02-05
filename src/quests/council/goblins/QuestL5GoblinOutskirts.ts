@@ -1,4 +1,12 @@
-import { availableAmount, Item, itemAmount, Location, use } from "kolmafia";
+import {
+  availableAmount,
+  Familiar,
+  Item,
+  itemAmount,
+  Location,
+  use,
+  useFamiliar,
+} from "kolmafia";
 import {
   DelayBurners,
   DelayCriteria,
@@ -94,8 +102,12 @@ export class QuestL5GoblinOutskirts implements QuestInfo {
           props.setChoice(111, 3);
           props.setChoice(118, 2);
 
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            useFamiliar(Familiar.get("Grey Goose"));
+          }
+
           try {
-            greyAdv(this.location);
+            greyAdv(this.location, outfit);
           } finally {
             props.resetAll();
           }

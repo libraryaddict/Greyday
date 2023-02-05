@@ -9,6 +9,8 @@ import {
   equip,
   print,
   Monster,
+  Familiar,
+  useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -20,6 +22,7 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 
 export class QuestL10GiantBasement implements QuestInfo {
   amulet: Item = Item.get("Amulet of Extreme Plot Significance");
@@ -54,6 +57,10 @@ export class QuestL10GiantBasement implements QuestInfo {
       freeRun: (monster) =>
         monster == this.alphaGiant && itemAmount(this.letterD) == 0,
       run: () => {
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
+        }
+
         const turnsSpent = turnsPlayed();
         this.runAdv(outfit);
 

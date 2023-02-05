@@ -5,8 +5,13 @@ import {
   toInt,
   Item,
   Monster,
+  Familiar,
+  useFamiliar,
 } from "kolmafia";
-import { DelayCriteria } from "../../../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../../iotms/delayburners/DelayBurners";
 import { greyAdv } from "../../../../utils/GreyLocations";
 import { GreyOutfit } from "../../../../utils/GreyOutfitter";
 import {
@@ -90,6 +95,10 @@ export class QuestL11PyramidTop implements QuestInfo {
       outfit: outfit,
       freeRun: () => true,
       run: () => {
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
+        }
+
         greyAdv(this.topLoc, outfit);
       },
     };

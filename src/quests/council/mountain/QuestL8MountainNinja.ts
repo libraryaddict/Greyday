@@ -10,6 +10,8 @@ import {
   Monster,
   myEffects,
   toEffect,
+  Familiar,
+  useFamiliar,
 } from "kolmafia";
 import {
   hasCombatSkillReady,
@@ -34,7 +36,10 @@ import { QuestType } from "../../QuestTypes";
 import { MountainStatus } from "../QuestL8IcePeak";
 import { GreyPulls } from "../../../utils/GreyResources";
 import { AdventureFinder } from "../../../GreyChooser";
-import { DelayCriteria } from "../../../iotms/delayburners/DelayBurners";
+import {
+  DelayBurners,
+  DelayCriteria,
+} from "../../../iotms/delayburners/DelayBurners";
 
 export class QuestL8MountainNinja extends TaskInfo implements QuestInfo {
   ninja: Location = Location.get("Lair of the Ninja Snowmen");
@@ -263,6 +268,10 @@ export class QuestL8MountainNinja extends TaskInfo implements QuestInfo {
       freeRun: (monster) => monster != this.assassin,
       run: () => {
         restoreHPTo(70);
+
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
+        }
 
         greyAdv(this.ninja, outfit);
       },

@@ -14,6 +14,9 @@ import {
   numericModifier,
   printHtml,
   Familiar,
+  Skill,
+  haveSkill,
+  useFamiliar,
 } from "kolmafia";
 import { DelayBurner } from "../../../../iotms/delayburners/DelayBurnerAbstract";
 import {
@@ -76,6 +79,7 @@ export class QuestDigitalKey implements QuestInfo {
   totMeatItem = Item.get("li'l pirate costume");
   totItemItem = Item.get("li'l ninja costume");
   tot: Familiar = Familiar.get("Trick-or-Treating Tot");
+  nanovision: Skill = Skill.get("Double Nanovision");
 
   level(): number {
     return 4;
@@ -92,7 +96,11 @@ export class QuestDigitalKey implements QuestInfo {
     );
 
     let score =
-      Math.min(zone.capped, numericModifier("Generated:_spec", zone.maximize)) -
+      Math.min(
+        zone.capped,
+        numericModifier("Generated:_spec", zone.maximize) +
+          (zone.maximize == "Item Drop" && haveSkill(this.nanovision) ? 200 : 0)
+      ) -
       (zone.capped - 300);
 
     if (this.currentZone != zone) {
@@ -231,7 +239,17 @@ export class QuestDigitalKey implements QuestInfo {
 
     const outfit = new GreyOutfit();
     outfit.addWeight(this.transfomer);
-    outfit.addWeight(zone.maximize, 5, null, zone.capped);
+    outfit.addWeight(
+      zone.maximize,
+      5,
+      null,
+      zone.capped -
+        (zone.maximize == "Item Drop" && haveSkill(this.nanovision) ? 200 : 0)
+    );
+
+    if (zone.maximize == "Item Drop") {
+      outfit.setItemDrops();
+    }
 
     const delayers = this.getViableDelayBurners();
 
@@ -260,6 +278,10 @@ export class QuestDigitalKey implements QuestInfo {
       familiar: fam,
       disableFamOverride: fam != null,
       run: () => {
+        if (fam == null && DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
+        }
+
         greyAdv(zone.loc, outfit);
       },
     };

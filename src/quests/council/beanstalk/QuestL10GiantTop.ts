@@ -7,6 +7,8 @@ import {
   lastChoice,
   getProperty,
   Monster,
+  Familiar,
+  useFamiliar,
 } from "kolmafia";
 import { PropertyManager } from "../../../utils/Properties";
 import { greyAdv } from "../../../utils/GreyLocations";
@@ -18,6 +20,7 @@ import {
   QuestStatus,
 } from "../../Quests";
 import { QuestType } from "../../QuestTypes";
+import { DelayBurners } from "../../../iotms/delayburners/DelayBurners";
 
 export class QuestL10GiantTop implements QuestInfo {
   modelAirShip: Item = Item.get("Model airship");
@@ -54,6 +57,10 @@ export class QuestL10GiantTop implements QuestInfo {
       outfit: outfit,
       freeRun: (monster) => true,
       run: () => {
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
+        }
+
         const props = new PropertyManager();
 
         try {

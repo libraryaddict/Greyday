@@ -6,11 +6,15 @@ import {
   equip,
   Item,
   Slot,
+  Familiar,
+  familiarWeight,
+  myAdventures,
 } from "kolmafia";
 import { DelayBurner } from "./DelayBurnerAbstract";
 
 export class DelayBurningKramco implements DelayBurner {
   kramco: Item = Item.get("Kramco Sausage-o-Matic");
+  goose: Familiar = Familiar.get("Grey Goose");
 
   getFightSetup(): Item[] {
     return [this.kramco];
@@ -39,6 +43,10 @@ export class DelayBurningKramco implements DelayBurner {
   }
 
   readyIn(): number {
+    if (familiarWeight(this.goose) < 6 && myAdventures() >= 80) {
+      return Math.max(7, this.getNextGuaranteedFight());
+    }
+
     return this.getNextGuaranteedFight();
   }
 
@@ -54,6 +62,7 @@ export class DelayBurningKramco implements DelayBurner {
 
   getNextGuaranteedGoblin(): number {
     const goblinsFought = this.getGoblinsFought();
+
     return (
       4 +
       goblinsFought * 3 +
@@ -79,6 +88,10 @@ export class DelayBurningKramco implements DelayBurner {
   }
 
   getChanceOfFight(): number {
+    if (familiarWeight(this.goose) < 6 && myAdventures() >= 80) {
+      return 0;
+    }
+
     let chance =
       (this.getLastGoblinTurn() + 1.0) /
       ((5.0 + this.getGoblinsFought()) * 3.0 +

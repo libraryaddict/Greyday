@@ -11,6 +11,7 @@ import {
   outfit,
   Stat,
   toInt,
+  useFamiliar,
   visitUrl,
 } from "kolmafia";
 import { hasNonCombatSkillsReady } from "../../../GreyAdventurer";
@@ -160,6 +161,10 @@ export class QuestL12StartWar extends TaskInfo implements QuestInfo {
       outfit: outfit,
       freeRun: () => true,
       run: () => {
+        if (DelayBurners.isTryingForDupeableGoblin()) {
+          useFamiliar(Familiar.get("Grey Goose"));
+        }
+
         const props = new PropertyManager();
         props.setChoice(139, 3);
         props.setChoice(140, 3);
