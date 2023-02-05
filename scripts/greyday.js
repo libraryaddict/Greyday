@@ -2338,6 +2338,10 @@ function greyKillingBlow(outfit) {
         attackSkill = nano;
       }
 
+      if (attackSkill == null) {
+        attackSkill = (0,external_kolmafia_namespaceObject.haveSkill)(nano) ? nano : (0,external_kolmafia_namespaceObject.haveSkill)(loop) ? loop : null;
+      }
+
       if (attackSkill != null) {
         macro.trySkill(attackSkill);
 
@@ -2373,7 +2377,8 @@ function DelayBurningKramco_typeof(obj) {"@babel/helpers - typeof";return DelayB
 
 
 var DelayBurningKramco = /*#__PURE__*/function () {function DelayBurningKramco() {DelayBurningKramco_classCallCheck(this, DelayBurningKramco);DelayBurningKramco_defineProperty(this, "kramco",
-    external_kolmafia_namespaceObject.Item.get("Kramco Sausage-o-Matic"));}DelayBurningKramco_createClass(DelayBurningKramco, [{ key: "getFightSetup", value:
+    external_kolmafia_namespaceObject.Item.get("Kramco Sausage-o-Matic"));DelayBurningKramco_defineProperty(this, "goose",
+    external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));}DelayBurningKramco_createClass(DelayBurningKramco, [{ key: "getFightSetup", value:
 
     function getFightSetup() {
       return [this.kramco];
@@ -2402,6 +2407,10 @@ var DelayBurningKramco = /*#__PURE__*/function () {function DelayBurningKramco()
     } }, { key: "readyIn", value:
 
     function readyIn() {
+      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) < 6 && (0,external_kolmafia_namespaceObject.myAdventures)() >= 80) {
+        return Math.max(7, this.getNextGuaranteedFight());
+      }
+
       return this.getNextGuaranteedFight();
     } }, { key: "doSetup", value:
 
@@ -2417,6 +2426,7 @@ var DelayBurningKramco = /*#__PURE__*/function () {function DelayBurningKramco()
 
     function getNextGuaranteedGoblin() {
       var goblinsFought = this.getGoblinsFought();
+
       return (
         4 +
         goblinsFought * 3 +
@@ -2442,6 +2452,10 @@ var DelayBurningKramco = /*#__PURE__*/function () {function DelayBurningKramco()
     } }, { key: "getChanceOfFight", value:
 
     function getChanceOfFight() {
+      if ((0,external_kolmafia_namespaceObject.familiarWeight)(this.goose) < 6 && (0,external_kolmafia_namespaceObject.myAdventures)() >= 80) {
+        return 0;
+      }
+
       var chance =
       (this.getLastGoblinTurn() + 1.0) / (
       (5.0 + this.getGoblinsFought()) * 3.0 +
@@ -7368,6 +7382,7 @@ function QuestL10GiantBasement_typeof(obj) {"@babel/helpers - typeof";return Que
 
 
 
+
 var QuestL10GiantBasement = /*#__PURE__*/function () {
 
 
@@ -7401,6 +7416,10 @@ var QuestL10GiantBasement = /*#__PURE__*/function () {
         freeRun: function freeRun(monster) {return (
             monster == _this.alphaGiant && (0,external_kolmafia_namespaceObject.itemAmount)(_this.letterD) == 0);},
         run: function run() {
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
+
           var turnsSpent = (0,external_kolmafia_namespaceObject.turnsPlayed)();
           _this.runAdv(outfit);
 
@@ -7500,6 +7519,7 @@ function QuestL10GiantTop_typeof(obj) {"@babel/helpers - typeof";return QuestL10
 
 
 
+
 var QuestL10GiantTop = /*#__PURE__*/function () {function QuestL10GiantTop() {QuestL10GiantTop_classCallCheck(this, QuestL10GiantTop);QuestL10GiantTop_defineProperty(this, "modelAirShip",
     external_kolmafia_namespaceObject.Item.get("Model airship"));QuestL10GiantTop_defineProperty(this, "wig",
     external_kolmafia_namespaceObject.Item.get("Mohawk Wig"));QuestL10GiantTop_defineProperty(this, "record",
@@ -7535,6 +7555,10 @@ var QuestL10GiantTop = /*#__PURE__*/function () {function QuestL10GiantTop() {Qu
         outfit: outfit,
         freeRun: function freeRun(monster) {return true;},
         run: function run() {
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
+
           var props = new PropertyManager();
 
           try {
@@ -10781,6 +10805,10 @@ var QuestL11PyramidTop = /*#__PURE__*/function () {function QuestL11PyramidTop()
         outfit: outfit,
         freeRun: function freeRun() {return true;},
         run: function run() {
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
+
           greyAdv(_this.topLoc, outfit);
         }
       };
@@ -11754,6 +11782,10 @@ var QuestL11ShenNinja = /*#__PURE__*/function () {function QuestL11ShenNinja() {
         outfit: outfit,
         freeRun: function freeRun(monster) {return monster != _this.assassin;},
         run: function run() {
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
+
           greyAdv(_this.location, outfit);
         }
       };
@@ -15317,6 +15349,10 @@ var QuestL12StartWar = /*#__PURE__*/function (_TaskInfo) {QuestL12StartWar_inher
         outfit: outfit,
         freeRun: function freeRun() {return true;},
         run: function run() {
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
+
           var props = new PropertyManager();
           props.setChoice(139, 3);
           props.setChoice(140, 3);
@@ -19238,7 +19274,8 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
     0);QuestDigitalKey_defineProperty(this, "totMeatItem",
     external_kolmafia_namespaceObject.Item.get("li'l pirate costume"));QuestDigitalKey_defineProperty(this, "totItemItem",
     external_kolmafia_namespaceObject.Item.get("li'l ninja costume"));QuestDigitalKey_defineProperty(this, "tot",
-    external_kolmafia_namespaceObject.Familiar.get("Trick-or-Treating Tot"));}QuestDigitalKey_createClass(QuestDigitalKey, [{ key: "level", value:
+    external_kolmafia_namespaceObject.Familiar.get("Trick-or-Treating Tot"));QuestDigitalKey_defineProperty(this, "nanovision",
+    external_kolmafia_namespaceObject.Skill.get("Double Nanovision"));}QuestDigitalKey_createClass(QuestDigitalKey, [{ key: "level", value:
 
     function level() {
       return 4;
@@ -19255,7 +19292,11 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
 
 
       var score =
-      Math.min(zone.capped, (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", zone.maximize)) - (
+      Math.min(
+      zone.capped,
+      (0,external_kolmafia_namespaceObject.numericModifier)("Generated:_spec", zone.maximize) + (
+      zone.maximize == "Item Drop" && (0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision) ? 200 : 0)) - (
+
       zone.capped - 300);
 
       if (this.currentZone != zone) {
@@ -19394,7 +19435,17 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
 
       var outfit = new GreyOutfit();
       outfit.addWeight(this.transfomer);
-      outfit.addWeight(zone.maximize, 5, null, zone.capped);
+      outfit.addWeight(
+      zone.maximize,
+      5,
+      null,
+      zone.capped - (
+      zone.maximize == "Item Drop" && (0,external_kolmafia_namespaceObject.haveSkill)(this.nanovision) ? 200 : 0));
+
+
+      if (zone.maximize == "Item Drop") {
+        outfit.setItemDrops();
+      }
 
       var delayers = this.getViableDelayBurners();
 
@@ -19423,6 +19474,10 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
         familiar: fam,
         disableFamOverride: fam != null,
         run: function run() {
+          if (fam == null && DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
+
           greyAdv(zone.loc, outfit);
         }
       };
@@ -20761,8 +20816,12 @@ var QuestL5GoblinOutskirts = /*#__PURE__*/function () {function QuestL5GoblinOut
             props.setChoice(111, 3);
             props.setChoice(118, 2);
 
+            if (DelayBurners.isTryingForDupeableGoblin()) {
+              (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+            }
+
             try {
-              greyAdv(_this.location);
+              greyAdv(_this.location, outfit);
             } finally {
               props.resetAll();
             }
@@ -22523,6 +22582,10 @@ var QuestL8MountainNinja = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainNin
         freeRun: function freeRun(monster) {return monster != _this2.assassin;},
         run: function run() {
           restoreHPTo(70);
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
 
           greyAdv(_this2.ninja, outfit);
         }
@@ -25357,6 +25420,10 @@ var ManorGallery = /*#__PURE__*/function () {function ManorGallery() {QuestManor
             settings.setStartOfFightMacro(getGhostBustingMacro());
           }
 
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_namespaceObject.useFamiliar)(external_kolmafia_namespaceObject.Familiar.get("Grey Goose"));
+          }
+
           /* if (availableAmount(this.sword) == 0) {
             props.setChoice(89, 2);
           } else*/{
@@ -27663,6 +27730,18 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
           GreySettings.greyCosplaySaber != "")
           {
             (0,external_kolmafia_namespaceObject.cliExecute)("saber " + GreySettings.greyCosplaySaber);
+          }
+
+          if (
+          (0,external_kolmafia_namespaceObject.availableAmount)(external_kolmafia_namespaceObject.Item.get("S.I.T. Course Completion Certificate")) >
+          0 &&
+          !(0,external_kolmafia_namespaceObject.toBoolean)((0,external_kolmafia_namespaceObject.getProperty)("_sitCourseCompleted")))
+          {
+            try {
+              (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?pwd&which=99&whichitem=11116");
+            } catch (e) {}
+
+            (0,external_kolmafia_namespaceObject.runChoice)(2);
           }
 
           if (
@@ -35137,7 +35216,7 @@ var GreyTimings = /*#__PURE__*/function () {function GreyTimings() {GreyTimings_
       return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     } }]);return GreyTimings;}();
 ;// CONCATENATED MODULE: ./src/_git_commit.ts
-var lastCommitHash = "311a9af";
+var lastCommitHash = "1baefd8";
 ;// CONCATENATED MODULE: ./src/GreyYouMain.ts
 function GreyYouMain_typeof(obj) {"@babel/helpers - typeof";return GreyYouMain_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {return typeof obj;} : function (obj) {return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;}, GreyYouMain_typeof(obj);}function GreyYouMain_createForOfIteratorHelper(o, allowArrayLike) {var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];if (!it) {if (Array.isArray(o) || (it = GreyYouMain_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = it.call(o);}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it["return"] != null) it["return"]();} finally {if (didErr) throw err;}} };}function GreyYouMain_unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return GreyYouMain_arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return GreyYouMain_arrayLikeToArray(o, minLen);}function GreyYouMain_arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];return arr2;}function GreyYouMain_classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function GreyYouMain_defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, GreyYouMain_toPropertyKey(descriptor.key), descriptor);}}function GreyYouMain_createClass(Constructor, protoProps, staticProps) {if (protoProps) GreyYouMain_defineProperties(Constructor.prototype, protoProps);if (staticProps) GreyYouMain_defineProperties(Constructor, staticProps);Object.defineProperty(Constructor, "prototype", { writable: false });return Constructor;}function GreyYouMain_defineProperty(obj, key, value) {key = GreyYouMain_toPropertyKey(key);if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function GreyYouMain_toPropertyKey(arg) {var key = GreyYouMain_toPrimitive(arg, "string");return GreyYouMain_typeof(key) === "symbol" ? key : String(key);}function GreyYouMain_toPrimitive(input, hint) {if (GreyYouMain_typeof(input) !== "object" || input === null) return input;var prim = input[Symbol.toPrimitive];if (prim !== undefined) {var res = prim.call(input, hint || "default");if (GreyYouMain_typeof(res) !== "object") return res;throw new TypeError("@@toPrimitive must return a primitive value.");}return (hint === "string" ? String : Number)(input);}
 

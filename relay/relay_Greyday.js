@@ -1044,7 +1044,8 @@ function DelayBurningKramco_typeof(obj) {"@babel/helpers - typeof";return DelayB
 
 
 var DelayBurningKramco = /*#__PURE__*/function () {function DelayBurningKramco() {DelayBurningKramco_classCallCheck(this, DelayBurningKramco);DelayBurningKramco_defineProperty(this, "kramco",
-    external_kolmafia_.Item.get("Kramco Sausage-o-Matic"));}DelayBurningKramco_createClass(DelayBurningKramco, [{ key: "getFightSetup", value:
+    external_kolmafia_.Item.get("Kramco Sausage-o-Matic"));DelayBurningKramco_defineProperty(this, "goose",
+    external_kolmafia_.Familiar.get("Grey Goose"));}DelayBurningKramco_createClass(DelayBurningKramco, [{ key: "getFightSetup", value:
 
     function getFightSetup() {
       return [this.kramco];
@@ -1073,6 +1074,10 @@ var DelayBurningKramco = /*#__PURE__*/function () {function DelayBurningKramco()
     } }, { key: "readyIn", value:
 
     function readyIn() {
+      if ((0,external_kolmafia_.familiarWeight)(this.goose) < 6 && (0,external_kolmafia_.myAdventures)() >= 80) {
+        return Math.max(7, this.getNextGuaranteedFight());
+      }
+
       return this.getNextGuaranteedFight();
     } }, { key: "doSetup", value:
 
@@ -1088,6 +1093,7 @@ var DelayBurningKramco = /*#__PURE__*/function () {function DelayBurningKramco()
 
     function getNextGuaranteedGoblin() {
       var goblinsFought = this.getGoblinsFought();
+
       return (
         4 +
         goblinsFought * 3 +
@@ -1113,6 +1119,10 @@ var DelayBurningKramco = /*#__PURE__*/function () {function DelayBurningKramco()
     } }, { key: "getChanceOfFight", value:
 
     function getChanceOfFight() {
+      if ((0,external_kolmafia_.familiarWeight)(this.goose) < 6 && (0,external_kolmafia_.myAdventures)() >= 80) {
+        return 0;
+      }
+
       var chance =
       (this.getLastGoblinTurn() + 1.0) / (
       (5.0 + this.getGoblinsFought()) * 3.0 +
@@ -3009,6 +3019,7 @@ function QuestL10GiantBasement_typeof(obj) {"@babel/helpers - typeof";return Que
 
 
 
+
 var QuestL10GiantBasement = /*#__PURE__*/function () {
 
 
@@ -3042,6 +3053,10 @@ var QuestL10GiantBasement = /*#__PURE__*/function () {
         freeRun: function freeRun(monster) {return (
             monster == _this.alphaGiant && (0,external_kolmafia_.itemAmount)(_this.letterD) == 0);},
         run: function run() {
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose"));
+          }
+
           var turnsSpent = (0,external_kolmafia_.turnsPlayed)();
           _this.runAdv(outfit);
 
@@ -3141,6 +3156,7 @@ function QuestL10GiantTop_typeof(obj) {"@babel/helpers - typeof";return QuestL10
 
 
 
+
 var QuestL10GiantTop = /*#__PURE__*/function () {function QuestL10GiantTop() {QuestL10GiantTop_classCallCheck(this, QuestL10GiantTop);QuestL10GiantTop_defineProperty(this, "modelAirShip",
     external_kolmafia_.Item.get("Model airship"));QuestL10GiantTop_defineProperty(this, "wig",
     external_kolmafia_.Item.get("Mohawk Wig"));QuestL10GiantTop_defineProperty(this, "record",
@@ -3176,6 +3192,10 @@ var QuestL10GiantTop = /*#__PURE__*/function () {function QuestL10GiantTop() {Qu
         outfit: outfit,
         freeRun: function freeRun(monster) {return true;},
         run: function run() {
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose"));
+          }
+
           var props = new Properties_PropertyManager();
 
           try {
@@ -6109,6 +6129,10 @@ function greyKillingBlow(outfit) {
         attackSkill = nano;
       }
 
+      if (attackSkill == null) {
+        attackSkill = (0,external_kolmafia_.haveSkill)(nano) ? nano : (0,external_kolmafia_.haveSkill)(loop) ? loop : null;
+      }
+
       if (attackSkill != null) {
         macro.trySkill(attackSkill);
 
@@ -8296,6 +8320,10 @@ var QuestL11PyramidTop = /*#__PURE__*/function () {function QuestL11PyramidTop()
         outfit: outfit,
         freeRun: function freeRun() {return true;},
         run: function run() {
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose"));
+          }
+
           greyAdv(_this.topLoc, outfit);
         }
       };
@@ -9269,6 +9297,10 @@ var QuestL11ShenNinja = /*#__PURE__*/function () {function QuestL11ShenNinja() {
         outfit: outfit,
         freeRun: function freeRun(monster) {return monster != _this.assassin;},
         run: function run() {
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose"));
+          }
+
           greyAdv(_this.location, outfit);
         }
       };
@@ -12832,6 +12864,10 @@ var QuestL12StartWar = /*#__PURE__*/function (_TaskInfo) {QuestL12StartWar_inher
         outfit: outfit,
         freeRun: function freeRun() {return true;},
         run: function run() {
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose"));
+          }
+
           var props = new Properties_PropertyManager();
           props.setChoice(139, 3);
           props.setChoice(140, 3);
@@ -18132,7 +18168,8 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
     0);QuestDigitalKey_defineProperty(this, "totMeatItem",
     external_kolmafia_.Item.get("li'l pirate costume"));QuestDigitalKey_defineProperty(this, "totItemItem",
     external_kolmafia_.Item.get("li'l ninja costume"));QuestDigitalKey_defineProperty(this, "tot",
-    external_kolmafia_.Familiar.get("Trick-or-Treating Tot"));}QuestDigitalKey_createClass(QuestDigitalKey, [{ key: "level", value:
+    external_kolmafia_.Familiar.get("Trick-or-Treating Tot"));QuestDigitalKey_defineProperty(this, "nanovision",
+    external_kolmafia_.Skill.get("Double Nanovision"));}QuestDigitalKey_createClass(QuestDigitalKey, [{ key: "level", value:
 
     function level() {
       return 4;
@@ -18149,7 +18186,11 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
 
 
       var score =
-      Math.min(zone.capped, (0,external_kolmafia_.numericModifier)("Generated:_spec", zone.maximize)) - (
+      Math.min(
+      zone.capped,
+      (0,external_kolmafia_.numericModifier)("Generated:_spec", zone.maximize) + (
+      zone.maximize == "Item Drop" && (0,external_kolmafia_.haveSkill)(this.nanovision) ? 200 : 0)) - (
+
       zone.capped - 300);
 
       if (this.currentZone != zone) {
@@ -18288,7 +18329,17 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
 
       var outfit = new GreyOutfit();
       outfit.addWeight(this.transfomer);
-      outfit.addWeight(zone.maximize, 5, null, zone.capped);
+      outfit.addWeight(
+      zone.maximize,
+      5,
+      null,
+      zone.capped - (
+      zone.maximize == "Item Drop" && (0,external_kolmafia_.haveSkill)(this.nanovision) ? 200 : 0));
+
+
+      if (zone.maximize == "Item Drop") {
+        outfit.setItemDrops();
+      }
 
       var delayers = this.getViableDelayBurners();
 
@@ -18317,6 +18368,10 @@ var QuestDigitalKey = /*#__PURE__*/function () {function QuestDigitalKey() {Ques
         familiar: fam,
         disableFamOverride: fam != null,
         run: function run() {
+          if (fam == null && DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose"));
+          }
+
           greyAdv(zone.loc, outfit);
         }
       };
@@ -19655,8 +19710,12 @@ var QuestL5GoblinOutskirts = /*#__PURE__*/function () {function QuestL5GoblinOut
             props.setChoice(111, 3);
             props.setChoice(118, 2);
 
+            if (DelayBurners.isTryingForDupeableGoblin()) {
+              (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose"));
+            }
+
             try {
-              greyAdv(_this.location);
+              greyAdv(_this.location, outfit);
             } finally {
               props.resetAll();
             }
@@ -21417,6 +21476,10 @@ var QuestL8MountainNinja = /*#__PURE__*/function (_TaskInfo) {QuestL8MountainNin
         freeRun: function freeRun(monster) {return monster != _this2.assassin;},
         run: function run() {
           restoreHPTo(70);
+
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose"));
+          }
 
           greyAdv(_this2.ninja, outfit);
         }
@@ -24251,6 +24314,10 @@ var ManorGallery = /*#__PURE__*/function () {function ManorGallery() {QuestManor
             settings.setStartOfFightMacro(getGhostBustingMacro());
           }
 
+          if (DelayBurners.isTryingForDupeableGoblin()) {
+            (0,external_kolmafia_.useFamiliar)(external_kolmafia_.Familiar.get("Grey Goose"));
+          }
+
           /* if (availableAmount(this.sword) == 0) {
             props.setChoice(89, 2);
           } else*/{
@@ -26557,6 +26624,18 @@ var QuestInitialStart = /*#__PURE__*/function (_TaskInfo) {QuestInitialStart_inh
           GreySettings_GreySettings.greyCosplaySaber != "")
           {
             (0,external_kolmafia_.cliExecute)("saber " + GreySettings_GreySettings.greyCosplaySaber);
+          }
+
+          if (
+          (0,external_kolmafia_.availableAmount)(external_kolmafia_.Item.get("S.I.T. Course Completion Certificate")) >
+          0 &&
+          !(0,external_kolmafia_.toBoolean)((0,external_kolmafia_.getProperty)("_sitCourseCompleted")))
+          {
+            try {
+              (0,external_kolmafia_.visitUrl)("inv_use.php?pwd&which=99&whichitem=11116");
+            } catch (e) {}
+
+            (0,external_kolmafia_.runChoice)(2);
           }
 
           if (
